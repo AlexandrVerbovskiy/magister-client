@@ -14,7 +14,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const isCurrentPath = (link = "") => currentPath.includes("/admin/" + link);
+  const isCurrentPath = (link = null) => {
+    if (!link) return currentPath === "/admin/";
+
+    return currentPath.includes("/admin/" + link);
+  };
 
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
@@ -53,12 +57,13 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   useEffect(() => {
     localStorage.setItem("sidebar-expanded", sidebarExpanded);
+
     if (sidebarExpanded) {
       document.querySelector("body").classList.add("sidebar-expanded");
     } else {
       document.querySelector("body").classList.remove("sidebar-expanded");
     }
-  }, [sidebarExpanded]);
+  }, [sidebarExpanded, currentPath]);
 
   return (
     <div className="min-w-fit">
