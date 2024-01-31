@@ -1,0 +1,10 @@
+@import "./bootstrap.min.css";
+@import "./animate.min.css";
+@import "./boxicons.min.css";
+@import "./flaticon.css";
+@import "swiper/css";
+@import "swiper/css/bundle";
+
+@import "./style.css";
+@import "./responsive.css";
+@import "./rtl.css";

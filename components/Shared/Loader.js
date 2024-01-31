@@ -1,17 +1,16 @@
 const Loader = ({ loading }) => {
-    return (
-      <>
-        {loading && (
-          <div className='preloader'>
-            <div className='preloader'>
-              <span></span>
-              <span></span>
-            </div>
+  return (
+    <>
+      {loading && (
+        <div className="preloader">
+          <div className="preloader">
+            <span></span>
+            <span></span>
           </div>
-        )}
-      </>
-    );
-  };
-  
-  export default Loader;
-  
+        </div>
+      )}
+    </>
+  );
+};
+
+export default Loader;
