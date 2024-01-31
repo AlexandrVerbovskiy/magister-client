@@ -3,14 +3,14 @@ import { useMain } from "../hooks";
 
 const IndiceContext = createContext();
 
-const IndiceProvider = ({ onlyAuth, children }) => {
+const IndiceProvider = ({ access, children }) => {
   const [displaySideMenu, setDisplaySideMenu] = useState(false);
 
   const toggleSideMenu = () => {
     setDisplaySideMenu(!displaySideMenu);
   };
 
-  const { isAuth, user, onLogin, onLogout, isAdmin } = useMain({ onlyAuth });
+  const { isAuth, user, onLogin, onLogout, isAdmin } = useMain({ access });
 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);

@@ -3,7 +3,7 @@ import Router from "next/router";
 import { updateSessionInfo, logout } from "../services";
 import STATIC from "../static";
 
-const useMain = ({ onlyAuth = false }) => {
+const useMain = ({ access = null }) => {
   const updateSessionTimeoutRef = useRef(null);
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
@@ -49,7 +49,8 @@ const useMain = ({ onlyAuth = false }) => {
 
   useEffect(() => {
     if (isAuth === null) return;
-    if (onlyAuth && !isAuth) Router?.push("/");
+    if (access == "auth" && !isAuth) Router?.push("/");
+    if (access == "admin" && (!isAuth || !isAdmin)) Router?.push("/");
   }, [isAuth]);
 
   const onLogin = (userInfo) => {

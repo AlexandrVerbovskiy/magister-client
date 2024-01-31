@@ -1,8 +1,8 @@
-const Th = ({ title, key, orderType, canOrder = false, onClick }) => {
+const Th = ({ title, value, orderType, canOrder = true, onClick }) => {
   const handleClick = () => {
     if (!canOrder || !onClick) return;
 
-    onClick(key);
+    onClick(value);
   };
 
   return (

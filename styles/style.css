@@ -16426,8 +16426,43 @@ Preloader Area CSS
 
 .main-site-alert {
   margin: 0;
-  position: fixed;
+  position: fixed !important;
   bottom: 20px;
   right: 20px;
   z-index: 9999;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  padding-right: 3rem;
+}
+
+.main-site-alert.alert-success {
+  color: #0a3622;
+  background-color: #d1e7dd;
+  border: 1px solid #a3cfbb;
+}
+
+.main-site-alert.alert-danger {
+  color: #58151c;
+  background-color: #f8d7da;
+  border: 1px solid #f1aeb5;
+}
+
+.main-site-alert .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1.25rem 1rem;
+
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  color: #000;
+  background: transparent
+    url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e")
+    center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.375rem;
+  opacity: 0.5;
 }

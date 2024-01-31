@@ -2,7 +2,7 @@ import React from "react";
 
 function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
   return (
-    <form className="relative">
+    <form className="relative" onSubmit={(e) => e.preventDefault()}>
       <label htmlFor="action-search" className="sr-only">
         Search
       </label>

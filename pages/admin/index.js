@@ -26,6 +26,7 @@ const AdminIndex = () => {
 
 AdminIndex.getInitialProps = async () => ({
   access: "admin",
+  type: "admin",
 });
 
 export default AdminIndex;

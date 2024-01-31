@@ -1,6 +1,18 @@
 import React from "react";
+import { generatePagination } from "../../utils";
 
-function PaginationNumeric({ move, canNext, canPrev, page, countPages }) {
+function PaginationNumeric({
+  to,
+  from,
+  move,
+  canNext,
+  canPrev,
+  page,
+  countPages,
+  totalCount,
+}) {
+  const visiblePages = generatePagination(page, countPages);
+
   const handleNextClick = () => {
     if (canNext) move(page + 1);
   };
@@ -15,8 +27,12 @@ function PaginationNumeric({ move, canNext, canPrev, page, countPages }) {
     "inline-flex items-center justify-center rounded leading-5 px-2.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600";
 
   return (
-    <div className="flex justify-center">
-      <nav className="flex" role="navigation" aria-label="Navigation">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <nav
+        className="flex justify-center mb-4 sm:mb-0 sm:order-1"
+        role="navigation"
+        aria-label="Navigation"
+      >
         <div className="mr-2">
           <span
             className={canPrev ? activeClass : inactiveClass}
@@ -31,40 +47,37 @@ function PaginationNumeric({ move, canNext, canPrev, page, countPages }) {
         </div>
 
         <ul className="inline-flex text-sm font-medium -space-x-px shadow-sm">
-          <li>
-            <span className="inline-flex items-center justify-center rounded-l leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-500">
-              1
-            </span>
-          </li>
-          <li>
-            <a
-              className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
-              href="#0"
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
-              href="#0"
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <span className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500">
-              …
-            </span>
-          </li>
-          <li>
-            <a
-              className="inline-flex items-center justify-center rounded-r leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
-              href="#0"
-            >
-              9
-            </a>
-          </li>
+          {visiblePages.map((visiblePage, index) => {
+            if (visiblePage == page)
+              return (
+                <li key={index}>
+                  <span className="inline-flex items-center justify-center rounded-l leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-500">
+                    {visiblePage}
+                  </span>
+                </li>
+              );
+
+            if (!visiblePage)
+              return (
+                <li key={index}>
+                  <span className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500">
+                    …
+                  </span>
+                </li>
+              );
+
+            return (
+              <li key={index}>
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
+                  onClick={() => move(visiblePage)}
+                >
+                  {visiblePage}
+                </button>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="ml-2">
@@ -80,6 +93,21 @@ function PaginationNumeric({ move, canNext, canPrev, page, countPages }) {
           </span>
         </div>
       </nav>
+      <div className="text-sm text-slate-500 dark:text-slate-400 text-center sm:text-left">
+        Showing{" "}
+        <span className="font-medium text-slate-600 dark:text-slate-300">
+          {from}
+        </span>{" "}
+        to{" "}
+        <span className="font-medium text-slate-600 dark:text-slate-300">
+          {to}
+        </span>{" "}
+        of{" "}
+        <span className="font-medium text-slate-600 dark:text-slate-300">
+          {totalCount}
+        </span>{" "}
+        results
+      </div>
     </div>
   );
 }
