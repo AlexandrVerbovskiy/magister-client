@@ -3,10 +3,17 @@ import Link from "next/link";
 import Transition from "../../utils/transition";
 import { logout } from "../../services";
 import { IndiceContext } from "../../contexts";
+import ENV from "../../env";
+
+const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
 function DropdownProfile({ align }) {
   const { onLogout, success: mainSuccess, user } = useContext(IndiceContext);
-  const name = user?user.name : "";
+  const name = user ? user.name : "";
+  const photo =
+    user && user.photo
+      ? ENV.SERVER_STORAGE_URL + "/" + user.photo
+      : defaultPhotoLink;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -55,7 +62,7 @@ function DropdownProfile({ align }) {
       >
         <img
           className="w-8 h-8 rounded-full"
-          src="/images/admin/user-avatar-32.png"
+          src={photo}
           width="32"
           height="32"
           alt="User"

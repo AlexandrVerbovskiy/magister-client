@@ -1,22 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import { usePagination } from "../../hooks";
+import { useAdminPage, usePagination } from "../../hooks";
 import UsersTable from "../../components/admin/Users/Table";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import ModalBlank from "../../components/admin/ModalBlank";
-import {
-  getList,
-  deleteUser,
-  changeActive,
-  setRole,
-} from "../../services/admin";
+import { getList, deleteUser, changeActive, setRole } from "../../services";
 import { IndiceContext } from "../../contexts";
 
 const Users = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
   const { error, success } = useContext(IndiceContext);
@@ -42,34 +37,6 @@ const Users = () => {
     getItemsFunc: getList,
     onError: (e) => error.set(e.message),
   });
-
-  useEffect(() => {
-    document
-      .querySelector("body")
-      .classList.add(
-        "font-inter",
-        "antialiased",
-        "bg-slate-100",
-        "dark:bg-slate-900",
-        "text-slate-600",
-        "dark:text-slate-400",
-        "sidebar-expanded"
-      );
-
-    return () => {
-      document
-        .querySelector("body")
-        .classList.remove(
-          "font-inter",
-          "antialiased",
-          "bg-slate-100",
-          "dark:bg-slate-900",
-          "text-slate-600",
-          "dark:text-slate-400",
-          "sidebar-expanded"
-        );
-    };
-  }, []);
 
   const handleCloseDeleteModal = () => {
     setToDeleteUserInfo(null);
@@ -119,13 +86,13 @@ const Users = () => {
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-white dark:bg-slate-900">
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden dark:bg-slate-900">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
-              <BreadCrumbs links={[{ title: "Users", href: "/admin/users" }]} />
+              <BreadCrumbs links={[{ title: "Users" }]} />
 
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 <SearchForm value={filter} onInput={changeFilter} />
@@ -150,6 +117,7 @@ const Users = () => {
               openDeleteModal={handleOpenDeleteModal}
               handleSetRole={handleSetRole}
               handleChangeActive={handleChangeActive}
+              totalCount={countItems}
             />
 
             <div className="mt-8">

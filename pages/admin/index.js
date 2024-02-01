@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import WelcomeBanner from "../../partials/admin/dashboard/WelcomeBanner";
 import "tailwindcss/tailwind.css";
+import { useAdminPage } from "../../hooks";
 
 const AdminIndex = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import STATIC from "../static";
+import STATIC from "../env";
 
 const authAxios = axios.create({
   baseURL: STATIC.BASE_URL,

@@ -37,9 +37,37 @@ const RoleSpan = ({ role }) => {
   );
 };
 
+const EmailSpan = ({ email, verified }) => {
+  let className = "text-left";
+
+  if (verified) {
+    className += " text-emerald-500";
+  } else {
+    className += " text-rose-500";
+  }
+
+  return <div className={className}>{email}</div>;
+};
+
+const PhoneSpan = ({ phone, verified }) => {
+  let className = "text-left";
+
+  if (phone) {
+    if (verified) {
+      className += " text-emerald-500";
+    } else {
+      className += " text-rose-500";
+    }
+  }
+
+  return <div className="text-left">{phone ?? "-"}</div>;
+};
+
 const TableItem = ({
   id,
   name,
+  email_verified,
+  phone_verified,
   email,
   phone,
   active,
@@ -53,16 +81,16 @@ const TableItem = ({
   return (
     <tr>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="text-left">{id}</div>
+        <div className="font-medium text-sky-500">#{id}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">{name}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="text-left">{email}</div>
+        <EmailSpan email={email} verified={email_verified} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="text-left">{phone}</div>
+        <PhoneSpan phone={phone} verified={phone_verified} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
@@ -79,33 +107,26 @@ const TableItem = ({
           <div className="mr-1.5">
             <a
               href={`/admin/user-edit/${id}`}
-              className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
+              className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
             >
-              <svg
-                className="w-4 h-4 fill-current text-slate-500 dark:text-slate-400 shrink-0"
-                viewBox="0 0 16 16"
-              >
-                <path d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
+              <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
               </svg>
             </a>
           </div>
 
           {currentUser.id != id && (
-            <div>
-              <button
-                type="button"
-                aria-controls="danger-modal"
-                onClick={onDeleteClick}
-                className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600"
-              >
-                <svg
-                  className="w-4 h-4 fill-current text-rose-500 shrink-0"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
-                </svg>
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-controls="danger-modal"
+              onClick={onDeleteClick}
+              className="text-rose-500 hover:text-rose-600 rounded-full"
+            >
+              <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                <path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+              </svg>
+            </button>
           )}
         </div>
       </td>

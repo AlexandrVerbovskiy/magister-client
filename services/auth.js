@@ -1,6 +1,7 @@
 import axios from "axios";
-import STATIC from "../static";
+import ENV from "../env";
 import { authAxios, serviceWrapper } from "../utils";
+const serverApiUrl = ENV.SERVER_API_URL;
 
 const saveSessionInfo = (res) => {
   const { user, accessToken } = res;
@@ -11,7 +12,7 @@ const saveSessionInfo = (res) => {
 
 export const login = async (userInfo) => {
   const data = await serviceWrapper(
-    axios.post(`${STATIC.SERVER_URL}/auth/login`, userInfo)
+    axios.post(`${serverApiUrl}/auth/login`, userInfo)
   );
   saveSessionInfo(data.body);
   return data.body.user;
@@ -25,21 +26,21 @@ export const logout = async () => {
 
 export const register = async (userInfo) => {
   const data = await serviceWrapper(
-    axios.post(`${STATIC.SERVER_URL}/auth/register`, userInfo)
+    axios.post(`${serverApiUrl}/auth/register`, userInfo)
   );
   return data.message;
 };
 
 export const resetPassword = async (email) => {
   const data = await serviceWrapper(
-    axios.post(`${STATIC.SERVER_URL}/auth/reset-password`, { email })
+    axios.post(`${serverApiUrl}/auth/reset-password`, { email })
   );
   return data.message;
 };
 
 export const updateSessionInfo = async () => {
   const data = await serviceWrapper(
-    authAxios.get(`${STATIC.SERVER_URL}/auth/update-session-info`)
+    authAxios.get(`${serverApiUrl}/auth/update-session-info`)
   );
   saveSessionInfo(data.body);
   return data.body.user;

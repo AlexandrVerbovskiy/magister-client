@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import Router from "next/router";
 import { updateSessionInfo, logout } from "../services";
-import STATIC from "../static";
+import STATIC from "../env";
 
 const useMain = ({ access = null }) => {
   const updateSessionTimeoutRef = useRef(null);
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const onLogout = () => {
     setUser(null);
@@ -48,9 +50,19 @@ const useMain = ({ access = null }) => {
   }, []);
 
   useEffect(() => {
-    if (isAuth === null) return;
-    if (access == "auth" && !isAuth) Router?.push("/");
-    if (access == "admin" && (!isAuth || !isAdmin)) Router?.push("/");
+    if (isAuth === null) {
+      return;
+    }
+
+    if ((access == "auth" || access == "admin") && !isAuth) {
+      setError("Authentication failed");
+      return Router?.push("/");
+    }
+
+    if (access == "admin" && !isAdmin) {
+      setError("Access denied");
+      return Router?.push("/");
+    }
   }, [isAuth]);
 
   const onLogin = (userInfo) => {
@@ -60,12 +72,25 @@ const useMain = ({ access = null }) => {
     setIsAdmin(userInfo && userInfo.role == "admin");
   };
 
+  const clearError = () => setError(null);
+  const clearSuccess = () => setSuccess(null);
+
   return {
     isAuth,
     user,
     onLogin,
     onLogout,
     isAdmin,
+    error: {
+      value: error,
+      set: setError,
+      clear: clearError,
+    },
+    success: {
+      value: success,
+      set: setSuccess,
+      clear: clearSuccess,
+    },
   };
 };
 

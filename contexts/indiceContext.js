@@ -10,34 +10,22 @@ const IndiceProvider = ({ access, children }) => {
     setDisplaySideMenu(!displaySideMenu);
   };
 
-  const { isAuth, user, onLogin, onLogout, isAdmin } = useMain({ access });
-
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
-
-  const clearError = () => setError(null);
-  const clearSuccess = () => setSuccess(null);
+  const { isAuth, user, onLogin, onLogout, isAdmin, error, success } = useMain({
+    access,
+  });
 
   return (
     <IndiceContext.Provider
       value={{
-        displaySideMenu,
-        toggleSideMenu,
+        user,
+        error,
         isAuth,
         isAdmin,
-        user,
-        error: {
-          value: error,
-          set: setError,
-          clear: clearError,
-        },
-        success: {
-          value: success,
-          set: setSuccess,
-          clear: clearSuccess,
-        },
+        success,
         onLogin,
         onLogout,
+        toggleSideMenu,
+        displaySideMenu,
       }}
     >
       {children}
