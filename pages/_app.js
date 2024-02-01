@@ -6,6 +6,17 @@ import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import "../styles/style.css";
 
+import "../styles/bootstrap.min.css";
+import "../styles/animate.min.css";
+import "../styles/boxicons.min.css";
+import "../styles/flaticon.css";
+import "swiper/css";
+import "swiper/css/bundle";
+
+// Global Style
+import "../styles/responsive.css";
+import "../styles/rtl.css";
+
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const stylesRef = useRef({ base: [], admin: [] });
   const loadedRef = useRef({ base: false, admin: false });
@@ -33,9 +44,9 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       isFirstCall.current = false;
 
       document.querySelectorAll("head style").forEach((elem) => {
-        stylesRef.current["admin"].push(elem.cloneNode(true));
-
-        if (!elem.innerText.includes("MIT License | https://tailwindcss.com")) {
+        if (elem.innerText.includes("MIT License | https://tailwindcss.com")) {
+          stylesRef.current["admin"].push(elem.cloneNode(true));
+        } else {
           stylesRef.current["base"].push(elem.cloneNode(true));
         }
       });
@@ -58,7 +69,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 };
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const accessType = pageProps.access;
   const type = pageProps.type;
