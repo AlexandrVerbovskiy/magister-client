@@ -231,65 +231,66 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {/* ------------ Auth Modal ------- */}
-      <div
-        className={
-          displayAuth
-            ? "modal loginRegisterModal show"
-            : "modal loginRegisterModal"
-        }
-        id="loginRegisterModal"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <Tabs>
-              <button type="button" className="close" onClick={toggleAuth}>
-                <i className="bx bx-x"></i>
-              </button>
+      {!isAuth && (
+        <div
+          className={
+            displayAuth
+              ? "modal loginRegisterModal show"
+              : "modal loginRegisterModal"
+          }
+          id="loginRegisterModal"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <Tabs>
+                <button type="button" className="close" onClick={toggleAuth}>
+                  <i className="bx bx-x"></i>
+                </button>
 
-              <ul className="nav nav-tabs" id="myTab">
-                <TabList>
-                  <Tab className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="login-tab"
-                      ref={loginTabBtnTrigger}
-                    >
-                      Login
-                    </a>
-                  </Tab>
-                  <Tab className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="register-tab"
-                      ref={registerTabBtnTrigger}
-                    >
-                      Register
-                    </a>
-                  </Tab>
-                </TabList>
-              </ul>
+                <ul className="nav nav-tabs" id="myTab">
+                  <TabList>
+                    <Tab className="nav-item">
+                      <a
+                        className="nav-link"
+                        id="login-tab"
+                        ref={loginTabBtnTrigger}
+                      >
+                        Login
+                      </a>
+                    </Tab>
+                    <Tab className="nav-item">
+                      <a
+                        className="nav-link"
+                        id="register-tab"
+                        ref={registerTabBtnTrigger}
+                      >
+                        Register
+                      </a>
+                    </Tab>
+                  </TabList>
+                </ul>
 
-              <div className="tab-content" id="myTabContent">
-                <TabPanel>
-                  <LoginTab
-                    moveToRegister={handleRegisterTabActive}
-                    closeModal={closeModals}
-                  />
-                </TabPanel>
+                <div className="tab-content" id="myTabContent">
+                  <TabPanel>
+                    <LoginTab
+                      moveToRegister={handleRegisterTabActive}
+                      closeModal={closeModals}
+                    />
+                  </TabPanel>
 
-                <TabPanel>
-                  <RegisterTab
-                    moveToLogin={handleLoginTabActive}
-                    closeModal={closeModals}
-                  />
-                </TabPanel>
-              </div>
-            </Tabs>
+                  <TabPanel>
+                    <RegisterTab
+                      moveToLogin={handleLoginTabActive}
+                      closeModal={closeModals}
+                    />
+                  </TabPanel>
+                </div>
+              </Tabs>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

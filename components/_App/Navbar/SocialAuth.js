@@ -6,11 +6,6 @@ const SocialAuth = () => (
       </a>
     </li>
     <li>
-      <a href="https://www.linkedin.com/" className="linkedin" target="_blank">
-        <i className="bx bxl-linkedin"></i> Linkedin
-      </a>
-    </li>
-    <li>
       <a href="https://www.gmail.com/" className="google" target="_blank">
         <i className="bx bxl-google"></i> Google
       </a>

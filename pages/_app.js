@@ -4,7 +4,9 @@ import Layout from "../components/_App/Layout";
 import Loader from "../components/Shared/Loader";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
-import "../styles/style.css";
+import UnverifiedAlert from "../components/_App/UnverifiedAlert";
+
+import "../styles/index.css";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const stylesRef = useRef({ base: [], admin: [] });
@@ -33,15 +35,15 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       isFirstCall.current = false;
 
       document.querySelectorAll("head style").forEach((elem) => {
-        stylesRef.current["admin"].push(elem.cloneNode(true));
-
-        if (!elem.innerText.includes("MIT License | https://tailwindcss.com")) {
+        if (elem.innerText.includes("MIT License | https://tailwindcss.com")) {
+          stylesRef.current["admin"].push(elem.cloneNode(true));
+        } else {
           stylesRef.current["base"].push(elem.cloneNode(true));
         }
       });
-    } else {
-      document.querySelectorAll("head style").forEach((elem) => elem.remove());
     }
+
+    document.querySelectorAll("head style").forEach((elem) => elem.remove());
 
     if (type == "admin") {
       await importStyle(() => import(`../styles/admin/index.css`), "admin");
@@ -58,7 +60,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 };
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const accessType = pageProps.access;
   const type = pageProps.type;
@@ -78,6 +80,7 @@ function MyApp({ Component, pageProps }) {
 
         <MainErrorAlert />
         <MainSuccessAlert />
+        <UnverifiedAlert />
       </IndiceProvider>
     </Layout>
   );
