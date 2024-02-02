@@ -124,7 +124,7 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
 
         <form>
           <div className="row">
-            <div className="col-6">
+            <div className="col-12">
               <Input
                 type="text"
                 value={name.value}
@@ -133,7 +133,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
                 onInput={handleInputName}
               />
             </div>
-            <div className="col-6">
+          </div>
+          <div className="row">
+            <div className="col-12">
               <Input
                 type="email"
                 value={email.value}

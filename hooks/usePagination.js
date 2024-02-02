@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/router";
 
 const usePagination = ({ getItemsFunc, onError = null }) => {
+  const router = useRouter();
+
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
 
@@ -17,6 +20,46 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
   const [currentFrom, setCurrentFrom] = useState(0);
   const [currentTo, setCurrentTo] = useState(0);
 
+  const updateStateByOption = (options) => {
+    setPage(options.page);
+    setItemsPerPage(options.count);
+    setOrder(options.order);
+    setOrderType(options.orderType);
+
+    const queryParams = {};
+
+    if (options.page > 1) {
+      queryParams["page"] = options.page;
+    }
+
+    if (options.order) {
+      queryParams["order"] = options.order;
+      if (options.orderType) {
+        queryParams["orderType"] = options.orderType;
+      }
+    }
+
+    if (options.filter) {
+      queryParams["filter"] = options.filter;
+    }
+
+    const props = Object.keys(queryParams)
+      .map((param) => `${param}=${queryParams[param]}`)
+      .join("&");
+
+    const currentLink = window.location.href;
+
+    const newLinkPart =
+      window.location.origin +
+      window.location.pathname +
+      (props ? `?${props}` : "");
+
+    if (currentLink !== newLinkPart) {
+      console.log("must change");
+      window.history.replaceState(null, null, newLinkPart);
+    }
+  };
+
   const onChangeOptions = async (dopBody = {}) => {
     try {
       const res = await getItemsFunc({
@@ -29,14 +72,9 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
 
       const { options, items: gotItems, countItems: gotCountItems } = res;
 
-      setPage(options.page);
-      setItemsPerPage(options.count);
-      setOrder(options.order);
-      setOrderType(options.orderType);
-
       countPagesRef.current = options.totalPages;
       countItemsRef.current = gotCountItems;
-
+      updateStateByOption(options);
       setItems(gotItems);
     } catch (e) {
       onError(e);
@@ -44,7 +82,26 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
   };
 
   useEffect(() => {
-    onChangeOptions();
+    const dopBody = {};
+    const { order, orderType, page, filter } = router.query;
+
+    if (order) {
+      dopBody["order"] = order;
+    }
+
+    if (orderType) {
+      dopBody["orderType"] = orderType;
+    }
+
+    if (page) {
+      dopBody["page"] = page;
+    }
+
+    if (filter) {
+      dopBody["filter"] = filter;
+    }
+
+    onChangeOptions(dopBody);
   }, []);
 
   useEffect(() => {

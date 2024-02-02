@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 
 const ActiveSpan = ({ active, onClick }) => {
@@ -17,23 +17,30 @@ const ActiveSpan = ({ active, onClick }) => {
   );
 };
 
-const RoleSpan = ({ role }) => {
-  if (role == "admin")
-    return (
-      <div className="text-xs inline-flex font-medium bg-amber-100 dark:bg-amber-400/30 text-amber-600 dark:text-amber-400 rounded-full text-center px-2.5 py-1">
-        Admin
-      </div>
-    );
-  if (role == "support")
-    return (
-      <span className="text-xs inline-flex font-medium bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400 rounded-full text-center px-2.5 py-1">
-        Support
-      </span>
-    );
+const RoleSpan = ({ role, onClick }) => {
+  let dopClassName =
+    "bg-sky-100 dark:bg-sky-500/30 text-sky-600 dark:text-sky-400";
+  let text = "User";
+
+  if (role == "admin") {
+    dopClassName =
+      "bg-amber-100 dark:bg-amber-400/30 text-amber-600 dark:text-amber-400";
+    text = "Admin";
+  }
+
+  if (role == "support") {
+    dopClassName =
+      "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+    text = "Support";
+  }
+
   return (
-    <span className="text-xs inline-flex font-medium bg-sky-100 dark:bg-sky-500/30 text-sky-600 dark:text-sky-400 rounded-full text-center px-2.5 py-1">
-      User
-    </span>
+    <div
+      className={`text-xs inline-flex font-medium  rounded-full text-center px-2.5 py-1 ${dopClassName}`}
+      onClick={() => onClick(role)}
+    >
+      {text}
+    </div>
   );
 };
 
@@ -77,6 +84,22 @@ const TableItem = ({
   onChangeActive,
 }) => {
   const { user: currentUser } = useContext(IndiceContext);
+  const [rolePopupActive, setRolePopupActive] = useState(false);
+
+  const handleRoleClick = () => {
+    setRolePopupActive(true);
+  };
+
+  const handleSelectRole = (value) => {
+    if (value != role) {
+      onChangeRole(value);
+    }
+    setRolePopupActive(false);
+  };
+
+  const closePopup = () => {
+    setRolePopupActive(false);
+  };
 
   return (
     <tr>
@@ -99,7 +122,22 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
-          <RoleSpan role={role} />
+          <span className="cursor-pointer">
+            <RoleSpan role={role} onClick={handleRoleClick} />
+            <div
+              className={`table-change-role-popup bg-white dark:bg-slate-800 shadow-lg rounded-sm px-2 ${
+                rolePopupActive ? "active" : ""
+              }`}
+            >
+              <RoleSpan role="user" onClick={handleSelectRole} />
+              <RoleSpan role="support" onClick={handleSelectRole} />
+              <RoleSpan role="admin" onClick={handleSelectRole} />
+            </div>
+
+            {rolePopupActive && (
+              <div className="hidden-popup" onClick={closePopup}></div>
+            )}
+          </span>
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

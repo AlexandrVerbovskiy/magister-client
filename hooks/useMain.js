@@ -10,6 +10,7 @@ const useMain = ({ access = null }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [displaySideMenu, setDisplaySideMenu] = useState(false);
 
   const onLogout = () => {
     setUser(null);
@@ -63,6 +64,12 @@ const useMain = ({ access = null }) => {
       setError("Access denied");
       return Router?.push("/");
     }
+
+    if(access=="no auth" && isAuth){
+      setError("Access denied");
+      return Router?.push("/");
+    }
+
   }, [isAuth]);
 
   const onLogin = (userInfo) => {
@@ -75,12 +82,24 @@ const useMain = ({ access = null }) => {
   const clearError = () => setError(null);
   const clearSuccess = () => setSuccess(null);
 
+  const baseRequestWrapper = async (promise) => {
+    try {
+      return await promise;
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  const toggleSideMenu = () => setDisplaySideMenu(!displaySideMenu);
+
   return {
     isAuth,
     user,
     onLogin,
     onLogout,
     isAdmin,
+    baseRequestWrapper,
+    toggleSideMenu,
     error: {
       value: error,
       set: setError,

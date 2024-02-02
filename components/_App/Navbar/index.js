@@ -231,7 +231,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {/* ------------ Auth Modal ------- */}
       {!isAuth && (
         <div
