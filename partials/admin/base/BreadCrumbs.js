@@ -7,15 +7,26 @@ const BreadCrumbs = ({ links }) => {
         {links.map((link) => {
           return (
             <li
-              key={link.href}
-              className="after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
+              key={link.title}
+              className="text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
             >
-              <a
-                className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
-                href={link.href}
-              >
-                {link.title}
-              </a>
+              {link.href && (
+                <a
+                  className="text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
+                  href={link.href}
+                >
+                  {link.title}
+                </a>
+              )}
+
+              {!link.href && (
+                <span
+                  style={{ transition: "0.5s" }}
+                  className="cursor-pointer text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
+                >
+                  {link.title}
+                </span>
+              )}
             </li>
           );
         })}
