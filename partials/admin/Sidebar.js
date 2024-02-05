@@ -260,6 +260,52 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </Link>
               </li>
 
+              {/* Logs */}
+              <li
+                className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                  isCurrentPath("users") && "bg-slate-900"
+                }`}
+              >
+                <Link
+                  href="/admin/logs"
+                  className={`block text-slate-200 truncate transition duration-150 ${
+                    isCurrentPath("users")
+                      ? "hover:text-slate-200"
+                      : "hover:text-white"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="icon icon-tabler icon-tabler-device-sd-card"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="#2c3e50"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                          marginLeft: "-5px",
+                          marginRight: "-2px",
+                        }}
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M7 21h10a2 2 0 0 0 2 -2v-14a2 2 0 0 0 -2 -2h-6.172a2 2 0 0 0 -1.414 .586l-3.828 3.828a2 2 0 0 0 -.586 1.414v10.172a2 2 0 0 0 2 2z" />
+                        <path d="M13 6v2" />
+                        <path d="M16 6v2" />
+                        <path d="M10 7v1" />
+                      </svg>
+                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                        Logs
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </li>
+
               {/* Settings */}
               <SidebarLinkGroup activecondition={isCurrentPath("settings")}>
                 {(handleClick, open) => {

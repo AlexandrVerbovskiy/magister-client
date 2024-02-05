@@ -7,7 +7,7 @@ import UsersTable from "../../components/admin/Users/Table";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import ModalBlank from "../../components/admin/ModalBlank";
-import { getList, deleteUser, changeActive, setRole } from "../../services";
+import { getUserList, deleteUser, changeActive, setRole } from "../../services";
 import { IndiceContext } from "../../contexts";
 
 const Users = () => {
@@ -33,8 +33,9 @@ const Users = () => {
     items: users,
     rebuild,
     setItemFields,
+    options,
   } = usePagination({
-    getItemsFunc: getList,
+    getItemsFunc: getUserList,
     onError: (e) => error.set(e.message),
   });
 

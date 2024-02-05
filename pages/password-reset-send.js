@@ -8,16 +8,17 @@ const PasswordResetSend = () => {
   const [email, setEmail] = useState({ value: "", error: null });
 
   const handleSendClick = () => {
-    if (!validateEmail(email.value)) {
+    const resEmailValid = validateEmail(email.value);
+    if (resEmailValid !== true) {
       setEmail((prev) => ({
         ...prev,
-        error: "Incorrect email format",
+        error: resEmailValid,
       }));
 
       return;
     }
 
-    success.set("Letter sent successfully")
+    success.set("Letter sent successfully");
   };
 
   const handleEmailInput = (e) => {
