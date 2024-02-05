@@ -43,19 +43,21 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
 
     let error = false;
 
-    if (!validatePassword(password.value)) {
+    const resPasswordValid = validatePassword(password.value);
+    if (resPasswordValid !== true) {
       error = true;
       setPassword((prev) => ({
         ...prev,
-        error: "The password must be longer than 8 characters",
+        error: resPasswordValid,
       }));
     }
 
-    if (!validatePassword(confirmPassword.value)) {
+    const resConfirmedPasswordValid = validatePassword(password.value);
+    if (resConfirmedPasswordValid !== true) {
       error = true;
       setConfirmPassword((prev) => ({
         ...prev,
-        error: "The password must be longer than 8 characters",
+        error: resConfirmedPasswordValid,
       }));
     }
 
@@ -67,11 +69,12 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
       }));
     }
 
-    if (!validateEmail(email.value)) {
+    const resEmailValid = validateEmail(email.value);
+    if (resEmailValid !== true) {
       error = true;
       setEmail((prev) => ({
         ...prev,
-        error: "Incorrect email format",
+        error: resEmailValid,
       }));
     }
 

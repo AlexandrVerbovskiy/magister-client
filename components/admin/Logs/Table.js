@@ -2,31 +2,28 @@ import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 
-const UsersTable = ({
-  users,
+const LogsTable = ({
+  logs,
   orderField,
   orderType,
   onClickTh,
-  openDeleteModal,
-  handleSetRole,
-  handleChangeActive,
   totalCount,
+  onSelectPanelItem,
 }) => {
   const ths = [
     { title: "Id", value: "id" },
-    { title: "Name", value: "name" },
-    { title: "Email", value: "email" },
-    { title: "Phone", value: "phone" },
-    { title: "Active", value: "active" },
-    { title: "Role", value: "role" },
-    { title: "Actions", value: "actions", canOrder: false },
+    { title: "Status", value: "success", canOrder: false },
+    { title: "Message", value: "message" },
+    { title: "File", value: "file" },
+    { title: "Line", value: "line" },
+    { title: "Date", value: "createAt" },
   ];
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Users{" "}
+          Logs{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>
@@ -50,19 +47,8 @@ const UsersTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {users.map((user) => (
-                <TableItem
-                  key={user.id}
-                  {...user}
-                  onChangeRole={(role) =>
-                    handleSetRole(user.id, user.name, role)
-                  }
-                  onChangeActive={() => handleChangeActive(user.id, user.name)}
-                  onDeleteClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteModal(user.name, user.id);
-                  }}
-                />
+              {logs.map((log) => (
+                <TableItem key={log.id} {...log} onSelectPanelItem={onSelectPanelItem} />
               ))}
             </tbody>
           </table>
@@ -72,4 +58,4 @@ const UsersTable = ({
   );
 };
 
-export default UsersTable;
+export default LogsTable;

@@ -2,7 +2,7 @@ import ENV from "../env";
 import { authAxios, serviceWrapper } from "../utils";
 const serverApiUrl = ENV.SERVER_API_URL;
 
-export const getById = async (id) => {
+export const getUserById = async (id) => {
   const data = await serviceWrapper(
     authAxios.get(`${serverApiUrl}/users/get-by-id/${id}`)
   );
@@ -11,7 +11,7 @@ export const getById = async (id) => {
 
 //only admin methods
 
-export const getList = async (body) => {
+export const getUserList = async (body) => {
   const data = await serviceWrapper(
     authAxios.post(`${serverApiUrl}/users/list`, body)
   );

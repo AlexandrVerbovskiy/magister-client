@@ -73,8 +73,8 @@ const PhoneSpan = ({ phone, verified }) => {
 const TableItem = ({
   id,
   name,
-  email_verified,
-  phone_verified,
+  emailVerified,
+  phoneVerified,
   email,
   phone,
   active,
@@ -110,10 +110,10 @@ const TableItem = ({
         <div className="text-left">{name}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <EmailSpan email={email} verified={email_verified} />
+        <EmailSpan email={email} verified={emailVerified} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <PhoneSpan phone={phone} verified={phone_verified} />
+        <PhoneSpan phone={phone} verified={phoneVerified} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
