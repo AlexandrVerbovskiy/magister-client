@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
-const usePagination = ({ getItemsFunc, onError = null }) => {
+const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
   const router = useRouter();
 
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
 
+  const [options, setOptions] = useState({});
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(null);
@@ -20,27 +21,36 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
   const [currentFrom, setCurrentFrom] = useState(0);
   const [currentTo, setCurrentTo] = useState(0);
 
-  const updateStateByOption = (options) => {
-    setPage(options.page);
-    setItemsPerPage(options.count);
-    setOrder(options.order);
-    setOrderType(options.orderType);
+  const updateStateByOption = (gotOptions) => {
+    setOptions(gotOptions);
+    setPage(gotOptions.page);
+    setItemsPerPage(gotOptions.count);
+    setOrder(gotOptions.order);
+    setOrderType(gotOptions.orderType);
 
     const queryParams = {};
 
-    if (options.page > 1) {
-      queryParams["page"] = options.page;
+    if (gotOptions.page > 1) {
+      queryParams["page"] = gotOptions.page;
     }
 
-    if (options.order) {
-      queryParams["order"] = options.order;
-      if (options.orderType) {
-        queryParams["orderType"] = options.orderType;
+    if (gotOptions.order) {
+      queryParams["order"] = gotOptions.order;
+      if (gotOptions.orderType) {
+        queryParams["orderType"] = gotOptions.orderType;
       }
     }
 
-    if (options.filter) {
-      queryParams["filter"] = options.filter;
+    if (gotOptions.filter) {
+      queryParams["filter"] = gotOptions.filter;
+    }
+
+    if (dopProps) {
+      Object.keys(dopProps).forEach((key) => {
+        if (dopProps[key]) {
+          queryParams[key] = dopProps[key];
+        }
+      });
     }
 
     const props = Object.keys(queryParams)
@@ -67,14 +77,19 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
         orderType,
         itemsPerPage,
         filter,
+        ...dopProps,
         ...dopBody,
       });
 
-      const { options, items: gotItems, countItems: gotCountItems } = res;
+      const {
+        options: gotOptions,
+        items: gotItems,
+        countItems: gotCountItems,
+      } = res;
 
-      countPagesRef.current = options.totalPages;
+      countPagesRef.current = gotOptions.totalPages;
       countItemsRef.current = gotCountItems;
-      updateStateByOption(options);
+      updateStateByOption(gotOptions);
       setItems(gotItems);
     } catch (e) {
       onError(e);
@@ -180,6 +195,7 @@ const usePagination = ({ getItemsFunc, onError = null }) => {
     countItems: countItemsRef.current,
     rebuild: onChangeOptions,
     setItemFields,
+    options,
   };
 };
 

@@ -25,19 +25,21 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
 
     let error = false;
 
-    if (!validatePassword(password.value)) {
+    const resPasswordValid = validatePassword(password.value);
+    if (resPasswordValid !== true) {
       setPassword((prev) => ({
         ...prev,
-        error: "The password must be longer than 8 characters",
+        error: resPasswordValid,
       }));
       error = true;
     }
 
-    if (!validateEmail(email.value)) {
+    const resEmailValid = validateEmail(email.value);
+    if (resEmailValid !== true) {
       error = true;
       setEmail((prev) => ({
         ...prev,
-        error: "Incorrect email format",
+        error: resEmailValid,
       }));
     }
 
