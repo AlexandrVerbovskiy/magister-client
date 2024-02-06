@@ -11,6 +11,7 @@ const useMain = ({ access = null }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [displaySideMenu, setDisplaySideMenu] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
 
   const onLogout = () => {
     setUser(null);
@@ -43,7 +44,7 @@ const useMain = ({ access = null }) => {
     setIsAuth(isAuth);
 
     if (isAuth) {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "");
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
       setIsAdmin(userInfo && userInfo.role == "admin");
       setUser(userInfo);
       update();
@@ -57,19 +58,20 @@ const useMain = ({ access = null }) => {
 
     if ((access == "auth" || access == "admin") && !isAuth) {
       setError("Authentication failed");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
     if (access == "admin" && !isAdmin) {
       setError("Access denied");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
-    if(access=="no auth" && isAuth){
+    if (access == "no auth" && isAuth) {
       setError("Access denied");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
+    setHasPermission(true);
   }, [isAuth]);
 
   const onLogin = (userInfo) => {
@@ -110,6 +112,7 @@ const useMain = ({ access = null }) => {
       set: setSuccess,
       clear: clearSuccess,
     },
+    hasPermission,
   };
 };
 

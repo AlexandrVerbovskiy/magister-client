@@ -111,7 +111,7 @@ const PasswordResetSend = () => {
 
                 <div className="form-group">
                   <input
-                    type={confirmPassword}
+                    type={confirmPasswordFieldType}
                     className={`input-newsletter border-bottom-required${
                       confirmPassword.error ? " is-invalid" : ""
                     }`}
@@ -157,8 +157,8 @@ const PasswordResetSend = () => {
   );
 };
 
-/*PasswordResetSend.getInitialProps = async () => ({
+PasswordResetSend.getInitialProps = async () => ({
   access: "no auth",
-});*/
+});
 
 export default PasswordResetSend;

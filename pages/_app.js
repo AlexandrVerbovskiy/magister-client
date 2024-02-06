@@ -7,6 +7,7 @@ import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 
 import "../styles/index.css";
+import PageWrapper from "../components/_App/PageWrapper";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const stylesRef = useRef({ base: [], admin: [] });
@@ -72,17 +73,19 @@ function MyApp({ Component, pageProps }) {
   });
 
   return (
-    <Layout>
-      <IndiceProvider access={accessType}>
-        <Component {...pageProps} />
+    <IndiceProvider access={accessType} dopProps={{ setLoading }}>
+      <Layout>
+        <PageWrapper>
+          <Component {...pageProps} />
+        </PageWrapper>
 
         <Loader loading={loading} />
 
         <MainErrorAlert />
         <MainSuccessAlert />
         <UnverifiedAlert />
-      </IndiceProvider>
-    </Layout>
+      </Layout>
+    </IndiceProvider>
   );
 }
 

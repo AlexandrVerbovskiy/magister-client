@@ -26,9 +26,10 @@ const UserEdit = () => {
 
   const router = useRouter();
   const { id } = router.query;
-  const [user, setUser] = useState(null);
   const { error, success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
+
+  const [user, setUser] = useState(null);
 
   const [newPhoto, setNewPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
@@ -45,12 +46,16 @@ const UserEdit = () => {
 
   const [contactDetails, setContactDetails] = useState("");
   const [briefBio, setBriefBio] = useState("");
+  const [placeWork, setPlaceWork] = useState("");
 
-  const [linkedin, setLinkedin] = useState("");
-  const [facebook, setFacebook] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [facebookUrl, setFacebookUrl] = useState("");
+  const [twitterUrl, setTwitterUrl] = useState("");
+  const [instagramUrl, setInstagramUrl] = useState("");
 
   const [twoFactorAuthentication, setTwoFactorAuthentication] = useState(false);
   const [active, setActive] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [suspicious, setSuspicious] = useState(false);
 
   const getObjectToSave = () => ({
@@ -59,15 +64,19 @@ const UserEdit = () => {
     role,
     email,
     phone,
+    verified,
     emailVerified,
     phoneVerified,
     contactDetails,
     briefBio,
-    linkedin,
-    facebook,
+    linkedinUrl,
+    facebookUrl,
+    twitterUrl,
+    instagramUrl,
     twoFactorAuthentication,
     active,
     suspicious,
+    placeWork,
   });
 
   const userToState = (user) => ({
@@ -75,8 +84,10 @@ const UserEdit = () => {
     role: user.role ?? "",
     phone: user.phone ?? "",
     email: user.email ?? "",
-    linkedin: user.linkedin ?? "",
-    facebook: user.facebook ?? "",
+    linkedinUrl: user.linkedinUrl ?? "",
+    facebookUrl: user.facebookUrl ?? "",
+    twitterUrl: user.twitterUrl ?? "",
+    instagramUrl: user.instagramUrl ?? "",
     emailVerified: user.emailVerified ?? false,
     phoneVerified: user.phoneVerified ?? false,
     twoFactorAuthentication: user.twoFactorAuthentication ?? true,
@@ -84,6 +95,8 @@ const UserEdit = () => {
     briefBio: user.briefBio ?? "",
     active: user.active ?? false,
     suspicious: user.suspicious ?? false,
+    verified: user.verified ?? false,
+    placeWork: user.placeWork ?? "",
   });
 
   const hasChanges = () => {
@@ -122,13 +135,17 @@ const UserEdit = () => {
           setPhone(resUserToState.phone);
           setPhoneVerified(resUserToState.phoneVerified);
           setRole(resUserToState.role);
-          setFacebook(resUserToState.facebook);
-          setLinkedin(resUserToState.linkedin);
+          setFacebookUrl(resUserToState.facebookUrl);
+          setLinkedinUrl(resUserToState.linkedinUrl);
+          setInstagramUrl(resUserToState.instagramUrl);
+          setTwitterUrl(resUserToState.twitterUrl);
           setBriefBio(resUserToState.briefBio);
           setContactDetails(resUserToState.contactDetails);
           setTwoFactorAuthentication(resUserToState.twoFactorAuthentication);
           setActive(resUserToState.active);
           setSuspicious(resUserToState.suspicious);
+          setVerified(resUserToState.verified);
+          setPlaceWork(resUserToState.placeWork);
         } else {
           setUser(null);
         }
@@ -363,38 +380,72 @@ const UserEdit = () => {
                         Social networks
                       </h2>
                       <div className="text-sm">
-                        Share your story: LinkedIn and Facebook links welcome
+                        Share your story: LinkedIn, Facebook, Instagram, Twitter
+                        links welcome
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <label
                             className="block text-sm font-medium mb-1"
-                            htmlFor="facebook"
+                            htmlFor="facebook_url"
                           >
-                            Facebook
+                            Facebook URL
                           </label>
                           <input
-                            id="facebook"
+                            id="facebook_url"
                             className="form-input w-full"
                             type="text"
-                            value={facebook}
-                            onInput={(e) => setFacebook(e.target.value)}
+                            value={facebookUrl}
+                            onInput={(e) => setFacebookUrl(e.target.value)}
                           />
                         </div>
                         <div className="sm:w-1/4">
                           <label
                             className="block text-sm font-medium mb-1"
-                            htmlFor="linkedin"
+                            htmlFor="linkedin_url"
                           >
-                            LinkedIn
+                            LinkedIn URL
                           </label>
                           <input
-                            id="linkedin"
+                            id="linkedin_url"
                             className="form-input w-full"
                             type="text"
-                            value={linkedin}
-                            onInput={(e) => setLinkedin(e.target.value)}
+                            value={linkedinUrl}
+                            onInput={(e) => setLinkedinUrl(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                        <div className="sm:w-1/4">
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            htmlFor="instagram_url"
+                          >
+                            Instagram URL
+                          </label>
+                          <input
+                            id="instagram_url"
+                            className="form-input w-full"
+                            type="text"
+                            value={instagramUrl}
+                            onInput={(e) => setInstagramUrl(e.target.value)}
+                          />
+                        </div>
+                        <div className="sm:w-1/4">
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            htmlFor="twitter_url"
+                          >
+                            Twitter URL
+                          </label>
+                          <input
+                            id="twitter_url"
+                            className="form-input w-full"
+                            type="text"
+                            value={twitterUrl}
+                            onInput={(e) => setTwitterUrl(e.target.value)}
                           />
                         </div>
                       </div>
@@ -428,6 +479,29 @@ const UserEdit = () => {
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Active
+                      </h2>
+                      <div className="flex flex-wrap mt-2">
+                        <div className="mr-2">
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            htmlFor="active"
+                          >
+                            Activated by selecting, deactivated by deselecting.
+                          </label>
+                        </div>
+                        <Switch
+                          id="active"
+                          checked={active}
+                          changeChecked={() => setActive(!active)}
+                          onText="Active"
+                          offText="Not active"
+                        />
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                         Verified
                       </h2>
                       <div className="flex flex-wrap mt-2">
@@ -442,8 +516,8 @@ const UserEdit = () => {
                         </div>
                         <Switch
                           id="active"
-                          checked={active}
-                          changeChecked={() => setActive(!active)}
+                          checked={verified}
+                          changeChecked={() => setVerified(!verified)}
                           onText="Verified"
                           offText="Not verified"
                         />
@@ -509,6 +583,26 @@ const UserEdit = () => {
                           value={briefBio}
                           rows="6"
                           onInput={(e) => setBriefBio(e.target.value)}
+                        />
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Place Work
+                      </h2>
+
+                      <div className="text-sm">
+                        Determine workplace location.
+                      </div>
+
+                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                        <textarea
+                          className="form-input w-full"
+                          type="text"
+                          value={placeWork}
+                          rows="6"
+                          onInput={(e) => setPlaceWork(e.target.value)}
                         />
                       </div>
                     </section>

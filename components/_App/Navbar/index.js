@@ -139,6 +139,12 @@ const Navbar = () => {
                     </Link>
                   </li>
 
+                  <li className="nav-item">
+                    <Link href="/settings/" className="nav-link">
+                      Settings
+                    </Link>
+                  </li>
+
                   {isAdmin && (
                     <li className="nav-item">
                       <Link href="/admin/" className="nav-link">

@@ -45,3 +45,41 @@ export const updateSessionInfo = async () => {
   saveSessionInfo(data.body);
   return data.body.user;
 };
+
+export const getMyInfo = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/my-info`)
+  );
+  return data.body.user;
+};
+
+export const setMyPassword = async (password) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/set-my-password`, { password })
+  );
+  return data.body.user;
+};
+
+export const updateProfile = async (body) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/save-profile`, body)
+  );
+  return data.body.user;
+};
+
+export const getMyDocuments = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/my-documents`)
+  );
+  return data.body.documents;
+};
+
+export const updateMyPassword = async (currentPassword, newPassword) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/update-my-password`, {
+      currentPassword,
+      newPassword,
+    })
+  );
+  return data.body.user;
+};

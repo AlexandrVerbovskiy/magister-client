@@ -83,8 +83,8 @@ const PasswordResetSend = () => {
   );
 };
 
-/*PasswordResetSend.getInitialProps = async () => ({
+PasswordResetSend.getInitialProps = async () => ({
   access: "no auth",
-});*/
+});
 
 export default PasswordResetSend;

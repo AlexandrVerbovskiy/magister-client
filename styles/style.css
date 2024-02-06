@@ -13737,6 +13737,7 @@ Dashboard CSS
 }
 .my-profile-box .profile-box img {
   border-radius: 5px;
+  width: 100%;
 }
 .my-profile-box .profile-box .file-upload {
   display: inline-block;
@@ -16474,6 +16475,7 @@ Preloader Area CSS
   border-bottom: 1px solid var(--bs-form-invalid-border-color) !important;
 }
 
+.password-competing form .form-group i,
 .password-reset form .form-group i {
   position: absolute;
   left: 0;
@@ -16482,4 +16484,12 @@ Preloader Area CSS
   font-size: 22px;
   cursor: pointer;
   color: var(--mainColor);
+}
+
+.password-competing form .form-group i {
+  left: 10px !important;
+}
+
+.password-competing form .form-group .input-newsletter {
+  padding: 0 0 0 42px;
 }
