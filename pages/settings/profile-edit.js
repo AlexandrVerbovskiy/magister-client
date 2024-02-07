@@ -3,7 +3,12 @@ import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import lodash from "lodash";
-import { updateProfile, updateMyPassword } from "../../services";
+import {
+  updateProfile,
+  updateMyPassword,
+  checkMyPhoneVerifyCode,
+  generateMyPhoneVerifyCode,
+} from "../../services";
 import ENV from "../../env";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
 import Input from "../../components/DashboardComponents/Input";
@@ -14,13 +19,37 @@ import {
   validatePhoneNumber,
   validateUrl,
 } from "../../utils";
+import YesNoModal from "../../components/_App/YesNoModal";
+import BaseModal from "../../components/_App/BaseModal";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
-  const { success, setLoading, error, user, onLogin } =
+  const { success, setLoading, updateUserFields, user, onLogin } =
     useContext(IndiceContext);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
+  const toggleVerifyPhoneModal = () =>
+    setActiveVerifyPhoneModal(!activeVerifyPhoneModal);
+
+  const [activeCodePhoneModal, setActiveCodePhoneModal] = useState(false);
+  const [verifyFormError, setVerifyFormError] = useState(null);
+  const [phoneCode, setPhoneCode] = useState("");
+
+  const toggleCodePhoneModal = () => {
+    setVerifyFormError(null);
+    setActiveCodePhoneModal(!activeCodePhoneModal);
+  };
+
+  const handleInputPhoneCode = (e) => {
+    setVerifyFormError(null);
+    setPhoneCode(e.target.value);
+  };
 
   const [newPhoto, setNewPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
@@ -175,7 +204,7 @@ const ProfileEdit = () => {
       hasError = true;
     }
 
-    if (hasError) return;
+    if (hasError) return false;
 
     if (hasChanges()) {
       const formData = new FormData();
@@ -200,11 +229,14 @@ const ProfileEdit = () => {
         const loginDate = { ...user, ...info, photo: res.photo };
         localStorage.setItem("userInfo", JSON.stringify(loginDate));
         onLogin(loginDate);
+        return true;
       } catch (e) {
         setProfileFormError(e.message);
+        return false;
       }
     } else {
       success.set("Profile updated successfully");
+      return true;
     }
   };
 
@@ -256,6 +288,63 @@ const ProfileEdit = () => {
     }
   };
 
+  const handleVerifyPhoneModalClick = async () => {
+    const success = await handleProfileSaveClick();
+
+    if (!success) {
+      toggleVerifyPhoneModal();
+      return;
+    }
+
+    try {
+      await generateMyPhoneVerifyCode();
+      toggleCodePhoneModal();
+    } catch (e) {
+      setProfileFormError(e.message);
+      toggleVerifyPhoneModal();
+    }
+  };
+
+  const handleVerifyPhoneClick = async () => {
+    const userInfo = userToState();
+
+    if (userInfo.phone == phone && user.phoneVerified) return;
+
+    const resPhoneValidate = validatePhoneNumber(phone);
+
+    if (resPhoneValidate !== true) {
+      setPhoneError(resPhoneValidate);
+      return;
+    }
+
+    if (userInfo.phone != phone) {
+      toggleVerifyPhoneModal();
+    } else {
+      try {
+        await generateMyPhoneVerifyCode();
+        toggleCodePhoneModal();
+      } catch (e) {
+        setProfileFormError(e.message);
+      }
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    if (phoneCode.length < 1) {
+      setVerifyFormError("Code is required field");
+      return;
+    }
+
+    try {
+      await checkMyPhoneVerifyCode(phoneCode);
+      toggleCodePhoneModal();
+      updateUserFields({ phoneVerified: true });
+      success.set("Phone success verified");
+    } catch (e) {
+      setVerifyFormError(e.message);
+    }
+  };
+
   useEffect(() => {
     initUser();
     setLoading(false);
@@ -263,6 +352,52 @@ const ProfileEdit = () => {
 
   return (
     <>
+      <YesNoModal
+        title="Confirm Action"
+        body="To confirm the phone number, you need to save the data
+        entered in the form. Are you sure you want to leave the data
+        as is?"
+        active={activeVerifyPhoneModal}
+        toggleActive={toggleVerifyPhoneModal}
+        onAccept={handleVerifyPhoneModalClick}
+      />
+
+      <BaseModal
+        active={activeCodePhoneModal}
+        toggleActive={toggleCodePhoneModal}
+      >
+        <span className="sub-title mb-2">
+          <span>Enter Verified Code</span>
+        </span>
+
+        <form method="get">
+          <div className="form-group">
+            <input
+              value={phoneCode}
+              onInput={handleInputPhoneCode}
+              type="text"
+              placeholder="Code"
+              className="form-control"
+            />
+          </div>
+
+          {verifyFormError && (
+            <div className="col-lg-12 col-md-12">
+              <div
+                className="alert-dismissible fade show alert alert-danger"
+                role="alert"
+              >
+                {verifyFormError}
+              </div>
+            </div>
+          )}
+
+          <button type="button" onClick={handleVerifyCode}>
+            Verify
+          </button>
+        </form>
+      </BaseModal>
+
       <DashboardNavbar />
       <div className="main-content d-flex flex-column">
         <NavbarThree />
@@ -285,7 +420,7 @@ const ProfileEdit = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-lg-6 col-md-12">
                     <Input
                       label="Your Name"
                       value={name}
@@ -307,15 +442,44 @@ const ProfileEdit = () => {
                     />
                   </div>
 
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <Input
-                      label="Phone"
-                      value={phone}
-                      type="text"
-                      setValue={setPhone}
-                      error={phoneError}
-                      setError={setPhoneError}
-                    />
+                  <div className="row">
+                    <div className="col-xl-6 col-lg-12 col-md-12">
+                      <Input
+                        label="Phone"
+                        value={phone}
+                        type="text"
+                        setValue={setPhone}
+                        setError={setPhoneError}
+                      />
+                    </div>
+
+                    {(phone != user.phone || !user.phoneVerified) && (
+                      <div className="col-xl-6 col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label
+                            className="d-none d-xl-block"
+                            style={{ color: "transparent" }}
+                          >
+                            Verify Phone
+                          </label>
+                          <button
+                            type="button"
+                            onClick={handleVerifyPhoneClick}
+                          >
+                            Verify Phone
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {phoneError && (
+                      <div
+                        className="invalid-feedback d-block"
+                        style={{ marginTop: "-14px", padding: "0 5px" }}
+                      >
+                        {phoneError}
+                      </div>
+                    )}
                   </div>
 
                   <div className="col-lg-12 col-md-12">

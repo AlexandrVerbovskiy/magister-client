@@ -95,7 +95,14 @@ const useMain = ({ access = null }) => {
 
   const toggleSideMenu = () => setDisplaySideMenu(!displaySideMenu);
 
+  const updateUserFields = (info) => {
+    const userInfo = { ...user, ...info };
+    setUser(userInfo);
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  };
+
   return {
+    updateUserFields,
     isAuth,
     user,
     onLogin,

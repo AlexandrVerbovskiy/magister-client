@@ -104,3 +104,17 @@ export const resetPassword = async (password, token) => {
   );
   return data.message;
 };
+
+export const generateMyPhoneVerifyCode = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/generate-my-phone-code`)
+  );
+  return data.message;
+};
+
+export const checkMyPhoneVerifyCode = async (code) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/check-my-phone-code`, { code })
+  );
+  return data.message;
+};

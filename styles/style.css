@@ -16493,3 +16493,39 @@ Preloader Area CSS
 .password-competing form .form-group .input-newsletter {
   padding: 0 0 0 42px;
 }
+
+.yes-no-modal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  form
+  button.button-danger {
+  background-color: #ee3535;
+}
+
+.yes-no-modal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  form
+  button.button-danger:hover {
+  background-color: #9e0000;
+}
+
+.yes-no-modal .modal-dialog .modal-content .tab-content .sub-title {
+  font-weight: 700 !important;
+}
+
+.yes-no-modal .modal-dialog .modal-content .tab-content .sub-title::before {
+  display: none;
+}
+
+.body_overlay.open {
+  z-index: 99999;
+}
+
+.modal.show {
+  z-index: 999999;
+}
