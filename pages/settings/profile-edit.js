@@ -7,6 +7,15 @@ import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import lodash from "lodash";
 import { updateProfile, updateMyPassword } from "../../services";
 import ENV from "../../env";
+import ImageInput from "../../components/DashboardComponents/ImageInput";
+import Input from "../../components/DashboardComponents/Input";
+import Textarea from "../../components/DashboardComponents/Textarea";
+import {
+  validateEmail,
+  validatePassword,
+  validatePhoneNumber,
+  validateUrl,
+} from "../../utils";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
@@ -24,6 +33,10 @@ const ProfileEdit = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
+  const [nameError, setNameError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [phoneError, setPhoneError] = useState(null);
+
   const [contactDetails, setContactDetails] = useState("");
   const [briefBio, setBriefBio] = useState("");
   const [placeWork, setPlaceWork] = useState("");
@@ -33,9 +46,18 @@ const ProfileEdit = () => {
   const [twitterUrl, setTwitterUrl] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
 
+  const [linkedinUrlError, setLinkedinUrlError] = useState(null);
+  const [facebookUrlError, setFacebookUrlError] = useState(null);
+  const [twitterUrlError, setTwitterUrlError] = useState(null);
+  const [instagramUrlError, setInstagramUrlError] = useState(null);
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
+
+  const [passwordError, setPasswordError] = useState(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+  const [currentPasswordError, setCurrentPasswordError] = useState(null);
 
   const objectToSave = () => ({
     name,
@@ -101,13 +123,63 @@ const ProfileEdit = () => {
   const handlePhotoChange = (e) => {
     const img = e.target.files[0];
     const url = URL.createObjectURL(img);
-
     setNewPhoto(img);
     setPhotoUrl(url);
   };
 
   const handleProfileSaveClick = async () => {
     setProfileFormError(null);
+
+    let hasError = false;
+
+    if (name.length < 1) {
+      setNameError("Required field");
+      hasError = true;
+    }
+
+    const resValidateEmail = validateEmail(email);
+
+    if (resValidateEmail !== true) {
+      setEmailError(resValidateEmail);
+      hasError = true;
+    }
+
+    const resValidatePhone = validatePhoneNumber(phone);
+
+    if (phone && resValidatePhone !== true) {
+      setPhoneError(resValidatePhone);
+      hasError = true;
+    }
+
+    const resValidateFacebookLink = validateUrl(facebookUrl);
+
+    if (facebookUrl && resValidateFacebookLink !== true) {
+      setFacebookUrlError(resValidateFacebookLink);
+      hasError = true;
+    }
+
+    const resValidateLinkedinLink = validateUrl(linkedinUrl);
+
+    if (linkedinUrl && resValidateLinkedinLink !== true) {
+      setLinkedinUrlError(resValidateLinkedinLink);
+      hasError = true;
+    }
+
+    const resValidateInstagramLink = validateUrl(instagramUrl);
+
+    if (instagramUrl && resValidateInstagramLink !== true) {
+      setInstagramUrlError(resValidateInstagramLink);
+      hasError = true;
+    }
+
+    const resValidateTwitterLink = validateUrl(twitterUrl);
+
+    if (twitterUrl && resValidateTwitterLink !== true) {
+      setTwitterUrlError(resValidateTwitterLink);
+      hasError = true;
+    }
+
+    if (hasError) return;
 
     if (hasChanges()) {
       const formData = new FormData();
@@ -138,6 +210,39 @@ const ProfileEdit = () => {
 
   const handleChangePassword = async () => {
     setPasswordFormError(null);
+
+    let hasError = false;
+
+    const resValidateCurrentPass = validatePassword(currentPassword);
+    const resValidateNewPass = validatePassword(password);
+    const resValidateNewConfirmPass = validatePassword(confirmPassword);
+
+    if (resValidateNewConfirmPass !== true) {
+      setConfirmPasswordError(resValidateNewConfirmPass);
+      hasError = true;
+    }
+
+    if (resValidateNewPass !== true) {
+      setPasswordError(resValidateNewPass);
+      hasError = true;
+    }
+
+    if (resValidateCurrentPass !== true) {
+      setCurrentPasswordError(resValidateCurrentPass);
+      hasError = true;
+    }
+
+    if (password != confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      hasError = true;
+    }
+
+    if (password == confirmPassword && password == currentPassword) {
+      setPasswordError("New password can't be equal with current password");
+      hasError = true;
+    }
+
+    if (hasError) return;
 
     try {
       await updateMyPassword(currentPassword, password);
@@ -173,153 +278,121 @@ const ProfileEdit = () => {
               <form method="get">
                 <div className="row">
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <img src={photoUrl ?? defaultPhotoLink} alt="image" />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          style={{ display: "none" }}
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handlePhotoChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      photoUrl={photoUrl}
+                      onChange={handlePhotoChange}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Your Name</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={name}
-                        onInput={(e) => setName(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Your Name"
+                      value={name}
+                      type="text"
+                      setValue={setName}
+                      error={nameError}
+                      setError={setNameError}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        value={email}
-                        onInput={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Email"
+                      value={email}
+                      type="email"
+                      setValue={setEmail}
+                      error={emailError}
+                      setError={setEmailError}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Phone</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={phone}
-                        onInput={(e) => setPhone(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Phone"
+                      value={phone}
+                      type="text"
+                      setValue={setPhone}
+                      error={phoneError}
+                      setError={setPhoneError}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Bio</label>
-                      <textarea
-                        cols="30"
-                        rows="6"
-                        placeholder="Short description about you..."
-                        className="form-control"
-                        value={briefBio}
-                        onInput={(e) => setBriefBio(e.target.value)}
-                      ></textarea>
-                    </div>
+                    <Textarea
+                      label="Bio"
+                      rows="6"
+                      placeholder="Short description about you..."
+                      value={briefBio}
+                      setValue={setBriefBio}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Contact Details</label>
-                      <textarea
-                        cols="30"
-                        rows="3"
-                        placeholder="Short contact info about you..."
-                        className="form-control"
-                        value={contactDetails}
-                        onInput={(e) => setContactDetails(e.target.value)}
-                      ></textarea>
-                    </div>
+                    <Textarea
+                      label="Contact Details"
+                      rows="3"
+                      placeholder="Short contact info about you..."
+                      value={contactDetails}
+                      setValue={setContactDetails}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Place Work</label>
-                      <textarea
-                        cols="30"
-                        rows="3"
-                        placeholder="Short info about you work..."
-                        className="form-control"
-                        value={placeWork}
-                        onInput={(e) => setPlaceWork(e.target.value)}
-                      ></textarea>
-                    </div>
+                    <Textarea
+                      label="Place Work"
+                      rows="3"
+                      placeholder="Short info about you work..."
+                      value={placeWork}
+                      setValue={setPlaceWork}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Facebook URL</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="https://www.facebook.com/"
-                        value={facebookUrl}
-                        onInput={(e) => setFacebookUrl(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Facebook URL"
+                      value={facebookUrl}
+                      type="text"
+                      setValue={setFacebookUrl}
+                      placeholder="https://www.facebook.com/"
+                      error={facebookUrlError}
+                      setError={setFacebookUrlError}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Twitter URL</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="https://twitter.com/"
-                        value={twitterUrl}
-                        onInput={(e) => setTwitterUrl(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Twitter URL"
+                      value={twitterUrl}
+                      type="text"
+                      setValue={setTwitterUrl}
+                      placeholder="https://twitter.com/"
+                      error={twitterUrlError}
+                      setError={setTwitterUrlError}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Linkedin URL</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="https://www.linkedin.com/"
-                        value={linkedinUrl}
-                        onInput={(e) => setLinkedinUrl(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Linkedin URL"
+                      value={linkedinUrl}
+                      type="text"
+                      setValue={setLinkedinUrl}
+                      placeholder="https://www.linkedin.com/"
+                      error={linkedinUrlError}
+                      setError={setLinkedinUrlError}
+                    />
                   </div>
 
                   <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Instagram URL</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="https://instagram.com/"
-                        value={instagramUrl}
-                        onInput={(e) => setInstagramUrl(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Instagram URL"
+                      value={instagramUrl}
+                      type="text"
+                      setValue={setInstagramUrl}
+                      placeholder="https://instagram.com/"
+                      error={instagramUrlError}
+                      setError={setInstagramUrlError}
+                    />
                   </div>
 
                   {profileFormError && (
@@ -352,39 +425,36 @@ const ProfileEdit = () => {
               <form method="get">
                 <div className="row">
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Current Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        value={currentPassword}
-                        onInput={(e) => setCurrentPassword(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Current Password"
+                      value={currentPassword}
+                      type="password"
+                      setValue={setCurrentPassword}
+                      error={currentPasswordError}
+                      setError={setCurrentPasswordError}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>New Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        value={password}
-                        onInput={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="New Password"
+                      value={password}
+                      type="password"
+                      setValue={setPassword}
+                      error={passwordError}
+                      setError={setPasswordError}
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Confirm New Password</label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        value={confirmPassword}
-                        onInput={(e) => setConfirmPassword(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      label="Confirm New Password"
+                      value={confirmPassword}
+                      type="password"
+                      setValue={setConfirmPassword}
+                      error={confirmPasswordError}
+                      setError={setConfirmPasswordError}
+                    />
                   </div>
 
                   {passwordFormError && (

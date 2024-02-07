@@ -74,6 +74,13 @@ export const getMyDocuments = async () => {
   return data.body.documents;
 };
 
+export const saveMyDocuments = async (body) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/save-my-documents`, body)
+  );
+  return data.body.documents;
+};
+
 export const updateMyPassword = async (currentPassword, newPassword) => {
   const data = await serviceWrapper(
     authAxios.post(`${serverApiUrl}/auth/update-my-password`, {

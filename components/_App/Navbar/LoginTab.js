@@ -7,48 +7,46 @@ import { IndiceContext } from "../../../contexts";
 
 const LoginTab = ({ moveToRegister, closeModal }) => {
   const [formError, setFormError] = useState(null);
-  const [email, setEmail] = useState({ value: "", error: null });
-  const [password, setPassword] = useState({
-    value: "",
-    error: null,
-  });
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
+
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
 
   const { onLogin, success: mainSuccess } = useContext(IndiceContext);
 
-  const handleInputEmail = (e) =>
-    setEmail({ value: e.target.value, error: null });
-  const handleInputPassword = (e) =>
-    setPassword({ value: e.target.value, error: null });
+  const handleInputEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError(null);
+  };
+  const handleInputPassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError(null);
+  };
 
   const handleSubmit = async () => {
     setFormError(null);
 
     let error = false;
 
-    const resPasswordValid = validatePassword(password.value);
+    const resPasswordValid = validatePassword(password);
     if (resPasswordValid !== true) {
-      setPassword((prev) => ({
-        ...prev,
-        error: resPasswordValid,
-      }));
       error = true;
+      setPasswordError(resPasswordValid);
     }
 
-    const resEmailValid = validateEmail(email.value);
+    const resEmailValid = validateEmail(email);
     if (resEmailValid !== true) {
       error = true;
-      setEmail((prev) => ({
-        ...prev,
-        error: resEmailValid,
-      }));
+      setEmailError(resEmailValid);
     }
 
     if (error) return;
 
     try {
       const user = await login({
-        email: email.value,
-        password: password.value,
+        email,
+        password,
       });
 
       onLogin(user);
@@ -74,17 +72,17 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
         <form>
           <Input
             type="text"
-            value={email.value}
+            value={email}
             placeholder="Email"
-            error={email.error}
+            error={emailError}
             onInput={handleInputEmail}
           />
 
           <Input
             type="password"
-            value={password.value}
+            value={password}
             placeholder="Password"
-            error={password.error}
+            error={passwordError}
             onInput={handleInputPassword}
           />
 

@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
+import ImageInput from "../../components/DashboardComponents/ImageInput";
+import { saveMyDocuments, getMyDocuments } from "../../services";
+import ENV from "../../env";
 
 const defaultPhotoLink = "/images/admin/applications-image-23.jpg";
 
@@ -97,7 +100,7 @@ const DocumentsVerification = () => {
   };
 
   const initDocuments = async () => {
-    const docs = {};
+    const docs = await getMyDocuments();
 
     if (docs.proofOfAddressLink) {
       setProofOfAddressLink(
@@ -156,10 +159,64 @@ const DocumentsVerification = () => {
 
   const handleSaveClick = async () => {
     setFormError(null);
+
+    const formData = new FormData();
+
+    let hasUpdates = false;
+
+    if (newProofOfAddress) {
+      formData.append("proofOfAddress", newProofOfAddress);
+      hasUpdates = true;
+    }
+
+    if (newReputableBankId) {
+      formData.append("reputableBankId", newReputableBankId);
+      hasUpdates = true;
+    }
+
+    if (newUtility) {
+      formData.append("utility", newUtility);
+      hasUpdates = true;
+    }
+
+    if (newHmrc) {
+      formData.append("hmrc", newHmrc);
+      hasUpdates = true;
+    }
+
+    if (newCouncilTaxBill) {
+      formData.append("councilTaxBill", newCouncilTaxBill);
+      hasUpdates = true;
+    }
+
+    if (newPassportOrDrivingId) {
+      formData.append("passportOrDrivingId", newPassportOrDrivingId);
+      hasUpdates = true;
+    }
+
+    if (newConfirmMoneyLaunderingChecksAndCompliance) {
+      formData.append(
+        "confirmMoneyLaunderingChecksAndCompliance",
+        newConfirmMoneyLaunderingChecksAndCompliance
+      );
+      hasUpdates = true;
+    }
+
+    console.log(hasUpdates);
+
+    if (hasUpdates) {
+      try {
+        await saveMyDocuments(formData);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     success.set("Profile updated successfully");
   };
 
   useEffect(() => {
+    initDocuments();
     setLoading(false);
   }, []);
 
@@ -181,164 +238,75 @@ const DocumentsVerification = () => {
               <form method="get">
                 <div className="row">
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>Proof of Address</label>
-                      <img
-                        src={proofOfAddressLink ?? defaultPhotoLink}
-                        alt="image"
-                      />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handleProofOfAddressChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="Proof of Address"
+                      photoUrl={proofOfAddressLink}
+                      onChange={handleProofOfAddressChange}
+                      name="proofOfAddressLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>Reputable Bank Id</label>
-                      <img
-                        src={reputableBankIdLink ?? defaultPhotoLink}
-                        alt="image"
-                      />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handleReputableBankIdChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="Reputable Bank Id"
+                      photoUrl={reputableBankIdLink}
+                      onChange={handleReputableBankIdChange}
+                      name="reputableBankIdLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>Utility</label>
-                      <img src={utilityLink ?? defaultPhotoLink} alt="image" />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handleUtilityChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="Utility"
+                      photoUrl={utilityLink}
+                      onChange={handleUtilityChange}
+                      name="utilityLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>HMRC</label>
-                      <img src={hmrcLink ?? defaultPhotoLink} alt="image" />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handleHmrcChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="HMRC"
+                      photoUrl={hmrcLink}
+                      onChange={handleHmrcChange}
+                      name="hmrcLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>Council Tax Bill</label>
-                      <img
-                        src={councilTaxBillLink ?? defaultPhotoLink}
-                        alt="image"
-                      />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handleCouncilTaxBillChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="Council Tax Bill"
+                      photoUrl={councilTaxBillLink}
+                      onChange={handleCouncilTaxBillChange}
+                      name="councilTaxBillLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>Passport Or Driving Id</label>
-                      <img
-                        src={passportOrDrivingIdLink ?? defaultPhotoLink}
-                        alt="image"
-                      />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={handlePassportOrDrivingIdChange}
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
-                    </div>
+                    <ImageInput
+                      label="Passport Or Driving Id"
+                      photoUrl={passportOrDrivingIdLink}
+                      onChange={handlePassportOrDrivingIdChange}
+                      name="passportOrDrivingIdLink"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group profile-box">
-                      <label>
-                        Confirm Money Laundering Check And Compliance
-                      </label>
-                      <img
-                        src={
-                          confirmMoneyLaunderingChecksAndComplianceLink ??
-                          defaultPhotoLink
-                        }
-                        alt="image"
-                      />
-                      <div className="file-upload">
-                        <input
-                          type="file"
-                          name="file"
-                          id="file"
-                          accept="image/*"
-                          className="inputfile"
-                          onChange={
-                            handleConfirmMoneyLaunderingChecksAndComplianceChange
-                          }
-                        />
-                        <label htmlFor="file">
-                          <i className="bx bx-upload"></i> Upload Photo
-                        </label>
-                      </div>
+                    <ImageInput
+                      label="Confirm Money Laundering Check And Compliance"
+                      photoUrl={confirmMoneyLaunderingChecksAndComplianceLink}
+                      onChange={
+                        handleConfirmMoneyLaunderingChecksAndComplianceChange
+                      }
+                      name="confirmMoneyLaunderingChecksAndComplianceLink"
+                    />
+                  </div>
+
+                  <div className="col-lg-12 col-md-12">
+                    <div className="form-group">
+                      <button type="button" onClick={handleSaveClick}>
+                        Save Change
+                      </button>
                     </div>
                   </div>
                 </div>

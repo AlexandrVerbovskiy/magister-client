@@ -11,7 +11,7 @@ const serviceWrapper = async (promise) => {
     return res.data;
   } catch (e) {
     if (e.response?.data?.isError) {
-      throw new Error(e.response?.data?.message.error);
+      throw new Error(e.response?.data?.message);
     } else {
       throw new Error(e.message);
     }

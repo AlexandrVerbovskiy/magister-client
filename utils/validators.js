@@ -89,7 +89,7 @@ export function validateDate(date) {
 
 export function validatePhoneNumber(phoneNumber) {
   if (/[^0-9]/.test(phoneNumber)) {
-    return "Phone number should contain only digits, hyphens, and spaces";
+    return "Phone number should contain only digits";
   }
 
   if (phoneNumber.length < 10) {
@@ -113,4 +113,13 @@ export function validatePrice(price) {
   }
 
   return true;
+}
+
+export function validateUrl(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (error) {
+    return error.message;
+  }
 }
