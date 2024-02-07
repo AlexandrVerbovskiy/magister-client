@@ -4,6 +4,7 @@ import SocialAuth from "./SocialAuth";
 import { validatePassword, validateEmail } from "../../../utils";
 import { login } from "../../../services";
 import { IndiceContext } from "../../../contexts";
+import Link from "next/link";
 
 const LoginTab = ({ moveToRegister, closeModal }) => {
   const [formError, setFormError] = useState(null);
@@ -54,6 +55,7 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
       mainSuccess.set("Successfully logged in");
     } catch (e) {
       setFormError(e.message);
+      setPassword("");
     }
   };
 
@@ -94,6 +96,11 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
               {formError}
             </div>
           )}
+
+          <span className="dont-account mt-0 mb-3">
+            Forgot or lost your password?{" "}
+            <Link href="/password-reset-send">Reset It Now</Link>
+          </span>
 
           <button type="button" onClick={handleSubmit}>
             Login Now

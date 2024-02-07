@@ -10,6 +10,7 @@ const PasswordCompleting = () => {
   const [formError, setFormError] = useState(null);
   const { user } = useContext(IndiceContext);
   const { error, success, setLoading } = useContext(IndiceContext);
+  const [hasAccess, setHasAccess] = useState(null);
 
   const [password, setPassword] = useState({
     value: "",
@@ -78,15 +79,24 @@ const PasswordCompleting = () => {
     try {
       await setMyPassword(password.value);
       success.set("Password updated successfully");
-      router.push("/profile-competing");
+      router.push("/settings/profile-edit");
     } catch (err) {
       setFormError(err.message);
     }
   };
 
   useEffect(() => {
+    if (user.needSetPassword) {
+      setHasAccess(true);
+    } else {
+      error.set("Access denied");
+      router.push("/");
+    }
+
     setLoading(false);
-  });
+  }, []);
+
+  if (hasAccess === null) return <div></div>;
 
   return (
     <div className="coming-soon-area password-competing">

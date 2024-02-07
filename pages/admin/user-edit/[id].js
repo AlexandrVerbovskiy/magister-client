@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Router, { useRouter } from "next/router";
 import lodash from "lodash";
 
@@ -13,8 +13,15 @@ import ENV from "../../../env";
 import Switch from "../../../partials/admin/base/Switch";
 import DropdownClassic from "../../../components/admin/DropdownClassic";
 import ModalBlank from "../../../components/admin/ModalBlank";
+import ImageInput from "../../../components/admin/Form/ImageInput";
+import Input from "../../../components/admin/Form/Input";
+import Textarea from "../../../components/admin/Form/Textarea";
+import {
+  validateEmail,
+  validatePhoneNumber,
+  validateUrl,
+} from "../../../utils";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 const roleOptions = [
   { value: "user", title: "User" },
   { value: "support", title: "Support" },
@@ -33,15 +40,17 @@ const UserEdit = () => {
 
   const [newPhoto, setNewPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
-  const photoInputRef = useRef(null);
 
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState(null);
   const [role, setRole] = useState("user");
 
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
   const [emailVerified, setEmailVerified] = useState(false);
 
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState(null);
   const [phoneVerified, setPhoneVerified] = useState(false);
 
   const [contactDetails, setContactDetails] = useState("");
@@ -49,9 +58,16 @@ const UserEdit = () => {
   const [placeWork, setPlaceWork] = useState("");
 
   const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [linkedinUrlError, setLinkedinUrlError] = useState(null);
+
   const [facebookUrl, setFacebookUrl] = useState("");
+  const [facebookUrlError, setFacebookUrlError] = useState(null);
+
   const [twitterUrl, setTwitterUrl] = useState("");
+  const [twitterUrlError, setTwitterUrlError] = useState(null);
+
   const [instagramUrl, setInstagramUrl] = useState("");
+  const [instagramUrlError, setInstagramUrlError] = useState(null);
 
   const [twoFactorAuthentication, setTwoFactorAuthentication] = useState(false);
   const [active, setActive] = useState(false);
@@ -178,8 +194,6 @@ const UserEdit = () => {
     Router.push("/admin/users");
   };
 
-  const handlePhotoInputClick = () => photoInputRef.current.click();
-
   const handleGoBackClick = (e) => {
     if (!hasChanges()) {
       Router.push("/admin/users");
@@ -195,6 +209,57 @@ const UserEdit = () => {
       success.set("Saved successfully");
       return;
     }
+
+    let hasError = false;
+
+    if (name.length < 1) {
+      setNameError("Required field");
+      hasError = true;
+    }
+
+    const resValidateEmail = validateEmail(email);
+
+    if (resValidateEmail !== true) {
+      setEmailError(resValidateEmail);
+      hasError = true;
+    }
+
+    const resValidatePhone = validatePhoneNumber(phone);
+
+    if (phone && resValidatePhone !== true) {
+      setPhoneError(resValidatePhone);
+      hasError = true;
+    }
+
+    const resValidateFacebookLink = validateUrl(facebookUrl);
+
+    if (facebookUrl && resValidateFacebookLink !== true) {
+      setFacebookUrlError(resValidateFacebookLink);
+      hasError = true;
+    }
+
+    const resValidateLinkedinLink = validateUrl(linkedinUrl);
+
+    if (linkedinUrl && resValidateLinkedinLink !== true) {
+      setLinkedinUrlError(resValidateLinkedinLink);
+      hasError = true;
+    }
+
+    const resValidateInstagramLink = validateUrl(instagramUrl);
+
+    if (instagramUrl && resValidateInstagramLink !== true) {
+      setInstagramUrlError(resValidateInstagramLink);
+      hasError = true;
+    }
+
+    const resValidateTwitterLink = validateUrl(twitterUrl);
+
+    if (twitterUrl && resValidateTwitterLink !== true) {
+      setTwitterUrlError(resValidateTwitterLink);
+      hasError = true;
+    }
+
+    if (hasError) return;
 
     const formData = new FormData();
 
@@ -252,33 +317,10 @@ const UserEdit = () => {
                     </h2>
 
                     <section>
-                      <div className="flex items-center">
-                        <div className="mr-4">
-                          <img
-                            className="cursor-pointer w-20 h-20 rounded-full"
-                            src={photoUrl ?? defaultPhotoLink}
-                            width="80"
-                            height="80"
-                            alt="User upload"
-                            onClick={handlePhotoInputClick}
-                          />
-                        </div>
-
-                        <button
-                          onClick={handlePhotoInputClick}
-                          className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
-                        >
-                          Change
-                        </button>
-
-                        <input
-                          ref={photoInputRef}
-                          style={{ display: "none" }}
-                          type="file"
-                          accept="image/*"
-                          onChange={handlePhotoChange}
-                        />
-                      </div>
+                      <ImageInput
+                        photoUrl={photoUrl}
+                        onChange={handlePhotoChange}
+                      />
                     </section>
 
                     <section>
@@ -291,18 +333,13 @@ const UserEdit = () => {
                       </div>
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            User Name
-                          </label>
-                          <input
-                            id="name"
-                            className="form-input w-full"
-                            type="text"
+                          <Input
                             value={name}
-                            onInput={(e) => setName(e.target.value)}
+                            setValue={setName}
+                            error={nameError}
+                            setError={setNameError}
+                            label="User Name"
+                            labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
                         <div className="sm:w-1/4">
@@ -327,15 +364,12 @@ const UserEdit = () => {
                       </h2>
                       <div className="flex flex-wrap mt-2">
                         <div className="mr-2">
-                          <label className="sr-only" htmlFor="email">
-                            Business email
-                          </label>
-                          <input
-                            id="email"
-                            className="form-input"
-                            type="email"
+                          <Input
                             value={email}
-                            onInput={(e) => setEmail(e.target.value)}
+                            setValue={setEmail}
+                            setError={setEmailError}
+                            label="Business Email"
+                            labelClassName="sr-only"
                           />
                         </div>
                         <Switch
@@ -346,6 +380,9 @@ const UserEdit = () => {
                           offText="Not verified"
                         />
                       </div>
+                      {emailError && (
+                        <div className="text-red-500 text-sm">{emailError}</div>
+                      )}
                     </section>
 
                     <section>
@@ -354,17 +391,15 @@ const UserEdit = () => {
                       </h2>
                       <div className="flex flex-wrap mt-2">
                         <div className="mr-2">
-                          <label className="sr-only" htmlFor="email">
-                            Business Phone
-                          </label>
-                          <input
-                            id="phone"
-                            className="form-input"
-                            type="phone"
+                          <Input
                             value={phone}
-                            onInput={(e) => setPhone(e.target.value)}
+                            setValue={setPhone}
+                            setError={setPhoneError}
+                            label="Business Phone"
+                            labelClassName="sr-only"
                           />
                         </div>
+
                         <Switch
                           id="phone-toggle"
                           checked={phoneVerified}
@@ -373,6 +408,9 @@ const UserEdit = () => {
                           offText="Not verified"
                         />
                       </div>
+                      {phoneError && (
+                        <div className="text-red-500 text-sm">{phoneError}</div>
+                      )}
                     </section>
 
                     <section>
@@ -386,66 +424,46 @@ const UserEdit = () => {
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="facebook_url"
-                          >
-                            Facebook URL
-                          </label>
-                          <input
-                            id="facebook_url"
-                            className="form-input w-full"
-                            type="text"
+                          <Input
                             value={facebookUrl}
-                            onInput={(e) => setFacebookUrl(e.target.value)}
+                            setValue={setFacebookUrl}
+                            error={facebookUrlError}
+                            setError={setFacebookUrlError}
+                            label="Facebook URL"
+                            labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
                         <div className="sm:w-1/4">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="linkedin_url"
-                          >
-                            LinkedIn URL
-                          </label>
-                          <input
-                            id="linkedin_url"
-                            className="form-input w-full"
-                            type="text"
+                          <Input
                             value={linkedinUrl}
-                            onInput={(e) => setLinkedinUrl(e.target.value)}
+                            setValue={setLinkedinUrl}
+                            error={linkedinUrlError}
+                            setError={setLinkedinUrlError}
+                            label="LinkedIn URL"
+                            labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="instagram_url"
-                          >
-                            Instagram URL
-                          </label>
-                          <input
-                            id="instagram_url"
-                            className="form-input w-full"
-                            type="text"
+                          <Input
                             value={instagramUrl}
-                            onInput={(e) => setInstagramUrl(e.target.value)}
+                            setValue={setInstagramUrl}
+                            error={instagramUrlError}
+                            setError={setInstagramUrlError}
+                            label="Instagram URL"
+                            labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
                         <div className="sm:w-1/4">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="twitter_url"
-                          >
-                            Twitter URL
-                          </label>
-                          <input
-                            id="twitter_url"
-                            className="form-input w-full"
-                            type="text"
+                          <Input
                             value={twitterUrl}
-                            onInput={(e) => setTwitterUrl(e.target.value)}
+                            setValue={setTwitterUrl}
+                            error={twitterUrlError}
+                            setError={setTwitterUrlError}
+                            label="Twitter URL"
+                            labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
                       </div>
@@ -549,26 +567,6 @@ const UserEdit = () => {
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Contact Details
-                      </h2>
-
-                      <div className="text-sm">
-                        Enter your information below
-                      </div>
-
-                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <textarea
-                          className="form-input w-full"
-                          type="text"
-                          rows="6"
-                          value={contactDetails}
-                          onInput={(e) => setContactDetails(e.target.value)}
-                        />
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                         Brief Info
                       </h2>
 
@@ -577,12 +575,24 @@ const UserEdit = () => {
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <textarea
-                          className="form-input w-full"
-                          type="text"
-                          value={briefBio}
-                          rows="6"
-                          onInput={(e) => setBriefBio(e.target.value)}
+                        <Textarea value={briefBio} setValue={setBriefBio} />
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Contact Details
+                      </h2>
+
+                      <div className="text-sm">
+                        Enter your information below
+                      </div>
+
+                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                        <Textarea
+                          row="3"
+                          value={contactDetails}
+                          setValue={setContactDetails}
                         />
                       </div>
                     </section>
@@ -597,12 +607,10 @@ const UserEdit = () => {
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <textarea
-                          className="form-input w-full"
-                          type="text"
+                        <Textarea
                           value={placeWork}
-                          rows="6"
-                          onInput={(e) => setPlaceWork(e.target.value)}
+                          setValue={setPlaceWork}
+                          row="3"
                         />
                       </div>
                     </section>

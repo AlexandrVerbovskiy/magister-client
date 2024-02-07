@@ -31,13 +31,6 @@ export const register = async (userInfo) => {
   return data.message;
 };
 
-export const resetPassword = async (email) => {
-  const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/reset-password`, { email })
-  );
-  return data.message;
-};
-
 export const updateSessionInfo = async () => {
   const data = await serviceWrapper(
     authAxios.get(`${serverApiUrl}/auth/update-session-info`)
@@ -89,4 +82,25 @@ export const updateMyPassword = async (currentPassword, newPassword) => {
     })
   );
   return data.body.user;
+};
+
+export const verifyEmail = async (email, token) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/verify-email`, { email, token })
+  );
+  return data.message;
+};
+
+export const resetPasswordSend = async (email) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/reset-password-send`, { email })
+  );
+  return data.message;
+};
+
+export const resetPassword = async (password, token) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/reset-password`, { password, token })
+  );
+  return data.message;
 };

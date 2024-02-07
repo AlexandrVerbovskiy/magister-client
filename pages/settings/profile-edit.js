@@ -1,6 +1,4 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
@@ -17,14 +15,12 @@ import {
   validateUrl,
 } from "../../utils";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
-
 const ProfileEdit = () => {
-  const router = useRouter();
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
-  const { success, setLoading, error, user } = useContext(IndiceContext);
+  const { success, setLoading, error, user, onLogin } =
+    useContext(IndiceContext);
 
   const [newPhoto, setNewPhoto] = useState(null);
   const [photoUrl, setPhotoUrl] = useState(null);
@@ -200,6 +196,10 @@ const ProfileEdit = () => {
           setNewPhoto(null);
           setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + res.photo);
         }
+
+        const loginDate = { ...user, ...info, photo: res.photo };
+        localStorage.setItem("userInfo", JSON.stringify(loginDate));
+        onLogin(loginDate);
       } catch (e) {
         setProfileFormError(e.message);
       }
@@ -247,11 +247,12 @@ const ProfileEdit = () => {
     try {
       await updateMyPassword(currentPassword, password);
       success.set("Password updated successfully");
+    } catch (e) {
+      setPasswordFormError(e.message);
+    } finally {
       setCurrentPassword("");
       setPassword("");
       setConfirmPassword("");
-    } catch (e) {
-      setPasswordFormError(e.message);
     }
   };
 

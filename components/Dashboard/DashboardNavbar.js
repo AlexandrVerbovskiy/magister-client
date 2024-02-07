@@ -13,11 +13,6 @@ const DashboardNavbar = () => {
   }, [router]);
 
   const { displaySideMenu, toggleSideMenu } = useContext(IndiceContext);
-  const [display, setDisplay] = useState(false);
-
-  const listingToggle = () => {
-    setDisplay(!display);
-  };
 
   return (
     <>
@@ -85,7 +80,7 @@ const DashboardNavbar = () => {
                 }`}
               >
                 <span className="icon">
-                  <i className="bx bx-home-circle"></i>
+                  <i className="bx bx-file"></i>
                 </span>
                 <span className="menu-title">Documents Verification</span>
               </Link>

@@ -101,10 +101,12 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
       });
 
       mainSuccess.set(message);
-
       moveToLogin();
     } catch (e) {
       setFormError(e.message);
+    } finally {
+      setPassword("");
+      setConfirmPassword("");
     }
   };
 

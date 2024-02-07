@@ -3,29 +3,36 @@ import Link from "next/link";
 import { validateEmail } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
+import { verifyEmail } from "../../services";
 
 const PasswordResetSend = () => {
   const router = useRouter();
   const { token } = router.query;
   const { error, success } = useContext(IndiceContext);
-  const [email, setEmail] = useState({ value: "", error: null });
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
 
-  const handleSendClick = () => {
-    const resEmailValid = validateEmail(email.value);
+  const handleSendClick = async () => {
+    const resEmailValid = validateEmail(email);
     if (resEmailValid !== true) {
-      setEmail((prev) => ({
-        ...prev,
-        error: "Incorrect email format",
-      }));
-
+      setEmailError("Incorrect email format");
       return;
     }
 
-    success.set("Letter sent successfully");
+    try {
+      await verifyEmail(email, token);
+      success.set(
+        "Mail verified successfully. For further actions, log in to the site"
+      );
+      router.push("/");
+    } catch (e) {
+      setEmailError(e.message);
+    }
   };
 
-  const handleEmailInput = (e) => {
-    setEmail({ value: e.target.value, error: null });
+  const handleInputEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError(null);
   };
 
   return (
@@ -45,19 +52,19 @@ const PasswordResetSend = () => {
                   <input
                     type="text"
                     className={`input-newsletter border-bottom-required${
-                      email.error ? " is-invalid" : ""
+                      emailError ? " is-invalid" : ""
                     }`}
                     placeholder="Enter your email"
                     name="email"
-                    value={email.value}
-                    onInput={handleEmailInput}
+                    value={email}
+                    onInput={handleInputEmail}
                     required
                   />
                   <span className="label-title">
                     <i className="bx bx-envelope"></i>
                   </span>
-                  {email.error && (
-                    <div className="invalid-feedback">{email.error}</div>
+                  {emailError && (
+                    <div className="invalid-feedback">{emailError}</div>
                   )}
                 </div>
 

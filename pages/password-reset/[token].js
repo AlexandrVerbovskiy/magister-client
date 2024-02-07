@@ -3,16 +3,17 @@ import Link from "next/link";
 import { validatePassword } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
+import { resetPassword } from "../../services";
 
 const PasswordResetSend = () => {
   const router = useRouter();
+  const [formError, setFormError] = useState(null);
   const { token } = router.query;
   const { error, success } = useContext(IndiceContext);
-  const [password, setPassword] = useState({ value: "", error: null });
-  const [confirmPassword, setConfirmPassword] = useState({
-    value: "",
-    error: null,
-  });
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
   const [passwordFieldType, setPasswordFieldType] = useState("password");
   const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
@@ -29,46 +30,48 @@ const PasswordResetSend = () => {
     setConfirmPasswordFieldType(newType);
   };
 
-  const handleSendClick = () => {
+  const handleSendClick = async () => {
+    setFormError(null);
     let error = false;
 
-    const resPasswordValid = validatePassword(password.value);
+    const resPasswordValid = validatePassword(password);
     if (resPasswordValid !== true) {
       error = true;
-      setPassword((prev) => ({
-        ...prev,
-        error: resPasswordValid,
-      }));
+      setPasswordError(resPasswordValid);
     }
 
-    const resConfirmedPasswordValid = validatePassword(password.value);
+    const resConfirmedPasswordValid = validatePassword(confirmPassword);
     if (resConfirmedPasswordValid !== true) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: resConfirmedPasswordValid,
-      }));
+      setConfirmPasswordError(resConfirmedPasswordValid);
     }
 
-    if (password.value != confirmPassword.value) {
+    if (password != confirmPassword) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: "Passwords do not match",
-      }));
+      setConfirmPasswordError("Passwords do not match");
     }
 
     if (error) return;
 
-    success.set("Password reset successfully");
+    try {
+      await resetPassword(password, token);
+      success.set("Password reset successfully. Try logging in to the site");
+    } catch (e) {
+      setFormError(e.message);
+    } finally {
+      setPassword("");
+      setConfirmPassword("");
+    }
   };
 
   const handlePasswordInput = (e) => {
-    setPassword({ value: e.target.value, error: null });
+    setPassword(e.target.value);
+    setPasswordError(null);
   };
 
   const handleConfirmedPasswordInput = (e) => {
-    setConfirmPassword({ value: e.target.value, error: null });
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError(null);
   };
 
   return (
@@ -88,11 +91,11 @@ const PasswordResetSend = () => {
                   <input
                     type={passwordFieldType}
                     className={`input-newsletter border-bottom-required${
-                      password.error ? " is-invalid" : ""
+                      passwordError ? " is-invalid" : ""
                     }`}
                     placeholder="Enter your password"
                     name="password"
-                    value={password.value}
+                    value={password}
                     onInput={handlePasswordInput}
                     required
                   />
@@ -104,8 +107,8 @@ const PasswordResetSend = () => {
                     } cursor-pointer`}
                     onClick={handleChangePasswordFieldType}
                   ></i>
-                  {password.error && (
-                    <div className="invalid-feedback">{password.error}</div>
+                  {passwordError && (
+                    <div className="invalid-feedback">{passwordError}</div>
                   )}
                 </div>
 
@@ -113,11 +116,11 @@ const PasswordResetSend = () => {
                   <input
                     type={confirmPasswordFieldType}
                     className={`input-newsletter border-bottom-required${
-                      confirmPassword.error ? " is-invalid" : ""
+                      confirmPasswordError ? " is-invalid" : ""
                     }`}
                     placeholder="Confirm your password"
                     name="confirm_password"
-                    value={confirmPassword.value}
+                    value={confirmPassword}
                     onInput={handleConfirmedPasswordInput}
                     required
                   />
@@ -129,12 +132,21 @@ const PasswordResetSend = () => {
                     } cursor-pointer`}
                     onClick={handleChangeConfirmPasswordFieldType}
                   ></i>
-                  {confirmPassword.error && (
+                  {confirmPasswordError && (
                     <div className="invalid-feedback">
-                      {confirmPassword.error}
+                      {confirmPasswordError}
                     </div>
                   )}
                 </div>
+
+                {formError && (
+                  <div
+                    className="alert-dismissible fade show alert alert-danger"
+                    role="alert"
+                  >
+                    {formError}
+                  </div>
+                )}
 
                 <button
                   type="button"

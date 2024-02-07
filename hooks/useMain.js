@@ -23,7 +23,8 @@ const useMain = ({ access = null }) => {
     if (!localStorage.getItem("accessToken")) return;
 
     try {
-      await updateSessionInfo();
+      const userInfo = await updateSessionInfo();
+      setUser(userInfo);
       setUpdateSessionInfoTimeout();
     } catch (e) {
       console.log(e);
@@ -102,6 +103,7 @@ const useMain = ({ access = null }) => {
     isAdmin,
     baseRequestWrapper,
     toggleSideMenu,
+    displaySideMenu,
     error: {
       value: error,
       set: setError,

@@ -8,12 +8,8 @@ import ImageInput from "../../components/DashboardComponents/ImageInput";
 import { saveMyDocuments, getMyDocuments } from "../../services";
 import ENV from "../../env";
 
-const defaultPhotoLink = "/images/admin/applications-image-23.jpg";
-
 const DocumentsVerification = () => {
-  const router = useRouter();
   const [formError, setFormError] = useState(null);
-  const { user } = useContext(IndiceContext);
   const { success, setLoading } = useContext(IndiceContext);
 
   const [newProofOfAddress, setNewProofOfAddress] = useState(null);
@@ -202,17 +198,15 @@ const DocumentsVerification = () => {
       hasUpdates = true;
     }
 
-    console.log(hasUpdates);
-
     if (hasUpdates) {
       try {
         await saveMyDocuments(formData);
       } catch (e) {
-        console.log(e);
+        setFormError(e);
       }
     }
 
-    success.set("Profile updated successfully");
+    success.set("Documents updated successfully");
   };
 
   useEffect(() => {
@@ -301,6 +295,17 @@ const DocumentsVerification = () => {
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
                     />
                   </div>
+
+                  {formError && (
+                    <div className="col-lg-12 col-md-12">
+                      <div
+                        className="alert-dismissible fade show alert alert-danger"
+                        role="alert"
+                      >
+                        {formError}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">

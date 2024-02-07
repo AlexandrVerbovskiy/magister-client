@@ -120,6 +120,6 @@ export function validateUrl(url) {
     new URL(url);
     return true;
   } catch (error) {
-    return error.message;
+    return "Invalid URL";
   }
 }
