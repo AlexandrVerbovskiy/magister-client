@@ -7,22 +7,26 @@ const useMain = ({ access = null }) => {
   const updateSessionTimeoutRef = useRef(null);
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
+  const [isSupport, setIsSupport] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [displaySideMenu, setDisplaySideMenu] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
 
   const onLogout = () => {
     setUser(null);
     setIsAuth(false);
     setIsAdmin(false);
+    setIsSupport(false);
   };
 
   const update = async () => {
     if (!localStorage.getItem("accessToken")) return;
 
     try {
-      await updateSessionInfo();
+      const userInfo = await updateSessionInfo();
+      updateUserFields({ ...userInfo });
       setUpdateSessionInfoTimeout();
     } catch (e) {
       console.log(e);
@@ -43,9 +47,8 @@ const useMain = ({ access = null }) => {
     setIsAuth(isAuth);
 
     if (isAuth) {
-      const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "");
-      setIsAdmin(userInfo && userInfo.role == "admin");
-      setUser(userInfo);
+      const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
+      updateUserFields({ ...userInfo });
       update();
     }
   }, []);
@@ -57,26 +60,31 @@ const useMain = ({ access = null }) => {
 
     if ((access == "auth" || access == "admin") && !isAuth) {
       setError("Authentication failed");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
     if (access == "admin" && !isAdmin) {
       setError("Access denied");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
-    if(access=="no auth" && isAuth){
+    if (access == "support" && !isSupport && !isAdmin) {
       setError("Access denied");
-      return Router?.push("/");
+      return setHasPermission(false);
     }
 
+    if (access == "no auth" && isAuth) {
+      setError("Access denied");
+      return setHasPermission(false);
+    }
+
+    setHasPermission(true);
   }, [isAuth]);
 
   const onLogin = (userInfo) => {
-    setUser(userInfo);
     setIsAuth(true);
     setUpdateSessionInfoTimeout();
-    setIsAdmin(userInfo && userInfo.role == "admin");
+    updateUserFields({ ...userInfo });
   };
 
   const clearError = () => setError(null);
@@ -92,14 +100,27 @@ const useMain = ({ access = null }) => {
 
   const toggleSideMenu = () => setDisplaySideMenu(!displaySideMenu);
 
+  const updateUserFields = (info) => {
+    const userInfo = { ...user, ...info };
+    setUser(userInfo);
+    setIsAdmin(userInfo && userInfo.role == "admin");
+    setIsSupport(
+      userInfo && (userInfo.role == "admin" || userInfo.role == "support")
+    );
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+  };
+
   return {
-    isAuth,
+    updateUserFields,
     user,
     onLogin,
     onLogout,
+    isAuth,
     isAdmin,
+    isSupport,
     baseRequestWrapper,
     toggleSideMenu,
+    displaySideMenu,
     error: {
       value: error,
       set: setError,
@@ -110,6 +131,7 @@ const useMain = ({ access = null }) => {
       set: setSuccess,
       clear: clearSuccess,
     },
+    hasPermission,
   };
 };
 

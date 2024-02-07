@@ -202,7 +202,7 @@ p:last-child {
   color: var(--mainColor);
 }
 .section-title.text-left {
-  text-align: left !important;
+  text-align: left important;
   position: relative;
   max-width: 100%;
   margin-left: 0;
@@ -13737,6 +13737,7 @@ Dashboard CSS
 }
 .my-profile-box .profile-box img {
   border-radius: 5px;
+  width: 100%;
 }
 .my-profile-box .profile-box .file-upload {
   display: inline-block;
@@ -16474,6 +16475,7 @@ Preloader Area CSS
   border-bottom: 1px solid var(--bs-form-invalid-border-color) !important;
 }
 
+.password-competing form .form-group i,
 .password-reset form .form-group i {
   position: absolute;
   left: 0;
@@ -16482,4 +16484,50 @@ Preloader Area CSS
   font-size: 22px;
   cursor: pointer;
   color: var(--mainColor);
+}
+
+.password-competing form .form-group i {
+  left: 10px !important;
+}
+
+.password-competing form .form-group .input-newsletter {
+  padding: 0 0 0 42px;
+}
+
+.yes-no-modal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  form
+  button.button-danger {
+  background-color: #ee3535;
+}
+
+.yes-no-modal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  form
+  button.button-danger:hover {
+  background-color: #9e0000;
+}
+
+.base-modal .modal-dialog .modal-content .tab-content .sub-title,
+.yes-no-modal .modal-dialog .modal-content .tab-content .sub-title {
+  font-weight: 700 !important;
+}
+
+.base-modal .modal-dialog .modal-content .tab-content .sub-title::before,
+.yes-no-modal .modal-dialog .modal-content .tab-content .sub-title::before {
+  display: none;
+}
+
+.body_overlay.open {
+  z-index: 99999;
+}
+
+.modal.show {
+  z-index: 999999;
 }

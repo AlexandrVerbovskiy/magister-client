@@ -11,6 +11,20 @@ export const getUserById = async (id) => {
 
 //only admin methods
 
+export const getFullUserById = async (id) => {
+  const data = await serviceWrapper(
+    authAxios.get(`${serverApiUrl}/users/get-full-by-id/${id}`)
+  );
+  return data.body;
+};
+
+export const getUserDocuments = async (userId) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/users/documents`, { userId })
+  );
+  return data.body.documents;
+};
+
 export const getUserList = async (body) => {
   const data = await serviceWrapper(
     authAxios.post(`${serverApiUrl}/users/list`, body)
@@ -28,6 +42,13 @@ export const setRole = async (id, role) => {
 export const changeActive = async (id) => {
   const data = await serviceWrapper(
     authAxios.post(`${serverApiUrl}/users/change-active`, { id })
+  );
+  return data.body;
+};
+
+export const changeVerified = async (id) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/users/change-verified`, { id })
   );
   return data.body;
 };

@@ -1,12 +1,14 @@
+import ENV from "../../../env";
+
 const SocialAuth = () => (
   <ul>
     <li>
-      <a href="https://www.facebook.com/" className="facebook" target="_blank">
+      <a href={ENV.FACEBOOK_AUTH_LINK} className="facebook">
         <i className="bx bxl-facebook"></i> Facebook
       </a>
     </li>
     <li>
-      <a href="https://www.gmail.com/" className="google" target="_blank">
+      <a href={ENV.GOOGLE_AUTH_LINK} className="google">
         <i className="bx bxl-google"></i> Google
       </a>
     </li>

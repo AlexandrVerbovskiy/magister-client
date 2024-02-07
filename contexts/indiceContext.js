@@ -3,13 +3,15 @@ import { useMain } from "../hooks";
 
 const IndiceContext = createContext();
 
-const IndiceProvider = ({ access, children }) => {
+const IndiceProvider = ({ access, children, dopProps = {} }) => {
   const main = useMain({
     access,
   });
 
   return (
-    <IndiceContext.Provider value={main}>{children}</IndiceContext.Provider>
+    <IndiceContext.Provider value={{ ...main, ...dopProps }}>
+      {children}
+    </IndiceContext.Provider>
   );
 };
 

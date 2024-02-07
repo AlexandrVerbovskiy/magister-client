@@ -7,7 +7,7 @@ import UsersTable from "../../components/admin/Users/Table";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import ModalBlank from "../../components/admin/ModalBlank";
-import { getUserList, deleteUser, changeActive, setRole } from "../../services";
+import { getUserList, deleteUser, changeActive, setRole, changeVerified } from "../../services";
 import { IndiceContext } from "../../contexts";
 
 const Users = () => {
@@ -61,6 +61,18 @@ const Users = () => {
     }
   };
 
+  const handleChangeVerified = async (id, name) => {
+    try {
+      const res = await changeVerified(id);
+      setItemFields({ verified: res.verified }, id);
+      success.set(
+        `${name} ${res.active ? "verified" : "unverified"} successfully!`
+      );
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
   const handleSetRole = async (id, name, role) => {
     try {
       const res = await setRole(id, role);
@@ -98,7 +110,7 @@ const Users = () => {
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 <SearchForm value={filter} onInput={changeFilter} />
 
-                <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                {/*<button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                   <svg
                     className="w-4 h-4 fill-current opacity-50 shrink-0"
                     viewBox="0 0 16 16"
@@ -106,7 +118,7 @@ const Users = () => {
                     <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                   </svg>
                   <span className="hidden xs:block ml-2">Add Member</span>
-                </button>
+                </button>*/}
               </div>
             </div>
 
@@ -119,6 +131,7 @@ const Users = () => {
               handleSetRole={handleSetRole}
               handleChangeActive={handleChangeActive}
               totalCount={countItems}
+              handleChangeVerified={handleChangeVerified}
             />
 
             <div className="mt-8">
@@ -196,7 +209,7 @@ const Users = () => {
 };
 
 Users.getInitialProps = async () => ({
-  access: "admin",
+  access: "support",
   type: "admin",
 });
 

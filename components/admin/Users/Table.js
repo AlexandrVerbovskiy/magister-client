@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import { IndiceContext } from "../../../contexts";
 
 const UsersTable = ({
   users,
@@ -10,17 +11,25 @@ const UsersTable = ({
   openDeleteModal,
   handleSetRole,
   handleChangeActive,
+  handleChangeVerified,
   totalCount,
 }) => {
+  const { isAdmin } = useContext(IndiceContext);
+
   const ths = [
     { title: "Id", value: "id" },
     { title: "Name", value: "name" },
     { title: "Email", value: "email" },
     { title: "Phone", value: "phone" },
-    { title: "Active", value: "active" },
-    { title: "Role", value: "role" },
-    { title: "Actions", value: "actions", canOrder: false },
+    { title: "Verified", value: "verified", canOrder: false },
   ];
+
+  if (isAdmin) {
+    ths.push({ title: "Active", value: "active", canOrder: false });
+  }
+
+  ths.push({ title: "Role", value: "role" });
+  ths.push({ title: "Actions", value: "actions", canOrder: false });
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -62,6 +71,9 @@ const UsersTable = ({
                     e.stopPropagation();
                     openDeleteModal(user.name, user.id);
                   }}
+                  onChangeVerified={() =>
+                    handleChangeVerified(user.id, user.name)
+                  }
                 />
               ))}
             </tbody>
