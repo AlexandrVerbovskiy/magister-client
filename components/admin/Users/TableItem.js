@@ -7,7 +7,7 @@ const ActiveSpan = ({ active, onClick, clickable = true }) => {
     ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
     : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
 
-  if (clickable) dopClass += "cursor-pointer";
+  if (clickable) dopClass += " cursor-pointer";
 
   return (
     <div
@@ -80,12 +80,16 @@ const TableItem = ({
   email,
   phone,
   active,
+  verified,
   role,
   onDeleteClick,
   onChangeRole,
   onChangeActive,
+  onChangeVerified,
 }) => {
-  const { user: currentUser } = useContext(IndiceContext);
+  console.log(active, verified);
+
+  const { user: currentUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
 
   const handleRoleClick = () => {
@@ -110,6 +114,11 @@ const TableItem = ({
     onChangeActive();
   };
 
+  const handleChangeVerified = () => {
+    if (isCurrent) return;
+    onChangeVerified();
+  };
+
   return (
     <tr>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -124,24 +133,38 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <PhoneSpan phone={phone} verified={phoneVerified} />
       </td>
+
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
           <ActiveSpan
-            active={active}
-            onClick={handleChangeActive}
+            active={verified}
+            onClick={handleChangeVerified}
             clickable={!isCurrent}
           />
         </div>
       </td>
+
+      {isAdmin && (
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <div className="text-left">
+            <ActiveSpan
+              active={active}
+              onClick={handleChangeActive}
+              clickable={!isCurrent}
+            />
+          </div>
+        </td>
+      )}
+
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
-          {isCurrent && (
+          {(isCurrent || !isAdmin) && (
             <span>
               <RoleSpan role={role} onClick={handleRoleClick} />
             </span>
           )}
 
-          {!isCurrent && (
+          {!isCurrent && isAdmin && (
             <span className="cursor-pointer">
               <RoleSpan role={role} onClick={handleRoleClick} />
               <div
@@ -164,6 +187,33 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
           {!isCurrent && (
+            <div className="mr-1.5 flex items-center">
+              <a
+                href={`/admin/user-documents/${id}`}
+                className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-clipboard-text stroke-current"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                  <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                  <path d="M9 12h6" />
+                  <path d="M9 16h6" />
+                </svg>
+              </a>
+            </div>
+          )}
+
+          {!isCurrent && isAdmin && (
             <div className="mr-1.5">
               <a
                 href={`/admin/user-edit/${id}`}
@@ -176,7 +226,7 @@ const TableItem = ({
             </div>
           )}
 
-          {!isCurrent && (
+          {!isCurrent && isAdmin && (
             <button
               type="button"
               aria-controls="danger-modal"

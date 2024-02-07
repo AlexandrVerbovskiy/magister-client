@@ -7,6 +7,7 @@ const useMain = ({ access = null }) => {
   const updateSessionTimeoutRef = useRef(null);
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
+  const [isSupport, setIsSupport] = useState(null);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -17,6 +18,7 @@ const useMain = ({ access = null }) => {
     setUser(null);
     setIsAuth(false);
     setIsAdmin(false);
+    setIsSupport(false);
   };
 
   const update = async () => {
@@ -24,7 +26,7 @@ const useMain = ({ access = null }) => {
 
     try {
       const userInfo = await updateSessionInfo();
-      setUser(userInfo);
+      updateUserFields({ ...userInfo });
       setUpdateSessionInfoTimeout();
     } catch (e) {
       console.log(e);
@@ -46,8 +48,7 @@ const useMain = ({ access = null }) => {
 
     if (isAuth) {
       const userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "{}");
-      setIsAdmin(userInfo && userInfo.role == "admin");
-      setUser(userInfo);
+      updateUserFields({ ...userInfo });
       update();
     }
   }, []);
@@ -67,6 +68,11 @@ const useMain = ({ access = null }) => {
       return setHasPermission(false);
     }
 
+    if (access == "support" && !isSupport && !isAdmin) {
+      setError("Access denied");
+      return setHasPermission(false);
+    }
+
     if (access == "no auth" && isAuth) {
       setError("Access denied");
       return setHasPermission(false);
@@ -76,10 +82,9 @@ const useMain = ({ access = null }) => {
   }, [isAuth]);
 
   const onLogin = (userInfo) => {
-    setUser(userInfo);
     setIsAuth(true);
     setUpdateSessionInfoTimeout();
-    setIsAdmin(userInfo && userInfo.role == "admin");
+    updateUserFields({ ...userInfo });
   };
 
   const clearError = () => setError(null);
@@ -98,16 +103,21 @@ const useMain = ({ access = null }) => {
   const updateUserFields = (info) => {
     const userInfo = { ...user, ...info };
     setUser(userInfo);
+    setIsAdmin(userInfo && userInfo.role == "admin");
+    setIsSupport(
+      userInfo && (userInfo.role == "admin" || userInfo.role == "support")
+    );
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
   };
 
   return {
     updateUserFields,
-    isAuth,
     user,
     onLogin,
     onLogout,
+    isAuth,
     isAdmin,
+    isSupport,
     baseRequestWrapper,
     toggleSideMenu,
     displaySideMenu,

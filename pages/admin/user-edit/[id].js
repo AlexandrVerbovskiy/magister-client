@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Router, { useRouter } from "next/router";
 import lodash from "lodash";
 
-import { getUserById, updateUser } from "../../../services";
+import { getFullUserById, updateUser } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import ErrorPage from "next/error";
 import Sidebar from "../../../partials/admin/Sidebar";
@@ -131,7 +131,7 @@ const UserEdit = () => {
   const initUser = async () => {
     try {
       if (id) {
-        const gotUserInfo = await getUserById(id);
+        const gotUserInfo = await getFullUserById(id);
         setUser(gotUserInfo);
 
         if (gotUserInfo && gotUserInfo.id) {

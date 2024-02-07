@@ -7,7 +7,7 @@ import UsersTable from "../../components/admin/Users/Table";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import ModalBlank from "../../components/admin/ModalBlank";
-import { getUserList, deleteUser, changeActive, setRole } from "../../services";
+import { getUserList, deleteUser, changeActive, setRole, changeVerified } from "../../services";
 import { IndiceContext } from "../../contexts";
 
 const Users = () => {
@@ -55,6 +55,18 @@ const Users = () => {
       setItemFields({ active: res.active }, id);
       success.set(
         `${name} ${res.active ? "activated" : "deactivated"} successfully!`
+      );
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
+  const handleChangeVerified = async (id, name) => {
+    try {
+      const res = await changeVerified(id);
+      setItemFields({ verified: res.verified }, id);
+      success.set(
+        `${name} ${res.active ? "verified" : "unverified"} successfully!`
       );
     } catch (e) {
       error.set(e.message);
@@ -119,6 +131,7 @@ const Users = () => {
               handleSetRole={handleSetRole}
               handleChangeActive={handleChangeActive}
               totalCount={countItems}
+              handleChangeVerified={handleChangeVerified}
             />
 
             <div className="mt-8">
@@ -196,7 +209,7 @@ const Users = () => {
 };
 
 Users.getInitialProps = async () => ({
-  access: "admin",
+  access: "support",
   type: "admin",
 });
 
