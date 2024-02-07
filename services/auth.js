@@ -14,8 +14,37 @@ export const login = async (userInfo) => {
   const data = await serviceWrapper(
     axios.post(`${serverApiUrl}/auth/login`, userInfo)
   );
+
+  /*if (!data.body.needCode) {
+    saveSessionInfo(data.body);
+  }*/
+
+  return data.body;
+};
+
+export const generateTwoFactorCode = async (email, password, type) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/generate-two-factor-code`, {
+      email,
+      password,
+      type,
+    })
+  );
+  return data.message;
+};
+
+export const checkTwoFactorCode = async (type, code, id) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/check-two-factor-code`, {
+      type,
+      code,
+      id,
+    })
+  );
+
   saveSessionInfo(data.body);
-  return data.body.user;
+
+  return data.body;
 };
 
 export const logout = async () => {

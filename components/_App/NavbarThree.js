@@ -5,7 +5,11 @@ import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 
 const NavbarThree = () => {
-  const { success: mainSuccess, isAdmin, isAuth } = useContext(IndiceContext);
+  const {
+    success: mainSuccess,
+    isAuth,
+    isSupport,
+  } = useContext(IndiceContext);
 
   // Add active class
   const [currentPath, setCurrentPath] = useState("");
@@ -76,7 +80,7 @@ const NavbarThree = () => {
                   </li>
                 )}
 
-                {isAdmin && (
+                {isSupport && (
                   <li className="nav-item">
                     <Link href="/admin/" className="nav-link">
                       Admin Section

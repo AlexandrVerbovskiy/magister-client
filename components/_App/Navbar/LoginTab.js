@@ -6,12 +6,21 @@ import { login } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 
-const LoginTab = ({ moveToRegister, closeModal }) => {
+const LoginTab = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  moveToRegister,
+  closeModal,
+  setCanChangeType,
+  setType,
+  setCodeModalActive,
+  setTypeModalActive,
+  setUser,
+}) => {
   const [formError, setFormError] = useState(null);
-  const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(null);
-
-  const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null);
 
   const { onLogin, success: mainSuccess } = useContext(IndiceContext);
@@ -20,6 +29,7 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
     setEmail(e.target.value);
     setEmailError(null);
   };
+
   const handleInputPassword = (e) => {
     setPassword(e.target.value);
     setPasswordError(null);
@@ -45,14 +55,27 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
     if (error) return;
 
     try {
-      const user = await login({
+      const res = await login({
         email,
         password,
       });
 
-      onLogin(user);
+      setUser(res.user);
       closeModal();
-      mainSuccess.set("Successfully logged in");
+
+      if (res.needCode) {
+        if (res.codeSent) {
+          setCanChangeType(false);
+          setType("email");
+          setCodeModalActive(true);
+        } else {
+          setCanChangeType(true);
+          setTypeModalActive(true);
+        }
+      } else {
+        onLogin(res.user);
+        mainSuccess.set("Successfully logged in");
+      }
     } catch (e) {
       setFormError(e.message);
       setPassword("");
@@ -60,61 +83,63 @@ const LoginTab = ({ moveToRegister, closeModal }) => {
   };
 
   return (
-    <div className="tab-pane fade show active" id="login">
-      <div className="miran-login">
-        <div className="login-with-account">
-          <span>Login with</span>
-          <SocialAuth />
-        </div>
+    <>
+      <div className="tab-pane fade show active" id="login">
+        <div className="miran-login">
+          <div className="login-with-account">
+            <span>Login with</span>
+            <SocialAuth />
+          </div>
 
-        <span className="sub-title">
-          <span>Or login with</span>
-        </span>
-
-        <form>
-          <Input
-            type="text"
-            value={email}
-            placeholder="Email"
-            error={emailError}
-            onInput={handleInputEmail}
-          />
-
-          <Input
-            type="password"
-            value={password}
-            placeholder="Password"
-            error={passwordError}
-            onInput={handleInputPassword}
-          />
-
-          {formError && (
-            <div
-              className="alert-dismissible fade show alert alert-danger"
-              role="alert"
-            >
-              {formError}
-            </div>
-          )}
-
-          <span className="dont-account mt-0 mb-3">
-            Forgot or lost your password?{" "}
-            <Link href="/password-reset-send">Reset It Now</Link>
+          <span className="sub-title">
+            <span>Or login with</span>
           </span>
 
-          <button type="button" onClick={handleSubmit}>
-            Login Now
-          </button>
-        </form>
+          <form>
+            <Input
+              type="text"
+              value={email}
+              placeholder="Email"
+              error={emailError}
+              onInput={handleInputEmail}
+            />
 
-        <span className="dont-account">
-          Don&apos;t have an account?{" "}
-          <a href="#" onClick={moveToRegister}>
-            Register Now
-          </a>
-        </span>
+            <Input
+              type="password"
+              value={password}
+              placeholder="Password"
+              error={passwordError}
+              onInput={handleInputPassword}
+            />
+
+            {formError && (
+              <div
+                className="alert-dismissible fade show alert alert-danger"
+                role="alert"
+              >
+                {formError}
+              </div>
+            )}
+
+            <span className="dont-account mt-0 mb-3">
+              Forgot or lost your password?{" "}
+              <Link href="/password-reset-send">Reset It Now</Link>
+            </span>
+
+            <button type="button" onClick={handleSubmit}>
+              Login Now
+            </button>
+          </form>
+
+          <span className="dont-account">
+            Don&apos;t have an account?{" "}
+            <a href="#" onClick={moveToRegister}>
+              Register Now
+            </a>
+          </span>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

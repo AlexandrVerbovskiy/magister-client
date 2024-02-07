@@ -1,6 +1,6 @@
 const BaseModal = ({ active, toggleActive, children, className = "" }) => {
   if (className) className += " ";
-  className += "modal loginRegisterModal yes-no-modal";
+  className += "modal loginRegisterModal base-modal";
   if (active) className += " show";
   return (
     <>

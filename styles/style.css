@@ -202,7 +202,7 @@ p:last-child {
   color: var(--mainColor);
 }
 .section-title.text-left {
-  text-align: left !important;
+  text-align: left important;
   position: relative;
   max-width: 100%;
   margin-left: 0;
@@ -16514,10 +16514,12 @@ Preloader Area CSS
   background-color: #9e0000;
 }
 
+.base-modal .modal-dialog .modal-content .tab-content .sub-title,
 .yes-no-modal .modal-dialog .modal-content .tab-content .sub-title {
   font-weight: 700 !important;
 }
 
+.base-modal .modal-dialog .modal-content .tab-content .sub-title::before,
 .yes-no-modal .modal-dialog .modal-content .tab-content .sub-title::before {
   display: none;
 }
