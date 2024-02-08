@@ -66,3 +66,11 @@ export const updateUser = async (userData) => {
   );
   return data.body;
 };
+
+
+export const createUser = async (userData) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/users/create`, userData)
+  );
+  return data.body;
+};

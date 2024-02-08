@@ -15,9 +15,9 @@ export const login = async (userInfo) => {
     axios.post(`${serverApiUrl}/auth/login`, userInfo)
   );
 
-  /*if (!data.body.needCode) {
+  if (!data.body.needCode) {
     saveSessionInfo(data.body);
-  }*/
+  }
 
   return data.body;
 };
@@ -33,12 +33,13 @@ export const generateTwoFactorCode = async (email, password, type) => {
   return data.message;
 };
 
-export const checkTwoFactorCode = async (type, code, id) => {
+export const checkTwoFactorCode = async (type, code, id, rememberMe) => {
   const data = await serviceWrapper(
     axios.post(`${serverApiUrl}/auth/check-two-factor-code`, {
       type,
       code,
       id,
+      rememberMe,
     })
   );
 
@@ -51,6 +52,13 @@ export const logout = async () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("userInfo");
   return;
+};
+
+export const generateMyEmailVerifyCode = async (email) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/generate-my-email-code`, { email })
+  );
+  return data.message;
 };
 
 export const register = async (userInfo) => {
@@ -75,9 +83,12 @@ export const getMyInfo = async () => {
   return data.body.user;
 };
 
-export const setMyPassword = async (password) => {
+export const updateShortUserInfo = async (password, acceptedTermCondition) => {
   const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/set-my-password`, { password })
+    authAxios.post(`${serverApiUrl}/auth/update-short-info`, {
+      password,
+      acceptedTermCondition,
+    })
   );
   return data.body.user;
 };
@@ -146,4 +157,18 @@ export const checkMyPhoneVerifyCode = async (code) => {
     authAxios.post(`${serverApiUrl}/auth/check-my-phone-code`, { code })
   );
   return data.message;
+};
+
+export const changeTwoFactorAuth = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/change-two-factor-auth`)
+  );
+  return data;
+};
+
+export const canSendVerifyRequest = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/can-send-verify-request`)
+  );
+  return data.body;
 };

@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { getMyInfo } from "../services/auth";
 import { IndiceContext } from "../contexts";
@@ -17,6 +16,7 @@ const UserAuthorized = () => {
     try {
       localStorage.setItem("accessToken", token);
       const user = await getMyInfo();
+      console.log(user);
 
       if (!user) {
         localStorage.removeItem("userInfo");
@@ -26,7 +26,7 @@ const UserAuthorized = () => {
         localStorage.setItem("userInfo", JSON.stringify(user));
 
         if (user.needSetPassword) {
-          redirectLink = "/password-competing";
+          redirectLink = "/more-info-competing";
         } else if (user.needRegularViewInfoForm) {
           redirectLink = "/settings/profile-edit";
         }

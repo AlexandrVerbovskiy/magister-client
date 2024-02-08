@@ -8,6 +8,7 @@ import {
   updateMyPassword,
   checkMyPhoneVerifyCode,
   generateMyPhoneVerifyCode,
+  changeTwoFactorAuth,
 } from "../../services";
 import ENV from "../../env";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
@@ -21,17 +22,20 @@ import {
 } from "../../utils";
 import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
+import Link from "next/link";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
-  const { success, setLoading, updateUserFields, user, onLogin } =
-    useContext(IndiceContext);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
+  const {
+    error: mainError,
+    success,
+    setLoading,
+    updateUserFields,
+    user,
+    onLogin,
+  } = useContext(IndiceContext);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
   const toggleVerifyPhoneModal = () =>
@@ -98,16 +102,16 @@ const ProfileEdit = () => {
   });
 
   const userToState = () => ({
-    name: user.name ?? "",
-    email: user.email ?? "",
-    phone: user.phone ?? "",
-    facebookUrl: user.facebookUrl ?? "",
-    linkedinUrl: user.linkedinUrl ?? "",
-    instagramUrl: user.instagramUrl ?? "",
-    twitterUrl: user.twitterUrl ?? "",
-    briefBio: user.briefBio ?? "",
-    contactDetails: user.contactDetails ?? "",
-    placeWork: user.placeWork ?? "",
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    phone: user?.phone ?? "",
+    facebookUrl: user?.facebookUrl ?? "",
+    linkedinUrl: user?.linkedinUrl ?? "",
+    instagramUrl: user?.instagramUrl ?? "",
+    twitterUrl: user?.twitterUrl ?? "",
+    briefBio: user?.briefBio ?? "",
+    contactDetails: user?.contactDetails ?? "",
+    placeWork: user?.placeWork ?? "",
   });
 
   const hasChanges = () => {
@@ -219,7 +223,7 @@ const ProfileEdit = () => {
 
       try {
         const res = await updateProfile(formData);
-        success.set("Saved successfully");
+        success.set("Profile updated successfully");
 
         if (res.photo) {
           setNewPhoto(null);
@@ -345,10 +349,26 @@ const ProfileEdit = () => {
     }
   };
 
+  const handleTwoFactorAuthChange = async (e) => {
+    try {
+      const res = await changeTwoFactorAuth();
+      success.set(res.message);
+      updateUserFields({
+        twoFactorAuthentication: res.body.twoFactorAuthentication,
+      });
+    } catch (e) {
+      mainError.set(e.message);
+    }
+  };
+
   useEffect(() => {
+    if (!user) return;
+
     initUser();
     setLoading(false);
-  }, []);
+  }, [user]);
+
+  if (!user) return <></>;
 
   return (
     <>
@@ -403,7 +423,15 @@ const ProfileEdit = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Profile Edit</h1>
+          <h1>Settings</h1>
+          <ol className="breadcrumb">
+            <li className="item">
+              <Link href="/settings/">Home</Link>
+            </li>
+            <li className="item">
+              <Link href="/settings/profile-edit">Profile Edit</Link>
+            </li>
+          </ol>
         </div>
 
         <div className="row">
@@ -442,8 +470,8 @@ const ProfileEdit = () => {
                     />
                   </div>
 
-                  <div className="row">
-                    <div className="col-xl-6 col-lg-12 col-md-12">
+                  <div className="row pe-0 edit-profile-phone-row">
+                    <div className="order-1 order-xl-1 col-xl-6 col-lg-12 col-md-12 p-0 phone-input">
                       <Input
                         label="Phone"
                         value={phone}
@@ -454,7 +482,7 @@ const ProfileEdit = () => {
                     </div>
 
                     {(phone != user.phone || !user.phoneVerified) && (
-                      <div className="col-xl-6 col-lg-12 col-md-12">
+                      <div className="order-3 order-xl-2 col-xl-6 col-lg-12 col-md-12 p-0 phone-verify">
                         <div className="form-group">
                           <label
                             className="d-none d-xl-block"
@@ -474,8 +502,8 @@ const ProfileEdit = () => {
 
                     {phoneError && (
                       <div
-                        className="invalid-feedback d-block"
-                        style={{ marginTop: "-14px", padding: "0 5px" }}
+                        className="order-2 order-xl-3 invalid-feedback d-block"
+                        style={{ marginTop: "-14px", padding: "0" }}
                       >
                         {phoneError}
                       </div>
@@ -642,6 +670,29 @@ const ProfileEdit = () => {
                   </div>
                 </div>
               </form>
+            </div>
+
+            <div className="add-listings-box">
+              <h3>Security</h3>
+
+              <div
+                className="form-group"
+                style={{ marginBottom: 0, paddingBottom: "25px" }}
+              >
+                <div className="sidebar-widgets">
+                  <div className="box">
+                    <span className="title">Two-factor authorization</span>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={user.twoFactorAuthentication}
+                        onChange={handleTwoFactorAuthChange}
+                      />
+                      <span></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

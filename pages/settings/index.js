@@ -27,7 +27,12 @@ const Dashboard = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Main Settings</h1>
+          <h1>Settings</h1>
+          <ol className="breadcrumb">
+            <li className="item">
+              <Link href="/settings/">Home</Link>
+            </li>
+          </ol>
         </div>
 
         <div

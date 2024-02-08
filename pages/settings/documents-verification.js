@@ -1,16 +1,22 @@
 import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
-import { saveMyDocuments, getMyDocuments } from "../../services";
+import {
+  saveMyDocuments,
+  getMyDocuments,
+  userVerifyRequestCreate,
+  canSendVerifyRequest,
+} from "../../services";
 import ENV from "../../env";
 
 const DocumentsVerification = () => {
   const [formError, setFormError] = useState(null);
   const { success, setLoading } = useContext(IndiceContext);
+  const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(false);
+  const [lastDeclineDescription, setLastDeclineDescription] = useState(null);
 
   const [newProofOfAddress, setNewProofOfAddress] = useState(null);
   const [proofOfAddressLink, setProofOfAddressLink] = useState(null);
@@ -97,6 +103,10 @@ const DocumentsVerification = () => {
 
   const initDocuments = async () => {
     const docs = await getMyDocuments();
+    const { canSend, lastAnswerDescription } = await canSendVerifyRequest();
+
+    setActiveSendRequestBtn(canSend);
+    setLastDeclineDescription(lastAnswerDescription);
 
     if (docs.proofOfAddressLink) {
       setProofOfAddressLink(
@@ -209,6 +219,16 @@ const DocumentsVerification = () => {
     success.set("Documents updated successfully");
   };
 
+  const handleSendRequestToVerify = async () => {
+    try {
+      const message = await userVerifyRequestCreate();
+      success.set(message);
+      setActiveSendRequestBtn(false);
+    } catch (e) {
+      setFormError(e);
+    }
+  };
+
   useEffect(() => {
     initDocuments();
     setLoading(false);
@@ -221,17 +241,40 @@ const DocumentsVerification = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Documents Verification</h1>
+          <h1>Settings</h1>
+          <ol className="breadcrumb">
+            <li className="item">
+              <Link href="/settings/">Home</Link>
+            </li>
+            <li className="item">
+              <Link href="/settings/documents-verification">
+                Documents Verification
+              </Link>
+            </li>
+          </ol>
         </div>
 
         <div className="row">
           <div className="col-12">
-            <div className="my-profile-box">
+            <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              <form method="get">
-                <div className="row">
+              {lastDeclineDescription && (
+                <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
+                    <div
+                      className="alert-dismissible fade show alert alert-danger"
+                      role="alert"
+                    >
+                      {lastDeclineDescription}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <form method="get">
+                <div className="row" style={{ alignItems: "flex-end" }}>
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Proof of Address"
                       photoUrl={proofOfAddressLink}
@@ -240,7 +283,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Reputable Bank Id"
                       photoUrl={reputableBankIdLink}
@@ -249,7 +292,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Utility"
                       photoUrl={utilityLink}
@@ -258,7 +301,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="HMRC"
                       photoUrl={hmrcLink}
@@ -267,7 +310,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Council Tax Bill"
                       photoUrl={councilTaxBillLink}
@@ -276,7 +319,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Passport Or Driving Id"
                       photoUrl={passportOrDrivingIdLink}
@@ -285,7 +328,7 @@ const DocumentsVerification = () => {
                     />
                   </div>
 
-                  <div className="col-lg-12 col-md-12">
+                  <div className="col-12 col-lg-3 col-md-4">
                     <ImageInput
                       label="Confirm Money Laundering Check And Compliance"
                       photoUrl={confirmMoneyLaunderingChecksAndComplianceLink}
@@ -308,10 +351,24 @@ const DocumentsVerification = () => {
                   )}
 
                   <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <button type="button" onClick={handleSaveClick}>
+                    <div className="form-group d-flex gap-2">
+                      <button
+                        type="button"
+                        style={{ width: "300px" }}
+                        onClick={handleSaveClick}
+                      >
                         Save Change
                       </button>
+
+                      {activeSendRequestBtn && (
+                        <button
+                          type="button"
+                          style={{ width: "300px" }}
+                          onClick={handleSendRequestToVerify}
+                        >
+                          Send Request To Verify
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -2,9 +2,10 @@ import React, { useState, useContext } from "react";
 import Input from "../../FormComponents/Input";
 import SocialAuth from "./SocialAuth";
 import { validatePassword, validateEmail } from "../../../utils";
-import { login } from "../../../services";
+import { generateMyEmailVerifyCode, login } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const LoginTab = ({
   email,
@@ -18,10 +19,16 @@ const LoginTab = ({
   setCodeModalActive,
   setTypeModalActive,
   setUser,
+  rememberMe,
+  setRememberMe,
 }) => {
+  const router = useRouter();
+
   const [formError, setFormError] = useState(null);
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
+  const [resendEmailView, setRememberMeView] = useState(false);
+  const [wasResendEmailView, setWasRememberMeView] = useState(false);
 
   const { onLogin, success: mainSuccess } = useContext(IndiceContext);
 
@@ -35,7 +42,21 @@ const LoginTab = ({
     setPasswordError(null);
   };
 
+  const handleResendEmailVerify = async (e) => {
+    e.preventDefault();
+    setWasRememberMeView(true);
+    setRememberMeView(false);
+
+    try {
+      const res = await generateMyEmailVerifyCode(email);
+      mainSuccess.set(res);
+    } catch (e) {
+      setFormError(e.message);
+    }
+  };
+
   const handleSubmit = async () => {
+    setRememberMeView(false);
     setFormError(null);
 
     let error = false;
@@ -58,6 +79,7 @@ const LoginTab = ({
       const res = await login({
         email,
         password,
+        rememberMe,
       });
 
       setUser(res.user);
@@ -74,11 +96,20 @@ const LoginTab = ({
         }
       } else {
         onLogin(res.user);
+        setPassword("");
+
         mainSuccess.set("Successfully logged in");
+        
+        if (res.user.needRegularViewInfoForm) {
+          router.push("/settings/profile-edit");
+        }
       }
     } catch (e) {
       setFormError(e.message);
-      setPassword("");
+
+      if (e.message.includes("The mail was not confirmed.")) {
+        setRememberMeView(true);
+      }
     }
   };
 
@@ -112,12 +143,33 @@ const LoginTab = ({
               onInput={handleInputPassword}
             />
 
+            <div className="form-group form-check">
+              <input
+                type="checkbox"
+                className={`form-check-input`}
+                id="remember-me"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <label className="form-check-label" htmlFor="remember-me">
+                Remember me
+              </label>
+            </div>
+
             {formError && (
               <div
                 className="alert-dismissible fade show alert alert-danger"
                 role="alert"
               >
                 {formError}
+                {resendEmailView && !wasResendEmailView && (
+                  <>
+                    {". "}
+                    <a href="#" onClick={handleResendEmailVerify}>
+                      Resend Letter
+                    </a>
+                  </>
+                )}
               </div>
             )}
 

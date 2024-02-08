@@ -14,8 +14,6 @@ import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 
 const Navbar = () => {
-  // Add active class
-
   const {
     isAuth,
     onLogout,
@@ -106,6 +104,8 @@ const Navbar = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
+  const [loginRememberMe, setLoginRememberMe] = useState(false);
+
   const handleChangeCode = (e) => {
     setCode(e.target.value);
     setCodeModalError(null);
@@ -129,10 +129,21 @@ const Navbar = () => {
     }
 
     try {
-      const res = await checkTwoFactorCode(type, code, userToAuth.id);
+      const res = await checkTwoFactorCode(
+        type,
+        code,
+        userToAuth.id,
+        loginRememberMe
+      );
       onLogin(res.user);
       setCodeModalActive(false);
+
+      if (res.user.needRegularViewInfoForm) {
+        router.push("/settings/profile-edit");
+      }
+
       mainSuccess.set("Successfully logged in");
+      setCode("");
     } catch (e) {
       setCodeModalError(e.message);
     }
@@ -368,6 +379,8 @@ const Navbar = () => {
                         setType={setType}
                         setCodeModalActive={setCodeModalActive}
                         setTypeModalActive={setTypeModalActive}
+                        rememberMe={loginRememberMe}
+                        setRememberMe={setLoginRememberMe}
                       />
                     </TabPanel>
 
