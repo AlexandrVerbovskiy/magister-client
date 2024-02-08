@@ -7,34 +7,46 @@ import { IndiceContext } from "../../../contexts";
 
 const RegisterTab = ({ moveToLogin, closeModal }) => {
   const [formError, setFormError] = useState(null);
-  const [name, setName] = useState({ value: "", error: null });
-  const [email, setEmail] = useState({
-    value: "",
-    error: null,
-  });
-  const [password, setPassword] = useState({
-    value: "",
-    error: null,
-  });
-  const [confirmPassword, setConfirmPassword] = useState({
-    value: "",
-    error: null,
-  });
-  const [acceptedTermCondition, setAcceptedTermCondition] = useState({
-    value: false,
-    error: null,
-  });
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState(null);
 
-  const handleInputName = (e) =>
-    setName({ value: e.target.value, error: null });
-  const handleInputEmail = (e) =>
-    setEmail({ value: e.target.value, error: null });
-  const handleInputPassword = (e) =>
-    setPassword({ value: e.target.value, error: null });
-  const handleInputConfirmPassword = (e) =>
-    setConfirmPassword({ value: e.target.value, error: null });
-  const handleInputAcceptedTermsCondition = (e) =>
-    setAcceptedTermCondition({ value: e.target.checked, error: null });
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(null);
+
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
+
+  const [acceptedTermCondition, setAcceptedTermCondition] = useState("");
+  const [acceptedTermConditionError, setAcceptedTermConditionError] =
+    useState(null);
+
+  const handleInputName = (e) => {
+    setName(e.target.value);
+    setNameError(null);
+  };
+
+  const handleInputEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailError(null);
+  };
+
+  const handleInputPassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError(null);
+  };
+
+  const handleInputConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError(null);
+  };
+
+  const handleInputAcceptedTermsCondition = (e) => {
+    setAcceptedTermCondition(e.target.checked);
+    setAcceptedTermConditionError(null);
+  };
 
   const { success: mainSuccess } = useContext(IndiceContext);
 
@@ -43,73 +55,58 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
 
     let error = false;
 
-    const resPasswordValid = validatePassword(password.value);
+    const resPasswordValid = validatePassword(password);
     if (resPasswordValid !== true) {
       error = true;
-      setPassword((prev) => ({
-        ...prev,
-        error: resPasswordValid,
-      }));
+      setPasswordError(resPasswordValid);
     }
 
-    const resConfirmedPasswordValid = validatePassword(password.value);
+    const resConfirmedPasswordValid = validatePassword(password);
     if (resConfirmedPasswordValid !== true) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: resConfirmedPasswordValid,
-      }));
+      setConfirmPasswordError(resConfirmedPasswordValid);
     }
 
-    if (password.value != confirmPassword.value) {
+    if (password != confirmPassword) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: "Passwords do not match",
-      }));
+      setConfirmPasswordError("Passwords do not match");
     }
 
-    const resEmailValid = validateEmail(email.value);
+    const resEmailValid = validateEmail(email);
     if (resEmailValid !== true) {
       error = true;
-      setEmail((prev) => ({
-        ...prev,
-        error: resEmailValid,
-      }));
+      setEmailError(resEmailValid);
     }
 
-    if (!name.value) {
+    if (!name) {
       error = true;
-      setName((prev) => ({
-        ...prev,
-        error: "Name is required field",
-      }));
+      setNameError("Name is required field");
     }
 
-    if (!acceptedTermCondition.value) {
+    if (!acceptedTermCondition) {
       error = true;
-      setAcceptedTermCondition((prev) => ({
-        ...prev,
-        error:
-          "You need to accept the site's terms of use if you want to work on it",
-      }));
+      setAcceptedTermConditionError(
+        "You need to accept the site's terms of use if you want to work on it"
+      );
     }
 
     if (error) return;
 
     try {
       const message = await register({
-        password: password.value,
-        name: name.value,
-        email: email.value,
-        acceptedTermCondition: acceptedTermCondition.value,
+        password,
+        name,
+        email,
+        acceptedTermCondition,
       });
 
       mainSuccess.set(message);
-
       moveToLogin();
     } catch (e) {
       setFormError(e.message);
+    } finally {
+      setPassword("");
+      setConfirmPassword("");
     }
   };
 
@@ -130,9 +127,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             <div className="col-12">
               <Input
                 type="text"
-                value={name.value}
+                value={name}
                 placeholder="Username"
-                error={name.error}
+                error={nameError}
                 onInput={handleInputName}
               />
             </div>
@@ -141,9 +138,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             <div className="col-12">
               <Input
                 type="email"
-                value={email.value}
+                value={email}
                 placeholder="Email"
-                error={email.error}
+                error={emailError}
                 onInput={handleInputEmail}
               />
             </div>
@@ -153,9 +150,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             <div className="col-6">
               <Input
                 type="password"
-                value={password.value}
+                value={password}
                 placeholder="Password"
-                error={password.error}
+                error={passwordError}
                 onInput={handleInputPassword}
               />
             </div>
@@ -163,9 +160,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             <div className="col-6">
               <Input
                 type="password"
-                value={confirmPassword.value}
+                value={confirmPassword}
                 placeholder="Confirm Password"
-                error={confirmPassword.error}
+                error={confirmPasswordError}
                 onInput={handleInputConfirmPassword}
               />
             </div>
@@ -175,10 +172,10 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             <input
               type="checkbox"
               className={`form-check-input${
-                acceptedTermCondition.error ? " is-invalid" : ""
+                acceptedTermConditionError ? " is-invalid" : ""
               }`}
               id="confirm-terms-conditions"
-              checked={acceptedTermCondition.value}
+              checked={acceptedTermCondition}
               onChange={handleInputAcceptedTermsCondition}
             />
             <label
@@ -187,9 +184,9 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
             >
               Create an account?
             </label>
-            {acceptedTermCondition.error && (
+            {acceptedTermConditionError && (
               <div className="invalid-feedback">
-                {acceptedTermCondition.error}
+                {acceptedTermConditionError}
               </div>
             )}
           </div>

@@ -65,7 +65,6 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
       (props ? `?${props}` : "");
 
     if (currentLink !== newLinkPart) {
-      console.log("must change");
       window.history.replaceState(null, null, newLinkPart);
     }
   };

@@ -26,7 +26,7 @@ const AdminIndex = () => {
 };
 
 AdminIndex.getInitialProps = async () => ({
-  access: "admin",
+  access: "support",
   type: "admin",
 });
 

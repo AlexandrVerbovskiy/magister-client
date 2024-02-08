@@ -3,9 +3,15 @@ import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RegisterTab from "./RegisterTab";
 import LoginTab from "./LoginTab";
-import { logout } from "../../../services";
+import {
+  logout,
+  generateTwoFactorCode,
+  checkTwoFactorCode,
+} from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
+import AuthCodeModal from "./AuthCodeModal";
+import AuthTypeModal from "./AuthTypeModal";
 
 const Navbar = () => {
   // Add active class
@@ -14,7 +20,8 @@ const Navbar = () => {
     isAuth,
     onLogout,
     success: mainSuccess,
-    isAdmin,
+    isSupport,
+    onLogin,
   } = useContext(IndiceContext);
 
   const [currentPath, setCurrentPath] = useState("");
@@ -84,6 +91,53 @@ const Navbar = () => {
     onLogout();
     mainSuccess.set("Successfully logged out");
   };
+
+  const [userToAuth, setUserToAuth] = useState(null);
+
+  const [canChangeType, setCanChangeType] = useState(false);
+  const [type, setType] = useState("email");
+  const [typeModalActive, setTypeModalActive] = useState(false);
+  const [typeModalError, setTypeModalError] = useState(null);
+
+  const [code, setCode] = useState("");
+  const [codeModalActive, setCodeModalActive] = useState(false);
+  const [codeModalError, setCodeModalError] = useState(null);
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  const handleChangeCode = (e) => {
+    setCode(e.target.value);
+    setCodeModalError(null);
+  };
+
+  const handleSelectTypeClick = async (type) => {
+    setType(type);
+
+    try {
+      await generateTwoFactorCode(loginEmail, loginPassword, type);
+      setTypeModalActive(false);
+      setCodeModalActive(true);
+    } catch (e) {
+      setTypeModalError(e.message);
+    }
+  };
+
+  const handleCheckCode = async () => {
+    if (code.length < 1) {
+      setCodeModalError("Code is required field");
+    }
+
+    try {
+      const res = await checkTwoFactorCode(type, code, userToAuth.id);
+      onLogin(res.user);
+      setCodeModalActive(false);
+      mainSuccess.set("Successfully logged in");
+    } catch (e) {
+      setCodeModalError(e.message);
+    }
+  };
+
   return (
     <>
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
@@ -139,7 +193,15 @@ const Navbar = () => {
                     </Link>
                   </li>
 
-                  {isAdmin && (
+                  {isAuth && (
+                    <li className="nav-item">
+                      <Link href="/settings/" className="nav-link">
+                        Settings
+                      </Link>
+                    </li>
+                  )}
+
+                  {isSupport && (
                     <li className="nav-item">
                       <Link href="/admin/" className="nav-link">
                         Admin Section
@@ -232,64 +294,95 @@ const Navbar = () => {
         </div>
       </div>
       {/* ------------ Auth Modal ------- */}
+
+      {!isAuth && canChangeType && (
+        <AuthTypeModal
+          typeModalActive={typeModalActive}
+          setTypeModalActive={setTypeModalActive}
+          typeModalError={typeModalError}
+          handleSelectTypeClick={handleSelectTypeClick}
+        />
+      )}
+
       {!isAuth && (
-        <div
-          className={
-            displayAuth
-              ? "modal loginRegisterModal show"
-              : "modal loginRegisterModal"
-          }
-          id="loginRegisterModal"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <Tabs>
-                <button type="button" className="close" onClick={toggleAuth}>
-                  <i className="bx bx-x"></i>
-                </button>
+        <AuthCodeModal
+          codeModalActive={codeModalActive}
+          code={code}
+          handleChangeCode={handleChangeCode}
+          codeModalError={codeModalError}
+          handleCheckCode={handleCheckCode}
+        />
+      )}
 
-                <ul className="nav nav-tabs" id="myTab">
-                  <TabList>
-                    <Tab className="nav-item">
-                      <a
-                        className="nav-link"
-                        id="login-tab"
-                        ref={loginTabBtnTrigger}
-                      >
-                        Login
-                      </a>
-                    </Tab>
-                    <Tab className="nav-item">
-                      <a
-                        className="nav-link"
-                        id="register-tab"
-                        ref={registerTabBtnTrigger}
-                      >
-                        Register
-                      </a>
-                    </Tab>
-                  </TabList>
-                </ul>
+      {!isAuth && (
+        <>
+          <div
+            className={
+              displayAuth
+                ? "modal loginRegisterModal show"
+                : "modal loginRegisterModal"
+            }
+            id="loginRegisterModal"
+          >
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <Tabs>
+                  <button type="button" className="close" onClick={toggleAuth}>
+                    <i className="bx bx-x"></i>
+                  </button>
 
-                <div className="tab-content" id="myTabContent">
-                  <TabPanel>
-                    <LoginTab
-                      moveToRegister={handleRegisterTabActive}
-                      closeModal={closeModals}
-                    />
-                  </TabPanel>
+                  <ul className="nav nav-tabs" id="myTab">
+                    <TabList>
+                      <Tab className="nav-item">
+                        <a
+                          className="nav-link"
+                          id="login-tab"
+                          ref={loginTabBtnTrigger}
+                        >
+                          Login
+                        </a>
+                      </Tab>
+                      <Tab className="nav-item">
+                        <a
+                          className="nav-link"
+                          id="register-tab"
+                          ref={registerTabBtnTrigger}
+                        >
+                          Register
+                        </a>
+                      </Tab>
+                    </TabList>
+                  </ul>
 
-                  <TabPanel>
-                    <RegisterTab
-                      moveToLogin={handleLoginTabActive}
-                      closeModal={closeModals}
-                    />
-                  </TabPanel>
-                </div>
-              </Tabs>
+                  <div className="tab-content" id="myTabContent">
+                    <TabPanel>
+                      <LoginTab
+                        setUser={setUserToAuth}
+                        email={loginEmail}
+                        setEmail={setLoginEmail}
+                        password={loginPassword}
+                        setPassword={setLoginPassword}
+                        moveToRegister={handleRegisterTabActive}
+                        closeModal={closeModals}
+                        setCanChangeType={setCanChangeType}
+                        setType={setType}
+                        setCodeModalActive={setCodeModalActive}
+                        setTypeModalActive={setTypeModalActive}
+                      />
+                    </TabPanel>
+
+                    <TabPanel>
+                      <RegisterTab
+                        moveToLogin={handleLoginTabActive}
+                        closeModal={closeModals}
+                      />
+                    </TabPanel>
+                  </div>
+                </Tabs>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

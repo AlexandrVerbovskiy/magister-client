@@ -14,8 +14,37 @@ export const login = async (userInfo) => {
   const data = await serviceWrapper(
     axios.post(`${serverApiUrl}/auth/login`, userInfo)
   );
+
+  /*if (!data.body.needCode) {
+    saveSessionInfo(data.body);
+  }*/
+
+  return data.body;
+};
+
+export const generateTwoFactorCode = async (email, password, type) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/generate-two-factor-code`, {
+      email,
+      password,
+      type,
+    })
+  );
+  return data.message;
+};
+
+export const checkTwoFactorCode = async (type, code, id) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/check-two-factor-code`, {
+      type,
+      code,
+      id,
+    })
+  );
+
   saveSessionInfo(data.body);
-  return data.body.user;
+
+  return data.body;
 };
 
 export const logout = async () => {
@@ -31,17 +60,90 @@ export const register = async (userInfo) => {
   return data.message;
 };
 
-export const resetPassword = async (email) => {
-  const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/reset-password`, { email })
-  );
-  return data.message;
-};
-
 export const updateSessionInfo = async () => {
   const data = await serviceWrapper(
     authAxios.get(`${serverApiUrl}/auth/update-session-info`)
   );
   saveSessionInfo(data.body);
   return data.body.user;
+};
+
+export const getMyInfo = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/my-info`)
+  );
+  return data.body.user;
+};
+
+export const setMyPassword = async (password) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/set-my-password`, { password })
+  );
+  return data.body.user;
+};
+
+export const updateProfile = async (body) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/save-profile`, body)
+  );
+  return data.body.user;
+};
+
+export const getMyDocuments = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/my-documents`)
+  );
+  return data.body.documents;
+};
+
+export const saveMyDocuments = async (body) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/save-my-documents`, body)
+  );
+  return data.body.documents;
+};
+
+export const updateMyPassword = async (currentPassword, newPassword) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/update-my-password`, {
+      currentPassword,
+      newPassword,
+    })
+  );
+  return data.body.user;
+};
+
+export const verifyEmail = async (email, token) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/verify-email`, { email, token })
+  );
+  return data.message;
+};
+
+export const resetPasswordSend = async (email) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/reset-password-send`, { email })
+  );
+  return data.message;
+};
+
+export const resetPassword = async (password, token) => {
+  const data = await serviceWrapper(
+    axios.post(`${serverApiUrl}/auth/reset-password`, { password, token })
+  );
+  return data.message;
+};
+
+export const generateMyPhoneVerifyCode = async () => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/generate-my-phone-code`)
+  );
+  return data.message;
+};
+
+export const checkMyPhoneVerifyCode = async (code) => {
+  const data = await serviceWrapper(
+    authAxios.post(`${serverApiUrl}/auth/check-my-phone-code`, { code })
+  );
+  return data.message;
 };
