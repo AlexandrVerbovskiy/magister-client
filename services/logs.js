@@ -1,17 +1,12 @@
-import ENV from "../env";
-import { authAxios, serviceWrapper } from "../utils";
-const serverApiUrl = ENV.SERVER_API_URL;
+import { initAxios, serviceWrapper } from "../utils";
+const axios = initAxios("/logs");
 
 export const getLogById = async (id) => {
-  const data = await serviceWrapper(
-    authAxios.get(`${serverApiUrl}/logs/get-by-id/${id}`)
-  );
+  const data = await serviceWrapper(axios.get(`/get-by-id/${id}`));
   return data.body;
 };
 
 export const getLogList = async (body) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/logs/list`, body)
-  );
+  const data = await serviceWrapper(axios.post("/list", body));
   return data.body;
 };

@@ -33,9 +33,11 @@ function DropdownClassic({ options, selected, setSelected }) {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const selectedTitle = options.find(
-    (option) => option.value === selected
-  ).title;
+  const selectedElem = options.find((option) => option.value === selected);
+
+  const selectedTitle = selectedElem
+    ? selectedElem.title
+    : options.find((option) => option.default).title;
 
   return (
     <div className="relative inline-flex">

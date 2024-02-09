@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
-const MainSuccessAlert = () => {
+const MainSuccessAlert = ({ statusCode }) => {
   const { success } = useContext(IndiceContext);
 
-  if (!success.value) return;
+  if (!success.value || statusCode) return;
 
   return (
     <div

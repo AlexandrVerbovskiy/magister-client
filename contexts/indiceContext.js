@@ -3,9 +3,9 @@ import { useMain } from "../hooks";
 
 const IndiceContext = createContext();
 
-const IndiceProvider = ({ access, children, dopProps = {} }) => {
+const IndiceProvider = ({ userInfo, children, dopProps = {} }) => {
   const main = useMain({
-    access,
+    userInfo,
   });
 
   return (

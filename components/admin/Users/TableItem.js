@@ -87,8 +87,6 @@ const TableItem = ({
   onChangeActive,
   onChangeVerified,
 }) => {
-  console.log(active, verified);
-
   const { user: currentUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
 

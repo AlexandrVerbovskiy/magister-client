@@ -1,30 +1,29 @@
-import axios from "axios";
-import ENV from "../env";
-import { authAxios, serviceWrapper } from "../utils";
-const serverApiUrl = ENV.SERVER_API_URL;
+import {
+  getCookieString,
+  initAxios,
+  removeCookie,
+  serviceWrapper,
+} from "../utils";
+const axios = initAxios("/auth");
 
 const saveSessionInfo = (res) => {
   const { user, accessToken } = res;
-  localStorage.setItem("accessToken", accessToken);
-  localStorage.setItem("userInfo", JSON.stringify(user));
   return user;
 };
 
 export const login = async (userInfo) => {
-  const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/login`, userInfo)
-  );
+  const data = await serviceWrapper(axios.post("/login", userInfo));
 
-  /*if (!data.body.needCode) {
+  if (!data.body.needCode) {
     saveSessionInfo(data.body);
-  }*/
+  }
 
   return data.body;
 };
 
 export const generateTwoFactorCode = async (email, password, type) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/generate-two-factor-code`, {
+    axios.post("/generate-two-factor-code", {
       email,
       password,
       type,
@@ -33,12 +32,13 @@ export const generateTwoFactorCode = async (email, password, type) => {
   return data.message;
 };
 
-export const checkTwoFactorCode = async (type, code, id) => {
+export const checkTwoFactorCode = async (type, code, id, rememberMe) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/check-two-factor-code`, {
+    axios.post("/check-two-factor-code", {
       type,
       code,
       id,
+      rememberMe,
     })
   );
 
@@ -48,64 +48,72 @@ export const checkTwoFactorCode = async (type, code, id) => {
 };
 
 export const logout = async () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("userInfo");
+  removeCookie("Bearer");
   return;
 };
 
-export const register = async (userInfo) => {
+export const generateMyEmailVerifyCode = async (email) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/register`, userInfo)
+    axios.post("/generate-my-email-code", { email })
   );
   return data.message;
 };
 
-export const updateSessionInfo = async () => {
-  const data = await serviceWrapper(
-    authAxios.get(`${serverApiUrl}/auth/update-session-info`)
-  );
-  saveSessionInfo(data.body);
-  return data.body.user;
+export const register = async (userInfo) => {
+  const data = await serviceWrapper(axios.post("/register", userInfo));
+  return data.message;
 };
 
 export const getMyInfo = async () => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/my-info`)
-  );
+  const data = await serviceWrapper(axios.post("/my-info"));
   return data.body.user;
 };
 
-export const setMyPassword = async (password) => {
+export const getMyInfoByCookie = async (cookies) => {
+  const options = {
+    headers: {
+      Cookie: getCookieString(cookies),
+    },
+  };
+
+  const data = await serviceWrapper(axios.post("/my-info", null, options));
+  return data.body.user;
+};
+
+export const updateShortUserInfo = async (password, acceptedTermCondition) => {
   const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/set-my-password`, { password })
+    axios.post("/update-short-info", {
+      password,
+      acceptedTermCondition,
+    })
   );
   return data.body.user;
 };
 
 export const updateProfile = async (body) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/save-profile`, body)
-  );
+  const data = await serviceWrapper(axios.post("/save-profile", body));
   return data.body.user;
 };
 
-export const getMyDocuments = async () => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/my-documents`)
-  );
+export const getMyDocuments = async (cookies) => {
+  const options = {
+    headers: {
+      Cookie: getCookieString(cookies),
+    },
+  };
+
+  const data = await serviceWrapper(axios.post("/my-documents", null, options));
   return data.body.documents;
 };
 
 export const saveMyDocuments = async (body) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/save-my-documents`, body)
-  );
+  const data = await serviceWrapper(axios.post("/save-my-documents", body));
   return data.body.documents;
 };
 
 export const updateMyPassword = async (currentPassword, newPassword) => {
   const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/update-my-password`, {
+    axios.post("/update-my-password", {
       currentPassword,
       newPassword,
     })
@@ -115,35 +123,50 @@ export const updateMyPassword = async (currentPassword, newPassword) => {
 
 export const verifyEmail = async (email, token) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/verify-email`, { email, token })
+    axios.post("/verify-email", { email, token })
   );
   return data.message;
 };
 
 export const resetPasswordSend = async (email) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/reset-password-send`, { email })
+    axios.post("/reset-password-send", { email })
   );
   return data.message;
 };
 
 export const resetPassword = async (password, token) => {
   const data = await serviceWrapper(
-    axios.post(`${serverApiUrl}/auth/reset-password`, { password, token })
+    axios.post("/reset-password", { password, token })
   );
   return data.message;
 };
 
 export const generateMyPhoneVerifyCode = async () => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/generate-my-phone-code`)
-  );
+  const data = await serviceWrapper(axios.post("/generate-my-phone-code"));
   return data.message;
 };
 
 export const checkMyPhoneVerifyCode = async (code) => {
   const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/auth/check-my-phone-code`, { code })
+    axios.post("/check-my-phone-code", { code })
   );
   return data.message;
+};
+
+export const changeTwoFactorAuth = async () => {
+  const data = await serviceWrapper(axios.post("/change-two-factor-auth"));
+  return data;
+};
+
+export const canSendVerifyRequest = async (cookies) => {
+  const options = {
+    headers: {
+      Cookie: getCookieString(cookies),
+    },
+  };
+  const data = await serviceWrapper(
+    axios.post("/can-send-verify-request", null, options)
+  );
+  return data.body;
 };

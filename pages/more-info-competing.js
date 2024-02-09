@@ -3,24 +3,25 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { validatePassword } from "../utils";
 import { IndiceContext } from "../contexts";
-import { setMyPassword } from "../services";
+import { updateShortUserInfo } from "../services";
+import { authSideProps } from "../middlewares";
 
-const PasswordCompleting = () => {
+const MoreInfoCompleting = () => {
   const router = useRouter();
   const [formError, setFormError] = useState(null);
   const { user } = useContext(IndiceContext);
   const { error, success, setLoading } = useContext(IndiceContext);
   const [hasAccess, setHasAccess] = useState(null);
 
-  const [password, setPassword] = useState({
-    value: "",
-    error: null,
-  });
+  const [acceptedTermCondition, setAcceptedTermCondition] = useState("");
+  const [acceptedTermConditionError, setAcceptedTermConditionError] =
+    useState(null);
 
-  const [confirmPassword, setConfirmPassword] = useState({
-    value: "",
-    error: null,
-  });
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(null);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
   const [passwordFieldType, setPasswordFieldType] = useState("password");
   const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
@@ -37,48 +38,55 @@ const PasswordCompleting = () => {
     setConfirmPasswordFieldType(newType);
   };
 
-  const handleInputPassword = (e) =>
-    setPassword({ value: e.target.value, error: null });
+  const handleInputPassword = (e) => {
+    setPassword(e.target.value);
+    setPasswordError(null);
+  };
 
-  const handleInputConfirmPassword = (e) =>
-    setConfirmPassword({ value: e.target.value, error: null });
+  const handleInputConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError(null);
+  };
+
+  const handleInputAcceptedTermsCondition = (e) => {
+    setAcceptedTermCondition(e.target.checked);
+    setAcceptedTermConditionError(null);
+  };
 
   const handleSaveClick = async () => {
     setFormError(null);
 
     let error = false;
 
-    const resPasswordValid = validatePassword(password.value);
+    const resPasswordValid = validatePassword(password);
     if (resPasswordValid !== true) {
       error = true;
-      setPassword((prev) => ({
-        ...prev,
-        error: resPasswordValid,
-      }));
+      setPasswordError(resPasswordValid);
     }
 
-    const resConfirmedPasswordValid = validatePassword(password.value);
+    const resConfirmedPasswordValid = validatePassword(password);
     if (resConfirmedPasswordValid !== true) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: resConfirmedPasswordValid,
-      }));
+      setConfirmPasswordError(resConfirmedPasswordValid);
     }
 
-    if (password.value != confirmPassword.value) {
+    if (password != confirmPassword) {
       error = true;
-      setConfirmPassword((prev) => ({
-        ...prev,
-        error: "Passwords do not match",
-      }));
+      setConfirmPasswordError("Passwords do not match");
+    }
+
+    if (!acceptedTermCondition) {
+      error = true;
+      setAcceptedTermConditionError(
+        "You need to accept the site's terms of use if you want to work on it"
+      );
     }
 
     if (error) return;
 
     try {
-      await setMyPassword(password.value);
-      success.set("Password updated successfully");
+      await updateShortUserInfo(password, acceptedTermCondition);
+      success.set("Info saved successfully");
       router.push("/settings/profile-edit");
     } catch (err) {
       setFormError(err.message);
@@ -86,6 +94,8 @@ const PasswordCompleting = () => {
   };
 
   useEffect(() => {
+    if (!user) return;
+
     if (user.needSetPassword) {
       setHasAccess(true);
     } else {
@@ -94,7 +104,7 @@ const PasswordCompleting = () => {
     }
 
     setLoading(false);
-  }, []);
+  }, [user]);
 
   if (hasAccess === null) return <div></div>;
 
@@ -107,7 +117,7 @@ const PasswordCompleting = () => {
               <img src="/images/black-logo.png" alt="image" />
             </Link>
 
-            <h2>Set a password</h2>
+            <h2>Continue registration</h2>
 
             <form className="newsletter-form" method="get">
               <div className="form-group">
@@ -146,11 +156,11 @@ const PasswordCompleting = () => {
                 <input
                   type={passwordFieldType}
                   className={`input-newsletter border-bottom-required${
-                    password.error ? " is-invalid" : ""
+                    passwordError ? " is-invalid" : ""
                   }`}
                   placeholder="Enter your password"
                   name="password"
-                  value={password.value}
+                  value={password}
                   onInput={handleInputPassword}
                   required
                 />
@@ -160,8 +170,8 @@ const PasswordCompleting = () => {
                   } cursor-pointer`}
                   onClick={handleChangePasswordFieldType}
                 ></i>
-                {password.error && (
-                  <div className="invalid-feedback">{password.error}</div>
+                {passwordError && (
+                  <div className="invalid-feedback">{passwordError}</div>
                 )}
               </div>
 
@@ -169,11 +179,11 @@ const PasswordCompleting = () => {
                 <input
                   type={confirmPasswordFieldType}
                   className={`input-newsletter border-bottom-required${
-                    confirmPassword.error ? " is-invalid" : ""
+                    confirmPasswordError ? " is-invalid" : ""
                   }`}
                   placeholder="Confirm your password"
                   name="confirm_password"
-                  value={confirmPassword.value}
+                  value={confirmPassword}
                   onInput={handleInputConfirmPassword}
                   required
                 />
@@ -185,9 +195,37 @@ const PasswordCompleting = () => {
                   } cursor-pointer`}
                   onClick={handleChangeConfirmPasswordFieldType}
                 ></i>
-                {confirmPassword.error && (
+                {confirmPasswordError && (
+                  <div className="invalid-feedback">{confirmPasswordError}</div>
+                )}
+              </div>
+
+              <div className="form-group form-check">
+                <div className="d-flex">
+                  <input
+                    type="checkbox"
+                    className={`form-check-input${
+                      acceptedTermConditionError ? " is-invalid" : ""
+                    }`}
+                    id="confirm-terms-conditions"
+                    checked={acceptedTermCondition}
+                    onChange={handleInputAcceptedTermsCondition}
+                  />
+                  <span>
+                    <label
+                      className="form-check-label"
+                      htmlFor="confirm-terms-conditions"
+                    >
+                      Accept
+                    </label>{" "}
+                    <span className="dont-account">
+                      <Link href="#">conditions</Link>
+                    </span>
+                  </span>
+                </div>
+                {acceptedTermConditionError && (
                   <div className="invalid-feedback">
-                    {confirmPassword.error}
+                    {acceptedTermConditionError}
                   </div>
                 )}
               </div>
@@ -221,8 +259,6 @@ const PasswordCompleting = () => {
   );
 };
 
-PasswordCompleting.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = authSideProps;
 
-export default PasswordCompleting;
+export default MoreInfoCompleting;
