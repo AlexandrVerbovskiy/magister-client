@@ -2,7 +2,6 @@ import Cookies from 'js-cookie';
 
 export const removeCookie = (name) => {
   Cookies.remove(name); // Replace 'yourCookieName' with the name of your cookie
-  console.log(document.cookie);
 };
 
 export const getCookieString = (cookies) => {
