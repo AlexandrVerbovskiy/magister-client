@@ -64,8 +64,14 @@ export const register = async (userInfo) => {
   return data.message;
 };
 
-export const getMyInfo = async () => {
-  const data = await serviceWrapper(axios.post("/my-info"));
+export const getMyInfo = async (cookies) => {
+  const options = {
+    headers: {
+      Cookie: getCookieString(cookies),
+    },
+  };
+  
+  const data = await serviceWrapper(axios.post("/my-info", null, options));
   return data.body.user;
 };
 
