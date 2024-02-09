@@ -16,11 +16,6 @@ const UserCreate = () => {
   return <EditUserForm user={{}} save={handleSave} currentTitle="New User" />;
 };
 
-UserCreate.getInitialProps = async () => ({
-  access: "admin",
-  type: "admin",
-});
-
 export const getServerSideProps = adminSideProps;
 
 export default UserCreate;
