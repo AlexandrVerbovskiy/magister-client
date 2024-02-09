@@ -23,6 +23,7 @@ import {
 import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
 import Link from "next/link";
+import { authSideProps } from "../../middlewares";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
@@ -231,7 +232,6 @@ const ProfileEdit = () => {
         }
 
         const loginDate = { ...user, ...info, photo: res.photo };
-        localStorage.setItem("userInfo", JSON.stringify(loginDate));
         onLogin(loginDate);
         return true;
       } catch (e) {
@@ -701,8 +701,6 @@ const ProfileEdit = () => {
   );
 };
 
-ProfileEdit.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = authSideProps;
 
 export default ProfileEdit;

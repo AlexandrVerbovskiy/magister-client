@@ -4,6 +4,7 @@ import Header from "../../partials/admin/Header";
 import WelcomeBanner from "../../partials/admin/dashboard/WelcomeBanner";
 import "tailwindcss/tailwind.css";
 import { useAdminPage } from "../../hooks";
+import { supportSideProps } from "../../middlewares";
 
 const AdminIndex = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -25,9 +26,6 @@ const AdminIndex = () => {
   );
 };
 
-AdminIndex.getInitialProps = async () => ({
-  access: "support",
-  type: "admin",
-});
+export const getServerSideProps = supportSideProps;
 
 export default AdminIndex;

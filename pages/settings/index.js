@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
+import { authSideProps } from "../../middlewares";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -79,8 +80,6 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = authSideProps;
 
 export default Dashboard;

@@ -7,7 +7,6 @@ import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 
 import "../styles/index.css";
-import PageWrapper from "../components/_App/PageWrapper";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const stylesRef = useRef({ base: [], admin: [] });
@@ -36,9 +35,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       isFirstCall.current = false;
 
       document.querySelectorAll("head style").forEach((elem) => {
-        if (elem.innerText.includes("MIT License | https://tailwindcss.com")) {
-          stylesRef.current["admin"].push(elem.cloneNode(true));
-        } else {
+        if (!elem.innerText.includes("MIT License | https://tailwindcss.com")) {
           stylesRef.current["base"].push(elem.cloneNode(true));
         }
       });
@@ -63,27 +60,25 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(false);
 
-  const accessType = pageProps.access;
-  const type = pageProps.type;
+  const pageType = pageProps.pageType;
+  const user = pageProps.user;
 
   useImportGlobalStyle({
-    type,
+    type: pageType,
     onStart: () => setLoading(true),
     onEnd: () => setLoading(false),
   });
 
   return (
-    <IndiceProvider access={accessType} dopProps={{ setLoading }}>
+    <IndiceProvider userInfo={user} dopProps={{ setLoading }}>
       <Layout>
-        <PageWrapper>
-          <Component {...pageProps} />
-        </PageWrapper>
+        <Component {...pageProps} />
 
         <Loader loading={loading} />
 
-        <MainErrorAlert />
-        <MainSuccessAlert />
-        <UnverifiedAlert />
+        <MainErrorAlert {...pageProps} />
+        <MainSuccessAlert {...pageProps} />
+        <UnverifiedAlert {...pageProps} />
       </Layout>
     </IndiceProvider>
   );

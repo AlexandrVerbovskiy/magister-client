@@ -6,6 +6,7 @@ import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import Datepicker from "../../components/admin/Datepicker";
 import UserVerifyRequestsTable from "../../components/admin/UserVerifyRequests/Table";
+import { supportSideProps } from "../../middlewares";
 
 import { useAdminPage, usePagination } from "../../hooks";
 import { IndiceContext } from "../../contexts";
@@ -122,9 +123,6 @@ const UserVerifyRequests = () => {
   );
 };
 
-UserVerifyRequests.getInitialProps = async () => ({
-  access: "admin",
-  type: "admin",
-});
+export const getServerSideProps = supportSideProps;
 
 export default UserVerifyRequests;

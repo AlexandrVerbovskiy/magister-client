@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import EditUserForm from "../../components/admin/EditUserForm";
 import { createUser } from "../../services";
+import { adminSideProps } from "../../middlewares";
 
 const UserCreate = () => {
   const router = useRouter();
@@ -19,5 +20,7 @@ UserCreate.getInitialProps = async () => ({
   access: "admin",
   type: "admin",
 });
+
+export const getServerSideProps = adminSideProps;
 
 export default UserCreate;

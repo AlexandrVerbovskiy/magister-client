@@ -245,12 +245,12 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     );
 
     try {
-      const res = await save(formData);
+      const { user } = await save(formData);
       success.set("User saved successfully");
 
-      if (res.photo) {
+      if (user.photo) {
         setNewPhoto(null);
-        setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + res.photo);
+        setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + user.photo);
       }
     } catch (e) {
       error.set(e.message);

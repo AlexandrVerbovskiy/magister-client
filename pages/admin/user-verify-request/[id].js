@@ -11,13 +11,13 @@ import Header from "../../../partials/admin/Header";
 import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
+import { supportSideProps } from "../../../middlewares";
 
-const UserVerifyRequest = () => {
+const UserVerifyRequest = ({ info }) => {
   const { error, success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   const [accessDeclineModalOpen, setAccessDeclineModalOpen] = useState(false);
-  const [info, setInfo] = useState(null);
   const router = useRouter();
   const { id } = router.query;
 
@@ -29,25 +29,9 @@ const UserVerifyRequest = () => {
     setDeclineDescriptionError(null);
   };
 
-  const init = async () => {
-    try {
-      const requestInfo = await getUserVerifyRequestById(id);
-      console.log(requestInfo);
-      setInfo(requestInfo);
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  useEffect(() => {
-    if (id) {
-      init();
-    }
-  }, [id]);
-
   const handleBaseVerifyChangeClick = async (verified, description = null) => {
     try {
-      await userVerifyRequestUpdate({id, verified, description});
+      await userVerifyRequestUpdate({ id, verified, description });
       const message = verified
         ? "Verified successfully"
         : "Declined successfully";
@@ -95,8 +79,8 @@ const UserVerifyRequest = () => {
                 links={[
                   { title: "Users", href: "/admin/users" },
                   {
-                    title: info?.userName,
-                    href: "/admin/user-edit/" + info?.userId,
+                    title: info.userName,
+                    href: "/admin/user-edit/" + info.userId,
                   },
                   { title: "Verify Request" },
                 ]}
@@ -189,9 +173,30 @@ const UserVerifyRequest = () => {
   );
 };
 
-UserVerifyRequest.getInitialProps = async () => ({
-  access: "support",
-  type: "admin",
-});
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await supportSideProps(context);
+  if (baseSideProps.notFound) return baseSideProps;
+
+  const id = context.params.id;
+
+  if (!id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const contextCookies = context.req.cookies;
+  const info = await getUserVerifyRequestById(id, contextCookies);
+
+  try {
+    return {
+      props: { ...baseSideProps.props, info },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default UserVerifyRequest;

@@ -1,76 +1,60 @@
-import ENV from "../env";
-import { authAxios, serviceWrapper } from "../utils";
-const serverApiUrl = ENV.SERVER_API_URL;
+import { getCookieString, initAxios, serviceWrapper } from "../utils";
+const axios = initAxios("/users");
 
 export const getUserById = async (id) => {
-  const data = await serviceWrapper(
-    authAxios.get(`${serverApiUrl}/users/get-by-id/${id}`)
-  );
+  const data = await serviceWrapper(axios.get(`/get-by-id/${id}`));
   return data.body;
 };
 
-//only admin methods
+export const getFullUserById = async (id, cookies) => {
+  const options = {
+    headers: {
+      Cookie: getCookieString(cookies),
+    },
+  };
 
-export const getFullUserById = async (id) => {
   const data = await serviceWrapper(
-    authAxios.get(`${serverApiUrl}/users/get-full-by-id/${id}`)
+    axios.get(`/get-full-by-id/${id}`, options)
   );
   return data.body;
 };
 
 export const getUserDocuments = async (userId) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/documents`, { userId })
-  );
+  const data = await serviceWrapper(axios.post("/documents", { userId }));
   return data.body.documents;
 };
 
 export const getUserList = async (body) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/list`, body)
-  );
+  const data = await serviceWrapper(axios.post("/list", body));
   return data.body;
 };
 
 export const setRole = async (id, role) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/set-role`, { id, role })
-  );
+  const data = await serviceWrapper(axios.post("/set-role", { id, role }));
   return data.body;
 };
 
 export const changeActive = async (id) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/change-active`, { id })
-  );
+  const data = await serviceWrapper(axios.post("/change-active", { id }));
   return data.body;
 };
 
 export const changeVerified = async (id) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/change-verified`, { id })
-  );
+  const data = await serviceWrapper(axios.post("/change-verified", { id }));
   return data.body;
 };
 
 export const deleteUser = async (id) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/delete`, { id })
-  );
+  const data = await serviceWrapper(axios.post("/delete", { id }));
   return data.body;
 };
 
 export const updateUser = async (userData) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/update`, userData)
-  );
+  const data = await serviceWrapper(axios.post("/update", userData));
   return data.body;
 };
 
-
 export const createUser = async (userData) => {
-  const data = await serviceWrapper(
-    authAxios.post(`${serverApiUrl}/users/create`, userData)
-  );
+  const data = await serviceWrapper(axios.post("/create", userData));
   return data.body;
 };

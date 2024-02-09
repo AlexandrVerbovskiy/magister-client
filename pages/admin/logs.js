@@ -7,6 +7,7 @@ import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import TransactionPanel from "../../partials/admin/finance/Panel";
 import LogsTable from "../../components/admin/Logs/Table";
 import Datepicker from "../../components/admin/Datepicker";
+import { adminSideProps } from "../../middlewares";
 
 import { useAdminPage, usePagination } from "../../hooks";
 import { IndiceContext } from "../../contexts";
@@ -135,9 +136,6 @@ const Logs = () => {
   );
 };
 
-Logs.getInitialProps = async () => ({
-  access: "admin",
-  type: "admin",
-});
+export const getServerSideProps = adminSideProps;
 
 export default Logs;

@@ -3,53 +3,51 @@ import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import { getFullUserById, updateUser } from "../../../services";
 import EditUserForm from "../../../components/admin/EditUserForm";
-import { IndiceContext } from "../../../contexts";
+import { adminSideProps } from "../../../middlewares";
 
-const UserEdit = () => {
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [user, setUser] = useState(null);
-  const { error } = useContext(IndiceContext);
-
-  const initUser = async () => {
-    try {
-      if (id) {
-        const gotUserInfo = await getFullUserById(id);
-        setUser(gotUserInfo);
-      } else {
-        setUser(null);
-      }
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  useEffect(() => {
-    initUser();
-  }, [id]);
-
-  if (!user) {
-    return <ErrorPage statusCode={404} />;
-  }
-
+const UserEdit = ({ editableUser }) => {
   const handleSave = async (formData) => {
-    formData.append("id", id);
+    formData.append("id", editableUser.id);
     return await updateUser(formData);
   };
 
   return (
     <EditUserForm
-      user={user}
+      user={editableUser}
       save={handleSave}
-      currentTitle={user ? user.name : "New User"}
+      currentTitle={editableUser.name}
     />
   );
 };
 
-UserEdit.getInitialProps = async () => ({
-  access: "admin",
-  type: "admin",
-});
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await adminSideProps(context);
+  const id = context.params.id;
+  
+  if (baseSideProps.notFound || !id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const contextCookies = context.req.cookies;
+    const editableUser = await getFullUserById(id, contextCookies);
+
+    const currentUser = baseSideProps.props.user;
+
+    if (currentUser.id === editableUser.id) {
+      throw new Error("Permission denied")
+    }
+
+    return {
+      props: { ...baseSideProps.props, editableUser },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default UserEdit;

@@ -11,12 +11,15 @@ import {
   canSendVerifyRequest,
 } from "../../services";
 import ENV from "../../env";
+import { authSideProps } from "../../middlewares";
 
-const DocumentsVerification = () => {
+const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
   const { success, setLoading } = useContext(IndiceContext);
-  const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(false);
-  const [lastDeclineDescription, setLastDeclineDescription] = useState(null);
+  const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
+  const [lastDeclineDescription, setLastDeclineDescription] = useState(
+    lastAnswerDescription
+  );
 
   const [newProofOfAddress, setNewProofOfAddress] = useState(null);
   const [proofOfAddressLink, setProofOfAddressLink] = useState(null);
@@ -102,12 +105,6 @@ const DocumentsVerification = () => {
   };
 
   const initDocuments = async () => {
-    const docs = await getMyDocuments();
-    const { canSend, lastAnswerDescription } = await canSendVerifyRequest();
-
-    setActiveSendRequestBtn(canSend);
-    setLastDeclineDescription(lastAnswerDescription);
-
     if (docs.proofOfAddressLink) {
       setProofOfAddressLink(
         ENV.SERVER_STORAGE_URL + "/" + docs.proofOfAddressLink
@@ -231,8 +228,7 @@ const DocumentsVerification = () => {
 
   useEffect(() => {
     initDocuments();
-    setLoading(false);
-  }, []);
+  }, [docs]);
 
   return (
     <>
@@ -381,8 +377,25 @@ const DocumentsVerification = () => {
   );
 };
 
-DocumentsVerification.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await authSideProps(context);
+  if (baseSideProps.notFound) return baseSideProps;
+
+  try {
+    const contextCookies = context.req.cookies;
+    const docs = await getMyDocuments(contextCookies);
+    const { canSend, lastAnswerDescription } = await canSendVerifyRequest(
+      contextCookies
+    );
+
+    return {
+      props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default DocumentsVerification;

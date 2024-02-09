@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { validatePassword } from "../utils";
 import { IndiceContext } from "../contexts";
 import { updateShortUserInfo } from "../services";
+import { authSideProps } from "../middlewares";
 
 const MoreInfoCompleting = () => {
   const router = useRouter();
@@ -200,7 +201,7 @@ const MoreInfoCompleting = () => {
               </div>
 
               <div className="form-group form-check">
-                <div className="d-flex"> 
+                <div className="d-flex">
                   <input
                     type="checkbox"
                     className={`form-check-input${
@@ -258,8 +259,6 @@ const MoreInfoCompleting = () => {
   );
 };
 
-MoreInfoCompleting.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = authSideProps;
 
 export default MoreInfoCompleting;

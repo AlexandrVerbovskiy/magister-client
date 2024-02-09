@@ -11,6 +11,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Header from "../../../partials/admin/Header";
 import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
+import { supportSideProps } from "../../../middlewares";
 
 const UserDocuments = () => {
   const { error, success } = useContext(IndiceContext);
@@ -103,9 +104,6 @@ const UserDocuments = () => {
   );
 };
 
-UserDocuments.getInitialProps = async () => ({
-  access: "support",
-  type: "admin",
-});
+export const getServerSideProps = supportSideProps;
 
 export default UserDocuments;
