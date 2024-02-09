@@ -21,6 +21,7 @@ const LoginTab = ({
   setUser,
   rememberMe,
   setRememberMe,
+  handleCloseBtn
 }) => {
   const router = useRouter();
 

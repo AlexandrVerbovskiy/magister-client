@@ -16475,6 +16475,14 @@ Preloader Area CSS
   margin-bottom: 5px !important;
 }
 
+.message-site-alert a {
+  color: var(--mainColor);
+}
+
+.message-site-alert a:hover {
+  color: var(--blackColor);
+}
+
 .words-wrap {
   hyphens: auto;
 }

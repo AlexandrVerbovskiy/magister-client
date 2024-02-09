@@ -54,6 +54,9 @@ const Navbar = () => {
 
   const toggleAuth = () => {
     setDisplayAuth(!displayAuth);
+    setLoginEmail("");
+    setLoginPassword("");
+    setLoginRememberMe(false);
   };
   const toggleMiniAuth = () => {
     setDisplayMiniAuth(!displayMiniAuth);
@@ -147,6 +150,22 @@ const Navbar = () => {
     } catch (e) {
       setCodeModalError(e.message);
     }
+  };
+
+  const handleCloseCodeModal = () => {
+    setCodeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
+  };
+
+  const handleCloseTypeModal = () => {
+    setTypeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
   };
 
   return (
@@ -309,9 +328,9 @@ const Navbar = () => {
       {!isAuth && canChangeType && (
         <AuthTypeModal
           typeModalActive={typeModalActive}
-          setTypeModalActive={setTypeModalActive}
           typeModalError={typeModalError}
           handleSelectTypeClick={handleSelectTypeClick}
+          handleClose={handleCloseTypeModal}
         />
       )}
 
@@ -322,6 +341,7 @@ const Navbar = () => {
           handleChangeCode={handleChangeCode}
           codeModalError={codeModalError}
           handleCheckCode={handleCheckCode}
+          handleClose={handleCloseCodeModal}
         />
       )}
 

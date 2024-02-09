@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { timeConverter, getFilenameByPath } from "../../../utils";
 
 const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
   return (

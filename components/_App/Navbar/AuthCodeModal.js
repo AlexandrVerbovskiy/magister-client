@@ -6,9 +6,13 @@ const AuthCodeModal = ({
   handleChangeCode,
   codeModalError,
   handleCheckCode,
+  handleClose
 }) => {
   return (
-    <BaseModal active={codeModalActive}>
+    <BaseModal
+      active={codeModalActive}
+      toggleActive={handleClose}
+    >
       <span className="sub-title mb-2">
         <span>Enter Verified Code</span>
       </span>
