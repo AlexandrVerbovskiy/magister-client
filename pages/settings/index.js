@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
+import { authSideProps } from "../../middlewares";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -27,7 +28,12 @@ const Dashboard = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Main Settings</h1>
+          <h1>Settings</h1>
+          <ol className="breadcrumb">
+            <li className="item">
+              <Link href="/settings/">Home</Link>
+            </li>
+          </ol>
         </div>
 
         <div
@@ -74,8 +80,6 @@ const Dashboard = () => {
   );
 };
 
-Dashboard.getInitialProps = async () => ({
-  access: "auth",
-});
+export const getServerSideProps = authSideProps;
 
 export default Dashboard;

@@ -4,10 +4,10 @@ const BreadCrumbs = ({ links }) => {
   return (
     <div className="mb-4 sm:mb-0">
       <ul className="inline-flex flex-wrap text-sm font-medium">
-        {links.map((link) => {
+        {links.map((link, index) => {
           return (
             <li
-              key={link.title}
+              key={index}
               className="text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
             >
               {link.href && (

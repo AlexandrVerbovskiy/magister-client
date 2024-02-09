@@ -14,8 +14,6 @@ import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 
 const Navbar = () => {
-  // Add active class
-
   const {
     isAuth,
     onLogout,
@@ -56,6 +54,9 @@ const Navbar = () => {
 
   const toggleAuth = () => {
     setDisplayAuth(!displayAuth);
+    setLoginEmail("");
+    setLoginPassword("");
+    setLoginRememberMe(false);
   };
   const toggleMiniAuth = () => {
     setDisplayMiniAuth(!displayMiniAuth);
@@ -106,6 +107,8 @@ const Navbar = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
+  const [loginRememberMe, setLoginRememberMe] = useState(false);
+
   const handleChangeCode = (e) => {
     setCode(e.target.value);
     setCodeModalError(null);
@@ -129,13 +132,40 @@ const Navbar = () => {
     }
 
     try {
-      const res = await checkTwoFactorCode(type, code, userToAuth.id);
+      const res = await checkTwoFactorCode(
+        type,
+        code,
+        userToAuth.id,
+        loginRememberMe
+      );
       onLogin(res.user);
       setCodeModalActive(false);
+
+      if (res.user.needRegularViewInfoForm) {
+        router.push("/settings/profile-edit");
+      }
+
       mainSuccess.set("Successfully logged in");
+      setCode("");
     } catch (e) {
       setCodeModalError(e.message);
     }
+  };
+
+  const handleCloseCodeModal = () => {
+    setCodeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
+  };
+
+  const handleCloseTypeModal = () => {
+    setTypeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
   };
 
   return (
@@ -298,9 +328,9 @@ const Navbar = () => {
       {!isAuth && canChangeType && (
         <AuthTypeModal
           typeModalActive={typeModalActive}
-          setTypeModalActive={setTypeModalActive}
           typeModalError={typeModalError}
           handleSelectTypeClick={handleSelectTypeClick}
+          handleClose={handleCloseTypeModal}
         />
       )}
 
@@ -311,6 +341,7 @@ const Navbar = () => {
           handleChangeCode={handleChangeCode}
           codeModalError={codeModalError}
           handleCheckCode={handleCheckCode}
+          handleClose={handleCloseCodeModal}
         />
       )}
 
@@ -368,6 +399,8 @@ const Navbar = () => {
                         setType={setType}
                         setCodeModalActive={setCodeModalActive}
                         setTypeModalActive={setTypeModalActive}
+                        rememberMe={loginRememberMe}
+                        setRememberMe={setLoginRememberMe}
                       />
                     </TabPanel>
 

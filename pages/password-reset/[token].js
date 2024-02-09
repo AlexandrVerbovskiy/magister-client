@@ -4,6 +4,7 @@ import { validatePassword } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
 import { resetPassword } from "../../services";
+import { notAuthSideProps } from "../../middlewares";
 
 const PasswordResetSend = () => {
   const router = useRouter();
@@ -169,8 +170,6 @@ const PasswordResetSend = () => {
   );
 };
 
-PasswordResetSend.getInitialProps = async () => ({
-  access: "no auth",
-});
+export const getServerSideProps = notAuthSideProps;
 
 export default PasswordResetSend;

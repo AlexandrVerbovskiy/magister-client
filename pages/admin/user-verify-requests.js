@@ -4,20 +4,18 @@ import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import TransactionPanel from "../../partials/admin/finance/Panel";
-import LogsTable from "../../components/admin/Logs/Table";
 import Datepicker from "../../components/admin/Datepicker";
-import { adminSideProps } from "../../middlewares";
+import UserVerifyRequestsTable from "../../components/admin/UserVerifyRequests/Table";
+import { supportSideProps } from "../../middlewares";
 
 import { useAdminPage, usePagination } from "../../hooks";
 import { IndiceContext } from "../../contexts";
-import { getLogList } from "../../services";
+import { getUserVerifyRequestList } from "../../services";
 import { timeConverter } from "../../utils";
 
-const Logs = () => {
+const UserVerifyRequests = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success } = useContext(IndiceContext);
-  const [panelItem, setPanelItem] = useState(false);
 
   const [fromTime, setFromTime] = useState(null);
   const [toTime, setToTime] = useState(null);
@@ -38,22 +36,17 @@ const Logs = () => {
     handleChangeOrder,
     canMoveNextPage,
     canMovePrevPage,
-    items: logs,
+    items: userVerifyRequests,
     rebuild,
     options,
   } = usePagination({
-    getItemsFunc: getLogList,
+    getItemsFunc: getUserVerifyRequestList,
     onError: (e) => error.set(e.message),
     dopProps: {
       fromTime,
       toTime,
     },
   });
-
-  const handleSelectPanelItem = (id) =>
-    setPanelItem(logs.find((log) => log.id === id));
-
-  const handlePanelItemClear = () => setPanelItem(null);
 
   const handleChange = (dates) => {
     let [from, to] = dates;
@@ -91,7 +84,7 @@ const Logs = () => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Logs" }]} />
+                <BreadCrumbs links={[{ title: "User Verify Request" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <Datepicker
@@ -102,13 +95,12 @@ const Logs = () => {
                 </div>
               </div>
 
-              <LogsTable
-                logs={logs}
+              <UserVerifyRequestsTable
+                userVerifyRequests={userVerifyRequests}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
-                onSelectPanelItem={handleSelectPanelItem}
               />
 
               <div className="mt-8">
@@ -124,11 +116,6 @@ const Logs = () => {
                 />
               </div>
             </div>
-
-            <TransactionPanel
-              panelItem={panelItem}
-              handlePanelItemClear={handlePanelItemClear}
-            />
           </div>
         </main>
       </div>
@@ -136,6 +123,6 @@ const Logs = () => {
   );
 };
 
-export const getServerSideProps = adminSideProps;
+export const getServerSideProps = supportSideProps;
 
-export default Logs;
+export default UserVerifyRequests;

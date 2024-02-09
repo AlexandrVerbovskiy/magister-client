@@ -1,4 +1,16 @@
-const serviceWrapper = async (promise) => {
+import ENV from "../env";
+import axios from "axios";
+
+export const initAxios = (path = null) => {
+  axios.defaults.withCredentials = true;
+  const baseURL = path ? ENV.SERVER_API_URL + path : ENV.SERVER_API_URL;
+  
+  return axios.create({
+    baseURL,
+  });
+};
+
+export const serviceWrapper = async (promise) => {
   try {
     const res = await promise;
 
@@ -17,5 +29,3 @@ const serviceWrapper = async (promise) => {
     }
   }
 };
-
-export default serviceWrapper;

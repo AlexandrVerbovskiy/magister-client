@@ -9,32 +9,9 @@ import { IndiceContext } from "../../../contexts";
 import Sidebar from "../../../partials/admin/Sidebar";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Header from "../../../partials/admin/Header";
-import ENV from "../../../env";
 import { useAdminPage } from "../../../hooks";
-
-const defaultLink = "/images/admin/user-avatar-80.png";
-
-const DocumentView = ({ label, url }) => {
-  const imgSrc = url ? ENV.SERVER_STORAGE_URL + "/" + url : defaultLink;
-  return (
-    <section>
-      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-        {label}
-      </h2>
-
-      <div className="form-group profile-box mt-2">
-        <img
-          src={imgSrc}
-          alt="image"
-          style={{
-            maxWidth: "300px",
-            height: "auto",
-          }}
-        />
-      </div>
-    </section>
-  );
-};
+import DocumentList from "../../../components/admin/Users/DocumentList";
+import { supportSideProps } from "../../../middlewares";
 
 const UserDocuments = () => {
   const { error, success } = useContext(IndiceContext);
@@ -51,9 +28,6 @@ const UserDocuments = () => {
       const gotUser = await getFullUserById(id);
       setDocuments(gotDocuments);
       setUser(gotUser);
-
-      console.log(gotDocuments);
-      console.log(gotUser);
     } catch (e) {
       error.set(e.message);
     }
@@ -105,38 +79,7 @@ const UserDocuments = () => {
             <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
               <div className="flex flex-col md:flex-row md:-mr-px">
                 <div className="grow">
-                  <div className="p-6 space-y-6">
-                    <DocumentView
-                      url={documents.proofOfAddressLink}
-                      label="Proof of Address"
-                    />
-
-                    <DocumentView
-                      url={documents.reputableBankIdLink}
-                      label="Reputable Bank Id"
-                    />
-
-                    <DocumentView url={documents.utilityLink} label="Utility" />
-
-                    <DocumentView url={documents.hmrcLink} label="HMRC" />
-
-                    <DocumentView
-                      url={documents.councilTaxBillLinkF}
-                      label="Council Tax Bill"
-                    />
-
-                    <DocumentView
-                      url={documents.passportOrDrivingIdLink}
-                      label="Passport Or Driving Id"
-                    />
-
-                    <DocumentView
-                      url={
-                        documents.confirmMoneyLaunderingChecksAndComplianceLink
-                      }
-                      label="Confirm Money Laundering Check And Compliance"
-                    />
-                  </div>
+                  <DocumentList {...documents} />
 
                   <footer>
                     <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
@@ -161,9 +104,6 @@ const UserDocuments = () => {
   );
 };
 
-UserDocuments.getInitialProps = async () => ({
-  access: "support",
-  type: "admin",
-});
+export const getServerSideProps = supportSideProps;
 
 export default UserDocuments;

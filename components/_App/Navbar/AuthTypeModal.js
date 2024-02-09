@@ -2,14 +2,14 @@ import BaseModal from "../BaseModal";
 
 const AuthTypeModal = ({
   typeModalActive,
-  setTypeModalActive,
+  handleClose,
   typeModalError,
   handleSelectTypeClick,
 }) => {
   return (
     <BaseModal
       active={typeModalActive}
-      toggleActive={() => setTypeModalActive(false)}
+      toggleActive={handleClose}
     >
       <span className="sub-title mb-2">
         <span>Choose where you will receive the code</span>

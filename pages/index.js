@@ -3,6 +3,7 @@ import Navbar from "../components/_App/Navbar";
 import Banner from "../components/HomeOne/Banner";
 import Footer from "../components/_App/Footer";
 import { IndiceContext } from "../contexts";
+import { userSideProps } from "../middlewares";
 
 const Index = () => {
   const { setLoading } = useContext(IndiceContext);
@@ -21,5 +22,7 @@ const Index = () => {
     </>
   );
 };
+
+export const getServerSideProps = userSideProps;
 
 export default Index;

@@ -4,6 +4,7 @@ import SocialAuth from "./SocialAuth";
 import { validatePassword, validateEmail } from "../../../utils";
 import { register } from "../../../services";
 import { IndiceContext } from "../../../contexts";
+import Link from "next/link";
 
 const RegisterTab = ({ moveToLogin, closeModal }) => {
   const [formError, setFormError] = useState(null);
@@ -178,12 +179,17 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
               checked={acceptedTermCondition}
               onChange={handleInputAcceptedTermsCondition}
             />
-            <label
-              className="form-check-label"
-              htmlFor="confirm-terms-conditions"
-            >
-              Create an account?
-            </label>
+            <span>
+              <label
+                className="form-check-label"
+                htmlFor="confirm-terms-conditions"
+              >
+                Accept 
+              </label>{" "}
+              <span className="dont-account">
+                <Link href="#">conditions</Link>
+              </span>
+            </span>
             {acceptedTermConditionError && (
               <div className="invalid-feedback">
                 {acceptedTermConditionError}
