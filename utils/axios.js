@@ -34,6 +34,8 @@ export const serviceWrapper = async (promise) => {
       throw res.error;
     }
 
+    console.log(res.headers['set-cookie']);
+
     if (res.data.isError) throw new Error(res.data);
 
     return res.data;
