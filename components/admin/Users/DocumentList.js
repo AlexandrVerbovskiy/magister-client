@@ -1,9 +1,10 @@
-import ENV from "../../../env";
+import { getFilePath } from "../../../utils";
 
 const defaultLink = "/images/admin/user-avatar-80.png";
 
 const DocumentView = ({ label, url }) => {
-  const imgSrc = url ? ENV.SERVER_STORAGE_URL + "/" + url : defaultLink;
+  const imgSrc = url ? getFilePath(url) : defaultLink;
+
   return (
     <div className="w-full lg:w-1/4 md:w-1/3" style={{ padding: "0.75rem" }}>
       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">

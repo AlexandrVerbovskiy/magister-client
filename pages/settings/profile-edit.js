@@ -15,6 +15,7 @@ import ImageInput from "../../components/DashboardComponents/ImageInput";
 import Input from "../../components/DashboardComponents/Input";
 import Textarea from "../../components/DashboardComponents/Textarea";
 import {
+  getFilePath,
   validateEmail,
   validatePassword,
   validatePhoneNumber,
@@ -131,7 +132,7 @@ const ProfileEdit = () => {
     const userPhoto = user.photo;
 
     if (userPhoto) {
-      setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + userPhoto);
+      setPhotoUrl(getFilePath(userPhoto()))
     } else {
       setPhotoUrl(null);
     }
@@ -228,7 +229,7 @@ const ProfileEdit = () => {
 
         if (res.photo) {
           setNewPhoto(null);
-          setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + res.photo);
+          setPhotoUrl(getFilePath(res.photo));
         }
 
         const loginDate = { ...user, ...info, photo: res.photo };

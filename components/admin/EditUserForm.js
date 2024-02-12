@@ -14,7 +14,7 @@ import ModalBlank from "./ModalBlank";
 import ImageInput from "./Form/ImageInput";
 import Input from "./Form/Input";
 import Textarea from "./Form/Textarea";
-import { validateEmail, validatePhoneNumber, validateUrl } from "../../utils";
+import { getFilePath, validateEmail, validatePhoneNumber, validateUrl } from "../../utils";
 
 const roleOptions = [
   { value: "user", title: "User", default: true },
@@ -66,7 +66,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
   useEffect(() => {
     if (user && user.photo) {
-      setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + user.photo);
+      setPhotoUrl(getFilePath(user.photo));
     } else {
       setPhotoUrl(null);
     }
@@ -250,7 +250,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
       if (user.photo) {
         setNewPhoto(null);
-        setPhotoUrl(ENV.SERVER_STORAGE_URL + "/" + user.photo);
+        setPhotoUrl(getFilePath(user.photo));
       }
     } catch (e) {
       error.set(e.message);

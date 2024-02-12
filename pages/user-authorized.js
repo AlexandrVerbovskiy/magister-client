@@ -6,7 +6,7 @@ const UserAuthorized = () => {
 
 export const getServerSideProps = async (context) => {
     const baseSideProps = await notAuthSideProps(context);
-
+    
     if (baseSideProps.notFound) {
         return baseSideProps;
     }
