@@ -6,6 +6,8 @@ import { generateMyEmailVerifyCode, login } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import env from "../../../env";
 
 const LoginTab = ({
   email,
@@ -21,7 +23,7 @@ const LoginTab = ({
   setUser,
   rememberMe,
   setRememberMe,
-  handleCloseBtn
+  handleCloseBtn,
 }) => {
   const router = useRouter();
 
@@ -96,11 +98,22 @@ const LoginTab = ({
           setTypeModalActive(true);
         }
       } else {
+        let expirationDate = new Date();
+
+        const dopDays = rememberMe
+          ? env.REMEMBER_COOKIES_DAYS
+          : env.NORMAL_COOKIES_DAYS;
+        expirationDate.setDate(expirationDate.getDate() + dopDays);
+
+        Cookies.set("auth-token", res.accessToken, {
+          expires: expirationDate,
+        });
+
         onLogin(res.user);
         setPassword("");
 
         mainSuccess.set("Successfully logged in");
-        
+
         if (res.user.needRegularViewInfoForm) {
           router.push("/settings/profile-edit");
         }
