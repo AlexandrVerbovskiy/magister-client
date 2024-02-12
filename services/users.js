@@ -1,4 +1,4 @@
-import { getCookieString, initAxios, serviceWrapper } from "../utils";
+import { initAxios, serviceWrapper, authHeaderProps } from "../utils";
 const axios = initAxios("/users");
 
 export const getUserById = async (id) => {
@@ -6,10 +6,10 @@ export const getUserById = async (id) => {
   return data.body;
 };
 
-export const getFullUserById = async (id, cookies) => {
+export const getFullUserById = async (id, token) => {
   const options = {
     headers: {
-      Cookie: getCookieString(cookies),
+      ...authHeaderProps(token),
     },
   };
 

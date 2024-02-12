@@ -1,8 +1,22 @@
+import Cookies from "js-cookie";
 import ENV from "../env";
 import axios from "axios";
+import authHeaderProps from "./authHeaderProps";
 
 export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
+
+  axios.interceptors.request.use((config) => {
+    const token = Cookies.get("auth-token");
+
+    if (token) {
+      const props = authHeaderProps(token);
+      config.headers.Authorization = `Bearer ${props.Authorization}`;
+    }
+
+    return config;
+  });
+
   const baseURL = path
     ? ENV.SERVER_URL + ENV.SERVER_API + path
     : ENV.SERVER_URL + ENV.SERVER_API;

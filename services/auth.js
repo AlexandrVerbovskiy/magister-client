@@ -1,24 +1,9 @@
-import {
-  getCookieString,
-  initAxios,
-  serviceWrapper,
-} from "../utils";
-import Cookies from 'js-cookie';
+import { initAxios, serviceWrapper, authHeaderProps } from "../utils";
 
 const axios = initAxios("/auth");
 
-const saveSessionInfo = (res) => {
-  const { user, accessToken } = res;
-  return user;
-};
-
 export const login = async (userInfo) => {
   const data = await serviceWrapper(axios.post("/login", userInfo));
-
-  if (!data.body.needCode) {
-    saveSessionInfo(data.body);
-  }
-
   return data.body;
 };
 
@@ -43,14 +28,7 @@ export const checkTwoFactorCode = async (type, code, id, rememberMe) => {
     })
   );
 
-  saveSessionInfo(data.body);
-
   return data.body;
-};
-
-export const logout = async () => {
-  Cookies.remove("Bearer");
-  return;
 };
 
 export const generateMyEmailVerifyCode = async (email) => {
@@ -65,10 +43,10 @@ export const register = async (userInfo) => {
   return data.message;
 };
 
-export const getMyInfo = async (cookies) => {
+export const getMyInfo = async (token) => {
   const options = {
     headers: {
-      Cookie: getCookieString(cookies),
+      ...authHeaderProps(token),
     },
   };
 
@@ -76,10 +54,10 @@ export const getMyInfo = async (cookies) => {
   return data.body.user;
 };
 
-export const getMyInfoByCookie = async (cookies) => {
+export const getMyInfoByCookie = async (token) => {
   const options = {
     headers: {
-      Cookie: getCookieString(cookies),
+      ...authHeaderProps(token),
     },
   };
 
@@ -102,10 +80,10 @@ export const updateProfile = async (body) => {
   return data.body.user;
 };
 
-export const getMyDocuments = async (cookies) => {
+export const getMyDocuments = async (token) => {
   const options = {
     headers: {
-      Cookie: getCookieString(cookies),
+      ...authHeaderProps(token),
     },
   };
 
@@ -166,10 +144,10 @@ export const changeTwoFactorAuth = async () => {
   return data;
 };
 
-export const canSendVerifyRequest = async (cookies) => {
+export const canSendVerifyRequest = async (token) => {
   const options = {
     headers: {
-      Cookie: getCookieString(cookies),
+      ...authHeaderProps(token),
     },
   };
   const data = await serviceWrapper(

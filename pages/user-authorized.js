@@ -1,45 +1,51 @@
-import {getMyInfo} from "../services/auth";
-import {notAuthSideProps} from "../middlewares";
+import { getMyInfo } from "../services/auth";
+import { notAuthSideProps } from "../middlewares";
+import env from "../env";
 
-const UserAuthorized = () => {
-};
+const UserAuthorized = () => {};
 
 export const getServerSideProps = async (context) => {
-    const baseSideProps = await notAuthSideProps(context);
-    
-    if (baseSideProps.notFound) {
-        return baseSideProps;
+  const baseSideProps = await notAuthSideProps(context);
+
+  if (baseSideProps.notFound) {
+    return baseSideProps;
+  }
+
+  try {
+    const { token } = context.query;
+    const user = await getMyInfo(token);
+
+    const router = context.res;
+
+    let expirationDate = new Date();
+    expirationDate.setDate(
+      expirationDate.getDate() + env.REMEMBER_COOKIES_DAYS
+    );
+
+    router.setHeader(
+      "Set-Cookie",
+      `auth-token=${token}; expires=${expirationDate.toUTCString()}; Path=/`
+    );
+
+    let redirectLink = "/";
+
+    if (user.needSetPassword) {
+      redirectLink = "/more-info-competing";
+    } else if (user.needRegularViewInfoForm) {
+      redirectLink = "/settings/profile-edit";
     }
 
-    try {
-        const {token} = context.query;
-        const user = await getMyInfo({Bearer: token});
-
-        const router = context.res;
-        router.setHeader(
-            "Set-Cookie",
-            `Bearer=${token}; Max-Age=${60 * 60 * 24 * 30 * 3*1000}; Path=/`
-        );
-
-        let redirectLink = "/";
-
-        if (user.needSetPassword) {
-            redirectLink = "/more-info-competing";
-        } else if (user.needRegularViewInfoForm) {
-            redirectLink = "/settings/profile-edit";
-        }
-
-        return {
-            redirect: {
-                destination: redirectLink,
-                permanent: false,
-            },
-        };
-    } catch (e) {
-        return {
-            notFound: true,
-        };
-    }
+    return {
+      redirect: {
+        destination: redirectLink,
+        permanent: false,
+      },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 export default UserAuthorized;
