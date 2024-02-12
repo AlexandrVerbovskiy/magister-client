@@ -1,9 +1,10 @@
 import {
   getCookieString,
   initAxios,
-  removeCookie,
   serviceWrapper,
 } from "../utils";
+import Cookies from 'js-cookie';
+
 const axios = initAxios("/auth");
 
 const saveSessionInfo = (res) => {
@@ -48,7 +49,7 @@ export const checkTwoFactorCode = async (type, code, id, rememberMe) => {
 };
 
 export const logout = async () => {
-  removeCookie("Bearer");
+  Cookies.remove("Bearer");
   return;
 };
 
@@ -70,7 +71,7 @@ export const getMyInfo = async (cookies) => {
       Cookie: getCookieString(cookies),
     },
   };
-  
+
   const data = await serviceWrapper(axios.post("/my-info", null, options));
   return data.body.user;
 };

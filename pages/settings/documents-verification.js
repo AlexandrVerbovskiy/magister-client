@@ -12,6 +12,7 @@ import {
 } from "../../services";
 import ENV from "../../env";
 import { authSideProps } from "../../middlewares";
+import { getFilePath } from "../../utils";
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
@@ -106,54 +107,44 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
   const initDocuments = async () => {
     if (docs.proofOfAddressLink) {
-      setProofOfAddressLink(
-        ENV.SERVER_STORAGE_URL + "/" + docs.proofOfAddressLink
-      );
+      setProofOfAddressLink(getFilePath(docs.proofOfAddressLink));
     } else {
       setProofOfAddressLink(null);
     }
 
     if (docs.reputableBankIdLink) {
-      setReputableBankIdLink(
-        ENV.SERVER_STORAGE_URL + "/" + docs.reputableBankIdLink
-      );
+      setReputableBankIdLink(getFilePath(docs.reputableBankIdLink));
     } else {
       setReputableBankIdLink(null);
     }
 
     if (docs.utilityLink) {
-      setUtilityLink(ENV.SERVER_STORAGE_URL + "/" + docs.utilityLink);
+      setUtilityLink(getFilePath(docs.utilityLink));
     } else {
       setUtilityLink(null);
     }
 
     if (docs.hmrcLink) {
-      setHmrcLink(ENV.SERVER_STORAGE_URL + "/" + docs.hmrcLink);
+      setHmrcLink(getFilePath(docs.hmrcLink));
     } else {
       setHmrcLink(null);
     }
 
     if (docs.councilTaxBillLink) {
-      setCouncilTaxBillLink(
-        ENV.SERVER_STORAGE_URL + "/" + docs.councilTaxBillLink
-      );
+      setCouncilTaxBillLink(getFilePath(docs.councilTaxBillLink));
     } else {
       setCouncilTaxBillLink(null);
     }
 
     if (docs.passportOrDrivingIdLink) {
-      setPassportOrDrivingIdLink(
-        ENV.SERVER_STORAGE_URL + "/" + docs.passportOrDrivingIdLink
-      );
+      setPassportOrDrivingIdLink(getFilePath(docs.passportOrDrivingIdLink));
     } else {
       setPassportOrDrivingIdLink(null);
     }
 
     if (docs.confirmMoneyLaunderingChecksAndComplianceLink) {
       setConfirmMoneyLaunderingChecksAndComplianceLink(
-        ENV.SERVER_STORAGE_URL +
-          "/" +
-          docs.confirmMoneyLaunderingChecksAndComplianceLink
+        getFilePath(docs.confirmMoneyLaunderingChecksAndComplianceLink)
       );
     } else {
       setConfirmMoneyLaunderingChecksAndComplianceLink(null);
