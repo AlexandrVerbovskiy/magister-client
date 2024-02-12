@@ -702,6 +702,8 @@ const ProfileEdit = () => {
   );
 };
 
-export const getServerSideProps = authSideProps;
+export const getServerSideProps = async (context) => {
+  return await authSideProps(context);
+}
 
 export default ProfileEdit;
