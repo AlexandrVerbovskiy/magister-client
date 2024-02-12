@@ -132,7 +132,7 @@ const ProfileEdit = () => {
     const userPhoto = user.photo;
 
     if (userPhoto) {
-      setPhotoUrl(getFilePath(userPhoto()))
+      setPhotoUrl(getFilePath(userPhoto))
     } else {
       setPhotoUrl(null);
     }
