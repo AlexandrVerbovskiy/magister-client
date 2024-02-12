@@ -3,8 +3,10 @@ import axios from "axios";
 
 export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
-  const baseURL = path ? ENV.SERVER_API_URL + path : ENV.SERVER_API_URL;
-  
+  const baseURL = path
+    ? ENV.SERVER_URL + ENV.SERVER_API + path
+    : ENV.SERVER_URL + ENV.SERVER_API;
+
   return axios.create({
     baseURL,
   });
@@ -29,3 +31,6 @@ export const serviceWrapper = async (promise) => {
     }
   }
 };
+
+export const getFilePath = (part) =>
+  ENV.SERVER_URL + ENV.SERVER_STORAGE + "/" + part;

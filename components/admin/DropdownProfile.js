@@ -3,7 +3,7 @@ import Link from "next/link";
 import Transition from "../../utils/transition";
 import { logout } from "../../services";
 import { IndiceContext } from "../../contexts";
-import ENV from "../../env";
+import { getFilePath } from "../../utils";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
@@ -12,7 +12,7 @@ function DropdownProfile({ align }) {
   const name = user ? user.name : "";
   const photo =
     user && user.photo
-      ? ENV.SERVER_STORAGE_URL + "/" + user.photo
+      ? getFilePath(user.photo)
       : defaultPhotoLink;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);

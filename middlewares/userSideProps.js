@@ -4,8 +4,11 @@ const userSideProps = async (context) => {
   try {
     const cookies = context.req.cookies;
     const user = await getMyInfoByCookie(cookies);
+
     return { props: { user } };
   } catch (e) {
+    console.log("Error: ", e)
+
     return { props: { user: null } };
   }
 };
