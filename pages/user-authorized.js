@@ -18,7 +18,7 @@ export const getServerSideProps = async (context) => {
         const router = context.res;
         router.setHeader(
             "Set-Cookie",
-            `Bearer=${token}; Max-Age=${60 * 60 * 24 * 30 * 3}; Path=/`
+            `Bearer=${token}; Max-Age=${60 * 60 * 24 * 30 * 3*1000}; Path=/`
         );
 
         let redirectLink = "/";
