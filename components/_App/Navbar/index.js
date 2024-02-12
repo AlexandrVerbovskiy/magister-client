@@ -3,15 +3,13 @@ import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RegisterTab from "./RegisterTab";
 import LoginTab from "./LoginTab";
-import {
-  logout,
-  generateTwoFactorCode,
-  checkTwoFactorCode,
-} from "../../../services";
+import { generateTwoFactorCode, checkTwoFactorCode } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
+import Cookies from "js-cookie";
+import env from "../../../env";
 
 const Navbar = () => {
   const {
@@ -73,14 +71,6 @@ const Navbar = () => {
     setShowMenu(!showMenu);
   };
 
-  useEffect(() => {
-    let abortController = new AbortController();
-    // your async action is here
-    return () => {
-      abortController.abort();
-    };
-  }, []);
-
   const loginTabBtnTrigger = useRef(null);
   const registerTabBtnTrigger = useRef(null);
 
@@ -88,7 +78,7 @@ const Navbar = () => {
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const handleSignOut = () => {
-    logout();
+    Cookies.remove("auth-token");
     onLogout();
     mainSuccess.set("Successfully logged out");
   };
@@ -138,6 +128,19 @@ const Navbar = () => {
         userToAuth.id,
         loginRememberMe
       );
+
+      let expirationDate = new Date();
+
+      const dopDays = loginRememberMe
+        ? env.REMEMBER_COOKIES_DAYS
+        : env.NORMAL_COOKIES_DAYS;
+      expirationDate.setDate(expirationDate.getDate() + dopDays);
+
+
+      Cookies.set("auth-token", res.accessToken, {
+        expires: expirationDate,
+      });
+
       onLogin(res.user);
       setCodeModalActive(false);
 

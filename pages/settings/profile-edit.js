@@ -132,7 +132,7 @@ const ProfileEdit = () => {
     const userPhoto = user.photo;
 
     if (userPhoto) {
-      setPhotoUrl(getFilePath(userPhoto()))
+      setPhotoUrl(getFilePath(userPhoto));
     } else {
       setPhotoUrl(null);
     }
@@ -702,6 +702,8 @@ const ProfileEdit = () => {
   );
 };
 
-export const getServerSideProps = authSideProps;
+export const getServerSideProps = async (context) => {
+  return await authSideProps(context);
+};
 
 export default ProfileEdit;

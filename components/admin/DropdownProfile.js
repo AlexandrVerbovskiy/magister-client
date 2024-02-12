@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Transition from "../../utils/transition";
-import { logout } from "../../services";
+import Cookies from 'js-cookie';
 import { IndiceContext } from "../../contexts";
 import { getFilePath } from "../../utils";
 
@@ -46,7 +46,7 @@ function DropdownProfile({ align }) {
   });
 
   const handleSignOut = () => {
-    logout();
+    Cookies.remove("auth-token");
     onLogout();
     mainSuccess.set("Successfully logged out");
   };
