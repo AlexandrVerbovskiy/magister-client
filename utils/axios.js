@@ -7,7 +7,7 @@ export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
 
   axios.interceptors.request.use((config) => {
-    const token = Cookies.get("auth-token");
+    const token = Cookies.get(env.AUTH_COOKIE_NAME);
 
     if (token) {
       const props = authHeaderProps(token);

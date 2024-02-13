@@ -46,7 +46,7 @@ function DropdownProfile({ align }) {
   });
 
   const handleSignOut = () => {
-    Cookies.remove("auth-token");
+    Cookies.remove(env.AUTH_COOKIE_NAME);
     onLogout();
     mainSuccess.set("Successfully logged out");
   };

@@ -105,7 +105,7 @@ const LoginTab = ({
           : env.NORMAL_COOKIES_DAYS;
         expirationDate.setDate(expirationDate.getDate() + dopDays);
 
-        Cookies.set("auth-token", res.accessToken, {
+        Cookies.set(env.AUTH_COOKIE_NAME, res.accessToken, {
           expires: expirationDate,
         });
 

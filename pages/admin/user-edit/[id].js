@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
-import ErrorPage from "next/error";
+import React from "react";
 import { getFullUserById, updateUser } from "../../../services";
 import EditUserForm from "../../../components/admin/EditUserForm";
 import { adminSideProps } from "../../../middlewares";
+import env from "../../../env"
 
 const UserEdit = ({ editableUser }) => {
   const handleSave = async (formData) => {
@@ -31,8 +30,8 @@ export const getServerSideProps = async (context) => {
   }
 
   try {
-    const contextCookies = context.req.cookies;
-    const editableUser = await getFullUserById(id, contextCookies);
+    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
+    const editableUser = await getFullUserById(id, authToken);
 
     const currentUser = baseSideProps.props.user;
 

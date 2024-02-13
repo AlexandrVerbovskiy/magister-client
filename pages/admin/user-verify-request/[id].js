@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import Router, { useRouter } from "next/router";
+import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
 import {
   getUserVerifyRequestById,
   userVerifyRequestUpdate,
@@ -12,6 +12,7 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
+import env from "../../../env"
 
 const UserVerifyRequest = ({ info }) => {
   const { error, success } = useContext(IndiceContext);
@@ -185,8 +186,8 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const contextCookies = context.req.cookies;
-  const info = await getUserVerifyRequestById(id, contextCookies);
+  const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
+  const info = await getUserVerifyRequestById(id, authToken);
 
   try {
     return {
