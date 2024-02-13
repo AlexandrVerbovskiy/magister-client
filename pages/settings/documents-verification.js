@@ -369,6 +369,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
 export const getServerSideProps = async (context) => {
   const baseSideProps = await authSideProps(context);
+  console.log(baseSideProps);
   if (baseSideProps.notFound) return baseSideProps;
 
   try {
@@ -382,6 +383,7 @@ export const getServerSideProps = async (context) => {
       props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
     };
   } catch (e) {
+    console.log(e)
     return {
       notFound: true,
     };
