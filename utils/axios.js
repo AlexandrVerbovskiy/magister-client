@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
-import ENV from "../env";
 import axios from "axios";
 import authHeaderProps from "./authHeaderProps";
+import env from "../env";
 
 export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
@@ -18,8 +18,8 @@ export const initAxios = (path = null) => {
   });
 
   const baseURL = path
-    ? ENV.SERVER_URL + ENV.SERVER_API + path
-    : ENV.SERVER_URL + ENV.SERVER_API;
+    ? env.SERVER_URL + env.SERVER_API + path
+    : env.SERVER_URL + env.SERVER_API;
 
   return axios.create({
     baseURL,
@@ -47,4 +47,4 @@ export const serviceWrapper = async (promise) => {
 };
 
 export const getFilePath = (part) =>
-  ENV.SERVER_URL + ENV.SERVER_STORAGE + "/" + part;
+env.SERVER_URL + env.SERVER_STORAGE + "/" + part;

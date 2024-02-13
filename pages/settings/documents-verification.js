@@ -10,7 +10,6 @@ import {
   userVerifyRequestCreate,
   canSendVerifyRequest,
 } from "../../services";
-import ENV from "../../env";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
 
