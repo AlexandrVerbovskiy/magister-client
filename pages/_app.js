@@ -5,7 +5,6 @@ import Loader from "../components/Shared/Loader";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
-
 import "../styles/index.css";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {

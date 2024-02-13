@@ -98,7 +98,7 @@ const LoginTab = ({
           setTypeModalActive(true);
         }
       } else {
-        let expirationDate = new Date();
+        const expirationDate = new Date();
 
         const dopDays = rememberMe
           ? env.REMEMBER_COOKIES_DAYS

@@ -155,3 +155,8 @@ export const canSendVerifyRequest = async (token) => {
   );
   return data.body;
 };
+
+export const authByProvider = async (body) => {
+  const data = await serviceWrapper(axios.post("/auth-by-provider", body));
+  return data.body;
+};
