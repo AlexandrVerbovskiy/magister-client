@@ -2,6 +2,7 @@ import {useLayoutEffect, useEffect, useState} from "react";
 import {useRouter} from 'next/router';
 import Cookies from "js-cookie";
 import env from "../env";
+
 const useMain = ({userInfo}) => {
     const [isAuth, setIsAuth] = useState(null);
     const [isAdmin, setIsAdmin] = useState(null);
