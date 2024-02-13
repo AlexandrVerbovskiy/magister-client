@@ -78,7 +78,7 @@ const Navbar = () => {
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const handleSignOut = () => {
-    Cookies.remove("auth-token");
+    Cookies.remove(env.AUTH_COOKIE_NAME);
     onLogout();
     mainSuccess.set("Successfully logged out");
   };
@@ -137,7 +137,7 @@ const Navbar = () => {
       expirationDate.setDate(expirationDate.getDate() + dopDays);
 
 
-      Cookies.set("auth-token", res.accessToken, {
+      Cookies.set(env.AUTH_COOKIE_NAME, res.accessToken, {
         expires: expirationDate,
       });
 

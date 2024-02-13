@@ -24,7 +24,7 @@ export const getServerSideProps = async (context) => {
 
     router.setHeader(
       "Set-Cookie",
-      `auth-token=${token}; expires=${expirationDate.toUTCString()}; Path=/`
+      `${env.AUTH_COOKIE_NAME}=${token}; expires=${expirationDate.toUTCString()}; Path=/`
     );
 
     let redirectLink = "/";

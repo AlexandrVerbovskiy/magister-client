@@ -1,14 +1,14 @@
 import { getMyInfoByCookie } from "../services";
+import env from "../env"
 
 const userSideProps = async (context) => {
   try {
-    const cookies = context.req.cookies;
-    const authToken = cookies["auth-token"] ?? null;
+    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
     const user = await getMyInfoByCookie(authToken);
 
     return { props: { user } };
   } catch (e) {
-    context.res.setHeader("Set-Cookie", `auth-token=; Max-Age=-1; Path=/`);
+    context.res.setHeader("Set-Cookie", `${env.AUTH_COOKIE_NAME}=; Max-Age=-1; Path=/`);
 
     return { props: { user: null } };
   }

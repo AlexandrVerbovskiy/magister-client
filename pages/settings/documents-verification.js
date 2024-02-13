@@ -12,6 +12,7 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
+import env from "../../env"
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
@@ -369,21 +370,20 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
 export const getServerSideProps = async (context) => {
   const baseSideProps = await authSideProps(context);
-  console.log(baseSideProps);
   if (baseSideProps.notFound) return baseSideProps;
 
   try {
-    const contextCookies = context.req.cookies;
-    const docs = await getMyDocuments(contextCookies);
+    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
+    const docs = await getMyDocuments(authToken);
     const { canSend, lastAnswerDescription } = await canSendVerifyRequest(
-      contextCookies
+      authToken
     );
 
     return {
       props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
     };
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return {
       notFound: true,
     };
