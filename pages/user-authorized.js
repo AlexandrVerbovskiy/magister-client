@@ -24,14 +24,14 @@ export const getServerSideProps = async (context) => {
 
     router.setHeader(
       "Set-Cookie",
-      `${env.AUTH_COOKIE_NAME}=${token}; expires=${expirationDate.toUTCString()}; Path=/`
+      `${
+        env.AUTH_COOKIE_NAME
+      }=${token}; expires=${expirationDate.toUTCString()}; Path=/`
     );
 
     let redirectLink = "/";
 
-    if (user.needSetPassword) {
-      redirectLink = "/more-info-competing";
-    } else if (user.needRegularViewInfoForm) {
+    if (user.needRegularViewInfoForm) {
       redirectLink = "/settings/profile-edit";
     }
 

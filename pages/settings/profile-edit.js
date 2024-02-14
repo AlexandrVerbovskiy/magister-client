@@ -9,6 +9,7 @@ import {
   checkMyPhoneVerifyCode,
   generateMyPhoneVerifyCode,
   changeTwoFactorAuth,
+  noNeedRegularViewInfoForm,
 } from "../../services";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
 import Input from "../../components/DashboardComponents/Input";
@@ -24,6 +25,7 @@ import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
 import Link from "next/link";
 import { authSideProps } from "../../middlewares";
+import env from "../../env";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
@@ -702,7 +704,15 @@ const ProfileEdit = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  return await authSideProps(context);
+  const baseSideProps = await authSideProps(context);
+  if (baseSideProps.notFound) return baseSideProps;
+
+  if (baseSideProps.props.user.needRegularViewInfoForm) {
+    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
+    noNeedRegularViewInfoForm(authToken);
+  }
+
+  return baseSideProps;
 };
 
 export default ProfileEdit;
