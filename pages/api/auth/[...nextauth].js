@@ -30,9 +30,6 @@ export default NextAuth({
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
-      async authorize(credentials, req) {
-        console.log(credentials);
-      },
     }),
     FacebookProvider({
       clientId: env.FACEBOOK_CLIENT_ID,
@@ -78,4 +75,5 @@ export default NextAuth({
       return session;
     },
   },
+  secret: "NhRSkw8Lt61TwsQgiPeBBO1Mykg2FgRCTPNrCmy2bGU="
 });

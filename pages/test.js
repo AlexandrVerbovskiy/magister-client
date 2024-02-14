@@ -6,39 +6,35 @@ const Test = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleClick = () => {
-    signIn("credentials", { email, password, redirect: false }).then(
-      (callback) => {
-        if (callback?.error) {
-          console.error(callback.error);
-        }
-
-        if (callback?.ok && !callback?.error) {
-          console.log("Logged in successfully!");
-        }
-      }
-    );
+  const handleBaseClick = () => {
+    signIn("credentials", { email, password, redirect: false });
   };
 
+    const handleGoogleClick = () => {
+        signIn("google", { redirect: false });
+    };
+
   return (
-    <div>
-      <input
-        type="text"
-        name="email"
-        value={email}
-        onInput={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="text"
-        name="password"
-        value={password}
-        onInput={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleClick}>Save</button>
-      <SessionProvider>
-        <Auth />
-      </SessionProvider>
-    </div>
+      <div>
+          <input
+              type="text"
+              name="email"
+              value={email}
+              onInput={(e) => setEmail(e.target.value)}
+          />
+          <input
+              type="text"
+              name="password"
+              value={password}
+              onInput={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={handleBaseClick}>Save</button>
+
+          <button onClick={handleGoogleClick}>Google</button>
+          <SessionProvider>
+              <Auth/>
+          </SessionProvider>
+      </div>
   );
 };
 
