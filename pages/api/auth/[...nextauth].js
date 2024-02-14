@@ -40,7 +40,7 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    signIn(user, account, profile) {
+    signIn(info) {
       //console.log(user, account);
 
       /*await fetch("https://your-server.com/api/user", {
@@ -55,19 +55,24 @@ export default NextAuth({
         }),
       });*/
 
-      return { test: "123234" };
+      info.user.test = "1234234";
+
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.customToken = user.customToken;
+        token.test = user.test;
       }
+
       return token;
     },
     session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id;
         session.user.customToken = token.customToken;
+        session.user.test = token.test;
       }
 
       return session;
