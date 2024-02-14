@@ -9,7 +9,6 @@ const userSideProps = async (context) => {
     return { props: { user } };
   } catch (e) {
     context.res.setHeader("Set-Cookie", `${env.AUTH_COOKIE_NAME}=; Max-Age=-1; Path=/`);
-
     return { props: { user: null } };
   }
 };

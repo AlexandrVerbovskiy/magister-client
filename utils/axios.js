@@ -1,29 +1,31 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import authHeaderProps from "./authHeaderProps";
 import env from "../env";
 
 export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
 
-  axios.interceptors.request.use((config) => {
-    const token = Cookies.get(env.AUTH_COOKIE_NAME);
+  const baseURL = path
+      ? env.SERVER_URL + env.SERVER_API + path
+      : env.SERVER_URL + env.SERVER_API;
+  
+  const axiosInstance = axios.create({
+    baseURL,
+  });
 
-    if (token) {
-      const props = authHeaderProps(token);
-      config.headers.Authorization = `Bearer ${props.Authorization}`;
+  axiosInstance.interceptors.request.use((config) => {
+    if(typeof window !== "undefined" && window.document) {
+      const token = Cookies.get(env.AUTH_COOKIE_NAME);
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
 
     return config;
   });
 
-  const baseURL = path
-    ? env.SERVER_URL + env.SERVER_API + path
-    : env.SERVER_URL + env.SERVER_API;
-
-  return axios.create({
-    baseURL,
-  });
+  return axiosInstance;
 };
 
 export const serviceWrapper = async (promise) => {

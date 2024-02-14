@@ -22,7 +22,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       await importFunc();
 
       document
-        .querySelectorAll("head style")
+        .querySelectorAll("head style, head link")
         .forEach((elem) => stylesRef.current[key].push(elem.cloneNode(true)));
     }
   };
@@ -33,14 +33,17 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (isFirstCall.current) {
       isFirstCall.current = false;
 
-      document.querySelectorAll("head style").forEach((elem) => {
-        if (!elem.innerText.includes("MIT License | https://tailwindcss.com")) {
+      document.querySelectorAll("head style, head link").forEach((elem, index) => {
+        if (!elem.innerText.includes("MIT License | https://tailwindcss.com") && !elem.hasAttribute("data-n-p")) {
           stylesRef.current["base"].push(elem.cloneNode(true));
         }
       });
     }
 
-    document.querySelectorAll("head style").forEach((elem) => elem.remove());
+    document.querySelectorAll("head style, head link").forEach((elem) => {
+      console.log("elem to remove ", elem);
+      elem.remove();
+    });
 
     if (type == "admin") {
       await importStyle(() => import(`../styles/admin/index.css`), "admin");

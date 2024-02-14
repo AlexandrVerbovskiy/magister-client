@@ -77,3 +77,7 @@
 .font-inter {
   font-family: Inter, sans-serif;
 }
+
+.pl-9{
+  padding-left: 2.25rem!important;
+}

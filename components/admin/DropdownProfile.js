@@ -4,10 +4,13 @@ import Transition from "../../utils/transition";
 import Cookies from 'js-cookie';
 import { IndiceContext } from "../../contexts";
 import { getFilePath } from "../../utils";
+import env from "../../env";
+import { useRouter } from "next/router";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
 function DropdownProfile({ align }) {
+  const router = useRouter();
   const { onLogout, success: mainSuccess, user } = useContext(IndiceContext);
   const name = user ? user.name : "";
   const photo =
@@ -49,6 +52,7 @@ function DropdownProfile({ align }) {
     Cookies.remove(env.AUTH_COOKIE_NAME);
     onLogout();
     mainSuccess.set("Successfully logged out");
+    router.push("/");
   };
 
   return (
