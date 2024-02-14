@@ -41,7 +41,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     }
 
     document.querySelectorAll("head style, head link").forEach((elem) => {
-      console.log("elem to remove ", elem);
       elem.remove();
     });
 

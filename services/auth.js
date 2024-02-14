@@ -65,16 +65,6 @@ export const getMyInfoByCookie = async (token) => {
   return data.body.user;
 };
 
-export const updateShortUserInfo = async (password, acceptedTermCondition) => {
-  const data = await serviceWrapper(
-    axios.post("/update-short-info", {
-      password,
-      acceptedTermCondition,
-    })
-  );
-  return data.body.user;
-};
-
 export const updateProfile = async (body) => {
   const data = await serviceWrapper(axios.post("/save-profile", body));
   return data.body.user;
@@ -141,6 +131,19 @@ export const checkMyPhoneVerifyCode = async (code) => {
 
 export const changeTwoFactorAuth = async () => {
   const data = await serviceWrapper(axios.post("/change-two-factor-auth"));
+  return data;
+};
+
+export const noNeedRegularViewInfoForm = async (token) => {
+  const options = {
+    headers: {
+      ...authHeaderProps(token),
+    },
+  };
+
+  const data = await serviceWrapper(
+    axios.post("/no-need-regular-view-info-form", null, options)
+  );
   return data;
 };
 
