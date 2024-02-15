@@ -97,6 +97,7 @@ const useMain = ({ userInfo, authToken }) => {
   useEffect(() => {
     setIsAuth(!!userInfo);
     setUser(userInfo);
+    console.log(userInfo);
     changePermissions(userInfo);
   }, [userInfo]);
 
