@@ -41,8 +41,6 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      let redirectUrl = "/test";
-
       if (
         account.provider.toLowerCase() == "facebook" ||
         account.provider.toLowerCase() == "google"
@@ -67,12 +65,8 @@ export default NextAuth({
           user.userId = res.userId;
           user.authToken = res.authToken;
           user.needRegularViewInfoForm = res.needRegularViewInfoForm;
-
-          if (res.needRegularViewInfoForm)
-            redirectUrl = "/settings/profile-edit";
         } catch (e) {
-          console.log(e);
-          return false;
+          return "/?error" + encodeURI(e.message);
         }
       }
 
