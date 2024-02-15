@@ -3,21 +3,20 @@ import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import env from "../../../env";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { authByProvider } from "../../../services";
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        authToken: { label: "Auth Token", type: "text" },
       },
       async authorize(credentials, req) {
+        console.log(credentials);
+
         const user = {
-          id: "1",
-          name: "J Smith",
-          email: "jsmith@example.com",
-          customToken: "test123423",
+          authToken: credentials.authToken,
         };
 
         if (user) {
@@ -37,43 +36,36 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    signIn(info) {
-      //console.log(user, account);
+    async signIn({ user, profile, account }) {
+      console.log("user: ", user);
+      console.log("profile: ", profile);
+      console.log("account: ", account);
 
-      /*await fetch("https://your-server.com/api/user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          name,
-          accessToken: account.access_token,
-        }),
-      });*/
+      /*if(account.provider.toLowerCase() == "google"){
+        const res = await authByProvider({name:,email:, token:, provider: "google"})
+      }
 
-      info.user.test = "1234234";
+      if(account.provider.toLowerCase() == "facebook"){
+        const res = await authByProvider({name:,email:, token:, provider: "google"})
+      }*/
+
+      user.authToken = "1234234";
 
       return true;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.customToken = user.customToken;
-        token.test = user.test;
+        token.authToken = user.authToken;
       }
 
       return token;
     },
     session({ session, token }) {
       if (token && session.user) {
-        session.user.id = token.id;
-        session.user.customToken = token.customToken;
-        session.user.test = token.test;
+        session.user.authToken = token.authToken;
       }
 
       return session;
     },
   },
-  secret: "NhRSkw8Lt61TwsQgiPeBBO1Mykg2FgRCTPNrCmy2bGU="
 });

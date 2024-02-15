@@ -33,11 +33,16 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (isFirstCall.current) {
       isFirstCall.current = false;
 
-      document.querySelectorAll("head style, head link").forEach((elem, index) => {
-        if (!elem.innerText.includes("MIT License | https://tailwindcss.com") && !elem.hasAttribute("data-n-p")) {
-          stylesRef.current["base"].push(elem.cloneNode(true));
-        }
-      });
+      document
+        .querySelectorAll("head style, head link")
+        .forEach((elem, index) => {
+          if (
+            !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
+            !elem.hasAttribute("data-n-p")
+          ) {
+            stylesRef.current["base"].push(elem.cloneNode(true));
+          }
+        });
     }
 
     document.querySelectorAll("head style, head link").forEach((elem) => {
