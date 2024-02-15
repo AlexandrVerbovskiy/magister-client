@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import env from "../../../env";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authByProvider } from "../../../services";
+import { signOut } from "next-auth/react";
 
 export default NextAuth({
   providers: [
@@ -37,33 +38,38 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      console.log("user: ", user);
-      console.log("profile: ", profile);
-      console.log("account: ", account);
+      let redirectUrl = "/";
 
-      /*if(account.provider.toLowerCase() == "google"){
-        const res = await authByProvider({
-          name:user.name,
-          email:user.email,
-          token:account.id_token,
-          provider: "google"
-        })
+      if (
+        account.provider.toLowerCase() == "facebook" ||
+        account.provider.toLowerCase() == "google"
+      ) {
+        try {
+          const dataToSend = {
+            name: user.name,
+            email: user.email,
+            provider: account.provider,
+          };
 
-        user.authToken = "1234234";
+          if (account.provider.toLowerCase() == "facebook") {
+            dataToSend["token"] = account.access_token;
+          }
+
+          if (account.provider.toLowerCase() == "google") {
+            dataToSend["token"] = account.id_token;
+          }
+
+          const res = await authByProvider(dataToSend);
+          user.authToken = res.authToken;
+          if (res.needRegularViewInfoForm)
+            redirectUrl = "/settings/profile-edit";
+        } catch (e) {
+          signOut();
+          return "/?error=" + encodeURI(e.message);
+        }
       }
 
-      if(account.provider.toLowerCase() == "facebook"){
-        const res = await authByProvider({
-          name:user.name,
-          email:user.email,
-          token:account.access_token,
-          provider: "facebook"
-        })
-
-        user.authToken = "1234234";
-      }*/
-
-      return true;
+      return redirectUrl + "?success=" + encodeURI("Login successfully");
     },
     async jwt({ token, user }) {
       if (user) {
