@@ -15,7 +15,7 @@ import { supportSideProps } from "../../../middlewares";
 import env from "../../../env"
 
 const UserVerifyRequest = ({ info }) => {
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   const [accessDeclineModalOpen, setAccessDeclineModalOpen] = useState(false);
@@ -186,8 +186,7 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
-  const info = await getUserVerifyRequestById(id, authToken);
+  const info = await getUserVerifyRequestById(id, baseSideProps.props.authToken);
 
   try {
     return {

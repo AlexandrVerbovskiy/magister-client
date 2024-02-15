@@ -1,23 +1,26 @@
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import env from "../../../env";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authByProvider } from "../../../services";
-import { signOut } from "next-auth/react";
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
+        userId: { label: "User Id", type: "text" },
         authToken: { label: "Auth Token", type: "text" },
+        needRegularViewInfoForm: {
+          label: "Need Regular View Info Form",
+          type: "bool",
+        },
       },
       async authorize(credentials, req) {
-        console.log(credentials);
-
         const user = {
+          userId: credentials.userId,
           authToken: credentials.authToken,
+          needRegularViewInfoForm: credentials.needRegularViewInfoForm,
         };
 
         if (user) {
@@ -38,7 +41,7 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      let redirectUrl = "/";
+      let redirectUrl = "/test";
 
       if (
         account.provider.toLowerCase() == "facebook" ||
@@ -60,16 +63,20 @@ export default NextAuth({
           }
 
           const res = await authByProvider(dataToSend);
+
+          user.userId = res.userId;
           user.authToken = res.authToken;
+          user.needRegularViewInfoForm = res.needRegularViewInfoForm;
+
           if (res.needRegularViewInfoForm)
             redirectUrl = "/settings/profile-edit";
         } catch (e) {
-          signOut();
-          return "/?error=" + encodeURI(e.message);
+          console.log(e);
+          return false;
         }
       }
 
-      return redirectUrl + "?success=" + encodeURI("Login successfully");
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
@@ -87,4 +94,7 @@ export default NextAuth({
     },
   },
   secret: process.env.SECRET,
+  session: {
+    maxAge: 60 * 60 * 24 * 90,
+  },
 });

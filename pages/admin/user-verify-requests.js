@@ -15,7 +15,7 @@ import { timeConverter } from "../../utils";
 
 const UserVerifyRequests = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
 
   const [fromTime, setFromTime] = useState(null);
   const [toTime, setToTime] = useState(null);
@@ -40,7 +40,7 @@ const UserVerifyRequests = () => {
     rebuild,
     options,
   } = usePagination({
-    getItemsFunc: getUserVerifyRequestList,
+    getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
     dopProps: {
       fromTime,

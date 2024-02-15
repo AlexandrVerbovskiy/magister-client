@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { SessionProvider } from "next-auth/react";
+
 import { IndiceProvider } from "../contexts";
 import Layout from "../components/_App/Layout";
 import Loader from "../components/Shared/Loader";
@@ -68,6 +70,7 @@ function MyApp({ Component, pageProps }) {
 
   const pageType = pageProps.pageType;
   const user = pageProps.user;
+  const authToken = pageProps.authToken;
 
   useImportGlobalStyle({
     type: pageType,
@@ -76,17 +79,19 @@ function MyApp({ Component, pageProps }) {
   });
 
   return (
-    <IndiceProvider userInfo={user} dopProps={{ setLoading }}>
-      <Layout>
-        <Component {...pageProps} />
+    <SessionProvider>
+      <IndiceProvider authToken={authToken} userInfo={user} dopProps={{ setLoading }}>
+        <Layout>
+          <Component {...pageProps} />
 
-        <Loader loading={loading} />
+          <Loader loading={loading} />
 
-        <MainErrorAlert {...pageProps} />
-        <MainSuccessAlert {...pageProps} />
-        <UnverifiedAlert {...pageProps} />
-      </Layout>
-    </IndiceProvider>
+          <MainErrorAlert {...pageProps} />
+          <MainSuccessAlert {...pageProps} />
+          <UnverifiedAlert {...pageProps} />
+        </Layout>
+      </IndiceProvider>
+    </SessionProvider>
   );
 }
 
