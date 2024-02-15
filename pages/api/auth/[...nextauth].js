@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
-import env from "../../../env";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authByProvider } from "../../../services";
 
@@ -10,13 +9,18 @@ export default NextAuth({
     CredentialsProvider({
       name: "Credentials",
       credentials: {
+        userId: { label: "User Id", type: "text" },
         authToken: { label: "Auth Token", type: "text" },
+        needRegularViewInfoForm: {
+          label: "Need Regular View Info Form",
+          type: "bool",
+        },
       },
       async authorize(credentials, req) {
-        console.log(credentials);
-
         const user = {
+          userId: credentials.userId,
           authToken: credentials.authToken,
+          needRegularViewInfoForm: credentials.needRegularViewInfoForm,
         };
 
         if (user) {
@@ -37,31 +41,40 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      console.log("user: ", user);
-      console.log("profile: ", profile);
-      console.log("account: ", account);
+      let redirectUrl = "/test";
 
-      /*if(account.provider.toLowerCase() == "google"){
-        const res = await authByProvider({
-          name:user.name,
-          email:user.email,
-          token:account.id_token,
-          provider: "google"
-        })
+      if (
+        account.provider.toLowerCase() == "facebook" ||
+        account.provider.toLowerCase() == "google"
+      ) {
+        try {
+          const dataToSend = {
+            name: user.name,
+            email: user.email,
+            provider: account.provider,
+          };
 
-        user.authToken = "1234234";
+          if (account.provider.toLowerCase() == "facebook") {
+            dataToSend["token"] = account.access_token;
+          }
+
+          if (account.provider.toLowerCase() == "google") {
+            dataToSend["token"] = account.id_token;
+          }
+
+          const res = await authByProvider(dataToSend);
+
+          user.userId = res.userId;
+          user.authToken = res.authToken;
+          user.needRegularViewInfoForm = res.needRegularViewInfoForm;
+
+          if (res.needRegularViewInfoForm)
+            redirectUrl = "/settings/profile-edit";
+        } catch (e) {
+          console.log(e);
+          return false;
+        }
       }
-
-      if(account.provider.toLowerCase() == "facebook"){
-        const res = await authByProvider({
-          name:user.name,
-          email:user.email,
-          token:account.access_token,
-          provider: "facebook"
-        })
-
-        user.authToken = "1234234";
-      }*/
 
       return true;
     },
@@ -81,4 +94,7 @@ export default NextAuth({
     },
   },
   secret: process.env.SECRET,
+  session: {
+    maxAge: 60 * 60 * 24 * 90,
+  },
 });

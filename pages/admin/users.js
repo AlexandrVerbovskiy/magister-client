@@ -22,7 +22,7 @@ const Users = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
 
   const {
     page,
@@ -43,7 +43,7 @@ const Users = () => {
     setItemFields,
     options,
   } = usePagination({
-    getItemsFunc: getUserList,
+    getItemsFunc: (data)=>getUserList(data, authToken),
     onError: (e) => error.set(e.message),
   });
 
@@ -59,7 +59,7 @@ const Users = () => {
 
   const handleChangeActive = async (id, name) => {
     try {
-      const res = await changeActive(id);
+      const res = await changeActive(id, authToken);
       setItemFields({ active: res.active }, id);
       success.set(
         `${name} ${res.active ? "activated" : "deactivated"} successfully!`
@@ -71,7 +71,7 @@ const Users = () => {
 
   const handleChangeVerified = async (id, name) => {
     try {
-      const res = await changeVerified(id);
+      const res = await changeVerified(id, authToken);
       setItemFields({ verified: res.verified }, id);
       success.set(
         `${name} ${res.active ? "verified" : "unverified"} successfully!`
@@ -83,7 +83,7 @@ const Users = () => {
 
   const handleSetRole = async (id, name, role) => {
     try {
-      const res = await setRole(id, role);
+      const res = await setRole(id, role, authToken);
       setItemFields({ role: res.role }, id);
       success.set(`${name} role updated to ${res.role} successfully!`);
     } catch (e) {
@@ -94,7 +94,7 @@ const Users = () => {
   const onDeleteAccept = async () => {
     try {
       const { name, id } = toDeleteUserInfo;
-      await deleteUser(id);
+      await deleteUser(id, authToken);
       handleCloseDeleteModal();
       rebuild();
       success.set(`${name} deleted successfully!`);

@@ -14,7 +14,7 @@ import DocumentList from "../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../middlewares";
 
 const UserDocuments = () => {
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   const [user, setUser] = useState(null);
@@ -24,8 +24,8 @@ const UserDocuments = () => {
 
   const init = async () => {
     try {
-      const gotDocuments = await getUserDocuments(id);
-      const gotUser = await getFullUserById(id);
+      const gotDocuments = await getUserDocuments(id, authToken);
+      const gotUser = await getFullUserById(id, authToken);
       setDocuments(gotDocuments);
       setUser(gotUser);
     } catch (e) {
@@ -41,7 +41,7 @@ const UserDocuments = () => {
 
   const handleVerifyClick = async () => {
     try {
-      const res = await changeVerified(id);
+      const res = await changeVerified(id, authToken);
       const verified = res.verified;
       success.set(
         "User " +

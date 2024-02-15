@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { getFullUserById, updateUser } from "../../../services";
 import EditUserForm from "../../../components/admin/EditUserForm";
 import { adminSideProps } from "../../../middlewares";
-import env from "../../../env"
+import { IndiceContext } from "../../../contexts";
 
 const UserEdit = ({ editableUser }) => {
+  const { authToken } = useContext(IndiceContext);
+
   const handleSave = async (formData) => {
     formData.append("id", editableUser.id);
-    return await updateUser(formData);
+    return await updateUser(formData, authToken);
   };
 
   return (
@@ -22,7 +24,7 @@ const UserEdit = ({ editableUser }) => {
 export const getServerSideProps = async (context) => {
   const baseSideProps = await adminSideProps(context);
   const id = context.params.id;
-  
+
   if (baseSideProps.notFound || !id) {
     return {
       notFound: true,
@@ -30,13 +32,15 @@ export const getServerSideProps = async (context) => {
   }
 
   try {
-    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
-    const editableUser = await getFullUserById(id, authToken);
+    const editableUser = await getFullUserById(
+      id,
+      baseSideProps.props.authToken
+    );
 
     const currentUser = baseSideProps.props.user;
 
     if (currentUser.id === editableUser.id) {
-      throw new Error("Permission denied")
+      throw new Error("Permission denied");
     }
 
     return {

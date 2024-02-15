@@ -37,7 +37,7 @@ const ProfileEdit = () => {
     setLoading,
     updateUserFields,
     user,
-    onLogin,
+    authToken
   } = useContext(IndiceContext);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
@@ -225,7 +225,7 @@ const ProfileEdit = () => {
       Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
       try {
-        const res = await updateProfile(formData);
+        const res = await updateProfile(formData, authToken);
         success.set("Profile updated successfully");
 
         if (res.photo) {
@@ -233,8 +233,6 @@ const ProfileEdit = () => {
           setPhotoUrl(getFilePath(res.photo));
         }
 
-        const loginDate = { ...user, ...info, photo: res.photo };
-        onLogin(loginDate);
         return true;
       } catch (e) {
         setProfileFormError(e.message);
@@ -283,7 +281,7 @@ const ProfileEdit = () => {
     if (hasError) return;
 
     try {
-      await updateMyPassword(currentPassword, password);
+      await updateMyPassword(currentPassword, password, authToken);
       success.set("Password updated successfully");
     } catch (e) {
       setPasswordFormError(e.message);
@@ -303,7 +301,7 @@ const ProfileEdit = () => {
     }
 
     try {
-      await generateMyPhoneVerifyCode();
+      await generateMyPhoneVerifyCode(authToken);
       toggleCodePhoneModal();
     } catch (e) {
       setProfileFormError(e.message);
@@ -327,7 +325,7 @@ const ProfileEdit = () => {
       toggleVerifyPhoneModal();
     } else {
       try {
-        await generateMyPhoneVerifyCode();
+        await generateMyPhoneVerifyCode(authToken);
         toggleCodePhoneModal();
       } catch (e) {
         setProfileFormError(e.message);
@@ -342,7 +340,7 @@ const ProfileEdit = () => {
     }
 
     try {
-      await checkMyPhoneVerifyCode(phoneCode);
+      await checkMyPhoneVerifyCode(phoneCode, authToken);
       toggleCodePhoneModal();
       updateUserFields({ phoneVerified: true });
       success.set("Phone success verified");
@@ -353,7 +351,7 @@ const ProfileEdit = () => {
 
   const handleTwoFactorAuthChange = async (e) => {
     try {
-      const res = await changeTwoFactorAuth();
+      const res = await changeTwoFactorAuth(authToken);
       success.set(res.message);
       updateUserFields({
         twoFactorAuthentication: res.body.twoFactorAuthentication,
@@ -708,8 +706,7 @@ export const getServerSideProps = async (context) => {
   if (baseSideProps.notFound) return baseSideProps;
 
   if (baseSideProps.props.user.needRegularViewInfoForm) {
-    const authToken = context.req.cookies[env.AUTH_COOKIE_NAME] ?? null;
-    noNeedRegularViewInfoForm(authToken);
+    noNeedRegularViewInfoForm(baseSideProps.props.authToken);
   }
 
   return baseSideProps;

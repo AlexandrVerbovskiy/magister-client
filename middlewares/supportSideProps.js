@@ -2,7 +2,7 @@ import userSideProps from "./userSideProps";
 
 const supportSideProps = async (context) => {
   const { props } = await userSideProps(context);
-  const { user } = props;
+  const { user, authToken } = props;
 
   if (!user || (user.role !== "admin" && user.role !== "support")) {
     return {
@@ -10,7 +10,7 @@ const supportSideProps = async (context) => {
     };
   }
 
-  return { props: { user, pageType: "admin" } };
+  return { props: { user, authToken, pageType: "admin" } };
 };
 
 export default supportSideProps;

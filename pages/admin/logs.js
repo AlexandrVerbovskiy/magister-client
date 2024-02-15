@@ -16,7 +16,7 @@ import { timeConverter } from "../../utils";
 
 const Logs = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
   const [panelItem, setPanelItem] = useState(false);
 
   const [fromTime, setFromTime] = useState(null);
@@ -42,7 +42,7 @@ const Logs = () => {
     rebuild,
     options,
   } = usePagination({
-    getItemsFunc: getLogList,
+    getItemsFunc: (data) => getLogList(data, authToken),
     onError: (e) => error.set(e.message),
     dopProps: {
       fromTime,

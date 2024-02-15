@@ -8,13 +8,11 @@ import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
-import Cookies from "js-cookie";
-import env from "../../../env";
+import { signIn, signOut } from "next-auth/react";
 
 const Navbar = () => {
   const {
     isAuth,
-    onLogout,
     success: mainSuccess,
     isSupport,
     onLogin,
@@ -77,10 +75,8 @@ const Navbar = () => {
   const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
-  const handleSignOut = () => {
-    Cookies.remove(env.AUTH_COOKIE_NAME);
-    onLogout();
-    mainSuccess.set("Successfully logged out");
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
   };
 
   const [userToAuth, setUserToAuth] = useState(null);
@@ -129,19 +125,13 @@ const Navbar = () => {
         loginRememberMe
       );
 
-      let expirationDate = new Date();
-
-      const dopDays = loginRememberMe
-        ? env.REMEMBER_COOKIES_DAYS
-        : env.NORMAL_COOKIES_DAYS;
-      expirationDate.setDate(expirationDate.getDate() + dopDays);
-
-
-      Cookies.set(env.AUTH_COOKIE_NAME, res.accessToken, {
-        expires: expirationDate,
+      await signIn("credentials", {
+        authToken: res.authToken,
+        redirect: false,
       });
 
       onLogin(res.user);
+
       setCodeModalActive(false);
 
       if (res.user.needRegularViewInfoForm) {

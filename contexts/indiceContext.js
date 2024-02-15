@@ -3,9 +3,10 @@ import { useMain } from "../hooks";
 
 const IndiceContext = createContext();
 
-const IndiceProvider = ({ userInfo, children, dopProps = {} }) => {
+const IndiceProvider = ({ userInfo, authToken, children, dopProps = {} }) => {
   const main = useMain({
     userInfo,
+    authToken,
   });
 
   return (
