@@ -6,8 +6,7 @@ import { generateMyEmailVerifyCode, login } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-import env from "../../../env";
+import { signIn } from "next-auth/react";
 
 const LoginTab = ({
   email,
@@ -33,7 +32,7 @@ const LoginTab = ({
   const [resendEmailView, setRememberMeView] = useState(false);
   const [wasResendEmailView, setWasRememberMeView] = useState(false);
 
-  const { onLogin, success: mainSuccess } = useContext(IndiceContext);
+  const { success: mainSuccess, onLogin } = useContext(IndiceContext);
 
   const handleInputEmail = (e) => {
     setEmail(e.target.value);
@@ -98,18 +97,13 @@ const LoginTab = ({
           setTypeModalActive(true);
         }
       } else {
-        let expirationDate = new Date();
-
-        const dopDays = rememberMe
-          ? env.REMEMBER_COOKIES_DAYS
-          : env.NORMAL_COOKIES_DAYS;
-        expirationDate.setDate(expirationDate.getDate() + dopDays);
-
-        Cookies.set("auth-token", res.accessToken, {
-          expires: expirationDate,
+        await signIn("credentials", {
+          authToken: res.authToken,
+          redirect: false,
         });
 
         onLogin(res.user);
+
         setPassword("");
 
         mainSuccess.set("Successfully logged in");

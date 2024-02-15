@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
-const useMain = ({ userInfo }) => {
+const useMain = ({ userInfo, authToken }) => {
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [isSupport, setIsSupport] = useState(null);
@@ -8,17 +10,94 @@ const useMain = ({ userInfo }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [displaySideMenu, setDisplaySideMenu] = useState(false);
+  const { data: session } = useSession();
+  const [prevSessionUser, setPrevSessionUser] = useState(undefined);
 
-  const onLogout = () => {
-    setUser(null);
-    setIsAuth(false);
-    setIsAdmin(false);
-    setIsSupport(false);
+  const handleSetSuccess = (message) => {
+    setError(null);
+    setSuccess(message);
   };
+
+  const handleSetError = (message) => {
+    setSuccess(null);
+    setError(message);
+  };
+
+  const router = useRouter();
+
+  const analizeQueryInfo = (param, onChange) => {
+    const currentParam = router.query[param];
+
+    if (!currentParam) return;
+
+    onChange(currentParam);
+
+    const { query, ...rest } = router.query;
+    delete rest[param];
+
+    router.replace({
+      pathname: router.pathname,
+      query: rest,
+    });
+  };
+
+  useEffect(() => {
+    analizeQueryInfo("error", (currentParam) => {
+      setSuccess(null);
+      setError(currentParam);
+    });
+  }, [router.query.error]);
+
+  useEffect(() => {
+    analizeQueryInfo("success", (currentParam) => {
+      setError(null);
+      setSuccess(currentParam);
+    });
+  }, [router.query.success]);
+
+  useEffect(() => {
+    if (session === undefined) {
+      return;
+    }
+
+    if (prevSessionUser === undefined) {
+      setPrevSessionUser(session?.user);
+      return;
+    }
+
+    if (
+      (prevSessionUser != null && session != null) ||
+      (prevSessionUser == null && session == null)
+    )
+      return;
+
+    let redirectLink = "/";
+
+    if (session?.user) {
+      setIsAuth(true);
+
+      if (session.user.needRegularViewInfoForm) {
+        redirectLink = "/settings/profile-edit";
+      }
+
+      handleSetSuccess("Successfully logged in");
+    } else {
+      setUser(null);
+      setIsAuth(false);
+      setIsAdmin(false);
+      setIsSupport(false);
+      handleSetSuccess("Successfully logged out");
+    }
+
+    setPrevSessionUser(session?.user);
+
+    router.push(redirectLink);
+  }, [session]);
 
   useEffect(() => {
     setIsAuth(!!userInfo);
     setUser(userInfo);
+    console.log(userInfo);
     changePermissions(userInfo);
   }, [userInfo]);
 
@@ -54,10 +133,10 @@ const useMain = ({ userInfo }) => {
   };
 
   return {
+    authToken,
     updateUserFields,
     user,
     onLogin,
-    onLogout,
     isAuth,
     isAdmin,
     isSupport,
@@ -66,12 +145,12 @@ const useMain = ({ userInfo }) => {
     displaySideMenu,
     error: {
       value: error,
-      set: setError,
+      set: handleSetError,
       clear: clearError,
     },
     success: {
       value: success,
-      set: setSuccess,
+      set: handleSetSuccess,
       clear: clearSuccess,
     },
   };

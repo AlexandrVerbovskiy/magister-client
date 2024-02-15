@@ -1,60 +1,52 @@
-import { initAxios, serviceWrapper, authHeaderProps } from "../utils";
-const axios = initAxios("/users");
+import { initAxios } from "../utils";
+const { get, post } = initAxios("/users");
 
 export const getUserById = async (id) => {
-  const data = await serviceWrapper(axios.get(`/get-by-id/${id}`));
+  const data = await get(`/get-by-id/${id}`);
   return data.body;
 };
 
-export const getFullUserById = async (id, token) => {
-  const options = {
-    headers: {
-      ...authHeaderProps(token),
-    },
-  };
-
-  const data = await serviceWrapper(
-    axios.get(`/get-full-by-id/${id}`, options)
-  );
+export const getFullUserById = async (id, authToken) => {
+  const data = await get(`/get-full-by-id/${id}`, authToken);
   return data.body;
 };
 
-export const getUserDocuments = async (userId) => {
-  const data = await serviceWrapper(axios.post("/documents", { userId }));
+export const getUserDocuments = async (userId, authToken) => {
+  const data = await post("/documents", { userId }, authToken);
   return data.body.documents;
 };
 
-export const getUserList = async (body) => {
-  const data = await serviceWrapper(axios.post("/list", body));
+export const getUserList = async (body, authToken) => {
+  const data = await post("/list", body, authToken);
   return data.body;
 };
 
-export const setRole = async (id, role) => {
-  const data = await serviceWrapper(axios.post("/set-role", { id, role }));
+export const setRole = async (id, role, authToken) => {
+  const data = await post("/set-role", { id, role }, authToken);
   return data.body;
 };
 
-export const changeActive = async (id) => {
-  const data = await serviceWrapper(axios.post("/change-active", { id }));
+export const changeActive = async (id, authToken) => {
+  const data = await post("/change-active", { id }, authToken);
   return data.body;
 };
 
-export const changeVerified = async (id) => {
-  const data = await serviceWrapper(axios.post("/change-verified", { id }));
+export const changeVerified = async (id, authToken) => {
+  const data = await post("/change-verified", { id }, authToken);
   return data.body;
 };
 
-export const deleteUser = async (id) => {
-  const data = await serviceWrapper(axios.post("/delete", { id }));
+export const deleteUser = async (id, authToken) => {
+  const data = await post("/delete", { id }, authToken);
   return data.body;
 };
 
-export const updateUser = async (userData) => {
-  const data = await serviceWrapper(axios.post("/update", userData));
+export const updateUser = async (userData, authToken) => {
+  const data = await post("/update", userData, authToken);
   return data.body;
 };
 
-export const createUser = async (userData) => {
-  const data = await serviceWrapper(axios.post("/create", userData));
+export const createUser = async (userData, authToken) => {
+  const data = await post("/create", userData, authToken);
   return data.body;
 };

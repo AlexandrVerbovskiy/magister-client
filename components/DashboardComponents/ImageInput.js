@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ENV from "../../env";
+import env from "../../env";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
@@ -18,8 +18,8 @@ const ImageInput = ({
     setError(null);
     const img = e.target.files[0];
 
-    if (img.size > ENV.MAX_FILE_SIZE) {
-      setError("File can't be larger than " + ENV.MAX_FILE_SIZE + " bytes");
+    if (img.size > env.MAX_FILE_SIZE) {
+      setError("File can't be larger than " + env.MAX_FILE_SIZE + " bytes");
     } else {
       onChange(e);
     }

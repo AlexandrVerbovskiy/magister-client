@@ -1,15 +1,23 @@
-import { getMyInfoByCookie } from "../services";
+import { getSession } from "next-auth/react";
+import { getMyInfo } from "../services";
 
 const userSideProps = async (context) => {
   try {
-    const cookies = context.req.cookies;
-    const authToken = cookies["auth-token"] ?? null;
-    const user = await getMyInfoByCookie(authToken);
+    const resGetSession = await getSession(context);
 
-    return { props: { user } };
+    if (!resGetSession) return { props: { user: null } };
+
+    const authToken = resGetSession.user.authToken;
+    const user = await getMyInfo(authToken);
+
+    if (!user) throw new Error("User not found");
+
+    return { props: { user, authToken } };
   } catch (e) {
-    context.res.setHeader("Set-Cookie", `auth-token=; Max-Age=-1; Path=/`);
-
+    console.log(e);
+    /*Object.keys(context.req.cookies).forEach((cookieName) => {
+      context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
+    });*/
     return { props: { user: null } };
   }
 };

@@ -2,10 +2,9 @@
 
 @import "tailwindcss/base.css";
 @import "tailwindcss/components.css";
+@import "tailwindcss/utilities.css";
 
-/* Additional styles */
 @import "./additional-styles/utility-patterns.css";
 @import "./additional-styles/flatpickr.css";
-@import "tailwindcss/utilities.css";
 
 @import "./style.css";

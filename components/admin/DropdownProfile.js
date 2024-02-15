@@ -1,19 +1,18 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Transition from "../../utils/transition";
-import Cookies from 'js-cookie';
 import { IndiceContext } from "../../contexts";
 import { getFilePath } from "../../utils";
+import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
 function DropdownProfile({ align }) {
-  const { onLogout, success: mainSuccess, user } = useContext(IndiceContext);
+  const router = useRouter();
+  const { success: mainSuccess, user } = useContext(IndiceContext);
   const name = user ? user.name : "";
-  const photo =
-    user && user.photo
-      ? getFilePath(user.photo)
-      : defaultPhotoLink;
+  const photo = user && user.photo ? getFilePath(user.photo) : defaultPhotoLink;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -45,10 +44,8 @@ function DropdownProfile({ align }) {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-  const handleSignOut = () => {
-    Cookies.remove("auth-token");
-    onLogout();
-    mainSuccess.set("Successfully logged out");
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
   };
 
   return (

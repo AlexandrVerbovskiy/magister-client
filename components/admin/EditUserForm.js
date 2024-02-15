@@ -7,7 +7,6 @@ import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import { useAdminPage } from "../../hooks";
-import ENV from "../../env";
 import Switch from "../../partials/admin/base/Switch";
 import DropdownClassic from "./DropdownClassic";
 import ModalBlank from "./ModalBlank";

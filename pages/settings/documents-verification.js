@@ -10,13 +10,13 @@ import {
   userVerifyRequestCreate,
   canSendVerifyRequest,
 } from "../../services";
-import ENV from "../../env";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
+import env from "../../env";
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading } = useContext(IndiceContext);
+  const { success, setLoading, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
   const [lastDeclineDescription, setLastDeclineDescription] = useState(
     lastAnswerDescription
@@ -198,7 +198,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
     if (hasUpdates) {
       try {
-        await saveMyDocuments(formData);
+        await saveMyDocuments(formData, authToken);
       } catch (e) {
         setFormError(e);
       }
@@ -209,7 +209,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
   const handleSendRequestToVerify = async () => {
     try {
-      const message = await userVerifyRequestCreate();
+      const message = await userVerifyRequestCreate(authToken);
       success.set(message);
       setActiveSendRequestBtn(false);
     } catch (e) {
@@ -337,14 +337,14 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     </div>
                   )}
 
-                  <div className="col-lg-12 col-md-12">
-                    <div className="form-group d-flex gap-2">
+                  <div className="col-12">
+                    <div className="form-group d-flex gap-2 justify-content-between mt-2">
                       <button
                         type="button"
                         style={{ width: "300px" }}
                         onClick={handleSaveClick}
                       >
-                        Save Change
+                        Save Changes
                       </button>
 
                       {activeSendRequestBtn && (
@@ -373,16 +373,16 @@ export const getServerSideProps = async (context) => {
   if (baseSideProps.notFound) return baseSideProps;
 
   try {
-    const contextCookies = context.req.cookies;
-    const docs = await getMyDocuments(contextCookies);
+    const docs = await getMyDocuments(baseSideProps.props.authToken);
     const { canSend, lastAnswerDescription } = await canSendVerifyRequest(
-      contextCookies
+      baseSideProps.props.authToken
     );
 
     return {
       props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
     };
   } catch (e) {
+    console.log(e);
     return {
       notFound: true,
     };

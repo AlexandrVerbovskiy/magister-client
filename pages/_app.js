@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { SessionProvider } from "next-auth/react";
+
 import { IndiceProvider } from "../contexts";
 import Layout from "../components/_App/Layout";
 import Loader from "../components/Shared/Loader";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
-
 import "../styles/index.css";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
@@ -23,7 +24,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       await importFunc();
 
       document
-        .querySelectorAll("head style")
+        .querySelectorAll("head style, head link")
         .forEach((elem) => stylesRef.current[key].push(elem.cloneNode(true)));
     }
   };
@@ -34,14 +35,21 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (isFirstCall.current) {
       isFirstCall.current = false;
 
-      document.querySelectorAll("head style").forEach((elem) => {
-        if (!elem.innerText.includes("MIT License | https://tailwindcss.com")) {
-          stylesRef.current["base"].push(elem.cloneNode(true));
-        }
-      });
+      document
+        .querySelectorAll("head style, head link")
+        .forEach((elem, index) => {
+          if (
+            !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
+            !elem.hasAttribute("data-n-p")
+          ) {
+            stylesRef.current["base"].push(elem.cloneNode(true));
+          }
+        });
     }
 
-    document.querySelectorAll("head style").forEach((elem) => elem.remove());
+    document.querySelectorAll("head style, head link").forEach((elem) => {
+      elem.remove();
+    });
 
     if (type == "admin") {
       await importStyle(() => import(`../styles/admin/index.css`), "admin");
@@ -62,6 +70,7 @@ function MyApp({ Component, pageProps }) {
 
   const pageType = pageProps.pageType;
   const user = pageProps.user;
+  const authToken = pageProps.authToken;
 
   useImportGlobalStyle({
     type: pageType,
@@ -70,17 +79,19 @@ function MyApp({ Component, pageProps }) {
   });
 
   return (
-    <IndiceProvider userInfo={user} dopProps={{ setLoading }}>
-      <Layout>
-        <Component {...pageProps} />
+    <SessionProvider>
+      <IndiceProvider authToken={authToken} userInfo={user} dopProps={{ setLoading }}>
+        <Layout>
+          <Component {...pageProps} />
 
-        <Loader loading={loading} />
+          <Loader loading={loading} />
 
-        <MainErrorAlert {...pageProps} />
-        <MainSuccessAlert {...pageProps} />
-        <UnverifiedAlert {...pageProps} />
-      </Layout>
-    </IndiceProvider>
+          <MainErrorAlert {...pageProps} />
+          <MainSuccessAlert {...pageProps} />
+          <UnverifiedAlert {...pageProps} />
+        </Layout>
+      </IndiceProvider>
+    </SessionProvider>
   );
 }
 

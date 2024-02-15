@@ -57,6 +57,7 @@ const PasswordResetSend = () => {
     try {
       await resetPassword(password, token);
       success.set("Password reset successfully. Try logging in to the site");
+      router.push("/");
     } catch (e) {
       setFormError(e.message);
     } finally {
