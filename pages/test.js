@@ -19,28 +19,34 @@ const Test = () => {
     signIn("google", { redirect: false });
   };
 
+    const handleFacebookClick = () => {
+        signIn("facebook", { redirect: false });
+    };
+
   return (
-    <div>
-      <input
-        type="text"
-        name="email"
-        value={email}
-        onInput={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="text"
-        name="password"
-        value={password}
-        onInput={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleBaseClick}>Save</button>
+      <div>
+          <input
+              type="text"
+              name="email"
+              value={email}
+              onInput={(e) => setEmail(e.target.value)}
+          />
+          <input
+              type="text"
+              name="password"
+              value={password}
+              onInput={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={handleBaseClick}>Save</button>
 
-      <button onClick={handleGoogleClick}>Google</button>
+          <button onClick={handleGoogleClick}>Google</button>
+          
+          <button onClick={handleFacebookClick}>Facebook</button>
 
-      <SessionProvider>
-        <Auth />
-      </SessionProvider>
-    </div>
+          <SessionProvider>
+              <Auth/>
+          </SessionProvider>
+      </div>
   );
 };
 

@@ -42,14 +42,26 @@ export default NextAuth({
       console.log("account: ", account);
 
       /*if(account.provider.toLowerCase() == "google"){
-        const res = await authByProvider({name:,email:, token:, provider: "google"})
+        const res = await authByProvider({
+          name:user.name,
+          email:user.email,
+          token:account.id_token,
+          provider: "google"
+        })
+
+        user.authToken = "1234234";
       }
 
       if(account.provider.toLowerCase() == "facebook"){
-        const res = await authByProvider({name:,email:, token:, provider: "google"})
-      }*/
+        const res = await authByProvider({
+          name:user.name,
+          email:user.email,
+          token:account.access_token,
+          provider: "facebook"
+        })
 
-      user.authToken = "1234234";
+        user.authToken = "1234234";
+      }*/
 
       return true;
     },
