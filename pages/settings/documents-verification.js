@@ -337,14 +337,14 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     </div>
                   )}
 
-                  <div className="col-lg-12 col-md-12">
-                    <div className="form-group d-flex gap-2">
+                  <div className="col-12">
+                    <div className="form-group d-flex gap-2 justify-content-between mt-2">
                       <button
                         type="button"
                         style={{ width: "300px" }}
                         onClick={handleSaveClick}
                       >
-                        Save Change
+                        Save Changes
                       </button>
 
                       {activeSendRequestBtn && (
