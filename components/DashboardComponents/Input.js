@@ -6,6 +6,7 @@ const Input = ({
   error = null,
   placeholder = "",
   setError = () => {},
+  children,
 }) => {
   const handleInput = (e) => {
     setError(null);
@@ -27,6 +28,7 @@ const Input = ({
           {error}
         </div>
       )}
+      {children}
     </div>
   );
 };
