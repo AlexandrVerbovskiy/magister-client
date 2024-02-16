@@ -16500,18 +16500,32 @@ Preloader Area CSS
 }
 
 .password-competing form .form-group i,
-.password-reset form .form-group i {
+.password-reset form .form-group i,
+.my-profile-box .form-group i {
   position: absolute;
-  left: 0;
   transition: var(--transition);
-  top: 11px;
   font-size: 22px;
   cursor: pointer;
   color: var(--mainColor);
 }
 
+.password-competing form .form-group i{
+  left: 0;
+  top: 11px;
+}
+
 .password-competing form .form-group i {
   left: 10px !important;
+  top: 11px;
+}
+
+.my-profile-box .form-group i {
+  left: 10px !important;
+  top: 40px;
+}
+
+.my-profile-box.change-password input{
+  padding: 0 0 0 42px;
 }
 
 .password-competing form .form-group .input-newsletter {
@@ -16601,4 +16615,9 @@ Preloader Area CSS
   display: flex;
   width: 100%;
   justify-content: center;
+}
+
+.form-control[readonly],
+.form-control[disabled]{
+  background-color: #d6d6d6 !important;
 }
