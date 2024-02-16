@@ -78,7 +78,7 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
         filter,
         ...dopProps,
         ...dopBody,
-      }, );
+      });
 
       const {
         options: gotOptions,

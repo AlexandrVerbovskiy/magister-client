@@ -32,7 +32,7 @@ const UserVerifyRequest = ({ info }) => {
 
   const handleBaseVerifyChangeClick = async (verified, description = null) => {
     try {
-      await userVerifyRequestUpdate({ id, verified, description });
+      await userVerifyRequestUpdate({ id, verified, description }, authToken);
       const message = verified
         ? "Verified successfully"
         : "Declined successfully";
