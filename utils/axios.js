@@ -35,7 +35,7 @@ export const initAxios = (path = null) => {
   const get = async (url, authToken = null) => {
     const options = { headers: {} };
     if (authToken) options["headers"]["Authorization"] = `Bearer ${authToken}`;
-    return await serviceWrapper(axiosInstance.post(url, options));
+    return await serviceWrapper(axiosInstance.get(url, options));
   };
 
   const post = async (url, body = null, authToken = null) => {
