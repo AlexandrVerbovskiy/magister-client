@@ -23,11 +23,9 @@ const loadHeadLink = ({ url, rel = "stylesheet", type = "text/css" }) => {
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const adminLinks = useRef([]);
-  //const baseLinks = useRef([]);
   const isFirstCall = useRef(true);
 
   const baseStyles = (handleEnd) => {
-    //if (baseLinks.current.length < 1) {
     const links = [
       {
         url: "https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap",
@@ -61,25 +59,15 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       },
     ];
 
-    var stylePromises = links.map(loadHeadLink);
+    const stylePromises = links.map(loadHeadLink);
 
     Promise.all(stylePromises)
       .then(function () {
         handleEnd();
-
-        /*document.head
-          .querySelectorAll("style, link")
-          .forEach((elem, index) => baseLinks.current.push(elem.outerHTML));*/
       })
       .catch(function (error) {
         console.error("Style loading error:", error);
       });
-    /*} else {
-      baseLinks.current.forEach((link) =>
-        document.head.insertAdjacentHTML("beforeend", link)
-      );
-      handleEnd();
-    }*/
   };
 
   const adminStyles = (handleEnd) => {
@@ -98,6 +86,8 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
         .forEach((elem, index) => adminLinks.current.push(elem.outerHTML));
     }
 
+    console.log(type);
+
     if (!isFirstCall.current || type != "admin") {
       document.head
         .querySelectorAll("style, link")
@@ -109,9 +99,13 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       onEnd();
     };
 
+    
+
     if (type == "admin") {
       if (!isFirstCall.current) {
         adminStyles(handleEnd);
+      } else {
+        handleEnd();
       }
     }
 
