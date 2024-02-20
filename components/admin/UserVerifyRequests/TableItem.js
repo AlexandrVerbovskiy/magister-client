@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { timeConverter } from "../../../utils";
 
 const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
   return (
@@ -17,7 +18,9 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div>{createdAt}</div>
+        <div className="font-medium text-sky-500">
+          <div>{timeConverter(createdAt)}</div>
+        </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">

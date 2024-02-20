@@ -1,3 +1,19 @@
+export function validateBigText(text) {
+  if (text && text.length > 10000) {
+    return "The string size exceeds 10 000 characters";
+  }
+
+  return true;
+}
+
+export function validateSmallText(text) {
+  if (text && text.length > 250) {
+    return "Length exceeds 250 characters";
+  }
+
+  return true;
+}
+
 export function validatePassword(password) {
   if (password.length < 8) {
     return "Password should have at least 8 characters";
@@ -53,9 +69,8 @@ export function validateEmail(email) {
     return "Domain part should contain at least one dot and should not start or end with a dot";
   }
 
-  if (email.length > 254) {
-    return "Email should not exceed 254 characters in total length";
-  }
+  const resSmallTextValidation = validateSmallText(email);
+  if (resSmallTextValidation !== true) return resSmallTextValidation;
 
   return true;
 }
@@ -74,7 +89,7 @@ export function validateDate(date) {
     return "Invalid month or day in the date";
   }
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date(date).getFullYear();
   if (year < 1900 || year > currentYear + 100) {
     return "Invalid year in the date";
   }
@@ -96,10 +111,13 @@ export function validatePhoneNumber(phoneNumber) {
     return "Phone number should have a minimum of 10 digits";
   }
 
+  const resSmallTextValidation = validateSmallText(phoneNumber);
+  if (resSmallTextValidation !== true) return resSmallTextValidation;
+
   return true;
 }
 
-export function validatePrice(price) {
+export function validatePrice(priceString) {
   const formatRegex = /^\$?\d+(\.\d{1,2})?$/;
 
   if (!formatRegex.test(priceString)) {
@@ -112,12 +130,19 @@ export function validatePrice(price) {
     return "Price should be a positive number";
   }
 
+  const resSmallTextValidation = validateSmallText(priceString);
+  if (resSmallTextValidation !== true) return resSmallTextValidation;
+
   return true;
 }
 
 export function validateUrl(url) {
   try {
     new URL(url);
+
+    const resSmallTextValidation = validateSmallText(url);
+    if (resSmallTextValidation !== true) return resSmallTextValidation;
+
     return true;
   } catch (error) {
     return "Invalid URL";

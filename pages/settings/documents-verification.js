@@ -16,7 +16,7 @@ import env from "../../env";
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading, authToken } = useContext(IndiceContext);
+  const { success, setLoading, user, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
   const [lastDeclineDescription, setLastDeclineDescription] = useState(
     lastAnswerDescription
@@ -267,6 +267,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={proofOfAddressLink}
                       onChange={handleProofOfAddressChange}
                       name="proofOfAddressLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -276,6 +277,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={reputableBankIdLink}
                       onChange={handleReputableBankIdChange}
                       name="reputableBankIdLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -285,6 +287,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={utilityLink}
                       onChange={handleUtilityChange}
                       name="utilityLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -294,6 +297,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={hmrcLink}
                       onChange={handleHmrcChange}
                       name="hmrcLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -303,6 +307,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={councilTaxBillLink}
                       onChange={handleCouncilTaxBillChange}
                       name="councilTaxBillLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -312,6 +317,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={passportOrDrivingIdLink}
                       onChange={handlePassportOrDrivingIdChange}
                       name="passportOrDrivingIdLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -323,6 +329,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                         handleConfirmMoneyLaunderingChecksAndComplianceChange
                       }
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
+                      disabled={user.verified}
                     />
                   </div>
 
@@ -337,27 +344,29 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     </div>
                   )}
 
-                  <div className="col-12">
-                    <div className="form-group d-flex gap-2 justify-content-between mt-2">
-                      <button
-                        type="button"
-                        style={{ width: "300px" }}
-                        onClick={handleSaveClick}
-                      >
-                        Save Changes
-                      </button>
-
-                      {activeSendRequestBtn && (
+                  {!user.verified && (
+                    <div className="col-12">
+                      <div className="form-group d-flex gap-2 justify-content-between mt-2">
                         <button
                           type="button"
                           style={{ width: "300px" }}
-                          onClick={handleSendRequestToVerify}
+                          onClick={handleSaveClick}
                         >
-                          Send Request To Verify
+                          Save Changes
                         </button>
-                      )}
+
+                        {activeSendRequestBtn && (
+                          <button
+                            type="button"
+                            style={{ width: "300px" }}
+                            onClick={handleSendRequestToVerify}
+                          >
+                            Send Request To Verify
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </form>
             </div>
@@ -374,7 +383,7 @@ export const getServerSideProps = async (context) => {
 
   try {
     const docs = await getMyDocuments(baseSideProps.props.authToken);
-    const { canSend, lastAnswerDescription } = await canSendVerifyRequest(
+    let { canSend, lastAnswerDescription } = await canSendVerifyRequest(
       baseSideProps.props.authToken
     );
 
