@@ -6,7 +6,7 @@ const DocumentView = ({ label, url }) => {
   const imgSrc = url ? getFilePath(url) : defaultLink;
 
   return (
-    <div className="w-full lg:w-1/4 md:w-1/3" style={{ padding: "0.75rem" }}>
+    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end">
       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
         {label}
       </h2>
@@ -15,14 +15,7 @@ const DocumentView = ({ label, url }) => {
         className="form-group profile-box mt-2"
         style={{ maxWidth: "300px" }}
       >
-        <img
-          src={imgSrc}
-          alt="image"
-          style={{
-            width: "100%",
-            height: "auto",
-          }}
-        />
+        <img src={imgSrc} alt="image" width="300px" height="300px" />
       </div>
     </div>
   );
@@ -46,7 +39,7 @@ const DocumentList = (documents) => {
       <DocumentView url={documents.hmrcLink} label="HMRC" />
 
       <DocumentView
-        url={documents.councilTaxBillLinkF}
+        url={documents.councilTaxBillLink}
         label="Council Tax Bill"
       />
 
