@@ -184,7 +184,12 @@ export const getServerSideProps = async (context) => {
   }
 
   try {
-    const info = await getUserVerifyRequestById(id, baseSideProps.props.authToken);
+    const info = await getUserVerifyRequestById(
+      id,
+      baseSideProps.props.authToken
+    );
+
+    console.log(info);
 
     return {
       props: { ...baseSideProps.props, info },
