@@ -24,6 +24,7 @@ import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
 import Link from "next/link";
 import { authSideProps } from "../../middlewares";
+import ErrorSpan from "../../components/ErrorSpan";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
@@ -512,14 +513,10 @@ const ProfileEdit = () => {
                       </div>
                     )}
 
-                    {phoneError && (
-                      <div
-                        className="order-2 order-xl-3 invalid-feedback d-block"
-                        style={{ marginTop: "-14px", padding: "0" }}
-                      >
-                        {phoneError}
-                      </div>
-                    )}
+                    <ErrorSpan
+                      error={phoneError}
+                      className="order-2 order-xl-3 d-block profile-phone-error"
+                    />
                   </div>
 
                   <div className="col-lg-12 col-md-12">

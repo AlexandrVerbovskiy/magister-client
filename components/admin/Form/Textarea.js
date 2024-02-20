@@ -1,3 +1,5 @@
+import ErrorSpan from "../ErrorSpan";
+
 const Textarea = ({
   label = null,
   value,
@@ -25,7 +27,7 @@ const Textarea = ({
         placeholder={placeholder}
         onInput={handleInput}
       />
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      <ErrorSpan error={error} />
     </>
   );
 };

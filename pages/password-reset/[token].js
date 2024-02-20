@@ -5,6 +5,7 @@ import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
 import { resetPassword } from "../../services";
 import { notAuthSideProps } from "../../middlewares";
+import ErrorSpan from "../../components/ErrorSpan";
 
 const PasswordResetSend = () => {
   const router = useRouter();
@@ -109,9 +110,8 @@ const PasswordResetSend = () => {
                     } cursor-pointer`}
                     onClick={handleChangePasswordFieldType}
                   ></i>
-                  {passwordError && (
-                    <div className="invalid-feedback">{passwordError}</div>
-                  )}
+
+                  <ErrorSpan error={passwordError} />
                 </div>
 
                 <div className="form-group">
@@ -134,11 +134,8 @@ const PasswordResetSend = () => {
                     } cursor-pointer`}
                     onClick={handleChangeConfirmPasswordFieldType}
                   ></i>
-                  {confirmPasswordError && (
-                    <div className="invalid-feedback">
-                      {confirmPasswordError}
-                    </div>
-                  )}
+
+                  <ErrorSpan error={confirmPasswordError} />
                 </div>
 
                 {formError && (

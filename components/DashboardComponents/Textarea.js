@@ -1,3 +1,5 @@
+import ErrorSpan from "../ErrorSpan";
+
 const Textarea = ({
   label = null,
   value,
@@ -24,11 +26,8 @@ const Textarea = ({
         value={value}
         onInput={handleInput}
       ></textarea>
-      {error && (
-        <div className="invalid-feedback d-block mt-0 position-absolute">
-          {error}
-        </div>
-      )}
+
+      <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
     </div>
   );
 };
