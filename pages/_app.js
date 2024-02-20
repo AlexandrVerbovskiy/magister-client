@@ -86,8 +86,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
         .forEach((elem, index) => adminLinks.current.push(elem.outerHTML));
     }
 
-    console.log(type);
-
     if (!isFirstCall.current || type != "admin") {
       document.head
         .querySelectorAll("style, link")

@@ -5,10 +5,15 @@ const ErrorSpan = ({ error }) => {
 
   useEffect(() => {
     if (errorRef.current) {
-      errorRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+      const { top, bottom } = errorRef.current.getBoundingClientRect();
+      const isInViewport = top >= 64 && bottom <= window.innerHeight;
+
+      if (!isInViewport) {
+        errorRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
     }
   }, [error]);
 
