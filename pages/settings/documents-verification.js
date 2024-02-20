@@ -22,6 +22,9 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
     lastAnswerDescription
   );
 
+  const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
+  const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
+
   const [newProofOfAddress, setNewProofOfAddress] = useState(null);
   const [proofOfAddressLink, setProofOfAddressLink] = useState(null);
 
@@ -151,9 +154,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
     }
   };
 
-  const handleSaveClick = async () => {
-    setFormError(null);
-
+  const dataToSave = () => {
     const formData = new FormData();
 
     let hasUpdates = false;
@@ -196,11 +197,24 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
       hasUpdates = true;
     }
 
-    if (hasUpdates) {
+    return hasUpdates ? formData : null;
+  };
+
+  const handleSaveClick = async () => {
+    if (saveDocumentsDisabled) return;
+
+    setSaveDocumentsDisabled(true);
+    setFormError(null);
+
+    const formData = dataToSave();
+
+    if (formData) {
       try {
         await saveMyDocuments(formData, authToken);
       } catch (e) {
         setFormError(e);
+      } finally {
+        setSaveDocumentsDisabled(false);
       }
     }
 
@@ -208,12 +222,27 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   };
 
   const handleSendRequestToVerify = async () => {
+    if (saveDocumentsDisabled || sendRequestDisabled) return;
+
+    setSaveDocumentsDisabled(true);
+    setSendRequestDisabled(true);
+    setFormError(null);
+
     try {
+      const formData = dataToSave();
+
+      if (formData) {
+        await saveMyDocuments(formData, authToken);
+      }
+
       const message = await userVerifyRequestCreate(authToken);
       success.set(message);
       setActiveSendRequestBtn(false);
     } catch (e) {
       setFormError(e);
+    } finally {
+      setSaveDocumentsDisabled(false);
+      setSendRequestDisabled(false);
     }
   };
 
@@ -351,6 +380,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                           type="button"
                           style={{ width: "300px" }}
                           onClick={handleSaveClick}
+                          disabled={saveDocumentsDisabled}
                         >
                           Save Changes
                         </button>
@@ -360,6 +390,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                             type="button"
                             style={{ width: "300px" }}
                             onClick={handleSendRequestToVerify}
+                            disabled={sendRequestDisabled}
                           >
                             Send Request To Verify
                           </button>

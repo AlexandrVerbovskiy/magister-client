@@ -74,6 +74,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [verified, setVerified] = useState(false);
   const [suspicious, setSuspicious] = useState(false);
 
+  const [submitDisabled, setSubmitDisabled] = useState(false);
+
   useEffect(() => {
     if (user && user.photo) {
       setPhotoUrl(getFilePath(user.photo));
@@ -186,8 +188,13 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   };
 
   const handleSaveClick = async () => {
+    if (submitDisabled) return;
+
+    setSubmitDisabled(true);
+
     if (!hasChanges()) {
       success.set("User saved successfully");
+      setSubmitDisabled(false);
       return;
     }
 
@@ -268,7 +275,10 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       hasError = true;
     }
 
-    if (hasError) return;
+    if (hasError) {
+      setSubmitDisabled(false);
+      return;
+    }
 
     const formData = new FormData();
 
@@ -292,6 +302,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       }
     } catch (e) {
       error.set(e.message);
+    } finally {
+      setSubmitDisabled(false);
     }
   };
 
@@ -668,6 +680,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           Cancel
                         </button>
                         <button
+                          disabled={submitDisabled}
                           type="button"
                           onClick={handleSaveClick}
                           className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
