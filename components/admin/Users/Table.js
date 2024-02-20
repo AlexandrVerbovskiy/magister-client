@@ -69,7 +69,7 @@ const UsersTable = ({
                   onChangeActive={() => handleChangeActive(user.id, user.name)}
                   onDeleteClick={(e) => {
                     e.stopPropagation();
-                    openDeleteModal(user.name, user.id);
+                    openDeleteModal(user.id, user.name);
                   }}
                   onChangeVerified={() =>
                     handleChangeVerified(user.id, user.name)

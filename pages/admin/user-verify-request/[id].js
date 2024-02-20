@@ -33,7 +33,7 @@ const UserVerifyRequest = ({ info }) => {
 
   const handleBaseVerifyChangeClick = async (verified, description = null) => {
     try {
-      await userVerifyRequestUpdate({ id, verified, description });
+      await userVerifyRequestUpdate({ id, verified, description }, authToken);
       const message = verified
         ? "Verified successfully"
         : "Declined successfully";
@@ -183,12 +183,10 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const info = await getUserVerifyRequestById(
-    id,
-    baseSideProps.props.authToken
-  );
-
   try {
+    const info = await getUserVerifyRequestById(id, baseSideProps.props.authToken);
+    console.log(info);
+
     return {
       props: { ...baseSideProps.props, info },
     };

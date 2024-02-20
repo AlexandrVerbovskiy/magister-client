@@ -30,7 +30,7 @@ const ImageInput = ({
     <div className="form-group profile-box">
       {label && <label>{label}</label>}
 
-      <img src={photoUrl ?? defaultUrl} alt="image" />
+      <img src={photoUrl ?? defaultUrl} alt="image" width="300px" height="300px"/>
       <div className="file-upload">
         <input
           type="file"
