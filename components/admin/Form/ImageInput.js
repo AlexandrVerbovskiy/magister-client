@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import env from "../../../env";
+import ErrorSpan from "../ErrorSpan";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
@@ -60,7 +61,7 @@ const ImageInput = ({
         onChange={handleChange}
       />
 
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      <ErrorSpan error={error} />
     </div>
   );
 };

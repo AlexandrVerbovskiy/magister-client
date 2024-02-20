@@ -13792,8 +13792,13 @@ Dashboard CSS
 .my-profile-box .profile-box .file-upload .inputfile:focus + label,
 .my-profile-box .profile-box .file-upload .inputfile + label:hover {
   background-color: var(--mainColor);
-  color: var(--whiteColor);
+  color: var(--whiteColor)!important;
 }
+
+.my-profile-box .profile-box .file-upload .inputfile + label:hover *{
+  color: var(--whiteColor)!important;
+}
+
 .my-profile-box .profile-box .file-upload .inputfile + label {
   cursor: pointer;
 }
@@ -16509,7 +16514,7 @@ Preloader Area CSS
   color: var(--mainColor);
 }
 
-.password-competing form .form-group i{
+.password-competing form .form-group i {
   left: 0;
   top: 11px;
 }
@@ -16524,7 +16529,7 @@ Preloader Area CSS
   top: 40px;
 }
 
-.my-profile-box.change-password input{
+.my-profile-box.change-password input {
   padding: 0 0 0 42px;
 }
 
@@ -16618,6 +16623,12 @@ Preloader Area CSS
 }
 
 .form-control[readonly],
-.form-control[disabled]{
-  background-color: #d6d6d6 !important;
+.form-control[disabled] {
+  background-color: #dddddd !important;
+  color: #555555 !important;
+}
+
+.profile-phone-error{
+  margin-top: -22px;
+  padding: 0;
 }

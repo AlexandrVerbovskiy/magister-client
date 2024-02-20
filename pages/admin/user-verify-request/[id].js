@@ -12,7 +12,8 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
-import env from "../../../env"
+import env from "../../../env";
+import ErrorSpan from "../../../components/admin/ErrorSpan";
 
 const UserVerifyRequest = ({ info }) => {
   const { error, success, authToken } = useContext(IndiceContext);
@@ -145,11 +146,7 @@ const UserVerifyRequest = ({ info }) => {
                   value={declineDescription}
                   onChange={handleInputDeclineDescription}
                 />
-                {declineDescriptionError && (
-                  <div className="text-red-500 text-sm">
-                    {declineDescriptionError}
-                  </div>
-                )}
+                <ErrorSpan error={declineDescriptionError} />
               </div>
 
               <div className="flex flex-wrap justify-end space-x-2">

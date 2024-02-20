@@ -1,5 +1,6 @@
 import { useState } from "react";
 import env from "../../env";
+import ErrorSpan from "../ErrorSpan";
 
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
@@ -45,11 +46,8 @@ const ImageInput = ({
           <i className="bx bx-upload"></i> {btnText}
         </label>
       </div>
-      {error && (
-        <div className="invalid-feedback d-block mt-0 position-absolute">
-          {error}
-        </div>
-      )}
+
+      <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
     </div>
   );
 };

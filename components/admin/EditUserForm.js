@@ -13,7 +13,13 @@ import ModalBlank from "./ModalBlank";
 import ImageInput from "./Form/ImageInput";
 import Input from "./Form/Input";
 import Textarea from "./Form/Textarea";
-import { getFilePath, validateEmail, validatePhoneNumber, validateUrl } from "../../utils";
+import {
+  getFilePath,
+  validateEmail,
+  validatePhoneNumber,
+  validateUrl,
+} from "../../utils";
+import ErrorSpan from "./ErrorSpan";
 
 const roleOptions = [
   { value: "user", title: "User", default: true },
@@ -346,9 +352,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           offText="Not verified"
                         />
                       </div>
-                      {emailError && (
-                        <div className="text-red-500 text-sm">{emailError}</div>
-                      )}
+                      <ErrorSpan error={emailError} />
                     </section>
 
                     <section>
@@ -374,9 +378,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           offText="Not verified"
                         />
                       </div>
-                      {phoneError && (
-                        <div className="text-red-500 text-sm">{phoneError}</div>
-                      )}
+                      <ErrorSpan error={phoneError} />
                     </section>
 
                     <section>
@@ -499,7 +501,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           </label>
                         </div>
                         <Switch
-                          id="active"
+                          id="verified"
                           checked={verified}
                           changeChecked={() => setVerified(!verified)}
                           onText="Verified"
