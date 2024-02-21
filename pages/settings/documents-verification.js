@@ -290,7 +290,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
               <form method="get">
                 <div className="row" style={{ alignItems: "flex-end" }}>
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Proof of Address"
                       photoUrl={proofOfAddressLink}
@@ -300,7 +300,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Reputable Bank Id"
                       photoUrl={reputableBankIdLink}
@@ -310,7 +310,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Utility"
                       photoUrl={utilityLink}
@@ -320,7 +320,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="HMRC"
                       photoUrl={hmrcLink}
@@ -330,7 +330,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Council Tax Bill"
                       photoUrl={councilTaxBillLink}
@@ -340,7 +340,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Passport Or Driving Id"
                       photoUrl={passportOrDrivingIdLink}
@@ -350,7 +350,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Confirm Money Laundering Check And Compliance"
                       photoUrl={confirmMoneyLaunderingChecksAndComplianceLink}

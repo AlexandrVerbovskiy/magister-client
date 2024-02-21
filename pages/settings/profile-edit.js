@@ -576,7 +576,6 @@ const ProfileEdit = () => {
           <div className="row">
             <div className="col-12">
               {profileFormSection}
-              {securityFormSection}
             </div>
           </div>
         )}

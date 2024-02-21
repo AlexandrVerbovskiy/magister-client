@@ -569,7 +569,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <div className="mr-2">
                           <label
                             className="block text-sm font-medium mb-1"
-                            htmlFor="active"
+                            htmlFor="verified"
                           >
                             Verified by checking the box, unverified by leaving
                             it unchecked.

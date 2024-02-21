@@ -60,7 +60,6 @@ const UsersTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {users.map((user) => {
-                console.log(user)
                 return <TableItem
                     key={user.id}
                     {...user}
