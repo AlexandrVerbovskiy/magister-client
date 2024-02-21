@@ -59,23 +59,24 @@ const UsersTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {users.map((user) => (
-                <TableItem
-                  key={user.id}
-                  {...user}
-                  onChangeRole={(role) =>
-                    handleSetRole(user.id, user.name, role)
-                  }
-                  onChangeActive={() => handleChangeActive(user.id, user.name)}
-                  onDeleteClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteModal(user.id, user.name);
-                  }}
-                  onChangeVerified={() =>
-                    handleChangeVerified(user.id, user.name)
-                  }
+              {users.map((user) => {
+                console.log(user)
+                return <TableItem
+                    key={user.id}
+                    {...user}
+                    onChangeRole={(role) =>
+                        handleSetRole(user.id, user.name, role)
+                    }
+                    onChangeActive={() => handleChangeActive(user.id, user.name)}
+                    onDeleteClick={(e) => {
+                      e.stopPropagation();
+                      openDeleteModal(user.id, user.name);
+                    }}
+                    onChangeVerified={() =>
+                        handleChangeVerified(user.id, user.name)
+                    }
                 />
-              ))}
+              })}
             </tbody>
           </table>
         </div>

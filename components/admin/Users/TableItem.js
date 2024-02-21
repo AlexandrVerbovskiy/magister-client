@@ -150,7 +150,7 @@ const TableItem = ({
           </Link>
         )}
 
-        {(isCurrent || role === "admin" || isAdmin) && (
+        {(isCurrent || role === "admin" || !isAdmin) && (
           <div className="text-left">{name}</div>
         )}
       </td>
@@ -185,7 +185,7 @@ const TableItem = ({
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
-          {(isCurrent || !isAdmin) && role === "admin" && (
+          {(isCurrent || !isAdmin || role === "admin") && (
             <span>
               <RoleSpan role={role} onClick={handleRoleClick} />
             </span>
