@@ -16514,7 +16514,7 @@ Preloader Area CSS
   color: var(--mainColor);
 }
 
-.password-competing form .form-group i {
+.password-reset form .form-group i {
   left: 0;
   top: 11px;
 }
