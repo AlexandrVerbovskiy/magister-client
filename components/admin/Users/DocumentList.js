@@ -6,15 +6,12 @@ const DocumentView = ({ label, url }) => {
   const imgSrc = url ? getFilePath(url) : defaultLink;
 
   return (
-    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end">
+    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end document-view">
       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
         {label}
       </h2>
 
-      <div
-        className="form-group profile-box mt-2"
-        style={{ maxWidth: "300px" }}
-      >
+      <div className="form-group profile-box mt-2">
         <img src={imgSrc} alt="image" width="300px" height="300px" />
       </div>
     </div>
@@ -23,7 +20,7 @@ const DocumentView = ({ label, url }) => {
 
 const DocumentList = (documents) => {
   return (
-    <div className="flex flex-row flex-wrap items-end p-6 space-y-6">
+    <div className="flex flex-row flex-wrap p-6 space-y-6">
       <DocumentView
         url={documents.proofOfAddressLink}
         label="Proof of Address"

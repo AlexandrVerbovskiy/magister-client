@@ -189,8 +189,6 @@ export const getServerSideProps = async (context) => {
       baseSideProps.props.authToken
     );
 
-    console.log(info);
-
     return {
       props: { ...baseSideProps.props, info },
     };

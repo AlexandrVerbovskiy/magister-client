@@ -31,28 +31,30 @@ const ImageInput = ({
     <div className="form-group profile-box">
       {label && <label>{label}</label>}
 
-      <img
-        src={photoUrl ?? defaultUrl}
-        alt="image"
-        width="300px"
-        height="300px"
-      />
-      <div className="file-upload">
-        <input
-          type="file"
-          id={name}
-          name={name}
-          style={{ display: "none" }}
-          accept="image/*"
-          className="inputfile"
-          onChange={handleChange}
+      <div className="image-box">
+        <img
+          src={photoUrl ?? defaultUrl}
+          alt="image"
+          width="300px"
+          height="300px"
         />
+        <div className="file-upload">
+          <input
+            type="file"
+            id={name}
+            name={name}
+            style={{ display: "none" }}
+            accept="image/*"
+            className="inputfile"
+            onChange={handleChange}
+          />
 
-        {!disabled && (
-          <label htmlFor={name}>
-            <i className="bx bx-upload"></i> {btnText}
-          </label>
-        )}
+          {!disabled && (
+            <label htmlFor={name}>
+              <i className="bx bx-upload"></i> {btnText}
+            </label>
+          )}
+        </div>
       </div>
 
       <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
