@@ -115,18 +115,35 @@ Preloader Area CSS
   animation-delay: -0.8s;
 }
 
-/*.document-view {
+.document-view {
   display: flex;
   justify-content: space-between;
   margin-top: 0 !important;
 }
 
+.document-view h2{
+  height: 55px;
+  display: flex !important;
+  align-items: flex-end;
+  box-sizing: border-box;
+}
+
 .document-view .profile-box {
-  height: 100%;
+  height: calc(100% - 55px);
   display: flex;
   max-width: 300px;
   max-height: 300px;
-}*/
+}
+
+.document-view .image-box {
+  width: 100%;
+  display: flex;
+  max-width: 300px;
+  max-height: 300px;
+  position: relative;
+  align-items: center;
+  background-color: #f8f8f8;
+}
 
 @keyframes preloader {
   0% {

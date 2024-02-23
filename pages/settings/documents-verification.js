@@ -12,7 +12,6 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
-import env from "../../env";
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
@@ -289,7 +288,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
               )}
 
               <form method="get">
-                <div className="row" style={{ alignItems: "flex-end" }}>
+                <div className="row">
                   <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Proof of Address"
@@ -363,7 +362,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                   </div>
 
                   {formError && (
-                    <div className="col-lg-12 col-md-12">
+                    <div className="col-lg-12 col-md-12 mb-2">
                       <div
                         className="alert-dismissible fade show alert alert-danger"
                         role="alert"
@@ -375,7 +374,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
                   {!user.verified && (
                     <div className="col-12">
-                      <div className="form-group d-flex gap-2 justify-content-between mt-2">
+                      <div className="form-group d-flex gap-2 justify-content-between">
                         <button
                           type="button"
                           style={{ width: "300px" }}

@@ -14,6 +14,8 @@ const ImageInput = ({
   disabled = false,
 }) => {
   const [error, setError] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   if (!defaultUrl) defaultUrl = defaultPhotoLink;
 
   const handleChange = (e) => {
@@ -27,6 +29,12 @@ const ImageInput = ({
     }
   };
 
+  const closeImagePopup = (event) => {
+    if (!event.target.matches(".modal-content img")) {
+      setIsPopupOpen(false);
+    }
+  };
+
   return (
     <div className="form-group profile-box">
       {label && <label>{label}</label>}
@@ -37,6 +45,8 @@ const ImageInput = ({
           alt="image"
           width="300px"
           height="300px"
+          style={{ cursor: disabled ? "zoom-in" : "auto" }}
+          onClick={() => disabled && setIsPopupOpen(true)}
         />
         <div className="file-upload">
           <input
@@ -58,6 +68,32 @@ const ImageInput = ({
       </div>
 
       <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
+
+      {isPopupOpen && (
+        <div className="view-picture-parent bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div
+            className="modal fade show"
+            style={{ display: "block" }}
+            tabIndex="-1"
+            onClick={closeImagePopup}
+          >
+            <div
+              className="modal-dialog modal-dialog-centered modal-xl"
+              style={{ maxWidth: "42rem" }}
+            >
+              <div className="modal-content">
+                <div className="modal-body">
+                  <img
+                    src={photoUrl ?? defaultUrl}
+                    alt="image"
+                    className="img-fluid"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
