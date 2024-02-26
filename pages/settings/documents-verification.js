@@ -12,15 +12,17 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
-import env from "../../env";
 
 const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading, authToken } = useContext(IndiceContext);
+  const { success, setLoading, user, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
   const [lastDeclineDescription, setLastDeclineDescription] = useState(
     lastAnswerDescription
   );
+
+  const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
+  const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
 
   const [newProofOfAddress, setNewProofOfAddress] = useState(null);
   const [proofOfAddressLink, setProofOfAddressLink] = useState(null);
@@ -151,9 +153,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
     }
   };
 
-  const handleSaveClick = async () => {
-    setFormError(null);
-
+  const dataToSave = () => {
     const formData = new FormData();
 
     let hasUpdates = false;
@@ -196,11 +196,24 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
       hasUpdates = true;
     }
 
-    if (hasUpdates) {
+    return hasUpdates ? formData : null;
+  };
+
+  const handleSaveClick = async () => {
+    if (saveDocumentsDisabled) return;
+
+    setSaveDocumentsDisabled(true);
+    setFormError(null);
+
+    const formData = dataToSave();
+
+    if (formData) {
       try {
         await saveMyDocuments(formData, authToken);
       } catch (e) {
         setFormError(e);
+      } finally {
+        setSaveDocumentsDisabled(false);
       }
     }
 
@@ -208,12 +221,27 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   };
 
   const handleSendRequestToVerify = async () => {
+    if (saveDocumentsDisabled || sendRequestDisabled) return;
+
+    setSaveDocumentsDisabled(true);
+    setSendRequestDisabled(true);
+    setFormError(null);
+
     try {
+      const formData = dataToSave();
+
+      if (formData) {
+        await saveMyDocuments(formData, authToken);
+      }
+
       const message = await userVerifyRequestCreate(authToken);
       success.set(message);
       setActiveSendRequestBtn(false);
     } catch (e) {
       setFormError(e);
+    } finally {
+      setSaveDocumentsDisabled(false);
+      setSendRequestDisabled(false);
     }
   };
 
@@ -260,62 +288,68 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
               )}
 
               <form method="get">
-                <div className="row" style={{ alignItems: "flex-end" }}>
-                  <div className="col-12 col-lg-3 col-md-4">
+                <div className="row">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Proof of Address"
                       photoUrl={proofOfAddressLink}
                       onChange={handleProofOfAddressChange}
                       name="proofOfAddressLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Reputable Bank Id"
                       photoUrl={reputableBankIdLink}
                       onChange={handleReputableBankIdChange}
                       name="reputableBankIdLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Utility"
                       photoUrl={utilityLink}
                       onChange={handleUtilityChange}
                       name="utilityLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="HMRC"
                       photoUrl={hmrcLink}
                       onChange={handleHmrcChange}
                       name="hmrcLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Council Tax Bill"
                       photoUrl={councilTaxBillLink}
                       onChange={handleCouncilTaxBillChange}
                       name="councilTaxBillLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Passport Or Driving Id"
                       photoUrl={passportOrDrivingIdLink}
                       onChange={handlePassportOrDrivingIdChange}
                       name="passportOrDrivingIdLink"
+                      disabled={user.verified}
                     />
                   </div>
 
-                  <div className="col-12 col-lg-3 col-md-4">
+                  <div className="col-12 col-lg-3 col-md-4 document-view">
                     <ImageInput
                       label="Confirm Money Laundering Check And Compliance"
                       photoUrl={confirmMoneyLaunderingChecksAndComplianceLink}
@@ -323,11 +357,12 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                         handleConfirmMoneyLaunderingChecksAndComplianceChange
                       }
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
+                      disabled={user.verified}
                     />
                   </div>
 
                   {formError && (
-                    <div className="col-lg-12 col-md-12">
+                    <div className="col-lg-12 col-md-12 mb-2">
                       <div
                         className="alert-dismissible fade show alert alert-danger"
                         role="alert"
@@ -337,27 +372,31 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     </div>
                   )}
 
-                  <div className="col-12">
-                    <div className="form-group d-flex gap-2 justify-content-between mt-2">
-                      <button
-                        type="button"
-                        style={{ width: "300px" }}
-                        onClick={handleSaveClick}
-                      >
-                        Save Changes
-                      </button>
-
-                      {activeSendRequestBtn && (
+                  {!user.verified && (
+                    <div className="col-12">
+                      <div className="form-group d-flex gap-2 justify-content-between">
                         <button
                           type="button"
                           style={{ width: "300px" }}
-                          onClick={handleSendRequestToVerify}
+                          onClick={handleSaveClick}
+                          disabled={saveDocumentsDisabled}
                         >
-                          Send Request To Verify
+                          Save Changes
                         </button>
-                      )}
+
+                        {activeSendRequestBtn && (
+                          <button
+                            type="button"
+                            style={{ width: "300px" }}
+                            onClick={handleSendRequestToVerify}
+                            disabled={sendRequestDisabled}
+                          >
+                            Send Request To Verify
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </form>
             </div>
@@ -374,7 +413,7 @@ export const getServerSideProps = async (context) => {
 
   try {
     const docs = await getMyDocuments(baseSideProps.props.authToken);
-    const { canSend, lastAnswerDescription } = await canSendVerifyRequest(
+    let { canSend, lastAnswerDescription } = await canSendVerifyRequest(
       baseSideProps.props.authToken
     );
 

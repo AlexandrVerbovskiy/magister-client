@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../../contexts";
+import Tooltip from "../../../components/admin/Tooltip";
+import Link from "next/link";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "YES" : "NO";
@@ -47,29 +49,47 @@ const RoleSpan = ({ role, onClick = () => {} }) => {
 };
 
 const EmailSpan = ({ email, verified }) => {
-  let className = "text-left";
+  let className = "text-left cursor-pointer";
+  let tooltipText = "";
 
   if (verified) {
     className += " text-emerald-500";
+    tooltipText = "The user's email is verified";
   } else {
     className += " text-rose-500";
+    tooltipText = "The user's email has not been verified";
   }
 
-  return <div className={className}>{email}</div>;
+  return (
+    <Tooltip title={tooltipText}>
+      <div className={className}>{email}</div>
+    </Tooltip>
+  );
 };
 
 const PhoneSpan = ({ phone, verified }) => {
-  let className = "text-left";
+  if (!phone) {
+    return <div className="text-left">-</div>;
+  }
+
+  let className = "text-left cursor-pointer";
+  let tooltipText = "";
 
   if (phone) {
     if (verified) {
       className += " text-emerald-500";
+      tooltipText = "The user's phone is verified";
     } else {
       className += " text-rose-500";
+      tooltipText = "The user's phone has not been verified";
     }
   }
 
-  return <div className="text-left">{phone ?? "-"}</div>;
+  return (
+    <Tooltip title={tooltipText}>
+      <div className={className}>{phone}</div>
+    </Tooltip>
+  );
 };
 
 const TableItem = ({
@@ -91,6 +111,7 @@ const TableItem = ({
   const [rolePopupActive, setRolePopupActive] = useState(false);
 
   const handleRoleClick = () => {
+    if (isCurrent || role === "admin") return;
     setRolePopupActive(true);
   };
 
@@ -105,15 +126,15 @@ const TableItem = ({
     setRolePopupActive(false);
   };
 
-  const isCurrent = currentUser.id == id;
+  const isCurrent = currentUser?.id == id;
 
   const handleChangeActive = () => {
-    if (isCurrent) return;
+    if (isCurrent || role === "admin") return;
     onChangeActive();
   };
 
   const handleChangeVerified = () => {
-    if (isCurrent) return;
+    if (isCurrent || role === "admin") return;
     onChangeVerified();
   };
 
@@ -123,7 +144,15 @@ const TableItem = ({
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <div className="text-left">{name}</div>
+        {!isCurrent && role !== "admin" && isAdmin && (
+          <Link href={`/admin/user-edit/${id}`}>
+            <div className="text-left">{name}</div>
+          </Link>
+        )}
+
+        {(isCurrent || role === "admin" || !isAdmin) && (
+          <div className="text-left">{name}</div>
+        )}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <EmailSpan email={email} verified={emailVerified} />
@@ -137,7 +166,7 @@ const TableItem = ({
           <ActiveSpan
             active={verified}
             onClick={handleChangeVerified}
-            clickable={!isCurrent}
+            clickable={!isCurrent && role !== "admin"}
           />
         </div>
       </td>
@@ -148,7 +177,7 @@ const TableItem = ({
             <ActiveSpan
               active={active}
               onClick={handleChangeActive}
-              clickable={!isCurrent}
+              clickable={!isCurrent && role !== "admin"}
             />
           </div>
         </td>
@@ -156,13 +185,13 @@ const TableItem = ({
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="text-left">
-          {(isCurrent || !isAdmin) && (
+          {(isCurrent || !isAdmin || role === "admin") && (
             <span>
               <RoleSpan role={role} onClick={handleRoleClick} />
             </span>
           )}
 
-          {!isCurrent && isAdmin && (
+          {!isCurrent && isAdmin && role !== "admin" && (
             <span className="cursor-pointer">
               <RoleSpan role={role} onClick={handleRoleClick} />
               <div
@@ -172,7 +201,6 @@ const TableItem = ({
               >
                 <RoleSpan role="user" onClick={handleSelectRole} />
                 <RoleSpan role="support" onClick={handleSelectRole} />
-                <RoleSpan role="admin" onClick={handleSelectRole} />
               </div>
 
               {rolePopupActive && (
@@ -184,9 +212,9 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
-          {!isCurrent && (
+          {!isCurrent && role !== "admin" && (
             <div className="mr-1.5 flex items-center">
-              <a
+              <Link
                 href={`/admin/user-documents/${id}`}
                 className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
               >
@@ -207,24 +235,24 @@ const TableItem = ({
                   <path d="M9 12h6" />
                   <path d="M9 16h6" />
                 </svg>
-              </a>
+              </Link>
             </div>
           )}
 
-          {!isCurrent && isAdmin && (
+          {!isCurrent && role !== "admin" && isAdmin && (
             <div className="mr-1.5">
-              <a
+              <Link
                 href={`/admin/user-edit/${id}`}
                 className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
               >
                 <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
                   <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                 </svg>
-              </a>
+              </Link>
             </div>
           )}
 
-          {!isCurrent && isAdmin && (
+          {!isCurrent && role !== "admin" && isAdmin && (
             <button
               type="button"
               aria-controls="danger-modal"

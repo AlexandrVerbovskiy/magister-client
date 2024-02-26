@@ -12,7 +12,8 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
-import env from "../../../env"
+import env from "../../../env";
+import ErrorSpan from "../../../components/admin/ErrorSpan";
 
 const UserVerifyRequest = ({ info }) => {
   const { error, success, authToken } = useContext(IndiceContext);
@@ -32,7 +33,7 @@ const UserVerifyRequest = ({ info }) => {
 
   const handleBaseVerifyChangeClick = async (verified, description = null) => {
     try {
-      await userVerifyRequestUpdate({ id, verified, description });
+      await userVerifyRequestUpdate({ id, verified, description }, authToken);
       const message = verified
         ? "Verified successfully"
         : "Declined successfully";
@@ -145,11 +146,7 @@ const UserVerifyRequest = ({ info }) => {
                   value={declineDescription}
                   onChange={handleInputDeclineDescription}
                 />
-                {declineDescriptionError && (
-                  <div className="text-red-500 text-sm">
-                    {declineDescriptionError}
-                  </div>
-                )}
+                <ErrorSpan error={declineDescriptionError} />
               </div>
 
               <div className="flex flex-wrap justify-end space-x-2">
@@ -186,9 +183,12 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const info = await getUserVerifyRequestById(id, baseSideProps.props.authToken);
-
   try {
+    const info = await getUserVerifyRequestById(
+      id,
+      baseSideProps.props.authToken
+    );
+
     return {
       props: { ...baseSideProps.props, info },
     };

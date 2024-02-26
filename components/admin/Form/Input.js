@@ -1,3 +1,5 @@
+import ErrorSpan from "../ErrorSpan";
+
 const Input = ({
   label = null,
   value,
@@ -23,7 +25,7 @@ const Input = ({
         placeholder={placeholder}
         onInput={handleInput}
       />
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      <ErrorSpan error={error} />
     </>
   );
 };

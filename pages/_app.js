@@ -7,69 +7,58 @@ import Loader from "../components/Shared/Loader";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
-import "../styles/admin/index.css";
+import "../styles/index.css";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
-  const adminLinks = useRef([]);
+  const stylesRef = useRef({ base: [], admin: [] });
+  const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
-  const loadStyles = () => [
-    `<link rel="stylesheet" href="/css/base/bootstrap.min.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/animate.min.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/style.css"></link>`,
-  ];
+  const importStyle = async (importFunc, key) => {
+    stylesRef.current[key].forEach((elem) =>
+      document.querySelector("head").append(elem)
+    );
 
-  const baseStyles = () => [
-    `<link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-  />`,
-    `<link rel="stylesheet" href="/css/base/bootstrap.min.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/animate.min.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/boxicons.min.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/flaticon.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/swiper.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/swiper-bundle.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/style.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/responsive.css"></link>`,
-    `<link rel="stylesheet" href="/css/base/rtl.css"></link>`,
-  ];
+    if (!loadedRef.current[key]) {
+      loadedRef.current[key] = true;
+      await importFunc();
 
-  const adminStyles = () => adminLinks.current;
+      document
+        .querySelectorAll("head style, head link")
+        .forEach((elem) => stylesRef.current[key].push(elem.cloneNode(true)));
+    }
+  };
 
   const onChangeType = async () => {
     onStart();
 
     if (isFirstCall.current) {
+      isFirstCall.current = false;
+
       document
         .querySelectorAll("head style, head link")
-        .forEach((elem, index) => adminLinks.current.push(elem.outerHTML));
+        .forEach((elem, index) => {
+          if (
+            !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
+            !elem.hasAttribute("data-n-p")
+          ) {
+            stylesRef.current["base"].push(elem.cloneNode(true));
+          }
+        });
     }
 
-    if (!isFirstCall.current || type != "admin") {
-      document
-        .querySelectorAll("head style, head link")
-        .forEach((elem) => elem.remove());
-    }
-
-    let linksToAdd = [];
+    document.querySelectorAll("head style, head link").forEach((elem) => {
+      elem.remove();
+    });
 
     if (type == "admin") {
-      if (!isFirstCall.current) {
-        linksToAdd = adminStyles();
-      }
+      await importStyle(() => import(`../styles/admin/index.css`), "admin");
+    } else {
+      await importStyle(() => import(`../styles/index.css`), "base");
     }
 
-    if (type != "admin") {
-      linksToAdd = baseStyles();
-    }
-
-    linksToAdd.forEach((link) =>
-      document.querySelector("head").insertAdjacentHTML("beforeend", link)
-    );
-
-    isFirstCall.current = false;
-    setTimeout(onEnd, 10);
+    console.log("end")
+    onEnd();
   };
 
   useEffect(() => {

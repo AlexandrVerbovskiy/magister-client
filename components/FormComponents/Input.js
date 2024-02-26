@@ -1,3 +1,5 @@
+import ErrorSpan from "../ErrorSpan";
+
 const Input = ({ type = "text", value, placeholder, error, onInput }) => (
   <div className="form-group">
     <input
@@ -7,7 +9,8 @@ const Input = ({ type = "text", value, placeholder, error, onInput }) => (
       value={value}
       onInput={onInput}
     />
-    {error && <div className="invalid-feedback">{error}</div>}
+    
+    <ErrorSpan error={error}/>
   </div>
 );
 

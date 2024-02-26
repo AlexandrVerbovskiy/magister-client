@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
@@ -11,11 +11,10 @@ import {
   changeTwoFactorAuth,
   noNeedRegularViewInfoForm,
 } from "../../services";
-import ImageInput from "../../components/DashboardComponents/ImageInput";
-import Input from "../../components/DashboardComponents/Input";
-import Textarea from "../../components/DashboardComponents/Textarea";
 import {
   getFilePath,
+  validateSmallText,
+  validateBigText,
   validatePassword,
   validatePhoneNumber,
   validateUrl,
@@ -24,6 +23,11 @@ import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
 import Link from "next/link";
 import { authSideProps } from "../../middlewares";
+import {
+  PasswordSection,
+  ProfileSection,
+  SecuritySection,
+} from "../../components/ProfileEdit";
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
@@ -68,6 +72,10 @@ const ProfileEdit = () => {
   const [contactDetails, setContactDetails] = useState("");
   const [briefBio, setBriefBio] = useState("");
   const [placeWork, setPlaceWork] = useState("");
+
+  const [contactDetailsError, setContactDetailsError] = useState(null);
+  const [briefBioError, setBriefBioError] = useState(null);
+  const [placeWorkError, setPlaceWorkError] = useState(null);
 
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [facebookUrl, setFacebookUrl] = useState("");
@@ -177,6 +185,13 @@ const ProfileEdit = () => {
       hasError = true;
     }
 
+    const resNameValidation = validateSmallText(name);
+
+    if (resNameValidation !== true) {
+      setNameError(resNameValidation);
+      hasError = true;
+    }
+
     const resValidatePhone = validatePhoneNumber(phone);
 
     if (phone && resValidatePhone !== true) {
@@ -209,6 +224,27 @@ const ProfileEdit = () => {
 
     if (twitterUrl && resValidateTwitterLink !== true) {
       setTwitterUrlError(resValidateTwitterLink);
+      hasError = true;
+    }
+
+    const resBriefBioValidation = validateBigText(briefBio);
+
+    if (resBriefBioValidation !== true) {
+      setBriefBioError(resBriefBioValidation);
+      hasError = true;
+    }
+
+    const resContactDetailsValidation = validateBigText(contactDetails);
+
+    if (resContactDetailsValidation !== true) {
+      setContactDetailsError(resContactDetailsValidation);
+      hasError = true;
+    }
+
+    const resPlaceWorkValidation = validateBigText(placeWork);
+
+    if (resPlaceWorkValidation !== true) {
+      setPlaceWorkError(resPlaceWorkValidation);
       hasError = true;
     }
 
@@ -381,6 +417,86 @@ const ProfileEdit = () => {
 
   if (!user) return <></>;
 
+  const profileFormSection = (
+    <ProfileSection
+      formInfo={{
+        photoUrl,
+        handlePhotoChange,
+        name,
+        setName,
+        nameError,
+        setNameError,
+        user,
+        phone,
+        setPhone,
+        setPhoneError,
+        handleVerifyPhoneClick,
+        phoneError,
+        briefBio,
+        setBriefBio,
+        contactDetails,
+        setContactDetails,
+        placeWork,
+        setPlaceWork,
+        facebookUrl,
+        setFacebookUrl,
+        facebookUrlError,
+        setFacebookUrlError,
+        twitterUrl,
+        setTwitterUrl,
+        twitterUrlError,
+        setTwitterUrlError,
+        linkedinUrl,
+        setLinkedinUrl,
+        linkedinUrlError,
+        setLinkedinUrlError,
+        instagramUrl,
+        setInstagramUrl,
+        instagramUrlError,
+        setInstagramUrlError,
+        profileFormError,
+        handleProfileSaveClick,
+        contactDetailsError,
+        setContactDetailsError,
+        briefBioError,
+        setBriefBioError,
+        placeWorkError,
+        setPlaceWorkError,
+      }}
+    />
+  );
+
+  const passwordFormSection = (
+    <PasswordSection
+      formInfo={{
+        currentPassword,
+        currentPasswordType,
+        setCurrentPassword,
+        currentPasswordError,
+        setCurrentPasswordError,
+        handleChangeCurrentPasswordType,
+        password,
+        passwordType,
+        setPassword,
+        passwordError,
+        setPasswordError,
+        handleChangePasswordType,
+        confirmPassword,
+        confirmPasswordType,
+        setConfirmPassword,
+        confirmPasswordError,
+        setConfirmPasswordError,
+        handleChangeConfirmPasswordType,
+        passwordFormError,
+        handleChangePassword,
+      }}
+    />
+  );
+
+  const securityFormSection = (
+    <SecuritySection formInfo={{ handleTwoFactorAuthChange, user }} />
+  );
+
   return (
     <>
       <YesNoModal
@@ -445,298 +561,24 @@ const ProfileEdit = () => {
           </ol>
         </div>
 
-        <div className="row">
-          <div className="col-lg-6 col-md-12">
-            <div className="my-profile-box">
-              <h3>Profile Details</h3>
+        {user.hasPasswordAccess && (
+          <div className="row">
+            <div className="col-lg-6 col-md-12">{profileFormSection}</div>
 
-              <form method="get">
-                <div className="row">
-                  <div className="col-lg-12 col-md-12">
-                    <ImageInput
-                      photoUrl={photoUrl}
-                      onChange={handlePhotoChange}
-                    />
-                  </div>
-
-                  <div className="col-lg-6 col-md-12">
-                    <Input
-                      label="Your Name"
-                      value={name}
-                      type="text"
-                      setValue={setName}
-                      error={nameError}
-                      setError={setNameError}
-                    />
-                  </div>
-
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Email</label>
-                      <input
-                        type="email"
-                        className="form-control"
-                        value={user.email}
-                        readOnly={true}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="row pe-0 edit-profile-phone-row">
-                    <div className="order-1 order-xl-1 col-xl-6 col-lg-12 col-md-12 p-0 phone-input">
-                      <Input
-                        label="Phone"
-                        value={phone}
-                        type="text"
-                        setValue={setPhone}
-                        setError={setPhoneError}
-                      />
-                    </div>
-
-                    {(phone != user.phone || !user.phoneVerified) && (
-                      <div className="order-3 order-xl-2 col-xl-6 col-lg-12 col-md-12 p-0 phone-verify">
-                        <div className="form-group">
-                          <label
-                            className="d-none d-xl-block"
-                            style={{ color: "transparent" }}
-                          >
-                            Verify Phone
-                          </label>
-                          <button
-                            type="button"
-                            onClick={handleVerifyPhoneClick}
-                          >
-                            Verify Phone
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {phoneError && (
-                      <div
-                        className="order-2 order-xl-3 invalid-feedback d-block"
-                        style={{ marginTop: "-14px", padding: "0" }}
-                      >
-                        {phoneError}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="col-lg-12 col-md-12">
-                    <Textarea
-                      label="Bio"
-                      rows="6"
-                      placeholder="Short description about you..."
-                      value={briefBio}
-                      setValue={setBriefBio}
-                    />
-                  </div>
-
-                  <div className="col-lg-12 col-md-12">
-                    <Textarea
-                      label="Contact Details"
-                      rows="3"
-                      placeholder="Short contact info about you..."
-                      value={contactDetails}
-                      setValue={setContactDetails}
-                    />
-                  </div>
-
-                  <div className="col-lg-12 col-md-12">
-                    <Textarea
-                      label="Place Work"
-                      rows="3"
-                      placeholder="Short info about you work..."
-                      value={placeWork}
-                      setValue={setPlaceWork}
-                    />
-                  </div>
-
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <Input
-                      label="Facebook URL"
-                      value={facebookUrl}
-                      type="text"
-                      setValue={setFacebookUrl}
-                      placeholder="https://www.facebook.com/"
-                      error={facebookUrlError}
-                      setError={setFacebookUrlError}
-                    />
-                  </div>
-
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <Input
-                      label="Twitter URL"
-                      value={twitterUrl}
-                      type="text"
-                      setValue={setTwitterUrl}
-                      placeholder="https://twitter.com/"
-                      error={twitterUrlError}
-                      setError={setTwitterUrlError}
-                    />
-                  </div>
-
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <Input
-                      label="Linkedin URL"
-                      value={linkedinUrl}
-                      type="text"
-                      setValue={setLinkedinUrl}
-                      placeholder="https://www.linkedin.com/"
-                      error={linkedinUrlError}
-                      setError={setLinkedinUrlError}
-                    />
-                  </div>
-
-                  <div className="col-xl-6 col-lg-12 col-md-12">
-                    <Input
-                      label="Instagram URL"
-                      value={instagramUrl}
-                      type="text"
-                      setValue={setInstagramUrl}
-                      placeholder="https://instagram.com/"
-                      error={instagramUrlError}
-                      setError={setInstagramUrlError}
-                    />
-                  </div>
-
-                  {profileFormError && (
-                    <div className="col-lg-12 col-md-12">
-                      <div
-                        className="alert-dismissible fade show alert alert-danger"
-                        role="alert"
-                      >
-                        {profileFormError}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <button type="button" onClick={handleProfileSaveClick}>
-                        Save Change
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </form>
+            <div className="col-lg-6 col-md-12">
+              {securityFormSection}
+              {passwordFormSection}
             </div>
           </div>
+        )}
 
-          <div className="col-lg-6 col-md-12">
-            <div className="add-listings-box">
-              <h3>Security</h3>
-
-              <div
-                className="form-group"
-                style={{ marginBottom: 0, paddingBottom: "25px" }}
-              >
-                <div className="sidebar-widgets">
-                  <div className="box">
-                    <span className="title">Two-factor authorization</span>
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={user.twoFactorAuthentication}
-                        onChange={handleTwoFactorAuthChange}
-                      />
-                      <span></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+        {!user.hasPasswordAccess && (
+          <div className="row">
+            <div className="col-12">
+              {profileFormSection}
             </div>
-
-            {user.hasPasswordAccess && (
-              <div className="my-profile-box change-password">
-                <h3>Change Password</h3>
-
-                <form method="get">
-                  <div className="row">
-                    <div className="col-lg-12 col-md-12">
-                      <Input
-                        label="Current Password"
-                        value={currentPassword}
-                        type={currentPasswordType}
-                        setValue={setCurrentPassword}
-                        error={currentPasswordError}
-                        setError={setCurrentPasswordError}
-                      >
-                        <i
-                          className={`bx ${
-                            currentPasswordType == "password"
-                              ? "bx-lock"
-                              : "bx-lock-open"
-                          } cursor-pointer`}
-                          onClick={handleChangeCurrentPasswordType}
-                        ></i>
-                      </Input>
-                    </div>
-
-                    <div className="col-lg-12 col-md-12">
-                      <Input
-                        label="New Password"
-                        value={password}
-                        type={passwordType}
-                        setValue={setPassword}
-                        error={passwordError}
-                        setError={setPasswordError}
-                      >
-                        <i
-                          className={`bx ${
-                            passwordType == "password"
-                              ? "bx-lock"
-                              : "bx-lock-open"
-                          } cursor-pointer`}
-                          onClick={handleChangePasswordType}
-                        ></i>
-                      </Input>
-                    </div>
-
-                    <div className="col-lg-12 col-md-12">
-                      <Input
-                        label="Confirm New Password"
-                        value={confirmPassword}
-                        type={confirmPasswordType}
-                        setValue={setConfirmPassword}
-                        error={confirmPasswordError}
-                        setError={setConfirmPasswordError}
-                      >
-                        <i
-                          className={`bx ${
-                            confirmPasswordType == "password"
-                              ? "bx-lock"
-                              : "bx-lock-open"
-                          } cursor-pointer`}
-                          onClick={handleChangeConfirmPasswordType}
-                        ></i>
-                      </Input>
-                    </div>
-
-                    {passwordFormError && (
-                      <div className="col-lg-12 col-md-12">
-                        <div
-                          className="alert-dismissible fade show alert alert-danger"
-                          role="alert"
-                        >
-                          {passwordFormError}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="col-lg-12 col-md-12">
-                      <div className="form-group">
-                        <button type="button" onClick={handleChangePassword}>
-                          Change Password
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            )}
           </div>
-        </div>
+        )}
       </div>
     </>
   );

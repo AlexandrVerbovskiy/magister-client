@@ -285,19 +285,28 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                               ? "text-indigo-500"
                               : "text-slate-600"
                           }`}
-                          d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z"
-                        />
+                          d="M8 1v2H3v19h18V3h-5V1h7v23H1V1z"
+                        ></path>
+                        <path
+                          className={`fill-current ${
+                            isCurrentPath("user-verify-requests/")
+                              ? "text-indigo-500"
+                              : "text-slate-600"
+                          }`}
+                          d="M1 1h22v23H1z"
+                        ></path>
                         <path
                           className={`fill-current ${
                             isCurrentPath("user-verify-requests/")
                               ? "text-indigo-300"
                               : "text-slate-400"
                           }`}
-                          d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z"
-                        />
+                          d="M15 10.586L16.414 12 11 17.414 7.586 14 9 12.586l2 2zM5 0h14v4H5z"
+                        ></path>
                       </svg>
+
                       <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                        User Verify Request
+                        User Verify Requests
                       </span>
                     </div>
                   </div>
@@ -306,78 +315,138 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
               {/* Logs */}
               {isAdmin && (
-                <li
-                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                    isCurrentPath("logs") && "bg-slate-900"
-                  }`}
-                >
-                  <Link
-                    href="/admin/logs"
-                    className={`block text-slate-200 truncate transition duration-150 ${
-                      isCurrentPath("logs")
-                        ? "hover:text-slate-200"
-                        : "hover:text-white"
+                <>
+                  <li
+                    className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                      isCurrentPath("user-event-logs") && "bg-slate-900"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="icon icon-tabler icon-tabler-device-sd-card"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="#2c3e50"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          style={{
-                            marginLeft: "-5px",
-                            marginRight: "-2px",
-                          }}
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path
-                            d="M7 21h10a2 2 0 0 0 2 -2v-14a2 2 0 0 0 -2 -2h-6.172a2 2 0 0 0 -1.414 .586l-3.828 3.828a2 2 0 0 0 -.586 1.414v10.172a2 2 0 0 0 2 2z"
-                            className={`stroke-current ${
-                              isCurrentPath("logs")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M13 6v2"
-                            className={`stroke-current ${
-                              isCurrentPath("logs")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M16 6v2"
-                            className={`stroke-current ${
-                              isCurrentPath("logs")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M10 7v1"
-                            className={`stroke-current ${
-                              isCurrentPath("logs")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                        </svg>
-                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                          Logs
-                        </span>
+                    <Link
+                      href="/admin/user-event-logs"
+                      className={`block text-slate-200 truncate transition duration-150 ${
+                        isCurrentPath("user-event-logs")
+                          ? "hover:text-slate-200"
+                          : "hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-device-sd-card"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{
+                              marginLeft: "-5px",
+                              marginRight: "-2px",
+                            }}
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                              d="M7 21h10a2 2 0 0 0 2 -2v-14a2 2 0 0 0 -2 -2h-6.172a2 2 0 0 0 -1.414 .586l-3.828 3.828a2 2 0 0 0 -.586 1.414v10.172a2 2 0 0 0 2 2z"
+                              className={`stroke-current ${
+                                isCurrentPath("user-event-logs")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M13 6v2"
+                              className={`stroke-current ${
+                                isCurrentPath("user-event-logs")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M16 6v2"
+                              className={`stroke-current ${
+                                isCurrentPath("user-event-logs")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M10 7v1"
+                              className={`stroke-current ${
+                                isCurrentPath("user-event-logs")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                          </svg>
+                          <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            User Logs
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </li>
+                    </Link>
+                  </li>
+
+                  <li
+                    className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                      isCurrentPath("settings") && "bg-slate-900"
+                    }`}
+                  >
+                    <Link
+                      href="/admin/settings"
+                      className={`block text-slate-200 truncate transition duration-150 ${
+                        isCurrentPath("settings")
+                          ? "hover:text-slate-200"
+                          : "hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-settings"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{
+                              marginLeft: "-2px",
+                              marginRight: "-5px",
+                            }}
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                              className={`stroke-current ${
+                                isCurrentPath("settings")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                              d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"
+                            />
+                            <path
+                              className={`stroke-current ${
+                                isCurrentPath("settings")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                              d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                            />
+                          </svg>
+
+                          <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            Settings
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </div>

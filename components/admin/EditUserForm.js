@@ -13,12 +13,19 @@ import ModalBlank from "./ModalBlank";
 import ImageInput from "./Form/ImageInput";
 import Input from "./Form/Input";
 import Textarea from "./Form/Textarea";
-import { getFilePath, validateEmail, validatePhoneNumber, validateUrl } from "../../utils";
+import {
+  getFilePath,
+  validateEmail,
+  validatePhoneNumber,
+  validateUrl,
+  validateSmallText,
+  validateBigText,
+} from "../../utils";
+import ErrorSpan from "./ErrorSpan";
 
 const roleOptions = [
   { value: "user", title: "User", default: true },
   { value: "support", title: "Support" },
-  { value: "admin", title: "Admin" },
 ];
 
 const EditUserForm = ({ user, save, currentTitle }) => {
@@ -46,6 +53,10 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [briefBio, setBriefBio] = useState("");
   const [placeWork, setPlaceWork] = useState("");
 
+  const [contactDetailsError, setContactDetailsError] = useState(null);
+  const [briefBioError, setBriefBioError] = useState(null);
+  const [placeWorkError, setPlaceWorkError] = useState(null);
+
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinUrlError, setLinkedinUrlError] = useState(null);
 
@@ -62,6 +73,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [active, setActive] = useState(false);
   const [verified, setVerified] = useState(false);
   const [suspicious, setSuspicious] = useState(false);
+
+  const [submitDisabled, setSubmitDisabled] = useState(false);
 
   useEffect(() => {
     if (user && user.photo) {
@@ -175,8 +188,13 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   };
 
   const handleSaveClick = async () => {
+    if (submitDisabled) return;
+
+    setSubmitDisabled(true);
+
     if (!hasChanges()) {
       success.set("User saved successfully");
+      setSubmitDisabled(false);
       return;
     }
 
@@ -184,6 +202,13 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
     if (name.length < 1) {
       setNameError("Required field");
+      hasError = true;
+    }
+
+    const resNameValidation = validateSmallText(name);
+
+    if (resNameValidation !== true) {
+      setNameError(resNameValidation);
       hasError = true;
     }
 
@@ -229,7 +254,31 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       hasError = true;
     }
 
-    if (hasError) return;
+    const resBriefBioValidation = validateBigText(briefBio);
+
+    if (resBriefBioValidation !== true) {
+      setBriefBioError(resBriefBioValidation);
+      hasError = true;
+    }
+
+    const resContactDetailsValidation = validateBigText(contactDetails);
+
+    if (resContactDetailsValidation !== true) {
+      setContactDetailsError(resContactDetailsValidation);
+      hasError = true;
+    }
+
+    const resPlaceWorkValidation = validateBigText(placeWork);
+
+    if (resPlaceWorkValidation !== true) {
+      setPlaceWorkError(resPlaceWorkValidation);
+      hasError = true;
+    }
+
+    if (hasError) {
+      setSubmitDisabled(false);
+      return;
+    }
 
     const formData = new FormData();
 
@@ -253,6 +302,34 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       }
     } catch (e) {
       error.set(e.message);
+    } finally {
+      setSubmitDisabled(false);
+    }
+  };
+
+  const handleChangeEmail = (value) => {
+    if (value.length < 1) setEmailVerified(false);
+    setEmail(value);
+  };
+
+  const handleChangePhone = (value) => {
+    if (value.length < 1) setPhoneVerified(false);
+    setPhone(value);
+  };
+
+  const handleChangePhoneVerified = (value) => {
+    if (phone.length < 1) {
+      setPhoneError("An empty phone cannot be verified");
+    } else {
+      setPhoneVerified(value);
+    }
+  };
+
+  const handleChangeEmailVerified = (value) => {
+    if (email.length < 1) {
+      setEmailError("An empty email cannot be verified");
+    } else {
+      setEmailVerified(value);
     }
   };
 
@@ -332,7 +409,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <div className="mr-2">
                           <Input
                             value={email}
-                            setValue={setEmail}
+                            setValue={handleChangeEmail}
                             setError={setEmailError}
                             label="Business Email"
                             labelClassName="sr-only"
@@ -341,14 +418,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <Switch
                           id="email-toggle"
                           checked={emailVerified}
-                          changeChecked={() => setEmailVerified(!emailVerified)}
+                          changeChecked={() =>
+                            handleChangeEmailVerified(!emailVerified)
+                          }
                           onText="Verified"
                           offText="Not verified"
                         />
                       </div>
-                      {emailError && (
-                        <div className="text-red-500 text-sm">{emailError}</div>
-                      )}
+                      <ErrorSpan error={emailError} />
                     </section>
 
                     <section>
@@ -359,7 +436,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <div className="mr-2">
                           <Input
                             value={phone}
-                            setValue={setPhone}
+                            setValue={handleChangePhone}
                             setError={setPhoneError}
                             label="Business Phone"
                             labelClassName="sr-only"
@@ -369,14 +446,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <Switch
                           id="phone-toggle"
                           checked={phoneVerified}
-                          changeChecked={() => setPhoneVerified(!phoneVerified)}
+                          changeChecked={() =>
+                            handleChangePhoneVerified(!phoneVerified)
+                          }
                           onText="Verified"
                           offText="Not verified"
                         />
                       </div>
-                      {phoneError && (
-                        <div className="text-red-500 text-sm">{phoneError}</div>
-                      )}
+                      <ErrorSpan error={phoneError} />
                     </section>
 
                     <section>
@@ -492,14 +569,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         <div className="mr-2">
                           <label
                             className="block text-sm font-medium mb-1"
-                            htmlFor="active"
+                            htmlFor="verified"
                           >
                             Verified by checking the box, unverified by leaving
                             it unchecked.
                           </label>
                         </div>
                         <Switch
-                          id="active"
+                          id="verified"
                           checked={verified}
                           changeChecked={() => setVerified(!verified)}
                           onText="Verified"
@@ -518,7 +595,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             className="block text-sm font-medium mb-1"
                             htmlFor="suspicious"
                           >
-                            Enable Two-Factor Authentication for added security.
+                            Questionable activity? Dive into Suspicious.
                           </label>
                         </div>
                         <Switch
@@ -541,7 +618,12 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <Textarea value={briefBio} setValue={setBriefBio} />
+                        <Textarea
+                          value={briefBio}
+                          setValue={setBriefBio}
+                          error={briefBioError}
+                          setError={setBriefBioError}
+                        />
                       </div>
                     </section>
 
@@ -559,6 +641,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           row="3"
                           value={contactDetails}
                           setValue={setContactDetails}
+                          error={contactDetailsError}
+                          setError={setContactDetailsError}
                         />
                       </div>
                     </section>
@@ -577,6 +661,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           value={placeWork}
                           setValue={setPlaceWork}
                           row="3"
+                          error={placeWorkError}
+                          setError={setPlaceWorkError}
                         />
                       </div>
                     </section>
@@ -594,6 +680,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           Cancel
                         </button>
                         <button
+                          disabled={submitDisabled}
                           type="button"
                           onClick={handleSaveClick}
                           className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"

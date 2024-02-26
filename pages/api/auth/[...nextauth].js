@@ -91,4 +91,11 @@ export default NextAuth({
   session: {
     maxAge: 60 * 60 * 24 * 90,
   },
+  pages: {
+    signIn: "/",
+    signOut: "/",
+    error: "/",
+    verifyRequest: "/",
+    newUser: "/",
+  },
 });

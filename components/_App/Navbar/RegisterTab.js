@@ -5,6 +5,7 @@ import { validatePassword, validateEmail } from "../../../utils";
 import { register } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
+import ErrorSpan from "../../ErrorSpan";
 
 const RegisterTab = ({ moveToLogin, closeModal }) => {
   const [formError, setFormError] = useState(null);
@@ -190,11 +191,8 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
                 <Link href="#">conditions</Link>
               </span>
             </span>
-            {acceptedTermConditionError && (
-              <div className="invalid-feedback">
-                {acceptedTermConditionError}
-              </div>
-            )}
+
+            <ErrorSpan error={acceptedTermConditionError}/>
           </div>
 
           {formError && (

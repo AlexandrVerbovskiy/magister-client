@@ -1,41 +1,27 @@
-import React, { useContext } from "react";
+import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
-import { IndiceContext } from "../../../contexts";
 
-const UsersTable = ({
-  users,
+const LogsTable = ({
+  logs,
   orderField,
   orderType,
   onClickTh,
-  openDeleteModal,
-  handleSetRole,
-  handleChangeActive,
-  handleChangeVerified,
   totalCount,
 }) => {
-  const { isAdmin } = useContext(IndiceContext);
-
   const ths = [
     { title: "Id", value: "id" },
-    { title: "Name", value: "name" },
-    { title: "Email", value: "email" },
-    { title: "Phone", value: "phone" },
-    { title: "Verified", value: "verified", canOrder: false },
+    { title: "Event", value: "event_name" },
+    { title: "User Email", value: "user_email" },
+    { title: "User Role", value: "user_role" },
+    { title: "Created At", value: "created_at" },
   ];
-
-  if (isAdmin) {
-    ths.push({ title: "Active", value: "active", canOrder: false });
-  }
-
-  ths.push({ title: "Role", value: "role" });
-  ths.push({ title: "Actions", value: "actions", canOrder: false });
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Users{" "}
+          User Event Logs{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>
@@ -59,23 +45,12 @@ const UsersTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {users.map((user) => {
-                return <TableItem
-                    key={user.id}
-                    {...user}
-                    onChangeRole={(role) =>
-                        handleSetRole(user.id, user.name, role)
-                    }
-                    onChangeActive={() => handleChangeActive(user.id, user.name)}
-                    onDeleteClick={(e) => {
-                      e.stopPropagation();
-                      openDeleteModal(user.id, user.name);
-                    }}
-                    onChangeVerified={() =>
-                        handleChangeVerified(user.id, user.name)
-                    }
+              {logs.map((log) => (
+                <TableItem
+                  key={log.id}
+                  {...log}
                 />
-              })}
+              ))}
             </tbody>
           </table>
         </div>
@@ -84,4 +59,4 @@ const UsersTable = ({
   );
 };
 
-export default UsersTable;
+export default LogsTable;

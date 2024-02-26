@@ -5,6 +5,7 @@ import { IndiceContext } from "../contexts";
 import { resetPasswordSend } from "../services";
 import { useRouter } from "next/router";
 import { notAuthSideProps } from "../middlewares";
+import ErrorSpan from "../components/ErrorSpan";
 
 const PasswordResetSend = () => {
   const router = useRouter();
@@ -61,9 +62,7 @@ const PasswordResetSend = () => {
                 <span className="label-title">
                   <i className="bx bx-envelope"></i>
                 </span>
-                {emailError && (
-                  <div className="invalid-feedback">{emailError}</div>
-                )}
+                <ErrorSpan error={emailError}/>
               </div>
 
               <button

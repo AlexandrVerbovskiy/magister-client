@@ -1,3 +1,5 @@
+import ErrorSpan from "../ErrorSpan";
+
 const Input = ({
   label = null,
   value,
@@ -23,11 +25,9 @@ const Input = ({
         onInput={handleInput}
         placeholder={placeholder}
       />
-      {error && (
-        <div className="invalid-feedback d-block mt-0 position-absolute">
-          {error}
-        </div>
-      )}
+
+      <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
+
       {children}
     </div>
   );

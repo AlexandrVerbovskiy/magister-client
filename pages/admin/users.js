@@ -96,7 +96,7 @@ const Users = () => {
       const { name, id } = toDeleteUserInfo;
       await deleteUser(id, authToken);
       handleCloseDeleteModal();
-      rebuild();
+      await rebuild();
       success.set(`${name} deleted successfully!`);
     } catch (e) {
       error.set(e.message);

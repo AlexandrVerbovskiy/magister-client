@@ -13,13 +13,32 @@ const useMain = ({ userInfo, authToken }) => {
   const { data: session } = useSession();
   const [prevSessionUser, setPrevSessionUser] = useState(undefined);
 
+  const successClearTimeout = useRef(null);
+  const errorClearTimeout = useRef(null);
+
+  const clearMainTimeouts = () => {
+    if (successClearTimeout.current) {
+      clearTimeout(successClearTimeout.current);
+      successClearTimeout.current = null;
+    }
+
+    if (errorClearTimeout.current) {
+      clearTimeout(errorClearTimeout.current);
+      errorClearTimeout.current = null;
+    }
+  };
+
   const handleSetSuccess = (message) => {
     setError(null);
+    clearMainTimeouts();
+    successClearTimeout.current = setTimeout(() => setSuccess(null), 5000);
     setSuccess(message);
   };
 
   const handleSetError = (message) => {
     setSuccess(null);
+    clearMainTimeouts();
+    errorClearTimeout.current = setTimeout(() => setError(null), 5000);
     setError(message);
   };
 
@@ -43,15 +62,13 @@ const useMain = ({ userInfo, authToken }) => {
 
   useEffect(() => {
     analizeQueryInfo("error", (currentParam) => {
-      setSuccess(null);
-      setError(currentParam);
+      handleSetError(currentParam);
     });
   }, [router.query.error]);
 
   useEffect(() => {
     analizeQueryInfo("success", (currentParam) => {
-      setError(null);
-      setSuccess(currentParam);
+      handleSetSuccess(currentParam);
     });
   }, [router.query.success]);
 
