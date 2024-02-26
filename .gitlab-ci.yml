@@ -17,7 +17,7 @@ before_script:
 deploy to master:
   stage: deploy
   script:
-    - ssh $REMOTE_USER@$DEV_HOST -p $HOST_PORT "cd $STAGING_DIR && git remote set-url origin $GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY && git pull origin master  && npm install && npm run build && pm2 delete selinaClient && pm2 start "npm run start" --name selinaClient "
+    - ssh $REMOTE_USER@$DEV_HOST -p $HOST_PORT "cd $STAGING_DIR && git remote set-url origin $GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY && git pull origin master  && npm install && npm run build && pm2 update"
   only:
     - master
 
