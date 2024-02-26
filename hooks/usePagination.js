@@ -72,6 +72,7 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
   const onChangeOptions = async (dopBody = {}) => {
     try {
       const res = await getItemsFunc({
+        clientTime: Date.now(),
         order,
         orderType,
         itemsPerPage,
