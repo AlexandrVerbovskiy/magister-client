@@ -13,6 +13,7 @@ before_script:
   - ssh-keyscan $DEV_HOST >> ~/.ssh/known_hosts
   - chmod 775 ~/.ssh/known_hosts
 
+
 deploy to master:
   stage: deploy
   script:
