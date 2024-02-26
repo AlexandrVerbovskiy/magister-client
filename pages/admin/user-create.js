@@ -1,8 +1,8 @@
+import React, { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import EditUserForm from "../../components/admin/EditUserForm";
 import { createUser } from "../../services";
 import { adminSideProps } from "../../middlewares";
-import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
 const UserCreate = () => {
@@ -10,10 +10,10 @@ const UserCreate = () => {
   const { authToken } = useContext(IndiceContext);
 
   const handleSave = async (formData) => {
-    const user = await createUser(formData, authToken);
+    const { user } = await createUser(formData, authToken);
     const id = user.id;
     router.push("/admin/user-edit/" + id);
-    return {};
+    return { user };
   };
 
   return <EditUserForm user={{}} save={handleSave} currentTitle="New User" />;

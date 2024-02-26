@@ -11,7 +11,7 @@ const UserEdit = ({ editableUser }) => {
     formData.append("id", editableUser.id);
     return await updateUser(formData, authToken);
   };
-
+  
   return (
     <EditUserForm
       user={editableUser}

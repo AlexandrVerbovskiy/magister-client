@@ -29,6 +29,7 @@ const roleOptions = [
 ];
 
 const EditUserForm = ({ user, save, currentTitle }) => {
+  const [prevUserInfo, setPrevUserInfo] = useState(user);
   const [accessLeaveModalOpen, setAccessLeaveModalOpen] = useState(false);
 
   const { error, success } = useContext(IndiceContext);
@@ -109,7 +110,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setSuspicious(resUserToState.suspicious);
     setVerified(resUserToState.verified);
     setPlaceWork(resUserToState.placeWork);
-  }, [user]);
+  }, [user.id]);
 
   const getObjectToSave = () => ({
     name,
@@ -155,7 +156,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     if (newPhoto) return true;
 
     const dataToSave = getObjectToSave();
-    const userToCheck = userToState(user);
+    const userToCheck = userToState(prevUserInfo);
 
     return !lodash.isEqual(userToCheck, dataToSave);
   };
@@ -294,6 +295,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
     try {
       const { user } = await save(formData);
+      setPrevUserInfo(user);
       success.set("User saved successfully");
 
       if (user.photo) {

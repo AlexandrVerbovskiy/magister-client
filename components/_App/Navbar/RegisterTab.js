@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Input from "../../FormComponents/Input";
 import SocialAuth from "./SocialAuth";
 import { validatePassword, validateEmail } from "../../../utils";
@@ -7,7 +7,7 @@ import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import ErrorSpan from "../../ErrorSpan";
 
-const RegisterTab = ({ moveToLogin, closeModal }) => {
+const RegisterTab = ({ moveToLogin, activePopup }) => {
   const [formError, setFormError] = useState(null);
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
@@ -24,6 +24,22 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
   const [acceptedTermCondition, setAcceptedTermCondition] = useState("");
   const [acceptedTermConditionError, setAcceptedTermConditionError] =
     useState(null);
+
+  useEffect(() => {
+    if (!activePopup) {
+      setFormError(null);
+      setPasswordError(null);
+      setConfirmPasswordError(null);
+      setEmailError(null);
+      setNameError(null);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      setAcceptedTermCondition("");
+      setAcceptedTermConditionError(null);
+    }
+  }, [activePopup]);
 
   const handleInputName = (e) => {
     setName(e.target.value);
@@ -185,14 +201,14 @@ const RegisterTab = ({ moveToLogin, closeModal }) => {
                 className="form-check-label"
                 htmlFor="confirm-terms-conditions"
               >
-                Accept 
+                Accept
               </label>{" "}
               <span className="dont-account">
                 <Link href="#">conditions</Link>
               </span>
             </span>
 
-            <ErrorSpan error={acceptedTermConditionError}/>
+            <ErrorSpan error={acceptedTermConditionError} />
           </div>
 
           {formError && (

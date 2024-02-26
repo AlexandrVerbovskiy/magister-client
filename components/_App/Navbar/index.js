@@ -381,6 +381,7 @@ const Navbar = () => {
                   <div className="tab-content" id="myTabContent">
                     <TabPanel>
                       <LoginTab
+                        activePopup={displayAuth}
                         setUser={setUserToAuth}
                         email={loginEmail}
                         setEmail={setLoginEmail}
@@ -399,6 +400,7 @@ const Navbar = () => {
 
                     <TabPanel>
                       <RegisterTab
+                        activePopup={displayAuth}
                         moveToLogin={handleLoginTabActive}
                         closeModal={closeModals}
                       />

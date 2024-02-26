@@ -57,7 +57,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       await importStyle(() => import(`../styles/index.css`), "base");
     }
 
-    console.log("end")
     onEnd();
   };
 

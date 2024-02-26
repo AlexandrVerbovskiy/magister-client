@@ -8,17 +8,16 @@ import LogsTable from "../../components/admin/UserLogs/Table";
 import Datepicker from "../../components/admin/Datepicker";
 import { adminSideProps } from "../../middlewares";
 
-import {
-  useAdminPage,
-  usePagination,
-  usePaginationTimeFilter,
-} from "../../hooks";
+import { useAdminPage, usePagination, useInitPaginationTimeFilter, useChangeTimeFilter } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import { getUserEventLogList } from "../../services";
 
 const Logs = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+  useInitPaginationTimeFilter();
 
   const {
     page,
@@ -40,13 +39,17 @@ const Logs = () => {
   } = usePagination({
     getItemsFunc: (data) => getUserEventLogList(data, authToken),
     onError: (e) => error.set(e.message),
-    dopProps: {
-      ...getTimeFilterProps(),
-    },
+    getDopProps: getTimeFilterProps,
   });
 
-  const { fromTime, toTime, handleChangeTimeFilter, getTimeFilterProps } =
-    usePaginationTimeFilter({ options, rebuild });
+  const { handleChangeTimeFilter } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
+  });
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">

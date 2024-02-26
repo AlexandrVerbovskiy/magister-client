@@ -11,7 +11,8 @@ import { supportSideProps } from "../../middlewares";
 import {
   useAdminPage,
   usePagination,
-  usePaginationTimeFilter,
+  useInitPaginationTimeFilter,
+  useChangeTimeFilter,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import { getUserVerifyRequestList } from "../../services";
@@ -19,6 +20,9 @@ import { getUserVerifyRequestList } from "../../services";
 const UserVerifyRequests = () => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -40,10 +44,17 @@ const UserVerifyRequests = () => {
   } = usePagination({
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
+    getDopProps: getTimeFilterProps,
   });
 
-  const { fromTime, toTime, handleChangeTimeFilter, getTimeFilterProps } =
-    usePaginationTimeFilter({options, rebuild});
+  const { handleChangeTimeFilter } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
+  });
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">

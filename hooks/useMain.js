@@ -169,6 +169,7 @@ const useMain = ({ userInfo, authToken }) => {
       set: handleSetSuccess,
       clear: clearSuccess,
     },
+    handleSetSuccess
   };
 };
 

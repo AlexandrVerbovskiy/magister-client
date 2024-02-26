@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
-const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
+const usePagination = ({
+  getItemsFunc,
+  onError = null,
+  getDopProps = null,
+}) => {
   const router = useRouter();
 
   const countPagesRef = useRef(0);
@@ -21,7 +25,7 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
   const [currentFrom, setCurrentFrom] = useState(0);
   const [currentTo, setCurrentTo] = useState(0);
 
-  const updateStateByOption = (gotOptions) => {
+  const updateStateByOption = (gotOptions, unusualKeys = []) => {
     setOptions(gotOptions);
     setPage(gotOptions.page);
     setItemsPerPage(gotOptions.count);
@@ -29,6 +33,16 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
     setOrderType(gotOptions.orderType);
 
     const queryParams = {};
+
+    if (getDopProps) {
+      const dopProps = getDopProps();
+
+      Object.keys(dopProps).forEach((key) => {
+        if (dopProps[key]) {
+          queryParams[key] = dopProps[key];
+        }
+      });
+    }
 
     if (gotOptions.page > 1) {
       queryParams["page"] = gotOptions.page;
@@ -45,13 +59,11 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
       queryParams["filter"] = gotOptions.filter;
     }
 
-    if (dopProps) {
-      Object.keys(dopProps).forEach((key) => {
-        if (dopProps[key]) {
-          queryParams[key] = dopProps[key];
-        }
-      });
-    }
+    unusualKeys.forEach((key) => {
+      if (gotOptions[key]) {
+        queryParams[key] = gotOptions[key];
+      }
+    });
 
     const props = Object.keys(queryParams)
       .map((param) => `${param}=${queryParams[param]}`)
@@ -69,17 +81,23 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
     }
   };
 
-  const onChangeOptions = async (dopBody = {}) => {
+  const onChangeOptions = async (dopBody = {}, unusualKeys = []) => {
     try {
-      const res = await getItemsFunc({
+      let props = {
         clientTime: Date.now(),
         order,
         orderType,
         itemsPerPage,
         filter,
-        ...dopProps,
-        ...dopBody,
-      });
+      };
+
+      if (getDopProps) {
+        props = { ...props, ...getDopProps() };
+      }
+
+      props = { ...props, ...dopBody };
+
+      const res = await getItemsFunc(props);
 
       const {
         options: gotOptions,
@@ -89,7 +107,7 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
 
       countPagesRef.current = gotOptions.totalPages;
       countItemsRef.current = gotCountItems;
-      updateStateByOption(gotOptions);
+      updateStateByOption(gotOptions, unusualKeys);
       setItems(gotItems);
     } catch (e) {
       onError(e);
