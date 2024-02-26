@@ -12,6 +12,7 @@ before_script:
   - chmod 775 ~/.ssh
   - ssh-keyscan $DEV_HOST >> ~/.ssh/known_hosts
   - chmod 775 ~/.ssh/known_hosts
+  - echo "$GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY"
 
 
 deploy to master:
