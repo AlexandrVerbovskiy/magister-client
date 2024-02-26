@@ -14,10 +14,10 @@ before_script:
   - chmod 775 ~/.ssh/known_hosts
   - echo "$GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY"
 
-
 deploy to master:
   stage: deploy
   script:
     - ssh $REMOTE_USER@$DEV_HOST -p $HOST_PORT "cd $DEV_DIR && git remote set-url origin $GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY && git pull origin master  && npm install && npm run build "
   only:
-    - master
+    - main
+
