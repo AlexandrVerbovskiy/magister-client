@@ -18,17 +18,12 @@ const Navbar = () => {
     onLogin,
   } = useContext(IndiceContext);
 
-  const [currentPath, setCurrentPath] = useState("");
+  const [canShowSearch, setCanShowSearch] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    setCurrentPath(router.asPath);
+    setCanShowSearch(router.asPath !== "/");
   }, [router]);
-
-  const isCurrentPath = (link) => {
-    if (link.charAt(0) === "/") link = link.slice(1);
-    return currentPath.includes("/" + link);
-  };
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
@@ -43,6 +38,7 @@ const Navbar = () => {
       setSticky(false);
     }
   };
+
   if (typeof window !== "undefined") {
     // browser code
     window.addEventListener("scroll", showStickyMenu);
@@ -198,16 +194,18 @@ const Navbar = () => {
               </Link>
 
               <div className="collapse navbar-collapse mean-menu">
-                <form className="navbar-search-box search-box-one">
-                  <label>
-                    <i className="flaticon-search"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="input-search"
-                    placeholder="What are you looking for?"
-                  />
-                </form>
+                {canShowSearch && (
+                  <form className="navbar-search-box search-box-one">
+                    <label>
+                      <i className="flaticon-search"></i>
+                    </label>
+                    <input
+                      type="text"
+                      className="input-search"
+                      placeholder="What are you looking for?"
+                    />
+                  </form>
+                )}
 
                 <ul className="navbar-nav">
                   <li className="nav-item">
@@ -276,18 +274,20 @@ const Navbar = () => {
             <div className={displayMiniAuth ? "container active" : "container"}>
               <div className="option-inner">
                 <div className="others-option">
-                  <div className="option-item">
-                    <form className="navbar-search-box">
-                      <label>
-                        <i className="flaticon-search"></i>
-                      </label>
-                      <input
-                        type="text"
-                        className="input-search"
-                        placeholder="What are you looking for?"
-                      />
-                    </form>
-                  </div>
+                  {canShowSearch && (
+                    <div className="option-item">
+                      <form className="navbar-search-box">
+                        <label>
+                          <i className="flaticon-search"></i>
+                        </label>
+                        <input
+                          type="text"
+                          className="input-search"
+                          placeholder="What are you looking for?"
+                        />
+                      </form>
+                    </div>
+                  )}
 
                   {!isAuth && (
                     <div className="option-item">

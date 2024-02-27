@@ -2128,10 +2128,37 @@ Main Banner Area CSS
 .main-banner-area {
   padding-top: 330px;
   padding-bottom: 250px;
-  background-image: url(/images/main-banner-bg1.jpg);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  position: relative;
+}
+
+.main-banner-area .background-image-list {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.main-banner-area .background-image-list .swiper{
+  height: 100%;
+}
+
+.main-banner-area .background-image{
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.main-banner-area .container{
+  position: relative;
+  z-index: 1;
 }
 
 .main-banner-content {
@@ -16100,6 +16127,23 @@ Dashboard CSS
 .main-banner-content .banner-one-heading {
   display: flex;
   justify-content: center;
+}
+
+.main-banner-content .banner-one-heading-fixed{
+  margin-right: 14px;
+}
+
+.main-banner-content .banner-one-heading-scrollable{
+  height: 60px;
+}
+
+.main-banner-content .banner-one-heading-scrollable .swiper{
+  width: 100%;
+  height: 100%;
+}
+
+.main-banner-content .banner-one-heading .swiper-slide{
+  display: flex;
 }
 
 .banner-content .banner-two-heading {

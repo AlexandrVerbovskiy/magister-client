@@ -9,6 +9,7 @@ const Input = ({
   placeholder = "",
   setError = () => {},
   labelClassName = "sr-only",
+  inputClassName = "form-input",
 }) => {
   const handleInput = (e) => {
     setValue(e.target.value);
@@ -19,7 +20,7 @@ const Input = ({
     <>
       {label && <label className={labelClassName}>{label}</label>}
       <input
-        className="form-input"
+        className={inputClassName}
         type={type}
         value={value}
         placeholder={placeholder}

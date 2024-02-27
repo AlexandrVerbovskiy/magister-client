@@ -121,7 +121,7 @@ Preloader Area CSS
   margin-top: 0 !important;
 }
 
-.document-view h2{
+.document-view h2 {
   height: 55px;
   display: flex !important;
   align-items: flex-end;
@@ -143,6 +143,24 @@ Preloader Area CSS
   position: relative;
   align-items: center;
   background-color: #f8f8f8;
+}
+
+.relative-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(6px, -11px);
+  padding: 0 1px;
+  background-color: white;
+  z-index: 9;
+}
+
+.create-listing-category-button div {
+  width: 200px;
+}
+
+.category-list-item .error-span {
+  margin-top: 5px;
 }
 
 @keyframes preloader {

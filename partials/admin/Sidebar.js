@@ -391,6 +391,92 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
                   <li
                     className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                      isCurrentPath("listing-categories") && "bg-slate-900"
+                    }`}
+                  >
+                    <Link
+                      href="/admin/listing-categories"
+                      className={`block text-slate-200 truncate transition duration-150 ${
+                        isCurrentPath("listing-categories")
+                          ? "hover:text-slate-200"
+                          : "hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-tools"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                              d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M14.5 5.5l4 4"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M12 8l-5 -5l-4 4l5 5"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M7 8l-1.5 1.5"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M16 12l5 5l-4 4l-5 -5"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M16 17l-1.5 1.5"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-categories")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                          </svg>
+
+                          <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            Listing Categories
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+
+                  <li
+                    className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                       isCurrentPath("settings") && "bg-slate-900"
                     }`}
                   >
