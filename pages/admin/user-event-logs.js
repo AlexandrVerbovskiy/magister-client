@@ -8,7 +8,12 @@ import LogsTable from "../../components/admin/UserLogs/Table";
 import Datepicker from "../../components/admin/Datepicker";
 import { adminSideProps } from "../../middlewares";
 
-import { useAdminPage, usePagination, useInitPaginationTimeFilter, useChangeTimeFilter } from "../../hooks";
+import {
+  useAdminPage,
+  usePagination,
+  useInitPaginationTimeFilter,
+  useChangeTimeFilter,
+} from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import { getUserEventLogList } from "../../services";
 
@@ -17,7 +22,7 @@ const Logs = () => {
   const { error, success, authToken } = useContext(IndiceContext);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-  useInitPaginationTimeFilter();
+    useInitPaginationTimeFilter();
 
   const {
     page,

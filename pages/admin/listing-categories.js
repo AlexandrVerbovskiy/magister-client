@@ -17,27 +17,52 @@ const ListingCategories = ({ categories: baseCategories }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
+  const [prevCategories, setPrevCategories] = useState(baseCategories);
 
-  const initCategories = {};
+  const categoriesToState = (categories) => {
+    const initCategories = {};
 
-  Object.keys(baseCategories).forEach((key) => {
-    initCategories[key] = [];
-    baseCategories[key].forEach((category) =>
-      initCategories[key].push({
-        ...category,
-        localId: uniqueId(),
-        error: null,
-        parentLocalId: null,
-      })
-    );
-  });
+    ["firstLevel", "secondLevel", "thirdLevel"].forEach((level) => {
+      initCategories[level] = [];
+      categories[level].forEach((category) => {
+        const parentId = category.parentId;
+        let parentLocalId = null;
+        let parentName = "";
 
-  const [categories, setCategories] = useState(initCategories);
-  const [firstLevelOptions, setFirstLevelOptions] = useState([]);
-  const [secondLevelOptions, setSecondLevelOptions] = useState([]);
-  const [thirdLevelOptions, setThirdLevelOptions] = useState([]);
+        if (level == "secondLevel") {
+          initCategories["firstLevel"].forEach((initCategory) => {
+            if (initCategory.id === parentId) {
+              parentLocalId = initCategory.localId;
+              parentName = initCategory.name;
+            }
+          });
+        }
 
-  const initParentOptions = (list = [], set) => {
+        if (level == "thirdLevel") {
+          initCategories["secondLevel"].forEach((initCategory) => {
+            if (initCategory.id === parentId) {
+              parentLocalId = initCategory.localId;
+              parentName = initCategory.name;
+            }
+          });
+        }
+
+        initCategories[level].push({
+          ...category,
+          localId: uniqueId(),
+          error: null,
+          parentLocalId: null,
+          parentId,
+          parentLocalId,
+          parentName,
+        });
+      });
+    });
+
+    return initCategories;
+  };
+
+  const getParentOptions = (list = []) => {
     const levelOptions = [];
 
     list.forEach((category) => {
@@ -50,13 +75,25 @@ const ListingCategories = ({ categories: baseCategories }) => {
       }
     });
 
-    set(levelOptions);
+    return levelOptions;
   };
 
+  const initCategories = categoriesToState(baseCategories);
+
+  const initFirstOptions = getParentOptions([]);
+  const initSecondOptions = getParentOptions(initCategories["firstLevel"]);
+  const initThirdOptions = getParentOptions(initCategories["secondLevel"]);
+
+  const [categories, setCategories] = useState(initCategories);
+  const [firstLevelOptions, setFirstLevelOptions] = useState(initFirstOptions);
+  const [secondLevelOptions, setSecondLevelOptions] =
+    useState(initSecondOptions);
+  const [thirdLevelOptions, setThirdLevelOptions] = useState(initThirdOptions);
+
   useEffect(() => {
-    initParentOptions([], setFirstLevelOptions);
-    initParentOptions(categories["firstLevel"], setSecondLevelOptions);
-    initParentOptions(categories["secondLevel"], setThirdLevelOptions);
+    setFirstLevelOptions(getParentOptions([]));
+    setSecondLevelOptions(getParentOptions(categories["firstLevel"]));
+    setThirdLevelOptions(getParentOptions(categories["secondLevel"]));
   }, [categories]);
 
   const handleChangeField = ({ localId, level, field, value }) => {
@@ -172,6 +209,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
   };
 
   const handleSaveClick = async () => {
+    if (submitting) return;
+
     setSubmitting(true);
 
     let hasError = false;
@@ -212,10 +251,12 @@ const ListingCategories = ({ categories: baseCategories }) => {
     });
 
     if (hasError) {
+      setSubmitting(false);
       return;
     }
 
     const dataToSave = { firstLevel: [], secondLevel: [], thirdLevel: [] };
+    const dataToCompare = { firstLevel: [], secondLevel: [], thirdLevel: [] };
 
     Object.keys(categories).forEach((level) => {
       categories[level].forEach((category) => {
@@ -223,20 +264,35 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
         delete categoryToSave["parentLocalId"];
         delete categoryToSave["localId"];
+        delete categoryToSave["parentName"];
 
         const parent = findCategoryByLocalId(category.parentLocalId);
         dataToSave[level].push({
-          ...category,
-          parentId: parent?.id,
-          parentName: parent?.name,
+          id: category.id,
+          level: category.level,
+          name: category.name,
+          popular: category.popular,
+          parentId: parent?.id ?? null,
+          parentName: parent?.name ?? null,
+        });
+
+        dataToCompare[level].push({
+          id: category.id,
+          level: category.level,
+          name: category.name,
+          popular: category.popular,
+          parentId: parent?.id ?? null,
         });
       });
     });
 
     try {
-      if (!lodash.isEqual(baseCategories, dataToSave)) {
-        await saveListingCategories(dataToSave, authToken);
+      if (!lodash.isEqual(prevCategories, dataToCompare)) {
+        const res = await saveListingCategories(dataToSave, authToken);
+        setPrevCategories(res);
+        setCategories(categoriesToState(res));
       }
+
       success.set("Categories saved successfully");
     } catch (err) {
       error.set(err.message);

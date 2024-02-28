@@ -1,10 +1,47 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import SearchTipsPopup from "../searchTipsPopup";
+import useSearchCategory from "../../hooks/useSearchCategory";
 
-const Banner = () => {
-  const categories = ["Hotels", "Restaurants", "Beauty", "Fitness", "Shopping"];
+const Banner = ({popularCategories}) => {
+  const categoryFilterRef = useRef(null);
+  const {
+    tipsPopupActive,
+    categoryTips,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    updateCategoryTips,
+  } = useSearchCategory();
+
+  const [searchCategory, setSearchCategory] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
+
+  const handleChangeCategory = (e) => {
+    const newValue = e.target.value;
+    updateCategoryTips(newValue);
+    setSearchCategory(newValue);
+  };
+
+  const handleCategoryTipClick = (value) => {
+    categoryFilterRef.current.blur();
+    setSearchCategory(value);
+    updateCategoryTips(value);
+  };
+
+  const handleChangeLocation = (e) => {
+    const newLocation = e.target.value;
+    setSearchLocation(newLocation);
+  };
+
+  /*const popularCategories = [
+    "Hotels",
+    "Restaurants",
+    "Beauty",
+    "Fitness",
+    "Shopping",
+  ];*/
   const backgroundImages = [
     "/images/main-banner-bg1.jpg",
     "/images/main-banner-bg3.jpg",
@@ -48,7 +85,7 @@ const Banner = () => {
                   }}
                   modules={[Autoplay]}
                 >
-                  {categories.map((category) => (
+                  {popularCategories.map((category) => (
                     <SwiperSlide key={category}>
                       <Link
                         href={`/search?filter=${category}`}
@@ -73,9 +110,20 @@ const Banner = () => {
                     <i className="flaticon-search"></i>
                   </label>
                   <input
+                    ref={categoryFilterRef}
                     type="text"
                     className="form-control"
                     placeholder="What are you looking for?"
+                    onFocus={openCategoryTipsPopup}
+                    onBlur={closeCategoryTipsPopup}
+                    value={searchCategory}
+                    onInput={handleChangeCategory}
+                  />
+
+                  <SearchTipsPopup
+                    active={tipsPopupActive}
+                    categoryTips={categoryTips}
+                    handleCategoryTipClick={handleCategoryTipClick}
                   />
                 </div>
               </div>
@@ -89,6 +137,8 @@ const Banner = () => {
                     type="text"
                     className="form-control"
                     placeholder="Location"
+                    value={searchLocation}
+                    onInput={handleChangeLocation}
                   />
                 </div>
               </div>
@@ -103,24 +153,12 @@ const Banner = () => {
 
           <ul className="popular-search-list">
             <li>Popular:</li>
-            <li>
-              <Link href="/grid-listings-with-map">Restaurants</Link>
-            </li>
-            <li>
-              <Link href="/grid-listings-with-map">Events</Link>
-            </li>
-            <li>
-              <Link href="/grid-listings-with-map">Clothing</Link>
-            </li>
-            <li>
-              <Link href="/grid-listings-with-map">Bank</Link>
-            </li>
-            <li>
-              <Link href="/grid-listings-with-map">Fitness</Link>
-            </li>
-            <li>
-              <Link href="/grid-listings-with-map">Bookstore</Link>
-            </li>
+
+            {popularCategories.map((category) => (
+              <li key={category}>
+                <Link href="/grid-listings-with-map">{category}</Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

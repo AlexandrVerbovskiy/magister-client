@@ -1,29 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 
-const LogsTable = ({
-  logs,
+const SearchedWordTable = ({
+  searchedWords,
   orderField,
   orderType,
   onClickTh,
   totalCount,
-  onSelectPanelItem,
 }) => {
   const ths = [
     { title: "Id", value: "id" },
-    { title: "Status", value: "success", canOrder: false },
-    { title: "Message", value: "message" },
-    { title: "File", value: "file" },
-    { title: "Line", value: "line" },
-    { title: "Date", value: "create_at" },
+    { title: "Search String", value: "name" },
+    { title: "Search Count", value: "search_count" },
+    { title: "Viewed", value: "admin_viewed", canOrder: false },
+    { title: "Accepted", value: "listing_categories_id", canOrder: false },
   ];
+
+  ths.push({ title: "Actions", value: "actions", canOrder: false });
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Logs{" "}
+          Searches not founds{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>
@@ -47,8 +47,8 @@ const LogsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {logs.map((log) => (
-                <TableItem key={log.id} {...log} onSelectPanelItem={onSelectPanelItem} />
+              {searchedWords.map((searchedWord) => (
+                <TableItem key={searchedWord.id} {...searchedWord} />
               ))}
             </tbody>
           </table>
@@ -58,4 +58,4 @@ const LogsTable = ({
   );
 };
 
-export default LogsTable;
+export default SearchedWordTable;

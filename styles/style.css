@@ -2143,11 +2143,11 @@ Main Banner Area CSS
   right: 0;
 }
 
-.main-banner-area .background-image-list .swiper{
+.main-banner-area .background-image-list .swiper {
   height: 100%;
 }
 
-.main-banner-area .background-image{
+.main-banner-area .background-image {
   width: 100%;
   height: 100%;
   background-position: center center;
@@ -2156,7 +2156,7 @@ Main Banner Area CSS
   position: relative;
 }
 
-.main-banner-area .container{
+.main-banner-area .container {
   position: relative;
   z-index: 1;
 }
@@ -13821,11 +13821,11 @@ Dashboard CSS
 .my-profile-box .profile-box .file-upload .inputfile:focus + label,
 .my-profile-box .profile-box .file-upload .inputfile + label:hover {
   background-color: var(--mainColor);
-  color: var(--whiteColor)!important;
+  color: var(--whiteColor) !important;
 }
 
-.my-profile-box .profile-box .file-upload .inputfile + label:hover *{
-  color: var(--whiteColor)!important;
+.my-profile-box .profile-box .file-upload .inputfile + label:hover * {
+  color: var(--whiteColor) !important;
 }
 
 .my-profile-box .profile-box .file-upload .inputfile + label {
@@ -16129,20 +16129,20 @@ Dashboard CSS
   justify-content: center;
 }
 
-.main-banner-content .banner-one-heading-fixed{
+.main-banner-content .banner-one-heading-fixed {
   margin-right: 14px;
 }
 
-.main-banner-content .banner-one-heading-scrollable{
+.main-banner-content .banner-one-heading-scrollable {
   height: 60px;
 }
 
-.main-banner-content .banner-one-heading-scrollable .swiper{
+.main-banner-content .banner-one-heading-scrollable .swiper {
   width: 100%;
   height: 100%;
 }
 
-.main-banner-content .banner-one-heading .swiper-slide{
+.main-banner-content .banner-one-heading .swiper-slide {
   display: flex;
 }
 
@@ -16668,7 +16668,7 @@ Preloader Area CSS
   justify-content: center;
 }
 
-.document-verification>form{
+.document-verification > form {
   padding-top: 0 !important;
 }
 
@@ -16678,12 +16678,12 @@ Preloader Area CSS
   color: #555555 !important;
 }
 
-.profile-phone-error{
+.profile-phone-error {
   margin-top: -22px;
   padding: 0;
 }
 
-.document-view .profile-box > label{
+.document-view .profile-box > label {
   height: 42px;
   display: flex !important;
   align-items: flex-end;
@@ -16707,11 +16707,51 @@ Preloader Area CSS
   background-color: #f8f8f8;
 }
 
-.view-picture-parent{
+.view-picture-parent {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999999999;
+}
+
+.tips-popup-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: all 0.2s ease-in-out;
+  z-index: 999;
+  background: white;
+  color: #686868;
+}
+
+.tips-popup-wrapper.active {
+  max-height: 200px;
+}
+
+.tips-popup {
+  max-height: 200px;
+  overflow: auto;
+  border-top: 1px solid #30eded;
+}
+
+.navbar-search-box .tips-popup {
+  border-top: 0!important;
+}
+
+.tips-popup .tip {
+  text-align: start;
+  padding: 5px 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.tips-popup .tip:hover {
+  background-color: #f2f2f2;
 }

@@ -477,6 +477,76 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
                   <li
                     className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                      isCurrentPath("searched-words") && "bg-slate-900"
+                    }`}
+                  >
+                    <Link
+                      href="/admin/searched-words"
+                      className={`block text-slate-200 truncate transition duration-150 ${
+                        isCurrentPath("searched-words")
+                          ? "hover:text-slate-200"
+                          : "hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="icon icon-tabler icon-tabler-clock-search"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="#2c3e50"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                              d="M20.993 11.646a9 9 0 1 0 -9.318 9.348"
+                              className={`stroke-current ${
+                                isCurrentPath("searched-words")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M12 7v5l1 1"
+                              className={`stroke-current ${
+                                isCurrentPath("searched-words")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"
+                              className={`stroke-current ${
+                                isCurrentPath("searched-words")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                            <path
+                              d="M20.2 20.2l1.8 1.8"
+                              className={`stroke-current ${
+                                isCurrentPath("searched-words")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            />
+                          </svg>
+
+                          <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                            Users Search Story
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+
+                  <li
+                    className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
                       isCurrentPath("settings") && "bg-slate-900"
                     }`}
                   >

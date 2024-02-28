@@ -31,6 +31,7 @@ const usePagination = ({
     setItemsPerPage(gotOptions.count);
     setOrder(gotOptions.order);
     setOrderType(gotOptions.orderType);
+    setFilter(gotOptions.filter);
 
     const queryParams = {};
 

@@ -43,7 +43,7 @@ const CategoryListItem = ({
                 value={name}
                 label="Name"
                 labelClassName="block text-sm font-medium relative-label"
-                setValue={(value) => onChangeName(value)}
+                setValue={onChangeName}
               />
             </div>
 
@@ -55,7 +55,7 @@ const CategoryListItem = ({
                 <DropdownClassic
                   options={parentOptions}
                   selected={parentLocalId}
-                  setSelected={(value) => onChangeParent(value)}
+                  setSelected={onChangeParent}
                 />
               </div>
             )}

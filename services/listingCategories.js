@@ -6,8 +6,12 @@ export const getListingCategoriesList = async () => {
   return data.body;
 };
 
+export const getPopularListingCategories = async () => {
+  const data = await get(`/popular`);
+  return data.body.popularCategories;
+};
+
 export const saveListingCategories = async (body, authToken) => {
   const data = await post(`/save`, body, authToken);
-  console.log(data.body);
   return data.body;
 };

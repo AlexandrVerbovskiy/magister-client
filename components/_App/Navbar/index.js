@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
+import useSearchCategory from "../../../hooks/useSearchCategory";
+import SearchTipsPopup from "../../searchTipsPopup";
 
 const Navbar = () => {
   const {
@@ -18,11 +20,37 @@ const Navbar = () => {
     onLogin,
   } = useContext(IndiceContext);
 
+  const categoryFilterRef = useRef(null);
+  const smallCategoryFilterRef = useRef(null);
+
+  const {
+    tipsPopupActive,
+    categoryTips,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    updateCategoryTips,
+  } = useSearchCategory();
+
   const [canShowSearch, setCanShowSearch] = useState(true);
+  const [searchCategory, setSearchCategory] = useState("");
+
+  const handleChangeCategory = (e) => {
+    const newValue = e.target.value;
+    updateCategoryTips(newValue);
+    setSearchCategory(newValue);
+  };
+
+  const handleCategoryTipClick = (value) => {
+    categoryFilterRef.current.blur();
+    smallCategoryFilterRef.current.blur();
+    setSearchCategory(value);
+    updateCategoryTips(value);
+  };
+
   const router = useRouter();
 
   useEffect(() => {
-    setCanShowSearch(router.asPath !== "/");
+    //setCanShowSearch(router.asPath !== "/");
   }, [router]);
 
   const [displayAuth, setDisplayAuth] = useState(false);
@@ -203,6 +231,17 @@ const Navbar = () => {
                       type="text"
                       className="input-search"
                       placeholder="What are you looking for?"
+                      ref={categoryFilterRef}
+                      value={searchCategory}
+                      onFocus={openCategoryTipsPopup}
+                      onBlur={closeCategoryTipsPopup}
+                      onInput={handleChangeCategory}
+                    />
+
+                    <SearchTipsPopup
+                      active={tipsPopupActive}
+                      categoryTips={categoryTips}
+                      handleCategoryTipClick={handleCategoryTipClick}
                     />
                   </form>
                 )}
@@ -284,6 +323,17 @@ const Navbar = () => {
                           type="text"
                           className="input-search"
                           placeholder="What are you looking for?"
+                          ref={smallCategoryFilterRef}
+                          value={searchCategory}
+                          onFocus={openCategoryTipsPopup}
+                          onBlur={closeCategoryTipsPopup}
+                          onInput={handleChangeCategory}
+                        />
+    
+                        <SearchTipsPopup
+                          active={tipsPopupActive}
+                          categoryTips={categoryTips}
+                          handleCategoryTipClick={handleCategoryTipClick}
                         />
                       </form>
                     </div>
