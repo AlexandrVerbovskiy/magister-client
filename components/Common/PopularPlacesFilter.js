@@ -1,64 +1,71 @@
-import React from 'react';
+import React from "react";
+import { useCategoryLocation } from "../../hooks";
+import SearchTipsPopup from "../searchTipsPopup";
 
 const PopularPlacesFilter = () => {
+  const {
+    handleChangeLocation,
+    handleCategoryTipClick,
+    handleChangeCategory,
+    searchCategory,
+    searchLocation,
+    tipsPopupActive,
+    categoryTips,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    categoryFilterRef,
+  } = useCategoryLocation();
+
   return (
     <>
-      <div className='page-title-bg'>
-        <div className='container'>
+      <div className="page-title-bg">
+        <div className="container">
           <h2>Find Popular Places</h2>
           <form>
-            <div className='row m-0 align-items-center'>
-              <div className='col-lg-4 col-md-12 p-0'>
-                <div className='form-group'>
+            <div className="row m-0 align-items-center">
+              <div className="col-lg-6 col-md-6 p-0">
+                <div className="form-group">
                   <label>
-                    <i className='flaticon-search'></i>
+                    <i className="flaticon-search"></i>
                   </label>
+
                   <input
-                    type='text'
-                    className='form-control'
-                    placeholder='What are you looking for?'
+                    type="text"
+                    className="form-control"
+                    placeholder="What are you looking for?"
+                    ref={categoryFilterRef}
+                    onFocus={openCategoryTipsPopup}
+                    onBlur={closeCategoryTipsPopup}
+                    value={searchCategory}
+                    onInput={handleChangeCategory}
+                  />
+
+                  <SearchTipsPopup
+                    active={tipsPopupActive}
+                    categoryTips={categoryTips}
+                    handleCategoryTipClick={handleCategoryTipClick}
                   />
                 </div>
               </div>
 
-              <div className='col-lg-3 col-md-6 p-0'>
-                <div className='form-group'>
+              <div className="col-lg-3 col-md-6 p-0">
+                <div className="form-group">
                   <label>
-                    <i className='flaticon-pin'></i>
+                    <i className="flaticon-pin"></i>
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    placeholder='Location'
+                    type="text"
+                    className="form-control"
+                    placeholder="Location"
+                    value={searchLocation}
+                    onInput={handleChangeLocation}
                   />
                 </div>
               </div>
 
-              <div className='col-lg-3 col-md-6 p-0'>
-                <div className='form-group category-select pagebanner-select-custom'>
-                  <label className="category-icon">
-                    <i className='flaticon-category'></i>
-                  </label>
-                  <select className="banner-form-select-pagebanner">
-                    <option>All Categories</option>
-                    <option>Restaurants</option>
-                    <option>Events</option>
-                    <option>Clothing</option>
-                    <option>Bank</option>
-                    <option>Fitness</option>
-                    <option>Bookstore</option>
-                    <option>Shopping</option>
-                    <option>Hotels</option>
-                    <option>Hospitals</option>
-                    <option>Culture</option>
-                    <option>Beauty</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className='col-lg-2 col-md-12 p-0'>
-                <div className='submit-btn'>
-                  <button type='submit'>Search Now</button>
+              <div className="col-lg-3 col-md-12 p-0 popup-places-filter">
+                <div className="submit-btn">
+                  <button type="submit">Search Now</button>
                 </div>
               </div>
             </div>

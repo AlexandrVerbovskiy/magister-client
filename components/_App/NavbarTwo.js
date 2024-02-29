@@ -1,22 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import RegisterTab from "./Navbar/RegisterTab";
+import LoginTab from "./Navbar/LoginTab";
+import { generateTwoFactorCode, checkTwoFactorCode } from "../../services";
+import { IndiceContext } from "../../contexts";
+import AuthCodeModal from "./Navbar/AuthCodeModal";
+import AuthTypeModal from "./Navbar/AuthTypeModal";
+import { signIn, signOut } from "next-auth/react";
+import useSearchCategory from "../../hooks/useSearchCategory";
+import SearchTipsPopup from "../searchTipsPopup";
 
-const NavbarTwo = () => {
-  // Add active class
-  const [currentPath, setCurrentPath] = useState("");
+const NavbarTwo = ({ canShowSearch = true }) => {
+  const {
+    isAuth,
+    success: mainSuccess,
+    isSupport,
+    onLogin,
+  } = useContext(IndiceContext);
+
+  const categoryFilterRef = useRef(null);
+  const smallCategoryFilterRef = useRef(null);
+
+  const {
+    tipsPopupActive,
+    categoryTips,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    updateCategoryTips,
+  } = useSearchCategory();
+
+  const [searchCategory, setSearchCategory] = useState("");
+
+  const handleChangeCategory = (e) => {
+    const newValue = e.target.value;
+    updateCategoryTips(newValue);
+    setSearchCategory(newValue);
+  };
+
+  const handleCategoryTipClick = (value) => {
+    categoryFilterRef.current.blur();
+    smallCategoryFilterRef.current.blur();
+    setSearchCategory(value);
+    updateCategoryTips(value);
+  };
+
   const router = useRouter();
-
-  useEffect(() => {
-    setCurrentPath(router.asPath);
-  }, [router]);
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [sticky, setSticky] = useState(false);
 
   //sticky menu
+
   const showStickyMenu = () => {
     if (window.scrollY >= 80) {
       setSticky(true);
@@ -24,6 +61,7 @@ const NavbarTwo = () => {
       setSticky(false);
     }
   };
+
   if (typeof window !== "undefined") {
     // browser code
     window.addEventListener("scroll", showStickyMenu);
@@ -31,25 +69,116 @@ const NavbarTwo = () => {
 
   const toggleAuth = () => {
     setDisplayAuth(!displayAuth);
+    setLoginEmail("");
+    setLoginPassword("");
+    setLoginRememberMe(false);
   };
-
   const toggleMiniAuth = () => {
     setDisplayMiniAuth(!displayMiniAuth);
   };
 
-  const [showMenu, setshowMenu] = useState(false);
-
-  const toggleMenu = () => {
-    setshowMenu(!showMenu);
+  const closeModals = () => {
+    setDisplayAuth(false);
+    setDisplayMiniAuth(false);
   };
 
-  useEffect(() => {
-    let abortController = new AbortController();
-    // your async action is here
-    return () => {
-      abortController.abort();
-    };
-  }, []);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const loginTabBtnTrigger = useRef(null);
+  const registerTabBtnTrigger = useRef(null);
+
+  const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
+  const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
+
+  const handleSignOut = async () => {
+    await signOut({ redirect: false });
+  };
+
+  const [userToAuth, setUserToAuth] = useState(null);
+
+  const [canChangeType, setCanChangeType] = useState(false);
+  const [type, setType] = useState("email");
+  const [typeModalActive, setTypeModalActive] = useState(false);
+  const [typeModalError, setTypeModalError] = useState(null);
+
+  const [code, setCode] = useState("");
+  const [codeModalActive, setCodeModalActive] = useState(false);
+  const [codeModalError, setCodeModalError] = useState(null);
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  const [loginRememberMe, setLoginRememberMe] = useState(false);
+
+  const handleChangeCode = (e) => {
+    setCode(e.target.value);
+    setCodeModalError(null);
+  };
+
+  const handleSelectTypeClick = async (type) => {
+    setType(type);
+
+    try {
+      await generateTwoFactorCode(loginEmail, loginPassword, type);
+      setTypeModalActive(false);
+      setCodeModalActive(true);
+    } catch (e) {
+      setTypeModalError(e.message);
+    }
+  };
+
+  const handleCheckCode = async () => {
+    if (code.length < 1) {
+      setCodeModalError("Code is required field");
+    }
+
+    try {
+      const res = await checkTwoFactorCode(
+        type,
+        code,
+        userToAuth.id,
+        loginRememberMe
+      );
+
+      await signIn("credentials", {
+        authToken: res.authToken,
+        redirect: false,
+      });
+
+      onLogin(res.user);
+
+      setCodeModalActive(false);
+
+      if (res.user.needRegularViewInfoForm) {
+        router.push("/settings/profile-edit");
+      }
+
+      mainSuccess.set("Successfully logged in");
+      setCode("");
+    } catch (e) {
+      setCodeModalError(e.message);
+    }
+  };
+
+  const handleCloseCodeModal = () => {
+    setCodeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
+  };
+
+  const handleCloseTypeModal = () => {
+    setTypeModalActive(false);
+    setLoginPassword("");
+    setLoginRememberMe(false);
+    setCodeModalError(null);
+    setTypeModalError(null);
+  };
 
   return (
     <>
@@ -69,7 +198,7 @@ const NavbarTwo = () => {
                 )}
               </div>
               <div className="logo">
-                <Link href="/index-2">
+                <Link href="/">
                   <img src="/images/black-logo.png" alt="logo" />
                 </Link>
               </div>
@@ -80,695 +209,83 @@ const NavbarTwo = () => {
         <div className={showMenu ? "miran-nav show" : "miran-nav"}>
           <div className="container-fluid">
             <nav className="navbar navbar-expand-md navbar-light">
-              <Link href="/index-2" className="navbar-brand">
+              <Link href="/" className="navbar-brand">
                 <img src="/images/black-logo.png" alt="logo" />
               </Link>
               <div className="collapse navbar-collapse mean-menu">
-                <form className="navbar-search-box search-box-one">
-                  <label>
-                    <i className="flaticon-search"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="input-search"
-                    placeholder="What are you looking for?"
-                  />
-                </form>
+                {canShowSearch && (
+                  <form className="navbar-search-box search-box-one">
+                    <label>
+                      <i className="flaticon-search"></i>
+                    </label>
+
+                    <input
+                      type="text"
+                      className="input-search"
+                      placeholder="What are you looking for?"
+                      ref={categoryFilterRef}
+                      value={searchCategory}
+                      onFocus={openCategoryTipsPopup}
+                      onBlur={closeCategoryTipsPopup}
+                      onInput={handleChangeCategory}
+                    />
+
+                    <SearchTipsPopup
+                      active={tipsPopupActive}
+                      categoryTips={categoryTips}
+                      handleCategoryTipClick={handleCategoryTipClick}
+                    />
+                  </form>
+                )}
 
                 <ul className="navbar-nav">
                   <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
+                    <Link href="/" className="nav-link">
                       Home
                     </Link>
-
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link
-                          href="/"
-                          className={`nav-link ${
-                            currentPath == "/" && "active"
-                          }`}
-                        >
-                          Home Demo - 1
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/index-2/"
-                          className={`nav-link ${
-                            currentPath == "/index-2/" && "active"
-                          }`}
-                        >
-                          Home Demo - 2
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/index-3/"
-                          className={`nav-link ${
-                            currentPath == "/index-3/" && "active"
-                          }`}
-                        >
-                          Home Demo - 3
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/index-4/"
-                          className={`nav-link ${
-                            currentPath == "/index-4/" && "active"
-                          }`}
-                        >
-                          Home Demo - 4
-                        </Link>
-                      </li>
-                    </ul>
                   </li>
 
-                  <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
-                      Listings
-                    </Link>
+                  {isAuth && (
+                    <li className="nav-item">
+                      <Link href="/settings/" className="nav-link">
+                        Settings
+                      </Link>
+                    </li>
+                  )}
 
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link href="#" className="nav-link">
-                          List Layout <i className="bx bx-chevron-right"></i>
-                        </Link>
-
-                        <ul className="dropdown-menu">
-                          <li className="nav-item">
-                            <Link
-                              href="/vertical-listings-left-sidebar/"
-                              className={`nav-link ${
-                                currentPath ==
-                                  "/vertical-listings-left-sidebar/" && "active"
-                              }`}
-                            >
-                              Left Sidebar
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/vertical-listings-right-sidebar/"
-                              className={`nav-link ${
-                                currentPath ==
-                                  "/vertical-listings-right-sidebar/" &&
-                                "active"
-                              }`}
-                            >
-                              Right Sidebar
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/vertical-listings-full-width/"
-                              className={`nav-link ${
-                                currentPath ==
-                                  "/vertical-listings-full-width/" && "active"
-                              }`}
-                            >
-                              Full Width
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/vertical-listings-with-map/"
-                              className={`nav-link ${
-                                currentPath == "/vertical-listings-with-map/" &&
-                                "active"
-                              }`}
-                            >
-                              Full Width + Map
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/vertical-listings-full-map/"
-                              className={`nav-link ${
-                                currentPath == "/vertical-listings-full-map/" &&
-                                "active"
-                              }`}
-                            >
-                              Full Width + Full Map
-                            </Link>
-                          </li>
-                        </ul>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link href="#" className="nav-link">
-                          Grid Layout <i className="bx bx-chevron-right"></i>
-                        </Link>
-
-                        <ul className="dropdown-menu">
-                          <li className="nav-item">
-                            <Link
-                              href="/grid-listings-with-left-sidebar/"
-                              className={`nav-link ${
-                                currentPath ==
-                                  "/grid-listings-with-left-sidebar/" &&
-                                "active"
-                              }`}
-                            >
-                              Left Sidebar
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/grid-listings-with-right-sidebar/"
-                              className={`nav-link ${
-                                currentPath ==
-                                  "/grid-listings-with-right-sidebar/" &&
-                                "active"
-                              }`}
-                            >
-                              Right Sidebar
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/grid-listings-full-width/"
-                              className={`nav-link ${
-                                currentPath == "/grid-listings-full-width/" &&
-                                "active"
-                              }`}
-                            >
-                              Full Width
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/grid-listings-with-map/"
-                              className={`nav-link ${
-                                currentPath == "/grid-listings-with-map/" &&
-                                "active"
-                              }`}
-                            >
-                              Full Width + Map
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/grid-listings-full-map/"
-                              className={`nav-link ${
-                                currentPath == "/grid-listings-full-map/" &&
-                                "active"
-                              }`}
-                            >
-                              Full Width + Full Map
-                            </Link>
-                          </li>
-                        </ul>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/single-listings/"
-                          className={`nav-link ${
-                            currentPath == "/single-listings/" && "active"
-                          }`}
-                        >
-                          Listings Details
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/destinations/"
-                          className={`nav-link ${
-                            currentPath == "/destinations/" && "active"
-                          }`}
-                        >
-                          Top Place
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/categories/"
-                          className={`nav-link ${
-                            currentPath == "/categories/" && "active"
-                          }`}
-                        >
-                          Categories
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/user-profile/"
-                          className={`nav-link ${
-                            currentPath == "/user-profile/" && "active"
-                          }`}
-                        >
-                          Author Profile
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
-                      User Panel
-                    </Link>
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/" && "active"
-                          }`}
-                        >
-                          Dashboard
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/messages/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/messages/" && "active"
-                          }`}
-                        >
-                          Messages
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/bookings/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/bookings/" && "active"
-                          }`}
-                        >
-                          Bookings
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/wallet/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/wallet/" && "active"
-                          }`}
-                        >
-                          Wallet
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/my-listing/active/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/my-listing/active/" &&
-                            "active"
-                          }`}
-                        >
-                          My Listings
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/reviews/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/reviews/" && "active"
-                          }`}
-                        >
-                          Reviews
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/bookmarks/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/bookmarks/" && "active"
-                          }`}
-                        >
-                          Bookmarks
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/add-listing/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/add-listing/" && "active"
-                          }`}
-                        >
-                          Add Listings
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/profile/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/profile/" && "active"
-                          }`}
-                        >
-                          My Profile
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/dashboard/invoice/"
-                          className={`nav-link ${
-                            currentPath == "/dashboard/invoice/" && "active"
-                          }`}
-                        >
-                          Invoice
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
-                      Shop
-                    </Link>
-
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link
-                          href="/shop/"
-                          className={`nav-link ${
-                            currentPath == "/shop/" && "active"
-                          }`}
-                        >
-                          Products List
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/cart/"
-                          className={`nav-link ${
-                            currentPath == "/cart/" && "active"
-                          }`}
-                        >
-                          Cart
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/checkout/"
-                          className={`nav-link ${
-                            currentPath == "/checkout/" && "active"
-                          }`}
-                        >
-                          Checkout
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/product-details/"
-                          className={`nav-link ${
-                            currentPath == "/product-details/" && "active"
-                          }`}
-                        >
-                          Products Details
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
-                      Blog
-                    </Link>
-
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link
-                          href="/blog-1/"
-                          className={`nav-link ${
-                            currentPath == "/blog-1/" && "active"
-                          }`}
-                        >
-                          Grid (2 in Row)
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/blog-2/"
-                          className={`nav-link ${
-                            currentPath == "/blog-2/" && "active"
-                          }`}
-                        >
-                          Grid (3 in Row)
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/blog-3/"
-                          className={`nav-link ${
-                            currentPath == "/blog-3/" && "active"
-                          }`}
-                        >
-                          Grid (Full Width)
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/blog-4/"
-                          className={`nav-link ${
-                            currentPath == "/blog-4/" && "active"
-                          }`}
-                        >
-                          Right Sidebar
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/blog-5/"
-                          className={`nav-link ${
-                            currentPath == "/blog-5/" && "active"
-                          }`}
-                        >
-                          Left Sidebar
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link href="#" className="nav-link">
-                          Single Post <i className="bx bx-chevron-right"></i>
-                        </Link>
-
-                        <ul className="dropdown-menu">
-                          <li className="nav-item">
-                            <Link
-                              href="/single-blog-1/"
-                              className={`nav-link ${
-                                currentPath == "/single-blog-1/" && "active"
-                              }`}
-                            >
-                              Default
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/single-blog-2/"
-                              className={`nav-link ${
-                                currentPath == "/single-blog-2/" && "active"
-                              }`}
-                            >
-                              With Video
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/single-blog-3/"
-                              className={`nav-link ${
-                                currentPath == "/single-blog-3/" && "active"
-                              }`}
-                            >
-                              With Image Slider
-                            </Link>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link href="#" className="dropdown-toggle nav-link">
-                      Pages
-                    </Link>
-
-                    <ul className="dropdown-menu">
-                      <li className="nav-item">
-                        <Link
-                          href="/about/"
-                          className={`nav-link ${
-                            currentPath == "/about/" && "active"
-                          }`}
-                        >
-                          About Us
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/how-it-works/"
-                          className={`nav-link ${
-                            currentPath == "/how-it-works/" && "active"
-                          }`}
-                        >
-                          How It Work
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/pricing/"
-                          className={`nav-link ${
-                            currentPath == "/pricing/" && "active"
-                          }`}
-                        >
-                          Pricing
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/gallery/"
-                          className={`nav-link ${
-                            currentPath == "/gallery/" && "active"
-                          }`}
-                        >
-                          Gallery
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link href="#" className="nav-link">
-                          Events <i className="bx bx-chevron-right"></i>
-                        </Link>
-                        <ul className="dropdown-menu">
-                          <li className="nav-item">
-                            <Link
-                              href="/events/"
-                              className={`nav-link ${
-                                currentPath == "/events/" && "active"
-                              }`}
-                            >
-                              Events
-                            </Link>
-                          </li>
-
-                          <li className="nav-item">
-                            <Link
-                              href="/single-events/"
-                              className={`nav-link ${
-                                currentPath == "/single-events/" && "active"
-                              }`}
-                            >
-                              Events Details
-                            </Link>
-                          </li>
-                        </ul>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/testimonial/"
-                          className={`nav-link ${
-                            currentPath == "/testimonial/" && "active"
-                          }`}
-                        >
-                          Testimonials
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/faq/"
-                          className={`nav-link ${
-                            currentPath == "/faq/" && "active"
-                          }`}
-                        >
-                          FAQ
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/404/"
-                          className={`nav-link ${
-                            currentPath == "/404/" && "active"
-                          }`}
-                        >
-                          404 Error
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/coming-soon/"
-                          className={`nav-link ${
-                            currentPath == "/coming-soon/" && "active"
-                          }`}
-                        >
-                          Coming Soon
-                        </Link>
-                      </li>
-
-                      <li className="nav-item">
-                        <Link
-                          href="/contact/"
-                          className={`nav-link ${
-                            currentPath == "/contact/" && "active"
-                          }`}
-                        >
-                          Contact
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
+                  {isSupport && (
+                    <li className="nav-item">
+                      <Link href="/admin/" className="nav-link">
+                        Admin Section
+                      </Link>
+                    </li>
+                  )}
                 </ul>
 
                 <div className="others-option d-flex align-items-center">
-                  <div className="option-item">
-                    <span
-                      data-toggle="modal"
-                      onClick={toggleAuth}
-                      className="auth-one"
-                    >
-                      <i className="flaticon-user"></i> Login / Register
-                    </span>
-                  </div>
+                  {!isAuth && (
+                    <div className="option-item">
+                      <span
+                        data-toggle="modal"
+                        onClick={toggleAuth}
+                        className="auth-one"
+                      >
+                        <i className="flaticon-user"></i> Login / Register
+                      </span>
+                    </div>
+                  )}
 
-                  <div className="option-item">
-                    <Link
-                      href="/dashboard/add-listing"
-                      className="default-btn button-one"
-                    >
-                      <i className="flaticon-more"></i> Add Listing
-                    </Link>
-                  </div>
+                  {isAuth && (
+                    <div className="option-item">
+                      <span
+                        data-toggle="modal"
+                        onClick={handleSignOut}
+                        className="auth-one"
+                      >
+                        <i className="bx bx-log-out"></i> Sign out
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </nav>
@@ -788,34 +305,53 @@ const NavbarTwo = () => {
             <div className={displayMiniAuth ? "container active" : "container"}>
               <div className="option-inner">
                 <div className="others-option">
-                  <div className="option-item">
-                    <form className="navbar-search-box">
-                      <label>
-                        <i className="flaticon-search"></i>
-                      </label>
-                      <input
-                        type="text"
-                        className="input-search"
-                        placeholder="What are you looking for?"
-                      />
-                    </form>
-                  </div>
+                  {canShowSearch && (
+                    <div className="option-item">
+                      <form className="navbar-search-box">
+                        <label>
+                          <i className="flaticon-search"></i>
+                        </label>
+                        <input
+                          type="text"
+                          className="input-search"
+                          placeholder="What are you looking for?"
+                          ref={smallCategoryFilterRef}
+                          value={searchCategory}
+                          onFocus={openCategoryTipsPopup}
+                          onBlur={closeCategoryTipsPopup}
+                          onInput={handleChangeCategory}
+                        />
 
-                  <div className="option-item">
-                    <span
-                      data-toggle="modal"
-                      data-target="#loginRegisterModal"
-                      onClick={toggleAuth}
-                    >
-                      <i className="flaticon-user"></i> Login / Register
-                    </span>
-                  </div>
+                        <SearchTipsPopup
+                          active={tipsPopupActive}
+                          categoryTips={categoryTips}
+                          handleCategoryTipClick={handleCategoryTipClick}
+                        />
+                      </form>
+                    </div>
+                  )}
 
-                  <div className="option-item">
+                  {!isAuth && (
+                    <div className="option-item">
+                      <span data-toggle="modal" onClick={toggleAuth}>
+                        <i className="flaticon-user"></i> Login / Register
+                      </span>
+                    </div>
+                  )}
+
+                  {isAuth && (
+                    <div className="option-item">
+                      <span data-toggle="modal" onClick={handleSignOut}>
+                        <i className="bx bx-log-out"></i> Sign out
+                      </span>
+                    </div>
+                  )}
+
+                  {/*<div className="option-item">
                     <Link href="/dashboard/add-listing" className="default-btn">
                       <i className="flaticon-more"></i> Add Listing
                     </Link>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>
@@ -823,158 +359,100 @@ const NavbarTwo = () => {
         </div>
       </div>
 
-      {/* ------------ Auth Modal ------- */}
-      <div
-        className={
-          displayAuth
-            ? "modal loginRegisterModal show"
-            : "modal loginRegisterModal"
-        }
-        id="loginRegisterModal"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <Tabs>
-              <button type="button" className="close" onClick={toggleAuth}>
-                <i className="bx bx-x"></i>
-              </button>
+      {!isAuth && canChangeType && (
+        <AuthTypeModal
+          typeModalActive={typeModalActive}
+          typeModalError={typeModalError}
+          handleSelectTypeClick={handleSelectTypeClick}
+          handleClose={handleCloseTypeModal}
+        />
+      )}
 
-              <ul className="nav nav-tabs" id="myTab">
-                <TabList>
-                  <Tab className="nav-item">
-                    <a className="nav-link" id="login-tab">
-                      Login
-                    </a>
-                  </Tab>
-                  <Tab className="nav-item">
-                    <a className="nav-link" id="register-tab">
-                      Register
-                    </a>
-                  </Tab>
-                </TabList>
-              </ul>
+      {!isAuth && (
+        <AuthCodeModal
+          codeModalActive={codeModalActive}
+          code={code}
+          handleChangeCode={handleChangeCode}
+          codeModalError={codeModalError}
+          handleCheckCode={handleCheckCode}
+          handleClose={handleCloseCodeModal}
+        />
+      )}
 
-              <div className="tab-content" id="myTabContent">
-                <TabPanel>
-                  <div className="tab-pane fade show active" id="login">
-                    <div className="miran-login">
-                      <div className="login-with-account">
-                        <span>Login with</span>
-                        <ul>
-                          <li>
-                            <a href="#" className="facebook" target="_blank">
-                              <i className="bx bxl-facebook"></i> Facebook
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="twitter" target="_blank">
-                              <i className="bx bxl-twitter"></i> Twitter
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
+      {!isAuth && (
+        <>
+          <div
+            className={
+              displayAuth
+                ? "modal loginRegisterModal show"
+                : "modal loginRegisterModal"
+            }
+            id="loginRegisterModal"
+          >
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <Tabs>
+                  <button type="button" className="close" onClick={toggleAuth}>
+                    <i className="bx bx-x"></i>
+                  </button>
 
-                      <span className="sub-title">
-                        <span>Or login with</span>
-                      </span>
+                  <ul className="nav nav-tabs" id="myTab">
+                    <TabList>
+                      <Tab className="nav-item">
+                        <a
+                          className="nav-link"
+                          id="login-tab"
+                          ref={loginTabBtnTrigger}
+                        >
+                          Login
+                        </a>
+                      </Tab>
+                      <Tab className="nav-item">
+                        <a
+                          className="nav-link"
+                          id="register-tab"
+                          ref={registerTabBtnTrigger}
+                        >
+                          Register
+                        </a>
+                      </Tab>
+                    </TabList>
+                  </ul>
 
-                      <form>
-                        <div className="form-group">
-                          <input
-                            type="text"
-                            placeholder="Username or Email"
-                            className="form-control"
-                          />
-                        </div>
+                  <div className="tab-content" id="myTabContent">
+                    <TabPanel>
+                      <LoginTab
+                        activePopup={displayAuth}
+                        setUser={setUserToAuth}
+                        email={loginEmail}
+                        setEmail={setLoginEmail}
+                        password={loginPassword}
+                        setPassword={setLoginPassword}
+                        moveToRegister={handleRegisterTabActive}
+                        closeModal={closeModals}
+                        setCanChangeType={setCanChangeType}
+                        setType={setType}
+                        setCodeModalActive={setCodeModalActive}
+                        setTypeModalActive={setTypeModalActive}
+                        rememberMe={loginRememberMe}
+                        setRememberMe={setLoginRememberMe}
+                      />
+                    </TabPanel>
 
-                        <div className="form-group">
-                          <input
-                            type="password"
-                            placeholder="Password"
-                            className="form-control"
-                          />
-                        </div>
-
-                        <button type="submit">Register Now</button>
-                      </form>
-
-                      <span className="dont-account">
-                        Don&apos;t have an account? <a href="#">Register Now</a>
-                      </span>
-                    </div>
+                    <TabPanel>
+                      <RegisterTab
+                        activePopup={displayAuth}
+                        moveToLogin={handleLoginTabActive}
+                        closeModal={closeModals}
+                      />
+                    </TabPanel>
                   </div>
-                </TabPanel>
-
-                <TabPanel>
-                  <div className="tab-pane" id="register">
-                    <div className="miran-register">
-                      <div className="register-with-account">
-                        <span>Register with</span>
-                        <ul>
-                          <li>
-                            <a href="#" className="facebook" target="_blank">
-                              <i className="bx bxl-facebook"></i> Facebook
-                            </a>
-                          </li>
-                          <li>
-                            <a href="#" className="twitter" target="_blank">
-                              <i className="bx bxl-twitter"></i> Twitter
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
-
-                      <span className="sub-title">
-                        <span>Or Register with</span>
-                      </span>
-
-                      <form>
-                        <div className="form-group">
-                          <input
-                            type="text"
-                            placeholder="Username"
-                            className="form-control"
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <input
-                            type="email"
-                            placeholder="Email"
-                            className="form-control"
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <input
-                            type="password"
-                            placeholder="Password"
-                            className="form-control"
-                          />
-                        </div>
-
-                        <div className="form-group">
-                          <input
-                            type="password"
-                            placeholder="Confirm Password"
-                            className="form-control"
-                          />
-                        </div>
-
-                        <button type="submit">Register Now</button>
-                      </form>
-
-                      <span className="already-account">
-                        Already have an account? <a href="#">Login Now</a>
-                      </span>
-                    </div>
-                  </div>
-                </TabPanel>
+                </Tabs>
               </div>
-            </Tabs>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };

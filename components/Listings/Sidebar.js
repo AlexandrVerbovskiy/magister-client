@@ -1,171 +1,420 @@
-import React from "react"; 
+import React, { useState, useRef, useEffect } from "react";
+import DateInput from "../FormComponents/DateInput";
+import { dateToInput } from "../../utils";
+import { useRouter } from "next/router";
+
+const categories = [
+  { name: "categories1", value: "restaurant", title: "Restaurant" },
+  { name: "categories2", value: "hotel", title: "Hotel" },
+  { name: "categories3", value: "beauty_&_spa", title: "Beauty & Spa" },
+  { name: "categories4", value: "fitness", title: "Fitness" },
+  { name: "categories5", value: "shopping", title: "Shopping" },
+  { name: "categories6", value: "hospital", title: "Hospital" },
+  { name: "categories7", value: "events", title: "Events" },
+  { name: "categories8", value: "clothing", title: "Clothing" },
+];
+
+const distances = [
+  { name: "distance1", value: "driving_(5_mi.)", title: "Driving (5 mi.)" },
+  { name: "distance2", value: "walking_(1_mi.)", title: "Walking (1 mi.)" },
+  { name: "distance3", value: "biking_(1_mi.)", title: "Biking (2 mi.)" },
+  { name: "distance4", value: "within_4_blocks", title: "Within 4 blocks" },
+  { name: "distance5", value: "bicycle_(6_mi.)", title: "Bicycle (6 mi.)" },
+  { name: "distance6", value: "driving_(10_mi.)", title: "Driving (10 mi.)" },
+  { name: "distance7", value: "walking_(10_mi.)", title: "Walking (11 mi.)" },
+];
+
+const baseShowedMore = false;
+const baseToDay = 2;
 
 const Sidebar = () => {
+  const router = useRouter();
+
+  const [mainFilterOpen, setMainFilterOpen] = useState(true);
+  const [categoriesOpen, setCategoriesOpen] = useState(true);
+  const [distanceOpen, setDistanceOpen] = useState(true);
+
+  const [categoriesShowedMore, setCategoriesShowedMore] =
+    useState(baseShowedMore);
+  const [distanceShowedMore, setDistanceShowedMore] = useState(baseShowedMore);
+
+  const [fromDateFilter, setFromDateFilter] = useState(dateToInput());
+  const [toDateFilter, setToDateFilter] = useState(dateToInput(baseToDay));
+
+  const mainFilterFullUlRef = useRef(null);
+
+  const categoryMainUlRef = useRef(null);
+  const categoryDopUlRef = useRef(null);
+  const categoryShowMoreUlRef = useRef(null);
+
+  const distanceMainUlRef = useRef(null);
+  const distanceDopUlRef = useRef(null);
+  const distanceShowMoreUlRef = useRef(null);
+
+  const [mainFilterMaxHeight, setMainFilterMaxHeight] = useState(null);
+  const [categoryMaxHeight, setCategoryMaxHeight] = useState(null);
+  const [distanceMaxHeight, setDistanceMaxHeight] = useState(null);
+
+  const [categoryDopMaxHeight, setCategoryDopMaxHeight] = useState(null);
+  const [distanceDopMaxHeight, setDistanceDopMaxHeight] = useState(null);
+
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedDistances, setSelectedDistances] = useState([]);
+
+  useEffect(() => {
+    const { categories, distances, from, to } = router.query;
+
+    if (from) {
+      if (from >= fromDateFilter) {
+        setFromDateFilter(from);
+      }
+    }
+
+    if (to) {
+      if (from > to) {
+        if (from >= fromDateFilter) {
+          setToDateFilter(from);
+        }
+      } else {
+        if (to >= toDateFilter) {
+          setToDateFilter(to);
+        }
+      }
+    }
+
+    try {
+      setSelectedCategories(JSON.parse(categories));
+    } catch (e) {
+      setSelectedCategories([]);
+    }
+
+    try {
+      setSelectedDistances(JSON.parse(distances));
+    } catch (e) {
+      setSelectedDistances([]);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    if (mainFilterFullUlRef.current) {
+      const childHeight = mainFilterFullUlRef.current.scrollHeight + 1;
+      setMainFilterMaxHeight(childHeight);
+    }
+  }, [mainFilterFullUlRef.current]);
+
+  useEffect(() => {
+    if (categoryMainUlRef.current) {
+      const childHeight =
+        categoryMainUlRef.current.scrollHeight +
+        categoryDopUlRef.current.scrollHeight +
+        categoryShowMoreUlRef.current.scrollHeight +
+        1;
+      setCategoryMaxHeight(childHeight);
+    }
+  }, [
+    categoryMainUlRef.current,
+    categoryDopUlRef.current,
+    categoryShowMoreUlRef.current,
+  ]);
+
+  useEffect(() => {
+    if (
+      distanceMainUlRef.current &&
+      distanceDopUlRef.current &&
+      distanceShowMoreUlRef.current
+    ) {
+      const childHeight =
+        distanceMainUlRef.current.scrollHeight +
+        distanceDopUlRef.current.scrollHeight +
+        distanceShowMoreUlRef.current.scrollHeight +
+        1;
+      setDistanceMaxHeight(childHeight);
+    }
+  }, [
+    distanceMainUlRef.current,
+    distanceDopUlRef.current,
+    distanceShowMoreUlRef.current,
+  ]);
+
+  useEffect(() => {
+    if (categoryDopUlRef.current) {
+      setCategoryDopMaxHeight(categoryDopUlRef.current.scrollHeight + 1);
+    }
+  }, [categoryDopUlRef.current]);
+
+  useEffect(() => {
+    if (distanceDopUlRef.current) {
+      setDistanceDopMaxHeight(distanceDopUlRef.current.scrollHeight + 1);
+    }
+  }, [distanceDopUlRef.current]);
+
+  const updateCurrentLink = (dopProps = {}) => {
+    const props = {
+      fromDateFilter,
+      toDateFilter,
+      selectedCategories,
+      selectedDistances,
+      ...dopProps,
+    };
+
+    let link = `?from=${props.fromDateFilter}&to=${props.toDateFilter}`;
+
+    if (props.selectedCategories.length > 0) {
+      link += `&categories=${encodeURIComponent(
+        JSON.stringify(props.selectedCategories)
+      )}`;
+    }
+
+    if (props.selectedDistances.length > 0) {
+      link += `&distances=${encodeURIComponent(
+        JSON.stringify(props.selectedDistances)
+      )}`;
+    }
+
+    const currentLink = window.location.href;
+
+    const newLinkPart =
+      window.location.origin + window.location.pathname + link;
+
+    if (currentLink !== newLinkPart) {
+      window.history.replaceState(null, null, newLinkPart);
+    }
+  };
+
+  const handleChangeCheckedCategory = (value) => {
+    let newSelectedCategories = selectedCategories;
+
+    if (selectedCategories.includes(value)) {
+      newSelectedCategories = newSelectedCategories.filter(
+        (category) => category != value
+      );
+    } else {
+      newSelectedCategories = [...newSelectedCategories, value];
+    }
+
+    setSelectedCategories(newSelectedCategories);
+    updateCurrentLink({ selectedCategories: newSelectedCategories });
+  };
+
+  const handleChangeCheckedDistance = (value) => {
+    let newSelectedDistances = selectedDistances;
+
+    if (selectedDistances.includes(value)) {
+      newSelectedDistances = newSelectedDistances.filter(
+        (distance) => distance != value
+      );
+    } else {
+      newSelectedDistances = [...newSelectedDistances, value];
+    }
+
+    setSelectedDistances(newSelectedDistances);
+    updateCurrentLink({ selectedDistances: newSelectedDistances });
+  };
+
+  const handleFromDateFilterChange = (value) => {
+    setFromDateFilter(value);
+    updateCurrentLink({ fromDateFilter: value });
+
+    if (!toDateFilter || value > toDateFilter) {
+      setToDateFilter(value);
+    }
+  };
+
+  const handleToDateFilterChange = (value) => {
+    setToDateFilter(value);
+    updateCurrentLink({ toDateFilter: value });
+  };
   return (
     <>
       <aside className="listings-widget-area">
-        <section className="widget widget_filters">
-          <h3 className="widget-title">Filters</h3>
+        <section
+          className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setMainFilterOpen(!mainFilterOpen)}
+          >
+            Filters
+          </h3>
 
-          <ul>
-            <li>
-              <button type="button">$</button>
-            </li>
-            <li>
-              <button type="button">$$</button>
-            </li>
-            <li>
-              <button type="button">$$$</button>
-            </li>
-            <li>
-              <button type="button">$$$$</button>
-            </li>
-          </ul>
+          <div
+            className="widget-body"
+            style={
+              !mainFilterMaxHeight
+                ? null
+                : { maxHeight: `${mainFilterMaxHeight}px` }
+            }
+          >
+            <ul ref={mainFilterFullUlRef}>
+              <li className="d-flex align-items-end date-filter-row">
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="from_date">From</label>
+                  <DateInput
+                    min={new Date().toISOString().split("T")[0]}
+                    name="from_date"
+                    value={fromDateFilter}
+                    onInput={(value) => handleFromDateFilterChange(value)}
+                  />
+                </div>
+
+                <div style={{ marginLeft: "10px", marginRight: "10px" }}>-</div>
+
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="to_date">To</label>
+                  <DateInput
+                    min={
+                      fromDateFilter || new Date().toISOString().split("T")[0]
+                    }
+                    name="to_date"
+                    value={toDateFilter}
+                    onInput={(value) => handleToDateFilterChange(value)}
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
         </section>
 
-        <section className="widget widget_categories">
-          <h3 className="widget-title">Categories</h3>
+        <section
+          className={`widget widget_categories ${
+            categoriesOpen ? "" : "close"
+          }`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setCategoriesOpen(!categoriesOpen)}
+          >
+            Categories
+          </h3>
 
-          <ul>
-            <li>
-              <input id="categories1" type="checkbox" />
-              <label htmlFor="categories1">Restaurant</label>
-            </li>
+          <div
+            className="widget-body"
+            style={
+              !categoryMaxHeight
+                ? null
+                : { maxHeight: `${categoryMaxHeight}px` }
+            }
+          >
+            <ul ref={categoryMainUlRef}>
+              {categories.slice(0, 5).map((category) => (
+                <li key={category.name}>
+                  <input
+                    id={category.name}
+                    type="checkbox"
+                    onChange={() => handleChangeCheckedCategory(category.value)}
+                    checked={selectedCategories.includes(category.value)}
+                    value={category.value}
+                  />
+                  <label htmlFor={category.name}>{category.title} </label>
+                </li>
+              ))}
+            </ul>
 
-            <li>
-              <input id="categories2" type="checkbox" />
-              <label htmlFor="categories2">Hotel</label>
-            </li>
+            <div
+              className={`showed-more ${categoriesShowedMore ? "" : "close"}`}
+              style={
+                !categoryDopMaxHeight
+                  ? null
+                  : { maxHeight: `${categoryDopMaxHeight}px` }
+              }
+            >
+              <ul ref={categoryDopUlRef} style={{ paddingTop: "11px" }}>
+                {categories.slice(5).map((category) => (
+                  <li key={category.name}>
+                    <input
+                      id={category.name}
+                      type="checkbox"
+                      onChange={() =>
+                        handleChangeCheckedCategory(category.value)
+                      }
+                      checked={selectedCategories.includes(category.value)}
+                      value={category.value}
+                    />
+                    <label htmlFor={category.name}>{category.title} </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <li>
-              <input id="categories3" type="checkbox" />
-              <label htmlFor="categories3">Beauty & Spa</label>
-            </li>
-
-            <li>
-              <input id="categories4" type="checkbox" />
-              <label htmlFor="categories4">Fitness</label>
-            </li>
-
-            <li>
-              <input id="categories5" type="checkbox" />
-              <label htmlFor="categories5">Shopping</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories6" type="checkbox" />
-              <label htmlFor="categories6">Hospital</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories7" type="checkbox" />
-              <label htmlFor="categories7">Events</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories8" type="checkbox" />
-              <label htmlFor="categories8">Clothing</label>
-            </li>
-            
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
+            <ul ref={categoryShowMoreUlRef} style={{ paddingTop: "11px" }}>
+              <li
+                className="see-all-btn"
+                onClick={() => setCategoriesShowedMore(!categoriesShowedMore)}
+              >
+                <span>{categoriesShowedMore ? "See Less" : "See All"} </span>
+              </li>
+            </ul>
+          </div>
         </section>
 
-        <section className="widget widget_features">
-          <h3 className="widget-title">Features</h3>
+        <section
+          className={`widget widget_distance ${distanceOpen ? "" : "close"}`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setDistanceOpen(!distanceOpen)}
+          >
+            Distance
+          </h3>
 
-          <ul>
-            <li>
-              <input id="categories1" type="checkbox" />
-              <label htmlFor="categories1">Restaurant</label>
-            </li>
+          <div
+            className="widget-body"
+            style={
+              !distanceMaxHeight
+                ? null
+                : { maxHeight: `${distanceMaxHeight}px` }
+            }
+          >
+            <ul ref={distanceMainUlRef}>
+              {distances.slice(0, 5).map((distance) => (
+                <li key={distance.name}>
+                  <input
+                    id={distance.name}
+                    type="checkbox"
+                    value={distance.value}
+                    onChange={() => handleChangeCheckedDistance(distance.value)}
+                    checked={selectedDistances.includes(distance.value)}
+                  />
+                  <label htmlFor={distance.name}>{distance.title} </label>
+                </li>
+              ))}
+            </ul>
 
-            <li>
-              <input id="categories2" type="checkbox" />
-              <label htmlFor="categories2">Hotel</label>
-            </li>
+            <div
+              className={`showed-more ${distanceShowedMore ? "" : "close"}`}
+              style={
+                !distanceDopMaxHeight
+                  ? null
+                  : { maxHeight: `${distanceDopMaxHeight}px` }
+              }
+            >
+              <ul ref={distanceDopUlRef} style={{ paddingTop: "11px" }}>
+                {distances.slice(5).map((distance) => (
+                  <li key={distance.name}>
+                    <input
+                      id={distance.name}
+                      type="checkbox"
+                      value={distance.value}
+                      onChange={() =>
+                        handleChangeCheckedDistance(distance.value)
+                      }
+                      checked={selectedDistances.includes(distance.value)}
+                    />
+                    <label htmlFor={distance.name}>{distance.title} </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-            <li>
-              <input id="categories3" type="checkbox" />
-              <label htmlFor="categories3">Beauty & Spa</label>
-            </li>
-
-            <li>
-              <input id="categories4" type="checkbox" />
-              <label htmlFor="categories4">Fitness</label>
-            </li>
-            
-            <li>
-              <input id="categories5" type="checkbox" />
-              <label htmlFor="categories5">Shopping</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories6" type="checkbox" />
-              <label htmlFor="categories6">Hospital</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories7" type="checkbox" />
-              <label htmlFor="categories7">Events</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories8" type="checkbox" />
-              <label htmlFor="categories8">Clothing</label>
-            </li>
-
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
-        </section>
-
-        <section className="widget widget_distance">
-          <h3 className="widget-title">Distance</h3>
-
-          <ul>
-            <li>
-              <input id="distance1" type="checkbox" />
-              <label htmlFor="distance1">Driving (5 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance2" type="checkbox" />
-              <label htmlFor="distance2">Walking (1 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance3" type="checkbox" />
-              <label htmlFor="distance3">Biking (2 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance4" type="checkbox" />
-              <label htmlFor="distance4">Within 4 blocks</label>
-            </li>
-
-            <li>
-              <input id="distance5" type="checkbox" />
-              <label htmlFor="distance5">Bicycle (6 mi.)</label>
-            </li>
-
-            <li className="hide">
-              <input id="distance6" type="checkbox" />
-              <label htmlFor="distance6">Driving (10 mi.)</label>
-            </li>
-
-            <li className="hide">
-              <input id="distance7" type="checkbox" />
-              <label htmlFor="distance7">Walking (11 mi.)</label>
-            </li>
-
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
+            <ul ref={distanceShowMoreUlRef} style={{ paddingTop: "11px" }}>
+              <li
+                className="see-all-btn"
+                onClick={() => setDistanceShowedMore(!distanceShowedMore)}
+              >
+                <span>{distanceShowedMore ? "See Less" : "See All"} </span>
+              </li>
+            </ul>
+          </div>
         </section>
       </aside>
     </>

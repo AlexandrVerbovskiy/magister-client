@@ -36,9 +36,9 @@ export const getServerSideProps = async (context) => {
   }
 
   const popularCategories = await getPopularListingCategories();
-  
+
   return {
-    props: { ...baseSideProps, popularCategories },
+    props: { ...baseSideProps.props, popularCategories },
   };
 };
 

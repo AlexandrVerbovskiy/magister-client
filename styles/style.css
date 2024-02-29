@@ -3884,7 +3884,7 @@ Listings Area CSS
 
 .all-listings-list {
   padding-right: 30px;
-  margin-left: -40px;
+  margin-left: 0 !important;
 }
 
 .map-container.fw-map.side-full-map {
@@ -16742,7 +16742,7 @@ Preloader Area CSS
 }
 
 .navbar-search-box .tips-popup {
-  border-top: 0!important;
+  border-top: 0 !important;
 }
 
 .tips-popup .tip {
@@ -16754,4 +16754,69 @@ Preloader Area CSS
 
 .tips-popup .tip:hover {
   background-color: #f2f2f2;
+}
+
+.page-title-bg form .popup-places-filter .submit-btn {
+  padding-left: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .page-title-bg form .popup-places-filter .submit-btn {
+    padding-left: 5px;
+  }
+}
+
+.listings-widget-area .widget-title {
+  cursor: pointer;
+}
+
+.showed-more,
+.listings-widget-area .widget,
+.listings-widget-area .widget .widget-body,
+.listings-widget-area .widget .widget-body ul,
+.listings-widget-area .widget .widget-title::before {
+  transition: all 0.4s ease-in-out;
+}
+
+.listings-widget-area .widget .widget-body,
+.listings-widget-area .widget .widget-body ul {
+  overflow: hidden;
+}
+
+.listings-widget-area .widget.close {
+  padding-bottom: 0;
+}
+
+.listings-widget-area .widget.close .widget-body {
+  max-height: 0 !important;
+}
+
+.listings-widget-area .widget.close .widget-title::before {
+  transform: rotate(180deg);
+}
+
+.date-input[type="date"] {
+  cursor: pointer;
+  border: 1px solid #d5d5d5;
+  color: #666666;
+  padding: 2px 5px;
+}
+
+.date-input[type="date"]::-webkit-inner-spin-button,
+.date-input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.date-filter,
+.date-filter input {
+  width: 100%;
+}
+
+.showed-more{
+  overflow: hidden;
+}
+
+.showed-more.close{
+  max-height: 0!important;
 }

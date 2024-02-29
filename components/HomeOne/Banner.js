@@ -3,37 +3,21 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../searchTipsPopup";
-import useSearchCategory from "../../hooks/useSearchCategory";
+import { useCategoryLocation } from "../../hooks";
 
-const Banner = ({popularCategories}) => {
-  const categoryFilterRef = useRef(null);
+const Banner = ({ popularCategories }) => {
   const {
+    handleChangeLocation,
+    handleCategoryTipClick,
+    handleChangeCategory,
+    searchCategory,
+    searchLocation,
     tipsPopupActive,
     categoryTips,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
-    updateCategoryTips,
-  } = useSearchCategory();
-
-  const [searchCategory, setSearchCategory] = useState("");
-  const [searchLocation, setSearchLocation] = useState("");
-
-  const handleChangeCategory = (e) => {
-    const newValue = e.target.value;
-    updateCategoryTips(newValue);
-    setSearchCategory(newValue);
-  };
-
-  const handleCategoryTipClick = (value) => {
-    categoryFilterRef.current.blur();
-    setSearchCategory(value);
-    updateCategoryTips(value);
-  };
-
-  const handleChangeLocation = (e) => {
-    const newLocation = e.target.value;
-    setSearchLocation(newLocation);
-  };
+    categoryFilterRef,
+  } = useCategoryLocation();
 
   /*const popularCategories = [
     "Hotels",
@@ -74,8 +58,6 @@ const Banner = ({popularCategories}) => {
         <div className="main-banner-content">
           <div className="banner-flexi">
             <h1 className="banner-one-heading">
-              <div className="banner-one-heading-fixed">Find Nearby</div>
-
               <div className="banner-one-heading-scrollable">
                 <Swiper
                   direction={"vertical"}
@@ -87,12 +69,15 @@ const Banner = ({popularCategories}) => {
                 >
                   {popularCategories.map((category) => (
                     <SwiperSlide key={category}>
-                      <Link
-                        href={`/search?filter=${category}`}
-                        className="color-0ec6c6"
-                      >
-                        {category}
-                      </Link>
+                      <span>
+                        Find Nearby{" "}
+                        <Link
+                          href={`/search?filter=${category}`}
+                          className="color-0ec6c6"
+                        >
+                          {category}
+                        </Link>
+                      </span>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -110,10 +95,10 @@ const Banner = ({popularCategories}) => {
                     <i className="flaticon-search"></i>
                   </label>
                   <input
-                    ref={categoryFilterRef}
                     type="text"
                     className="form-control"
                     placeholder="What are you looking for?"
+                    ref={categoryFilterRef}
                     onFocus={openCategoryTipsPopup}
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}

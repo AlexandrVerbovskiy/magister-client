@@ -90,6 +90,7 @@ const useMain = ({ userInfo, authToken }) => {
 
     let redirectLink = "/";
 
+
     if (session?.user) {
       setIsAuth(true);
 
@@ -169,7 +170,7 @@ const useMain = ({ userInfo, authToken }) => {
       set: handleSetSuccess,
       clear: clearSuccess,
     },
-    handleSetSuccess
+    handleSetSuccess,
   };
 };
 

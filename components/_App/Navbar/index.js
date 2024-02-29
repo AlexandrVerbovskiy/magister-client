@@ -12,7 +12,7 @@ import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../searchTipsPopup";
 
-const Navbar = () => {
+const Navbar = ({canShowSearch = true}) => {
   const {
     isAuth,
     success: mainSuccess,
@@ -31,7 +31,6 @@ const Navbar = () => {
     updateCategoryTips,
   } = useSearchCategory();
 
-  const [canShowSearch, setCanShowSearch] = useState(true);
   const [searchCategory, setSearchCategory] = useState("");
 
   const handleChangeCategory = (e) => {
@@ -48,10 +47,6 @@ const Navbar = () => {
   };
 
   const router = useRouter();
-
-  useEffect(() => {
-    //setCanShowSearch(router.asPath !== "/");
-  }, [router]);
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
@@ -227,6 +222,7 @@ const Navbar = () => {
                     <label>
                       <i className="flaticon-search"></i>
                     </label>
+                    
                     <input
                       type="text"
                       className="input-search"
