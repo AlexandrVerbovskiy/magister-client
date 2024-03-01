@@ -4,7 +4,7 @@ import Banner from "../components/HomeOne/Banner";
 import Footer from "../components/_App/Footer";
 import { IndiceContext } from "../contexts";
 import { userSideProps } from "../middlewares";
-import { getPopularListingCategories } from "../services/listingCategories";
+import { getIndexOptions } from "../services";
 
 const Index = ({ popularCategories }) => {
   const { setLoading } = useContext(IndiceContext);
@@ -35,10 +35,10 @@ export const getServerSideProps = async (context) => {
     };
   }
 
-  const popularCategories = await getPopularListingCategories();
+  const options = await getIndexOptions();
 
   return {
-    props: { ...baseSideProps.props, popularCategories },
+    props: { ...baseSideProps.props, ...options },
   };
 };
 

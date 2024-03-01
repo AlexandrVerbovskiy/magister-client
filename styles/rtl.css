@@ -38,6 +38,8 @@
 [dir=rtl] .miran-nav .navbar .others-option .option-item:first-child {
   margin-right: 0;
 }
+
+[dir=rtl] .add-listing-link-btn,
 [dir=rtl] .miran-nav .navbar .others-option .option-item .default-btn {
   font-size: 14px;
   padding-left: 25px;

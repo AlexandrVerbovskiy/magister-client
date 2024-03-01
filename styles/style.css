@@ -1116,6 +1116,8 @@ Navbar Area CSS
 .miran-nav .navbar .others-option .option-item span:hover::before {
   transform: scaleX(1);
 }
+
+.add-listing-link-btn,
 .miran-nav .navbar .others-option .option-item .default-btn {
   position: relative;
   box-shadow: unset !important;
@@ -1126,11 +1128,18 @@ Navbar Area CSS
   padding-top: 11px;
   padding-bottom: 11px;
 }
+.add-listing-link-btn i,
 .miran-nav .navbar .others-option .option-item .default-btn i {
   margin-right: 5px;
 }
+
+.add-listing-link-btn:hover,
 .miran-nav .navbar .others-option .option-item .default-btn:hover {
   background-color: var(--mainColor);
+  color: var(--whiteColor);
+}
+
+.add-listing-link-btn:hover i {
   color: var(--whiteColor);
 }
 
@@ -1706,6 +1715,8 @@ Navbar Area CSS
 .navbar-style-two .miran-nav .navbar .others-option .option-item span:hover i {
   color: var(--mainColor2);
 }
+
+.navbar-style-two .add-listing-link-btn,
 .navbar-style-two .miran-nav .navbar .others-option .option-item .default-btn {
   color: var(--mainColor2);
   border-color: var(--mainColor2);
@@ -12537,9 +12548,10 @@ Dashboard CSS
   visibility: visible;
 }
 .main-content .listing-area {
+  position: relative;
   background-color: var(--whiteColor);
   box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
-  padding: 25px 20px 0;
+  padding: 25px 20px;
   border-radius: 5px;
   margin-bottom: 30px;
 }
@@ -16813,10 +16825,107 @@ Preloader Area CSS
   width: 100%;
 }
 
-.showed-more{
+.showed-more {
   overflow: hidden;
 }
 
-.showed-more.close{
-  max-height: 0!important;
+.showed-more.close {
+  max-height: 0 !important;
+}
+
+.listing-area {
+  height: 70vh;
+}
+
+.no-listing {
+  width: 300px;
+  height: 300px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.no-listing-text {
+  margin-top: 10px;
+}
+
+.no-listing-btn {
+  margin-top: 10px;
+}
+
+.no-listing-img {
+  width: 180px;
+  height: 180px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  background-image: url("/images/claim-your-business.png");
+}
+
+.listing-category-select {
+  cursor: pointer;
+}
+
+.add-listings-box .form-group:has(.is-invalid) {
+  margin-bottom: 2px !important;
+}
+
+.dropzone.add-listings-box .gallery-flex {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f8f8;
+  cursor: pointer;
+}
+
+.dropzone.add-listings-box .gallery-flex img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.dropzone.add-listings-box .add-more-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.gallery-flex-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  border: 1px solid var(--mainColor);
+  background-color: var(--mainColor);
+  width: 34px;
+  height: 34px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-10px, 10px) rotate(45deg);
+}
+
+.remove-file-btn i::before {
+  transform: rotate(45deg);
 }

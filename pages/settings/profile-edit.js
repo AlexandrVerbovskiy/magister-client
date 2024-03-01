@@ -553,11 +553,12 @@ const ProfileEdit = () => {
           <h1>Settings</h1>
           <ol className="breadcrumb">
             <li className="item">
-              <Link href="/settings/">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/profile-edit">Profile Edit</Link>
+              <Link href="/settings/">Settings</Link>
             </li>
+            <li className="item">Profile Edit</li>
           </ol>
         </div>
 
@@ -574,9 +575,7 @@ const ProfileEdit = () => {
 
         {!user.hasPasswordAccess && (
           <div className="row">
-            <div className="col-12">
-              {profileFormSection}
-            </div>
+            <div className="col-12">{profileFormSection}</div>
           </div>
         )}
       </div>

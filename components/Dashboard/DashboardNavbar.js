@@ -60,6 +60,20 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
+                href="/settings/listings/"
+                className={`nav-link ${
+                  currentPath == "/settings/listings/" && "active"
+                }`}
+              >
+                <span className="icon">
+                  <i className="bx bx-layer"></i>
+                </span>
+                <span className="menu-title">Listings Edit</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
                 href="/settings/profile-edit/"
                 className={`nav-link ${
                   currentPath == "/settings/profile-edit/" && "active"

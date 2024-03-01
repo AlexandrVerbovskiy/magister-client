@@ -259,13 +259,12 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
           <h1>Settings</h1>
           <ol className="breadcrumb">
             <li className="item">
-              <Link href="/settings/">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/documents-verification">
-                Documents Verification
-              </Link>
+              <Link href="/settings/">Settings</Link>
             </li>
+            <li className="item"> Documents Verification</li>
           </ol>
         </div>
 
