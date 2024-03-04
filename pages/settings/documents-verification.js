@@ -273,7 +273,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
             <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              {lastDeclineDescription && (
+              {!user.verified && lastDeclineDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
                     <div

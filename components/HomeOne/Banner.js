@@ -70,7 +70,7 @@ const Banner = ({ popularCategories }) => {
                   {popularCategories.map((category) => (
                     <SwiperSlide key={category}>
                       <span>
-                        Find Nearby{" "}
+                        Find Near by{" "}
                         <Link
                           href={`/search?filter=${category}`}
                           className="color-0ec6c6"

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { authSideProps } from "../../../middlewares";
 

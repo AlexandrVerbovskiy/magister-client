@@ -20,7 +20,7 @@ const PopularPlacesFilter = () => {
     <>
       <div className="page-title-bg">
         <div className="container">
-          <h2>Find Popular Places</h2>
+          <h2>Find Near by</h2>
           <form>
             <div className="row m-0 align-items-center">
               <div className="col-lg-6 col-md-6 p-0">

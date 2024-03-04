@@ -1,35 +1,44 @@
 import Link from "next/link";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
-import React, { useEffect, useState, useRef } from "react";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  Circle,
-} from "@react-google-maps/api";
-import { useDropzone } from "react-dropzone";
+import React, { useState, useContext } from "react";
+import lodash from "lodash";
 
 import { authSideProps } from "../../../middlewares";
-import { getCreateListingOptions } from "../../../services";
-import ErrorSpan from "../../../components/ErrorSpan";
+import { createListing, getCreateListingOptions } from "../../../services";
 
-import ENV from "../../../env";
 import {
+  uniqueId,
   validateBigText,
   validateInteger,
   validatePrice,
   validateSmallText,
 } from "../../../utils";
-import BaseModal from "../../../components/_App/BaseModal";
+import EditMap from "../../../components/Listings/EditMap";
+import SelectWithIcon from "../../../components/FormComponents/SelectWithIcon";
+import InputWithIcon from "../../../components/FormComponents/InputWithIcon";
+import ErrorIconWrapper from "../../../components/FormComponents/ErrorIconWrapper";
+import TextareaWithIcon from "../../../components/FormComponents/TextareaWithIcon";
+import EditPhotosSection from "../../../components/Listings/EditPhotosSection";
+import { IndiceContext } from "../../../contexts";
 
-const baseMarker = {
-  lat: 44.076613,
-  lng: -98.362239833,
-  radius: 5000,
+const cityCoords = {
+  Warrington: { lat: 53.48095, lng: -2.23743 },
+  Manchester: { lat: 53.390044, lng: -2.59695 },
 };
 
-const AddListing = ({ categories }) => {
+const baseRadius = 500;
+
+const cityOptions = [
+  { value: "Warrington", label: "Warrington" },
+  { value: "Manchester", label: "Manchester" },
+];
+
+const baseCity = cityOptions[0]["value"];
+
+const AddListing = ({ categories, listing = {} }) => {
+  const { success, authToken } = useContext(IndiceContext);
+
   const levels = [
     { name: "firstLevel", label: "First level" },
     { name: "secondLevel", label: "Second level" },
@@ -45,61 +54,143 @@ const AddListing = ({ categories }) => {
     return result;
   }, {});
 
+  const baseCategoryKey = Object.keys(categorizedCategories).filter(
+    (key) =>
+      categorizedCategories[key].popular.length ||
+      categorizedCategories[key].unpopular.length
+  )[0];
+
+  const baseCategory = baseCategoryKey
+    ? (
+        categorizedCategories[baseCategoryKey].popular[0] ??
+        categorizedCategories[baseCategoryKey].unpopular[0]
+      ).id
+    : "";
+
   const [files, setFiles] = useState([]);
-  const [photoInfo, setPhotoInfo] = useState([]);
+  const [linkFiles, setLinkFiles] = useState([]);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/png": [".png"],
-      "image/jpeg": [".jpg", ".jpeg"],
-    },
-    onDrop: (acceptedFiles) => {
-      let newFiles = acceptedFiles.slice(0, 5 - files.length);
-      setFiles((prev) => [
-        ...prev,
-        ...newFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        ),
-      ]);
-      acceptedFiles = [];
-    },
-  });
+  const removeFile = (localIdToRemove, type) => {
+    if (type == "storage") {
+      const newFiles = files.filter((file) => file.localId !== localIdToRemove);
+      setFiles(newFiles);
+    }
 
-  const removeFile = (indexToRemove) => {
-    const newFiles = files.filter((_, index) => index !== indexToRemove);
-    setFiles(newFiles);
+    if (type == "url") {
+      const newLinkFiles = linkFiles.filter(
+        (file) => file.localId !== localIdToRemove
+      );
+      setLinkFiles(newLinkFiles);
+    }
   };
 
   const [photoPopupActive, setPhotoPopupActive] = useState(false);
-  const [photoPopupLinkType, setPhotoPopupLinkType] = useState("storage");
   const [photoPopupPhoto, setPhotoPopupPhoto] = useState(null);
-  const [photoPopupLink, setPhotoPopupLink] = useState(null);
+  const [photoPopupLink, setPhotoPopupLink] = useState("null");
+  const [photoPopupType, setPhotoPopupType] = useState("storage");
+  const [photoPopupLocalFileId, setPhotoPopupLocalFileId] = useState(null);
 
   const handleClosePhotoPopup = () => {
-    setPhotoPopupLinkType("storage");
+    setPhotoPopupLink("");
+    setPhotoPopupType("storage");
     setPhotoPopupPhoto(null);
     setPhotoPopupActive(null);
+    setPhotoPopupLocalFileId(null);
   };
 
+  const adaptLinkPropsToLocal = (list) =>
+    list.map((info) => ({
+      link: info.link,
+      localId: uniqueId(),
+      type: info.type,
+      date: Date.now(),
+    }));
+
   const handlePhotoAddByPopup = () => {
-    if (photoPopupLinkType === "storage") {
-      setFiles((prev) => [
-        ...prev,
-        Object.assign(photoPopupPhoto, {
-          preview: URL.createObjectURL(photoPopupPhoto),
-        }),
-      ]);
+    if (photoPopupType === "storage") {
+      let found = null;
+      let date = Date.now();
+
+      if (photoPopupLocalFileId) {
+        const newFiles = files.map((file) => {
+          if (file.localId != photoPopupLocalFileId) return file;
+
+          found = { ...file, preview: URL.createObjectURL(photoPopupPhoto) };
+          return found;
+        });
+
+        setFiles(newFiles);
+      }
+
+      if (photoPopupLocalFileId && !found) {
+        const file = linkFiles.filter(
+          (file) => file.localId == photoPopupLocalFileId
+        )[0];
+
+        if (file) {
+          date = file.date;
+        }
+
+        const newLinkFiles = linkFiles.filter(
+          (file) => file.localId != photoPopupLocalFileId
+        );
+        setLinkFiles(newLinkFiles);
+      }
+
+      if (!photoPopupLocalFileId || !found) {
+        setFiles((prev) => [
+          ...prev,
+          Object.assign(photoPopupPhoto, {
+            preview: URL.createObjectURL(photoPopupPhoto),
+            localId: uniqueId(),
+            date,
+          }),
+        ]);
+      }
     } else {
-      setPhotoInfo((prev) => [
-        ...prev,
-        {
-          type: photoPopupLinkType,
-          path: photoPopupPhoto,
-        },
-      ]);
+      let found = null;
+      let date = Date.now();
+
+      if (photoPopupLocalFileId) {
+        const newLinkFiles = linkFiles.map((file) => {
+          if (file.localId != photoPopupLocalFileId) return file;
+
+          found = { ...file, link: photoPopupPhoto, type: "url" };
+          return found;
+        });
+
+        setLinkFiles(newLinkFiles);
+      }
+
+      if (photoPopupLocalFileId && !found) {
+        const file = files.filter(
+          (file) => file.localId == photoPopupLocalFileId
+        )[0];
+
+        if (file) {
+          date = file.date;
+        }
+
+        const newFiles = files.filter(
+          (file) => file.localId != photoPopupLocalFileId
+        );
+
+        setFiles(newFiles);
+      }
+
+      if (!photoPopupLocalFileId || !found) {
+        setLinkFiles((prev) => [
+          ...prev,
+          {
+            link: photoPopupLink,
+            localId: uniqueId(),
+            type: "url",
+            date,
+          },
+        ]);
+      }
     }
+
     handleClosePhotoPopup();
   };
 
@@ -111,7 +202,7 @@ const AddListing = ({ categories }) => {
   const [keyWords, setKeyWords] = useState("");
   const [keyWordsError, setKeyWordsError] = useState(null);
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(baseCategory);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -123,7 +214,7 @@ const AddListing = ({ categories }) => {
   const [postcode, setPostcode] = useState("");
   const [postcodeError, setPostcodeError] = useState(null);
 
-  const [country, setCountry] = useState("New York");
+  const [city, setCity] = useState(baseCity);
 
   const [compensationCost, setCompensationCost] = useState("");
   const [compensationCostError, setCompensationCostError] = useState(null);
@@ -137,32 +228,15 @@ const AddListing = ({ categories }) => {
   const [minRentalDays, setMinRentalDays] = useState("");
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
-  const mapRef = useRef(null);
-  const circleRef = useRef(null);
-  const markerRef = useRef(null);
-
   const [center, setCenter] = useState({
-    lat: baseMarker.lat,
-    lng: baseMarker.lng,
+    lat: cityCoords[baseCity].lat,
+    lng: cityCoords[baseCity].lng,
   });
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(baseMarker.lat);
-  const [lng, setLng] = useState(baseMarker.lng);
-  const [radius, setRadius] = useState(baseMarker.radius);
-
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: ENV.GOOGLE_MAP_API_KEY,
-  });
-
-  const onLoad = (map) => {
-    mapRef.current = map;
-  };
-
-  const onUnmount = function callback(map) {
-    mapRef.current = null;
-  };
+  const [lat, setLat] = useState(cityCoords[baseCity].lat);
+  const [lng, setLng] = useState(cityCoords[baseCity].lng);
+  const [radius, setRadius] = useState(baseRadius);
 
   const [mainError, setMainError] = useState(null);
 
@@ -196,8 +270,16 @@ const AddListing = ({ categories }) => {
     setMainError(null);
   };
 
-  const handleChangeCountry = (e) => {
-    setCountry(e.target.value);
+  const handleChangeCity = (e) => {
+    const city = e.target.value;
+    const lat = cityCoords[city].lat;
+    const lng = cityCoords[city].lng;
+
+    setCity(city);
+    setCenter({ lat, lng });
+    setLat(lat);
+    setLng(lng);
+    setRadius(baseRadius);
     setMainError(null);
   };
 
@@ -231,9 +313,59 @@ const AddListing = ({ categories }) => {
     setMainError(null);
   };
 
+  const listingToState = () => {
+    const city = listing.city ?? baseCity;
+    const lat = (cityCoords[city] ?? cityCoords[baseCity]).lat;
+    const lng = (cityCoords[city] ?? cityCoords[baseCity]).lng;
+
+    return {
+      name: listing.name ?? "",
+      keyWords: listing.keyWords ?? "",
+      categoryId: listing.categoryId ?? baseCategory,
+      description: listing.description ?? "",
+      rentalTerms: listing.rentalTerms ?? "",
+      postcode: listing.postcode ?? "",
+      city: city,
+      compensationCost: listing.compensationCost ?? "",
+      countStoredItems: listing.countStoredItems ?? "",
+      pricePerDay: listing.pricePerDay ?? "",
+      minRentalDays: listing.minRentalDays ?? "",
+      rentalLat: lat,
+      rentalLng: lng,
+      rentalRadius: listing.radius ?? baseRadius,
+      listingImages: listing.listingImages ?? [],
+    };
+  };
+
+  const objectToSave = () => ({
+    name,
+    keyWords,
+    categoryId: category,
+    description,
+    rentalTerms,
+    postcode,
+    city,
+    compensationCost,
+    countStoredItems,
+    pricePerDay,
+    minRentalDays,
+    rentalLat: lat,
+    rentalLng: lng,
+    rentalRadius: radius,
+    listingImages: linkFiles,
+  });
+
+  const hasChanges = () => {
+    if (files.length > 0) return true;
+    const dataToSave = objectToSave();
+    const listingToCheck = listingToState();
+    return !lodash.isEqual(listingToCheck, dataToSave);
+  };
+
   const handleSubmit = async () => {
     try {
       if (disabled) return;
+      setMainError(null);
 
       let hasError = false;
 
@@ -320,14 +452,36 @@ const AddListing = ({ categories }) => {
       if (hasError) return;
 
       setDisabled(true);
+
+      if (hasChanges()) {
+        const formData = new FormData();
+
+        if (files) {
+          files.forEach((file, index) =>
+            formData.append(`files[${index}]`, file)
+          );
+        }
+
+        const info = objectToSave();
+        info["listingImages"] = JSON.stringify(info["listingImages"]);
+        Object.keys(info).forEach((key) => formData.append(key, info[key]));
+
+        const res = await createListing(formData, authToken);
+
+        setFiles([]);
+        setLinkFiles(adaptLinkPropsToLocal(res.listingImages));
+
+        success.set("Created successfully");
+      } else {
+        success.set("Created successfully");
+        return true;
+      }
     } catch (e) {
       setMainError(e.message);
     } finally {
       setDisabled(false);
     }
   };
-
-  if (!isLoaded) return <></>;
 
   return (
     <>
@@ -357,26 +511,22 @@ const AddListing = ({ categories }) => {
 
           <div className="row">
             <div className="col-lg-12 col-md-12">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-briefcase-alt"></i> Listing Title:
-                </label>
-                <input
-                  value={name}
-                  onInput={handleChangeName}
-                  type="text"
-                  className={`form-control ${nameError ? "is-invalid" : ""}`}
-                  placeholder="Name of your tool"
-                />
-                <ErrorSpan error={nameError} />
-              </div>
+              <InputWithIcon
+                label="Title:"
+                icon="bx bx-briefcase-alt"
+                placeholder="Name of your tool"
+                value={name}
+                onInput={handleChangeName}
+                error={nameError}
+              />
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-duplicate"></i> Type / Category:
-                </label>
+              <ErrorIconWrapper
+                icon="bx bx-duplicate"
+                label="Category:"
+                error={categoryError}
+              >
                 <select
                   className={`dashbaord-category-select listing-category-select ${
                     categoryError ? "is-invalid" : ""
@@ -425,26 +575,18 @@ const AddListing = ({ categories }) => {
                     );
                   })}
                 </select>
-                <ErrorSpan error={categoryError} />
-              </div>
+              </ErrorIconWrapper>
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bxs-key"></i> Keywords:
-                </label>
-                <input
-                  value={keyWords}
-                  onInput={handleChangeKeyWords}
-                  type="text"
-                  className={`form-control ${
-                    keyWordsError ? "is-invalid" : ""
-                  }`}
-                  placeholder="Maximum 15 , should be separated by commas"
-                />
-                <ErrorSpan error={keyWordsError} />
-              </div>
+              <InputWithIcon
+                label="Keywords:"
+                icon="bx bxs-key"
+                placeholder="Maximum 15 , should be separated by commas"
+                value={keyWords}
+                onInput={handleChangeKeyWords}
+                error={keyWordsError}
+              />
             </div>
           </div>
         </div>
@@ -454,74 +596,46 @@ const AddListing = ({ categories }) => {
 
           <div className="row">
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-purchase-tag"></i> Pricing per day:
-                </label>
-                <input
-                  type="text"
-                  value={pricePerDay}
-                  onInput={handleChangePricePerDay}
-                  className={`form-control ${
-                    pricePerDayError ? "is-invalid" : ""
-                  }`}
-                  placeholder="12.00"
-                />
-                <ErrorSpan error={pricePerDayError} />
-              </div>
+              <InputWithIcon
+                label="Rental price per day:"
+                icon="bx bx-purchase-tag"
+                placeholder="12.00"
+                value={pricePerDay}
+                onInput={handleChangePricePerDay}
+                error={pricePerDayError}
+              />
             </div>
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-purchase-tag"></i> Compensation price:
-                </label>
-                <input
-                  type="text"
-                  value={compensationCost}
-                  onInput={handleChangeCompensationCost}
-                  className={`form-control ${
-                    compensationCostError ? "is-invalid" : ""
-                  }`}
-                  placeholder="542.00"
-                />
-                <ErrorSpan error={compensationCostError} />
-              </div>
+              <InputWithIcon
+                label="Item value:"
+                icon="bx bx-purchase-tag"
+                placeholder="532.00"
+                value={compensationCost}
+                onInput={handleChangeCompensationCost}
+                error={compensationCostError}
+              />
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-menu-alt-left"></i> Minimal rent days:
-                </label>
-                <input
-                  type="text"
-                  value={minRentalDays}
-                  onInput={handleChangeMinRentalDays}
-                  className={`form-control ${
-                    minRentalDaysError ? "is-invalid" : ""
-                  }`}
-                  placeholder="-"
-                />
-                <ErrorSpan error={minRentalDaysError} />
-              </div>
+              <InputWithIcon
+                label="Min rental days:"
+                icon="bx bx-menu-alt-left"
+                placeholder="0"
+                value={minRentalDays}
+                onInput={handleChangeMinRentalDays}
+                error={minRentalDaysError}
+              />
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-menu-alt-left"></i> Count tools:
-                </label>
-                <input
-                  type="text"
-                  value={countStoredItems}
-                  onInput={handleChangeCountStoredItems}
-                  className={`form-control ${
-                    countStoredItemsError ? "is-invalid" : ""
-                  }`}
-                  placeholder="1"
-                />
-                <ErrorSpan error={countStoredItemsError} />
-              </div>
+              <InputWithIcon
+                label="Quantity:"
+                icon="bx bx-menu-alt-left"
+                placeholder="1"
+                value={countStoredItems}
+                onInput={handleChangeCountStoredItems}
+                error={countStoredItemsError}
+              />
             </div>
           </div>
         </div>
@@ -531,175 +645,73 @@ const AddListing = ({ categories }) => {
 
           <div className="row">
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-menu-alt-left"></i> Country:
-                </label>
-                <select
-                  onChange={handleChangeCountry}
-                  value={country}
-                  className="dashbaord-category-select"
-                >
-                  <option value="New York">New York</option>
-                  <option value="London">London</option>
-                </select>
-              </div>
+              <SelectWithIcon
+                onChange={handleChangeCity}
+                value={city}
+                label="City:"
+                icon="bx bx-menu-alt-left"
+                options={cityOptions}
+              />
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-menu-alt-left"></i> Postcode:
-                </label>
-                <input
-                  value={postcode}
-                  onInput={handleChangePostcode}
-                  type="text"
-                  className={`form-control ${
-                    postcodeError ? "is-invalid" : ""
-                  }`}
-                  placeholder="e.g. 55 County Laois"
-                />
-                <ErrorSpan error={postcodeError} />
-              </div>
+              <InputWithIcon
+                label="Postcode:"
+                icon="bx bx-menu-alt-left"
+                placeholder="e.g. 55 County Laois"
+                value={postcode}
+                onInput={handleChangePostcode}
+                error={postcodeError}
+              />
             </div>
           </div>
 
-          <div className="form-group">
-            <GoogleMap
-              center={center}
-              zoom={10}
-              onLoad={onLoad}
-              onUnmount={onUnmount}
-              mapContainerStyle={{ height: "400px", width: "100%" }}
-              className="my-map"
-              onRightClick={() => setMarkerActive(false)}
-              onDragEnd={() => {
-                if (!mapRef.current) return;
-                const center = mapRef.current.center;
-                const lat = center.lat();
-                const lng = center.lng();
-
-                setCenter({ lat, lng });
-              }}
-              onClick={(e) => {
-                const lat = e.latLng.lat();
-                const lng = e.latLng.lng();
-                setMarkerActive(true);
-                setLat(lat);
-                setLng(lng);
-              }}
-            >
-              <Marker
-                ref={markerRef}
-                position={{ lat: lat, lng: lng }}
-                onClick={() => setMarkerActive(true)}
-              />
-              <Circle
-                center={{ lat: lat, lng: lng }}
-                radius={radius}
-                ref={circleRef}
-                onClick={() => setMarkerActive(true)}
-                options={{
-                  strokeColor: "#FF0000",
-                  strokeOpacity: 0.8,
-                  strokeWeight: 2,
-                  fillColor: "#FF0000",
-                  fillOpacity: 0.35,
-                  draggable: markerActive,
-                  editable: markerActive,
-                }}
-                onRadiusChanged={() => {
-                  if (!circleRef.current) return;
-                  setRadius(circleRef.current.state.circle.radius);
-                }}
-                onCenterChanged={() => {
-                  if (!circleRef.current) return;
-
-                  const center = circleRef.current.state.circle.center;
-                  const newLat = center.lat();
-                  const newLng = center.lng();
-
-                  if ((lat == newLat, lng == newLng)) {
-                    return;
-                  }
-
-                  setLat(lat);
-                  setLng(lng);
-                }}
-                onDrag={(e) => {
-                  if (!e) return;
-                  const newCenter = e.latLng.toJSON();
-                  setLat(newCenter.lat);
-                  setLng(newCenter.lng);
-                }}
-              />
-            </GoogleMap>
-          </div>
+          <EditMap
+            markerActive={markerActive}
+            setMarkerActive={setMarkerActive}
+            center={center}
+            setCenter={setCenter}
+            lat={lat}
+            setLat={setLat}
+            lng={lng}
+            setLng={setLng}
+            radius={radius}
+            setRadius={setRadius}
+          />
         </div>
 
-        <div {...getRootProps()} className="dropzone add-listings-box">
-          <h3>Photos</h3>
-
-          <div className="row" style={{ width: "100%" }}>
-            {files.map((file, index) => (
-              <div className="col-xl-3 col-lg-4 col-md-6 gallery-flex-parent">
-                <div className="invoice-btn-box gallery-flex form-group">
-                  <img src={file.preview} />
-                  <input {...getInputProps()} />
-                  <button
-                    type="button"
-                    className="default-btn remove-file-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeFile(index);
-                    }}
-                  >
-                    <i className="flaticon-more"></i>
-                  </button>
-                </div>
-              </div>
-            ))}
-
-            {files.length < 5 && (
-              <div className="col-xl-3 col-lg-4 col-md-6 gallery-flex-parent">
-                <div className="gallery-flex form-group">
-                  <div
-                    className="add-more-image"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setPhotoPopupActive(true);
-                    }}
-                  >
-                    Drag 'n' drop some files here, or click to select files
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <EditPhotosSection
+          files={files}
+          linkFiles={linkFiles}
+          removeFile={removeFile}
+          photoPopupLink={photoPopupLink}
+          photoPopupActive={photoPopupActive}
+          setPhotoPopupActive={setPhotoPopupActive}
+          setPhotoPopupLink={setPhotoPopupLink}
+          setPhotoPopupPhoto={setPhotoPopupPhoto}
+          handlePhotoAddByPopup={handlePhotoAddByPopup}
+          photoPopupType={photoPopupType}
+          setPhotoPopupType={setPhotoPopupType}
+          photoPopupLocalFileId={photoPopupLocalFileId}
+          setPhotoPopupLocalFileId={setPhotoPopupLocalFileId}
+          handleClosePhotoPopup={handleClosePhotoPopup}
+          photoPopupPhoto={photoPopupPhoto}
+          setFiles={setFiles}
+        />
 
         <div className="add-listings-box">
           <h3>Details</h3>
 
           <div className="row">
             <div className="col-lg-12 col-md-12">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-text"></i> Description:
-                </label>
-                <textarea
-                  cols={30}
-                  rows="7"
-                  className={`form-control ${
-                    descriptionError ? "is-invalid" : ""
-                  }`}
-                  placeholder="Details..."
-                  value={description}
-                  onInput={handleChangeDescription}
-                ></textarea>
-                <ErrorSpan error={descriptionError} />
-              </div>
+              <TextareaWithIcon
+                value={description}
+                onChange={handleChangeDescription}
+                icon="bx bx-text"
+                label="How Item Is Stored:"
+                error={descriptionError}
+                placeholder="Details..."
+              />
             </div>
           </div>
         </div>
@@ -709,22 +721,14 @@ const AddListing = ({ categories }) => {
 
           <div className="row">
             <div className="col-lg-12 col-md-12">
-              <div className="form-group">
-                <label>
-                  <i className="bx bx-text"></i> Rental Terms:
-                </label>
-                <textarea
-                  cols={30}
-                  rows="7"
-                  className={`form-control ${
-                    rentalTermsError ? "is-invalid" : ""
-                  }`}
-                  placeholder="Terms..."
-                  value={rentalTerms}
-                  onInput={handleChangeRentalTerms}
-                ></textarea>
-                <ErrorSpan error={rentalTermsError} />
-              </div>
+              <TextareaWithIcon
+                value={rentalTerms}
+                onChange={handleChangeRentalTerms}
+                icon="bx bx-text"
+                label="Rental Terms:"
+                error={rentalTermsError}
+                placeholder="Terms..."
+              />
             </div>
           </div>
         </div>
@@ -744,56 +748,6 @@ const AddListing = ({ categories }) => {
           </button>
         </div>
       </div>
-
-      <BaseModal active={photoPopupActive} toggleActive={handleClosePhotoPopup}>
-        <span className="sub-title mb-2">
-          <span>Photo Popup</span>
-        </span>
-
-        <form method="get">
-          <div className="form-group">
-            <select
-              onChange={(e) => setPhotoPopupPhoto(e.target.value)}
-              value={photoPopupLinkType}
-              className="dashbaord-category-select"
-              style={{ marginBottom: "10px" }}
-            >
-              <option value="storage">Storage</option>
-              <option value="instagram">Instagram</option>
-              <option value="google_drive">Google Drive</option>
-              <option value="dropbox">Dropbox</option>
-            </select>
-
-            {photoPopupLinkType !== "storage" && (
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  value={photoPopupLink}
-                  onInput={(e) => setPhotoPopupLink(e.target.value)}
-                  placeholder="https://storage.google.com"
-                />
-              </div>
-            )}
-
-            {photoPopupLinkType === "storage" && (
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  value={photoPopupLink}
-                  onInput={(e) => setPhotoPopupLink(e.target.value)}
-                  placeholder="test"
-                />
-              </div>
-            )}
-          </div>
-
-          <button type="button" onClick={handlePhotoAddByPopup}>
-            Add
-          </button>
-        </form>
-      </BaseModal>
     </>
   );
 };

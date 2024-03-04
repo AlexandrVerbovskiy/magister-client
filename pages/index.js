@@ -15,7 +15,7 @@ const Index = ({ popularCategories }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar canShowSearch={false} />
 
       <Banner popularCategories={popularCategories} />
 

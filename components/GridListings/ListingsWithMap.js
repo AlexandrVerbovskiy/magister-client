@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import Sidebar from "../Listings/Sidebar";
 
-const ListingsWithMap = () => {
+const ListingsWithMap = ({ categories }) => {
   return (
     <>
       <div className="listings-area ptb-100">
@@ -13,7 +13,7 @@ const ListingsWithMap = () => {
             <div className="col-xl-8 col-lg-12 col-md-12 p-0">
               <div className="row">
                 <div className="col-lg-4 col-md-12">
-                  <Sidebar />
+                  <Sidebar categories={categories}/>
                 </div>
 
                 <div className="col-lg-8 col-md-12">

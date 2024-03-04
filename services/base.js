@@ -7,7 +7,11 @@ export const getIndexOptions = async () => {
 };
 
 export const getCreateListingOptions = async (authToken) => {
-    const data = await get(`/create-listing-options`, authToken);
-    return data.body;
-  };
+  const data = await get(`/create-listing-options`, authToken);
+  return data.body;
+};
 
+export const getListingListOptions = async () => {
+  const data = await get(`/listing-list-options`);
+  return data.body;
+};

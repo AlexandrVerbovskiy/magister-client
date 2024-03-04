@@ -136,13 +136,8 @@ const ProfileEdit = () => {
 
   const hasChanges = () => {
     if (newPhoto) return true;
-
     const dataToSave = objectToSave();
-
-    const userToCheck = {
-      ...userToState(),
-    };
-
+    const userToCheck =userToState()
     return !lodash.isEqual(userToCheck, dataToSave);
   };
 

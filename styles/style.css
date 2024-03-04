@@ -16348,12 +16348,6 @@ Dashboard CSS
   display: inline-block;
 }
 
-.dropzone {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .dropzone h3 {
   border-bottom: 1px solid #eee;
   width: 100%;
@@ -16883,7 +16877,8 @@ Preloader Area CSS
   position: relative;
   align-items: center;
   justify-content: center;
-  background-color: #f8f8f8;
+  background-color: #f6f6f6;
+  border: 1px solid #eee;
   cursor: pointer;
 }
 
@@ -16928,4 +16923,32 @@ Preloader Area CSS
 
 .remove-file-btn i::before {
   transform: rotate(45deg);
+}
+
+.popup-get-image .gallery-flex{
+  margin-bottom: 0!important;
+  margin-top: 0!important;
+}
+
+.popup-get-image .dropzone.add-listings-box{
+  padding: 0!important;
+}
+
+.popup-get-image .dropzone{
+  width: 100%;
+  height: 200px;
+}
+
+.invoice-btn-box.gallery-flex{
+  margin-top: 0;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-btn-box.gallery-flex img{
+  margin-top: 0;
+  max-height: 100%;
+  box-sizing: border-box;
 }

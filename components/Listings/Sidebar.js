@@ -3,17 +3,6 @@ import DateInput from "../FormComponents/DateInput";
 import { dateToInput } from "../../utils";
 import { useRouter } from "next/router";
 
-const categories = [
-  { name: "categories1", value: "restaurant", title: "Restaurant" },
-  { name: "categories2", value: "hotel", title: "Hotel" },
-  { name: "categories3", value: "beauty_&_spa", title: "Beauty & Spa" },
-  { name: "categories4", value: "fitness", title: "Fitness" },
-  { name: "categories5", value: "shopping", title: "Shopping" },
-  { name: "categories6", value: "hospital", title: "Hospital" },
-  { name: "categories7", value: "events", title: "Events" },
-  { name: "categories8", value: "clothing", title: "Clothing" },
-];
-
 const distances = [
   { name: "distance1", value: "driving_(5_mi.)", title: "Driving (5 mi.)" },
   { name: "distance2", value: "walking_(1_mi.)", title: "Walking (1 mi.)" },
@@ -27,8 +16,19 @@ const distances = [
 const baseShowedMore = false;
 const baseToDay = 2;
 
-const Sidebar = () => {
+const Sidebar = ({ categories: baseCategories }) => {
   const router = useRouter();
+
+  const { firstLevel, secondLevel, thirdLevel } = baseCategories;
+  const categories = firstLevel.map((elem) => ({
+    ...elem,
+    children: secondLevel
+      .filter((sElem) => sElem.parentId === elem.id)
+      .map((sElem) => ({
+        ...sElem,
+        children: thirdLevel.filter((tElem) => tElem.parentId === sElem.id),
+      })),
+  }));
 
   const [mainFilterOpen, setMainFilterOpen] = useState(true);
   const [categoriesOpen, setCategoriesOpen] = useState(true);
@@ -224,6 +224,38 @@ const Sidebar = () => {
     setToDateFilter(value);
     updateCurrentLink({ toDateFilter: value });
   };
+
+  const CategoryLi = ({ category, style = {} }) => (
+    <li key={category.name} style={style}>
+      <input
+        id={category.name}
+        type="checkbox"
+        onChange={() => handleChangeCheckedCategory(category.name)}
+        checked={selectedCategories.includes(category.name)}
+        value={category.name}
+      />
+      <label htmlFor={category.name}>{category.name} </label>
+    </li>
+  );
+
+  const FirstCategoryLevel = ({ fCategory }) => (
+    <React.Fragment key={fCategory.name}>
+      <CategoryLi category={fCategory} />
+      {fCategory.children.map((sCategory) => (
+        <React.Fragment key={sCategory.name}>
+          <CategoryLi style={{ paddingLeft: "25px" }} category={sCategory} />
+          {sCategory.children.map((tCategory) => (
+            <CategoryLi
+              style={{ paddingLeft: "50px" }}
+              category={tCategory}
+              key={tCategory.name}
+            />
+          ))}
+        </React.Fragment>
+      ))}
+    </React.Fragment>
+  );
+
   return (
     <>
       <aside className="listings-widget-area">
@@ -296,17 +328,8 @@ const Sidebar = () => {
             }
           >
             <ul ref={categoryMainUlRef}>
-              {categories.slice(0, 5).map((category) => (
-                <li key={category.name}>
-                  <input
-                    id={category.name}
-                    type="checkbox"
-                    onChange={() => handleChangeCheckedCategory(category.value)}
-                    checked={selectedCategories.includes(category.value)}
-                    value={category.value}
-                  />
-                  <label htmlFor={category.name}>{category.title} </label>
-                </li>
+              {categories.slice(0, 5).map((fCategory) => (
+                <FirstCategoryLevel fCategory={fCategory} />
               ))}
             </ul>
 
@@ -319,19 +342,8 @@ const Sidebar = () => {
               }
             >
               <ul ref={categoryDopUlRef} style={{ paddingTop: "11px" }}>
-                {categories.slice(5).map((category) => (
-                  <li key={category.name}>
-                    <input
-                      id={category.name}
-                      type="checkbox"
-                      onChange={() =>
-                        handleChangeCheckedCategory(category.value)
-                      }
-                      checked={selectedCategories.includes(category.value)}
-                      value={category.value}
-                    />
-                    <label htmlFor={category.name}>{category.title} </label>
-                  </li>
+                {categories.slice(5).map((fCategory) => (
+                  <FirstCategoryLevel fCategory={fCategory} />
                 ))}
               </ul>
             </div>

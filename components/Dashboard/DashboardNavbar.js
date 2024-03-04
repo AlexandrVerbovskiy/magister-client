@@ -62,7 +62,7 @@ const DashboardNavbar = () => {
               <Link
                 href="/settings/listings/"
                 className={`nav-link ${
-                  currentPath == "/settings/listings/" && "active"
+                  currentPath.includes("/settings/listings/") && "active"
                 }`}
               >
                 <span className="icon">
