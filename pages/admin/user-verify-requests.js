@@ -17,7 +17,7 @@ import {
 import { IndiceContext } from "../../contexts";
 import { getUserVerifyRequestList } from "../../services";
 
-const UserVerifyRequests = () => {
+const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
@@ -45,6 +45,7 @@ const UserVerifyRequests = () => {
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getTimeFilterProps,
+    defaultData: pageProps,
   });
 
   const { handleChangeTimeFilter } = useChangeTimeFilter({
@@ -106,6 +107,29 @@ const UserVerifyRequests = () => {
   );
 };
 
-export const getServerSideProps = supportSideProps;
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await supportSideProps(context);
+
+  if (baseSideProps.notFound) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const props = await getUserVerifyRequestList(
+      context.query,
+      baseSideProps.props.authToken
+    );
+
+    return {
+      props: { ...baseSideProps.props, ...props },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default UserVerifyRequests;

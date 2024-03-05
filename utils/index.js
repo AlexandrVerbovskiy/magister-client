@@ -5,5 +5,6 @@ export { default as getFilenameByPath } from "./getFilenameByPath";
 export { default as byteConverter } from "./byteConverter";
 export { default as uniqueId } from "./uniqueId";
 export { default as getListingImageByType } from "./getListingImageByType";
+export { default as middlewareCallbackWrapper } from "./middlewareCallbackWrapper";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";

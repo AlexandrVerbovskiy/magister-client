@@ -1,6 +1,7 @@
+import { middlewareCallbackWrapper } from "../utils";
 import userSideProps from "./userSideProps";
 
-const adminSideProps = async (context) => {
+const adminSideProps = async (context, callback = null) => {
   const { props } = await userSideProps(context);
   const { user, authToken } = props;
 
@@ -10,7 +11,13 @@ const adminSideProps = async (context) => {
     };
   }
 
-  return { props: { user, pageType: "admin", authToken } };
+  const res = { user, pageType: "admin", authToken };
+
+  return await middlewareCallbackWrapper({
+    callback,
+    context,
+    res,
+  });
 };
 
 export default adminSideProps;

@@ -10,7 +10,10 @@ import { adminSideProps } from "../../middlewares";
 
 import { useAdminPage, usePagination } from "../../hooks";
 import { IndiceContext } from "../../contexts";
-import { getSearchedWordList } from "../../services";
+import {
+  getAdminSearchedWordListPageOptions,
+  getSearchedWordList,
+} from "../../services";
 import SearchedWordTable from "../../components/admin/SearchedWord/Table";
 import { useRouter } from "next/router";
 
@@ -38,7 +41,7 @@ const FilterRadioOption = ({
   );
 };
 
-const SearchedWords = () => {
+const SearchedWords = (pageProps) => {
   const router = useRouter();
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -71,6 +74,7 @@ const SearchedWords = () => {
     getItemsFunc: (data) => getSearchedWordList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({ viewed: viewedFilter, accepted: acceptedFilter }),
+    defaultData: pageProps,
   });
 
   const handleChangeAcceptedFilter = (value) => {
@@ -170,6 +174,29 @@ const SearchedWords = () => {
   );
 };
 
-export const getServerSideProps = adminSideProps;
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await adminSideProps(context);
+
+  if (baseSideProps.notFound) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const props = await getAdminSearchedWordListPageOptions(
+      context.query,
+      baseSideProps.props.authToken
+    );
+
+    return {
+      props: { ...baseSideProps.props, ...props },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default SearchedWords;

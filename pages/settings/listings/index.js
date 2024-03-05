@@ -44,11 +44,7 @@ const TabHeaderSection = ({ filter, changeFilter, countItems, style = {} }) => (
   </ul>
 );
 
-const ListingList = ({
-  items: baseItems,
-  options: baseOptions,
-  countItems: baseCountItems,
-}) => {
+const ListingList = (pageProps) => {
   const { error, success, authToken } = useContext(IndiceContext);
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);
@@ -67,11 +63,7 @@ const ListingList = ({
   } = usePagination({
     getItemsFunc: (data) => getUserListingList(data, authToken),
     onError: (e) => error.set(e.message),
-    defaultData: {
-      items: baseItems,
-      options: baseOptions,
-      countItems: baseCountItems,
-    },
+    defaultData: pageProps,
   });
 
   const handleAcceptDelete = async () => {
@@ -319,11 +311,9 @@ export const getServerSideProps = async (context) => {
       notFound: true,
     };
   }
-  const { filter = "", page = 1 } = context.query;
-
   try {
     const props = await getUserListingListOptions(
-      { filter, page },
+      context.query,
       baseSideProps.props.authToken
     );
 

@@ -1,21 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import { authSideProps } from "../../middlewares";
 
 const Dashboard = () => {
-  const router = useRouter();
-  const [formError, setFormError] = useState(null);
   const { user } = useContext(IndiceContext);
-  const { success, setLoading } = useContext(IndiceContext);
-
-  const handleSaveClick = async () => {
-    setFormError(null);
-    success.set("Profile updated successfully");
-  };
+  const { setLoading } = useContext(IndiceContext);
 
   useEffect(() => {
     setLoading(false);

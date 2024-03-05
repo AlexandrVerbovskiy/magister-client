@@ -16,9 +16,9 @@ import {
   useInitPaginationTimeFilter,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
-import { getLogList } from "../../services";
+import { getAdminLogListPageOptions, getLogList } from "../../services";
 
-const Logs = () => {
+const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [panelItem, setPanelItem] = useState(false);
@@ -47,6 +47,7 @@ const Logs = () => {
     getItemsFunc: (data) => getLogList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getTimeFilterProps,
+    defaultData: pageProps,
   });
 
   const { handleChangeTimeFilter } = useChangeTimeFilter({
@@ -119,6 +120,29 @@ const Logs = () => {
   );
 };
 
-export const getServerSideProps = adminSideProps;
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await adminSideProps(context);
+
+  if (baseSideProps.notFound) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const props = await getAdminLogListPageOptions(
+      context.query,
+      baseSideProps.props.authToken
+    );
+
+    return {
+      props: { ...baseSideProps.props, ...props },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default Logs;

@@ -13,12 +13,13 @@ import {
   changeActive,
   setRole,
   changeVerified,
+  getAdminUserListPageOptions,
 } from "../../services";
 import { IndiceContext } from "../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../middlewares";
 
-const Users = () => {
+const Users = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
@@ -41,10 +42,10 @@ const Users = () => {
     items: users,
     rebuild,
     setItemFields,
-    options,
   } = usePagination({
-    getItemsFunc: (data)=>getUserList(data, authToken),
+    getItemsFunc: (data) => getUserList(data, authToken),
     onError: (e) => error.set(e.message),
+    defaultData: pageProps,
   });
 
   const handleCloseDeleteModal = () => {
@@ -221,6 +222,29 @@ const Users = () => {
   );
 };
 
-export const getServerSideProps = supportSideProps;
+export const getServerSideProps = async (context) => {
+  const baseSideProps = await supportSideProps(context);
+
+  if (baseSideProps.notFound) {
+    return {
+      notFound: true,
+    };
+  }
+
+  try {
+    const props = await getAdminUserListPageOptions(
+      context.query,
+      baseSideProps.props.authToken
+    );
+
+    return {
+      props: { ...baseSideProps.props, ...props },
+    };
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
+};
 
 export default Users;
