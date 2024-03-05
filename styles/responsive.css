@@ -1,7 +1,7 @@
 /* Max width 767px */
 @media only screen and (max-width: 767px) {
   .listing-area {
-    height: 200px;
+    min-height: 400px;
   }
 
   .no-listing{
@@ -2601,7 +2601,7 @@
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .listing-area {
-    height: 60vh;
+    min-height: 53vh;
   }
   body {
     font-size: 14px;

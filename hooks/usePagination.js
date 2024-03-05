@@ -5,8 +5,10 @@ const usePagination = ({
   getItemsFunc,
   onError = null,
   getDopProps = null,
+  defaultData = null,
 }) => {
   const router = useRouter();
+  const isFirstRef = useRef(true);
 
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
@@ -135,7 +137,26 @@ const usePagination = ({
       dopBody["filter"] = filter;
     }
 
-    onChangeOptions(dopBody);
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+
+      if (defaultData) {
+        const {
+          options: gotOptions,
+          items: gotItems,
+          countItems: gotCountItems,
+        } = defaultData;
+
+        countPagesRef.current = gotOptions.totalPages;
+        countItemsRef.current = gotCountItems;
+        updateStateByOption(gotOptions);
+        setItems(gotItems);
+      } else {
+        onChangeOptions(dopBody);
+      }
+    } else {
+      onChangeOptions(dopBody);
+    }
   }, []);
 
   useEffect(() => {

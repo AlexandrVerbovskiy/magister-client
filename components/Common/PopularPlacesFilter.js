@@ -1,6 +1,6 @@
 import React from "react";
 import { useCategoryLocation } from "../../hooks";
-import SearchTipsPopup from "../searchTipsPopup";
+import SearchTipsPopup from "../SearchTipsPopup";
 
 const PopularPlacesFilter = () => {
   const {

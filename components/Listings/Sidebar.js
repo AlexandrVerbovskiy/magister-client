@@ -62,7 +62,7 @@ const Sidebar = ({ categories: baseCategories }) => {
   const [selectedDistances, setSelectedDistances] = useState([]);
 
   useEffect(() => {
-    const { categories, distances, from, to } = router.query;
+    const { categories = [], distances = [], from, to } = router.query;
 
     if (from) {
       if (from >= fromDateFilter) {
@@ -83,13 +83,13 @@ const Sidebar = ({ categories: baseCategories }) => {
     }
 
     try {
-      setSelectedCategories(JSON.parse(categories));
+      setSelectedCategories(categories);
     } catch (e) {
       setSelectedCategories([]);
     }
 
     try {
-      setSelectedDistances(JSON.parse(distances));
+      setSelectedDistances(distances);
     } catch (e) {
       setSelectedDistances([]);
     }
@@ -160,15 +160,15 @@ const Sidebar = ({ categories: baseCategories }) => {
     let link = `?from=${props.fromDateFilter}&to=${props.toDateFilter}`;
 
     if (props.selectedCategories.length > 0) {
-      link += `&categories=${encodeURIComponent(
-        JSON.stringify(props.selectedCategories)
-      )}`;
+      link += `&${props.selectedCategories
+        .map((category) => `categories=${category}`)
+        .join("&")}`;
     }
 
     if (props.selectedDistances.length > 0) {
-      link += `&distances=${encodeURIComponent(
-        JSON.stringify(props.selectedDistances)
-      )}`;
+      link += `&${props.selectedDistances
+        .map((distance) => `distances=${distance}`)
+        .join("&")}`;
     }
 
     const currentLink = window.location.href;
@@ -329,7 +329,10 @@ const Sidebar = ({ categories: baseCategories }) => {
           >
             <ul ref={categoryMainUlRef}>
               {categories.slice(0, 5).map((fCategory) => (
-                <FirstCategoryLevel fCategory={fCategory} />
+                <FirstCategoryLevel
+                  fCategory={fCategory}
+                  key={fCategory.name}
+                />
               ))}
             </ul>
 
@@ -343,7 +346,10 @@ const Sidebar = ({ categories: baseCategories }) => {
             >
               <ul ref={categoryDopUlRef} style={{ paddingTop: "11px" }}>
                 {categories.slice(5).map((fCategory) => (
-                  <FirstCategoryLevel fCategory={fCategory} />
+                  <FirstCategoryLevel
+                    fCategory={fCategory}
+                    key={fCategory.name}
+                  />
                 ))}
               </ul>
             </div>

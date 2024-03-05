@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import BaseModal from "../_App/BaseModal";
 import SelectWithIcon from "../FormComponents/SelectWithIcon";
 import InputWithIcon from "../FormComponents/InputWithIcon";
+import { getListingImageByType } from "../../utils";
 
 const linkTypeOptions = [
   { value: "storage", label: "Storage" },
@@ -27,8 +28,11 @@ const ImageView = ({
 
   return (
     <div className="col-xl-3 col-lg-4 col-md-6 gallery-flex-parent">
-      <div className="invoice-btn-box gallery-flex form-group">
-        <img src={path} onClick={handleImageClick} />
+      <div
+        className="invoice-btn-box gallery-flex form-group"
+        onClick={handleImageClick}
+      >
+        <img src={path} />
         <input {...inputProps} />
         <button
           type="button"
@@ -116,14 +120,15 @@ const EditPhotosSection = ({
     setPhotoPopupType(type);
     setPhotoPopupLocalFileId(localId);
 
-    if (type == "url") {
-      const info = linkFiles.filter((file) => file.localId === localId)[0];
-      setPhotoPopupLink(info.link);
+    const linkInfo = linkFiles.filter((file) => file.localId === localId)[0];
+    const file = files.filter((file) => file.localId === localId)[0];
+
+    if (linkInfo) {
+      setPhotoPopupLink(linkInfo.link);
       setPhotoPopupPhoto(null);
-    } else {
-      const info = files.filter((file) => file.localId === localId)[0];
+    } else if (file) {
       setPhotoPopupLink("");
-      setPhotoPopupPhoto(info);
+      setPhotoPopupPhoto(file);
     }
 
     setPhotoPopupActive(true);
@@ -135,14 +140,23 @@ const EditPhotosSection = ({
       localId: file.localId,
       path: file.preview,
       date: file.date,
+      full: true,
     })),
     ...linkFiles.map((info) => ({
-      type: "url",
+      type: info.type,
       localId: info.localId,
       path: info.link,
       date: info.date,
+      full: false,
     })),
-  ].sort((a, b) => new Date(a.date) - new Date(b.date));
+  ].sort((a, b) => {
+    const dateComparison =
+      new Date(a.date).getTime() - new Date(b.date).getTime();
+    if (dateComparison === 0) {
+      return a.localId.localeCompare(b.localId);
+    }
+    return dateComparison;
+  });
 
   return (
     <>
@@ -153,9 +167,13 @@ const EditPhotosSection = ({
           {infosToView.map((file) => (
             <ImageView
               key={file.localId}
-              removeFile={() => removeFile(file.localId, file.type)}
+              removeFile={() => removeFile(file.localId)}
               inputProps={getInputPropsBase()}
-              path={file.path}
+              path={
+                file.full
+                  ? file.path
+                  : getListingImageByType(file.path, file.type)
+              }
               onImageClick={() => handleStartEditImage(file.localId, file.type)}
             />
           ))}
@@ -200,7 +218,7 @@ const EditPhotosSection = ({
 
               {photoPopupLink.length > 0 && (
                 <div className="invoice-btn-box gallery-flex form-group">
-                  <img src={photoPopupLink}/>
+                  <img src={photoPopupLink} />
                 </div>
               )}
             </div>
@@ -212,11 +230,18 @@ const EditPhotosSection = ({
               {...getRootPropsPopup()}
               style={{ marginBottom: "15px" }}
             >
-              {!photoPopupPhoto && (
+              {!photoPopupPhoto && !photoPopupLink && (
                 <div className="gallery-flex form-group">
                   <div className="add-more-image">
                     Drag 'n' drop some file here, or click to select file
                   </div>
+                </div>
+              )}
+
+              {!photoPopupPhoto && photoPopupLink && (
+                <div className="invoice-btn-box gallery-flex form-group">
+                  <img src={getListingImageByType(photoPopupLink, "storage")} />
+                  <input {...getInputPropsPopup()} />
                 </div>
               )}
 

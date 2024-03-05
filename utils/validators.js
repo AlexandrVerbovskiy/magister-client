@@ -120,17 +120,17 @@ export function validatePhoneNumber(phoneNumber) {
 export function validatePrice(priceString) {
   const formatRegex = /^\d+(\.\d{1,2})?$/;
 
-  if (!formatRegex.test(priceString)) {
+  if (!formatRegex.test(`${priceString}`)) {
     return "Price should be a positive number with optional decimal values";
   }
 
-  const numericValue = parseFloat(priceString.replace(/\$/, ""));
+  const numericValue = parseFloat(`${priceString}`.replace(/\$/, ""));
 
   if (isNaN(numericValue) || numericValue <= 0) {
     return "Price should be a positive number";
   }
 
-  const resSmallTextValidation = validateSmallText(priceString);
+  const resSmallTextValidation = validateSmallText(`${priceString}`);
   if (resSmallTextValidation !== true) return resSmallTextValidation;
 
   return true;

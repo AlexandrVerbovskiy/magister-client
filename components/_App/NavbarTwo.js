@@ -10,7 +10,7 @@ import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
-import SearchTipsPopup from "../searchTipsPopup";
+import SearchTipsPopup from "../SearchTipsPopup";
 
 const NavbarTwo = ({ canShowSearch = true }) => {
   const {

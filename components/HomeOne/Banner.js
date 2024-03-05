@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import SearchTipsPopup from "../searchTipsPopup";
+import SearchTipsPopup from "../SearchTipsPopup";
 import { useCategoryLocation } from "../../hooks";
 
 const Banner = ({ popularCategories }) => {
@@ -38,6 +38,7 @@ const Banner = ({ popularCategories }) => {
     <div className="main-banner-area">
       <div className="background-image-list">
         <Swiper
+          loop={true}
           autoplay={{
             delay: 8000,
           }}

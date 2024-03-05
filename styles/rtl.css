@@ -610,6 +610,8 @@
   left: auto;
   right: 0;
 }
+
+[dir=rtl] .search-header-section .search-field,
 [dir=rtl] .widget-area .widget_search form .search-field {
   padding: 2px 15px 0 0;
 }

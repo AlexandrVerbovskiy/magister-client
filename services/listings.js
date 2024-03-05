@@ -7,7 +7,7 @@ export const getListingCategoriesList = async () => {
 };
 
 export const getFullListingInfo = async (id) => {
-  const data = await post(`/get-full-by-id${id}`);
+  const data = await get(`/get-full-by-id/${id}`);
   return data.body;
 };
 
@@ -38,5 +38,18 @@ export const updateListingByAdmin = async (body, authToken) => {
 
 export const deleteListingByAdmin = async (id, authToken) => {
   const data = await post(`/delete-by-admin`, { id }, authToken);
+  return data.body;
+};
+
+export const getListingList = async ({ filter = "", page = 1 }, authToken) => {
+  const data = await post(`/list`, { filter, page }, authToken);
+  return data.body;
+};
+
+export const getUserListingList = async (
+  { filter = "", page = 1 },
+  authToken
+) => {
+  const data = await post(`/user-list`, { filter, page }, authToken);
   return data.body;
 };
