@@ -24,22 +24,12 @@ const Index = ({ popularCategories }) => {
   );
 };
 
-//saveListingCategories
-
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await userSideProps(context);
-
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
+const boostServerSideProps = async () => {
   const options = await getIndexOptions();
-
-  return {
-    props: { ...baseSideProps.props, ...options },
-  };
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  userSideProps(context, boostServerSideProps);
 
 export default Index;

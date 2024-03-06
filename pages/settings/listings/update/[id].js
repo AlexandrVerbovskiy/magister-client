@@ -24,30 +24,17 @@ const UpdateListing = ({ categories, listing: baseListing, id }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
+const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
+  const options = await getUpdateListingOptions(
+    id,
+    baseSideProps.authToken
+  );
 
-  if (baseSideProps.notFound || !id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const options = await getUpdateListingOptions(
-      id,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, ...options, id },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { ...options, id };
 };
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default UpdateListing;

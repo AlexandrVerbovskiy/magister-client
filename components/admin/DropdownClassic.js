@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import Transition from "../../utils/transition";
 
-function DropdownClassic({ options, selected, setSelected }) {
+function DropdownClassic({
+  options,
+  selected,
+  setSelected,
+  needSearch = true,
+}) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -33,6 +39,10 @@ function DropdownClassic({ options, selected, setSelected }) {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  const filteredOptions = options.filter((option) =>
+    option.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const selectedElem = options.find((option) => option.value === selected);
 
   const selectedTitle = selectedElem
@@ -40,7 +50,7 @@ function DropdownClassic({ options, selected, setSelected }) {
     : options.find((option) => option.default).title;
 
   return (
-    <div className="relative inline-flex">
+    <div className="relative inline-flex w-full">
       <button
         ref={trigger}
         className="w-full btn justify-between min-w-44 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200"
@@ -78,7 +88,16 @@ function DropdownClassic({ options, selected, setSelected }) {
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
         >
-          {options.map((option) => {
+          {needSearch && (
+            <input
+              type="text"
+              className="form-input w-full border-0 border-b border-slate-200 dark:border-slate-700 rounded-sm px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          )}
+          {filteredOptions.map((option) => {
             return (
               <button
                 key={option.value}

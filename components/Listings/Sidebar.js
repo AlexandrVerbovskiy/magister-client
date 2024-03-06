@@ -177,7 +177,7 @@ const Sidebar = ({ categories: baseCategories }) => {
       window.location.origin + window.location.pathname + link;
 
     if (currentLink !== newLinkPart) {
-      window.history.replaceState(null, null, newLinkPart);
+      router.replace(newLinkPart);
     }
   };
 

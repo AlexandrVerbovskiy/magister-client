@@ -16166,6 +16166,7 @@ Dashboard CSS
 
 .main-banner-content .banner-one-heading .swiper-slide {
   display: flex;
+  text-wrap: nowrap;
 }
 
 .banner-content .banner-two-heading {
@@ -16186,11 +16187,29 @@ Dashboard CSS
   margin-right: 11px;
 }
 
-.dashbaord-category-select {
+.dashboard-category-select {
   background: #f6f6f6;
   border: 1px solid #eee;
   width: 100%;
   padding: 14px;
+}
+
+.custom-search-select>[class*='-control'] {
+  height: 48px;
+  background: #f9f9f9 !important;
+  transition: var(--transition);
+  border-radius: 5px;
+  border: 1px solid #e5e7f2 !important;
+  color: var(--blackColor) !important;
+  font-weight: 400;
+  font-size: var(--fontSize);
+  padding: 0 5px;
+  box-shadow: none!important;
+}
+
+.custom-search-select>[class*='-control']:hover{
+  border: 1px solid #e5e7f2 !important;
+  box-shadow: none!important;
 }
 
 .blog-select {
@@ -17022,6 +17041,12 @@ Preloader Area CSS
 
 .listings-details-image{
   max-height: 500px;
+  min-height: 500px;
+}
+
+.listings-details-image .swiper {
+  min-height: 500px;
+  background-color: #eeeeee;
 }
 
 .listings-details-image img{

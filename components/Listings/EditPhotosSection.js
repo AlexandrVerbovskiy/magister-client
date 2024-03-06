@@ -113,7 +113,7 @@ const EditPhotosSection = ({
   const handleChangePhotoPopupType = (e) => {
     setPhotoPopupLink("");
     setPhotoPopupPhoto(null);
-    setPhotoPopupType(e.target.value);
+    setPhotoPopupType(e.value);
   };
 
   const handleStartEditImage = (localId, type) => {
@@ -206,6 +206,7 @@ const EditPhotosSection = ({
             value={photoPopupType}
             onChange={handleChangePhotoPopupType}
             options={linkTypeOptions}
+            isSearchable={false}
           />
 
           {photoPopupType !== "storage" && (
@@ -255,7 +256,7 @@ const EditPhotosSection = ({
           )}
 
           <button type="button" onClick={handlePhotoAddByPopup}>
-            {photoPopupLocalFileId ? "Edit" : "Add"}
+            {photoPopupLocalFileId ? "Save" : "Append"}
           </button>
         </form>
       </BaseModal>

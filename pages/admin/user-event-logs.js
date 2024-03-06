@@ -110,29 +110,16 @@ const Logs = (pageProps) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await adminSideProps(context);
+const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const options = await getAdminUserEventLogListPageOptions(
+    { ...context.query, clientTime: Date.now() },
+    baseSideProps.authToken
+  );
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const props = await getAdminUserEventLogListPageOptions(
-      context.query,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, ...props },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default Logs;

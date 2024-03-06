@@ -15,7 +15,7 @@ import {
   useChangeTimeFilter,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
-import { getUserVerifyRequestList } from "../../services";
+import { getAdminUserUserVerifyRequestListPageOptions, getUserVerifyRequestList } from "../../services";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -107,29 +107,16 @@ const UserVerifyRequests = (pageProps) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await supportSideProps(context);
+const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const options = await getAdminUserUserVerifyRequestListPageOptions(
+    { ...context.query, clientTime: Date.now() },
+    baseSideProps.authToken
+  );
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const props = await getUserVerifyRequestList(
-      context.query,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, ...props },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  supportSideProps(context, boostServerSideProps);
 
 export default UserVerifyRequests;

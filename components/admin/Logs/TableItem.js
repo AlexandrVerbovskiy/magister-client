@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { timeConverter, getFilenameByPath } from "../../../utils";
 
 const StatusSpan = ({ status }) => {

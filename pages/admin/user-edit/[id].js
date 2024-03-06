@@ -11,7 +11,7 @@ const UserEdit = ({ editableUser }) => {
     formData.append("id", editableUser.id);
     return await updateUser(formData, authToken);
   };
-  
+
   return (
     <EditUserForm
       user={editableUser}
@@ -21,36 +21,19 @@ const UserEdit = ({ editableUser }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await adminSideProps(context);
+const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
+  const editableUser = await getFullUserById(id, baseSideProps.authToken);
+  const currentUser = baseSideProps.user;
 
-  if (baseSideProps.notFound || !id) {
-    return {
-      notFound: true,
-    };
+  if (currentUser.id === editableUser.id) {
+    throw new Error("Permission denied");
   }
 
-  try {
-    const editableUser = await getFullUserById(
-      id,
-      baseSideProps.props.authToken
-    );
-
-    const currentUser = baseSideProps.props.user;
-
-    if (currentUser.id === editableUser.id) {
-      throw new Error("Permission denied");
-    }
-
-    return {
-      props: { ...baseSideProps.props, editableUser },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { editableUser };
 };
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default UserEdit;

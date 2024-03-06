@@ -21,6 +21,16 @@ export const getUpdateListingOptions = async (id, authToken) => {
   return data.body;
 };
 
+export const getCurrentUserDocumentsPageOptions = async (authToken) => {
+  const data = await get(`/current-user-documents-options`, authToken);
+  return data.body;
+};
+
+export const getAdminListingEditPageOptions = async (id, authToken) => {
+  const data = await get(`/admin-update-listing-options/${id}`, authToken);
+  return data.body;
+};
+
 export const getUserListingListOptions = async (params, authToken) => {
   const data = await post(`/user-listing-list-options`, params, authToken);
   return data.body;
@@ -70,4 +80,14 @@ export const getAdminSearchedWordListPageOptions = async (
     authToken
   );
   return data.body;
+};
+
+export const getAdminListingListPageOptions = async (params, authToken) => {
+  const data = await post(`/admin-listing-list-options`, params, authToken);
+  return data.body;
+};
+
+export const getUserNameIdList = async (params) => {
+  const data = await post(`/user-name-id-list`, params);
+  return data.body.list;
 };

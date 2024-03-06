@@ -370,28 +370,13 @@ const ListingCategories = ({ categories: baseCategories }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await adminSideProps(context);
+const boostServerSideProps = async () => {
+  const categories = await getListingCategoriesList();
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const categories = await getListingCategoriesList();
-
-    return {
-      props: { ...baseSideProps.props, categories },
-    };
-  } catch (e) {
-    console.log(e);
-
-    return {
-      notFound: true,
-    };
-  }
+  return { categories };
 };
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default ListingCategories;

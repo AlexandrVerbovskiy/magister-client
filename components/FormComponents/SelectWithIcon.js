@@ -1,5 +1,6 @@
 import ErrorSpan from "../ErrorSpan";
 import ErrorIconWrapper from "./ErrorIconWrapper";
+import Select from "react-select";
 
 const SelectWithIcon = ({
   onChange,
@@ -8,20 +9,19 @@ const SelectWithIcon = ({
   icon = null,
   error = null,
   options = [],
-  style={}
+  style = {},
+  isSearchable = true,
 }) => {
   return (
     <ErrorIconWrapper label={label} icon={icon} error={error}>
-      <select
+      <Select
+        options={options}
+        value={options.find((option) => option.value === value)}
         onChange={onChange}
-        value={value}
-        className="dashbaord-category-select"
+        isSearchable={isSearchable}
         style={style}
-      >
-        {options.map((elem) => (
-          <option key={elem.value} value={elem.value}>{elem.label}</option>
-        ))}
-      </select>
+        className="custom-search-select"
+      />
       <ErrorSpan error={error} />
     </ErrorIconWrapper>
   );

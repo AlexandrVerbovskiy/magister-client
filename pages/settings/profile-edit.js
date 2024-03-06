@@ -137,7 +137,7 @@ const ProfileEdit = () => {
   const hasChanges = () => {
     if (newPhoto) return true;
     const dataToSave = objectToSave();
-    const userToCheck =userToState()
+    const userToCheck = userToState();
     return !lodash.isEqual(userToCheck, dataToSave);
   };
 
@@ -578,15 +578,13 @@ const ProfileEdit = () => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
-  if (baseSideProps.props.user.needRegularViewInfoForm) {
-    noNeedRegularViewInfoForm(baseSideProps.props.authToken);
+const boostServerSideProps = async ({ baseSideProps }) => {
+  if (baseSideProps.user.needRegularViewInfoForm) {
+    noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
-
-  return baseSideProps;
+  return {};
 };
+
+export const getServerSideProps = (context) =>authSideProps(context, boostServerSideProps);
 
 export default ProfileEdit;

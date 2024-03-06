@@ -18,10 +18,12 @@ import ErrorIconWrapper from "../FormComponents/ErrorIconWrapper";
 import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
 import EditPhotosSection from "../Listings/EditPhotosSection";
 import { IndiceContext } from "../../contexts";
+import { useListingPhotosEdit } from "../../hooks";
+import CategorySelect from "./CategorySelect";
 
 const cityCoords = {
-  Warrington: { lat: 53.48095, lng: -2.23743 },
-  Manchester: { lat: 53.390044, lng: -2.59695 },
+  Warrington: { lat: 53.390044, lng: -2.59695 },
+  Manchester: { lat: 53.48095, lng: -2.23743 },
 };
 
 const baseRadius = 500;
@@ -64,128 +66,26 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
       ).id
     : "";
 
-  const [files, setFiles] = useState([]);
-  const [linkFiles, setLinkFiles] = useState([]);
-
-  const removeFile = (localIdToRemove) => {
-    const newFiles = files.filter((file) => file.localId !== localIdToRemove);
-    setFiles(newFiles);
-
-    const newLinkFiles = linkFiles.filter(
-      (file) => file.localId !== localIdToRemove
-    );
-    setLinkFiles(newLinkFiles);
-  };
-
-  const [photoPopupActive, setPhotoPopupActive] = useState(false);
-  const [photoPopupPhoto, setPhotoPopupPhoto] = useState(null);
-  const [photoPopupLink, setPhotoPopupLink] = useState("");
-  const [photoPopupType, setPhotoPopupType] = useState("storage");
-  const [photoPopupLocalFileId, setPhotoPopupLocalFileId] = useState(null);
-
-  const handleClosePhotoPopup = () => {
-    setPhotoPopupLink("");
-    setPhotoPopupType("storage");
-    setPhotoPopupPhoto(null);
-    setPhotoPopupActive(null);
-    setPhotoPopupLocalFileId(null);
-  };
-
-  const adaptLinkPropsToLocal = (list) =>
-    list.map((info) => ({
-      link: info.link,
-      localId: uniqueId(),
-      type: info.type,
-      date: Date.now(),
-    }));
-
-  const handlePhotoAddByPopup = () => {
-    if (photoPopupType === "storage") {
-      let found = null;
-      let date = Date.now();
-
-      if (photoPopupLocalFileId) {
-        const newFiles = files.map((file) => {
-          if (file.localId != photoPopupLocalFileId) return file;
-
-          found = { ...file, preview: URL.createObjectURL(photoPopupPhoto) };
-          return found;
-        });
-
-        setFiles(newFiles);
-      }
-
-      if (photoPopupLocalFileId && !found) {
-        const file = linkFiles.filter(
-          (file) => file.localId == photoPopupLocalFileId
-        )[0];
-
-        if (file) {
-          date = file.date;
-        }
-
-        const newLinkFiles = linkFiles.filter(
-          (file) => file.localId != photoPopupLocalFileId
-        );
-        setLinkFiles(newLinkFiles);
-      }
-
-      if (!photoPopupLocalFileId || !found) {
-        setFiles((prev) => [
-          ...prev,
-          Object.assign(photoPopupPhoto, {
-            preview: URL.createObjectURL(photoPopupPhoto),
-            localId: uniqueId(),
-            date,
-          }),
-        ]);
-      }
-    } else {
-      let found = null;
-      let date = Date.now();
-
-      if (photoPopupLocalFileId) {
-        const newLinkFiles = linkFiles.map((file) => {
-          if (file.localId != photoPopupLocalFileId) return file;
-
-          found = { ...file, link: photoPopupLink, type: "url" };
-          return found;
-        });
-
-        setLinkFiles(newLinkFiles);
-      }
-
-      if (photoPopupLocalFileId && !found) {
-        const file = files.filter(
-          (file) => file.localId == photoPopupLocalFileId
-        )[0];
-
-        if (file) {
-          date = file.date;
-        }
-
-        const newFiles = files.filter(
-          (file) => file.localId != photoPopupLocalFileId
-        );
-
-        setFiles(newFiles);
-      }
-
-      if (!photoPopupLocalFileId || !found) {
-        setLinkFiles((prev) => [
-          ...prev,
-          {
-            link: photoPopupLink,
-            localId: uniqueId(),
-            type: "url",
-            date,
-          },
-        ]);
-      }
-    }
-
-    handleClosePhotoPopup();
-  };
+  const {
+    adaptLinkPropsToLocal,
+    files,
+    linkFiles,
+    removeFile,
+    photoPopupLink,
+    photoPopupActive,
+    setPhotoPopupActive,
+    setPhotoPopupLink,
+    setPhotoPopupPhoto,
+    handlePhotoAddByPopup,
+    photoPopupType,
+    setPhotoPopupType,
+    photoPopupLocalFileId,
+    setPhotoPopupLocalFileId,
+    handleClosePhotoPopup,
+    photoPopupPhoto,
+    setFiles,
+    setLinkFiles,
+  } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -246,7 +146,7 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
   };
 
   const handleChangeCategory = (e) => {
-    setCategory(e.target.value);
+    setCategory(e.value);
     setCategoryError(null);
     setMainError(null);
   };
@@ -264,7 +164,7 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
   };
 
   const handleChangeCity = (e) => {
-    const city = e.target.value;
+    const city = e.value;
     const lat = cityCoords[city].lat;
     const lng = cityCoords[city].lng;
 
@@ -557,54 +457,12 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
                 label="Category:"
                 error={categoryError}
               >
-                <select
-                  className={`dashbaord-category-select listing-category-select ${
-                    categoryError ? "is-invalid" : ""
-                  }`}
-                  value={category}
-                  onChange={handleChangeCategory}
-                >
-                  <option value="" disabled style={{ display: "none" }}>
-                    Select Category
-                  </option>
-                  {Object.keys(categorizedCategories).map((level) => {
-                    const categoryInfo = categorizedCategories[level];
-
-                    const popularLabel = categoryInfo.label + " popular";
-                    const unpopularLabel = categoryInfo.label;
-
-                    const popularSection = categoryInfo.popular.length ? (
-                      <optgroup label={popularLabel}>
-                        {categoryInfo.popular.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ) : (
-                      <></>
-                    );
-
-                    const unpopularSection = categoryInfo.unpopular.length ? (
-                      <optgroup label={unpopularLabel}>
-                        {categoryInfo.unpopular.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ) : (
-                      <></>
-                    );
-
-                    return (
-                      <React.Fragment key={level}>
-                        {popularSection}
-                        {unpopularSection}
-                      </React.Fragment>
-                    );
-                  })}
-                </select>
+                <CategorySelect
+                  categorizedCategories={categorizedCategories}
+                  category={category}
+                  categoryError={categoryError}
+                  handleChangeCategory={handleChangeCategory}
+                />
               </ErrorIconWrapper>
             </div>
 
@@ -681,6 +539,7 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
                 label="City:"
                 icon="bx bx-menu-alt-left"
                 options={cityOptions}
+                isSearchable={false}
               />
             </div>
 

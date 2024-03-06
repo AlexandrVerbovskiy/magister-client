@@ -1,10 +1,17 @@
-const middlewareCallbackWrapper = async ({ callback, context, res }) => {
+const middlewareCallbackWrapper = async ({ callback, res, context }) => {
   if (callback) {
     try {
-      const callbackRes = await callback(context);
+      const callbackRes = await callback({ baseSideProps: res, context });
+
+      if (callback.notFound) {
+        return {
+          notFound: true,
+        };
+      }
+
       res = { ...res, ...callbackRes };
     } catch (e) {
-      console.log("Middleware error: " + e.message);
+      console.error("Middleware error: " + e.message);
       return {
         notFound: true,
       };

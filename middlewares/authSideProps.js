@@ -13,8 +13,8 @@ const authSideProps = async (context, callback = null) => {
 
   return await middlewareCallbackWrapper({
     callback,
+    res: props,
     context,
-    props,
   });
 };
 

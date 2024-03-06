@@ -241,6 +241,7 @@ const createCategoryBySearch = ({
                               options={levelOptions}
                               selected={level}
                               setSelected={handleChangeLevel}
+                              needSearch={false}
                             />
                           </div>
 
@@ -305,27 +306,16 @@ const createCategoryBySearch = ({
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await adminSideProps(context);
+const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
-
-  if (baseSideProps.notFound || !id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const res = await getSearchedWordById(id, baseSideProps.props.authToken);
-
-    return {
-      props: { ...baseSideProps.props, ...res },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  const searchedWordInfo = await getSearchedWordById(
+    id,
+    baseSideProps.authToken
+  );
+  return { ...searchedWordInfo };
 };
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default createCategoryBySearch;

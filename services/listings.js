@@ -41,15 +41,22 @@ export const deleteListingByAdmin = async (id, authToken) => {
   return data.body;
 };
 
-export const getListingList = async ({ filter = "", page = 1 }, authToken) => {
-  const data = await post(`/list`, { filter, page }, authToken);
+export const getListingList = async (params, authToken) => {
+  const data = await post(`/list`, params, authToken);
   return data.body;
 };
 
-export const getUserListingList = async (
-  { filter = "", page = 1 },
-  authToken
-) => {
-  const data = await post(`/user-list`, { filter, page }, authToken);
+export const getAdminListingList = async (params, authToken) => {
+  const data = await post(`/admin-list`, params, authToken);
+  return data.body;
+};
+
+export const getUserListingList = async (params, authToken) => {
+  const data = await post(`/user-list`, params, authToken);
+  return data.body;
+};
+
+export const changeListingApprove = async (id, authToken) => {
+  const data = await post(`/change-approve`, { id }, authToken);
   return data.body;
 };

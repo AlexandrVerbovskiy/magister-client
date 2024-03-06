@@ -137,7 +137,10 @@ const SingleListingsContent = ({ listing }) => {
 
                 <h3>Gallery</h3>
                 <div id="gallery">
-                  <div className="row justify-content-center">
+                  <div
+                    className="row justify-content-center"
+                    style={{ gridRowGap: "10px" }}
+                  >
                     {listing.listingImages.map((image, index) => (
                       <div className="col-lg-4 col-md-6">
                         <div className="single-image-bpx">

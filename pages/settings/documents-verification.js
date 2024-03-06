@@ -6,14 +6,13 @@ import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
 import {
   saveMyDocuments,
-  getMyDocuments,
   userVerifyRequestCreate,
-  canSendVerifyRequest,
+  getCurrentUserDocumentsPageOptions,
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
 
-const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
+const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) => {
   const [formError, setFormError] = useState(null);
   const { success, setLoading, user, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
@@ -108,45 +107,45 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   };
 
   const initDocuments = async () => {
-    if (docs.proofOfAddressLink) {
-      setProofOfAddressLink(getFilePath(docs.proofOfAddressLink));
+    if (documents.proofOfAddressLink) {
+      setProofOfAddressLink(getFilePath(documents.proofOfAddressLink));
     } else {
       setProofOfAddressLink(null);
     }
 
-    if (docs.reputableBankIdLink) {
-      setReputableBankIdLink(getFilePath(docs.reputableBankIdLink));
+    if (documents.reputableBankIdLink) {
+      setReputableBankIdLink(getFilePath(documents.reputableBankIdLink));
     } else {
       setReputableBankIdLink(null);
     }
 
-    if (docs.utilityLink) {
-      setUtilityLink(getFilePath(docs.utilityLink));
+    if (documents.utilityLink) {
+      setUtilityLink(getFilePath(documents.utilityLink));
     } else {
       setUtilityLink(null);
     }
 
-    if (docs.hmrcLink) {
-      setHmrcLink(getFilePath(docs.hmrcLink));
+    if (documents.hmrcLink) {
+      setHmrcLink(getFilePath(documents.hmrcLink));
     } else {
       setHmrcLink(null);
     }
 
-    if (docs.councilTaxBillLink) {
-      setCouncilTaxBillLink(getFilePath(docs.councilTaxBillLink));
+    if (documents.councilTaxBillLink) {
+      setCouncilTaxBillLink(getFilePath(documents.councilTaxBillLink));
     } else {
       setCouncilTaxBillLink(null);
     }
 
-    if (docs.passportOrDrivingIdLink) {
-      setPassportOrDrivingIdLink(getFilePath(docs.passportOrDrivingIdLink));
+    if (documents.passportOrDrivingIdLink) {
+      setPassportOrDrivingIdLink(getFilePath(documents.passportOrDrivingIdLink));
     } else {
       setPassportOrDrivingIdLink(null);
     }
 
-    if (docs.confirmMoneyLaunderingChecksAndComplianceLink) {
+    if (documents.confirmMoneyLaunderingChecksAndComplianceLink) {
       setConfirmMoneyLaunderingChecksAndComplianceLink(
-        getFilePath(docs.confirmMoneyLaunderingChecksAndComplianceLink)
+        getFilePath(documents.confirmMoneyLaunderingChecksAndComplianceLink)
       );
     } else {
       setConfirmMoneyLaunderingChecksAndComplianceLink(null);
@@ -247,7 +246,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
   useEffect(() => {
     initDocuments();
-  }, [docs]);
+  }, [documents]);
 
   return (
     <>
@@ -406,25 +405,13 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
-  try {
-    const docs = await getMyDocuments(baseSideProps.props.authToken);
-    let { canSend, lastAnswerDescription } = await canSendVerifyRequest(
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      notFound: true,
-    };
-  }
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const { documents, canSend, lastAnswerDescription } = await getCurrentUserDocumentsPageOptions(
+    baseSideProps.authToken
+  );
+  return { canSend, lastAnswerDescription, documents };
 };
+
+export const getServerSideProps = (context) =>authSideProps(context, boostServerSideProps);
 
 export default DocumentsVerification;

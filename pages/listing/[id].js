@@ -17,28 +17,20 @@ const Listing = ({ listing }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await userSideProps(context);
+const boostServerSideProps = async ({ context }) => {
   const id = context.params.id;
+  const listing = await getFullListingInfo(id);
 
-  try {
-    const listing = await getFullListingInfo(id);
-
-    if (!listing) {
-      return {
-        notFound: true,
-      };
-    }
-
-    return {
-      props: { ...baseSideProps.props, listing, id },
-    };
-  } catch (e) {
-    console.log(e);
+  if (!listing) {
     return {
       notFound: true,
     };
   }
+
+  return { listing, id };
 };
+
+export const getServerSideProps = (context) =>
+  userSideProps(context, boostServerSideProps);
 
 export default Listing;

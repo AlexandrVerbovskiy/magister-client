@@ -80,7 +80,7 @@ const usePagination = ({
       (props ? `?${props}` : "");
 
     if (currentLink !== newLinkPart) {
-      window.history.replaceState(null, null, newLinkPart);
+      router.replace(newLinkPart);
     }
   };
 

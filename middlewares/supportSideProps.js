@@ -1,3 +1,4 @@
+import { middlewareCallbackWrapper } from "../utils";
 import userSideProps from "./userSideProps";
 
 const supportSideProps = async (context, callback = null) => {
@@ -14,8 +15,8 @@ const supportSideProps = async (context, callback = null) => {
 
   return await middlewareCallbackWrapper({
     callback,
-    context,
     res,
+    context,
   });
 };
 

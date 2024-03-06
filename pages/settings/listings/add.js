@@ -4,16 +4,18 @@ import { authSideProps } from "../../../middlewares";
 import { createListing, getCreateListingOptions } from "../../../services";
 
 import EditForm from "../../../components/Listings/EditForm";
+import { useRouter } from "next/router";
 
 const AddListing = ({ categories }) => {
   const [listing, setListing] = useState({});
+  const router = useRouter();
 
   const save = async (formData, authToken) => {
     const res = await createListing(formData, authToken);
     const listingId = res.listingId;
     const newLinkPart =
       window.location.origin + "/settings/listings/update/" + listingId;
-    window.history.replaceState(null, null, newLinkPart);
+    router.replace(newLinkPart);
     setListing(res);
     return res;
   };
@@ -28,28 +30,13 @@ const AddListing = ({ categories }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const options = await getCreateListingOptions(baseSideProps.authToken);
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const options = await getCreateListingOptions(
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, ...options },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default AddListing;

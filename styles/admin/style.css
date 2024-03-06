@@ -163,6 +163,92 @@ Preloader Area CSS
   margin-top: 5px;
 }
 
+.admin-map-parent .form-group {
+  width: 100%;
+}
+
+.add-listings-box {
+  margin-bottom: 30px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+.add-listings-box h3 {
+  padding: 20px 25px 19px;
+  border-bottom: 1px dashed #eeeeee;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  margin-left: -25px;
+  margin-right: -25px;
+}
+.add-listings-box .form-group {
+  position: relative;
+}
+.add-listings-box .form-group label {
+  display: block;
+  margin-bottom: 12px;
+  color: #000000;
+  position: relative;
+  padding-left: 25px;
+  font-weight: 500;
+}
+
+.dropzone.add-listings-box .add-more-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.gallery-flex {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-flex img,
+.gallery-flex-parent img {
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.gallery-flex-parent > div {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-flex-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  width: 34px;
+  height: 34px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-5px, 0) rotate(45deg);
+  border-radius: 50%;
+}
+
 @keyframes preloader {
   0% {
     transform: scale(0, 0);

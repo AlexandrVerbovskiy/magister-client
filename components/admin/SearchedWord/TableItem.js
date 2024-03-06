@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { IndiceContext } from "../../../contexts";
+import React from "react";
 import Tooltip from "../../../components/admin/Tooltip";
-import Link from "next/link";
+import View from "../FastActions/View";
+import Moderate from "../FastActions/Moderate";
 
 const ActiveSpan = ({ active, tooltipTextActive, tooltipTextInactive }) => {
   const text = active ? "YES" : "NO";
@@ -53,39 +53,11 @@ const TableItem = ({
         />
       </td>
       <td>
-        <Link
-          href={`/admin/create-category-by-search/${id}`}
-          className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
-        >
-          {listingCategoriesId ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 stroke-current"
-              strokeWidth="1.5"
-              stroke="#2c3e50"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-              <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 stroke-current"
-              strokeWidth="1.5"
-              stroke="#2c3e50"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" />
-            </svg>
-          )}
-        </Link>
+        {listingCategoriesId ? (
+          <View href={`/admin/create-category-by-search/${id}`} />
+        ) : (
+          <Moderate href={`/admin/create-category-by-search/${id}`} />
+        )}
       </td>
     </tr>
   );

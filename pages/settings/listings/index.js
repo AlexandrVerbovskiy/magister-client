@@ -303,28 +303,16 @@ const ListingList = (pageProps) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const options = await getUserListingListOptions(
+    context.query,
+    baseSideProps.authToken
+  );
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-  try {
-    const props = await getUserListingListOptions(
-      context.query,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, ...props },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default ListingList;

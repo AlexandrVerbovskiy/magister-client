@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import Tooltip from "../../../components/admin/Tooltip";
 import Link from "next/link";
+import Delete from "../FastActions/Delete";
+import Edit from "../FastActions/Edit";
+import Documents from "../FastActions/Documents";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "YES" : "NO";
@@ -213,57 +216,17 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
           {!isCurrent && role !== "admin" && (
-            <div className="mr-1.5 flex items-center">
-              <Link
-                href={`/admin/user-documents/${id}`}
-                className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="icon icon-tabler icon-tabler-clipboard-text stroke-current"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                  <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                  <path d="M9 12h6" />
-                  <path d="M9 16h6" />
-                </svg>
-              </Link>
+            <div className="mr-1 flex items-center">
+              <Documents href={`/admin/user-documents/${id}`} />
             </div>
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (
-            <div className="mr-1.5">
-              <Link
-                href={`/admin/user-edit/${id}`}
-                className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
-              >
-                <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                  <path d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                </svg>
-              </Link>
-            </div>
+              <Edit href={`/admin/user-edit/${id}`} />
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (
-            <button
-              type="button"
-              aria-controls="danger-modal"
-              onClick={onDeleteClick}
-              className="text-rose-500 hover:text-rose-600 rounded-full"
-            >
-              <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                <path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-              </svg>
-            </button>
+            <Delete onDeleteClick={onDeleteClick} />
           )}
         </div>
       </td>

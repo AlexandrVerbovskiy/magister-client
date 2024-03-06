@@ -50,11 +50,6 @@ export const updateProfile = async (body, authToken) => {
   return data.body.user;
 };
 
-export const getMyDocuments = async (authToken) => {
-  const data = await post("/my-documents", null, authToken);
-  return data.body.documents;
-};
-
 export const saveMyDocuments = async (body, authToken) => {
   const data = await post("/save-my-documents", body, authToken);
   return data.body.documents;
@@ -107,11 +102,6 @@ export const changeTwoFactorAuth = async (authToken) => {
 export const noNeedRegularViewInfoForm = async (authToken) => {
   const data = await post("/no-need-regular-view-info-form", null, authToken);
   return data;
-};
-
-export const canSendVerifyRequest = async (authToken) => {
-  const data = await post("/can-send-verify-request", null, authToken);
-  return data.body;
 };
 
 export const authByProvider = async (body) => {

@@ -171,32 +171,19 @@ const UserVerifyRequest = ({ info }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await supportSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
+const boostServerSideProps = async ({baseSideProps, context}) => {
   const id = context.params.id;
 
-  if (!id) {
-    return {
-      notFound: true,
-    };
-  }
+  const info = await getUserVerifyRequestById(
+    id,
+    baseSideProps.authToken
+  );
 
-  try {
-    const info = await getUserVerifyRequestById(
-      id,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, info },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { info };
 };
+
+export const getServerSideProps = (context) =>
+  supportSideProps(context, boostServerSideProps);
+
 
 export default UserVerifyRequest;

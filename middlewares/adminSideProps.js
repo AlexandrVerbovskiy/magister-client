@@ -15,8 +15,8 @@ const adminSideProps = async (context, callback = null) => {
 
   return await middlewareCallbackWrapper({
     callback,
-    context,
     res,
+    context,
   });
 };
 

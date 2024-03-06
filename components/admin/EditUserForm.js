@@ -398,6 +398,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             options={roleOptions}
                             selected={role}
                             setSelected={setRole}
+                            needSearch={false}
                           />
                         </div>
                       </div>
