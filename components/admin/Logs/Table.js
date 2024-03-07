@@ -37,9 +37,8 @@ const LogsTable = ({
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />
@@ -48,7 +47,11 @@ const LogsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {logs.map((log) => (
-                <TableItem key={log.id} {...log} onSelectPanelItem={onSelectPanelItem} />
+                <TableItem
+                  key={log.id}
+                  {...log}
+                  onSelectPanelItem={onSelectPanelItem}
+                />
               ))}
             </tbody>
           </table>

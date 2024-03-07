@@ -12,13 +12,14 @@ import {
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
 
-const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) => {
+const DocumentsVerification = ({
+  documents,
+  canSend,
+  lastAnswerDescription,
+}) => {
   const [formError, setFormError] = useState(null);
   const { success, setLoading, user, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
-  const [lastDeclineDescription, setLastDeclineDescription] = useState(
-    lastAnswerDescription
-  );
 
   const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
@@ -138,7 +139,9 @@ const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) =>
     }
 
     if (documents.passportOrDrivingIdLink) {
-      setPassportOrDrivingIdLink(getFilePath(documents.passportOrDrivingIdLink));
+      setPassportOrDrivingIdLink(
+        getFilePath(documents.passportOrDrivingIdLink)
+      );
     } else {
       setPassportOrDrivingIdLink(null);
     }
@@ -210,7 +213,7 @@ const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) =>
       try {
         await saveMyDocuments(formData, authToken);
       } catch (e) {
-        setFormError(e);
+        setFormError(e.message);
       } finally {
         setSaveDocumentsDisabled(false);
       }
@@ -237,7 +240,7 @@ const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) =>
       success.set(message);
       setActiveSendRequestBtn(false);
     } catch (e) {
-      setFormError(e);
+      setFormError(e.message);
     } finally {
       setSaveDocumentsDisabled(false);
       setSendRequestDisabled(false);
@@ -272,14 +275,15 @@ const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) =>
             <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              {!user.verified && lastDeclineDescription && (
+              {!user.verified && lastAnswerDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
                     <div
                       className="alert-dismissible fade show alert alert-danger"
                       role="alert"
                     >
-                      {lastDeclineDescription}
+                      <b>Rejected feedback: </b>
+                      {lastAnswerDescription}
                     </div>
                   </div>
                 </div>
@@ -406,12 +410,12 @@ const DocumentsVerification = ({ documents, canSend, lastAnswerDescription }) =>
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  const { documents, canSend, lastAnswerDescription } = await getCurrentUserDocumentsPageOptions(
-    baseSideProps.authToken
-  );
+  const { documents, canSend, lastAnswerDescription } =
+    await getCurrentUserDocumentsPageOptions(baseSideProps.authToken);
   return { canSend, lastAnswerDescription, documents };
 };
 
-export const getServerSideProps = (context) =>authSideProps(context, boostServerSideProps);
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default DocumentsVerification;

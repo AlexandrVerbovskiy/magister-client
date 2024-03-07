@@ -3,6 +3,7 @@ import ModalBlank from "../ModalBlank";
 import { getListingImageByType, uniqueId } from "../../../utils";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
+import ErrorSpan from "../ErrorSpan";
 
 const linkTypeOptions = [
   { value: "storage", title: "Storage" },
@@ -67,6 +68,8 @@ const EditPhotosSection = ({
   setPhotoPopupLocalFileId,
   handleClosePhotoPopup,
   setFiles,
+  fileError,
+  setFileError,
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
@@ -86,6 +89,7 @@ const EditPhotosSection = ({
             })
           ),
         ]);
+        setFileError(null);
       },
     });
 
@@ -191,6 +195,17 @@ const EditPhotosSection = ({
                 >
                   Drag 'n' drop some files here, or click to select files
                 </div>
+              </div>
+            </div>
+          )}
+
+          {fileError && (
+            <div className="col-12 form-group">
+              <div
+                className="is-invalid"
+                style={{ marginBottom: "10px", marginTop: "-15px" }}
+              >
+                <ErrorSpan error={fileError} />
               </div>
             </div>
           )}

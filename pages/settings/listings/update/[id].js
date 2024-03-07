@@ -4,8 +4,20 @@ import { authSideProps } from "../../../../middlewares";
 import { getUpdateListingOptions, updateListing } from "../../../../services";
 import EditForm from "../../../../components/Listings/EditForm";
 
-const UpdateListing = ({ categories, listing: baseListing, id }) => {
+const UpdateListing = ({
+  categories,
+  listing: baseListing,
+  id,
+  lastRequestInfo = {},
+}) => {
+  const baseCanSendRequest = lastRequestInfo.approved !== null;
+  const baseRejectDescription = lastRequestInfo.rejectDescription;
+
   const [listing, setListing] = useState(baseListing);
+  const [canSendRequest, setCanSendRequest] = useState(baseCanSendRequest);
+  const [rejectDescription, setRejectDescription] = useState(
+    baseRejectDescription
+  );
 
   const save = async (formData, authToken) => {
     formData.append("id", id);
@@ -20,16 +32,17 @@ const UpdateListing = ({ categories, listing: baseListing, id }) => {
       listing={listing}
       save={save}
       messageOnSuccess="Updated successfully"
+      canSendRequest={canSendRequest}
+      setCanSendRequest={setCanSendRequest}
+      rejectDescription={rejectDescription}
+      clearRejectDescription={() => setRejectDescription(null)}
     />
   );
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-  const options = await getUpdateListingOptions(
-    id,
-    baseSideProps.authToken
-  );
+  const options = await getUpdateListingOptions(id, baseSideProps.authToken);
 
   return { ...options, id };
 };

@@ -265,7 +265,7 @@ const createCategoryBySearch = ({
                     {formError && (
                       <section className="flex gap-x-4 flex-row">
                         <div
-                          className="w-full fade text-sm show bg-red-500 text-white px-4 py-3 rounded relative"
+                          className="w-full fade text-sm show bg-rose-500 text-white px-4 py-3 rounded relative"
                           role="alert"
                         >
                           <span className="block sm:inline">{formError}</span>

@@ -17,7 +17,7 @@ import { IndiceContext } from "../../../contexts";
 import EditMap from "../../../components/Listings/EditMap";
 import lodash from "lodash";
 import EditPhotosSection from "../../../components/admin/Listings/EditPhotosSection";
-import {useListingPhotosEdit} from "../../../hooks";
+import { useListingPhotosEdit } from "../../../hooks";
 import {
   uniqueId,
   validateBigText,
@@ -76,6 +76,8 @@ const ListingsEdit = ({ categories, listing, id }) => {
     photoPopupPhoto,
     setFiles,
     setLinkFiles,
+    fileError,
+    setFileError,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
@@ -321,6 +323,11 @@ const ListingsEdit = ({ categories, listing, id }) => {
 
       if (compensationCost && validatePrice(compensationCost) !== true) {
         setCompensationCostError(validatePrice(compensationCost));
+        hasError = true;
+      }
+
+      if (files.length + linkFiles.length < 1) {
+        setFileError("At least one photo is required");
         hasError = true;
       }
 
@@ -612,6 +619,8 @@ const ListingsEdit = ({ categories, listing, id }) => {
                         handleClosePhotoPopup={handleClosePhotoPopup}
                         photoPopupPhoto={photoPopupPhoto}
                         setFiles={setFiles}
+                        fileError={fileError}
+                        setFileError={setFileError}
                       />
 
                       <section>

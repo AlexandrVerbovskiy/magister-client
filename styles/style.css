@@ -3290,6 +3290,7 @@ Listings Area CSS
 }
 
 .single-listings-box {
+  position: relative;
   box-shadow: 5px 5px #b2eaea;
   transition: var(--transition);
   background-color: var(--whiteColor);
@@ -3302,9 +3303,15 @@ Listings Area CSS
   border-radius: 5px 5px 0 0;
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .single-listings-box .listings-image img {
   border-radius: 5px 5px 0 0;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
 }
 .single-listings-box .listings-image::before {
   content: "";
@@ -13778,6 +13785,8 @@ Dashboard CSS
 .my-profile-box form .form-group .form-control:focus::placeholder {
   color: transparent;
 }
+
+.add-listings-box.footer-section button,
 .my-profile-box form button {
   display: block;
   width: 100%;
@@ -13791,6 +13800,8 @@ Dashboard CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.add-listings-box.footer-section button:hover,
 .my-profile-box form button:hover {
   background-color: #3b99ca;
   color: var(--whiteColor);
@@ -16194,7 +16205,7 @@ Dashboard CSS
   padding: 14px;
 }
 
-.custom-search-select>[class*='-control'] {
+.custom-search-select > [class*="-control"] {
   height: 48px;
   background: #f9f9f9 !important;
   transition: var(--transition);
@@ -16204,12 +16215,12 @@ Dashboard CSS
   font-weight: 400;
   font-size: var(--fontSize);
   padding: 0 5px;
-  box-shadow: none!important;
+  box-shadow: none !important;
 }
 
-.custom-search-select>[class*='-control']:hover{
+.custom-search-select > [class*="-control"]:hover {
   border: 1px solid #e5e7f2 !important;
-  box-shadow: none!important;
+  box-shadow: none !important;
 }
 
 .blog-select {
@@ -17039,7 +17050,7 @@ Preloader Area CSS
   height: auto;
 }
 
-.listings-details-image{
+.listings-details-image {
   max-height: 500px;
   min-height: 500px;
 }
@@ -17049,23 +17060,124 @@ Preloader Area CSS
   background-color: #eeeeee;
 }
 
-.listings-details-image img{
+.listings-details-image img {
   width: 100%;
   height: 500px;
-  filter: blur(5px); 
+  filter: blur(5px);
 }
 
-.listings-details-image .container-fluid{
+.listings-details-image .container-fluid {
   z-index: 9;
 }
 
-.header-section{
+.header-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
-.search-header-section .search-field{
-  height: 40px!important;
+.search-header-section .search-field {
+  height: 40px !important;
   padding: 0 0 0 15px;
 }
+
+.add-listings-box.footer-section {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.add-listings-box.footer-section button {
+  width: 300px;
+}
+
+.alert-dismissible {
+  overflow-wrap: break-word;
+}
+
+.dropdown-filter {
+  font-size: var(--fontSize);
+}
+
+.dropdown-filter .filter-trigger {
+  border: 1px solid #96e3e3;
+  color: #96e3e3;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-filter .filter-trigger:hover {
+  border: var(--mainColor);
+  border: 1px solid var(--mainColor);
+}
+
+.dropdown-filter .filter-trigger svg {
+  width: 16px;
+  height: 16px;
+  fill: #96e3e3;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-filter .filter-trigger:hover svg {
+  fill: var(--mainColor);
+}
+
+.dropdown-filter .dropdown-menu {
+  font-size: 13px;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000,
+    0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
+}
+
+.dropdown-filter .dropdown-menu .form-check {
+  margin-bottom: 0;
+}
+
+.dropdown-filter .dropdown-menu .label-section {
+  color: rgb(148 163 184);
+}
+
+.listing-request-status {
+  padding: 7px;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 10px;
+}
+
+.listing-request-status.approved {
+  background-color: var(--mainColor);
+}
+
+.listing-request-status.unapproved {
+  background-color: red;
+}
+
+.listing-request-status.not_processed {
+  background-color: #eeeeee;
+}
+
+.custom-tooltip-parent{
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    z-index: 999;
+    font-size: 13px;
+    width: 200px;
+    line-height: 13px;
+  }

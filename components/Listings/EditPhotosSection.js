@@ -4,6 +4,7 @@ import BaseModal from "../_App/BaseModal";
 import SelectWithIcon from "../FormComponents/SelectWithIcon";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import { getListingImageByType } from "../../utils";
+import ErrorSpan from "../ErrorSpan";
 
 const linkTypeOptions = [
   { value: "storage", label: "Storage" },
@@ -68,6 +69,8 @@ const EditPhotosSection = ({
   setPhotoPopupLocalFileId,
   handleClosePhotoPopup,
   setFiles,
+  fileError,
+  setFileError,
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
@@ -87,6 +90,7 @@ const EditPhotosSection = ({
             })
           ),
         ]);
+        setFileError(null);
       },
     });
 
@@ -190,6 +194,17 @@ const EditPhotosSection = ({
                 >
                   Drag 'n' drop some files here, or click to select files
                 </div>
+              </div>
+            </div>
+          )}
+
+          {fileError && (
+            <div className="col-12 form-group">
+              <div
+                className="is-invalid"
+                style={{ marginBottom: "10px", marginTop: "-15px" }}
+              >
+                <ErrorSpan error={fileError} />
               </div>
             </div>
           )}

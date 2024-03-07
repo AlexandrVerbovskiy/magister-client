@@ -8,7 +8,6 @@ import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import {
   getAdminListingListPageOptions,
   getAdminListingList,
-  changeListingApprove,
   deleteListingByAdmin,
 } from "../../../services";
 import SearchForm from "../../../partials/admin/actions/SearchForm";
@@ -38,23 +37,12 @@ const Listings = (pageProps) => {
     canMoveNextPage,
     canMovePrevPage,
     items: listings,
-    setItemFields,
     rebuild,
   } = usePagination({
     getItemsFunc: (data) => getAdminListingList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
   });
-
-  const handleChangeListingApprove = async (id, name) => {
-    try {
-      const { approved } = await changeListingApprove(id, authToken);
-      setItemFields({ approved }, id);
-      success.set(`${name} ${approved ? "approved" : "unapproved"}!`);
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
 
   const handleCloseDeleteModal = () => {
     setToDeleteUserInfo(null);
@@ -101,7 +89,6 @@ const Listings = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
-                onClickListingApprove={handleChangeListingApprove}
                 onClickDelete={handleOpenDeleteModal}
               />
 

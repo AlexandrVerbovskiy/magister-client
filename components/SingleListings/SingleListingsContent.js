@@ -8,7 +8,6 @@ import { Autoplay } from "swiper/modules";
 const defaultPhotoLink = "/images/admin/user-avatar-80.png";
 
 const SingleListingsContent = ({ listing }) => {
-  console.log(listing);
   const { success, error } = useContext(IndiceContext);
 
   const handleShareClick = () => {

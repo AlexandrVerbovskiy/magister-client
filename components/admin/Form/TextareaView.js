@@ -1,20 +1,10 @@
-import ErrorSpan from "../ErrorSpan";
-
-const Textarea = ({
+const TextareaView = ({
   label = null,
   value,
-  setValue,
-  error = null,
   placeholder = "",
-  setError = () => {},
   rows = "6",
   labelClassName = "sr-only",
 }) => {
-  const handleInput = (e) => {
-    setValue(e.target.value);
-    setError(null);
-  };
-
   return (
     <>
       {label && <label className={labelClassName}>{label}</label>}
@@ -23,11 +13,10 @@ const Textarea = ({
         className="form-input w-full"
         value={value}
         placeholder={placeholder}
-        onInput={handleInput}
+        readOnly={true}
       />
-      <ErrorSpan error={error} />
     </>
   );
 };
 
-export default Textarea;
+export default TextareaView;

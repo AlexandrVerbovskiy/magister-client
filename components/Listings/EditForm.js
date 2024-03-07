@@ -20,6 +20,8 @@ import EditPhotosSection from "../Listings/EditPhotosSection";
 import { IndiceContext } from "../../contexts";
 import { useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
+import YesNoModal from "../_App/YesNoModal";
+import { createListingApprovalRequest } from "../../services";
 
 const cityCoords = {
   Warrington: { lat: 53.390044, lng: -2.59695 },
@@ -35,7 +37,16 @@ const cityOptions = [
 
 const baseCity = cityOptions[0]["value"];
 
-const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
+const EditForm = ({
+  categories,
+  listing,
+  save,
+  messageOnSuccess,
+  canSendRequest,
+  setCanSendRequest,
+  rejectDescription,
+  clearRejectDescription,
+}) => {
   const { success, authToken } = useContext(IndiceContext);
 
   const levels = [
@@ -85,9 +96,13 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
     photoPopupPhoto,
     setFiles,
     setLinkFiles,
+    fileError,
+    setFileError,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
+  const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
+  const [activeSentRequestPopup, setActiveSentRequestPopup] = useState(false);
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
@@ -293,7 +308,21 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
     return !lodash.isEqual(listingToCheck, dataToSave);
   };
 
-  const handleSubmit = async () => {
+  const formDataToSave = () => {
+    const formData = new FormData();
+
+    if (files) {
+      files.forEach((file, index) => formData.append(`files[${index}]`, file));
+    }
+
+    const info = objectToSave();
+    info["listingImages"] = JSON.stringify(info["listingImages"]);
+    Object.keys(info).forEach((key) => formData.append(key, info[key]));
+
+    return formData;
+  };
+
+  const handleSubmit = async (needShowMessage = true) => {
     try {
       if (disabled) return;
       setMainError(null);
@@ -375,42 +404,64 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
         hasError = true;
       }
 
+      if (files.length + linkFiles.length < 1) {
+        setFileError("At least one photo is required");
+        hasError = true;
+      }
+
       if (compensationCost && validatePrice(compensationCost) !== true) {
         setCompensationCostError(validatePrice(compensationCost));
         hasError = true;
       }
 
-      if (hasError) return;
+      if (hasError) return false;
 
       setDisabled(true);
 
       if (hasChanges()) {
-        const formData = new FormData();
-
-        if (files) {
-          files.forEach((file, index) =>
-            formData.append(`files[${index}]`, file)
-          );
-        }
-
-        const info = objectToSave();
-        info["listingImages"] = JSON.stringify(info["listingImages"]);
-        Object.keys(info).forEach((key) => formData.append(key, info[key]));
-
+        const formData = formDataToSave();
         const res = await save(formData, authToken);
-
         setFiles([]);
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
+      }
+
+      if (needShowMessage) {
         success.set(messageOnSuccess);
-      } else {
-        success.set(messageOnSuccess);
-        return true;
+      }
+
+      return true;
+    } catch (e) {
+      setMainError(e.message);
+      return false;
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleSendRequestToApprove = async () => {
+    if (disabled || sendRequestDisabled || !listing.id) return;
+
+    setSendRequestDisabled(true);
+
+    try {
+      const canSent = await handleSubmit(false);
+
+      if (canSent) {
+        await createListingApprovalRequest(listing.id, authToken);
+        success.set("The request was sent successfully");
+        setCanSendRequest(false);
+        clearRejectDescription();
       }
     } catch (e) {
       setMainError(e.message);
     } finally {
-      setDisabled(false);
+      setSendRequestDisabled(false);
     }
+  };
+
+  const activateSendRequestPopup = (e) => {
+    e.preventDefault();
+    setActiveSentRequestPopup(true);
   };
 
   return (
@@ -435,6 +486,15 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
             <li className="item">Add Listings</li>
           </ol>
         </div>
+
+        {rejectDescription && (
+          <div
+            className="alert-dismissible fade show alert alert-danger"
+            role="alert"
+          >
+            <b>Rejected feedback: </b> {rejectDescription}
+          </div>
+        )}
 
         <div className="add-listings-box">
           <h3>Basic Informations</h3>
@@ -586,6 +646,8 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
           handleClosePhotoPopup={handleClosePhotoPopup}
           photoPopupPhoto={photoPopupPhoto}
           setFiles={setFiles}
+          fileError={fileError}
+          setFileError={setFileError}
         />
 
         <div className="add-listings-box">
@@ -631,11 +693,32 @@ const EditForm = ({ categories, listing, save, messageOnSuccess }) => {
           </div>
         )}
 
-        <div className="add-listings-btn">
-          <button type="button" disabled={disabled} onClick={handleSubmit}>
-            Submit Listings
-          </button>
+        <div className="add-listings-box footer-section">
+          <div className="d-flex gap-2 justify-content-between">
+            <button type="button" disabled={disabled} onClick={handleSubmit}>
+              Submit Listings
+            </button>
+
+            {canSendRequest && (
+              <button
+                type="button"
+                onClick={activateSendRequestPopup}
+                disabled={sendRequestDisabled}
+              >
+                Send Request To Approve
+              </button>
+            )}
+          </div>
         </div>
+
+        <YesNoModal
+          active={activeSentRequestPopup}
+          toggleActive={() => setActiveSentRequestPopup(false)}
+          onAccept={handleSendRequestToApprove}
+          title="Confirm Action"
+          body={"Confirmation is required to send a listing approval request"}
+          acceptText="Send"
+        />
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import DropdownFilter from "../../components/admin/DropdownFilter";
+import FilterRadioOption from "../../components/admin/Form/FilterRadioOption";
 
 import { adminSideProps } from "../../middlewares";
 
@@ -16,30 +17,6 @@ import {
 } from "../../services";
 import SearchedWordTable from "../../components/admin/SearchedWord/Table";
 import { useRouter } from "next/router";
-
-const FilterRadioOption = ({
-  name,
-  label,
-  value,
-  currentValue,
-  setCurrentValue,
-}) => {
-  return (
-    <li className="py-1 px-3">
-      <label className="flex items-center cursor-pointer">
-        <input
-          type="radio"
-          name={name}
-          className="form-radio cursor-pointer"
-          value={value}
-          checked={currentValue == value}
-          onChange={() => setCurrentValue(value)}
-        />
-        <span className="text-sm font-medium ml-2">{label}</span>
-      </label>
-    </li>
-  );
-};
 
 const SearchedWords = (pageProps) => {
   const router = useRouter();

@@ -1,8 +1,8 @@
-import React from "react";
-import Tooltip from "../../../components/admin/Tooltip";
+import Link from "next/link";
+import { timeConverter } from "../../../utils";
 import View from "../FastActions/View";
-import Edit from "../FastActions/Edit";
-import Delete from "../FastActions/Delete";
+import Moderate from "../FastActions/Moderate";
+import Tooltip from "../Tooltip";
 
 const ActiveSpan = ({ active }) => {
   const text = active ? "YES" : "NO";
@@ -32,11 +32,11 @@ const TableItem = ({
   name,
   city,
   userName,
+  userId,
   categoryName,
-  countStoredItems,
-  pricePerDay,
+  categoryId,
   approved,
-  onClickDelete,
+  createdAt,
 }) => {
   return (
     <tr>
@@ -44,33 +44,38 @@ const TableItem = ({
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {name}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {city}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {userName}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {categoryName}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {countStoredItems}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        {pricePerDay}
+        <div>
+          <Link href={`/admin/listing-approval-requests/${id}`}>{name}</Link>
+        </div>
       </td>
 
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div className="font-medium">{city}</div>
+      </td>
+
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div>
+          <Link href={`/admin/user-edit/${userId}`}>{userName}</Link>
+        </div>
+      </td>
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div className="font-medium">{categoryName}</div>
+      </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <ActiveSpan active={approved} />
       </td>
-
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <div className="font-medium text-sky-500">
+          <div>{timeConverter(createdAt)}</div>
+        </div>
+      </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
-          <View href={`/listing/${id}`} />
-          <Edit href={`/admin/listings-edit/${id}`} />
-          <Delete onDeleteClick={onClickDelete} />
+          {approved === null ? (
+            <Moderate href={`/admin/listing-approval-requests/${id}`} />
+          ) : (
+            <View href={`/admin/listing-approval-requests/${id}`} />
+          )}
         </div>
       </td>
     </tr>

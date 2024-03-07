@@ -19,7 +19,7 @@ const ErrorSpan = ({ error }) => {
 
   if (error) {
     return (
-      <div ref={errorRef} className="text-red-500 text-sm error-span">
+      <div ref={errorRef} className="text-rose-500 text-sm error-span">
         {error}
       </div>
     );

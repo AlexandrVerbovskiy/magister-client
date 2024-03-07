@@ -15,7 +15,7 @@ const SearchedWordTable = ({
     { title: "Search Count", value: "search_count" },
     { title: "Viewed", value: "admin_viewed", canOrder: false },
     { title: "Accepted", value: "listing_categories_id", canOrder: false },
-    { title: "Actions", value: "actions", canOrder: false }
+    { title: "Actions", value: "actions", canOrder: false },
   ];
 
   return (
@@ -36,9 +36,8 @@ const SearchedWordTable = ({
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />

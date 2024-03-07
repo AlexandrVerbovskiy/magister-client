@@ -31,11 +31,6 @@ export const getAdminListingEditPageOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getUserListingListOptions = async (params, authToken) => {
-  const data = await post(`/user-listing-list-options`, params, authToken);
-  return data.body;
-};
-
 export const getAdminUserListPageOptions = async (params, authToken) => {
   const data = await post(`/admin-user-list-options`, params, authToken);
   return data.body;
@@ -82,6 +77,11 @@ export const getAdminSearchedWordListPageOptions = async (
   return data.body;
 };
 
+export const getUserListingListOptions = async (params, authToken) => {
+  const data = await post(`/user-listing-list-options`, params, authToken);
+  return data.body;
+};
+
 export const getAdminListingListPageOptions = async (params, authToken) => {
   const data = await post(`/admin-listing-list-options`, params, authToken);
   return data.body;
@@ -90,4 +90,39 @@ export const getAdminListingListPageOptions = async (params, authToken) => {
 export const getUserNameIdList = async (params) => {
   const data = await post(`/user-name-id-list`, params);
   return data.body.list;
+};
+
+export const getUserListingApprovalRequestListPageOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/user-listing-approval-request-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminListingApprovalRequestListPageOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-listing-approval-request-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminListingApprovalRequestOption = async (
+  requestId,
+  authToken
+) => {
+  const data = await get(
+    `/admin-listing-approval-request-options/${requestId}`,
+    authToken
+  );
+  return data.body;
 };

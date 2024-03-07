@@ -4,6 +4,7 @@ import { uniqueId } from "../utils";
 const useListingPhotoEdit = () => {
   const [files, setFiles] = useState([]);
   const [linkFiles, setLinkFiles] = useState([]);
+  const [fileError, setFileError] = useState(null);
 
   const removeFile = (localIdToRemove) => {
     const newFiles = files.filter((file) => file.localId !== localIdToRemove);
@@ -38,6 +39,8 @@ const useListingPhotoEdit = () => {
     }));
 
   const handlePhotoAddByPopup = () => {
+    setFileError(null);
+
     if (photoPopupType === "storage") {
       let found = null;
       let date = Date.now();
@@ -143,7 +146,9 @@ const useListingPhotoEdit = () => {
     handleClosePhotoPopup,
     photoPopupPhoto,
     setFiles,
-    setLinkFiles
+    setLinkFiles,
+    fileError,
+    setFileError,
   };
 };
 

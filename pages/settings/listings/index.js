@@ -17,24 +17,79 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { getListingImageByType } from "../../../utils";
 
 import YesNoModal from "../../../components/_App/YesNoModal";
+import DropdownFilter from "../../../components/DropdownFilter";
+import { useRouter } from "next/router";
 
-const TabHeaderSection = ({ filter, changeFilter, countItems, style = {} }) => (
+const Tooltip = ({ text, children }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const showTooltip = () => setIsVisible(true);
+  const hideTooltip = () => setIsVisible(false);
+
+  return (
+    <div className="custom-tooltip-parent">
+      {isVisible && <div className="custom-tooltip">{text}</div>}
+      <div onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const TabHeaderSection = ({
+  filter,
+  changeFilter,
+  statusFilter,
+  handleChangeStatusFilter,
+  countItems,
+  style = {},
+}) => (
   <ul
     className="nav nav-tabs d-flex align-items-end justify-content-between"
     id="myTab"
     style={style}
   >
-    <li className="nav-item react-tabs__tab--selected">
-      <a className="nav-link" id="all-listing-tab">
+    <li className="nav-item">
+      <a className="nav-link active" id="all-listing-tab">
         <span className="menu-title">All Listings ({countItems})</span>
       </a>
     </li>
 
-    <li className="nav-item">
-      <label className="search-header-section">
+    <li className="nav-item dropdown d-flex">
+      <DropdownFilter align="left">
+        <div className="pt-1.5 px-3">
+          <div className="text-uppercase label-section">Status</div>
+          <ul className="list-group list-group-flush">
+            {[
+              { value: "approved", label: "Approved" },
+              { value: "unapproved", label: "Unapproved" },
+              { value: "not_processed", label: "Not Processed" },
+              { value: "all", label: "All" },
+            ].map((option) => (
+              <div className="py-1" key={option.value}>
+                <div className="form-check">
+                  <input
+                    type="radio"
+                    name={option.value}
+                    className="form-check-input cursor-pointer"
+                    value={option.value}
+                    checked={statusFilter === option.value}
+                    onChange={() => handleChangeStatusFilter(option.value)}
+                    id={option.value}
+                  />
+                  <label htmlFor={option.value} className="form-check-label">
+                    {option.label}
+                  </label>
+                </div>
+              </div>
+            ))}
+          </ul>
+        </div>
+      </DropdownFilter>
+      <label className="search-header-section ms-2">
         <input
           value={filter}
-          onInput={(e) => changeFilter(e.target.value)}
+          onChange={(e) => changeFilter(e.target.value)}
           type="search"
           className="search-field"
           placeholder="Search..."
@@ -44,10 +99,44 @@ const TabHeaderSection = ({ filter, changeFilter, countItems, style = {} }) => (
   </ul>
 );
 
+const StatusBlock = ({ requestId, requestApproved }) => {
+  let listingStatus = "unapproved";
+  let icon = "bx bx-x-circle";
+  let tooltip =
+    "The tool has not been approved. Update it and send a confirmation request";
+
+  if (requestId) {
+    if (requestApproved === null) {
+      listingStatus = "not_processed";
+      icon = "bx bx-time";
+      tooltip =
+        "The tool is waiting for confirmation. An administrator will review your request shortly";
+    }
+
+    if (requestApproved) {
+      listingStatus = "approved";
+      icon = "bx bx-check-circle";
+      tooltip = "The tool has been approved. Users can interact with the tool";
+    }
+  }
+
+  return (
+    <div className={`listing-request-status ${listingStatus}`}>
+      <Tooltip text={tooltip}>
+        <i className={icon}></i>
+      </Tooltip>
+    </div>
+  );
+};
+
 const ListingList = (pageProps) => {
+  const router = useRouter();
   const { error, success, authToken } = useContext(IndiceContext);
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);
+
+  const baseStatusFilter = router.query.status ?? "all";
+  const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
 
   const {
     page,
@@ -64,6 +153,7 @@ const ListingList = (pageProps) => {
     getItemsFunc: (data) => getUserListingList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
+    getDopProps: () => ({ status: statusFilter }),
   });
 
   const handleAcceptDelete = async () => {
@@ -82,6 +172,11 @@ const ListingList = (pageProps) => {
   const handleDeleteItem = (e, id) => {
     e.preventDefault();
     setListingIdToDelete(id);
+  };
+
+  const handleChangeStatusFilter = (status) => {
+    setStatusFilter(status);
+    rebuild({ status: status }, ["status"]);
   };
 
   return (
@@ -116,13 +211,15 @@ const ListingList = (pageProps) => {
           </Link>
         </div>
 
-        {listings.length < 1 && (
+        {listings.length < 1 && pageProps.items.length < 1 && (
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
               filter={filter}
               changeFilter={changeFilter}
               countItems={countItems}
+              statusFilter={statusFilter}
+              handleChangeStatusFilter={handleChangeStatusFilter}
             />
 
             <div className="no-listing">
@@ -150,6 +247,8 @@ const ListingList = (pageProps) => {
                 filter={filter}
                 changeFilter={changeFilter}
                 countItems={countItems}
+                statusFilter={statusFilter}
+                handleChangeStatusFilter={handleChangeStatusFilter}
               />
 
               <div className="tab-content" id="myTabContent">
@@ -213,6 +312,11 @@ const ListingList = (pageProps) => {
                                 </Swiper>
                               )}
                             </div>
+
+                            <StatusBlock
+                              requestApproved={listing.requestApproved}
+                              requestId={listing.requestId}
+                            />
 
                             <div className="listings-content">
                               <ul className="listings-meta">

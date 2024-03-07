@@ -12,7 +12,6 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
-import env from "../../../env";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 
 const UserVerifyRequest = ({ info }) => {
@@ -130,7 +129,7 @@ const UserVerifyRequest = ({ info }) => {
             <div style={{ width: "100%" }}>
               <div className="mb-2">
                 <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                  Are yiu sure you want decline this request?
+                  Are you sure you want decline this request?
                 </div>
               </div>
               <div className="text-sm mb-2">

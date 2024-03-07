@@ -1,11 +1,6 @@
 import { initAxios } from "../utils";
 const { get, post } = initAxios("/listings");
 
-export const getListingCategoriesList = async () => {
-  const data = await get(`/list`);
-  return data.body;
-};
-
 export const getFullListingInfo = async (id) => {
   const data = await get(`/get-full-by-id/${id}`);
   return data.body;
@@ -53,10 +48,5 @@ export const getAdminListingList = async (params, authToken) => {
 
 export const getUserListingList = async (params, authToken) => {
   const data = await post(`/user-list`, params, authToken);
-  return data.body;
-};
-
-export const changeListingApprove = async (id, authToken) => {
-  const data = await post(`/change-approve`, { id }, authToken);
   return data.body;
 };

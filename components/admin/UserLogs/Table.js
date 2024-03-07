@@ -2,13 +2,7 @@ import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 
-const LogsTable = ({
-  logs,
-  orderField,
-  orderType,
-  onClickTh,
-  totalCount,
-}) => {
+const LogsTable = ({ logs, orderField, orderType, onClickTh, totalCount }) => {
   const ths = [
     { title: "Id", value: "id" },
     { title: "Event", value: "event_name" },
@@ -35,9 +29,8 @@ const LogsTable = ({
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />
@@ -46,10 +39,7 @@ const LogsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {logs.map((log) => (
-                <TableItem
-                  key={log.id}
-                  {...log}
-                />
+                <TableItem key={log.id} {...log} />
               ))}
             </tbody>
           </table>

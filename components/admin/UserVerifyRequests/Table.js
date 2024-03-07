@@ -2,7 +2,7 @@ import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 
-const UsersTable = ({
+const RequestsTable = ({
   userVerifyRequests,
   orderField,
   orderType,
@@ -10,10 +10,10 @@ const UsersTable = ({
   totalCount,
 }) => {
   const ths = [
-    { title: "Id", value: "id" },
-    { title: "User Name", value: "userName" },
-    { title: "User Email", value: "userEmail" },
-    { title: "Created At", value: "createdAt" },
+    { title: "Id", value: "user_verify_requests.id" },
+    { title: "User Name", value: "users.name" },
+    { title: "User Email", value: "users.email" },
+    { title: "Created At", value: "user_verify_requests.created_at" },
     { title: "Actions", value: "actions", canOrder: false },
   ];
 
@@ -35,9 +35,8 @@ const UsersTable = ({
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />
@@ -56,4 +55,4 @@ const UsersTable = ({
   );
 };
 
-export default UsersTable;
+export default RequestsTable;

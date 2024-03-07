@@ -1,4 +1,11 @@
-const YesNoModal = ({ active, toggleActive, title, body = null, onAccept }) => {
+const YesNoModal = ({
+  active,
+  toggleActive,
+  title,
+  body = null,
+  onAccept,
+  acceptText = "Save",
+}) => {
   const handleAccept = () => {
     toggleActive();
     onAccept();
@@ -37,7 +44,7 @@ const YesNoModal = ({ active, toggleActive, title, body = null, onAccept }) => {
                       Cancel
                     </button>
                     <button type="button" onClick={handleAccept}>
-                      Save
+                      {acceptText}
                     </button>
                   </form>
                 </div>
