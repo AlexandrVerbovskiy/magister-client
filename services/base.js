@@ -26,6 +26,11 @@ export const getCurrentUserDocumentsPageOptions = async (authToken) => {
   return data.body;
 };
 
+export const getAdminListingCreatePageOptions = async (authToken) => {
+  const data = await get(`/admin-create-listing-options`, authToken);
+  return data.body;
+};
+
 export const getAdminListingEditPageOptions = async (id, authToken) => {
   const data = await get(`/admin-update-listing-options/${id}`, authToken);
   return data.body;

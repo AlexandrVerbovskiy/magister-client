@@ -32,7 +32,7 @@ const Dashboard = () => {
           className="notification-alert alert alert-success alert-dismissible fade show"
           role="alert"
         >
-          Welcome, <b>{user.name}</b>!
+          Welcome, <b>{user?.name}</b>!
           <button
             type="button"
             className="btn-close"

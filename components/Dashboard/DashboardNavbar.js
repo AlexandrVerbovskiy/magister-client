@@ -12,7 +12,16 @@ const DashboardNavbar = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const { displaySideMenu, toggleSideMenu } = useContext(IndiceContext);
+  const { displaySideMenu, toggleSideMenu, user, error } =
+    useContext(IndiceContext);
+
+  const needVerifyAccount = (e) => {
+    if (!user.verified) {
+      e.preventDefault();
+      error.set(`You need to be verified to rent and rent tools. To verify, send the
+      necessary data via the "Documents Verification" page`);
+    }
+  };
 
   return (
     <>
@@ -63,7 +72,8 @@ const DashboardNavbar = () => {
                 href="/settings/listings/"
                 className={`nav-link ${
                   currentPath.includes("/settings/listings/") && "active"
-                }`}
+                }  ${!user.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
               >
                 <span className="icon">
                   <i className="bx bx-layer"></i>

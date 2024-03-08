@@ -3,10 +3,10 @@ import { getMyInfo } from "../services";
 import { middlewareCallbackWrapper } from "../utils";
 
 const userSideProps = async (context, callback = null) => {
+  const res = { user: null };
+
   try {
     const resGetSession = await getSession(context);
-
-    const res = { user: null };
 
     if (resGetSession) {
       const authToken = resGetSession.user.authToken;
@@ -17,18 +17,18 @@ const userSideProps = async (context, callback = null) => {
       res["user"] = user;
       res["authToken"] = authToken;
     }
-
-    return await middlewareCallbackWrapper({
-      callback,
-      res,
-      context,
-    });
   } catch (e) {
     Object.keys(context.req.cookies).forEach((cookieName) => {
       context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
     });
     return { props: { user: null } };
   }
+
+  return await middlewareCallbackWrapper({
+    callback,
+    res,
+    context,
+  });
 };
 
 export default userSideProps;

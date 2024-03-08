@@ -26,6 +26,11 @@ export const deleteListing = async (id, authToken) => {
   return data.body;
 };
 
+export const createListingByAdmin = async (body, authToken) => {
+  const data = await post(`/create-by-admin`, body, authToken);
+  return data.body;
+};
+
 export const updateListingByAdmin = async (body, authToken) => {
   const data = await post(`/update-by-admin`, body, authToken);
   return data.body;

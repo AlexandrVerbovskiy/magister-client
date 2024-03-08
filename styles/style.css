@@ -369,7 +369,7 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item:first-child {
   margin-left: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:hover a,
+.miran-nav .navbar .navbar-nav .nav-item:not(.disabled):hover a,
 .miran-nav .navbar .navbar-nav .nav-item.active a {
   color: var(--mainColor);
 }
@@ -1034,7 +1034,7 @@ Navbar Area CSS
   visibility: visible;
   margin-top: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:hover .dropdown-menu {
+.miran-nav .navbar .navbar-nav .nav-item:not(.disabled):hover .dropdown-menu {
   opacity: 1;
   visibility: visible;
   margin-top: 0;
@@ -1160,7 +1160,12 @@ Navbar Area CSS
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a.active {
   color: var(--mainColor);
 }
-.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item:hover a,
+.navbar-style-two
+  .miran-nav
+  .navbar
+  .navbar-nav
+  .nav-item:not(.disabled):hover
+  a,
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item.active a {
   color: var(--mainColor);
 }
@@ -15634,14 +15639,27 @@ Dashboard CSS
   font-variant: normal;
   font-size: 18px;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover {
   background-color: #fafafa;
   color: var(--mainColor);
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover::before {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover::before {
   width: 3px;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover .icon {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover
+  .icon {
   transform: rotateY(-180deg);
   color: var(--mainColor);
 }
@@ -16326,10 +16344,10 @@ Dashboard CSS
   background: #888;
 }
 
-.nav-item:hover .icon {
+/*.nav-item:not(.disabled):hover .icon {
   transform: rotateY(-180deg);
   color: var(--mainColor);
-}
+}*/
 
 .sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .active {
   background-color: #fafafa;
@@ -17164,22 +17182,26 @@ Preloader Area CSS
   background-color: #eeeeee;
 }
 
-.custom-tooltip-parent{
+.custom-tooltip-parent {
   position: relative;
   display: inline-block;
   cursor: pointer;
 }
 
-.custom-tooltip{
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: rgba(0,0,0,0.8);
-    color: #fff;
-    padding: 5px;
-    border-radius: 3px;
-    z-index: 999;
-    font-size: 13px;
-    width: 200px;
-    line-height: 13px;
-  }
+.custom-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  z-index: 999;
+  font-size: 13px;
+  width: 200px;
+  line-height: 13px;
+}
+
+.sidemenu-nav .nav-link.disabled {
+  pointer-events: all!important;
+}

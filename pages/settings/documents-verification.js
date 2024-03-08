@@ -275,7 +275,7 @@ const DocumentsVerification = ({
             <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              {!user.verified && lastAnswerDescription && (
+              {!user?.verified && lastAnswerDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
                     <div
@@ -297,7 +297,7 @@ const DocumentsVerification = ({
                       photoUrl={proofOfAddressLink}
                       onChange={handleProofOfAddressChange}
                       name="proofOfAddressLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -307,7 +307,7 @@ const DocumentsVerification = ({
                       photoUrl={reputableBankIdLink}
                       onChange={handleReputableBankIdChange}
                       name="reputableBankIdLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -317,7 +317,7 @@ const DocumentsVerification = ({
                       photoUrl={utilityLink}
                       onChange={handleUtilityChange}
                       name="utilityLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -327,7 +327,7 @@ const DocumentsVerification = ({
                       photoUrl={hmrcLink}
                       onChange={handleHmrcChange}
                       name="hmrcLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -337,7 +337,7 @@ const DocumentsVerification = ({
                       photoUrl={councilTaxBillLink}
                       onChange={handleCouncilTaxBillChange}
                       name="councilTaxBillLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -347,7 +347,7 @@ const DocumentsVerification = ({
                       photoUrl={passportOrDrivingIdLink}
                       onChange={handlePassportOrDrivingIdChange}
                       name="passportOrDrivingIdLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -359,7 +359,7 @@ const DocumentsVerification = ({
                         handleConfirmMoneyLaunderingChecksAndComplianceChange
                       }
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -374,7 +374,7 @@ const DocumentsVerification = ({
                     </div>
                   )}
 
-                  {!user.verified && (
+                  {!user?.verified && (
                     <div className="col-12">
                       <div className="form-group d-flex gap-2 justify-content-between">
                         <button

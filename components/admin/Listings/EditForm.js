@@ -1,43 +1,37 @@
 import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../../../partials/admin/Sidebar";
-import Header from "../../../../partials/admin/Header";
-import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
-import Switch from "../../../../partials/admin/base/Switch";
-import DropdownClassic from "../../../../components/admin/DropdownClassic";
-import Input from "../../../../components/admin/Form/Input";
-import Textarea from "../../../../components/admin/Form/Textarea";
+import Sidebar from "../../../partials/admin/Sidebar";
+import Header from "../../../partials/admin/Header";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import Switch from "../../../partials/admin/base/Switch";
+import DropdownClassic from "../DropdownClassic";
+import Input from "../Form/Input";
+import Textarea from "../Form/Textarea";
 import {
   getAdminListingEditPageOptions,
   getUserNameIdList,
   updateListingByAdmin,
-} from "../../../../services";
-import { adminSideProps } from "../../../../middlewares";
-import { IndiceContext } from "../../../../contexts";
-import EditMap from "../../../../components/Listings/EditMap";
+} from "../../../services";
+import { adminSideProps } from "../../../middlewares";
+import { IndiceContext } from "../../../contexts";
+import EditMap from "../../Listings/EditMap";
 import lodash from "lodash";
-import EditPhotosSection from "../../../../components/admin/Listings/EditPhotosSection";
-import { useListingPhotosEdit, useAdminPage } from "../../../../hooks";
+import EditPhotosSection from "../Listings/EditPhotosSection";
+import { useListingPhotosEdit, useAdminPage } from "../../../hooks";
 import {
   uniqueId,
   validateBigText,
   validateInteger,
   validatePrice,
   validateSmallText,
-} from "../../../../utils";
-import DropdownClassicAjax from "../../../../components/admin/DropdownClassicAjax";
+} from "../../../utils";
+import DropdownClassicAjax from "../DropdownClassicAjax";
+import STATIC from "../../../static";
 
 const categoryLevelOptions = [
   { value: "firstLevel", title: "First Level", default: true },
   { value: "secondLevel", title: "Second Level" },
   { value: "thirdLevel", title: "Third Level" },
 ];
-
-const cityCoords = {
-  Warrington: { lat: 53.390044, lng: -2.59695 },
-  Manchester: { lat: 53.48095, lng: -2.23743 },
-};
-
-const baseRadius = 500;
 
 const cityOptions = [
   { value: "Warrington", title: "Warrington" },
@@ -48,19 +42,7 @@ const baseCategoryLevel = "firstLevel";
 
 const baseCity = cityOptions[0]["value"];
 
-const ListingEdit = ({ categories, listing, id }) => {
-  const [listing, setListing] = useState({});
-
-  const save = async (formData, authToken) => {
-    formData.append("id", id);
-    const res = await updateListingByAdmin(formData, authToken);
-    setListing(res);
-  };
-
-  return <EditForm categories={categories} listing={listing} save={save}/>;
-};
-
-const ListingsEdit = ({ categories, listing, id }) => {
+const EditForm = ({ listing, categories, save }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [prevListing, setPrevListing] = useState(listing);
@@ -131,14 +113,14 @@ const ListingsEdit = ({ categories, listing, id }) => {
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const [center, setCenter] = useState({
-    lat: cityCoords[baseCity].lat,
-    lng: cityCoords[baseCity].lng,
+    lat: STATIC.cityCoords[baseCity].lat,
+    lng: STATIC.cityCoords[baseCity].lng,
   });
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(cityCoords[baseCity].lat);
-  const [lng, setLng] = useState(cityCoords[baseCity].lng);
-  const [radius, setRadius] = useState(baseRadius);
+  const [lat, setLat] = useState(STATIC.cityCoords[baseCity].lat);
+  const [lng, setLng] = useState(STATIC.cityCoords[baseCity].lng);
+  const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
 
   const handleChangeCategoryLevel = (newLevel) => {
     setCategoryLevel(newLevel);
@@ -146,14 +128,14 @@ const ListingsEdit = ({ categories, listing, id }) => {
   };
 
   const handleChangeCity = (city) => {
-    const lat = cityCoords[city].lat;
-    const lng = cityCoords[city].lng;
+    const lat = STATIC.cityCoords[city].lat;
+    const lng = STATIC.cityCoords[city].lng;
 
     setCity(city);
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(baseRadius);
+    setRadius(STATIC.baseListingMapCircleRadius);
   };
 
   useEffect(() => {
@@ -187,8 +169,8 @@ const ListingsEdit = ({ categories, listing, id }) => {
 
   const listingToState = () => {
     const city = prevListing.city ?? baseCity;
-    const lat = (cityCoords[city] ?? cityCoords[baseCity]).lat;
-    const lng = (cityCoords[city] ?? cityCoords[baseCity]).lng;
+    const lat = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lat;
+    const lng = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -209,9 +191,9 @@ const ListingsEdit = ({ categories, listing, id }) => {
       minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: prevListing.radius ?? baseRadius,
+      rentalRadius: prevListing.radius ?? STATIC.baseListingMapCircleRadius,
       listingImages,
-      approved: prevListing.approved,
+      approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
     };
   };
@@ -348,7 +330,6 @@ const ListingsEdit = ({ categories, listing, id }) => {
 
       if (hasChanges()) {
         const formData = new FormData();
-        formData.append("id", id);
 
         if (files) {
           files.forEach((file, index) =>
@@ -360,7 +341,7 @@ const ListingsEdit = ({ categories, listing, id }) => {
         info["listingImages"] = JSON.stringify(info["listingImages"]);
         Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
-        const res = await updateListingByAdmin(formData, authToken);
+        const res = await save(formData, authToken);
 
         setFiles([]);
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
@@ -716,18 +697,4 @@ const ListingsEdit = ({ categories, listing, id }) => {
   );
 };
 
-const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const id = context.params.id;
-
-  const options = await getAdminListingEditPageOptions(
-    id,
-    baseSideProps.authToken
-  );
-
-  return { ...options, id };
-};
-
-export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
-
-export default ListingEdit;
+export default EditForm;
