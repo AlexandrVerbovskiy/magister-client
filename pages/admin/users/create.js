@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from "react";
 import { useRouter } from "next/router";
-import EditUserForm from "../../components/admin/EditUserForm";
-import { createUser, updateUser } from "../../services";
-import { adminSideProps } from "../../middlewares";
-import { IndiceContext } from "../../contexts";
+import EditUserForm from "../../../components/admin/EditUserForm";
+import { createUser, updateUser } from "../../../services";
+import { adminSideProps } from "../../../middlewares";
+import { IndiceContext } from "../../../contexts";
 
 const UserCreate = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const UserCreate = () => {
       const { user } = await createUser(formData, authToken);
       const id = user.id;
       setUserId(id);
-      router.push("/admin/user-edit/" + id);
+      router.push("/admin/users/edit/" + id);
       return { user };
     } else {
       formData.append("id", editableUser.id);

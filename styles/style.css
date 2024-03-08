@@ -3506,6 +3506,8 @@ Listings Area CSS
 .single-listings-box.without-boxshadow {
   box-shadow: unset;
 }
+
+.single-listings-box.hovered,
 .single-listings-box:hover {
   box-shadow: 5px 5px var(--mainColor);
   border-color: var(--mainColor);

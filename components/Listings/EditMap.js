@@ -7,6 +7,9 @@ import {
 import ENV from "../../env";
 import { useRef } from "react";
 
+const defaultMarker = require("../../public/images/maps/default-marker.svg").default
+  .src;
+
 const EditMap = ({
   markerActive,
   setMarkerActive,
@@ -59,7 +62,7 @@ const EditMap = ({
         onClick={(e) => {
           const lat = e.latLng.lat();
           const lng = e.latLng.lng();
-          
+
           setMarkerActive(true);
           setLat(lat);
           setLng(lng);
@@ -69,6 +72,7 @@ const EditMap = ({
           ref={markerRef}
           position={{ lat: lat, lng: lng }}
           onClick={() => setMarkerActive(true)}
+          icon={defaultMarker}
         />
         <Circle
           center={{ lat: lat, lng: lng }}

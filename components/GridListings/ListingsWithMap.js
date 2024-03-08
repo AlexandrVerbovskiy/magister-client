@@ -1,10 +1,113 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import Sidebar from "../Listings/Sidebar";
+import {
+  usePagination,
+  useInitPaginationTimeFilter,
+  useChangeTimeFilter,
+} from "../../hooks";
+import { getListingList } from "../../services";
+import { IndiceContext } from "../../contexts";
+import { getFilePath, getListingImageByType } from "../../utils";
+import Pagination from "../Pagination";
+import MultyMarkersMap from "../Listings/MultyMarkersMap";
 
-const ListingsWithMap = ({ categories }) => {
+const ListingsWithMap = ({ categories, pageProps }) => {
+  const [selectedCategories, setSelectedCategories] = useState(
+    pageProps.options.categories
+  );
+  const [selectedCities, setSelectedCities] = useState(
+    pageProps.options.cities
+  );
+
+  const { error, success } = useContext(IndiceContext);
+
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+    useInitPaginationTimeFilter();
+
+  const {
+    page,
+    countItems,
+    countPages,
+    moveToPage,
+    canMoveNextPage,
+    canMovePrevPage,
+    items: listings,
+    rebuild,
+    options,
+    order,
+    handleChangeOrder,
+  } = usePagination({
+    getItemsFunc: (data) => getListingList(data),
+    onError: (e) => error.set(e.message),
+    getDopProps: () => ({
+      ...getTimeFilterProps(),
+      categories: selectedCategories.length > 0 ? selectedCategories : null,
+      cities: selectedCities.length > 0 ? selectedCities : null,
+    }),
+    defaultData: pageProps,
+  });
+
+  const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
+  });
+
+  const handleSelectedCategories = (categories) => {
+    setSelectedCategories(categories);
+    rebuild({ categories }, ["categories"]);
+  };
+
+  const handleSelectedCities = (cities) => {
+    setSelectedCities(cities);
+    rebuild({ cities }, ["cities"]);
+  };
+
+  const [markers, setMarkers] = useState([]);
+  const [activeListingIds, setActiveListingIds] = useState([]);
+
+  useEffect(() => {
+    const newMarkers = listings.map((listing) => ({
+      lat: listing.rentalLat,
+      lng: listing.rentalLng,
+      radius: listing.rentalRadius,
+      id: listing.id,
+      active: false,
+    }));
+
+    setMarkers(newMarkers);
+  }, [listings]);
+
+  useEffect(
+    () =>
+      setActiveListingIds(
+        markers.filter((marker) => marker.active).map((marker) => marker.id)
+      ),
+    [markers]
+  );
+
+  const setMarkerActive = (id) =>
+    setMarkers((prev) =>
+      prev.map((marker) => {
+        if (marker.id == id) marker.active = true;
+        return marker;
+      })
+    );
+
+  const setMarkerUnactive = (id) =>
+    setMarkers((prev) =>
+      prev.map((marker) => {
+        if (marker.id == id) marker.active = false;
+        return marker;
+      })
+    );
+
   return (
     <>
       <div className="listings-area ptb-100">
@@ -13,7 +116,17 @@ const ListingsWithMap = ({ categories }) => {
             <div className="col-xl-8 col-lg-12 col-md-12 p-0">
               <div className="row">
                 <div className="col-lg-4 col-md-12">
-                  <Sidebar categories={categories}/>
+                  <Sidebar
+                    fromDateFilter={fromTime}
+                    setFromDateFilter={handleChangeFromDate}
+                    toDateFilter={toTime}
+                    setToDateFilter={handleChangeToDate}
+                    selectedCities={selectedCities}
+                    setSelectedCities={handleSelectedCities}
+                    selectedCategories={selectedCategories}
+                    setSelectedCategories={handleSelectedCategories}
+                    categories={categories}
+                  />
                 </div>
 
                 <div className="col-lg-8 col-md-12">
@@ -21,7 +134,7 @@ const ListingsWithMap = ({ categories }) => {
                     <div className="listings-grid-sorting row align-items-center">
                       <div className="col-lg-5 col-md-6 result-count">
                         <p>
-                          <span className="count">9</span> Results
+                          <span className="count">{countItems}</span> Results
                         </p>
                       </div>
 
@@ -29,13 +142,21 @@ const ListingsWithMap = ({ categories }) => {
                         <div className="d-flex justify-content-end">
                           <div className="select-box">
                             <label>Sort By:</label>
-                            <select className="blog-select">
-                              <option>Recommended</option>
-                              <option>Default</option>
-                              <option>Popularity</option>
-                              <option>Latest</option>
-                              <option>Price: low to high</option>
-                              <option>Price: high to low</option>
+                            <select
+                              className="blog-select"
+                              value={order ?? "default"}
+                              onChange={(e) =>
+                                handleChangeOrder(e.target.value)
+                              }
+                            >
+                              <option value="default">Default</option>
+                              <option value="latest">Latest</option>
+                              <option value="price_to_high">
+                                Price: low to high
+                              </option>
+                              <option value="price_to_low">
+                                Price: high to low
+                              </option>
                             </select>
                           </div>
                         </div>
@@ -43,693 +164,139 @@ const ListingsWithMap = ({ categories }) => {
                     </div>
 
                     <div className="row">
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <img
-                              src="/images/listings/listings1.jpg"
-                              alt="image"
-                            />
-                            <Link
-                              href="/single-listings"
-                              className="link-btn"
-                            ></Link>
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user1.jpg" alt="image" />
-                                <span>Taylor</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-furniture-and-household"></i>
-                                  Restaurant
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> New York, USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/product-details">
-                                Chipotle Mexican Grill
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <span className="count">(45)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$150</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <Swiper
-                              loop={true}
-                              navigation={true}
-                              modules={[Navigation]}
-                              className="listings-image-slides"
-                            >
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings2.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings4.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-                            </Swiper>
-
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user2.jpg" alt="image" />
-                                <span>Sarah</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-furniture-and-household"></i>
-                                  Hotel
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Los Angeles,
-                                  USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                The Beverly Hills Hotel
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(10)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$200</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <img
-                              src="/images/listings/listings3.jpg"
-                              alt="image"
-                            />
-                            <Link
-                              href="/single-listings"
-                              className="link-btn"
-                            ></Link>
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user3.jpg" alt="image" />
-                                <span>James</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-shopping-bags"></i>
-                                  Shopping
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Bangkok,
-                                  Thailand
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                Central Shopping Center
-                              </Link>
-                            </h3>
-                            <span className="status status-close">
-                              <i className="flaticon-save"></i> Close Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star-half"></i>
-                                <span className="count">(35)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$110</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <Swiper
-                              loop={true}
-                              navigation={true}
-                              modules={[Navigation]}
-                              className="listings-image-slides"
-                            >
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings5.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings6.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-                            </Swiper>
-
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user4.jpg" alt="image" />
-                                <span>Andy</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-cleansing"></i> Beauty
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Suwanee, USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                Indice Beauty Center
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bx-star"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(15)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$100</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <img
-                              src="/images/listings/listings7.jpg"
-                              alt="image"
-                            />
-                            <Link
-                              href="/single-listings"
-                              className="link-btn"
-                            ></Link>
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user3.jpg" alt="image" />
-                                <span>James</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-furniture-and-household"></i>
-                                  Restaurant
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Francisco,
-                                  USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                The Mad Made Grill
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <span className="count">(18)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$121</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <Swiper
-                              loop={true}
-                              navigation={true}
-                              modules={[Navigation]}
-                              className="listings-image-slides"
-                            >
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings4.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings2.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-                            </Swiper>
-
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user2.jpg" alt="image" />
-                                <span>Sarah</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-hotel"></i> Hotel
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Los Angeles,
-                                  USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                The Beverly Hills Hotel
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(10)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$200</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <img
-                              src="/images/listings/listings13.jpg"
-                              alt="image"
-                            />
-                            <Link
-                              href="/single-listings"
-                              className="link-btn"
-                            ></Link>
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user3.jpg" alt="image" />
-                                <span>James</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-shopping-bags"></i>
-                                  Fitness
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Bangkok,
-                                  Thailand
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                Power House Gym
-                              </Link>
-                            </h3>
-                            <span className="status status-close">
-                              <i className="flaticon-save"></i> Close Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star-half"></i>
-                                <span className="count">(35)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$110</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-6 col-lg-6 col-md-6">
-                        <div className="single-listings-box">
-                          <div className="listings-image">
-                            <Swiper
-                              loop={true}
-                              navigation={true}
-                              modules={[Navigation]}
-                              className="listings-image-slides"
-                            >
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings14.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-
-                              <SwiperSlide>
-                                <div className="single-image">
-                                  <img
-                                    src="/images/listings/listings15.jpg"
-                                    alt="image"
-                                  />
-                                  <Link
-                                    href="/single-listings"
-                                    className="link-btn"
-                                  ></Link>
-                                </div>
-                              </SwiperSlide>
-                            </Swiper>
-
-                            <a href="#" className="bookmark-save">
-                              <i className="flaticon-heart"></i>
-                            </a>
-                            <a href="#" className="category">
-                              <i className="flaticon-cooking"></i>
-                            </a>
-                          </div>
-
-                          <div className="listings-content">
-                            <div className="author">
-                              <div className="d-flex align-items-center">
-                                <img src="/images/user4.jpg" alt="image" />
-                                <span>Andy</span>
-                              </div>
-                            </div>
-                            <ul className="listings-meta">
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-cleansing"></i> Beauty
-                                </a>
-                              </li>
-                              <li>
-                                <a href="#">
-                                  <i className="flaticon-pin"></i> Suwanee, USA
-                                </a>
-                              </li>
-                            </ul>
-                            <h3>
-                              <Link href="/single-listings">
-                                Divine Beauty Parlour & Spa
-                              </Link>
-                            </h3>
-                            <span className="status">
-                              <i className="flaticon-save"></i> Open Now
-                            </span>
-                            <div
-                              className="
-                              d-flex
-                              align-items-center
-                              justify-content-between
-                            "
-                            >
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bx-star"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(15)</span>
-                              </div>
-                              <div className="price">
-                                Start From <span>$100</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-xl-12 col-lg-12 col-md-12">
-                        <div className="pagination-area text-center">
-                          <a href="#" className="prev page-numbers">
-                            <i className="bx bx-chevrons-left"></i>
-                          </a>
-                          <span
-                            className="page-numbers current"
-                            aria-current="page"
+                      {listings.map((listing) => (
+                        <div
+                          key={listing.id}
+                          className="col-xl-6 col-lg-6 col-md-6 d-flex"
+                          onMouseOver={() => setMarkerActive(listing.id)}
+                          onMouseLeave={() => setMarkerUnactive(listing.id)}
+                        >
+                          <div
+                            className={`single-listings-box w-100 ${
+                              activeListingIds.includes(listing.id)
+                                ? "hovered"
+                                : ""
+                            }`}
                           >
-                            1
-                          </span>
-                          <a href="#" className="page-numbers">
-                            2
-                          </a>
-                          <a href="#" className="page-numbers">
-                            3
-                          </a>
-                          <a href="#" className="page-numbers">
-                            4
-                          </a>
-                          <a href="#" className="next page-numbers">
-                            <i className="bx bx-chevrons-right"></i>
-                          </a>
+                            <div className="listings-image">
+                              {listing.images.length == 1 && (
+                                <>
+                                  <img
+                                    src={getListingImageByType(
+                                      listing.images[0].link,
+                                      listing.images[0].type
+                                    )}
+                                    alt="image"
+                                  />
+                                  <Link
+                                    href={`/listing/${listing.id}`}
+                                    className="link-btn"
+                                  ></Link>
+                                </>
+                              )}
+
+                              {listing.images.length > 1 && (
+                                <Swiper
+                                  loop={true}
+                                  navigation={true}
+                                  modules={[Navigation]}
+                                  className="listings-image-slides"
+                                >
+                                  {listing.images.map((img) => (
+                                    <SwiperSlide key={img.id}>
+                                      <div className="single-image">
+                                        <img
+                                          src={getListingImageByType(
+                                            img.link,
+                                            img.type
+                                          )}
+                                          alt="image"
+                                        />
+                                        <Link
+                                          href={`/listing/${listing.id}`}
+                                          className="link-btn"
+                                        ></Link>
+                                      </div>
+                                    </SwiperSlide>
+                                  ))}
+                                </Swiper>
+                              )}
+
+                              <a href="#" className="bookmark-save">
+                                <i className="flaticon-heart"></i>
+                              </a>
+                              <a href="#" className="category">
+                                <i className="flaticon-cooking"></i>
+                              </a>
+                            </div>
+
+                            <div className="listings-content">
+                              <div className="author">
+                                <div className="d-flex align-items-center">
+                                  <img
+                                    src={getFilePath(listing.userPhoto)}
+                                    alt="image"
+                                  />
+                                  <span>{listing.userName}</span>
+                                </div>
+                              </div>
+                              <ul className="listings-meta">
+                                <li>
+                                  <Link
+                                    href={`/listing-list?categories=${listing.categoryName}`}
+                                  >
+                                    <i className="flaticon-furniture-and-household"></i>
+                                    {listing.categoryName}
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    href={`/listing-list?cities=${listing.city}`}
+                                  >
+                                    <i className="flaticon-pin"></i>
+                                    {listing.city}
+                                  </Link>
+                                </li>
+                              </ul>
+                              <h3>
+                                <Link href={`/listing/${listing.id}`}>
+                                  {listing.name}
+                                </Link>
+                              </h3>
+                              <span className="status">
+                                <i className="flaticon-save"></i> Open Now
+                              </span>
+                              <div
+                                className="
+                              d-flex
+                              align-items-center
+                              justify-content-between
+                            "
+                              >
+                                <div className="rating">
+                                  <i className="bx bxs-star"></i>
+                                  <i className="bx bxs-star"></i>
+                                  <i className="bx bxs-star"></i>
+                                  <i className="bx bxs-star"></i>
+                                  <i className="bx bx-star"></i>
+                                  <span className="count">(10)</span>
+                                </div>
+                                <div className="price">
+                                  Start From <span>${listing.pricePerDay}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ))}
+
+                      <Pagination
+                        page={page}
+                        countPages={countPages}
+                        move={moveToPage}
+                        canNext={canMoveNextPage}
+                        canPrev={canMovePrevPage}
+                      />
                     </div>
                   </div>
                 </div>
@@ -739,7 +306,11 @@ const ListingsWithMap = ({ categories }) => {
             <div className="col-xl-4 col-lg-12 col-md-12 p-0">
               <div className="map-container fw-map side-full-map">
                 <div id="main-full-map">
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8385385572983!2d144.95358331584498!3d-37.81725074201705!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad65d4dd5a05d97%3A0x3e64f855a564844d!2s121%20King%20St%2C%20Melbourne%20VIC%203000%2C%20Australia!5e0!3m2!1sen!2sbd!4v1612419490850!5m2!1sen!2sbd"></iframe>
+                  <MultyMarkersMap
+                    markers={markers}
+                    onMouseOver={setMarkerActive}
+                    onMouseOut={setMarkerUnactive}
+                  />
                 </div>
               </div>
             </div>

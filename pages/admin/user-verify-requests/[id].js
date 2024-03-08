@@ -81,7 +81,7 @@ const UserVerifyRequest = ({ info }) => {
                   { title: "Users", href: "/admin/users" },
                   {
                     title: info.userName,
-                    href: "/admin/user-edit/" + info.userId,
+                    href: "/admin/users/edit/" + info.userId,
                   },
                   { title: "Verify Request" },
                 ]}

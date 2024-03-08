@@ -1,21 +1,21 @@
 import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../partials/admin/Sidebar";
-import Header from "../../partials/admin/Header";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../partials/admin/actions/SearchForm";
-import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import DropdownFilter from "../../components/admin/DropdownFilter";
-import FilterRadioOption from "../../components/admin/Form/FilterRadioOption";
+import Sidebar from "../../../partials/admin/Sidebar";
+import Header from "../../../partials/admin/Header";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import SearchForm from "../../../partials/admin/actions/SearchForm";
+import PaginationNumeric from "../../../components/admin/PaginationNumeric";
+import DropdownFilter from "../../../components/admin/DropdownFilter";
+import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
 
-import { adminSideProps } from "../../middlewares";
+import { adminSideProps } from "../../../middlewares";
 
-import { useAdminPage, usePagination } from "../../hooks";
-import { IndiceContext } from "../../contexts";
+import { useAdminPage, usePagination } from "../../../hooks";
+import { IndiceContext } from "../../../contexts";
 import {
   getAdminSearchedWordListPageOptions,
   getSearchedWordList,
-} from "../../services";
-import SearchedWordTable from "../../components/admin/SearchedWord/Table";
+} from "../../../services";
+import SearchedWordTable from "../../../components/admin/SearchedWord/Table";
 import { useRouter } from "next/router";
 
 const SearchedWords = (pageProps) => {

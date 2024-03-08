@@ -2,15 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import {
   createCategoryBySearchWord,
   getSearchedWordById,
-} from "../../../services";
-import { IndiceContext } from "../../../contexts";
-import Sidebar from "../../../partials/admin/Sidebar";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import Header from "../../../partials/admin/Header";
-import { useAdminPage } from "../../../hooks";
-import { adminSideProps } from "../../../middlewares";
-import DropdownClassic from "../../../components/admin/DropdownClassic";
-import Input from "../../../components/admin/Form/Input";
+} from "../../../../services";
+import { IndiceContext } from "../../../../contexts";
+import Sidebar from "../../../../partials/admin/Sidebar";
+import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
+import Header from "../../../../partials/admin/Header";
+import { useAdminPage } from "../../../../hooks";
+import { adminSideProps } from "../../../../middlewares";
+import DropdownClassic from "../../../../components/admin/DropdownClassic";
+import Input from "../../../../components/admin/Form/Input";
 import Link from "next/link";
 
 const createCategoryBySearch = ({

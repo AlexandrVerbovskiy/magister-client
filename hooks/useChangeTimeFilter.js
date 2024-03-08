@@ -25,7 +25,11 @@ const useWatchChangeTimeFilter = ({
   const handleChangeTimeFilter = (dates) => {
     let [from, to] = dates;
     const fromDate = from ? new Date(from) : null;
-    const toDate = to ? new Date(to) : null;
+    let toDate = to ? new Date(to) : null;
+
+    if (fromDate > toDate) {
+      toDate = new Date(fromDate);
+    }
 
     if (from) {
       fromDate.setHours(0, 0, 0, 0);
@@ -52,7 +56,15 @@ const useWatchChangeTimeFilter = ({
     }
   };
 
-  return { handleChangeTimeFilter };
+  const handleChangeFromDate = (value) => {
+    handleChangeTimeFilter([value, toTime]);
+  };
+
+  const handleChangeToDate = (value) => {
+    handleChangeTimeFilter([fromTime, value]);
+  };
+
+  return { handleChangeTimeFilter, handleChangeFromDate, handleChangeToDate };
 };
 
 export default useWatchChangeTimeFilter;

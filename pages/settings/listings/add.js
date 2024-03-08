@@ -27,7 +27,7 @@ const AddListing = ({ categories }) => {
       const listingId = res.listingId;
       const newLinkPart =
         window.location.origin + "/settings/listings/update/" + listingId;
-      router.replace(newLinkPart);
+      router.replace(newLinkPart, undefined, { shallow: true });
       setListing(res);
       setCanSendRequest(true);
       return res;

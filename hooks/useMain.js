@@ -54,10 +54,14 @@ const useMain = ({ userInfo, authToken }) => {
     const { query, ...rest } = router.query;
     delete rest[param];
 
-    router.replace({
-      pathname: router.pathname,
-      query: rest,
-    });
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: rest,
+      },
+      undefined,
+      { shallow: true }
+    );
   };
 
   useEffect(() => {
@@ -89,7 +93,6 @@ const useMain = ({ userInfo, authToken }) => {
       return;
 
     let redirectLink = "/";
-
 
     if (session?.user) {
       setIsAuth(true);

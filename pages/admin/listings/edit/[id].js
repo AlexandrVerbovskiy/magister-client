@@ -1,31 +1,31 @@
 import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../../partials/admin/Sidebar";
-import Header from "../../../partials/admin/Header";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import Switch from "../../../partials/admin/base/Switch";
-import DropdownClassic from "../../../components/admin/DropdownClassic";
-import Input from "../../../components/admin/Form/Input";
-import Textarea from "../../../components/admin/Form/Textarea";
+import Sidebar from "../../../../partials/admin/Sidebar";
+import Header from "../../../../partials/admin/Header";
+import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
+import Switch from "../../../../partials/admin/base/Switch";
+import DropdownClassic from "../../../../components/admin/DropdownClassic";
+import Input from "../../../../components/admin/Form/Input";
+import Textarea from "../../../../components/admin/Form/Textarea";
 import {
   getAdminListingEditPageOptions,
   getUserNameIdList,
   updateListingByAdmin,
-} from "../../../services";
-import { adminSideProps } from "../../../middlewares";
-import { useAdminPage } from "../../../hooks";
-import { IndiceContext } from "../../../contexts";
-import EditMap from "../../../components/Listings/EditMap";
+} from "../../../../services";
+import { adminSideProps } from "../../../../middlewares";
+import { useAdminPage } from "../../../../hooks";
+import { IndiceContext } from "../../../../contexts";
+import EditMap from "../../../../components/Listings/EditMap";
 import lodash from "lodash";
-import EditPhotosSection from "../../../components/admin/Listings/EditPhotosSection";
-import { useListingPhotosEdit } from "../../../hooks";
+import EditPhotosSection from "../../../../components/admin/Listings/EditPhotosSection";
+import { useListingPhotosEdit } from "../../../../hooks";
 import {
   uniqueId,
   validateBigText,
   validateInteger,
   validatePrice,
   validateSmallText,
-} from "../../../utils";
-import DropdownClassicAjax from "../../../components/admin/DropdownClassicAjax";
+} from "../../../../utils";
+import DropdownClassicAjax from "../../../../components/admin/DropdownClassicAjax";
 
 const categoryLevelOptions = [
   { value: "firstLevel", title: "First Level", default: true },

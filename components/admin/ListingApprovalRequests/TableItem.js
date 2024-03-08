@@ -55,7 +55,7 @@ const TableItem = ({
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div>
-          <Link href={`/admin/user-edit/${userId}`}>{userName}</Link>
+          <Link href={`/admin/users/edit/${userId}`}>{userName}</Link>
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

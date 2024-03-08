@@ -13,14 +13,14 @@ const usePagination = ({
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
 
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState(defaultData.options ?? {});
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(null);
   const [orderType, setOrderType] = useState(null);
   const [filter, setFilter] = useState("");
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(defaultData.items ?? []);
   const [canMoveNextPage, setCanMoveNextPage] = useState(true);
   const [canMovePrevPage, setCanMovePrevPage] = useState(true);
 
@@ -69,7 +69,13 @@ const usePagination = ({
     });
 
     const props = Object.keys(queryParams)
-      .map((param) => `${param}=${queryParams[param]}`)
+      .map((param) => {
+        if (Array.isArray(queryParams[param])) {
+          return queryParams[param].map((val) => `${param}=${val}`).join("&");
+        } else {
+          return `${param}=${queryParams[param]}`;
+        }
+      })
       .join("&");
 
     const currentLink = window.location.href;
@@ -80,7 +86,7 @@ const usePagination = ({
       (props ? `?${props}` : "");
 
     if (currentLink !== newLinkPart) {
-      router.replace(newLinkPart);
+      router.replace(newLinkPart, undefined, { shallow: true });
     }
   };
 

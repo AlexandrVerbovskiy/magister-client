@@ -74,10 +74,6 @@ const UserVerifyRequests = (pageProps) => {
                 <BreadCrumbs links={[{ title: "User Verify Requests" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                </div>
-
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}

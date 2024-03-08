@@ -70,7 +70,7 @@ const UserDocuments = () => {
               <BreadCrumbs
                 links={[
                   { title: "Users", href: "/admin/users" },
-                  { title: user.name, href: "/admin/user-edit/" + user.id },
+                  { title: user.name, href: "/admin/users/edit/" + user.id },
                   { title: "Documents" },
                 ]}
               />

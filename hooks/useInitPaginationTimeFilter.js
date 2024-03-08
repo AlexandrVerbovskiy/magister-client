@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { timeConverter } from "../utils";
+import { timeNormalConverter } from "../utils";
 import { useRouter } from "next/router";
 
 const useInitPaginationTimeFilter = () => {
@@ -18,14 +18,14 @@ const useInitPaginationTimeFilter = () => {
   const [fromTime, setFromTime] = useState(baseFromTime);
   const [toTime, setToTime] = useState(baseToTime);
 
-  const getTimeToProp = (date) => (date ? timeConverter(date) : null);
+  const getTimeToProp = (date) => (date ? timeNormalConverter(date) : null);
 
   return {
     fromTime,
     setFromTime,
     toTime,
     setToTime,
-    getTimeFilterProps:()=> ({
+    getTimeFilterProps: () => ({
       fromTime: getTimeToProp(fromTime),
       toTime: getTimeToProp(toTime),
     }),

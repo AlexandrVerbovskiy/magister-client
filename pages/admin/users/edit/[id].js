@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { getFullUserById, updateUser } from "../../../services";
-import EditUserForm from "../../../components/admin/EditUserForm";
-import { adminSideProps } from "../../../middlewares";
-import { IndiceContext } from "../../../contexts";
+import { getFullUserById, updateUser } from "../../../../services";
+import EditUserForm from "../../../../components/admin/EditUserForm";
+import { adminSideProps } from "../../../../middlewares";
+import { IndiceContext } from "../../../../contexts";
 
 const UserEdit = ({ editableUser }) => {
   const { authToken } = useContext(IndiceContext);

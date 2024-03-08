@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../partials/admin/Sidebar";
-import Header from "../../partials/admin/Header";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import { useAdminPage, usePagination } from "../../hooks";
-import UsersTable from "../../components/admin/Users/Table";
-import SearchForm from "../../partials/admin/actions/SearchForm";
-import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import DeleteAccept from "../../components/admin/DeleteAccept";
+import Sidebar from "../../../partials/admin/Sidebar";
+import Header from "../../../partials/admin/Header";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import { useAdminPage, usePagination } from "../../../hooks";
+import UsersTable from "../../../components/admin/Users/Table";
+import SearchForm from "../../../partials/admin/actions/SearchForm";
+import PaginationNumeric from "../../../components/admin/PaginationNumeric";
+import DeleteAccept from "../../../components/admin/DeleteAccept";
 import {
   getUserList,
   deleteUser,
@@ -14,10 +14,10 @@ import {
   setRole,
   changeVerified,
   getAdminUserListPageOptions,
-} from "../../services";
-import { IndiceContext } from "../../contexts";
+} from "../../../services";
+import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
-import { supportSideProps } from "../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 
 const Users = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -121,7 +121,7 @@ const Users = (pageProps) => {
 
                 {
                   <Link
-                    href="/admin/user-create"
+                    href="/admin/users/create"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                   >
                     <svg

@@ -3,6 +3,7 @@ import NavbarThree from "../_App/NavbarThree";
 import DashboardNavbar from "../Dashboard/DashboardNavbar";
 import React, { useState, useContext, useEffect } from "react";
 import lodash from "lodash";
+import STATIC from "../../static";
 
 import {
   uniqueId,
@@ -22,13 +23,6 @@ import { useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
 import { createListingApprovalRequest } from "../../services";
-
-const cityCoords = {
-  Warrington: { lat: 53.390044, lng: -2.59695 },
-  Manchester: { lat: 53.48095, lng: -2.23743 },
-};
-
-const baseRadius = 500;
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -137,14 +131,14 @@ const EditForm = ({
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const [center, setCenter] = useState({
-    lat: cityCoords[baseCity].lat,
-    lng: cityCoords[baseCity].lng,
+    lat: STATIC.cityCoords[baseCity].lat,
+    lng: STATIC.cityCoords[baseCity].lng,
   });
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(cityCoords[baseCity].lat);
-  const [lng, setLng] = useState(cityCoords[baseCity].lng);
-  const [radius, setRadius] = useState(baseRadius);
+  const [lat, setLat] = useState(STATIC.cityCoords[baseCity].lat);
+  const [lng, setLng] = useState(STATIC.cityCoords[baseCity].lng);
+  const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
 
   const [mainError, setMainError] = useState(null);
 
@@ -180,14 +174,14 @@ const EditForm = ({
 
   const handleChangeCity = (e) => {
     const city = e.value;
-    const lat = cityCoords[city].lat;
-    const lng = cityCoords[city].lng;
+    const lat = STATIC.cityCoords[city].lat;
+    const lng = STATIC.cityCoords[city].lng;
 
     setCity(city);
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(baseRadius);
+    setRadius(STATIC.baseListingMapCircleRadius);
     setMainError(null);
   };
 
@@ -223,8 +217,8 @@ const EditForm = ({
 
   const listingToState = () => {
     const city = listing.city ?? baseCity;
-    const lat = (cityCoords[city] ?? cityCoords[baseCity]).lat;
-    const lng = (cityCoords[city] ?? cityCoords[baseCity]).lng;
+    const lat = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lat;
+    const lng = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lng;
 
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -245,7 +239,7 @@ const EditForm = ({
       minRentalDays: listing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: listing.radius ?? baseRadius,
+      rentalRadius: listing.radius ?? STATIC.baseListingMapCircleRadius,
       listingImages,
     };
   };

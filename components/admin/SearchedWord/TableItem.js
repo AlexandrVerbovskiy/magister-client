@@ -54,9 +54,9 @@ const TableItem = ({
       </td>
       <td>
         {listingCategoriesId ? (
-          <View href={`/admin/create-category-by-search/${id}`} />
+          <View href={`/admin/searched-words/create-category/${id}`} />
         ) : (
-          <Moderate href={`/admin/create-category-by-search/${id}`} />
+          <Moderate href={`/admin/searched-words/create-category/${id}`} />
         )}
       </td>
     </tr>

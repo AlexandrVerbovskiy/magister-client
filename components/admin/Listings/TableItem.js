@@ -69,7 +69,7 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
           <View href={`/listing/${id}`} />
-          <Edit href={`/admin/listings-edit/${id}`} />
+          <Edit href={`/admin/listings/edit/${id}`} />
           <Delete onDeleteClick={onClickDelete} />
         </div>
       </td>

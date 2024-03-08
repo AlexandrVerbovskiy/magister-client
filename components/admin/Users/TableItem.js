@@ -148,7 +148,7 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         {!isCurrent && role !== "admin" && isAdmin && (
-          <Link href={`/admin/user-edit/${id}`}>
+          <Link href={`/admin/users/edit/${id}`}>
             <div className="text-left">{name}</div>
           </Link>
         )}
@@ -222,7 +222,7 @@ const TableItem = ({
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (
-              <Edit href={`/admin/user-edit/${id}`} />
+              <Edit href={`/admin/users/edit/${id}`} />
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (
