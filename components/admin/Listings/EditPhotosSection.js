@@ -4,6 +4,7 @@ import { getListingImageByType, uniqueId } from "../../../utils";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
+import env from "../../../env";
 
 const linkTypeOptions = [
   { value: "storage", title: "Storage" },
@@ -73,6 +74,7 @@ const EditPhotosSection = ({
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
+      maxFiles:env.MAX_FILE_SIZE,
       accept: acceptImageOptions,
       onDrop: (acceptedFiles) => {
         const newFiles = acceptedFiles.slice(

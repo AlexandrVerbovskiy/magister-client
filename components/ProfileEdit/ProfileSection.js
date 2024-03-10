@@ -56,7 +56,10 @@ const ProfileSection = ({ formInfo }) => {
       <form method="get">
         <div className="row">
           <div className="col-lg-12 col-md-12">
-            <ImageInput photoUrl={photoUrl} onChange={handlePhotoChange} />
+            <ImageInput
+              photoUrl={photoUrl}
+              onChange={handlePhotoChange}
+            />
           </div>
 
           <div className="col-lg-6 col-md-12">

@@ -1,32 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../../../components/admin/Form/Input";
 import DropdownClassic from "../../../components/admin/DropdownClassic";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
+import ImageInput from "../../../components/admin/Form/ImageInput";
+import env from "../../../env";
+import { getFilePath } from "../../../utils";
 
 const CategoryListItem = ({
   popular,
   name,
+  image,
+  localId,
+  categories,
+  imageFile = null,
   hasParent = false,
   parentLocalId = null,
   parentOptions,
   onChangeParent = (value) => {},
   onChangeName = (value) => {},
+  onChangePhoto = (value) => {},
   onPopularClick = () => {},
   onDeleteClick = () => {},
   error = null,
   deletePopupMessage = null,
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [defaultNewCategory, setDefaultNewCategory] = useState(null);
+  const [categoriesToChangeOptions, setCategoriesToChangeOptions] = useState(
+    []
+  );
+  const [categoriesToChange, setCategoriesToChange] = useState([]);
 
+  useEffect(() => {
+    const newCategoriesToChange = [];
+
+    Object.keys(categories).forEach((level) =>
+      categories[level]
+        .filter(
+          (category) =>
+            category.name != name && category.parentLocalId != localId
+        )
+        .forEach((category) => newCategoriesToChange.push(category))
+    );
+
+    const options = newCategoriesToChange.map((elem, index) => ({
+      value: elem.name,
+      title: elem.name,
+      default: index == 0,
+    }));
+
+    setCategoriesToChange(newCategoriesToChange);
+    setCategoriesToChangeOptions(options);
+    setDefaultNewCategory(newCategoriesToChange[0]);
+  }, [categories]);
+
+  const [newChildCategory, setNewChildCategory] = useState(null);
+
+  const handleChangeNewChildCategory = (name) => {
+    const filtered = categoriesToChange.filter((elem) => elem.name === name);
+    setNewChildCategory(filtered[0]);
+  };
+
+  const [modalOpen, setModalOpen] = useState(false);
   const handleDeleteClick = (e) => {
     e.stopPropagation();
+
     if (deletePopupMessage) {
       setModalOpen(true);
+      setNewChildCategory(defaultNewCategory);
     } else {
-      onDeleteClick();
+      onDeleteClick(newChildCategory);
+      setNewChildCategory(null);
     }
   };
+
+  let photoUrl = null;
+
+  if (imageFile) {
+    photoUrl = image;
+  } else if (image) {
+    photoUrl = getFilePath(image);
+  }
 
   return (
     <div className="category-list-item">
@@ -36,7 +90,7 @@ const CategoryListItem = ({
         }
       >
         <div className="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
-          <div className="flex items-start space-x-3 md:space-x-4 w-full">
+          <div className="flex items-center space-x-3 md:space-x-4 w-full">
             <div className="flex-col inline-flex text-slate-800 dark:text-slate-100 relative w-full">
               <Input
                 inputClassName="form-input w-full"
@@ -44,6 +98,15 @@ const CategoryListItem = ({
                 label="Name"
                 labelClassName="block text-sm font-medium relative-label"
                 setValue={onChangeName}
+              />
+            </div>
+
+            <div className="category-list-item-image">
+              <ImageInput
+                btnText="Change Photo"
+                photoUrl={photoUrl}
+                fileSizeLimit={env.MAX_SMALL_FILE_SIZE}
+                onChange={onChangePhoto}
               />
             </div>
 
@@ -102,9 +165,12 @@ const CategoryListItem = ({
 
         {deletePopupMessage && (
           <ModalBlank
-            id="access-leave-modal"
+            id="access-delete-category-listing-modal"
             modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
+            setModalOpen={() => {
+              setModalOpen(false);
+              setNewChildCategory(null);
+            }}
           >
             <div className="p-5 flex space-x-4">
               {/* Icon */}
@@ -119,7 +185,7 @@ const CategoryListItem = ({
               <div className="w-full">
                 <div className="mb-2">
                   <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                    Leave without saving?
+                    Delete category?
                   </div>
                 </div>
                 <div className="text-sm mb-10">
@@ -127,6 +193,11 @@ const CategoryListItem = ({
                     <p
                       dangerouslySetInnerHTML={{ __html: deletePopupMessage }}
                     ></p>
+                    <DropdownClassic
+                      options={categoriesToChangeOptions}
+                      selected={newChildCategory?.name}
+                      setSelected={handleChangeNewChildCategory}
+                    />
                   </div>
                 </div>
 
@@ -136,12 +207,13 @@ const CategoryListItem = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setModalOpen(false);
+                      setNewChildCategory(null);
                     }}
                   >
                     No, Close
                   </button>
                   <button
-                    onClick={onDeleteClick}
+                    onClick={() => onDeleteClick(newChildCategory)}
                     className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
                   >
                     Yes, Delete

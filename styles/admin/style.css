@@ -249,6 +249,26 @@ Preloader Area CSS
   border-radius: 50%;
 }
 
+.category-list-item-image button {
+  text-wrap: nowrap;
+}
+
+.category-list-item-image .image-input-parent {
+  flex-direction: column;
+}
+
+.category-list-item-image div:has(> img),
+.category-list-item-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 0;
+}
+
+#access-delete-category-listing-modal,
+#access-delete-category-listing-modal>div {
+  overflow: unset!important;
+}
+
 @keyframes preloader {
   0% {
     transform: scale(0, 0);

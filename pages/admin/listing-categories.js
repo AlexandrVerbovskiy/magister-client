@@ -18,6 +18,9 @@ const ListingCategories = ({ categories: baseCategories }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
   const [prevCategories, setPrevCategories] = useState(baseCategories);
+  const [replaceDeleteIdsCategories, setReplaceDeleteIdsCategories] = useState(
+    {}
+  );
 
   const categoriesToState = (categories) => {
     const initCategories = {};
@@ -110,7 +113,30 @@ const ListingCategories = ({ categories: baseCategories }) => {
     });
   };
 
-  const handleRemove = ({ level, localId }) => {
+  const handleChangePhoto = ({ localId, level, image }) => {
+    setCategories((prev) => {
+      const res = { ...prev };
+
+      for (let i = 0; i < res[level].length; i++) {
+        if (res[level][i]["localId"] === localId) {
+          const url = URL.createObjectURL(image);
+          res[level][i]["image"] = url;
+          res[level][i]["imageFile"] = image;
+        }
+      }
+
+      return res;
+    });
+  };
+
+  const handleRemove = ({ level, localId, id = null, newChildCategory }) => {
+    if (id) {
+      setReplaceDeleteIdsCategories((prev) => {
+        prev[id] = newChildCategory;
+        return prev;
+      });
+    }
+
     setCategories((prev) => {
       const res = { ...prev };
       res[level] = res[level].filter((elem) => elem.localId !== localId);
@@ -189,9 +215,13 @@ const ListingCategories = ({ categories: baseCategories }) => {
   const getLevelInfo = (level) => ({
     handleChangeField: ({ localId, field, value }) =>
       handleChangeField({ level, localId, field, value }),
-    handleRemove: (localId) => handleRemove({ level, localId }),
+    handleRemove: (localId, id, newChildCategory) =>
+      handleRemove({ level, localId, id, newChildCategory }),
     handleCreate: () => handleCreate(level),
+    handleChangePhoto: ({ localId, image }) =>
+      handleChangePhoto({ localId, level, image }),
     list: categories[level],
+    categories,
   });
 
   const findCategoryByLocalId = (localId) => {
@@ -255,11 +285,11 @@ const ListingCategories = ({ categories: baseCategories }) => {
       return;
     }
 
-    const dataToSave = { firstLevel: [], secondLevel: [], thirdLevel: [] };
+    const dataToSave = new FormData();
     const dataToCompare = { firstLevel: [], secondLevel: [], thirdLevel: [] };
 
     Object.keys(categories).forEach((level) => {
-      categories[level].forEach((category) => {
+      categories[level].forEach((category, index) => {
         const categoryToSave = { ...category };
 
         delete categoryToSave["parentLocalId"];
@@ -267,14 +297,50 @@ const ListingCategories = ({ categories: baseCategories }) => {
         delete categoryToSave["parentName"];
 
         const parent = findCategoryByLocalId(category.parentLocalId);
-        dataToSave[level].push({
-          id: category.id,
-          level: category.level,
-          name: category.name,
-          popular: category.popular,
-          parentId: parent?.id ?? null,
-          parentName: parent?.name ?? null,
-        });
+
+        if (category.id) {
+          dataToSave.append(
+            `categoriesToSave[${level}][${index}][id]`,
+            category.id
+          );
+        }
+
+        if (category.level) {
+          dataToSave.append(
+            `categoriesToSave[${level}][${index}][level]`,
+            category.level
+          );
+        }
+
+        dataToSave.append(
+          `categoriesToSave[${level}][${index}][name]`,
+          category.name
+        );
+
+        if (category.popular) {
+          dataToSave.append(`categoriesToSave[${level}][${index}][popular]`, 1);
+        }
+
+        if (parent?.id) {
+          dataToSave.append(
+            `categoriesToSave[${level}][${index}][parentId]`,
+            parent.id
+          );
+        }
+
+        if (parent?.name) {
+          dataToSave.append(
+            `categoriesToSave[${level}][${index}][parentName]`,
+            parent.name
+          );
+        }
+
+        if (category.imageFile ?? category.image) {
+          dataToSave.append(
+            `categoriesToSave[${level}][${index}][image]`,
+            category.imageFile ?? category.image
+          );
+        }
 
         dataToCompare[level].push({
           id: category.id,
@@ -282,12 +348,32 @@ const ListingCategories = ({ categories: baseCategories }) => {
           name: category.name,
           popular: category.popular,
           parentId: parent?.id ?? null,
+          image: category.imageFile ?? category.image,
         });
       });
     });
 
     try {
       if (!lodash.isEqual(prevCategories, dataToCompare)) {
+        Object.keys(replaceDeleteIdsCategories).forEach((prevId, index) => {
+          const newId = replaceDeleteIdsCategories[prevId]["id"] ?? null;
+          const newName = replaceDeleteIdsCategories[prevId]["name"];
+          const newLevel = replaceDeleteIdsCategories[prevId]["level"];
+          console.log(prevId, replaceDeleteIdsCategories);
+
+          dataToSave.append(`categoriesToReplace[${index}][prevId]`, prevId);
+
+          if (newId) {
+            dataToSave.append(`categoriesToReplace[${index}][newId]`, newId);
+          }
+
+          dataToSave.append(`categoriesToReplace[${index}][newName]`, newName);
+          dataToSave.append(
+            `categoriesToReplace[${index}][newLevel]`,
+            newLevel
+          );
+        });
+
         const res = await saveListingCategories(dataToSave, authToken);
         setPrevCategories(res);
         setCategories(categoriesToState(res));
@@ -314,53 +400,47 @@ const ListingCategories = ({ categories: baseCategories }) => {
               <BreadCrumbs links={[{ title: "Listing Categories" }]} />
             </div>
 
-            <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
-              <div className="flex flex-col md:-mr-px">
-                <CategoryList
-                  deletePopupMessage={
-                    "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
-                  }
-                  parentOptions={firstLevelOptions}
-                  canCreate={true}
-                  name="First Level"
-                  {...getLevelInfo("firstLevel")}
-                />
+            <CategoryList
+              deletePopupMessage={
+                "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
+              }
+              parentOptions={firstLevelOptions}
+              canCreate={true}
+              name="First Level"
+              {...getLevelInfo("firstLevel")}
+            />
 
-                <CategoryList
-                  deletePopupMessage={
-                    "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
-                  }
-                  parentOptions={secondLevelOptions}
-                  name="Second Level"
-                  hasParent={true}
-                  disabledReason="Can't be created without first level category"
-                  {...getLevelInfo("secondLevel")}
-                />
+            <CategoryList
+              deletePopupMessage={
+                "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
+              }
+              parentOptions={secondLevelOptions}
+              name="Second Level"
+              hasParent={true}
+              disabledReason="Can't be created without first level category"
+              {...getLevelInfo("secondLevel")}
+            />
 
-                <CategoryList
-                  deletePopupMessage={
-                    "Are you sure you want to delete this category?"
-                  }
-                  parentOptions={thirdLevelOptions}
-                  name="Third Level"
-                  hasParent={true}
-                  disabledReason="Can't be created without second level category"
-                  {...getLevelInfo("thirdLevel")}
-                />
+            <CategoryList
+              deletePopupMessage={
+                "Are you sure you want to delete this category?"
+              }
+              parentOptions={thirdLevelOptions}
+              name="Third Level"
+              hasParent={true}
+              disabledReason="Can't be created without second level category"
+              {...getLevelInfo("thirdLevel")}
+            />
 
-                <div className="grow">
-                  <div className="border-t border-slate-200 dark:border-slate-700 p-6 space-y-6 flex justify-end">
-                    <button
-                      onClick={handleSaveClick}
-                      disabled={submitting}
-                      className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
-                    >
-                      <span className="hidden xs:block ml-2">
-                        Save Categories
-                      </span>
-                    </button>
-                  </div>
-                </div>
+            <div className="mb-8">
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSaveClick}
+                  disabled={submitting}
+                  className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
+                >
+                  <span className="hidden xs:block ml-2">Save Categories</span>
+                </button>
               </div>
             </div>
           </div>

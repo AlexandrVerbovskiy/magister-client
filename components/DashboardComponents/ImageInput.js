@@ -12,18 +12,21 @@ const ImageInput = ({
   btnText = "Upload Photo",
   name = "file",
   disabled = false,
+  fileSizeLimit = null,
 }) => {
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   if (!defaultUrl) defaultUrl = defaultPhotoLink;
 
+  if (!fileSizeLimit) fileSizeLimit = env.MAX_FILE_SIZE;
+
   const handleChange = (e) => {
     setError(null);
     const img = e.target.files[0];
 
-    if (img.size > env.MAX_FILE_SIZE) {
-      setError("File can't be larger than " + env.MAX_FILE_SIZE + " bytes");
+    if (img.size > fileSizeLimit) {
+      setError("File can't be larger than " + fileSizeLimit + " bytes");
     } else {
       onChange(e);
     }

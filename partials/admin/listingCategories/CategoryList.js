@@ -4,9 +4,11 @@ import Tooltip from "../../../components/admin/Tooltip";
 
 const CategoryList = ({
   name,
+  categories,
   handleChangeField,
   handleRemove,
   handleCreate,
+  handleChangePhoto,
   list = [],
   hasParent = false,
   parentOptions = [{ value: "", title: "-", default: true }],
@@ -34,65 +36,80 @@ const CategoryList = ({
   );
 
   return (
-    <div className="grow">
-      <div className="border-t border-slate-200 dark:border-slate-700 p-6">
-        <h2 className="flex items-center justify-between text-2xl text-slate-800 dark:text-slate-100 font-bold">
-          {name}
+    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+      <div className="flex flex-col md:-mr-px">
+        <div className="grow">
+          <div className="p-6">
+            <h2 className="flex items-center justify-between text-2xl text-slate-800 dark:text-slate-100 font-bold">
+              {name}
 
-          {!canCreate && disabledReason && (
-            <Tooltip
-              className="text-sm create-listing-category-button"
-              title={disabledReason}
-            >
-              {createButton}
-            </Tooltip>
+              {!canCreate && disabledReason && (
+                <Tooltip
+                  className="text-sm create-listing-category-button"
+                  title={disabledReason}
+                >
+                  {createButton}
+                </Tooltip>
+              )}
+              {(canCreate || !disabledReason) && createButton}
+            </h2>
+          </div>
+
+          {list.length > 0 && (
+            <div className="p-6 space-y-6 pt-0">
+              <section className="flex gap-y-4 flex-col">
+                {list.map((elem) => (
+                  <CategoryListItem
+                    deletePopupMessage={deletePopupMessage}
+                    parentOptions={parentOptions}
+                    key={elem.localId}
+                    categories={categories}
+                    {...elem}
+                    hasParent={hasParent}
+                    onChangePhoto={(e) => {
+                      if (e.target.files.length) {
+                        handleChangePhoto({
+                          localId: elem.localId,
+                          image: e.target.files[0],
+                        });
+                      }
+                    }}
+                    onChangeParent={(value) =>
+                      handleChangeField({
+                        localId: elem.localId,
+                        value,
+                        field: "parentLocalId",
+                      })
+                    }
+                    onChangeName={(value) => {
+                      handleChangeField({
+                        localId: elem.localId,
+                        value,
+                        field: "name",
+                      });
+                      handleChangeField({
+                        localId: elem.localId,
+                        value: null,
+                        field: "error",
+                      });
+                    }}
+                    onPopularClick={() =>
+                      handleChangeField({
+                        localId: elem.localId,
+                        value: !elem.popular,
+                        field: "popular",
+                      })
+                    }
+                    onDeleteClick={(newChildCategory) => {
+                      handleRemove(elem.localId, elem.id, newChildCategory);
+                    }}
+                  />
+                ))}
+              </section>
+            </div>
           )}
-          {(canCreate || !disabledReason) && createButton}
-        </h2>
-      </div>
-
-      {list.length > 0 && (
-        <div className="p-6 space-y-6 pt-0">
-          <section className="flex gap-y-4 flex-col">
-            {list.map((elem) => (
-              <CategoryListItem
-                deletePopupMessage={deletePopupMessage}
-                parentOptions={parentOptions}
-                key={elem.localId}
-                {...elem}
-                hasParent={hasParent}
-                onChangeParent={(value) =>
-                  handleChangeField({
-                    localId: elem.localId,
-                    value,
-                    field: "parentLocalId",
-                  })
-                }
-                onChangeName={(value) => {
-                  handleChangeField({
-                    localId: elem.localId,
-                    value,
-                    field: "name",
-                  });
-                  handleChangeField({
-                    localId: elem.localId,
-                    value: null,
-                    field: "error",
-                  });
-                }}
-                onPopularClick={() =>
-                  handleChangeField({
-                    localId: elem.localId,
-                    value: !elem.popular,
-                    field: "popular",
-                  })
-                }
-                onDeleteClick={() => handleRemove(elem.localId)}
-              />
-            ))}
-          </section>
         </div>
-      )}
+      </div>
     </div>
   );
 };
