@@ -130,25 +130,6 @@ const usePagination = ({
       return;
     }
 
-    const dopBody = {};
-    const { order, orderType, page, filter } = router.query;
-
-    if (order) {
-      dopBody["order"] = order;
-    }
-
-    if (orderType) {
-      dopBody["orderType"] = orderType;
-    }
-
-    if (page) {
-      dopBody["page"] = page;
-    }
-
-    if (filter) {
-      dopBody["filter"] = filter;
-    }
-
     if (defaultData) {
       const {
         options: gotOptions,
@@ -168,7 +149,7 @@ const usePagination = ({
 
       setItems(gotItems);
     }
-  }, [defaultData]);
+  }, [defaultData.options]);
 
   useEffect(() => {
     const dopBody = {};

@@ -193,6 +193,8 @@ const NavbarTwo = ({ canShowSearch = true }) => {
   const handleSearchClick = () => {
     const link = getListingSearchLink(searchCategory);
     router.push(link);
+    setSearchCategory("");
+    document.querySelector(".navbar-search-box input").blur();
   };
 
   return (

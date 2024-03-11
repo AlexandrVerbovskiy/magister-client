@@ -41,8 +41,8 @@ export const deleteListingByAdmin = async (id, authToken) => {
   return data.body;
 };
 
-export const getListingList = async (params) => {
-  const data = await post(`/list`, params);
+export const getListingList = async (params, authToken = null) => {
+  const data = await post(`/list`, params, authToken);
   return data.body;
 };
 

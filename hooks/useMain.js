@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-const useMain = ({ userInfo, authToken }) => {
+const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
+  const [authToken, setAuthToken] = useState(baseAuthToken);
   const [isAuth, setIsAuth] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [isSupport, setIsSupport] = useState(null);
@@ -77,6 +78,8 @@ const useMain = ({ userInfo, authToken }) => {
   }, [router.query.success]);
 
   useEffect(() => {
+    setAuthToken(session?.user.authToken);
+
     if (session === undefined) {
       return;
     }

@@ -3910,6 +3910,7 @@ Listings Area CSS
 .all-listings-list {
   padding-right: 30px;
   margin-left: 0 !important;
+  height: 100%;
 }
 
 .map-container.fw-map.side-full-map {
@@ -17212,4 +17213,33 @@ Preloader Area CSS
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.no-listing-found,
+.send-create-listing-category-notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.send-create-listing-category-notification button{
+  margin-bottom: 20px;
+}
+
+.no-listing-found .image-parent,
+.send-create-listing-category-notification .image-parent {
+  width: 400px;
+  height: 400px;
+}
+
+.no-listing-found .description,
+.send-create-listing-category-notification .description {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.all-listings-list>.row:has(.no-listing-found),
+.all-listings-list>.row:has(.send-create-listing-category-notification){
+  height: 100%;
 }

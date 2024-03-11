@@ -13,16 +13,20 @@ import { IndiceContext } from "../../contexts";
 import { getFilePath, getListingImageByType } from "../../utils";
 import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
-import { useRouter } from "next/router";
+import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 
 const ListingsWithMap = ({
   categories: baseCategories,
   pageProps: basePageProps,
+  canSendCreateNotifyRequest: baseCanSendCreateNotifyRequest,
 }) => {
   const isFirstRef = useRef(true);
 
   const [categories, setCategories] = useState(baseCategories);
   const [pageProps, setPageProps] = useState(basePageProps);
+  const [canSendCreateNotifyRequest, setCanSendCreateNotifyRequest] = useState(
+    baseCanSendCreateNotifyRequest
+  );
 
   const [selectedCategories, setSelectedCategories] = useState(
     pageProps.options.categories
@@ -40,13 +44,13 @@ const ListingsWithMap = ({
 
     setSelectedCities(pageProps.options.cities);
     setSelectedCategories(pageProps.options.categories);
-  }, [pageProps]);
+  }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
 
   useEffect(() => setCategories(baseCategories), [baseCategories]);
 
-  const { error, success } = useContext(IndiceContext);
+  const { error, success, authToken = null } = useContext(IndiceContext);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter();
@@ -64,7 +68,11 @@ const ListingsWithMap = ({
     order,
     handleChangeOrder,
   } = usePagination({
-    getItemsFunc: (data) => getListingList(data),
+    getItemsFunc: async (data) => {
+      const res = await getListingList(data, authToken);
+      setCanSendCreateNotifyRequest(res.canSendCreateNotifyRequest);
+      return res;
+    },
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
       ...getTimeFilterProps(),
@@ -116,6 +124,19 @@ const ListingsWithMap = ({
     [markers]
   );
 
+  const handleSendSubscribeNotificationOnCreateCategory = async () => {
+    if (authToken) {
+      await createListingCategoryCreateNotification(
+        selectedCategories[0],
+        authToken
+      );
+      setCanSendCreateNotifyRequest(false);
+      success.set("Subscription done success");
+    } else {
+      document.querySelector(".flaticon-user").click();
+    }
+  };
+
   const setMarkerActive = (id) =>
     setMarkers((prev) =>
       prev.map((marker) => {
@@ -155,37 +176,39 @@ const ListingsWithMap = ({
 
                 <div className="col-lg-8 col-md-12">
                   <div className="all-listings-list">
-                    <div className="listings-grid-sorting row align-items-center">
-                      <div className="col-lg-5 col-md-6 result-count">
-                        <p>
-                          <span className="count">{countItems}</span> Results
-                        </p>
-                      </div>
+                    {listings.length > 0 && (
+                      <div className="listings-grid-sorting row align-items-center">
+                        <div className="col-lg-5 col-md-6 result-count">
+                          <p>
+                            <span className="count">{countItems}</span> Results
+                          </p>
+                        </div>
 
-                      <div className="col-lg-7 col-md-6 ordering">
-                        <div className="d-flex justify-content-end">
-                          <div className="select-box">
-                            <label>Sort By:</label>
-                            <select
-                              className="blog-select"
-                              value={order ?? "default"}
-                              onChange={(e) =>
-                                handleChangeOrder(e.target.value)
-                              }
-                            >
-                              <option value="default">Default</option>
-                              <option value="latest">Latest</option>
-                              <option value="price_to_high">
-                                Price: low to high
-                              </option>
-                              <option value="price_to_low">
-                                Price: high to low
-                              </option>
-                            </select>
+                        <div className="col-lg-7 col-md-6 ordering">
+                          <div className="d-flex justify-content-end">
+                            <div className="select-box">
+                              <label>Sort By:</label>
+                              <select
+                                className="blog-select"
+                                value={order ?? "default"}
+                                onChange={(e) =>
+                                  handleChangeOrder(e.target.value)
+                                }
+                              >
+                                <option value="default">Default</option>
+                                <option value="latest">Latest</option>
+                                <option value="price_to_high">
+                                  Price: low to high
+                                </option>
+                                <option value="price_to_low">
+                                  Price: high to low
+                                </option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="row">
                       {listings.map((listing) => (
@@ -314,13 +337,55 @@ const ListingsWithMap = ({
                         </div>
                       ))}
 
-                      <Pagination
-                        page={page}
-                        countPages={countPages}
-                        move={moveToPage}
-                        canNext={canMoveNextPage}
-                        canPrev={canMovePrevPage}
-                      />
+                      {listings.length == 0 && canSendCreateNotifyRequest && (
+                        <div className="send-create-listing-category-notification">
+                          <div className="image-parent">
+                            <img src="/images/contact.png" alt="image" />
+                          </div>
+
+                          <div className="description">
+                            Unfortunately, the searched category was not found.
+                            <br />
+                            It will be added in the future. <br />
+                            Sign up for a notification so you don't miss this
+                            event!
+                          </div>
+
+                          <button
+                            onClick={
+                              handleSendSubscribeNotificationOnCreateCategory
+                            }
+                            className="default-btn"
+                            type="button"
+                          >
+                            Subscribe on update listing categories
+                          </button>
+                        </div>
+                      )}
+
+                      {listings.length == 0 && !canSendCreateNotifyRequest && (
+                        <div className="no-listing-found">
+                          <div className="image-parent">
+                            <img src="/images/banner-img1.png" alt="image" />
+                          </div>
+
+                          <div className="description">
+                            Unfortunately, no listings were found for the
+                            specified parameters.
+                            <br /> Try searching for something similar
+                          </div>
+                        </div>
+                      )}
+
+                      {listings.length > 0 && (
+                        <Pagination
+                          page={page}
+                          countPages={countPages}
+                          move={moveToPage}
+                          canNext={canMoveNextPage}
+                          canPrev={canMovePrevPage}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

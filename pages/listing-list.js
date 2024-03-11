@@ -6,7 +6,13 @@ import NavbarTwo from "../components/_App/NavbarTwo";
 import { userSideProps } from "../middlewares";
 import { getListingListOptions } from "../services";
 
-const GridListingsFullMap = ({ categories, items, options, countItems }) => (
+const GridListingsFullMap = ({
+  categories,
+  items,
+  options,
+  countItems,
+  canSendCreateNotifyRequest,
+}) => (
   <>
     <NavbarTwo canShowSearch={true} />
 
@@ -15,13 +21,14 @@ const GridListingsFullMap = ({ categories, items, options, countItems }) => (
     <ListingsWithMap
       categories={categories}
       pageProps={{ items, options, countItems }}
+      canSendCreateNotifyRequest={canSendCreateNotifyRequest}
     />
 
     <Footer bgColor="bg-f5f5f5" />
   </>
 );
 
-const boostServerSideProps = async ({ context }) => {
+const boostServerSideProps = async ({ baseSideProps, context }) => {
   const { categories: baseCategories = [], cities: baseCities = [] } =
     context.query;
 
@@ -40,12 +47,15 @@ const boostServerSideProps = async ({ context }) => {
     baseCities.forEach((city) => cities.push(city));
   }
 
-  const options = await getListingListOptions({
-    ...context.query,
-    clientTime: Date.now(),
-    cities,
-    categories,
-  });
+  const options = await getListingListOptions(
+    {
+      ...context.query,
+      clientTime: Date.now(),
+      cities,
+      categories,
+    },
+    baseSideProps.authToken
+  );
 
   return { ...options };
 };

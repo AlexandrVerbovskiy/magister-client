@@ -6,8 +6,8 @@ export const getIndexOptions = async () => {
   return data.body;
 };
 
-export const getListingListOptions = async (params) => {
-  const data = await post(`/listing-list-options`, params);
+export const getListingListOptions = async (params, authToken = null) => {
+  const data = await post(`/listing-list-options`, params, authToken);
   return data.body;
 };
 
