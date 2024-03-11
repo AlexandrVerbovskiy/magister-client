@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../components/_App/Footer";
 import PopularPlacesFilter from "../components/Common/PopularPlacesFilter";
 import ListingsWithMap from "../components/GridListings/ListingsWithMap";
@@ -6,22 +6,20 @@ import NavbarTwo from "../components/_App/NavbarTwo";
 import { userSideProps } from "../middlewares";
 import { getListingListOptions } from "../services";
 
-const GridListingsFullMap = ({ categories, items, options, countItems }) => {
-  return (
-    <>
-      <NavbarTwo canShowSearch={false} />
+const GridListingsFullMap = ({ categories, items, options, countItems }) => (
+  <>
+    <NavbarTwo canShowSearch={true} />
 
-      <PopularPlacesFilter />
+    <PopularPlacesFilter />
 
-      <ListingsWithMap
-        categories={categories}
-        pageProps={{ items, options, countItems }}
-      />
+    <ListingsWithMap
+      categories={categories}
+      pageProps={{ items, options, countItems }}
+    />
 
-      <Footer bgColor="bg-f5f5f5" />
-    </>
-  );
-};
+    <Footer bgColor="bg-f5f5f5" />
+  </>
+);
 
 const boostServerSideProps = async ({ context }) => {
   const { categories: baseCategories = [], cities: baseCities = [] } =

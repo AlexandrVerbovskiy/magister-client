@@ -18,9 +18,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
   const [prevCategories, setPrevCategories] = useState(baseCategories);
-  const [replaceDeleteIdsCategories, setReplaceDeleteIdsCategories] = useState(
-    {}
-  );
+  const [replaceDeleteInfosCategories, setReplaceDeleteInfosCategories] =
+    useState([]);
 
   const categoriesToState = (categories) => {
     const initCategories = {};
@@ -100,17 +99,16 @@ const ListingCategories = ({ categories: baseCategories }) => {
   }, [categories]);
 
   const handleChangeField = ({ localId, level, field, value }) => {
-    setCategories((prev) => {
-      const res = { ...prev };
+    const newCategories = { ...categories };
 
-      for (let i = 0; i < res[level].length; i++) {
-        if (res[level][i]["localId"] === localId) {
-          res[level][i][field] = value;
-        }
+    for (let i = 0; i < newCategories[level].length; i++) {
+      if (newCategories[level][i]["localId"] === localId) {
+        newCategories[level][i][field] = value;
       }
+    }
 
-      return res;
-    });
+    setCategories(newCategories);
+    checkCategoryListingDoubling(newCategories);
   };
 
   const handleChangePhoto = ({ localId, level, image }) => {
@@ -129,41 +127,107 @@ const ListingCategories = ({ categories: baseCategories }) => {
     });
   };
 
-  const handleRemove = ({ level, localId, id = null, newChildCategory }) => {
-    if (id) {
-      setReplaceDeleteIdsCategories((prev) => {
-        prev[id] = newChildCategory;
-        return prev;
+  const checkCategoryListingDoubling = (newCategories = null) => {
+    if (!newCategories) newCategories = categories;
+
+    let hasError = false;
+
+    const names = [];
+    const localIdErrors = {};
+
+    Object.keys(newCategories).forEach((key) => {
+      newCategories[key].forEach((category) => {
+        if (category.name.length < 1) {
+          localIdErrors[category.localId] = "Cannot save an empty category";
+          hasError = true;
+          return;
+        }
+
+        if (names.includes(category.name)) {
+          localIdErrors[category.localId] =
+            "Cannot create two identical categories";
+          hasError = true;
+          return;
+        }
+
+        localIdErrors[category.localId] = null;
+        names.push(category.name);
       });
-    }
+    });
 
     setCategories((prev) => {
       const res = { ...prev };
-      res[level] = res[level].filter((elem) => elem.localId !== localId);
 
-      const parentLocalIdsToDelete = [localId];
+      Object.keys(res).forEach((level) => {
+        res[level].forEach((category, i) => {
+          res[level][i]["error"] = localIdErrors[category.localId];
+        });
+      });
 
-      Object.keys(res).forEach((key) =>
-        res[key]
-          .filter((elem) => elem.parentLocalId == localId)
-          .forEach((elem) => parentLocalIdsToDelete.push(elem.localId))
+      return res;
+    });
+
+    return hasError;
+  };
+
+  const handleRemove = ({ localId, newChildCategory }) => {
+    const firstSecondLevelIdsToDelete = [];
+    const categoriesToDelete = [];
+
+    Object.keys(categories).forEach((key) =>
+      categories[key]
+        .filter(
+          (elem) => elem.parentLocalId == localId || elem.localId == localId
+        )
+        .forEach((elem) => firstSecondLevelIdsToDelete.push(elem.localId))
+    );
+
+    Object.keys(categories).forEach((key) =>
+      categories[key]
+        .filter(
+          (elem) =>
+            firstSecondLevelIdsToDelete.includes(elem.parentLocalId) ||
+            firstSecondLevelIdsToDelete.includes(elem.localId)
+        )
+        .forEach((elem) => categoriesToDelete.push({ ...elem }))
+    );
+
+    const categoriesToDeleteIds = categoriesToDelete.map(
+      (category) => category.localId
+    );
+
+    setReplaceDeleteInfosCategories((prev) => {
+      prev = prev.map((elem) =>
+        categoriesToDeleteIds.includes(elem.newChildCategory.localId)
+          ? { ...elem, newChildCategory }
+          : elem
       );
 
-      Object.keys(res).forEach((key) => {
-        const resKey = [];
-
-        res[key].forEach((elem) => {
-          if (
-            !(
-              parentLocalIdsToDelete.includes(elem.localId) ||
-              parentLocalIdsToDelete.includes(elem.parentLocalId)
-            )
-          ) {
-            resKey.push(elem);
+      Object.keys(categories).forEach((key) =>
+        categories[key].forEach((category) => {
+          if (categoriesToDeleteIds.includes(category.localId) && category.id) {
+            prev = [
+              {
+                deletedId: category.id,
+                deletedName: category.name,
+                newChildCategory,
+              },
+              ...prev,
+            ];
           }
-        });
+        })
+      );
 
-        res[key] = resKey;
+      return prev;
+    });
+
+    setCategories((prev) => {
+      const res = { firstLevel: [], secondLevel: [], thirdLevel: [] };
+
+      Object.keys(prev).forEach((level) => {
+        res[level] = prev[level].filter(
+          (category) => !categoriesToDeleteIds.includes(category.localId)
+        );
       });
 
       return res;
@@ -215,8 +279,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
   const getLevelInfo = (level) => ({
     handleChangeField: ({ localId, field, value }) =>
       handleChangeField({ level, localId, field, value }),
-    handleRemove: (localId, id, newChildCategory) =>
-      handleRemove({ level, localId, id, newChildCategory }),
+    handleRemove: ({ localId, newChildCategory }) =>
+      handleRemove({ localId, newChildCategory }),
     handleCreate: () => handleCreate(level),
     handleChangePhoto: ({ localId, image }) =>
       handleChangePhoto({ localId, level, image }),
@@ -243,42 +307,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
     setSubmitting(true);
 
-    let hasError = false;
-
-    const names = {
-      firstLevel: [],
-      secondLevel: [],
-      thirdLevel: [],
-    };
-
-    Object.keys(categories).forEach((key) => {
-      categories[key].forEach((category) => {
-        if (category.name.length < 1) {
-          handleChangeField({
-            localId: category.localId,
-            level: key,
-            field: "error",
-            value: "Cannot save an empty category",
-          });
-
-          hasError = true;
-          return;
-        }
-
-        if (names[key].includes(category.name)) {
-          handleChangeField({
-            localId: category.localId,
-            level: key,
-            field: "error",
-            value: "Cannot create two identical categories",
-          });
-
-          hasError = true;
-        }
-
-        names[key].push(category.name);
-      });
-    });
+    const hasError = checkCategoryListingDoubling();
 
     if (hasError) {
       setSubmitting(false);
@@ -355,11 +384,11 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
     try {
       if (!lodash.isEqual(prevCategories, dataToCompare)) {
-        Object.keys(replaceDeleteIdsCategories).forEach((prevId, index) => {
-          const newId = replaceDeleteIdsCategories[prevId]["id"] ?? null;
-          const newName = replaceDeleteIdsCategories[prevId]["name"];
-          const newLevel = replaceDeleteIdsCategories[prevId]["level"];
-          console.log(prevId, replaceDeleteIdsCategories);
+        replaceDeleteInfosCategories.forEach((info, index) => {
+          const newId = info["newChildCategory"]["id"] ?? null;
+          const newName = info["newChildCategory"]["name"];
+          const newLevel = info["newChildCategory"]["level"];
+          const prevId = info["deletedId"];
 
           dataToSave.append(`categoriesToReplace[${index}][prevId]`, prevId);
 
@@ -401,6 +430,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
             </div>
 
             <CategoryList
+              checkCategoryListingDoubling={checkCategoryListingDoubling}
               deletePopupMessage={
                 "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
               }
@@ -411,6 +441,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
             />
 
             <CategoryList
+              checkCategoryListingDoubling={checkCategoryListingDoubling}
               deletePopupMessage={
                 "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
               }
@@ -422,6 +453,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
             />
 
             <CategoryList
+              checkCategoryListingDoubling={checkCategoryListingDoubling}
               deletePopupMessage={
                 "Are you sure you want to delete this category?"
               }
@@ -439,7 +471,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
                   disabled={submitting}
                   className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
                 >
-                  <span className="hidden xs:block ml-2">Save Categories</span>
+                  <span className="hidden xs:block">Save Categories</span>
                 </button>
               </div>
             </div>

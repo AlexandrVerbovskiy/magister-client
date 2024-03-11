@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useDebugValue } from "react";
 import { useRouter } from "next/router";
 
 const usePagination = ({
@@ -9,6 +9,7 @@ const usePagination = ({
 }) => {
   const router = useRouter();
   const isFirstRef = useRef(true);
+  const isFirstDefaultDataRef = useRef(true);
 
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
@@ -122,6 +123,52 @@ const usePagination = ({
       onError(e);
     }
   };
+
+  useEffect(() => {
+    if (!defaultData || isFirstDefaultDataRef.current) {
+      isFirstDefaultDataRef.current = false;
+      return;
+    }
+
+    const dopBody = {};
+    const { order, orderType, page, filter } = router.query;
+
+    if (order) {
+      dopBody["order"] = order;
+    }
+
+    if (orderType) {
+      dopBody["orderType"] = orderType;
+    }
+
+    if (page) {
+      dopBody["page"] = page;
+    }
+
+    if (filter) {
+      dopBody["filter"] = filter;
+    }
+
+    if (defaultData) {
+      const {
+        options: gotOptions,
+        items: gotItems,
+        countItems: gotCountItems,
+      } = defaultData;
+
+      countPagesRef.current = gotOptions.totalPages;
+      countItemsRef.current = gotCountItems;
+
+      setOptions(gotOptions);
+      setPage(gotOptions.page);
+      setItemsPerPage(gotOptions.count);
+      setOrder(gotOptions.order);
+      setOrderType(gotOptions.orderType);
+      setFilter(gotOptions.filter);
+
+      setItems(gotItems);
+    }
+  }, [defaultData]);
 
   useEffect(() => {
     const dopBody = {};

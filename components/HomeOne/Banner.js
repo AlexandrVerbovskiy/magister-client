@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { useCategoryLocation } from "../../hooks";
+import { getFullListingSearchLink } from "../../utils";
 
 const Banner = ({ popularCategories }) => {
   const {
@@ -131,7 +132,11 @@ const Banner = ({ popularCategories }) => {
 
               <div className="col-lg-3 col-md-12 p-0">
                 <div className="submit-btn">
-                  <button type="submit">Search Now</button>
+                  <Link
+                    href={getFullListingSearchLink(searchLocation, searchCategory)}
+                  >
+                    <button type="button">Search Now</button>
+                  </Link>
                 </div>
               </div>
             </div>

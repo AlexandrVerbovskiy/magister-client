@@ -11,8 +11,9 @@ import AuthTypeModal from "./AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
+import { getListingSearchLink } from "../../../utils";
 
-const Navbar = ({canShowSearch = true}) => {
+const Navbar = ({ canShowSearch = true }) => {
   const {
     isAuth,
     success: mainSuccess,
@@ -33,6 +34,14 @@ const Navbar = ({canShowSearch = true}) => {
 
   const [searchCategory, setSearchCategory] = useState("");
 
+  const router = useRouter();
+
+  const [displayAuth, setDisplayAuth] = useState(false);
+  const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
+  const [sticky, setSticky] = useState(false);
+
+  //sticky menu
+
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
     updateCategoryTips(newValue);
@@ -44,15 +53,9 @@ const Navbar = ({canShowSearch = true}) => {
     smallCategoryFilterRef.current.blur();
     setSearchCategory(value);
     updateCategoryTips(value);
+    const link = getListingSearchLink(value);
+    router.push(link);
   };
-
-  const router = useRouter();
-
-  const [displayAuth, setDisplayAuth] = useState(false);
-  const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [sticky, setSticky] = useState(false);
-
-  //sticky menu
 
   const showStickyMenu = () => {
     if (window.scrollY >= 80) {
@@ -180,6 +183,18 @@ const Navbar = ({canShowSearch = true}) => {
     setTypeModalError(null);
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchCategory) return;
+
+    handleSearchClick();
+  };
+
+  const handleSearchClick = () => {
+    const link = getListingSearchLink(searchCategory);
+    router.push(link);
+  };
+
   return (
     <>
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
@@ -218,11 +233,17 @@ const Navbar = ({canShowSearch = true}) => {
 
               <div className="collapse navbar-collapse mean-menu">
                 {canShowSearch && (
-                  <form className="navbar-search-box search-box-one">
-                    <label>
+                  <form
+                    onSubmit={handleSearchSubmit}
+                    className="navbar-search-box search-box-one"
+                  >
+                    <label
+                      onClick={handleSearchClick}
+                      className="cursor-pointer"
+                    >
                       <i className="flaticon-search"></i>
                     </label>
-                    
+
                     <input
                       type="text"
                       className="input-search"
@@ -311,8 +332,14 @@ const Navbar = ({canShowSearch = true}) => {
                 <div className="others-option">
                   {canShowSearch && (
                     <div className="option-item">
-                      <form className="navbar-search-box">
-                        <label>
+                      <form
+                        onSubmit={handleSearchSubmit}
+                        className="navbar-search-box"
+                      >
+                        <label
+                          onClick={handleSearchClick}
+                          className="cursor-pointer"
+                        >
                           <i className="flaticon-search"></i>
                         </label>
                         <input
@@ -325,7 +352,7 @@ const Navbar = ({canShowSearch = true}) => {
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
                         />
-    
+
                         <SearchTipsPopup
                           active={tipsPopupActive}
                           categoryTips={categoryTips}

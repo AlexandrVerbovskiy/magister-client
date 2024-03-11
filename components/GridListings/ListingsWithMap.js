@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -13,14 +13,38 @@ import { IndiceContext } from "../../contexts";
 import { getFilePath, getListingImageByType } from "../../utils";
 import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
+import { useRouter } from "next/router";
 
-const ListingsWithMap = ({ categories, pageProps }) => {
+const ListingsWithMap = ({
+  categories: baseCategories,
+  pageProps: basePageProps,
+}) => {
+  const isFirstRef = useRef(true);
+
+  const [categories, setCategories] = useState(baseCategories);
+  const [pageProps, setPageProps] = useState(basePageProps);
+
   const [selectedCategories, setSelectedCategories] = useState(
     pageProps.options.categories
   );
+
   const [selectedCities, setSelectedCities] = useState(
     pageProps.options.cities
   );
+
+  useEffect(() => {
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+      return;
+    }
+
+    setSelectedCities(pageProps.options.cities);
+    setSelectedCategories(pageProps.options.categories);
+  }, [pageProps]);
+
+  useEffect(() => setPageProps(basePageProps), [basePageProps]);
+
+  useEffect(() => setCategories(baseCategories), [baseCategories]);
 
   const { error, success } = useContext(IndiceContext);
 

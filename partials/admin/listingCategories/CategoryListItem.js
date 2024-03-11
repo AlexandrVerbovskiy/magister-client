@@ -5,7 +5,7 @@ import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 import ImageInput from "../../../components/admin/Form/ImageInput";
 import env from "../../../env";
-import { getFilePath } from "../../../utils";
+import { getFilePath, getNumberLevelByName } from "../../../utils";
 
 const CategoryListItem = ({
   popular,
@@ -17,6 +17,7 @@ const CategoryListItem = ({
   hasParent = false,
   parentLocalId = null,
   parentOptions,
+  checkHasError,
   onChangeParent = (value) => {},
   onChangeName = (value) => {},
   onChangePhoto = (value) => {},
@@ -32,29 +33,58 @@ const CategoryListItem = ({
   const [categoriesToChange, setCategoriesToChange] = useState([]);
 
   useEffect(() => {
-    const newCategoriesToChange = [];
+    const firstSecondLevelCategoriesIdsToIgnore = [];
 
-    Object.keys(categories).forEach((level) =>
+    ["firstLevel", "secondLevel"].forEach((level) =>
       categories[level]
         .filter(
           (category) =>
-            category.name != name && category.parentLocalId != localId
+            category.parentLocalId == localId || category.localId == localId
         )
-        .forEach((category) => newCategoriesToChange.push(category))
+        .forEach((category) =>
+          firstSecondLevelCategoriesIdsToIgnore.push(category.localId)
+        )
     );
 
-    const options = newCategoriesToChange.map((elem, index) => ({
-      value: elem.name,
-      title: elem.name,
-      default: index == 0,
-    }));
+    const totalCategoriesIdsToIgnore = [
+      ...firstSecondLevelCategoriesIdsToIgnore,
+    ];
 
-    setCategoriesToChange(newCategoriesToChange);
+    categories["thirdLevel"]
+      .filter(
+        (category) =>
+          firstSecondLevelCategoriesIdsToIgnore.includes(
+            category.parentLocalId
+          ) || category.localId === localId
+      )
+      .forEach((category) => totalCategoriesIdsToIgnore.push(category.localId));
+
+    const options = [];
+    const categoriesToChange = [];
+
+    Object.keys(categories).forEach((level) => {
+      categories[level].forEach((category) => {
+        if (!totalCategoriesIdsToIgnore.includes(category.localId)) {
+          categoriesToChange.push({
+            ...category,
+            level: getNumberLevelByName(level),
+          });
+          options.push({
+            value: category.name,
+            title: category.name,
+            default: options.length == 0,
+          });
+        }
+      });
+    });
+
+    setCategoriesToChange(categoriesToChange);
     setCategoriesToChangeOptions(options);
-    setDefaultNewCategory(newCategoriesToChange[0]);
+    setDefaultNewCategory(categoriesToChange[0]);
   }, [categories]);
 
   const [newChildCategory, setNewChildCategory] = useState(null);
+  const [newChildCategoryError, setNewChildCategoryError] = useState(null);
 
   const handleChangeNewChildCategory = (name) => {
     const filtered = categoriesToChange.filter((elem) => elem.name === name);
@@ -62,15 +92,29 @@ const CategoryListItem = ({
   };
 
   const [modalOpen, setModalOpen] = useState(false);
+
+  const onDeleteAccept = () => {
+    if (newChildCategory) {
+      onDeleteClick(newChildCategory);
+      setNewChildCategory(null);
+    } else {
+      setNewChildCategoryError(
+        "You cannot delete a category without replacing it for children"
+      );
+    }
+  };
+
   const handleDeleteClick = (e) => {
     e.stopPropagation();
+
+    if (checkHasError()) return;
 
     if (deletePopupMessage) {
       setModalOpen(true);
       setNewChildCategory(defaultNewCategory);
+      setNewChildCategoryError(null);
     } else {
-      onDeleteClick(newChildCategory);
-      setNewChildCategory(null);
+      onDeleteAccept();
     }
   };
 
@@ -188,7 +232,11 @@ const CategoryListItem = ({
                     Delete category?
                   </div>
                 </div>
-                <div className="text-sm mb-10">
+                <div
+                  className={
+                    newChildCategoryError ? "text-sm mb-3" : "text-sm mb-10"
+                  }
+                >
                   <div className="space-y-2">
                     <p
                       dangerouslySetInnerHTML={{ __html: deletePopupMessage }}
@@ -198,6 +246,7 @@ const CategoryListItem = ({
                       selected={newChildCategory?.name}
                       setSelected={handleChangeNewChildCategory}
                     />
+                    <ErrorSpan error={newChildCategoryError} />
                   </div>
                 </div>
 
@@ -213,7 +262,7 @@ const CategoryListItem = ({
                     No, Close
                   </button>
                   <button
-                    onClick={() => onDeleteClick(newChildCategory)}
+                    onClick={onDeleteAccept}
                     className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
                   >
                     Yes, Delete

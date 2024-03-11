@@ -9,6 +9,7 @@ const CategoryList = ({
   handleRemove,
   handleCreate,
   handleChangePhoto,
+  checkCategoryListingDoubling,
   list = [],
   hasParent = false,
   parentOptions = [{ value: "", title: "-", default: true }],
@@ -66,6 +67,7 @@ const CategoryList = ({
                     categories={categories}
                     {...elem}
                     hasParent={hasParent}
+                    checkHasError={checkCategoryListingDoubling}
                     onChangePhoto={(e) => {
                       if (e.target.files.length) {
                         handleChangePhoto({
@@ -101,7 +103,10 @@ const CategoryList = ({
                       })
                     }
                     onDeleteClick={(newChildCategory) => {
-                      handleRemove(elem.localId, elem.id, newChildCategory);
+                      handleRemove({
+                        localId: elem.localId,
+                        newChildCategory,
+                      });
                     }}
                   />
                 ))}

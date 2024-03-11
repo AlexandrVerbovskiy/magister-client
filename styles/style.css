@@ -17207,5 +17207,9 @@ Preloader Area CSS
 }
 
 .sidemenu-nav .nav-link.disabled {
-  pointer-events: all!important;
+  pointer-events: all !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
