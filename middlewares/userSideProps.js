@@ -18,9 +18,9 @@ const userSideProps = async (context, callback = null) => {
       res["authToken"] = authToken;
     }
   } catch (e) {
-    Object.keys(context.req.cookies).forEach((cookieName) => {
+    /*Object.keys(context.req.cookies).forEach((cookieName) => {
       context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
-    });
+    });*/
     return { props: { user: null } };
   }
 

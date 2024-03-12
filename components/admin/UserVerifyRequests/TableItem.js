@@ -25,7 +25,7 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <div className="flex text-left">
           <a
-            href={`/admin/user-verify-request/${id}`}
+            href={`/admin/user-verify-requests/${id}`}
             className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
           >
             <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">

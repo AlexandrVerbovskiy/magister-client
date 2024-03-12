@@ -6,12 +6,7 @@ import Switch from "../../../partials/admin/base/Switch";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../Form/Input";
 import Textarea from "../Form/Textarea";
-import {
-  getAdminListingEditPageOptions,
-  getUserNameIdList,
-  updateListingByAdmin,
-} from "../../../services";
-import { adminSideProps } from "../../../middlewares";
+import { getUserNameIdList } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
 import lodash from "lodash";
@@ -157,6 +152,7 @@ const EditForm = ({ listing, categories, save }) => {
     setApproved(data.approved);
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
+    setCategoryLevel(data.categoryLevel);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -177,10 +173,21 @@ const EditForm = ({ listing, categories, save }) => {
       type: elem.type,
     }));
 
+    const categoryId = prevListing.categoryId ?? baseCategory;
+
+    const categoryLevel =
+      Object.keys(categories).filter((level) => {
+        const categoriesWithCurrentId = categories[level].filter(
+          (category) => category.id === prevListing.categoryId
+        );
+
+        return categoriesWithCurrentId.length > 0;
+      })[0] ?? "firstLevel";
+
     return {
       name: prevListing.name ?? "",
       keyWords: prevListing.keyWords ?? "",
-      categoryId: prevListing.categoryId ?? baseCategory,
+      categoryId: categoryId,
       description: prevListing.description ?? "",
       rentalTerms: prevListing.rentalTerms ?? "",
       postcode: prevListing.postcode ?? "",
@@ -195,6 +202,7 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
+      categoryLevel,
     };
   };
 
@@ -222,6 +230,7 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved,
       ownerId,
+      categoryLevel,
     };
   };
 
@@ -345,12 +354,16 @@ const EditForm = ({ listing, categories, save }) => {
 
         setFiles([]);
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
-        success.set("Updated successfully");
-      } else {
-        success.set("Updated successfully");
-        return true;
+        setPrevListing((prev) => ({
+          ...prev,
+          listingImages: [...res.listingImages],
+        }));
       }
+
+      success.set("Updated successfully");
+      return true;
     } catch (e) {
+      console.log(e);
       error.set(e.message);
     } finally {
       setDisabled(false);
@@ -376,7 +389,7 @@ const EditForm = ({ listing, categories, save }) => {
                 <BreadCrumbs
                   links={[
                     { title: "Listings", href: "/admin/listings" },
-                    { title: listing.name },
+                    { title: prevListing.name ?? "Create New Listing" },
                   ]}
                 />
               </div>
@@ -401,7 +414,7 @@ const EditForm = ({ listing, categories, save }) => {
                               setValue={setName}
                               error={nameError}
                               setError={setNameError}
-                              label="User Name"
+                              label="Name"
                               placeholder="Name of tool"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"

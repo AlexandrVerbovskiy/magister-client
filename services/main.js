@@ -1,5 +1,5 @@
 import { initAxios } from "../utils";
-const { get, post } = initAxios("/base");
+const { get, post } = initAxios("/main");
 
 export const getIndexOptions = async () => {
   const data = await get(`/index-options`);
@@ -97,18 +97,6 @@ export const getUserNameIdList = async (params) => {
   return data.body.list;
 };
 
-export const getUserListingApprovalRequestListPageOptions = async (
-  params,
-  authToken
-) => {
-  const data = await post(
-    `/user-listing-approval-request-list-options`,
-    params,
-    authToken
-  );
-  return data.body;
-};
-
 export const getAdminListingApprovalRequestListPageOptions = async (
   params,
   authToken
@@ -129,5 +117,10 @@ export const getAdminListingApprovalRequestOption = async (
     `/admin-listing-approval-request-options/${requestId}`,
     authToken
   );
+  return data.body;
+};
+
+export const getUserDocumentsPageOption = async (userId, authToken) => {
+  const data = await get(`/user-documents-options/${userId}`, authToken);
   return data.body;
 };

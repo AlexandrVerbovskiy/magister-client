@@ -14,7 +14,9 @@ import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 
-const UserVerifyRequest = ({ info }) => {
+const UserVerifyRequest = ({ info: baseInfo }) => {
+  const [info, setInfo] = useState(baseInfo);
+
   const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
@@ -37,7 +39,12 @@ const UserVerifyRequest = ({ info }) => {
         ? "Verified successfully"
         : "Declined successfully";
       success.set(message);
-      router.push("/admin/user-documents/" + info.userId);
+
+      setInfo((prev) => ({
+        ...prev,
+        hasResponse: true,
+        failedDescription: description,
+      }));
     } catch (e) {
       error.set(e.message);
     }
@@ -93,27 +100,58 @@ const UserVerifyRequest = ({ info }) => {
                 <div className="grow">
                   <DocumentList {...info} />
 
-                  <footer>
-                    <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
-                      <div className="flex self-start">
-                        <button
-                          type="button"
-                          onClick={handleDeclineClick}
-                          className="btn bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Decline
-                        </button>
+                  {!info.hasResponse && (
+                    <footer>
+                      <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex self-start">
+                          <button
+                            type="button"
+                            onClick={handleDeclineClick}
+                            className="btn bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Decline
+                          </button>
 
-                        <button
-                          type="button"
-                          onClick={handleAcceptClick}
-                          className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-2"
-                        >
-                          Accept
-                        </button>
+                          <button
+                            type="button"
+                            onClick={handleAcceptClick}
+                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-2"
+                          >
+                            Accept
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </footer>
+                    </footer>
+                  )}
+
+                  {info.hasResponse && (
+                    <footer>
+                      <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                        <section className="flex gap-x-4 flex-row">
+                          {info.failedDescription ? (
+                            <div
+                              className="w-full fade text-sm show bg-rose-500 text-white px-4 py-3 rounded relative"
+                              role="alert"
+                            >
+                              <span className="block sm:inline">
+                                <b>Rejected: </b>
+                                {info.failedDescription}
+                              </span>
+                            </div>
+                          ) : (
+                            <div
+                              className="w-full fade text-sm show bg-emerald-500 text-white px-4 py-3 rounded relative"
+                              role="alert"
+                            >
+                              <span className="block sm:inline">
+                                <b>Accepted</b>
+                              </span>
+                            </div>
+                          )}
+                        </section>
+                      </div>
+                    </footer>
+                  )}
                 </div>
               </div>
             </div>
@@ -170,19 +208,15 @@ const UserVerifyRequest = ({ info }) => {
   );
 };
 
-const boostServerSideProps = async ({baseSideProps, context}) => {
+const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
 
-  const info = await getUserVerifyRequestById(
-    id,
-    baseSideProps.authToken
-  );
+  const info = await getUserVerifyRequestById(id, baseSideProps.authToken);
 
   return { info };
 };
 
 export const getServerSideProps = (context) =>
   supportSideProps(context, boostServerSideProps);
-
 
 export default UserVerifyRequest;

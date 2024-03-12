@@ -6,5 +6,5 @@ export * from "./userEventLogs";
 export * from "./userVerifyRequests";
 export * from "./searchedWords";
 export * from "./listings";
-export * from "./base";
+export * from "./main";
 export * from "./listingApprovalRequests";

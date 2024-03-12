@@ -20,8 +20,3 @@ export const getSearchTips = async (searchValue) => {
   const data = await get(`/tips-list?search=${searchValue}`);
   return data.body.list;
 };
-
-export const search = async (searchValue) => {
-  const data = await get(`/search?search=${searchValue}`);
-  return data.body;
-};
