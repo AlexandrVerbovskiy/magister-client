@@ -26,7 +26,7 @@ const YesNoModal = ({
               <i className="bx bx-x"></i>
             </button>
 
-            <div className="tab-content mt-0" id="myTabContent">
+            <div className="tab-content mt-0">
               <div className="tab-pane fade show active" id="login">
                 <div className="miran-login">
                   <span className="sub-title mb-2">

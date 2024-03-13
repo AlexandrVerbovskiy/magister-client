@@ -1,21 +1,31 @@
-import React, {useState} from "react";
+import React, { useContext, useState } from "react";
 import { getSearchTips } from "../services";
+import { IndiceContext } from "../contexts";
 
 const useSearchCategory = () => {
   const [tipsPopupActive, setTipsPopupActive] = useState(false);
   const [categoryTips, setCategoryTips] = useState([]);
 
-  const openCategoryTipsPopup = () => setTipsPopupActive(true);
+  const { error } = useContext(IndiceContext);
+
+  const openCategoryTipsPopup = (baseValue) => {
+    setTipsPopupActive(true);
+    updateCategoryTips(baseValue);
+  };
 
   const closeCategoryTipsPopup = () => setTipsPopupActive(false);
 
   const updateCategoryTips = async (search) => {
-    const tips = await getSearchTips(search);
-    setCategoryTips(tips);
+    try {
+      const tips = await getSearchTips(search);
+      setCategoryTips(tips);
+    } catch (e) {
+      error.set(e.message);
+    }
   };
 
   return {
-    tipsPopupActive,
+    categoryTipsPopupActive: tipsPopupActive,
     categoryTips,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,

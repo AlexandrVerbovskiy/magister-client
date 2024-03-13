@@ -9,6 +9,7 @@ const Textarea = ({
   setError = () => {},
   rows = "6",
   labelClassName = "sr-only",
+  name = null,
 }) => {
   const handleInput = (e) => {
     setValue(e.target.value);
@@ -24,6 +25,7 @@ const Textarea = ({
         value={value}
         placeholder={placeholder}
         onInput={handleInput}
+        name={name}
       />
       <ErrorSpan error={error} />
     </>

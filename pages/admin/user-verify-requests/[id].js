@@ -51,7 +51,11 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
   };
 
   const handleAcceptClick = async () => {
-    await handleBaseVerifyChangeClick(true);
+    try {
+      await handleBaseVerifyChangeClick(true);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   const handleDeclineClick = (e) => {
@@ -69,8 +73,12 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
       return;
     }
 
-    setAccessDeclineModalOpen(false);
-    await handleBaseVerifyChangeClick(false, declineDescription);
+    try {
+      await handleBaseVerifyChangeClick(false, declineDescription);
+      setAccessDeclineModalOpen(false);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -178,6 +186,7 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
 
               <div className="mb-2">
                 <textarea
+                  name="declineDescription"
                   className="form-input w-full"
                   rows="6"
                   value={declineDescription}

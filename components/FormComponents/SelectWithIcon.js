@@ -11,6 +11,7 @@ const SelectWithIcon = ({
   options = [],
   style = {},
   isSearchable = true,
+  name = null,
 }) => {
   return (
     <ErrorIconWrapper label={label} icon={icon} error={error}>
@@ -21,6 +22,7 @@ const SelectWithIcon = ({
         isSearchable={isSearchable}
         style={style}
         className="custom-search-select"
+        name={name}
       />
       <ErrorSpan error={error} />
     </ErrorIconWrapper>

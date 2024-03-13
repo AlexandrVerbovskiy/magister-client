@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Transition from "../../utils/transition";
+import { IndiceContext } from "../../contexts";
 
 function DropdownClassicAjax({
   fetchOptions,
@@ -7,6 +8,7 @@ function DropdownClassicAjax({
   onChange,
   selectedTitle,
 }) {
+  const { error } = useContext(IndiceContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,14 +74,20 @@ function DropdownClassicAjax({
 
     if (actualLoading || !actualHasMore) return;
     setLoading(true);
-    const newOptions = await fetchOptions(actualPage, actualSearchTerm);
 
-    if (newOptions.length === 0) {
-      setHasMore(false);
-    } else {
-      setOptions([...actualOptions, ...newOptions]);
-      setPage((prevPage) => prevPage + 1);
+    try {
+      const newOptions = await fetchOptions(actualPage, actualSearchTerm);
+
+      if (newOptions.length === 0) {
+        setHasMore(false);
+      } else {
+        setOptions([...actualOptions, ...newOptions]);
+        setPage((prevPage) => prevPage + 1);
+      }
+    } catch (e) {
+      error.set(e);
     }
+
     setLoading(false);
   };
 
@@ -154,6 +162,7 @@ function DropdownClassicAjax({
           onBlur={() => setDropdownOpen(false)}
         >
           <input
+            name="selectFilter"
             type="text"
             className="form-input w-full border-0 border-b border-slate-200 dark:border-slate-700 rounded-sm px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500"
             placeholder="Search..."

@@ -9,6 +9,7 @@ const Textarea = ({
   error = null,
   placeholder = "",
   setError = () => {},
+  name = null,
 }) => {
   const handleInput = (e) => {
     setError(null);
@@ -25,6 +26,7 @@ const Textarea = ({
         className="form-control"
         value={value}
         onInput={handleInput}
+        name={name}
       ></textarea>
 
       <ErrorSpan error={error} className="d-block mt-0 position-absolute" />

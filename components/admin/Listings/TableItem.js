@@ -12,7 +12,7 @@ const ActiveSpan = ({ active }) => {
 
   return (
     <div
-      className={`cursor-pointer text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
+      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
     >
       <Tooltip
         title={

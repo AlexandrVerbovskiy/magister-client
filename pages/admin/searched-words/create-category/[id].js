@@ -10,8 +10,13 @@ import Header from "../../../../partials/admin/Header";
 import { useAdminPage } from "../../../../hooks";
 import { adminSideProps } from "../../../../middlewares";
 import DropdownClassic from "../../../../components/admin/DropdownClassic";
-import Input from "../../../../components/admin/Form/Input";
+import InputView from "../../../../components/admin/Form/InputView";
+import ImageInput from "../../../../components/admin/Form/ImageInput";
 import Link from "next/link";
+import ImageView from "../../../../components/admin/Form/ImageView";
+import STATIC from "../../../../static";
+import ENV from "../../../../env";
+import { getFilePath } from "../../../../utils";
 
 const createCategoryBySearch = ({
   searchedWord,
@@ -20,6 +25,20 @@ const createCategoryBySearch = ({
 }) => {
   const [prevCategory, setPrevCategory] = useState(createdCategory);
   const [submitting, setSubmitting] = useState(false);
+
+  const [newPhoto, setNewPhoto] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(
+    prevCategory?.image ? getFilePath(prevCategory.image) : null
+  );
+  const [openImage, setOpenImage] = useState(false);
+
+  const handlePhotoChange = (e) => {
+    const img = e.target.files[0];
+    const url = URL.createObjectURL(img);
+
+    setNewPhoto(img);
+    setPhotoUrl(url);
+  };
 
   const baseLevel = createdCategory ? createdCategory["level"] : 1;
   const baseParentId = createdCategory ? createdCategory["parentId"] : null;
@@ -110,6 +129,7 @@ const createCategoryBySearch = ({
   };
 
   const handleSaveClick = async () => {
+    setFormError(null);
     if (submitting) return;
     setSubmitting(true);
 
@@ -130,10 +150,21 @@ const createCategoryBySearch = ({
         throw new Error(`Category with level '${level}' must have a parent`);
       }
 
-      const res = await createCategoryBySearchWord(
-        { name, level, parentId, searchedWordId: searchedWord["id"] },
-        authToken
-      );
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("level", level);
+
+      if (parentId) {
+        formData.append("parentId", parentId);
+      }
+
+      formData.append("searchedWordId", searchedWord["id"]);
+
+      if (newPhoto) {
+        formData.append("photo", newPhoto);
+      }
+
+      const res = await createCategoryBySearchWord(formData, authToken);
       setPrevCategory(res);
       success.set("Category created successfully");
     } catch (e) {
@@ -169,97 +200,130 @@ const createCategoryBySearch = ({
                 <div className="grow">
                   <div className="p-6 space-y-6">
                     {prevCategory && (
-                      <section className="flex gap-y-4 flex-col">
-                        <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
-                          <div className="inline-flex flex-col w-full">
-                            <label className="block font-medium">
-                              Search Word
-                            </label>
-                            <div className="form-input">
-                              {searchedWord["name"]}
+                      <>
+                        <section className="flex gap-y-4 flex-col category-image-parent">
+                          <div
+                            className="col-lg-4 col-md-6"
+                            style={{ cursor: "zoom-in" }}
+                            onClick={() => setOpenImage(true)}
+                          >
+                            <div className="single-image-bpx">
+                              <img
+                                className="w-20 h-20"
+                                src={photoUrl ?? STATIC.defaultPhotoLink}
+                                alt={`${name} image`}
+                              />
                             </div>
                           </div>
-                          <div className="inline-flex flex-col w-full">
-                            <label className="block font-medium">
-                              Category Name
-                            </label>
-                            <div className="form-input">{name}</div>
-                          </div>
-                        </div>
+                          <ImageView
+                            imgSrc={photoUrl}
+                            open={openImage}
+                            close={() => setOpenImage(false)}
+                          />
+                        </section>
 
-                        <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
-                          <div className="inline-flex flex-col w-full">
-                            <label className="block font-medium">
-                              Category Level
-                            </label>
-                            <div className="form-input">
-                              {
-                                levelOptions.filter(
-                                  (option) => option.value == level
-                                )[0]["title"]
-                              }
+                        <section className="flex gap-y-4 flex-col">
+                          <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
+                            <div className="inline-flex flex-col w-full">
+                              <label className="block font-medium">
+                                Search Word
+                              </label>
+                              <div className="form-input">
+                                {searchedWord["name"]}
+                              </div>
+                            </div>
+                            <div className="inline-flex flex-col w-full">
+                              <label className="block font-medium">
+                                Category Name
+                              </label>
+                              <div className="form-input">{name}</div>
                             </div>
                           </div>
-                          <div className="inline-flex flex-col w-full">
-                            <label className="block font-medium">
-                              Parent Category
-                            </label>
 
-                            <div className="form-input">
-                              {parentIdOptions.length > 0
-                                ? parentIdOptions.filter(
-                                    (option) => option.value == parentId
+                          <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
+                            <div className="inline-flex flex-col w-full">
+                              <label className="block font-medium">
+                                Category Level
+                              </label>
+                              <div className="form-input">
+                                {
+                                  levelOptions.filter(
+                                    (option) => option.value == level
                                   )[0]["title"]
-                                : ""}
+                                }
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </section>
-                    )}
-
-                    {!prevCategory && (
-                      <section className="flex gap-y-4 flex-col">
-                        <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
-                          <div className="inline-flex flex-col w-full">
-                            <Input
-                              inputClassName="form-input"
-                              value={name}
-                              label="Category Name"
-                              labelClassName="block font-medium"
-                              setValue={handleChangeName}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
-                          <div className="inline-flex flex-col w-full">
-                            <label className="block font-medium">
-                              Category Level
-                            </label>
-
-                            <DropdownClassic
-                              options={levelOptions}
-                              selected={level}
-                              setSelected={handleChangeLevel}
-                              needSearch={false}
-                            />
-                          </div>
-
-                          {parentIdOptions.length > 0 && (
-                            <div className="inline-flex flex-col w-full gap-x-4 ">
+                            <div className="inline-flex flex-col w-full">
                               <label className="block font-medium">
                                 Parent Category
                               </label>
 
-                              <DropdownClassic
-                                options={parentIdOptions}
-                                selected={parentId}
-                                setSelected={handleChangeParentId}
+                              <div className="form-input">
+                                {parentIdOptions.length > 0
+                                  ? parentIdOptions.filter(
+                                      (option) => option.value == parentId
+                                    )[0]["title"]
+                                  : "-"}
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </>
+                    )}
+
+                    {!prevCategory && (
+                      <>
+                        <section className="flex gap-y-4 flex-col category-image-parent">
+                          <ImageInput
+                            photoUrl={photoUrl}
+                            onChange={handlePhotoChange}
+                            fileSizeLimit={ENV.MAX_SMALL_FILE_SIZE}
+                          />
+                        </section>
+
+                        <section className="flex gap-y-4 flex-col">
+                          <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
+                            <div className="inline-flex flex-col w-full">
+                              <InputView
+                                inputClassName="form-input"
+                                value={name}
+                                name="name"
+                                label="Category Name"
+                                labelClassName="block font-medium"
                               />
                             </div>
-                          )}
-                        </div>
-                      </section>
+                          </div>
+
+                          <div className="sm:flex-row gap-4 flex-col inline-flex text-slate-800 dark:text-slate-100">
+                            <div className="inline-flex flex-col w-full">
+                              <label className="block font-medium">
+                                Category Level
+                              </label>
+
+                              <DropdownClassic
+                                options={levelOptions}
+                                selected={level}
+                                setSelected={handleChangeLevel}
+                                needSearch={false}
+                              />
+                            </div>
+
+                            {parentIdOptions.length > 0 && (
+                              <div className="inline-flex flex-col w-full gap-x-4 ">
+                                <label className="block font-medium">
+                                  Parent Category
+                                </label>
+
+                                <DropdownClassic
+                                  options={parentIdOptions}
+                                  selected={parentId}
+                                  setSelected={handleChangeParentId}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      </>
                     )}
 
                     {formError && (

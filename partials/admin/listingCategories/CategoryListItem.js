@@ -139,6 +139,7 @@ const CategoryListItem = ({
               <Input
                 inputClassName="form-input w-full"
                 value={name}
+                name="name"
                 label="Name"
                 labelClassName="block text-sm font-medium relative-label"
                 setValue={onChangeName}

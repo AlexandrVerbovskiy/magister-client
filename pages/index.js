@@ -5,9 +5,18 @@ import Footer from "../components/_App/Footer";
 import { IndiceContext } from "../contexts";
 import { userSideProps } from "../middlewares";
 import { getIndexOptions } from "../services";
+import Features from "../components/HomeOne/Features";
+import ListingArea from "../components/Common/ListingArea";
+import Category from "../components/HomeOne/Category";
+import DestinationsTwo from '../components/Common/DestinationsTwo';
+import Feedback from '../components/Common/Feedback';
+import HowItWorks from '../components/Common/HowItWorks';
 
-const Index = ({ popularCategories }) => {
+const Index = ({ categoriesInfos, topListings }) => {
   const { setLoading } = useContext(IndiceContext);
+  const popularCategories = categoriesInfos
+    .filter((item) => item.popular)
+    .map((item) => item.name);
 
   useEffect(() => {
     setLoading(false);
@@ -18,6 +27,16 @@ const Index = ({ popularCategories }) => {
       <Navbar canShowSearch={false} />
 
       <Banner popularCategories={popularCategories} />
+
+      <Features />
+
+      <ListingArea listings={topListings} />
+
+      <Category categoriesInfos={categoriesInfos} />
+
+      <DestinationsTwo />
+
+      <Feedback />
 
       <Footer />
     </>

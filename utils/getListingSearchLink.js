@@ -3,7 +3,7 @@ export const getFullListingSearchLink = (searchLocation, searchCategory) => {
   let hasPrev = false;
 
   if (searchLocation) {
-    searchLink += `?cities=${searchLink}`;
+    searchLink += `?cities=${searchLocation}`;
     hasPrev = true;
   }
 

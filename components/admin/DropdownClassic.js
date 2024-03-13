@@ -90,6 +90,7 @@ function DropdownClassic({
         >
           {needSearch && (
             <input
+              name="selectFilter"
               type="text"
               className="form-input w-full border-0 border-b border-slate-200 dark:border-slate-700 rounded-sm px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500"
               placeholder="Search..."

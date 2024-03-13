@@ -10,7 +10,8 @@ const UpdateListing = ({
   id,
   lastRequestInfo = {},
 }) => {
-  const baseCanSendRequest = lastRequestInfo.approved !== null;
+  const baseCanSendRequest =
+    !baseListing.approved && (!lastRequestInfo || lastRequestInfo.approved !== null);
   const baseRejectDescription = lastRequestInfo.rejectDescription;
 
   const [listing, setListing] = useState(baseListing);
@@ -43,7 +44,6 @@ const UpdateListing = ({
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getUpdateListingOptions(id, baseSideProps.authToken);
-
   return { ...options, id };
 };
 

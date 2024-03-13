@@ -3,30 +3,29 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../SearchTipsPopup";
-import { useCategoryLocation } from "../../hooks";
+import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 
 const Banner = ({ popularCategories }) => {
   const {
-    handleChangeLocation,
+    handleChangeCity,
     handleCategoryTipClick,
     handleChangeCategory,
+    handleCityTipClick,
     searchCategory,
-    searchLocation,
-    tipsPopupActive,
+    searchCity,
+    categoryTipsPopupActive,
     categoryTips,
+    cityTipsPopupActive,
+    cityTips,
+    openCityTipsPopup,
+    closeCityTipsPopup,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
     categoryFilterRef,
-  } = useCategoryLocation();
+    cityFilterRef,
+  } = useCategoryCity();
 
-  /*const popularCategories = [
-    "Hotels",
-    "Restaurants",
-    "Beauty",
-    "Fitness",
-    "Shopping",
-  ];*/
   const backgroundImages = [
     "/images/main-banner-bg1.jpg",
     "/images/main-banner-bg3.jpg",
@@ -72,7 +71,7 @@ const Banner = ({ popularCategories }) => {
                   {popularCategories.map((category) => (
                     <SwiperSlide key={category}>
                       <span>
-                        Find Near by{" "}
+                        What would you like to rent?{" "}
                         <Link
                           href={`/search?filter=${category}`}
                           className="color-0ec6c6"
@@ -100,17 +99,18 @@ const Banner = ({ popularCategories }) => {
                     type="text"
                     className="form-control"
                     placeholder="What are you looking for?"
+                    name="category"
                     ref={categoryFilterRef}
-                    onFocus={openCategoryTipsPopup}
+                    onFocus={() => openCategoryTipsPopup(searchCategory)}
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
                   />
 
                   <SearchTipsPopup
-                    active={tipsPopupActive}
-                    categoryTips={categoryTips}
-                    handleCategoryTipClick={handleCategoryTipClick}
+                    active={categoryTipsPopupActive}
+                    tips={categoryTips}
+                    handleTipClick={handleCategoryTipClick}
                   />
                 </div>
               </div>
@@ -124,8 +124,18 @@ const Banner = ({ popularCategories }) => {
                     type="text"
                     className="form-control"
                     placeholder="Location"
-                    value={searchLocation}
-                    onInput={handleChangeLocation}
+                    name="city"
+                    ref={cityFilterRef}
+                    onFocus={() => openCityTipsPopup(searchCity)}
+                    onBlur={closeCityTipsPopup}
+                    value={searchCity}
+                    onInput={handleChangeCity}
+                  />
+
+                  <SearchTipsPopup
+                    active={cityTipsPopupActive}
+                    tips={cityTips}
+                    handleTipClick={handleCityTipClick}
                   />
                 </div>
               </div>
@@ -133,7 +143,7 @@ const Banner = ({ popularCategories }) => {
               <div className="col-lg-3 col-md-12 p-0">
                 <div className="submit-btn">
                   <Link
-                    href={getFullListingSearchLink(searchLocation, searchCategory)}
+                    href={getFullListingSearchLink(searchCity, searchCategory)}
                   >
                     <button type="button">Search Now</button>
                   </Link>

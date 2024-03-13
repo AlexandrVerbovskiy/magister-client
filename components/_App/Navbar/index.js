@@ -19,13 +19,14 @@ const Navbar = ({ canShowSearch = true }) => {
     success: mainSuccess,
     isSupport,
     onLogin,
+    error: mainError,
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
 
   const {
-    tipsPopupActive,
+    categoryTipsPopupActive,
     categoryTips,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
@@ -98,7 +99,11 @@ const Navbar = ({ canShowSearch = true }) => {
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {
+      mainError.set(e.message);
+    }
   };
 
   const [userToAuth, setUserToAuth] = useState(null);
@@ -248,6 +253,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       type="text"
                       className="input-search"
                       placeholder="What are you looking for?"
+                      name="listingCategorySearch"
                       ref={categoryFilterRef}
                       value={searchCategory}
                       onFocus={openCategoryTipsPopup}
@@ -256,9 +262,9 @@ const Navbar = ({ canShowSearch = true }) => {
                     />
 
                     <SearchTipsPopup
-                      active={tipsPopupActive}
-                      categoryTips={categoryTips}
-                      handleCategoryTipClick={handleCategoryTipClick}
+                      active={categoryTipsPopupActive}
+                      tips={categoryTips}
+                      handleTipClick={handleCategoryTipClick}
                     />
                   </form>
                 )}
@@ -267,6 +273,12 @@ const Navbar = ({ canShowSearch = true }) => {
                   <li className="nav-item">
                     <Link href="/" className="nav-link">
                       Home
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link href="/listing-list" className="nav-link">
+                      Listings
                     </Link>
                   </li>
 
@@ -346,6 +358,7 @@ const Navbar = ({ canShowSearch = true }) => {
                           type="text"
                           className="input-search"
                           placeholder="What are you looking for?"
+                          name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}
                           onFocus={openCategoryTipsPopup}
@@ -354,9 +367,9 @@ const Navbar = ({ canShowSearch = true }) => {
                         />
 
                         <SearchTipsPopup
-                          active={tipsPopupActive}
-                          categoryTips={categoryTips}
-                          handleCategoryTipClick={handleCategoryTipClick}
+                          active={categoryTipsPopupActive}
+                          tips={categoryTips}
+                          handleTipClick={handleCategoryTipClick}
                         />
                       </form>
                     </div>
@@ -451,7 +464,7 @@ const Navbar = ({ canShowSearch = true }) => {
                     </TabList>
                   </ul>
 
-                  <div className="tab-content" id="myTabContent">
+                  <div className="tab-content">
                     <TabPanel>
                       <LoginTab
                         activePopup={displayAuth}

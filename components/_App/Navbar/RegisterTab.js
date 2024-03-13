@@ -144,6 +144,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
           <div className="row">
             <div className="col-12">
               <Input
+                name="username"
                 type="text"
                 value={name}
                 placeholder="Username"
@@ -155,6 +156,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
           <div className="row">
             <div className="col-12">
               <Input
+                name="email"
                 type="email"
                 value={email}
                 placeholder="Email"
@@ -167,6 +169,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
           <div className="row">
             <div className="col-6">
               <Input
+                name="password"
                 type="password"
                 value={password}
                 placeholder="Password"
@@ -177,6 +180,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
 
             <div className="col-6">
               <Input
+                name="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 placeholder="Confirm Password"
@@ -188,6 +192,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
 
           <div className="form-group form-check">
             <input
+              name="confirmTermsConditions"
               type="checkbox"
               className={`form-check-input${
                 acceptedTermConditionError ? " is-invalid" : ""

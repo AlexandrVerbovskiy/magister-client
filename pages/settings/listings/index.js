@@ -91,6 +91,7 @@ const TabHeaderSection = ({
           value={filter}
           onChange={(e) => changeFilter(e.target.value)}
           type="search"
+          name="search"
           className="search-field"
           placeholder="Search..."
         />
@@ -105,19 +106,17 @@ const StatusBlock = ({ requestId, requestApproved }) => {
   let tooltip =
     "The tool has not been approved. Update it and send a confirmation request";
 
-  if (requestId) {
-    if (requestApproved === null) {
-      listingStatus = "not_processed";
-      icon = "bx bx-time";
-      tooltip =
-        "The tool is waiting for confirmation. An administrator will review your request shortly";
-    }
+  if (requestId && requestApproved === null) {
+    listingStatus = "not_processed";
+    icon = "bx bx-time";
+    tooltip =
+      "The tool is waiting for confirmation. An administrator will review your request shortly";
+  }
 
-    if (requestApproved) {
-      listingStatus = "approved";
-      icon = "bx bx-check-circle";
-      tooltip = "The tool has been approved. Users can interact with the tool";
-    }
+  if (requestApproved) {
+    listingStatus = "approved";
+    icon = "bx bx-check-circle";
+    tooltip = "The tool has been approved. Users can interact with the tool";
   }
 
   return (
@@ -251,7 +250,7 @@ const ListingList = (pageProps) => {
                 handleChangeStatusFilter={handleChangeStatusFilter}
               />
 
-              <div className="tab-content" id="myTabContent">
+              <div className="tab-content">
                 <div className="tab-pane fade show active" id="all-listing">
                   <div className="row">
                     {listings.map((listing) => {
@@ -314,7 +313,11 @@ const ListingList = (pageProps) => {
                             </div>
 
                             <StatusBlock
-                              requestApproved={listing.requestApproved}
+                              requestApproved={
+                                listing.approved
+                                  ? true
+                                  : listing.requestApproved
+                              }
                               requestId={listing.requestId}
                             />
 

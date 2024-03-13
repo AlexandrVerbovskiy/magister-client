@@ -1,11 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import { getFilePath, getListingImageByType } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import ImagePopup from "../_App/ImagePopup";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
+import STATIC from "../../static";
 
 const SingleListingsContent = ({ listing }) => {
   const { success, error } = useContext(IndiceContext);
@@ -26,6 +27,10 @@ const SingleListingsContent = ({ listing }) => {
     });
     clipboard.onClick(event);
   };
+
+  const [currentOpenImg, setCurrentOpenImg] = useState(null);
+
+  const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   return (
     <>
@@ -140,16 +145,33 @@ const SingleListingsContent = ({ listing }) => {
                     className="row justify-content-center"
                     style={{ gridRowGap: "10px" }}
                   >
-                    {listing.listingImages.map((image, index) => (
-                      <div className="col-lg-4 col-md-6">
-                        <div className="single-image-bpx">
-                          <img
-                            src={getListingImageByType(image.link, image.type)}
-                            alt={`${listing.name} image ${index}`}
-                          />
+                    {listing.listingImages.map((image, index) => {
+                      const imgLink = getListingImageByType(
+                        image.link,
+                        image.type
+                      );
+
+                      return (
+                        <div
+                          className="col-lg-4 col-md-6"
+                          style={{ cursor: "zoom-in" }}
+                          onClick={() => setCurrentOpenImg(imgLink)}
+                        >
+                          <div className="single-image-bpx">
+                            <img
+                              src={imgLink}
+                              alt={`${listing.name} image ${index}`}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
+
+                    <ImagePopup
+                      photoUrl={currentOpenImg}
+                      open={currentOpenImg}
+                      close={closeCurrentOpenImg}
+                    />
                   </div>
                 </div>
 
@@ -799,7 +821,7 @@ const SingleListingsContent = ({ listing }) => {
                         src={
                           listing.userPhoto
                             ? getFilePath(listing.userPhoto)
-                            : defaultPhotoLink
+                            : STATIC.defaultPhotoLink
                         }
                         alt={listing.userName}
                       />

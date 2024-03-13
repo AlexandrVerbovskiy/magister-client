@@ -89,6 +89,7 @@ const Sidebar = ({
       <input
         id={category.name}
         type="checkbox"
+        name={`categories[${category.name}]`}
         onChange={() => handleChangeCheckedCategory(category.name)}
         checked={selectedCategories.includes(category.name)}
         value={category.name}
@@ -121,6 +122,7 @@ const Sidebar = ({
         id={item.name}
         type="checkbox"
         value={item.value}
+        name={`cities[${item.name}]`}
         onChange={() => handleChangeCheckedCity(item.value)}
         checked={selectedCities.includes(item.value)}
       />
@@ -182,16 +184,6 @@ const Sidebar = ({
         </section>
 
         <SidebarCheckboxesSection
-          title="Categories"
-          open={categoriesOpen}
-          setOpen={setCategoriesOpen}
-          items={categories}
-          selectedItems={selectedCategories}
-          handleChangeChecked={handleChangeCheckedCategory}
-          LiItemElement={FirstCategoryLevelLi}
-        />
-
-        <SidebarCheckboxesSection
           title="City"
           open={cityOpen}
           setOpen={setCityOpen}
@@ -199,6 +191,16 @@ const Sidebar = ({
           selectedItems={selectedCities}
           handleChangeChecked={handleChangeCheckedCity}
           LiItemElement={CityLi}
+        />
+
+        <SidebarCheckboxesSection
+          title="Categories"
+          open={categoriesOpen}
+          setOpen={setCategoriesOpen}
+          items={categories}
+          selectedItems={selectedCategories}
+          handleChangeChecked={handleChangeCheckedCategory}
+          LiItemElement={FirstCategoryLevelLi}
         />
       </aside>
     </>

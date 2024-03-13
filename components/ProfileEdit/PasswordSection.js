@@ -38,6 +38,7 @@ const PasswordSection = ({ formInfo }) => {
               setValue={setCurrentPassword}
               error={currentPasswordError}
               setError={setCurrentPasswordError}
+              name="current-password"
             >
               <i
                 className={`bx ${
@@ -56,6 +57,7 @@ const PasswordSection = ({ formInfo }) => {
               setValue={setPassword}
               error={passwordError}
               setError={setPasswordError}
+              name="new-password"
             >
               <i
                 className={`bx ${
@@ -74,6 +76,7 @@ const PasswordSection = ({ formInfo }) => {
               setValue={setConfirmPassword}
               error={confirmPasswordError}
               setError={setConfirmPasswordError}
+              name="confirm-new-password"
             >
               <i
                 className={`bx ${

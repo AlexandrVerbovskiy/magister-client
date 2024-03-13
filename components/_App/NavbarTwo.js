@@ -10,6 +10,7 @@ import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
+import useSearchCity from "../../hooks/useSearchCity";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
 
@@ -19,13 +20,14 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     success: mainSuccess,
     isSupport,
     onLogin,
+    error: mainError,
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
 
   const {
-    tipsPopupActive,
+    categoryTipsPopupActive,
     categoryTips,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
@@ -98,7 +100,11 @@ const NavbarTwo = ({ canShowSearch = true }) => {
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {
+      mainError.set(e.message);
+    }
   };
 
   const [userToAuth, setUserToAuth] = useState(null);
@@ -245,15 +251,16 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       placeholder="What are you looking for?"
                       ref={categoryFilterRef}
                       value={searchCategory}
+                      name="listingCategorySearch"
                       onFocus={openCategoryTipsPopup}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
                     />
 
                     <SearchTipsPopup
-                      active={tipsPopupActive}
-                      categoryTips={categoryTips}
-                      handleCategoryTipClick={handleCategoryTipClick}
+                      active={categoryTipsPopupActive}
+                      tips={categoryTips}
+                      handleTipClick={handleCategoryTipClick}
                     />
                   </form>
                 )}
@@ -262,6 +269,12 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                   <li className="nav-item">
                     <Link href="/" className="nav-link">
                       Home
+                    </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link href="/listing-list" className="nav-link">
+                      Listings
                     </Link>
                   </li>
 
@@ -338,6 +351,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                           type="text"
                           className="input-search"
                           placeholder="What are you looking for?"
+                          name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}
                           onFocus={openCategoryTipsPopup}
@@ -346,9 +360,9 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                         />
 
                         <SearchTipsPopup
-                          active={tipsPopupActive}
-                          categoryTips={categoryTips}
-                          handleCategoryTipClick={handleCategoryTipClick}
+                          active={categoryTipsPopupActive}
+                          tips={categoryTips}
+                          handleTipClick={handleCategoryTipClick}
                         />
                       </form>
                     </div>
@@ -369,12 +383,6 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       </span>
                     </div>
                   )}
-
-                  {/*<div className="option-item">
-                    <Link href="/dashboard/add-listing" className="default-btn">
-                      <i className="flaticon-more"></i> Add Listing
-                    </Link>
-                  </div>*/}
                 </div>
               </div>
             </div>
@@ -442,7 +450,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     </TabList>
                   </ul>
 
-                  <div className="tab-content" id="myTabContent">
+                  <div className="tab-content">
                     <TabPanel>
                       <LoginTab
                         activePopup={displayAuth}

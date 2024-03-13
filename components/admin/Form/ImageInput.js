@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import env from "../../../env";
 import ErrorSpan from "../ErrorSpan";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
+import STATIC from "../../../static";
 
 const ImageInput = ({
   label = null,
@@ -18,7 +18,7 @@ const ImageInput = ({
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
-  if (!defaultUrl) defaultUrl = defaultPhotoLink;
+  if (!defaultUrl) defaultUrl = STATIC.defaultPhotoLink;
 
   const handleChange = (e) => {
     setError(null);
@@ -44,7 +44,7 @@ const ImageInput = ({
         <div className="mr-4">
           <img
             className="cursor-pointer w-20 h-20 rounded-full"
-            src={photoUrl ?? defaultPhotoLink}
+            src={photoUrl ?? defaultUrl}
             width="80"
             height="80"
             alt="User upload"

@@ -35,7 +35,7 @@ const ImageView = ({
         onClick={handleImageClick}
       >
         <img src={path} />
-        <input {...inputProps} />
+        <input name="image[]" {...inputProps} />
         <button
           type="button"
           className="default-btn remove-file-btn"
@@ -224,11 +224,13 @@ const EditPhotosSection = ({
             onChange={handleChangePhotoPopupType}
             options={linkTypeOptions}
             isSearchable={false}
+            name="photoPopupType"
           />
 
           {photoPopupType !== "storage" && (
             <div style={{ marginBottom: "15px" }}>
               <InputWithIcon
+                name="photoPopupLink"
                 value={photoPopupLink}
                 onInput={(e) => setPhotoPopupLink(e.target.value)}
                 placeholder="https://storage.google.com"
@@ -259,14 +261,14 @@ const EditPhotosSection = ({
               {!photoPopupPhoto && photoPopupLink && (
                 <div className="invoice-btn-box gallery-flex form-group">
                   <img src={getListingImageByType(photoPopupLink, "storage")} />
-                  <input {...getInputPropsPopup()} />
+                  <input name="modalImage" {...getInputPropsPopup()} />
                 </div>
               )}
 
               {photoPopupPhoto && (
                 <div className="invoice-btn-box gallery-flex form-group">
                   <img src={photoPopupPhoto.preview} />
-                  <input {...getInputPropsPopup()} />
+                  <input name="modalImage" {...getInputPropsPopup()} />
                 </div>
               )}
             </div>

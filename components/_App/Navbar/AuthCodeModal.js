@@ -6,13 +6,10 @@ const AuthCodeModal = ({
   handleChangeCode,
   codeModalError,
   handleCheckCode,
-  handleClose
+  handleClose,
 }) => {
   return (
-    <BaseModal
-      active={codeModalActive}
-      toggleActive={handleClose}
-    >
+    <BaseModal active={codeModalActive} toggleActive={handleClose}>
       <span className="sub-title mb-2">
         <span>Enter Verified Code</span>
       </span>
@@ -20,6 +17,7 @@ const AuthCodeModal = ({
       <form method="get">
         <div className="form-group">
           <input
+            name="verifyCode"
             value={code}
             onInput={handleChangeCode}
             type="text"

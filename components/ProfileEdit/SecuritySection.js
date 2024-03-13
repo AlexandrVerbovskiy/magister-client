@@ -17,6 +17,7 @@ const SecuritySection = ({ formInfo }) => {
                 type="checkbox"
                 checked={user.twoFactorAuthentication}
                 onChange={handleTwoFactorAuthChange}
+                name="twoFactorCode"
               />
               <span></span>
             </label>

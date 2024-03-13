@@ -1,18 +1,29 @@
 import React, { useState, useRef } from "react";
 import useSearchCategory from "./useSearchCategory";
+import useSearchCity from "./useSearchCity";
 
-const useCategoryLocation = () => {
+const useCategoryCity = () => {
   const categoryFilterRef = useRef(null);
+  const cityFilterRef = useRef(null);
+
   const {
-    tipsPopupActive,
+    categoryTipsPopupActive,
     categoryTips,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
     updateCategoryTips,
   } = useSearchCategory();
 
+  const {
+    cityTipsPopupActive,
+    cityTips,
+    openCityTipsPopup,
+    closeCityTipsPopup,
+    updateCityTips,
+  } = useSearchCity();
+
   const [searchCategory, setSearchCategory] = useState("");
-  const [searchLocation, setSearchLocation] = useState("");
+  const [searchCity, setSearchCity] = useState("");
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
@@ -26,23 +37,36 @@ const useCategoryLocation = () => {
     updateCategoryTips(value);
   };
 
-  const handleChangeLocation = (e) => {
-    const newLocation = e.target.value;
-    setSearchLocation(newLocation);
+  const handleChangeCity = (e) => {
+    const newCity = e.target.value;
+    updateCityTips(newCity);
+    setSearchCity(newCity);
+  };
+
+  const handleCityTipClick = (value) => {
+    cityFilterRef.current.blur();
+    setSearchCity(value);
+    updateCityTips(value);
   };
 
   return {
-    handleChangeLocation,
+    handleChangeCity,
     handleCategoryTipClick,
     handleChangeCategory,
+    handleCityTipClick,
     searchCategory,
-    searchLocation,
-    tipsPopupActive,
+    searchCity,
+    categoryTipsPopupActive,
     categoryTips,
+    cityTipsPopupActive,
+    cityTips,
+    openCityTipsPopup,
+    closeCityTipsPopup,
     openCategoryTipsPopup,
     closeCategoryTipsPopup,
     categoryFilterRef,
+    cityFilterRef,
   };
 };
 
-export default useCategoryLocation;
+export default useCategoryCity;

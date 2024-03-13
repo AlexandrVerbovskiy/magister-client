@@ -1,8 +1,9 @@
 import { useState } from "react";
 import env from "../../env";
 import ErrorSpan from "../ErrorSpan";
+import ImagePopup from "../_App/ImagePopup";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
+import STATIC from "../../static";
 
 const ImageInput = ({
   label = null,
@@ -17,7 +18,7 @@ const ImageInput = ({
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  if (!defaultUrl) defaultUrl = defaultPhotoLink;
+  if (!defaultUrl) defaultUrl = STATIC.defaultPhotoLink;
 
   if (!fileSizeLimit) fileSizeLimit = env.MAX_FILE_SIZE;
 
@@ -72,31 +73,11 @@ const ImageInput = ({
 
       <ErrorSpan error={error} className="d-block mt-0 position-absolute" />
 
-      {isPopupOpen && (
-        <div className="view-picture-parent bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div
-            className="modal fade show"
-            style={{ display: "block" }}
-            tabIndex="-1"
-            onClick={closeImagePopup}
-          >
-            <div
-              className="modal-dialog modal-dialog-centered modal-xl"
-              style={{ maxWidth: "42rem" }}
-            >
-              <div className="modal-content">
-                <div className="modal-body">
-                  <img
-                    src={photoUrl ?? defaultUrl}
-                    alt="image"
-                    className="img-fluid"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ImagePopup
+        open={isPopupOpen}
+        close={closeImagePopup}
+        photoUrl={photoUrl}
+      />
     </div>
   );
 };

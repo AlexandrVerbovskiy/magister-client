@@ -4,6 +4,7 @@ const TextareaView = ({
   placeholder = "",
   rows = "6",
   labelClassName = "sr-only",
+  name = null,
 }) => {
   return (
     <>
@@ -14,6 +15,7 @@ const TextareaView = ({
         value={value}
         placeholder={placeholder}
         readOnly={true}
+        name={name}
       />
     </>
   );

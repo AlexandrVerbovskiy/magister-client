@@ -518,48 +518,50 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </li>
               )}
 
-              {/* Users Verify Request */}
-              <li
-                className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                  isCurrentPath("listing-approval-requests") && "bg-slate-900"
-                }`}
-              >
-                <Link
-                  href="/admin/listing-approval-requests"
-                  className={`block text-slate-200 truncate transition duration-150 ${
-                    isCurrentPath("listing-approval-requests")
-                      ? "hover:text-slate-200"
-                      : "hover:text-white"
+              {/* Listing Approve Request */}
+              {isAdmin && (
+                <li
+                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                    isCurrentPath("listing-approval-requests") && "bg-slate-900"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        height="24"
-                        width="24"
-                        viewBox="0 0 20 20"
-                      >
-                        <title>clipboard check</title>
-                        <g fill="none" className="nc-icon-wrapper">
-                          <path
-                            d="M12.75,2h-.275c-.123-.846-.845-1.5-1.725-1.5h-3.5c-.879,0-1.602,.654-1.725,1.5h-.275c-1.517,0-2.75,1.233-2.75,2.75V14.25c0,1.517,1.233,2.75,2.75,2.75h7.5c1.517,0,2.75-1.233,2.75-2.75V4.75c0-1.517-1.233-2.75-2.75-2.75Zm-5.75,.25c0-.138,.112-.25,.25-.25h3.5c.138,0,.25,.112,.25,.25v1c0,.138-.112,.25-.25,.25h-3.5c-.138,0-.25-.112-.25-.25v-1Zm5.35,5.45l-3.75,5c-.136,.181-.346,.291-.572,.299-.009,0-.019,0-.028,0-.216,0-.422-.093-.564-.256l-1.75-2c-.273-.312-.241-.785,.071-1.058s.785-.242,1.058,.071l1.141,1.303,3.195-4.26c.249-.331,.719-.397,1.05-.15,.331,.249,.398,.719,.15,1.05Z"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-approval-requests")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          ></path>
-                        </g>
-                      </svg>
+                  <Link
+                    href="/admin/listing-approval-requests"
+                    className={`block text-slate-200 truncate transition duration-150 ${
+                      isCurrentPath("listing-approval-requests")
+                        ? "hover:text-slate-200"
+                        : "hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24"
+                          width="24"
+                          viewBox="0 0 20 20"
+                        >
+                          <title>clipboard check</title>
+                          <g fill="none" className="nc-icon-wrapper">
+                            <path
+                              d="M12.75,2h-.275c-.123-.846-.845-1.5-1.725-1.5h-3.5c-.879,0-1.602,.654-1.725,1.5h-.275c-1.517,0-2.75,1.233-2.75,2.75V14.25c0,1.517,1.233,2.75,2.75,2.75h7.5c1.517,0,2.75-1.233,2.75-2.75V4.75c0-1.517-1.233-2.75-2.75-2.75Zm-5.75,.25c0-.138,.112-.25,.25-.25h3.5c.138,0,.25,.112,.25,.25v1c0,.138-.112,.25-.25,.25h-3.5c-.138,0-.25-.112-.25-.25v-1Zm5.35,5.45l-3.75,5c-.136,.181-.346,.291-.572,.299-.009,0-.019,0-.028,0-.216,0-.422-.093-.564-.256l-1.75-2c-.273-.312-.241-.785,.071-1.058s.785-.242,1.058,.071l1.141,1.303,3.195-4.26c.249-.331,.719-.397,1.05-.15,.331,.249,.398,.719,.15,1.05Z"
+                              className={`stroke-current ${
+                                isCurrentPath("listing-approval-requests")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            ></path>
+                          </g>
+                        </svg>
 
-                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                        Listing Approve Requests
-                      </span>
+                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                          Listing Approve Requests
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </li>
+                  </Link>
+                </li>
+              )}
 
               {/* Searched Words*/}
               {isAdmin && (

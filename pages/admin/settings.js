@@ -15,12 +15,16 @@ import { IndiceContext } from "../../contexts";
 const Settings = ({ userLogActive: baseUserLogActive }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [userLogActive, setUserLogActive] = useState(baseUserLogActive);
-  const { authToken, success } = useContext(IndiceContext);
+  const { authToken, success, error } = useContext(IndiceContext);
 
   const handleChange = async (value) => {
-    const res = await setUserLogActiveRequest(value, authToken);
-    success.set("Operation done success");
-    setUserLogActive(res);
+    try {
+      const res = await setUserLogActiveRequest(value, authToken);
+      success.set("Operation done success");
+      setUserLogActive(res);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -69,10 +73,8 @@ const Settings = ({ userLogActive: baseUserLogActive }) => {
   );
 };
 
-const boostServerSideProps = async ({baseSideProps}) => {
-  const userLogActive = await getUserLogActiveRequest(
-    baseSideProps.authToken
-  );
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const userLogActive = await getUserLogActiveRequest(baseSideProps.authToken);
 
   return { userLogActive };
 };

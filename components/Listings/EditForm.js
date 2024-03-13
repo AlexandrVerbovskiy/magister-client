@@ -217,8 +217,12 @@ const EditForm = ({
 
   const listingToState = () => {
     const city = listing.city ?? baseCity;
-    const lat = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lat;
-    const lng = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lng;
+    const lat = listing.rentalLat
+      ? Number(listing.rentalLat)
+      : STATIC.cityCoords[city].lat;
+    const lng = listing.rentalLng
+      ? Number(listing.rentalLng)
+      : STATIC.cityCoords[city].lng;
 
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -433,7 +437,7 @@ const EditForm = ({
   };
 
   const handleSendRequestToApprove = async () => {
-    if (disabled || sendRequestDisabled || !listing.id) return;
+    if (disabled || sendRequestDisabled) return;
 
     setSendRequestDisabled(true);
 
@@ -466,7 +470,7 @@ const EditForm = ({
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Add Listings</h1>
+          <h1>{listing.name ?? "Add Listings"}</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/">Home</Link>
@@ -477,7 +481,7 @@ const EditForm = ({
             <li className="item">
               <Link href="/settings/listings">Listings</Link>
             </li>
-            <li className="item">Add Listings</li>
+            <li className="item">{listing.name ?? "Add Listings"}</li>
           </ol>
         </div>
 
@@ -502,6 +506,7 @@ const EditForm = ({
                 value={name}
                 onInput={handleChangeName}
                 error={nameError}
+                name="name"
               />
             </div>
 
@@ -528,6 +533,7 @@ const EditForm = ({
                 value={keyWords}
                 onInput={handleChangeKeyWords}
                 error={keyWordsError}
+                name="keywords"
               />
             </div>
           </div>
@@ -545,6 +551,7 @@ const EditForm = ({
                 value={pricePerDay}
                 onInput={handleChangePricePerDay}
                 error={pricePerDayError}
+                name="pricePerDay"
               />
             </div>
             <div className="col-lg-6 col-md-6">
@@ -555,6 +562,7 @@ const EditForm = ({
                 value={compensationCost}
                 onInput={handleChangeCompensationCost}
                 error={compensationCostError}
+                name="compensationCostError"
               />
             </div>
 
@@ -566,6 +574,7 @@ const EditForm = ({
                 value={minRentalDays}
                 onInput={handleChangeMinRentalDays}
                 error={minRentalDaysError}
+                name="minRentalDays"
               />
             </div>
 
@@ -577,6 +586,7 @@ const EditForm = ({
                 value={countStoredItems}
                 onInput={handleChangeCountStoredItems}
                 error={countStoredItemsError}
+                name="countStoredItems"
               />
             </div>
           </div>
@@ -594,6 +604,7 @@ const EditForm = ({
                 icon="bx bx-menu-alt-left"
                 options={cityOptions}
                 isSearchable={false}
+                name="city"
               />
             </div>
 
@@ -605,6 +616,7 @@ const EditForm = ({
                 value={postcode}
                 onInput={handleChangePostcode}
                 error={postcodeError}
+                name="postcode"
               />
             </div>
           </div>
@@ -650,6 +662,7 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-12 col-md-12">
               <TextareaWithIcon
+                name="description"
                 value={description}
                 onChange={handleChangeDescription}
                 icon="bx bx-text"
@@ -667,6 +680,7 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-12 col-md-12">
               <TextareaWithIcon
+                name="rentalTerms"
                 value={rentalTerms}
                 onChange={handleChangeRentalTerms}
                 icon="bx bx-text"
@@ -689,11 +703,15 @@ const EditForm = ({
 
         <div className="add-listings-box footer-section">
           <div className="d-flex gap-2 justify-content-between">
-            <button type="button" disabled={disabled} onClick={handleSubmit}>
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => handleSubmit(true)}
+            >
               Submit Listings
             </button>
 
-            {canSendRequest && (
+            {canSendRequest && listing.id && (
               <button
                 type="button"
                 onClick={activateSendRequestPopup}

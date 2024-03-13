@@ -279,3 +279,7 @@ Preloader Area CSS
     opacity: 0;
   }
 }
+
+.category-image-parent img{
+  border-radius: 0!important;
+}

@@ -146,6 +146,7 @@ const LoginTab = ({
 
           <form>
             <Input
+              name="email"
               type="text"
               value={email}
               placeholder="Email"
@@ -154,6 +155,7 @@ const LoginTab = ({
             />
 
             <Input
+              name="password"
               type="password"
               value={password}
               placeholder="Password"
@@ -163,6 +165,7 @@ const LoginTab = ({
 
             <div className="form-group form-check">
               <input
+                name="rememberMe"
                 type="checkbox"
                 className={`form-check-input`}
                 id="remember-me"

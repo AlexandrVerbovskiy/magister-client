@@ -13,6 +13,7 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
         className="form-input pl-9 bg-white dark:bg-slate-800"
         type="search"
         placeholder={placeholder}
+        name="search"
       />
       <button
         className="absolute inset-0 right-auto group"

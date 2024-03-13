@@ -7,8 +7,8 @@ import {
 import ENV from "../../env";
 import { useRef } from "react";
 
-const defaultMarker = require("../../public/images/maps/default-marker.svg").default
-  .src;
+const defaultMarker = require("../../public/images/maps/default-marker.svg")
+  .default.src;
 
 const EditMap = ({
   markerActive,
@@ -99,12 +99,12 @@ const EditMap = ({
             const newLat = center.lat();
             const newLng = center.lng();
 
-            if ((lat == newLat, lng == newLng)) {
+            if ((lat == newLat && lng == newLng)) {
               return;
             }
 
-            setLat(lat);
-            setLng(lng);
+            setLat(newLat);
+            setLng(newLng);
           }}
           onDrag={(e) => {
             if (!e) return;

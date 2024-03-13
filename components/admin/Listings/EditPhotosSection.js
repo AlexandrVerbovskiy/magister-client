@@ -34,7 +34,7 @@ const ImageView = ({
         onClick={handleImageClick}
       >
         <img src={path} className="object-cover w-full h-auto" />
-        <input {...inputProps} className="mt-2" />
+        <input name="image[]" {...inputProps} className="mt-2" />
         <button
           type="button"
           className="remove-file-btn bg-indigo-500 text-white px-4 py-2 mt-2 rounded-md hover:bg-indigo-600"
@@ -74,7 +74,7 @@ const EditPhotosSection = ({
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
-      maxFiles:env.MAX_FILE_SIZE,
+      maxFiles: env.MAX_FILE_SIZE,
       accept: acceptImageOptions,
       onDrop: (acceptedFiles) => {
         const newFiles = acceptedFiles.slice(
@@ -202,7 +202,7 @@ const EditPhotosSection = ({
           )}
 
           {fileError && (
-            <div className="col-12 form-group">
+            <div className="w-full form-group p-2">
               <div
                 className="is-invalid"
                 style={{ marginBottom: "10px", marginTop: "-15px" }}
@@ -238,6 +238,7 @@ const EditPhotosSection = ({
                 {photoPopupType !== "storage" && (
                   <div className="mb-4">
                     <Input
+                      name="photoPopupLink"
                       placeholder="https://storage.google.com"
                       labelClassName="block text-sm font-medium mb-1"
                       value={photoPopupLink}
@@ -271,14 +272,20 @@ const EditPhotosSection = ({
                         <img
                           src={getListingImageByType(photoPopupLink, "storage")}
                         />
-                        <input {...getInputPropsPopup()} />
+                        <input
+                          name="modalPhotoInput"
+                          {...getInputPropsPopup()}
+                        />
                       </div>
                     )}
 
                     {photoPopupPhoto && (
                       <div className="invoice-btn-box gallery-flex form-group bg-gray-100 cursor-pointer">
                         <img src={photoPopupPhoto.preview} />
-                        <input {...getInputPropsPopup()} />
+                        <input
+                          name="modalPhotoInput"
+                          {...getInputPropsPopup()}
+                        />
                       </div>
                     )}
                   </div>

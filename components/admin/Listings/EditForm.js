@@ -21,6 +21,7 @@ import {
 } from "../../../utils";
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
+import ErrorSpan from "../ErrorSpan";
 
 const categoryLevelOptions = [
   { value: "firstLevel", title: "First Level", default: true },
@@ -73,6 +74,8 @@ const EditForm = ({ listing, categories, save }) => {
   const [approved, setApproved] = useState(false);
 
   const [ownerId, setOwnerId] = useState(null);
+  const [ownerIdError, setOwnerIdError] = useState(null);
+
   const [ownerName, setOwnerName] = useState("");
 
   const [name, setName] = useState("");
@@ -148,6 +151,7 @@ const EditForm = ({ listing, categories, save }) => {
     setMinRentalDays(data.minRentalDays);
     setLat(data.rentalLat);
     setLng(data.rentalLng);
+    setCenter({ lat: data.rentalLat, lng: data.rentalLng });
     setRadius(data.rentalRadius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
@@ -165,8 +169,12 @@ const EditForm = ({ listing, categories, save }) => {
 
   const listingToState = () => {
     const city = prevListing.city ?? baseCity;
-    const lat = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lat;
-    const lng = (STATIC.cityCoords[city] ?? STATIC.cityCoords[baseCity]).lng;
+    const lat = prevListing.rentalLat
+      ? Number(prevListing.rentalLat)
+      : STATIC.cityCoords[city].lat;
+    const lng = prevListing.rentalLng
+      ? Number(prevListing.rentalLng)
+      : STATIC.cityCoords[city].lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -313,6 +321,11 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
+      if (!ownerId) {
+        setOwnerIdError("Required field");
+        hasError = true;
+      }
+
       if (pricePerDay && validatePrice(pricePerDay) !== true) {
         setPricePerDayError(validatePrice(pricePerDay));
         hasError = true;
@@ -356,7 +369,8 @@ const EditForm = ({ listing, categories, save }) => {
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
         setPrevListing((prev) => ({
           ...prev,
-          listingImages: [...res.listingImages],
+          ...res,
+          approved: res.approved === "true",
         }));
       }
 
@@ -373,6 +387,7 @@ const EditForm = ({ listing, categories, save }) => {
   const handleChangeOwner = (ownerId, ownerName) => {
     setOwnerId(ownerId);
     setOwnerName(ownerName);
+    setOwnerIdError(null);
   };
 
   return (
@@ -410,6 +425,7 @@ const EditForm = ({ listing, categories, save }) => {
                         <div className="flex flex-col gap-2">
                           <div className="w-full">
                             <Input
+                              name="name"
                               value={name}
                               setValue={setName}
                               error={nameError}
@@ -424,6 +440,7 @@ const EditForm = ({ listing, categories, save }) => {
                           <div className="flex w-full gap-2">
                             <div className=" w-full sm:w-1/2">
                               <Input
+                                name="keyWords"
                                 label="Keywords:"
                                 placeholder="Maximum 15, should be separated by commas"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -450,6 +467,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 onChange={handleChangeOwner}
                                 selectedTitle={ownerName}
                               />
+                              <ErrorSpan error={ownerIdError} />
                             </div>
                           </div>
                           <div className="flex w-full gap-2">
@@ -499,6 +517,7 @@ const EditForm = ({ listing, categories, save }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <Input
+                                name="pricePerPay"
                                 value={pricePerDay}
                                 setValue={setPricePerDay}
                                 error={pricePerDayError}
@@ -512,6 +531,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                             <div className="w-full sm:w-1/2">
                               <Input
+                                name="compensationCost"
                                 label="Item value"
                                 placeholder="532.00"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -527,6 +547,7 @@ const EditForm = ({ listing, categories, save }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <Input
+                                name="minRentalDays"
                                 value={minRentalDays}
                                 setValue={setMinRentalDays}
                                 error={minRentalDaysError}
@@ -540,6 +561,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                             <div className="w-full sm:w-1/2">
                               <Input
+                                name="countStoredItems"
                                 label="Quantity"
                                 placeholder="1"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -578,6 +600,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                             <div className="w-full sm:w-1/2">
                               <Input
+                                name="postcode"
                                 label="Postcode"
                                 placeholder="e.g. 55 County Laois"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -635,6 +658,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                         <div className="w-full">
                           <Textarea
+                            name="description"
                             value={description}
                             setValue={setDescription}
                             row="7"
@@ -651,6 +675,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                         <div className="w-full">
                           <Textarea
+                            name="rentalTerms"
                             value={rentalTerms}
                             setValue={setRentalTerms}
                             row="7"

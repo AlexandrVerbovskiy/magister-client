@@ -38,6 +38,7 @@ const CategorySelect = ({
 
   return (
     <Select
+      name="selectedCategory"
       options={options}
       value={selectedOption}
       onChange={handleChangeCategory}

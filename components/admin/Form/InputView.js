@@ -5,11 +5,13 @@ const InputView = ({
   placeholder = "",
   labelClassName = "sr-only",
   inputClassName = "form-input",
+  name = null,
 }) => {
   return (
     <>
       {label && <label className={labelClassName}>{label}</label>}
       <input
+        name={name}
         className={inputClassName}
         type={type}
         value={value}

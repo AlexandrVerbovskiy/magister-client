@@ -27,7 +27,7 @@ const WithLeftSidebar = () => {
                   <div className="d-flex justify-content-end">
                     <div className="select-box">
                       <label>Sort By:</label>
-                      <select className="blog-select">
+                      <select name="orderSelect" className="blog-select">
                         <option>Recommended</option>
                         <option>Default</option>
                         <option>Popularity</option>

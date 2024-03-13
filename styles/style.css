@@ -3208,6 +3208,10 @@ Features Area CSS
   transition: var(--transition);
   padding: 40px 20px;
   border-radius: 5px;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .single-features-box .icon {
   margin-bottom: 25px;
@@ -17033,6 +17037,10 @@ Preloader Area CSS
   border-color: #d5d5d5 !important;
 }
 
+.page-numbers.disabled.next {
+  box-shadow: 3px 3px #d5d5d5 !important;
+}
+
 .page-numbers.disabled:hover {
   color: gray !important;
   background-color: var(--whiteColor);
@@ -17223,7 +17231,7 @@ Preloader Area CSS
   flex-direction: column;
 }
 
-.send-create-listing-category-notification button{
+.send-create-listing-category-notification button {
   margin-bottom: 20px;
 }
 
@@ -17239,7 +17247,11 @@ Preloader Area CSS
   margin-bottom: 20px;
 }
 
-.all-listings-list>.row:has(.no-listing-found),
-.all-listings-list>.row:has(.send-create-listing-category-notification){
+.all-listings-list > .row:has(.no-listing-found),
+.all-listings-list > .row:has(.send-create-listing-category-notification) {
   height: 100%;
+}
+
+.single-category-box .icon:has(img) {
+  line-height: normal!important;
 }

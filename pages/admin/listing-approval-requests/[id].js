@@ -66,25 +66,35 @@ const ListingApprovalRequest = ({
       return;
     }
 
-    setRejectModalOpen(false);
-    await rejectListingApproveRequest(
-      { listingId: listing.id, description: declineDescription },
-      authToken
-    );
-    setRequest((prev) => ({
-      ...prev,
-      approved: false,
-      rejectDescription: declineDescription,
-    }));
-    success.set("Rejected successfully");
+    try {
+      await rejectListingApproveRequest(
+        { listingId: listing.id, description: declineDescription },
+        authToken
+      );
+
+      setRejectModalOpen(false);
+
+      setRequest((prev) => ({
+        ...prev,
+        approved: false,
+        rejectDescription: declineDescription,
+      }));
+      success.set("Rejected successfully");
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   const handleApproveAcceptClick = async () => {
-    setApproveModalOpen(false);
-    await approveListingApprovalRequest({ listingId: listing.id }, authToken);
-    setListing((prev) => ({ ...prev, approved: true }));
-    setRequest((prev) => ({ ...prev, approved: true }));
-    success.set("Approved successfully");
+    try {
+      await approveListingApprovalRequest({ listingId: listing.id }, authToken);
+      setApproveModalOpen(false);
+      setListing((prev) => ({ ...prev, approved: true }));
+      setRequest((prev) => ({ ...prev, approved: true }));
+      success.set("Approved successfully");
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -126,6 +136,7 @@ const ListingApprovalRequest = ({
                           <InputView
                             value={listing.name}
                             label="User Name"
+                            name="name"
                             placeholder="Name of tool"
                             labelClassName="block text-sm font-medium mb-1"
                             inputClassName="form-input w-full"
@@ -136,6 +147,7 @@ const ListingApprovalRequest = ({
                           <div className=" w-full sm:w-1/2">
                             <InputView
                               label="Keywords:"
+                              name="keyWords"
                               placeholder="Maximum 15, should be separated by commas"
                               labelClassName="block text-sm font-medium mb-1"
                               value={listing.keyWords}
@@ -147,6 +159,7 @@ const ListingApprovalRequest = ({
                             <InputView
                               value={listing.userName}
                               label="Owner"
+                              name="owner"
                               placeholder="owner"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -158,6 +171,7 @@ const ListingApprovalRequest = ({
                             <InputView
                               value={categoryLevelLabel}
                               label="Category level"
+                              name="categoryLevelLabel"
                               placeholder="category"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -169,6 +183,7 @@ const ListingApprovalRequest = ({
                               value={listing.categoryName}
                               label="Category"
                               placeholder="category"
+                              name="categoryName"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -187,6 +202,7 @@ const ListingApprovalRequest = ({
                           <div className="w-full sm:w-1/2">
                             <InputView
                               value={listing.pricePerDay}
+                              name="pricePerDay"
                               label="Rental price per day"
                               placeholder="12.00"
                               labelClassName="block text-sm font-medium mb-1"
@@ -197,6 +213,7 @@ const ListingApprovalRequest = ({
                           <div className="w-full sm:w-1/2">
                             <InputView
                               label="Item value"
+                              name="compensationCost"
                               placeholder="532.00"
                               labelClassName="block text-sm font-medium mb-1"
                               value={listing.compensationCost}
@@ -209,6 +226,7 @@ const ListingApprovalRequest = ({
                           <div className="w-full sm:w-1/2">
                             <InputView
                               value={listing.minRentalDays}
+                              name="minRentalDays"
                               label="Min rental days"
                               placeholder="0"
                               labelClassName="block text-sm font-medium mb-1"
@@ -219,6 +237,7 @@ const ListingApprovalRequest = ({
                           <div className="w-full sm:w-1/2">
                             <InputView
                               label="Quantity"
+                              name="countStoredItems"
                               placeholder="1"
                               labelClassName="block text-sm font-medium mb-1"
                               value={listing.countStoredItems}
@@ -238,6 +257,7 @@ const ListingApprovalRequest = ({
                         <div className="flex w-full gap-2">
                           <div className="w-full sm:w-1/2">
                             <InputView
+                              name="city"
                               label="City"
                               placeholder="City"
                               labelClassName="block text-sm font-medium mb-1"
@@ -248,6 +268,7 @@ const ListingApprovalRequest = ({
 
                           <div className="w-full sm:w-1/2">
                             <InputView
+                              name="postcode"
                               label="Postcode"
                               placeholder="e.g. 55 County Laois"
                               labelClassName="block text-sm font-medium mb-1"
@@ -265,7 +286,11 @@ const ListingApprovalRequest = ({
                       </h2>
 
                       <div className="w-full">
-                        <TextareaView value={listing.description} row="7" />
+                        <TextareaView
+                          name="description"
+                          value={listing.description}
+                          row="7"
+                        />
                       </div>
                     </section>
 
@@ -275,7 +300,11 @@ const ListingApprovalRequest = ({
                       </h2>
 
                       <div className="w-full">
-                        <TextareaView value={listing.rentalTerms} row="7" />
+                        <TextareaView
+                          name="rentalTerms"
+                          value={listing.rentalTerms}
+                          row="7"
+                        />
                       </div>
                     </section>
 
@@ -375,6 +404,7 @@ const ListingApprovalRequest = ({
 
               <div className="mb-2">
                 <textarea
+                  name="declineDescription"
                   className="form-input w-full"
                   rows="6"
                   value={declineDescription}

@@ -56,10 +56,7 @@ const ProfileSection = ({ formInfo }) => {
       <form method="get">
         <div className="row">
           <div className="col-lg-12 col-md-12">
-            <ImageInput
-              photoUrl={photoUrl}
-              onChange={handlePhotoChange}
-            />
+            <ImageInput photoUrl={photoUrl} onChange={handlePhotoChange} />
           </div>
 
           <div className="col-lg-6 col-md-12">
@@ -70,6 +67,7 @@ const ProfileSection = ({ formInfo }) => {
               setValue={setName}
               error={nameError}
               setError={setNameError}
+              name="name"
             />
           </div>
 
@@ -81,6 +79,7 @@ const ProfileSection = ({ formInfo }) => {
                 className="form-control"
                 value={user.email}
                 readOnly={true}
+                name="email"
               />
             </div>
           </div>
@@ -93,6 +92,7 @@ const ProfileSection = ({ formInfo }) => {
                 type="text"
                 setValue={setPhone}
                 setError={setPhoneError}
+                name="phone"
               />
             </div>
 
@@ -127,6 +127,7 @@ const ProfileSection = ({ formInfo }) => {
               setValue={setBriefBio}
               error={briefBioError}
               setError={setBriefBioError}
+              name="bio"
             />
           </div>
 
@@ -139,6 +140,7 @@ const ProfileSection = ({ formInfo }) => {
               setValue={setContactDetails}
               error={contactDetailsError}
               setError={setContactDetailsError}
+              name="contactDetails"
             />
           </div>
 
@@ -151,6 +153,7 @@ const ProfileSection = ({ formInfo }) => {
               setValue={setPlaceWork}
               error={placeWorkError}
               setError={setPlaceWorkError}
+              name="placeWork"
             />
           </div>
 
@@ -163,6 +166,7 @@ const ProfileSection = ({ formInfo }) => {
               placeholder="https://www.facebook.com/"
               error={facebookUrlError}
               setError={setFacebookUrlError}
+              name="facebookUrl"
             />
           </div>
 
@@ -175,6 +179,7 @@ const ProfileSection = ({ formInfo }) => {
               placeholder="https://twitter.com/"
               error={twitterUrlError}
               setError={setTwitterUrlError}
+              name="twitterUrl"
             />
           </div>
 
@@ -187,6 +192,7 @@ const ProfileSection = ({ formInfo }) => {
               placeholder="https://www.linkedin.com/"
               error={linkedinUrlError}
               setError={setLinkedinUrlError}
+              name="linkedinUrl"
             />
           </div>
 
@@ -199,6 +205,7 @@ const ProfileSection = ({ formInfo }) => {
               placeholder="https://instagram.com/"
               error={instagramUrlError}
               setError={setInstagramUrlError}
+              name="instagramUrl"
             />
           </div>
 

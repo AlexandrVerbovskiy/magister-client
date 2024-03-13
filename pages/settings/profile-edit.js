@@ -519,6 +519,7 @@ const ProfileEdit = () => {
               onInput={handleInputPhoneCode}
               type="text"
               placeholder="Code"
+              name="phoneCode"
               className="form-control"
             />
           </div>

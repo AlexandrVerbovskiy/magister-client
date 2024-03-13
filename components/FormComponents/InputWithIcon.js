@@ -9,6 +9,7 @@ const InputWithIcon = ({
   error = null,
   type = "text",
   style = {},
+  name = null,
 }) => (
   <ErrorIconWrapper label={label} icon={icon} error={error}>
     <input
@@ -18,6 +19,7 @@ const InputWithIcon = ({
       className={`form-control ${error ? "is-invalid" : ""}`}
       placeholder={placeholder}
       style={style}
+      name={name}
     />
   </ErrorIconWrapper>
 );
