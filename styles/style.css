@@ -95,7 +95,7 @@ a {
   color: var(--blackColor);
   transition: var(--transition);
   text-decoration: none;
-  outline: 0 !important;
+  outline: 0!important;
 }
 a:hover {
   color: var(--mainColor);
@@ -103,7 +103,7 @@ a:hover {
 }
 
 :focus {
-  outline: 0 !important;
+  outline: 0!important;
 }
 
 .d-table {
@@ -255,10 +255,10 @@ p:last-child {
 /*form-control*/
 .form-control {
   border-radius: 0;
-  background-color: #f5f5f5 !important;
-  box-shadow: unset !important;
+  background-color: #f5f5f5!important;
+  box-shadow: unset!important;
   transition: var(--transition);
-  border: none !important;
+  border: none!important;
   height: 45px;
   padding-left: 15px;
   color: var(--blackColor);
@@ -300,7 +300,7 @@ Navbar Area CSS
   width: 100%;
   z-index: 999;
   box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.09);
-  background-color: var(--whiteColor) !important;
+  background-color: var(--whiteColor)!important;
   animation: 500ms ease-in-out 0s normal none 1 running fadeInDown;
 }
 
@@ -466,7 +466,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: 250px;
+  left: -250px;
   visibility: hidden;
   margin-top: -12px;
 }
@@ -1121,7 +1121,7 @@ Navbar Area CSS
 .add-listing-link-btn,
 .miran-nav .navbar .others-option .option-item .default-btn {
   position: relative;
-  box-shadow: unset !important;
+  box-shadow: unset!important;
   border-radius: 30px;
   background-color: transparent;
   color: var(--mainColor);
@@ -1730,7 +1730,7 @@ Navbar Area CSS
   border-color: var(--mainColor);
 }
 .navbar-style-two.is-sticky {
-  background-color: var(--blackColor) !important;
+  background-color: var(--blackColor)!important;
 }
 .navbar-style-two .others-option-for-responsive .dot-menu .inner .circle {
   background-color: var(--whiteColor);
@@ -1853,7 +1853,7 @@ Navbar Area CSS
   .option-item
   .default-btn {
   position: relative;
-  box-shadow: unset !important;
+  box-shadow: unset!important;
   border-radius: 30px;
   background-color: transparent;
   color: var(--mainColor);
@@ -2015,10 +2015,10 @@ Navbar Area CSS
     background: var(--blackColor);
   }
   .miran-responsive-nav .dropdown-toggle::after {
-    display: none !important;
+    display: none!important;
   }
   .miran-responsive-nav .others-option {
-    display: none !important;
+    display: none!important;
   }
   .miran-responsive-nav .others-option .option-item {
     margin-left: 25px;
@@ -2059,7 +2059,7 @@ Navbar Area CSS
   }
   .miran-responsive-nav .others-option .option-item .default-btn {
     position: relative;
-    box-shadow: unset !important;
+    box-shadow: unset!important;
     border-radius: 30px;
     background-color: transparent;
     color: var(--mainColor);
@@ -2216,10 +2216,10 @@ Main Banner Area CSS
   padding-right: 20px;
 }
 .main-banner-content form .form-group .form-control {
-  border: none !important;
+  border: none!important;
   color: var(--blackColor);
-  box-shadow: unset !important;
-  background-color: transparent !important;
+  box-shadow: unset!important;
+  background-color: transparent!important;
   height: 60px;
   line-height: 60px;
   font-size: var(--fontSize);
@@ -2292,7 +2292,7 @@ Main Banner Area CSS
   font-weight: 500;
 }
 .main-banner-content form .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .main-banner-content form .form-group .nice-select .list .option:hover::before {
@@ -2305,7 +2305,7 @@ Main Banner Area CSS
   .nice-select
   .list
   .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .main-banner-content form .form-group .nice-select .list .option::before {
@@ -2335,7 +2335,7 @@ Main Banner Area CSS
   .nice-select
   .list
   .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .main-banner-content
@@ -2460,10 +2460,10 @@ Main Banner Area CSS
   padding-right: 20px;
 }
 .banner-content form .form-group .form-control {
-  border: none !important;
+  border: none!important;
   color: var(--blackColor);
-  box-shadow: unset !important;
-  background-color: transparent !important;
+  box-shadow: unset!important;
+  background-color: transparent!important;
   height: 60px;
   line-height: 60px;
   font-size: var(--fontSize);
@@ -2536,7 +2536,7 @@ Main Banner Area CSS
   font-weight: 500;
 }
 .banner-content form .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .banner-content form .form-group .nice-select .list .option:hover::before {
@@ -2544,7 +2544,7 @@ Main Banner Area CSS
 }
 .banner-content form .form-group .nice-select .list .option.focus,
 .banner-content form .form-group .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .banner-content form .form-group .nice-select .list .option::before {
@@ -2564,7 +2564,7 @@ Main Banner Area CSS
   visibility: visible;
 }
 .banner-content form .form-group .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .banner-content
@@ -2692,10 +2692,10 @@ Main Banner Area CSS
   padding-right: 20px;
 }
 .banner-wrapper-content form .form-group .form-control {
-  border: none !important;
+  border: none!important;
   color: var(--blackColor);
-  box-shadow: unset !important;
-  background-color: transparent !important;
+  box-shadow: unset!important;
+  background-color: transparent!important;
   height: 60px;
   line-height: 60px;
   font-size: var(--fontSize);
@@ -2768,7 +2768,7 @@ Main Banner Area CSS
   font-weight: 500;
 }
 .banner-wrapper-content form .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .banner-wrapper-content
@@ -2786,7 +2786,7 @@ Main Banner Area CSS
   .nice-select
   .list
   .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .banner-wrapper-content form .form-group .nice-select .list .option::before {
@@ -2816,7 +2816,7 @@ Main Banner Area CSS
   .nice-select
   .list
   .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .banner-wrapper-content
@@ -2999,10 +2999,10 @@ Main Banner Area CSS
   padding-right: 20px;
 }
 .map-home-area form .form-group .form-control {
-  border: none !important;
+  border: none!important;
   color: var(--blackColor);
-  box-shadow: unset !important;
-  background-color: transparent !important;
+  box-shadow: unset!important;
+  background-color: transparent!important;
   height: 60px;
   line-height: 60px;
   font-size: var(--fontSize);
@@ -3075,7 +3075,7 @@ Main Banner Area CSS
   font-weight: 500;
 }
 .map-home-area form .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .map-home-area form .form-group .nice-select .list .option:hover::before {
@@ -3083,7 +3083,7 @@ Main Banner Area CSS
 }
 .map-home-area form .form-group .nice-select .list .option.focus,
 .map-home-area form .form-group .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .map-home-area form .form-group .nice-select .list .option::before {
@@ -3103,7 +3103,7 @@ Main Banner Area CSS
   visibility: visible;
 }
 .map-home-area form .form-group .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .map-home-area
@@ -3410,9 +3410,9 @@ Listings Area CSS
   padding: 6px 8px;
 }
 .single-listings-box .listings-content .author img {
-  width: 30px !important;
+  width: 30px!important;
   height: 30px;
-  display: inline-block !important;
+  display: inline-block!important;
   border-radius: 50%;
 }
 .single-listings-box .listings-content .author span {
@@ -3623,9 +3623,9 @@ Listings Area CSS
   z-index: 2;
 }
 .single-listings-item .listings-image .author img {
-  width: 30px !important;
+  width: 30px!important;
   height: 30px;
-  display: inline-block !important;
+  display: inline-block!important;
   border-radius: 50%;
 }
 .single-listings-item .listings-image .author span {
@@ -3849,7 +3849,7 @@ Listings Area CSS
   font-weight: 600;
 }
 .listings-grid-sorting .ordering .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .listings-grid-sorting .ordering .nice-select .list .option:hover::before {
@@ -3857,7 +3857,7 @@ Listings Area CSS
 }
 .listings-grid-sorting .ordering .nice-select .list .option.focus,
 .listings-grid-sorting .ordering .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .listings-grid-sorting .ordering .nice-select .list .option::before {
@@ -3877,7 +3877,7 @@ Listings Area CSS
   visibility: visible;
 }
 .listings-grid-sorting .ordering .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .listings-grid-sorting
@@ -3906,7 +3906,7 @@ Listings Area CSS
 
 .all-listings-list {
   padding-right: 30px;
-  margin-left: 0 !important;
+  margin-left: 0!important;
   height: 100%;
 }
 
@@ -3971,7 +3971,7 @@ Listings Area CSS
 
 .map-popup-box {
   display: block;
-  width: 300px !important;
+  width: 300px!important;
   position: relative;
 }
 .map-popup-box .map-popup {
@@ -4144,22 +4144,22 @@ Listings Area CSS
 }
 
 .cluster {
-  width: 40px !important;
-  height: 40px !important;
+  width: 40px!important;
+  height: 40px!important;
 }
 .cluster img {
   display: none;
 }
 .cluster div {
   text-align: center;
-  font-size: 15px !important;
+  font-size: 15px!important;
   background: var(--whiteColor);
-  color: var(--blackColor) !important;
+  color: var(--blackColor)!important;
   font-weight: 600;
   border-radius: 100%;
-  width: 40px !important;
-  height: 40px !important;
-  line-height: 37px !important;
+  width: 40px!important;
+  height: 40px!important;
+  line-height: 37px!important;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.5);
   border: 2px solid var(--whiteColor);
   transition: var(--transition);
@@ -4167,7 +4167,7 @@ Listings Area CSS
 }
 .cluster div:hover {
   background: var(--mainColor);
-  color: var(--whiteColor) !important;
+  color: var(--whiteColor)!important;
   border-color: var(--mainColor);
 }
 
@@ -5233,8 +5233,8 @@ Listings Details Area CSS
   color: var(--whiteColor);
 }
 .listings-details-desc .review-form-wrapper form .form-control {
-  background-color: var(--whiteColor) !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+  background-color: var(--whiteColor)!important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12)!important;
 }
 
 .listings-sidebar {
@@ -5994,8 +5994,8 @@ Category Area CSS
 }
 .single-category-box.more-categories .icon {
   margin-top: 14px;
-  background-color: var(--whiteColor) !important;
-  color: var(--mainColor) !important;
+  background-color: var(--whiteColor)!important;
+  color: var(--mainColor)!important;
 }
 .single-category-box.more-categories h3 {
   margin-bottom: 14px;
@@ -6346,8 +6346,8 @@ Feedback Area CSS
   margin-top: 20px;
 }
 .single-feedback-box .client-info img {
-  width: 60px !important;
-  display: inline-block !important;
+  width: 60px!important;
+  display: inline-block!important;
   height: 60px;
   border-radius: 50%;
 }
@@ -6399,8 +6399,8 @@ Feedback Area CSS
   margin-top: 20px;
 }
 .single-feedback-item .client-info img {
-  width: 60px !important;
-  display: inline-block !important;
+  width: 60px!important;
+  display: inline-block!important;
   height: 60px;
   border-radius: 50%;
   margin-right: 7px;
@@ -7099,7 +7099,7 @@ Blog Details Area CSS
 .blog-details-desc .article-video iframe {
   width: 100%;
   height: 400px;
-  border: none !important;
+  border: none!important;
 }
 .blog-details-desc .article-content {
   margin-top: 30px;
@@ -7331,7 +7331,7 @@ blockquote,
 .blockquote {
   overflow: hidden;
   background-color: #fafafa;
-  padding: 50px !important;
+  padding: 50px!important;
   position: relative;
   z-index: 1;
   margin-bottom: 20px;
@@ -7344,7 +7344,7 @@ blockquote p,
   margin-bottom: 0;
   font-style: italic;
   font-weight: 700;
-  font-size: 20px !important;
+  font-size: 20px!important;
 }
 blockquote cite,
 .blockquote cite {
@@ -7752,7 +7752,7 @@ blockquote::after,
   color: transparent;
 }
 .comments-area .comment-respond textarea {
-  height: auto !important;
+  height: auto!important;
   padding-top: 15px;
 }
 .comments-area .comment-respond .comment-form-author {
@@ -8405,10 +8405,10 @@ Page Title Area CSS
   padding-right: 20px;
 }
 .page-title-bg form .form-group .form-control {
-  border: none !important;
+  border: none!important;
   color: var(--blackColor);
-  box-shadow: unset !important;
-  background-color: transparent !important;
+  box-shadow: unset!important;
+  background-color: transparent!important;
   height: 60px;
   line-height: 60px;
   font-size: var(--fontSize);
@@ -8481,7 +8481,7 @@ Page Title Area CSS
   font-weight: 500;
 }
 .page-title-bg form .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .page-title-bg form .form-group .nice-select .list .option:hover::before {
@@ -8489,7 +8489,7 @@ Page Title Area CSS
 }
 .page-title-bg form .form-group .nice-select .list .option.focus,
 .page-title-bg form .form-group .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .page-title-bg form .form-group .nice-select .list .option::before {
@@ -8509,7 +8509,7 @@ Page Title Area CSS
   visibility: visible;
 }
 .page-title-bg form .form-group .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .page-title-bg
@@ -8678,8 +8678,8 @@ Partner Area CSS
   padding: 20px;
 }
 .partner-item a img {
-  width: auto !important;
-  display: inline-block !important;
+  width: auto!important;
+  display: inline-block!important;
   opacity: 0.5;
   transition: var(--transition);
 }
@@ -8857,7 +8857,7 @@ Products Area CSS
   font-weight: 600;
 }
 .miran-grid-sorting .ordering .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .miran-grid-sorting .ordering .nice-select .list .option:hover::before {
@@ -8865,7 +8865,7 @@ Products Area CSS
 }
 .miran-grid-sorting .ordering .nice-select .list .option.focus,
 .miran-grid-sorting .ordering .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .miran-grid-sorting .ordering .nice-select .list .option::before {
@@ -8885,7 +8885,7 @@ Products Area CSS
   visibility: visible;
 }
 .miran-grid-sorting .ordering .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .miran-grid-sorting
@@ -9952,7 +9952,7 @@ Checkout Area CSS
   font-weight: 600;
 }
 .billing-details .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .billing-details .form-group .nice-select .list .option:hover::before {
@@ -9960,7 +9960,7 @@ Checkout Area CSS
 }
 .billing-details .form-group .nice-select .list .option.focus,
 .billing-details .form-group .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .billing-details .form-group .nice-select .list .option::before {
@@ -9980,7 +9980,7 @@ Checkout Area CSS
   visibility: visible;
 }
 .billing-details .form-group .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .billing-details .form-group .nice-select .list .option.selected:hover::before {
@@ -10315,8 +10315,8 @@ Author Area CSS
   margin-top: 25px;
 }
 .author-sidebar .user-contact-info form .form-control {
-  background-color: var(--whiteColor) !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+  background-color: var(--whiteColor)!important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12)!important;
 }
 
 .author-all-listings h2 {
@@ -10516,9 +10516,9 @@ Widget Sidebar CSS
   height: 80px;
   display: inline-block;
   border-radius: 5px;
-  background-size: cover !important;
+  background-size: cover!important;
   background-repeat: no-repeat;
-  background-position: center center !important;
+  background-position: center center!important;
 }
 .widget-area .widget_miran_posts_thumb .item .thumb .fullimage.bg1 {
   background-image: url(/images/blog/blog4.jpg);
@@ -10627,7 +10627,7 @@ Widget Sidebar CSS
   border: none;
   border-radius: 3px;
   font-weight: 600;
-  font-size: 14px !important;
+  font-size: 14px!important;
   margin-top: 8px;
   margin-right: 4px;
 }
@@ -10959,11 +10959,11 @@ Contact Area CSS
   margin-top: 5px;
 }
 .contact-form form #msgSubmit {
-  margin: 0 !important;
+  margin: 0!important;
 }
 .contact-form form #msgSubmit.text-danger,
 .contact-form form #msgSubmit.text-success {
-  margin-top: 15px !important;
+  margin-top: 15px!important;
 }
 
 #map iframe {
@@ -11075,7 +11075,7 @@ Footer Area CSS
   font-weight: 600;
 }
 .single-footer-widget .languages-switch .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .single-footer-widget
@@ -11091,7 +11091,7 @@ Footer Area CSS
   .nice-select
   .list
   .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .single-footer-widget .languages-switch .nice-select .list .option::before {
@@ -11119,7 +11119,7 @@ Footer Area CSS
   .nice-select
   .list
   .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .single-footer-widget
@@ -11176,7 +11176,7 @@ Footer Area CSS
   font-weight: 600;
 }
 .single-footer-widget .country-switch .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .single-footer-widget .country-switch .nice-select .list .option:hover::before {
@@ -11188,7 +11188,7 @@ Footer Area CSS
   .nice-select
   .list
   .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .single-footer-widget .country-switch .nice-select .list .option::before {
@@ -11216,7 +11216,7 @@ Footer Area CSS
   .nice-select
   .list
   .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .single-footer-widget
@@ -11316,8 +11316,8 @@ All Modal CSS
   position: absolute;
   right: -22px;
   top: -22px;
-  opacity: 1 !important;
-  visibility: visible !important;
+  opacity: 1!important;
+  visibility: visible!important;
   background-color: red;
   width: 32px;
   height: 32px;
@@ -11631,9 +11631,9 @@ All Modal CSS
   form
   .form-group
   .form-control {
-  border: 1px solid #d5d5d5 !important;
+  border: 1px solid #d5d5d5!important;
   border-radius: 5px;
-  background-color: var(--whiteColor) !important;
+  background-color: var(--whiteColor)!important;
   padding-top: 9px;
 }
 .loginRegisterModal
@@ -11947,9 +11947,9 @@ All Modal CSS
   form
   .form-group
   .form-control {
-  border: 1px solid #d5d5d5 !important;
+  border: 1px solid #d5d5d5!important;
   border-radius: 5px;
-  background-color: var(--whiteColor) !important;
+  background-color: var(--whiteColor)!important;
   padding-top: 9px;
 }
 .loginRegisterModal
@@ -12031,7 +12031,7 @@ Dashboard CSS
   top: 0;
   left: 250px;
   width: calc(100% - 250px);
-  animation: unset !important;
+  animation: unset!important;
 }
 .main-content .navbar-area .miran-nav {
   padding-left: 30px;
@@ -12736,7 +12736,7 @@ Dashboard CSS
   .dropdown-menu {
   padding: 15px 15px 10px;
   position: absolute;
-  left: -15px !important;
+  left: -15px!important;
   border-radius: 2px;
   border: none;
   display: block;
@@ -13014,10 +13014,10 @@ Dashboard CSS
   visibility: visible;
 }
 .main-content .others-option-for-responsive .container {
-  max-width: 100% !important;
+  max-width: 100%!important;
 }
 .main-content .others-option-for-responsive .container .container {
-  max-width: 260px !important;
+  max-width: 260px!important;
 }
 .main-content .copyrights-area {
   padding-top: 5px;
@@ -13105,7 +13105,7 @@ Dashboard CSS
   top: 4px;
   line-height: 18px;
   color: var(--optionalColor);
-  font-family: "boxicons" !important;
+  font-family: "boxicons"!important;
   font-weight: normal;
   font-style: normal;
   font-variant: normal;
@@ -13863,11 +13863,11 @@ Dashboard CSS
 .my-profile-box .profile-box .file-upload .inputfile:focus + label,
 .my-profile-box .profile-box .file-upload .inputfile + label:hover {
   background-color: var(--mainColor);
-  color: var(--whiteColor) !important;
+  color: var(--whiteColor)!important;
 }
 
 .my-profile-box .profile-box .file-upload .inputfile + label:hover * {
-  color: var(--whiteColor) !important;
+  color: var(--whiteColor)!important;
 }
 
 .my-profile-box .profile-box .file-upload .inputfile + label {
@@ -13932,7 +13932,7 @@ Dashboard CSS
   .chat-sidebar-header
   form
   .form-control:focus::-moz-placeholder {
-  color: transparent !important;
+  color: transparent!important;
 }
 .chat-content-area
   .sidebar-left
@@ -13940,7 +13940,7 @@ Dashboard CSS
   .chat-sidebar-header
   form
   .form-control:focus::placeholder {
-  color: transparent !important;
+  color: transparent!important;
 }
 .chat-content-area
   .sidebar-left
@@ -14318,8 +14318,8 @@ Dashboard CSS
   opacity: 0;
   visibility: hidden;
   transition: 0.3s;
-  transform: unset !important;
-  left: auto !important;
+  transform: unset!important;
+  left: auto!important;
   right: 0;
 }
 .chat-content-area
@@ -14500,7 +14500,7 @@ Dashboard CSS
   .chat-message
   p
   a {
-  color: var(--whiteColor) !important;
+  color: var(--whiteColor)!important;
 }
 .chat-content-area
   .content-right
@@ -14528,7 +14528,7 @@ Dashboard CSS
   .chat
   .chat-body
   .chat-message:first-child {
-  margin-top: 0 !important;
+  margin-top: 0!important;
 }
 .chat-content-area
   .content-right
@@ -14579,7 +14579,7 @@ Dashboard CSS
   .chat-message
   p
   a {
-  color: #727e8c !important;
+  color: #727e8c!important;
 }
 .chat-content-area
   .content-right
@@ -14914,11 +14914,11 @@ Dashboard CSS
 }
 .add-listings-box .form-group .form-control {
   height: 48px;
-  background: #f9f9f9 !important;
+  background: #f9f9f9!important;
   transition: var(--transition);
   border-radius: 5px;
-  border: 1px solid #e5e7f2 !important;
-  color: var(--blackColor) !important;
+  border: 1px solid #e5e7f2!important;
+  color: var(--blackColor)!important;
   font-weight: 400;
   font-size: var(--fontSize);
   padding-top: 0;
@@ -14987,7 +14987,7 @@ Dashboard CSS
   font-weight: 600;
 }
 .add-listings-box .form-group .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .add-listings-box .form-group .nice-select .list .option:hover::before {
@@ -14995,7 +14995,7 @@ Dashboard CSS
 }
 .add-listings-box .form-group .nice-select .list .option.focus,
 .add-listings-box .form-group .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .add-listings-box .form-group .nice-select .list .option::before {
@@ -15015,7 +15015,7 @@ Dashboard CSS
   visibility: visible;
 }
 .add-listings-box .form-group .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .add-listings-box
@@ -15322,7 +15322,7 @@ Dashboard CSS
   font-weight: 600;
 }
 .add-listings-box .opening-day .nice-select .list .option:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .add-listings-box .opening-day .nice-select .list .option:hover::before {
@@ -15330,7 +15330,7 @@ Dashboard CSS
 }
 .add-listings-box .opening-day .nice-select .list .option.focus,
 .add-listings-box .opening-day .nice-select .list .option.selected.focus {
-  background-color: transparent !important;
+  background-color: transparent!important;
   color: var(--blackColor);
 }
 .add-listings-box .opening-day .nice-select .list .option::before {
@@ -15350,7 +15350,7 @@ Dashboard CSS
   visibility: visible;
 }
 .add-listings-box .opening-day .nice-select .list .option.selected:hover {
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   color: var(--whiteColor);
 }
 .add-listings-box
@@ -15635,7 +15635,7 @@ Dashboard CSS
   top: 9px;
   color: #7e7e7e;
   transition: var(--transition);
-  font-family: "boxicons" !important;
+  font-family: "boxicons"!important;
   font-weight: normal;
   font-style: normal;
   font-variant: normal;
@@ -15700,7 +15700,7 @@ Dashboard CSS
   .nav-item
   .nav-link {
   color: #7e7e7e;
-  background-color: transparent !important;
+  background-color: transparent!important;
   padding-left: 0;
   padding-right: 0;
   padding-bottom: 5px;
@@ -15801,7 +15801,7 @@ Dashboard CSS
   .nav-item
   .nav-link {
   color: #7e7e7e;
-  background-color: transparent !important;
+  background-color: transparent!important;
   padding-left: 0;
   padding-right: 0;
   padding-bottom: 5px;
@@ -15912,7 +15912,7 @@ Dashboard CSS
   padding: 0 10px;
 }
 .sidemenu-area.toggle-sidemenu-area .sidemenu-header .navbar-brand {
-  display: block !important;
+  display: block!important;
 }
 .sidemenu-area.toggle-sidemenu-area .sidemenu-header .navbar-brand span {
   opacity: 0;
@@ -16085,7 +16085,7 @@ Dashboard CSS
 }
 
 .products-details-tabs .nav .react-tabs__tab--selected a {
-  color: var(--blackColor) !important;
+  color: var(--blackColor)!important;
 }
 
 .products-details-tabs .nav .nav-link:hover {
@@ -16093,7 +16093,7 @@ Dashboard CSS
 }
 
 .show {
-  display: block !important;
+  display: block!important;
 }
 
 .body_overlay {
@@ -16144,7 +16144,7 @@ Dashboard CSS
 
 .form-group .category-icon {
   position: absolute;
-  top: 0px !important;
+  top: 0px!important;
 }
 
 .banner-form-select {
@@ -16229,20 +16229,20 @@ Dashboard CSS
 
 .custom-search-select > [class*="-control"] {
   height: 48px;
-  background: #f9f9f9 !important;
+  background: #f9f9f9!important;
   transition: var(--transition);
   border-radius: 5px;
-  border: 1px solid #e5e7f2 !important;
-  color: var(--blackColor) !important;
+  border: 1px solid #e5e7f2!important;
+  color: var(--blackColor)!important;
   font-weight: 400;
   font-size: var(--fontSize);
   padding: 0 5px;
-  box-shadow: none !important;
+  box-shadow: none!important;
 }
 
 .custom-search-select > [class*="-control"]:hover {
-  border: 1px solid #e5e7f2 !important;
-  box-shadow: none !important;
+  border: 1px solid #e5e7f2!important;
+  box-shadow: none!important;
 }
 
 .blog-select {
@@ -16487,7 +16487,7 @@ Preloader Area CSS
   width: 100px;
   height: 100px;
   border-radius: 100%;
-  background-color: var(--mainColor) !important;
+  background-color: var(--mainColor)!important;
   animation: preloader 1.3s linear infinite;
 }
 .preloader .preloader span:last-child {
@@ -16558,16 +16558,16 @@ Preloader Area CSS
   form
   .form-group
   .form-control.is-invalid {
-  border-color: var(--bs-form-invalid-border-color) !important;
+  border-color: var(--bs-form-invalid-border-color)!important;
 }
 
 .form-group.form-check .invalid-feedback {
-  margin-left: -1.5rem !important;
+  margin-left: -1.5rem!important;
 }
 
 .main-site-alert {
   margin: 0;
-  position: fixed !important;
+  position: fixed!important;
   bottom: 20px;
   right: 20px;
   z-index: 999999;
@@ -16579,7 +16579,7 @@ Preloader Area CSS
 
 .message-site-alert {
   margin: 0;
-  position: fixed !important;
+  position: fixed!important;
   bottom: 20px;
   left: 20px;
   z-index: 9999;
@@ -16590,8 +16590,8 @@ Preloader Area CSS
 }
 
 .message-site-alert .title {
-  font-weight: 700 !important;
-  margin-bottom: 5px !important;
+  font-weight: 700!important;
+  margin-bottom: 5px!important;
 }
 
 .message-site-alert a {
@@ -16615,7 +16615,7 @@ Preloader Area CSS
 }
 
 .is-invalid.border-bottom-required {
-  border-bottom: 1px solid var(--bs-form-invalid-border-color) !important;
+  border-bottom: 1px solid var(--bs-form-invalid-border-color)!important;
 }
 
 .password-competing form .form-group i,
@@ -16634,12 +16634,12 @@ Preloader Area CSS
 }
 
 .password-competing form .form-group i {
-  left: 10px !important;
+  left: 10px!important;
   top: 11px;
 }
 
 .my-profile-box .form-group i {
-  left: 10px !important;
+  left: 10px!important;
   top: 40px;
 }
 
@@ -16673,7 +16673,7 @@ Preloader Area CSS
 
 .base-modal .modal-dialog .modal-content .tab-content .sub-title,
 .yes-no-modal .modal-dialog .modal-content .tab-content .sub-title {
-  font-weight: 700 !important;
+  font-weight: 700!important;
 }
 
 .base-modal .modal-dialog .modal-content .tab-content .sub-title::before,
@@ -16700,11 +16700,11 @@ Preloader Area CSS
 }
 
 .newsletter-form .form-group.form-check .dont-account a {
-  color: var(--mainColor) !important;
+  color: var(--mainColor)!important;
 }
 
 .newsletter-form .form-group.form-check .dont-account a:hover {
-  color: var(--blackColor) !important;
+  color: var(--blackColor)!important;
 }
 
 .newsletter-form .form-group.form-check input[type="checkbox"] {
@@ -16718,11 +16718,11 @@ Preloader Area CSS
 
 @media only screen and (min-width: 1140px) {
   .edit-profile-phone-row .phone-input {
-    padding-right: 5px !important;
+    padding-right: 5px!important;
   }
 
   .edit-profile-phone-row .phone-verify {
-    padding-left: 5px !important;
+    padding-left: 5px!important;
   }
 }
 
@@ -16737,13 +16737,13 @@ Preloader Area CSS
 }
 
 .document-verification > form {
-  padding-top: 0 !important;
+  padding-top: 0!important;
 }
 
 .form-control[readonly],
 .form-control[disabled] {
-  background-color: #dddddd !important;
-  color: #555555 !important;
+  background-color: #dddddd!important;
+  color: #555555!important;
 }
 
 .profile-phone-error {
@@ -16753,14 +16753,14 @@ Preloader Area CSS
 
 .document-view .profile-box > label {
   height: 42px;
-  display: flex !important;
+  display: flex!important;
   align-items: flex-end;
 }
 
 .document-view {
   display: flex;
   justify-content: space-between;
-  margin-top: 0 !important;
+  margin-top: 0!important;
   margin-bottom: 20px;
 }
 
@@ -16810,7 +16810,7 @@ Preloader Area CSS
 }
 
 .navbar-search-box .tips-popup {
-  border-top: 0 !important;
+  border-top: 0!important;
 }
 
 .tips-popup .tip {
@@ -16856,7 +16856,7 @@ Preloader Area CSS
 }
 
 .listings-widget-area .widget.close .widget-body {
-  max-height: 0 !important;
+  max-height: 0!important;
 }
 
 .listings-widget-area .widget.close .widget-title::before {
@@ -16886,7 +16886,7 @@ Preloader Area CSS
 }
 
 .showed-more.close {
-  max-height: 0 !important;
+  max-height: 0!important;
 }
 
 .listing-area {
@@ -16933,7 +16933,7 @@ Preloader Area CSS
 }
 
 .add-listings-box .form-group:has(.is-invalid) {
-  margin-bottom: 2px !important;
+  margin-bottom: 2px!important;
 }
 
 .dropzone.add-listings-box .gallery-flex {
@@ -16980,7 +16980,7 @@ Preloader Area CSS
   background-color: var(--mainColor);
   width: 34px;
   height: 34px;
-  padding: 0 !important;
+  padding: 0!important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16992,12 +16992,12 @@ Preloader Area CSS
 }
 
 .popup-get-image .gallery-flex {
-  margin-bottom: 0 !important;
-  margin-top: 0 !important;
+  margin-bottom: 0!important;
+  margin-top: 0!important;
 }
 
 .popup-get-image .dropzone.add-listings-box {
-  padding: 0 !important;
+  padding: 0!important;
 }
 
 .popup-get-image .dropzone {
@@ -17024,18 +17024,18 @@ Preloader Area CSS
 }
 
 .page-numbers.disabled {
-  color: gray !important;
+  color: gray!important;
   cursor: auto;
-  box-shadow: -2px 3px #d5d5d5 !important;
-  border-color: #d5d5d5 !important;
+  box-shadow: -2px 3px #d5d5d5!important;
+  border-color: #d5d5d5!important;
 }
 
 .page-numbers.disabled.next {
-  box-shadow: 3px 3px #d5d5d5 !important;
+  box-shadow: 3px 3px #d5d5d5!important;
 }
 
 .page-numbers.disabled:hover {
-  color: gray !important;
+  color: gray!important;
   background-color: var(--whiteColor);
 }
 
@@ -17103,7 +17103,7 @@ Preloader Area CSS
 }
 
 .search-header-section .search-field {
-  height: 40px !important;
+  height: 40px!important;
   padding: 0 0 0 15px;
 }
 
@@ -17209,7 +17209,7 @@ Preloader Area CSS
 }
 
 .sidemenu-nav .nav-link.disabled {
-  pointer-events: all !important;
+  pointer-events: all!important;
 }
 
 .cursor-pointer {
