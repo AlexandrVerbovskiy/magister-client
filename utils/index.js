@@ -7,6 +7,7 @@ export { default as uniqueId } from "./uniqueId";
 export { default as getListingImageByType } from "./getListingImageByType";
 export { default as middlewareCallbackWrapper } from "./middlewareCallbackWrapper";
 export { default as getNumberLevelByName } from "./getNumberLevelByName";
+export { default as leveliseCategories } from "./leveliseCategories";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";

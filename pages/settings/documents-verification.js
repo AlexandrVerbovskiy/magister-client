@@ -410,9 +410,10 @@ const DocumentsVerification = ({
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  const { documents, canSend, lastAnswerDescription } =
-    await getCurrentUserDocumentsPageOptions(baseSideProps.authToken);
-  return { canSend, lastAnswerDescription, documents };
+  const options = await getCurrentUserDocumentsPageOptions(
+    baseSideProps.authToken
+  );
+  return { ...options };
 };
 
 export const getServerSideProps = (context) =>

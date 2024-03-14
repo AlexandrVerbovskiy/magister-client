@@ -3,7 +3,7 @@ import NavbarTwo from "../../components/_App/NavbarTwo";
 import Footer from "../../components/_App/Footer";
 import SingleListingsContent from "../../components/SingleListings/SingleListingsContent";
 import { userSideProps } from "../../middlewares";
-import { getFullListingInfo } from "../../services";
+import { getListingFullByIdOptions } from "../../services";
 
 const Listing = ({ listing }) => {
   return (
@@ -19,15 +19,9 @@ const Listing = ({ listing }) => {
 
 const boostServerSideProps = async ({ context }) => {
   const id = context.params.id;
-  const listing = await getFullListingInfo(id);
+  const options = await getListingFullByIdOptions(id);
 
-  if (!listing) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return { listing, id };
+  return { ...options, id };
 };
 
 export const getServerSideProps = (context) =>

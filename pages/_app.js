@@ -71,6 +71,7 @@ function MyApp({ Component, pageProps }) {
   const pageType = pageProps.pageType;
   const user = pageProps.user;
   const authToken = pageProps.authToken;
+  const categories = pageProps.categories ?? {};
 
   useImportGlobalStyle({
     type: pageType,
@@ -84,6 +85,7 @@ function MyApp({ Component, pageProps }) {
         authToken={authToken}
         userInfo={user}
         dopProps={{ setLoading }}
+        categories={categories}
       >
         <Layout>
           {!loading && <Component {...pageProps} />}

@@ -8,15 +8,21 @@ import { getIndexOptions } from "../services";
 import Features from "../components/HomeOne/Features";
 import ListingArea from "../components/Common/ListingArea";
 import Category from "../components/HomeOne/Category";
-import DestinationsTwo from '../components/Common/DestinationsTwo';
-import Feedback from '../components/Common/Feedback';
-import HowItWorks from '../components/Common/HowItWorks';
+import DestinationsTwo from "../components/Common/DestinationsTwo";
+import Feedback from "../components/Common/Feedback";
+import AppDownload from "../components/Common/AppDownload";
 
-const Index = ({ categoriesInfos, topListings }) => {
+const Index = ({ topCategories, topListings, categories }) => {
   const { setLoading } = useContext(IndiceContext);
-  const popularCategories = categoriesInfos
-    .filter((item) => item.popular)
-    .map((item) => item.name);
+  const popularCategories = [];
+
+  Object.keys(categories).forEach((level) => {
+    categories[level].map((category) => {
+      if (category.popular) {
+        popularCategories.push(category.name);
+      }
+    });
+  });
 
   useEffect(() => {
     setLoading(false);
@@ -32,11 +38,13 @@ const Index = ({ categoriesInfos, topListings }) => {
 
       <ListingArea listings={topListings} />
 
-      <Category categoriesInfos={categoriesInfos} />
+      <Category topCategories={topCategories} />
 
       <DestinationsTwo />
 
       <Feedback />
+
+      <AppDownload />
 
       <Footer />
     </>

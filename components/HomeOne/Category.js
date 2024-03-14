@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { getFilePath, getListingImageByType } from "../../utils";
+import { getFilePath } from "../../utils";
 import STATE from "../../static";
 
-const Category = ({ categoriesInfos }) => {
-  console.log(categoriesInfos);
+const Category = ({ topCategories }) => {
   return (
     <>
       <section className="category-area pt-100 pb-70">
@@ -20,17 +19,11 @@ const Category = ({ categoriesInfos }) => {
           </div>
 
           <div className="row">
-            {categoriesInfos.map((info) => (
+            {topCategories.map((info) => (
               <div className="col-lg-2 col-sm-6 col-md-4" key={info.id}>
                 <div className="single-category-box">
                   <div className="icon overflow-hidden">
-                    <img
-                      src={
-                        info.image
-                          ? getFilePath(info.image)
-                          : STATE.defaultPhotoLink
-                      }
-                    />
+                    {info.image && <img src={getFilePath(info.image)} />}
                   </div>
                   <h3>{info.name}</h3>
                   <span>{info.countListings} Listings</span>

@@ -4,6 +4,7 @@ import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import { authSideProps } from "../../middlewares";
+import { getSettingsPageOptions } from "../../services";
 
 const Dashboard = () => {
   const { user } = useContext(IndiceContext);
@@ -72,6 +73,12 @@ const Dashboard = () => {
   );
 };
 
-export const getServerSideProps = authSideProps;
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const options = await getSettingsPageOptions(baseSideProps.authToken);
+  return { ...options };
+};
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default Dashboard;

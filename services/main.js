@@ -11,6 +11,11 @@ export const getListingListOptions = async (params, authToken = null) => {
   return data.body;
 };
 
+export const getListingFullByIdOptions = async (id, authToken = null) => {
+  const data = await get(`/listing-full-by-id-options/${id}`, authToken);
+  return data.body;
+};
+
 export const getCreateListingOptions = async (authToken) => {
   const data = await get(`/create-listing-options`, authToken);
   return data.body;
@@ -122,5 +127,15 @@ export const getAdminListingApprovalRequestOption = async (
 
 export const getUserDocumentsPageOption = async (userId, authToken) => {
   const data = await get(`/user-documents-options/${userId}`, authToken);
+  return data.body;
+};
+
+export const getUserProfileEditPageOptions = async (authToken) => {
+  const data = await get(`/user-profile-edit-options`, authToken);
+  return data.body;
+};
+
+export const getSettingsPageOptions = async (authToken) => {
+  const data = await get(`/settings-options`, authToken);
   return data.body;
 };

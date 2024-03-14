@@ -10,6 +10,7 @@ import {
   generateMyPhoneVerifyCode,
   changeTwoFactorAuth,
   noNeedRegularViewInfoForm,
+  getUserProfileEditPageOptions,
 } from "../../services";
 import {
   getFilePath,
@@ -583,9 +584,12 @@ const boostServerSideProps = async ({ baseSideProps }) => {
   if (baseSideProps.user.needRegularViewInfoForm) {
     noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
-  return {};
+
+  const options = await getUserProfileEditPageOptions(baseSideProps.authToken);
+  return { ...options };
 };
 
-export const getServerSideProps = (context) =>authSideProps(context, boostServerSideProps);
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default ProfileEdit;

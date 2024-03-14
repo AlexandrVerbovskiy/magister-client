@@ -12,6 +12,7 @@ import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
+import CategoriesNavbar from "../../CategoriesNavbar";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -20,6 +21,7 @@ const Navbar = ({ canShowSearch = true }) => {
     isSupport,
     onLogin,
     error: mainError,
+    categories = {},
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -256,7 +258,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       name="listingCategorySearch"
                       ref={categoryFilterRef}
                       value={searchCategory}
-                      onFocus={openCategoryTipsPopup}
+                      onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
                     />
@@ -277,9 +279,13 @@ const Navbar = ({ canShowSearch = true }) => {
                   </li>
 
                   <li className="nav-item">
-                    <Link href="/listing-list" className="nav-link">
+                    <Link
+                      href="/listing-list"
+                      className="dropdown-toggle nav-link"
+                    >
                       Listings
                     </Link>
+                    <CategoriesNavbar categories={categories} />
                   </li>
 
                   {isAuth && (
@@ -361,7 +367,7 @@ const Navbar = ({ canShowSearch = true }) => {
                           name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}
-                          onFocus={openCategoryTipsPopup}
+                          onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
                         />

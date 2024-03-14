@@ -134,9 +134,9 @@
     visibility: visible;
   }
   .navbar-area .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
-    opacity: 1;
-    margin-top: 0;
-    visibility: visible;
+    opacity: 1!important;
+    margin-top: 0!important;
+    visibility: visible!important;
     margin-bottom: 10px;
   }
   .navbar-area .navbar .navbar-nav .nav-item a {
@@ -2741,10 +2741,10 @@
     visibility: visible;
   }
   .navbar-area .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
-    opacity: 1;
-    margin-top: 0;
+    opacity: 1!important;
+    margin-top: 0!important;
     margin-bottom: 10px;
-    visibility: visible;
+    visibility: visible!important;
   }
   .navbar-area .navbar .navbar-nav .nav-item {
     margin-left: 15px !important;
@@ -3620,10 +3620,10 @@
     margin-right: 15px !important;
   }
   .navbar-area .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
-    opacity: 1;
-    margin-top: 0;
+    opacity: 1!important;
+    margin-top: 0!important;
     margin-bottom: 10px;
-    visibility: visible;
+    visibility: visible!important;
   }
   .navbar-area .navbar .navbar-nav .nav-item a {
     padding-left: 0;

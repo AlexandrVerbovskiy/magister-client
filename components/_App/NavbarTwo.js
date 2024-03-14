@@ -10,9 +10,9 @@ import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
-import useSearchCity from "../../hooks/useSearchCity";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
+import CategoriesNavbar from "../CategoriesNavbar";
 
 const NavbarTwo = ({ canShowSearch = true }) => {
   const {
@@ -21,6 +21,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     isSupport,
     onLogin,
     error: mainError,
+    categories = {},
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -252,7 +253,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       ref={categoryFilterRef}
                       value={searchCategory}
                       name="listingCategorySearch"
-                      onFocus={openCategoryTipsPopup}
+                      onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
                     />
@@ -273,9 +274,13 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                   </li>
 
                   <li className="nav-item">
-                    <Link href="/listing-list" className="nav-link">
+                    <Link
+                      href="/listing-list"
+                      className="dropdown-toggle nav-link"
+                    >
                       Listings
                     </Link>
+                    <CategoriesNavbar categories={categories} />
                   </li>
 
                   {isAuth && (
@@ -354,7 +359,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                           name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}
-                          onFocus={openCategoryTipsPopup}
+                          onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
                         />

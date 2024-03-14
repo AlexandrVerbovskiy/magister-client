@@ -369,7 +369,7 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item:first-child {
   margin-left: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:not(.disabled):hover a,
+.miran-nav .navbar .navbar-nav .nav-item.active:not(.disabled):hover a,
 .miran-nav .navbar .navbar-nav .nav-item.active a {
   color: var(--mainColor);
 }
@@ -419,7 +419,7 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -250px;
+  left: 250px;
   margin-top: 15px;
   visibility: hidden;
 }
@@ -468,6 +468,7 @@ Navbar Area CSS
   opacity: 0;
   left: 250px;
   visibility: hidden;
+  margin-top: -12px;
 }
 .miran-nav
   .navbar
@@ -532,6 +533,7 @@ Navbar Area CSS
   opacity: 0;
   left: -250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -606,6 +608,7 @@ Navbar Area CSS
   opacity: 0;
   left: 250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -690,6 +693,7 @@ Navbar Area CSS
   opacity: 0;
   left: -250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -784,6 +788,7 @@ Navbar Area CSS
   opacity: 0;
   left: 250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -1025,16 +1030,12 @@ Navbar Area CSS
 }
 .miran-nav
   .navbar
-  .navbar-nav
-  .nav-item
-  .dropdown-menu
-  li:hover
-  .dropdown-menu {
+  .navbar-nav>.nav-item>.dropdown-menu>li:hover>.dropdown-menu {
   opacity: 1;
   visibility: visible;
   margin-top: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:not(.disabled):hover .dropdown-menu {
+.miran-nav .navbar .navbar-nav>.nav-item:not(.disabled):hover>.dropdown-menu {
   opacity: 1;
   visibility: visible;
   margin-top: 0;
@@ -1160,15 +1161,7 @@ Navbar Area CSS
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a.active {
   color: var(--mainColor);
 }
-.navbar-style-two
-  .miran-nav
-  .navbar
-  .navbar-nav
-  .nav-item:not(.disabled):hover
-  a,
-.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item.active a {
-  color: var(--mainColor);
-}
+
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
   color: var(--blackColor);
 }
@@ -12070,7 +12063,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: -250px;
+  left: 250px;
 }
 .main-content
   .navbar-area
@@ -17255,3 +17248,8 @@ Preloader Area CSS
 .single-category-box .icon:has(img) {
   line-height: normal!important;
 }
+
+/*.dropdown-menu.test {
+  opacity: 1!important;
+  visibility: visible!important;
+}*/

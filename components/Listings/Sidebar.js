@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import DateInput from "../FormComponents/DateInput";
-import { dateToInputString } from "../../utils";
-import { useRouter } from "next/router";
+import { dateToInputString, leveliseCategories } from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 
 const cities = [
@@ -20,16 +19,7 @@ const Sidebar = ({
   toDateFilter,
   setToDateFilter,
 }) => {
-  const { firstLevel, secondLevel, thirdLevel } = baseCategories;
-  const categories = firstLevel.map((elem) => ({
-    ...elem,
-    children: secondLevel
-      .filter((sElem) => sElem.parentId === elem.id)
-      .map((sElem) => ({
-        ...sElem,
-        children: thirdLevel.filter((tElem) => tElem.parentId === sElem.id),
-      })),
-  }));
+  const categories = leveliseCategories(baseCategories);
 
   const [mainFilterOpen, setMainFilterOpen] = useState(true);
   const [categoriesOpen, setCategoriesOpen] = useState(true);
