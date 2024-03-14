@@ -19,7 +19,7 @@ import ErrorIconWrapper from "../FormComponents/ErrorIconWrapper";
 import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
 import EditPhotosSection from "../Listings/EditPhotosSection";
 import { IndiceContext } from "../../contexts";
-import { useListingPhotosEdit } from "../../hooks";
+import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
 import { createListingApprovalRequest } from "../../services";
@@ -41,7 +41,7 @@ const EditForm = ({
   rejectDescription,
   clearRejectDescription,
 }) => {
-  const { success, authToken } = useContext(IndiceContext);
+  const { success, authToken, error } = useContext(IndiceContext);
 
   const levels = [
     { name: "firstLevel", label: "First level" },
@@ -110,6 +110,9 @@ const EditForm = ({
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
+  const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState(null);
+
   const [rentalTerms, setRentalTerms] = useState("");
   const [rentalTermsError, setRentalTermsError] = useState(null);
 
@@ -142,6 +145,8 @@ const EditForm = ({
 
   const [mainError, setMainError] = useState(null);
 
+  const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
+
   const handleChangeName = (e) => {
     setName(e.target.value);
     setNameError(null);
@@ -152,6 +157,34 @@ const EditForm = ({
     setKeyWords(e.target.value);
     setKeyWordsError(null);
     setMainError(null);
+  };
+
+  const handleChangeAddress = async (event) => {
+    try {
+      const newAddress = event.target.value;
+      setAddress(newAddress);
+      setAddressError(null);
+      setMainError(null);
+      const newCoords = await getCoordsByAddress(newAddress);
+      setLat(newCoords.lat);
+      setLng(newCoords.lng);
+      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+    } catch (e) {
+      if (!e.message.includes("ZERO_RESULTS")) {
+        error.set(e.message);
+      }
+    }
+  };
+
+  const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
+    try {
+      setLat(newLat);
+      setLng(newLng);
+      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
+      setAddress(newAddress);
+    } catch (e) {
+      error.set(e.message);
+    }
   };
 
   const handleChangeCategory = (e) => {
@@ -244,6 +277,7 @@ const EditForm = ({
     }));
 
     return {
+      address: listing.address ?? "",
       name: listing.name ?? "",
       keyWords: listing.keyWords ?? "",
       categoryId: listing.categoryId ?? baseCategory,
@@ -269,6 +303,7 @@ const EditForm = ({
     }));
 
     return {
+      address,
       name,
       keyWords,
       categoryId: category,
@@ -303,6 +338,7 @@ const EditForm = ({
     setLat(data.rentalLat);
     setLng(data.rentalLng);
     setRadius(data.rentalRadius);
+    setAddress(data.address);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -633,6 +669,18 @@ const EditForm = ({
                 name="postcode"
               />
             </div>
+
+            <div className="col-12">
+              <InputWithIcon
+                label="Address:"
+                icon="bx bx-menu-alt-left"
+                placeholder="e.g. 55 County Laois"
+                value={address}
+                onInput={handleChangeAddress}
+                error={addressError}
+                name="address"
+              />
+            </div>
           </div>
 
           <EditMap
@@ -641,9 +689,8 @@ const EditForm = ({
             center={center}
             setCenter={setCenter}
             lat={lat}
-            setLat={setLat}
+            changeCoords={handleChangeCoords}
             lng={lng}
-            setLng={setLng}
             radius={radius}
             setRadius={setRadius}
           />

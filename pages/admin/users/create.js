@@ -15,7 +15,7 @@ const UserCreate = () => {
       const { user } = await createUser(formData, authToken);
       const id = user.id;
       setUserId(id);
-      router.push("/admin/users/edit/" + id);
+      router.replace("/admin/users/edit/" + id, undefined, { shallow: true });
       return { user };
     } else {
       formData.append("id", editableUser.id);

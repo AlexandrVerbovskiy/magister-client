@@ -1,14 +1,7 @@
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  Circle,
-} from "@react-google-maps/api";
-import ENV from "../../env";
 import { useRef } from "react";
-
-const defaultMarker = require("../../public/images/maps/default-marker.svg")
-  .default.src;
+import Map from "../GoogleMapItems/Map";
+import Marker from "../GoogleMapItems/Marker";
+import Circle from "../GoogleMapItems/Circle";
 
 const EditMap = ({
   markerActive,
@@ -16,9 +9,8 @@ const EditMap = ({
   center,
   setCenter,
   lat,
-  setLat,
   lng,
-  setLng,
+  changeCoords,
   radius,
   setRadius,
 }) => {
@@ -26,30 +18,11 @@ const EditMap = ({
   const circleRef = useRef(null);
   const markerRef = useRef(null);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: ENV.GOOGLE_MAP_API_KEY,
-  });
-
-  const onLoad = (map) => {
-    mapRef.current = map;
-  };
-
-  const onUnmount = function callback(map) {
-    mapRef.current = null;
-  };
-
-  if (!isLoaded) return <></>;
-
   return (
     <div className="form-group">
-      <GoogleMap
+      <Map
+        ref={mapRef}
         center={center}
-        zoom={15}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-        mapContainerStyle={{ height: "500px", width: "100%" }}
-        className="my-map"
         onRightClick={() => setMarkerActive(false)}
         onDragEnd={() => {
           if (!mapRef.current) return;
@@ -64,30 +37,24 @@ const EditMap = ({
           const lng = e.latLng.lng();
 
           setMarkerActive(true);
-          setLat(lat);
-          setLng(lng);
+          changeCoords({ lat, lng });
         }}
       >
         <Marker
           ref={markerRef}
-          position={{ lat: lat, lng: lng }}
+          lat={lat}
+          lng={lng}
           onClick={() => setMarkerActive(true)}
-          icon={defaultMarker}
         />
         <Circle
-          center={{ lat: lat, lng: lng }}
-          radius={radius}
           ref={circleRef}
+          radius={radius}
+          lat={lat}
+          lng={lng}
+          draggable={markerActive}
+          editable={markerActive}
           onClick={() => setMarkerActive(true)}
-          options={{
-            strokeColor: "#FF0000",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#FF0000",
-            fillOpacity: 0.35,
-            draggable: markerActive,
-            editable: markerActive,
-          }}
+          color="#FF0000"
           onRadiusChanged={() => {
             if (!circleRef.current) return;
             setRadius(circleRef.current.state.circle.radius);
@@ -99,21 +66,19 @@ const EditMap = ({
             const newLat = center.lat();
             const newLng = center.lng();
 
-            if ((lat == newLat && lng == newLng)) {
+            if (lat == newLat && lng == newLng) {
               return;
             }
 
-            setLat(newLat);
-            setLng(newLng);
+            changeCoords({ lat: newLat, lng: newLng });
           }}
           onDrag={(e) => {
             if (!e) return;
             const newCenter = e.latLng.toJSON();
-            setLat(newCenter.lat);
-            setLng(newCenter.lng);
+            changeCoords({ lat: newCenter.lat, lng: newCenter.lng });
           }}
         />
-      </GoogleMap>
+      </Map>
     </div>
   );
 };

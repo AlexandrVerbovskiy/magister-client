@@ -11,7 +11,11 @@ import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
 import lodash from "lodash";
 import EditPhotosSection from "../Listings/EditPhotosSection";
-import { useListingPhotosEdit, useAdminPage } from "../../../hooks";
+import {
+  useListingPhotosEdit,
+  useAdminPage,
+  useCoordsAddress,
+} from "../../../hooks";
 import {
   uniqueId,
   validateBigText,
@@ -90,6 +94,9 @@ const EditForm = ({ listing, categories, save }) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
+  const [address, setAddress] = useState("");
+  const [addressError, setAddressError] = useState(null);
+
   const [rentalTerms, setRentalTerms] = useState("");
   const [rentalTermsError, setRentalTermsError] = useState(null);
 
@@ -120,6 +127,8 @@ const EditForm = ({ listing, categories, save }) => {
   const [lng, setLng] = useState(STATIC.cityCoords[baseCity].lng);
   const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
 
+  const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
+
   const handleChangeCategoryLevel = (newLevel) => {
     setCategoryLevel(newLevel);
     setCategory(categories[newLevel][0]["id"]);
@@ -134,6 +143,34 @@ const EditForm = ({ listing, categories, save }) => {
     setLat(lat);
     setLng(lng);
     setRadius(STATIC.baseListingMapCircleRadius);
+  };
+
+  const handleChangeAddress = async (event) => {
+    try {
+      const newAddress = event.target.value;
+      setAddress(newAddress);
+      setAddressError(null);
+      setMainError(null);
+      const newCoords = await getCoordsByAddress(newAddress);
+      setLat(newCoords.lat);
+      setLng(newCoords.lng);
+      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+    } catch (e) {
+      if (!e.message.includes("ZERO_RESULTS")) {
+        error.set(e.message);
+      }
+    }
+  };
+
+  const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
+    try {
+      setLat(newLat);
+      setLng(newLng);
+      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
+      setAddress(newAddress);
+    } catch (e) {
+      error.set(e.message);
+    }
   };
 
   useEffect(() => {
@@ -157,6 +194,7 @@ const EditForm = ({ listing, categories, save }) => {
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
     setCategoryLevel(data.categoryLevel);
+    setAddress(data.address);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -211,6 +249,7 @@ const EditForm = ({ listing, categories, save }) => {
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
       categoryLevel,
+      address: prevListing.address ?? "",
     };
   };
 
@@ -222,6 +261,7 @@ const EditForm = ({ listing, categories, save }) => {
 
     return {
       name,
+      address,
       keyWords,
       categoryId: category,
       description,
@@ -611,6 +651,20 @@ const EditForm = ({ listing, categories, save }) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+
+                            <div className="w-full">
+                              <Input
+                                name="address"
+                                label="Address"
+                                placeholder="e.g. 55 County Laois"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={address}
+                                setValue={handleChangeAddress}
+                                error={addressError}
+                                setError={setAddressError}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
                           </div>
 
                           <div className="flex w-full admin-map-parent">
@@ -620,9 +674,8 @@ const EditForm = ({ listing, categories, save }) => {
                               center={center}
                               setCenter={setCenter}
                               lat={lat}
-                              setLat={setLat}
                               lng={lng}
-                              setLng={setLng}
+                              changeCoords={handleChangeCoords}
                               radius={radius}
                               setRadius={setRadius}
                             />

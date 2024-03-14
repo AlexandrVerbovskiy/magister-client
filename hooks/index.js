@@ -5,3 +5,4 @@ export { default as useInitPaginationTimeFilter } from "./useInitPaginationTimeF
 export { default as useChangeTimeFilter } from "./useChangeTimeFilter";
 export { default as useCategoryCity } from "./useCategoryCity";
 export { default as useListingPhotosEdit } from "./useListingPhotosEdit";
+export { default as useCoordsAddress } from "./useCoordsAddress";

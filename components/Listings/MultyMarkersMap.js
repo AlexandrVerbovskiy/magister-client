@@ -1,10 +1,7 @@
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  Circle,
-} from "@react-google-maps/api";
-import ENV from "../../env";
+import Map from "../GoogleMapItems/Map";
+import Marker from "../GoogleMapItems/Marker";
+import Circle from "../GoogleMapItems/Circle";
+
 import React, { useEffect, useRef, useState } from "react";
 import STATIC from "../../static";
 
@@ -28,15 +25,6 @@ const MultyMarkersMap = ({
   const [center, setCenter] = useState(defaultCenter);
   const [userLocation, setUserLocation] = useState(null);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: ENV.GOOGLE_MAP_API_KEY,
-  });
-
-  const onLoad = (map) => {
-    mapRef.current = map;
-  };
-
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function (position) {
@@ -50,27 +38,18 @@ const MultyMarkersMap = ({
     }
   }, [navigator.geolocation]);
 
-  const onUnmount = function callback(map) {
-    mapRef.current = null;
-  };
-
-  if (!isLoaded) return <></>;
-
   return (
-    <GoogleMap
-      zoom={15}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-      mapContainerStyle={{ height: "100%", width: "100%" }}
+    <Map
+      ref={mapRef}
+      height="100%"
+      width="100%"
       center={center}
       className="my-map"
     >
       {userLocation && (
         <Marker
-          position={{
-            lat: Number(userLocation.lat),
-            lng: Number(userLocation.lng),
-          }}
+          lat={Number(userLocation.lat)}
+          lng={Number(userLocation.lng)}
           icon={userMarker}
         />
       )}
@@ -79,25 +58,23 @@ const MultyMarkersMap = ({
           <Marker
             onMouseOver={() => onMouseOver(marker.id)}
             onMouseOut={() => onMouseOut(marker.id)}
-            position={{ lat: Number(marker.lat), lng: Number(marker.lng) }}
+            lat={marker.lat}
+            lng={marker.lng}
             icon={marker.active ? hoveredMarker : defaultMarker}
           />
           <Circle
-            center={{ lat: Number(marker.lat), lng: Number(marker.lng) }}
+            lat={marker.lat}
+            lng={marker.lng}
             radius={marker.radius}
             onMouseOver={() => onMouseOver(marker.id)}
             onMouseOut={() => onMouseOut(marker.id)}
-            options={{
-              strokeColor: "#FF0000",
-              strokeOpacity: marker.active ? 1 : 0.8,
-              strokeWeight: 2,
-              fillColor: "#FF0000",
-              fillOpacity: marker.active ? 0.5 : 0.35,
-            }}
+            color="#FF0000"
+            strokeOpacity={marker.active ? 1 : 0.8}
+            fillOpacity={marker.active ? 0.5 : 0.35}
           />
         </React.Fragment>
       ))}
-    </GoogleMap>
+    </Map>
   );
 };
 
