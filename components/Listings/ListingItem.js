@@ -10,13 +10,10 @@ const ListingItem = ({ listing, hovered = false }) => {
     <div className={`single-listings-box w-100 ${hovered ? "hovered" : ""}`}>
       <div className="listings-image">
         {images.length == 1 && (
-          <>
-            <img
-              src={getListingImageByType(images[0].link, images[0].type)}
-              alt="image"
-            />
-            <Link href={`/listing/${listing.id}`} className="link-btn"></Link>
-          </>
+          <img
+            src={getListingImageByType(images[0].link, images[0].type)}
+            alt="image"
+          />
         )}
 
         {images.length > 1 && (
@@ -41,6 +38,10 @@ const ListingItem = ({ listing, hovered = false }) => {
               </SwiperSlide>
             ))}
           </Swiper>
+        )}
+
+        {images.length <= 1 && (
+          <Link href={`/listing/${listing.id}`} className="link-btn"></Link>
         )}
 
         <a href="#" className="bookmark-save">

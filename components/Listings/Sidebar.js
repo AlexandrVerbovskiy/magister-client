@@ -29,12 +29,18 @@ const Sidebar = ({
 
   const [mainFilterMaxHeight, setMainFilterMaxHeight] = useState(null);
 
-  useEffect(() => {
+  const updateTimeFilterHeight = () => {
     if (mainFilterFullUlRef.current) {
       const childHeight = mainFilterFullUlRef.current.scrollHeight + 1;
       setMainFilterMaxHeight(childHeight);
     }
-  }, [mainFilterFullUlRef.current]);
+  };
+
+  useEffect(() => updateTimeFilterHeight(), [mainFilterFullUlRef.current]);
+
+  useEffect(() => {
+    setInterval(updateTimeFilterHeight, 250);
+  }, []);
 
   const handleChangeCheckedCategory = (value) => {
     let newSelectedCategories = selectedCategories;

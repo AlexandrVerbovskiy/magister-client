@@ -7,12 +7,12 @@ const NavbarLi = ({ category }) => {
 
   return (
     <li className="nav-item">
-      <Link href={link} className={`nav-link ${hasChildren ? "" : "false"}`}>
-        {false && (
+      <Link href={link} className={`nav-link category-nav-link ${hasChildren ? "" : "false"}`}>
+        {category.image && (
           <div className="category-navbar-img">
-            <img src={getFilePath(category.image)} />
+            <img src={getFilePath(category.image)} height="20px" width="20px"/>
           </div>
-        )}{" "}
+        )}
         {category.name}
         {hasChildren && <i className="bx bx-chevron-right"></i>}
       </Link>

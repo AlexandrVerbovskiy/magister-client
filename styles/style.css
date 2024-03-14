@@ -3315,7 +3315,7 @@ Listings Area CSS
   height: auto;
   max-height: 100%;
 }
-.single-listings-box .listings-image::before {
+.single-listings-box .listings-image:not(:has(img))::before {
   content: "";
   position: absolute;
   left: 0;
@@ -3384,6 +3384,8 @@ Listings Area CSS
   position: relative;
   z-index: 1;
 }
+
+/*
 .single-listings-box .listings-image .single-image::before {
   content: "";
   position: absolute;
@@ -3395,7 +3397,8 @@ Listings Area CSS
   background-color: #000000;
   border-radius: 5px 5px 0 0;
   opacity: 0.25;
-}
+}*/
+
 .single-listings-box .listings-content {
   padding: 28px 20px 25px;
   position: relative;
@@ -17253,3 +17256,11 @@ Preloader Area CSS
   opacity: 1!important;
   visibility: visible!important;
 }*/
+
+.category-nav-link{
+  display: flex!important;
+}
+
+.category-nav-link img{
+  margin-right: 8px;
+}

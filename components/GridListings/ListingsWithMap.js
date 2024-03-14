@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import Link from "next/link";
 import Sidebar from "../Listings/Sidebar";
 import {
   usePagination,
@@ -8,7 +7,6 @@ import {
 } from "../../hooks";
 import { getListingList } from "../../services";
 import { IndiceContext } from "../../contexts";
-import { getFilePath, getListingImageByType } from "../../utils";
 import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
@@ -80,6 +78,8 @@ const ListingsWithMap = ({
     }),
     defaultData: pageProps,
   });
+
+  console.log(listings)
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
     options,

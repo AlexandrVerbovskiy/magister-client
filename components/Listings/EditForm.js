@@ -215,6 +215,20 @@ const EditForm = ({
     setMainError(null);
   };
 
+  useEffect(() => {
+    if (listing.id) return;
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setCenter({ lat, lng });
+        setLat(lat);
+        setLng(lng);
+      });
+    }
+  }, [navigator.geolocation]);
+
   const listingToState = () => {
     const city = listing.city ?? baseCity;
     const lat = listing.rentalLat
