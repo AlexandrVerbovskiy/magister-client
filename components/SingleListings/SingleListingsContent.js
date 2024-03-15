@@ -5,6 +5,7 @@ import { getFilePath, getListingImageByType } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
+import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 
@@ -89,7 +90,7 @@ const SingleListingsContent = ({ listing }) => {
                   )}
                   <li className="location">
                     <i className="bx bx-map"></i>
-                    <span>Location</span>
+                    <span>City</span>
                     {listing.city}
                   </li>
                 </ul>
@@ -797,10 +798,12 @@ const SingleListingsContent = ({ listing }) => {
                       <i className="bx bx-envelope"></i>
                       <a href="#">{listing.userEmail}</a>
                     </li>
-                    <li>
-                      <i className="bx bx-phone-call"></i>
-                      <a href="tel:+2122791456">{listing.userPhone}</a>
-                    </li>
+                    {listing.userPhone && (
+                      <li>
+                        <i className="bx bx-phone-call"></i>
+                        <a href="tel:+2122791456">{listing.userPhone}</a>
+                      </li>
+                    )}
                     {listing.userPlaceWork && (
                       <li>
                         <i className="bx bx-building"></i>
@@ -808,7 +811,44 @@ const SingleListingsContent = ({ listing }) => {
                       </li>
                     )}
                     <li>
-                      <i className="bx bx-map"></i> {listing.city}
+                      <i className="bx bx-map" style={{ marginTop: "7px" }}></i>{" "}
+                      {listing.city}
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="listings-widget listings_contact_details">
+                  <h3>Location</h3>
+                  <ul>
+                    <li>
+                      <i className="bx bx-map" style={{ marginTop: "0px" }}></i>{" "}
+                      {listing.city}
+                    </li>
+
+                    {listing.address && (
+                      <li>
+                        <i
+                          className="bx bx-map"
+                          style={{ marginTop: "0px" }}
+                        ></i>{" "}
+                        {listing.address}
+                      </li>
+                    )}
+                    <li style={{ height: "400px", paddingLeft: "0" }}>
+                      <MultyMarkersMap
+                        markers={[
+                          {
+                            id: 1,
+                            lat: listing.rentalLat,
+                            lng: listing.rentalLng,
+                            radius: listing.rentalRadius,
+                          },
+                        ]}
+                        baseCenter={{
+                          lat: listing.rentalLat,
+                          lng: listing.rentalLng,
+                        }}
+                      />
                     </li>
                   </ul>
                 </div>

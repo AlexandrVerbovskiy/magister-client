@@ -10,11 +10,15 @@ const RequestsTable = ({
   totalCount,
 }) => {
   const ths = [
-    { title: "Id", value: "user_verify_requests.id" },
-    { title: "User Name", value: "users.name" },
-    { title: "User Email", value: "users.email" },
-    { title: "Created At", value: "user_verify_requests.created_at" },
-    { title: "Actions", value: "actions", canOrder: false },
+    { title: "Id", value: "user_verify_requests.id", width: "10%" },
+    { title: "User Name", value: "users.name", width: "30%" },
+    { title: "User Email", value: "users.email", width: "30%" },
+    {
+      title: "Created At",
+      value: "user_verify_requests.created_at",
+      width: "20%",
+    },
+    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
   ];
 
   return (
@@ -30,7 +34,7 @@ const RequestsTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (

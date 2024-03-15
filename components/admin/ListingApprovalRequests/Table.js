@@ -10,18 +10,23 @@ const RequestsTable = ({
   totalCount,
 }) => {
   const ths = [
-    { title: "Id", value: "listing_approval_requests.id" },
-    { title: "Name", value: "listings.name" },
-    { title: "City", value: "listings.city" },
-    { title: "User", value: "users.name" },
-    { title: "Category", value: "listing_categories.name" },
+    { title: "Id", value: "listing_approval_requests.id", width: "10%" },
+    { title: "Name", value: "listings.name", width: "15%" },
+    { title: "City", value: "listings.city", width: "15%" },
+    { title: "User", value: "users.name", width: "15%" },
+    { title: "Category", value: "listing_categories.name", width: "15%" },
     {
       title: "Approved",
       value: "listing_approval_requests.approved",
       canOrder: false,
+      width: "10%",
     },
-    { title: "Created At", value: "listing_approval_requests.created_at" },
-    { title: "Actions", value: "actions", canOrder: false },
+    {
+      title: "Created At",
+      value: "listing_approval_requests.created_at",
+      width: "10%",
+    },
+    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
   ];
 
   return (
@@ -37,7 +42,7 @@ const RequestsTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (

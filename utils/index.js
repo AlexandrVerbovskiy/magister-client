@@ -8,6 +8,7 @@ export { default as getListingImageByType } from "./getListingImageByType";
 export { default as middlewareCallbackWrapper } from "./middlewareCallbackWrapper";
 export { default as getNumberLevelByName } from "./getNumberLevelByName";
 export { default as leveliseCategories } from "./leveliseCategories";
+export { default as onCurrentUserLocation } from "./onCurrentUserLocation";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";

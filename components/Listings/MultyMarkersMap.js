@@ -1,6 +1,7 @@
 import Map from "../GoogleMapItems/Map";
 import Marker from "../GoogleMapItems/Marker";
 import Circle from "../GoogleMapItems/Circle";
+import { onCurrentUserLocation } from "../../utils";
 
 import React, { useEffect, useRef, useState } from "react";
 import STATIC from "../../static";
@@ -20,23 +21,28 @@ const MultyMarkersMap = ({
   markers = [],
   onMouseOver = () => {},
   onMouseOut = () => {},
+  baseCenter = null,
 }) => {
   const mapRef = useRef(null);
-  const [center, setCenter] = useState(defaultCenter);
+
+  if (baseCenter) {
+    baseCenter = { lat: Number(baseCenter.lat), lng: Number(baseCenter.lng) };
+  } else {
+    baseCenter = defaultCenter;
+  }
+
+  const [center, setCenter] = useState(baseCenter);
   const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+    onCurrentUserLocation(
+      ({ lat, lng }) => {
         setUserLocation({ lat, lng });
-        setCenter({ lat, lng });
-      });
-    } else {
-      setUserLocation(null);
-    }
-  }, [navigator.geolocation]);
+        if (!baseCenter) setCenter({ lat, lng });
+      },
+      () => setUserLocation(null)
+    );
+  }, []);
 
   return (
     <Map

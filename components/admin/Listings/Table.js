@@ -11,15 +11,15 @@ const ListingsTable = ({
   onClickDelete,
 }) => {
   const ths = [
-    { title: "Id", value: "id" },
-    { title: "Name", value: "name" },
-    { title: "City", value: "city" },
-    { title: "Owner", value: "users.name" },
-    { title: "Category", value: "listing_categories.name" },
-    { title: "Count Stored", value: "count_stored_items" },
-    { title: "Price Per Day", value: "price_per_day" },
-    { title: "Approved", value: "approved" },
-    { title: "Actions", value: "actions", canOrder: false },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Name", value: "name", width: "15%" },
+    { title: "City", value: "city", width: "10%" },
+    { title: "Owner", value: "users.name", width: "15%" },
+    { title: "Category", value: "listing_categories.name", width: "10%" },
+    { title: "Count Stored", value: "count_stored_items", width: "10%" },
+    { title: "Price Per Day", value: "price_per_day", width: "10%" },
+    { title: "Approved", value: "approved", width: "10%" },
+    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
   ];
 
   return (
@@ -35,7 +35,7 @@ const ListingsTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (

@@ -266,8 +266,8 @@ Preloader Area CSS
 }
 
 #access-delete-category-listing-modal,
-#access-delete-category-listing-modal>div {
-  overflow: unset!important;
+#access-delete-category-listing-modal > div {
+  overflow: unset !important;
 }
 
 @keyframes preloader {
@@ -281,6 +281,29 @@ Preloader Area CSS
   }
 }
 
-.category-image-parent img{
-  border-radius: 0!important;
+.category-image-parent img {
+  border-radius: 0 !important;
+}
+
+.admin-table .overflow-separate,
+.admin-table td:not(:has(*)) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adaptive-logo-image,
+.logo-image {
+  height: 32px;
+}
+
+.adaptive-logo-image {
+  background-image: url("/images/rent-about-logo.svg");
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 1536px) {
+  .adaptive-logo-image {
+    background-image: url("/images/rent-about-logo.png");
+  }
 }

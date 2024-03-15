@@ -223,7 +223,11 @@ const NavbarTwo = ({ canShowSearch = true }) => {
               </div>
               <div className="logo">
                 <Link href="/">
-                  <img src="/images/black-logo.png" alt="logo" />
+                  <img
+                    src="/images/rent-about-logo.png"
+                    className="logo-image"
+                    alt="logo"
+                  />
                 </Link>
               </div>
             </div>
@@ -234,7 +238,11 @@ const NavbarTwo = ({ canShowSearch = true }) => {
           <div className="container-fluid">
             <nav className="navbar navbar-expand-md navbar-light">
               <Link href="/" className="navbar-brand">
-                <img src="/images/black-logo.png" alt="logo" />
+                <img
+                  src="/images/rent-about-logo-black.png"
+                  className="logo-image"
+                  alt="logo"
+                />{" "}
               </Link>
               <div className="collapse navbar-collapse mean-menu">
                 {canShowSearch && (

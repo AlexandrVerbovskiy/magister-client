@@ -10,7 +10,7 @@ const Map = forwardRef(
       height = "500px",
       width = "100%",
       className = "my-map",
-      zoom = 15,
+      zoom = 13,
       onRightClick = () => {},
       onClick = () => {},
       onDragEnd = () => {},

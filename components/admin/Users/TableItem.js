@@ -17,7 +17,7 @@ const ActiveSpan = ({ active, onClick, clickable = true }) => {
   return (
     <div
       onClick={onClick}
-      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
+      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1 overflow-separate`}
     >
       {text}
     </div>
@@ -26,7 +26,7 @@ const ActiveSpan = ({ active, onClick, clickable = true }) => {
 
 const RoleSpan = ({ role, onClick = () => {} }) => {
   let dopClassName =
-    "bg-sky-100 dark:bg-sky-500/30 text-sky-600 dark:text-sky-400";
+    "bg-sky-100 dark:bg-sky-500/30 text-sky-600 dark:text-sky-400 overflow-separate";
   let text = "User";
 
   if (role == "admin") {
@@ -52,7 +52,7 @@ const RoleSpan = ({ role, onClick = () => {} }) => {
 };
 
 const EmailSpan = ({ email, verified }) => {
-  let className = "text-left cursor-pointer";
+  let className = "text-left cursor-pointer overflow-separate overflow-separate";
   let tooltipText = "";
 
   if (verified) {
@@ -75,7 +75,7 @@ const PhoneSpan = ({ phone, verified }) => {
     return <div className="text-left">-</div>;
   }
 
-  let className = "text-left cursor-pointer";
+  let className = "text-left cursor-pointer overflow-separate";
   let tooltipText = "";
 
   if (phone) {
@@ -143,10 +143,10 @@ const TableItem = ({
 
   return (
     <tr>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {!isCurrent && role !== "admin" && isAdmin && (
           <Link href={`/admin/users/edit/${id}`}>
             <div className="text-left">{name}</div>
@@ -213,16 +213,18 @@ const TableItem = ({
           )}
         </div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
           {!isCurrent && role !== "admin" && (
-            <div className="mr-1 flex items-center">
+            <div className="mr-2 flex items-center">
               <Documents href={`/admin/user-documents/${id}`} />
             </div>
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (
+            <div className="mr-2 flex items-center">
               <Edit href={`/admin/users/edit/${id}`} />
+            </div>
           )}
 
           {!isCurrent && role !== "admin" && isAdmin && (

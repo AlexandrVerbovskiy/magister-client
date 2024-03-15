@@ -14,6 +14,7 @@ import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
+import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 
 const ListingApprovalRequest = ({
   request: baseRequest,
@@ -276,6 +277,37 @@ const ListingApprovalRequest = ({
                               inputClassName="form-input w-full"
                             />
                           </div>
+                        </div>
+
+                        <div className="w-full mb-2">
+                          <InputView
+                            name="address"
+                            label="Address"
+                            placeholder="e.g. 55 County Laois"
+                            labelClassName="block text-sm font-medium mb-1"
+                            value={listing.address}
+                            inputClassName="form-input w-full"
+                          />
+                        </div>
+
+                        <div
+                          className="flex w-full admin-map-parent"
+                          style={{ height: "400px" }}
+                        >
+                          <MultyMarkersMap
+                            markers={[
+                              {
+                                id: 1,
+                                lat: listing.rentalLat,
+                                lng: listing.rentalLng,
+                                radius: listing.rentalRadius,
+                              },
+                            ]}
+                            baseCenter={{
+                              lat: listing.rentalLat,
+                              lng: listing.rentalLng,
+                            }}
+                          />
                         </div>
                       </div>
                     </section>

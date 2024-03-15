@@ -4,6 +4,7 @@ import DashboardNavbar from "../Dashboard/DashboardNavbar";
 import React, { useState, useContext, useEffect } from "react";
 import lodash from "lodash";
 import STATIC from "../../static";
+import { onCurrentUserLocation } from "../../utils";
 
 import {
   uniqueId,
@@ -251,16 +252,14 @@ const EditForm = ({
   useEffect(() => {
     if (listing.id) return;
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        setCenter({ lat, lng });
-        setLat(lat);
-        setLng(lng);
-      });
-    }
-  }, [navigator.geolocation]);
+    onCurrentUserLocation(({ lat, lng }) => {
+      if (listing.id) return;
+
+      setCenter({ lat, lng });
+      setLat(lat);
+      setLng(lng);
+    });
+  }, []);
 
   const listingToState = () => {
     const city = listing.city ?? baseCity;
@@ -670,7 +669,7 @@ const EditForm = ({
               />
             </div>
 
-            <div className="col-12">
+            <div className="col-12 mb-1">
               <InputWithIcon
                 label="Address:"
                 icon="bx bx-menu-alt-left"

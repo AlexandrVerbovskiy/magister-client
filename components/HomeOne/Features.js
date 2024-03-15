@@ -17,7 +17,7 @@ const Features = () => {
       link: "/",
     },
     {
-      text: `Verify If you haven&#39;t already done so, you&#39;ll be
+      text: `Verify If you haven't already done so, you'll be
       prompted to verify your identity. This ensures a robust
       rental process. After verification, your rental will be
       confirmed..`,

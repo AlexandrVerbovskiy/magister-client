@@ -21,7 +21,7 @@ const ActiveSpan = ({ active }) => {
             : "The tool is not approved, so it cannot be rented"
         }
       >
-        {text}
+        <span className="overflow-separate">{text}</span>
       </Tooltip>
     </div>
   );
@@ -40,25 +40,25 @@ const TableItem = ({
 }) => {
   return (
     <tr>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {name}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {city}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {userName}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {categoryName}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {countStoredItems}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {pricePerDay}
       </td>
 
@@ -66,10 +66,16 @@ const TableItem = ({
         <ActiveSpan active={approved} />
       </td>
 
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
-          <View href={`/listing/${id}`} />
-          <Edit href={`/admin/listings/edit/${id}`} />
+          <div className="mr-2 flex items-center">
+            <View href={`/listing/${id}`} />
+          </div>
+
+          <div className="mr-2 flex items-center">
+            <Edit href={`/admin/listings/edit/${id}`} />
+          </div>
+
           <Delete onDeleteClick={onClickDelete} />
         </div>
       </td>

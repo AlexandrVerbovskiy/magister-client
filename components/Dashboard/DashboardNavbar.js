@@ -34,7 +34,11 @@ const DashboardNavbar = () => {
       >
         <div className="sidemenu-header">
           <Link href="/" className="navbar-brand d-flex align-items-center">
-            <img src="/images/black-logo.png" alt="image" />
+            <img
+              src="/images/rent-about-logo-black.png"
+              className="logo-image"
+              alt="logo"
+            />
           </Link>
 
           <div

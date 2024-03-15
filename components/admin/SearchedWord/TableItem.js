@@ -14,7 +14,7 @@ const ActiveSpan = ({ active, tooltipTextActive, tooltipTextInactive }) => {
       className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
     >
       <Tooltip title={active ? tooltipTextActive : tooltipTextInactive}>
-        {text}
+        <span className="overflow-separate">{text}</span>
       </Tooltip>
     </div>
   );
@@ -29,16 +29,16 @@ const TableItem = ({
 }) => {
   return (
     <tr>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {name}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-semibold">{searchCount}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <ActiveSpan
           active={adminViewed}
           tooltipTextActive="You have viewed this search request before"
@@ -52,7 +52,7 @@ const TableItem = ({
           tooltipTextInactive="You have accepted this search request before"
         />
       </td>
-      <td>
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {listingCategoriesId ? (
           <View href={`/admin/searched-words/create-category/${id}`} />
         ) : (

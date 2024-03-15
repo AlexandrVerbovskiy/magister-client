@@ -4,13 +4,11 @@ const View = ({ href }) => {
   return (
     <Link
       href={href}
-      className="flex text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
+      className="flex items-center text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="icon icon-tabler icon-tabler-clipboard-text stroke-current"
-        width="24"
-        height="24"
+        className="w-5 h-5 stroke-current"
         viewBox="0 0 24 24"
         strokeWidth="2"
         fill="none"

@@ -4,11 +4,11 @@ import TableItem from "./TableItem";
 
 const LogsTable = ({ logs, orderField, orderType, onClickTh, totalCount }) => {
   const ths = [
-    { title: "Id", value: "id" },
-    { title: "Event", value: "event_name" },
-    { title: "User Email", value: "user_email" },
-    { title: "User Role", value: "user_role" },
-    { title: "Created At", value: "created_at" },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Event", value: "event_name", width: "30%" },
+    { title: "User Email", value: "user_email", width: "30%" },
+    { title: "User Role", value: "user_role", width: "15%" },
+    { title: "Created At", value: "created_at", width: "15%" },
   ];
 
   return (
@@ -24,7 +24,7 @@ const LogsTable = ({ logs, orderField, orderType, onClickTh, totalCount }) => {
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (

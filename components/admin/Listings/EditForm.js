@@ -651,20 +651,20 @@ const EditForm = ({ listing, categories, save }) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+                          </div>
 
-                            <div className="w-full">
-                              <Input
-                                name="address"
-                                label="Address"
-                                placeholder="e.g. 55 County Laois"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={address}
-                                setValue={handleChangeAddress}
-                                error={addressError}
-                                setError={setAddressError}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
+                          <div className="w-full mb-2">
+                            <Input
+                              name="address"
+                              label="Address"
+                              placeholder="e.g. 55 County Laois"
+                              labelClassName="block text-sm font-medium mb-1"
+                              value={address}
+                              setValue={handleChangeAddress}
+                              error={addressError}
+                              setError={setAddressError}
+                              inputClassName="form-input w-full"
+                            />
                           </div>
 
                           <div className="flex w-full admin-map-parent">

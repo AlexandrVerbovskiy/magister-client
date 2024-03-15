@@ -9,6 +9,8 @@ import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 import "../styles/index.css";
 
+const styleSelector = "head style, head link:not([rel='shortcut icon']";
+
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const stylesRef = useRef({ base: [], admin: [] });
   const loadedRef = useRef({ base: false, admin: false });
@@ -24,7 +26,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       await importFunc();
 
       document
-        .querySelectorAll("head style, head link")
+        .querySelectorAll(styleSelector)
         .forEach((elem) => stylesRef.current[key].push(elem.cloneNode(true)));
     }
   };
@@ -35,19 +37,17 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (isFirstCall.current) {
       isFirstCall.current = false;
 
-      document
-        .querySelectorAll("head style, head link")
-        .forEach((elem, index) => {
-          if (
-            !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
-            !elem.hasAttribute("data-n-p")
-          ) {
-            stylesRef.current["base"].push(elem.cloneNode(true));
-          }
-        });
+      document.querySelectorAll(styleSelector).forEach((elem, index) => {
+        if (
+          !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
+          !elem.hasAttribute("data-n-p")
+        ) {
+          stylesRef.current["base"].push(elem.cloneNode(true));
+        }
+      });
     }
 
-    document.querySelectorAll("head style, head link").forEach((elem) => {
+    document.querySelectorAll(styleSelector).forEach((elem) => {
       elem.remove();
     });
 

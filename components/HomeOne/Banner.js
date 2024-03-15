@@ -60,6 +60,7 @@ const Banner = ({ popularCategories }) => {
           <div className="banner-flexi">
             <h1 className="banner-one-heading">
               <div className="banner-one-heading-scrollable">
+                What would you like to rent?
                 <Swiper
                   direction={"vertical"}
                   autoplay={{
@@ -71,7 +72,6 @@ const Banner = ({ popularCategories }) => {
                   {popularCategories.map((category) => (
                     <SwiperSlide key={category}>
                       <span>
-                        What would you like to rent?{" "}
                         <Link
                           href={`/listing-list?categories=${category}`}
                           className="color-0ec6c6"
