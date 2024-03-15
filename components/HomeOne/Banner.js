@@ -73,7 +73,7 @@ const Banner = ({ popularCategories }) => {
                       <span>
                         What would you like to rent?{" "}
                         <Link
-                          href={`/search?filter=${category}`}
+                          href={`/listing-list?categories=${category}`}
                           className="color-0ec6c6"
                         >
                           {category}
@@ -157,7 +157,9 @@ const Banner = ({ popularCategories }) => {
 
             {popularCategories.map((category) => (
               <li key={category}>
-                <Link href="/grid-listings-with-map">{category}</Link>
+                <Link href={`/listing-list?categories=${category}`}>
+                  {category}
+                </Link>
               </li>
             ))}
           </ul>

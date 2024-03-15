@@ -21,8 +21,10 @@ const Category = ({ topCategories }) => {
           <div className="row">
             {topCategories.map((info) => (
               <div className="col-lg-2 col-sm-6 col-md-4" key={info.id}>
-                <div className="single-category-box">
-                  <div className="icon overflow-hidden">
+                <div
+                  className="single-category-box d-flex flex-column align-items-center"
+                >
+                  <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
                   </div>
                   <h3>{info.name}</h3>

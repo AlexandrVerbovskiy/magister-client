@@ -12,14 +12,20 @@ import DestinationsTwo from "../components/Common/DestinationsTwo";
 import Feedback from "../components/Common/Feedback";
 import AppDownload from "../components/Common/AppDownload";
 
-const Index = ({ topCategories, topListings, categories }) => {
+const Index = ({ topListings, categories }) => {
   const { setLoading } = useContext(IndiceContext);
   const popularCategories = [];
+  const topCategories = [];
+  const maxTopCategoriesSectionView = 11;
 
   Object.keys(categories).forEach((level) => {
     categories[level].map((category) => {
       if (category.popular) {
         popularCategories.push(category.name);
+      }
+
+      if (topCategories.length < maxTopCategoriesSectionView) {
+        topCategories.push(category);
       }
     });
   });
