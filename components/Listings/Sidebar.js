@@ -189,15 +189,17 @@ const Sidebar = ({
           LiItemElement={CityLi}
         />
 
-        <SidebarCheckboxesSection
-          title="Categories"
-          open={categoriesOpen}
-          setOpen={setCategoriesOpen}
-          items={categories}
-          selectedItems={selectedCategories}
-          handleChangeChecked={handleChangeCheckedCategory}
-          LiItemElement={FirstCategoryLevelLi}
-        />
+        {categories.length > 0 && (
+          <SidebarCheckboxesSection
+            title="Categories"
+            open={categoriesOpen}
+            setOpen={setCategoriesOpen}
+            items={categories}
+            selectedItems={selectedCategories}
+            handleChangeChecked={handleChangeCheckedCategory}
+            LiItemElement={FirstCategoryLevelLi}
+          />
+        )}
       </aside>
     </>
   );
