@@ -1,15 +1,16 @@
 const onCurrentUserLocation = (hasNavCallback, noHasNavCallback = null) => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+  navigator.geolocation.getCurrentPosition(
+    function (position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       hasNavCallback({ lat, lng });
-    });
-  } else {
-    if (noHasNavCallback) {
-      noHasNavCallback();
+    },
+    function (err) {
+      if (noHasNavCallback) {
+        noHasNavCallback(err.message);
+      }
     }
-  }
+  );
 };
 
 export default onCurrentUserLocation;

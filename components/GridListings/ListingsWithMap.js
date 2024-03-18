@@ -11,6 +11,11 @@ import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
+import { useRouter } from "next/router";
+import { getDateByCurrentAdd } from "../../utils";
+import STATIC from "../../static";
+
+const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
 const ListingsWithMap = ({
   categories: baseCategories,
@@ -18,6 +23,16 @@ const ListingsWithMap = ({
   canSendCreateNotifyRequest: baseCanSendCreateNotifyRequest,
 }) => {
   const isFirstRef = useRef(true);
+  const router = useRouter();
+
+  const [userLocation, setUserLocation] = useState(null);
+  const [searchLocation, setSearchLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
+
+  const defaultTimeFilterValues = {
+    defaultFromTime: getDateByCurrentAdd(0),
+    defaultToTime: getDateByCurrentAdd(2),
+  };
 
   const [categories, setCategories] = useState(baseCategories);
   const [pageProps, setPageProps] = useState(basePageProps);
@@ -25,13 +40,47 @@ const ListingsWithMap = ({
     baseCanSendCreateNotifyRequest
   );
 
+  const initCategories = () => {
+    const pagePropsCategories = pageProps.options?.categories;
+
+    if (pagePropsCategories) return pagePropsCategories;
+
+    const routerCategories = router.query.categories;
+
+    if (routerCategories) {
+      if (typeof routerCategories === "string") {
+        return [routerCategories];
+      } else {
+        return [...routerCategories];
+      }
+    }
+
+    return [];
+  };
+
+  const initCities = () => {
+    const pagePropsCities = pageProps.options?.cities;
+
+    if (pagePropsCities) return pagePropsCities;
+
+    const routerCities = router.query.cities;
+
+    if (routerCities) {
+      if (typeof routerCities === "string") {
+        return [routerCities];
+      } else {
+        return [...routerCities];
+      }
+    }
+
+    return [];
+  };
+
   const [selectedCategories, setSelectedCategories] = useState(
-    pageProps.options.categories
+    initCategories()
   );
 
-  const [selectedCities, setSelectedCities] = useState(
-    pageProps.options.cities
-  );
+  const [selectedCities, setSelectedCities] = useState(initCities());
 
   useEffect(() => {
     if (isFirstRef.current) {
@@ -39,8 +88,8 @@ const ListingsWithMap = ({
       return;
     }
 
-    setSelectedCities(pageProps.options.cities);
-    setSelectedCategories(pageProps.options.categories);
+    setSelectedCities(initCities());
+    setSelectedCategories(initCategories());
   }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
@@ -50,7 +99,7 @@ const ListingsWithMap = ({
   const { error, success, authToken = null } = useContext(IndiceContext);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+    useInitPaginationTimeFilter(defaultTimeFilterValues);
 
   const {
     page,
@@ -75,11 +124,12 @@ const ListingsWithMap = ({
       ...getTimeFilterProps(),
       categories: selectedCategories.length > 0 ? selectedCategories : null,
       cities: selectedCities.length > 0 ? selectedCities : null,
+      lat: searchLocation?.lat,
+      lng: searchLocation?.lng,
     }),
-    defaultData: pageProps,
+    //defaultData: pageProps,
+    needInit: false,
   });
-
-  console.log(listings)
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
     options,
@@ -88,6 +138,7 @@ const ListingsWithMap = ({
     toTime,
     setToTime,
     rebuild,
+    ...defaultTimeFilterValues,
   });
 
   const handleSelectedCategories = (categories) => {
@@ -96,8 +147,13 @@ const ListingsWithMap = ({
   };
 
   const handleSelectedCities = (cities) => {
+    const searchCenter =
+      userLocation ?? STATIC.cityCoords[cities[0]] ?? defaultCenter;
+
     setSelectedCities(cities);
-    rebuild({ cities }, ["cities"]);
+    rebuild({ cities, ...searchCenter }, ["cities", "lat", "lng"]);
+
+    setMapCenter(searchCenter);
   };
 
   const [markers, setMarkers] = useState([]);
@@ -155,6 +211,17 @@ const ListingsWithMap = ({
         return marker;
       })
     );
+
+  const changeUserLocation = (location) => {
+    setUserLocation(location);
+
+    let center = STATIC.cityCoords[selectedCities[0]] ?? defaultCenter;
+    if (location) center = location;
+
+    setSearchLocation(center);
+    setMapCenter(center);
+    rebuild({ ...location }, ["lat", "lng"]);
+  };
 
   return (
     <>
@@ -288,9 +355,13 @@ const ListingsWithMap = ({
               <div className="map-container fw-map side-full-map">
                 <div id="main-full-map">
                   <MultyMarkersMap
+                    userLocation={userLocation}
+                    setUserLocation={changeUserLocation}
                     markers={markers}
                     onMouseOver={setMarkerActive}
                     onMouseOut={setMarkerUnactive}
+                    center={mapCenter}
+                    setCenter={setMapCenter}
                   />
                 </div>
               </div>

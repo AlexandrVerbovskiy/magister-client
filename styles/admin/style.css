@@ -302,6 +302,14 @@ Preloader Area CSS
   background-repeat: no-repeat;
 }
 
+.listing-gallery-flex-parent > div {
+  height: 300px !important;
+}
+
+.sidebar-expanded .adaptive-logo-image {
+  background-image: url("/images/rent-about-logo.png");
+}
+
 @media (min-width: 1536px) {
   .adaptive-logo-image {
     background-image: url("/images/rent-about-logo.png");

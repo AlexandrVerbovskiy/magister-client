@@ -2362,6 +2362,8 @@ Main Banner Area CSS
 .main-banner-content form .submit-btn {
   padding-left: 5px;
 }
+
+.base-main-button,
 .main-banner-content form .submit-btn button {
   display: block;
   width: 100%;
@@ -2374,6 +2376,15 @@ Main Banner Area CSS
   border-radius: 30px;
   transition: var(--transition);
 }
+
+.base-main-button{
+  width: max-content;
+  padding: 11px 40px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.base-main-button:hover,
 .main-banner-content form .submit-btn button:hover {
   background-color: var(--blackColor);
   color: var(--whiteColor);
@@ -13817,6 +13828,7 @@ Dashboard CSS
   font-weight: 600;
 }
 
+
 .add-listings-box.footer-section button:hover,
 .my-profile-box form button:hover {
   background-color: #3b99ca;
@@ -17282,5 +17294,5 @@ Preloader Area CSS
 }
 
 .logo-image{
-  height: 42px!important;
+  height: 34px!important;
 }

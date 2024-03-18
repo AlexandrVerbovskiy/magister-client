@@ -11,6 +11,10 @@ import Category from "../components/HomeOne/Category";
 import DestinationsTwo from "../components/Common/DestinationsTwo";
 import Feedback from "../components/Common/Feedback";
 import AppDownload from "../components/Common/AppDownload";
+import Blog from "../components/Common/Blog";
+import HowItWorks from "../components/Common/HowItWorks";
+import BeforeTheRental from "../components/Common/BeforeTheRental";
+import DuringRental from "../components/Common/DuringRental";
 
 const Index = ({ topListings, categories }) => {
   const { setLoading } = useContext(IndiceContext);
@@ -49,6 +53,14 @@ const Index = ({ topListings, categories }) => {
       <DestinationsTwo />
 
       <Feedback />
+
+      <HowItWorks bgColor="bg-f9f9f9" />
+
+      <DuringRental />
+
+      <BeforeTheRental />
+
+      <Blog />
 
       <AppDownload />
 

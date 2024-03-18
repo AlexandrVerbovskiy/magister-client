@@ -1,11 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { timeNormalConverter } from "../utils";
+import React, { useState } from "react";
+import {
+  getDateByCurrentAdd,
+  getDateByCurrentReject,
+  timeNormalConverter,
+} from "../utils";
 import { useRouter } from "next/router";
 
-const useInitPaginationTimeFilter = () => {
+const useInitPaginationTimeFilter = ({
+  defaultFromTime = null,
+  defaultToTime = null,
+} = {}) => {
   const router = useRouter();
-  let baseFromTime = router.query.fromTime;
-  let baseToTime = router.query.toTime;
+
+  if (!defaultToTime) {
+    defaultToTime = getDateByCurrentAdd(1);
+  }
+
+  if (!defaultFromTime) {
+    defaultFromTime = getDateByCurrentReject(1);
+  }
+
+  let baseFromTime = router.query.fromTime ?? defaultFromTime;
+  let baseToTime = router.query.toTime ?? defaultToTime;
 
   if (baseFromTime) {
     baseFromTime = new Date(baseFromTime);

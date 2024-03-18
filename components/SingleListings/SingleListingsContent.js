@@ -11,6 +11,8 @@ import STATIC from "../../static";
 
 const SingleListingsContent = ({ listing }) => {
   const { success, error } = useContext(IndiceContext);
+  const [userLocation, setUserLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
 
   const handleShareClick = () => {
     const clipboard = new ClipboardJS("#shareButton", {
@@ -848,6 +850,10 @@ const SingleListingsContent = ({ listing }) => {
                           lat: listing.rentalLat,
                           lng: listing.rentalLng,
                         }}
+                        userLocation={userLocation}
+                        setUserLocation={setUserLocation}
+                        center={mapCenter}
+                        setCenter={setMapCenter}
                       />
                     </li>
                   </ul>

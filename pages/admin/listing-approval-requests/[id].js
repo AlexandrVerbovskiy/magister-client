@@ -15,6 +15,43 @@ import TextareaView from "../../../components/admin/Form/TextareaView";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
+import { getListingImageByType } from "../../../utils";
+import ImageView from "../../../components/admin/Form/ImageView";
+
+const ListingPhotoView = ({ src }) => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [mapCenter, setMapCenter] = useState(null);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  return (
+    <>
+      <div
+        className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent listing-gallery-flex-parent"
+        onClick={openPopup}
+      >
+        <div className="bg-gray-100 border shadow-md flex flex-col form-group">
+          <div className="image-box cursor-zoom-in">
+            <img
+              src={src}
+              alt="image"
+              width="300px"
+              height="300px"
+              className="object-cover w-full h-auto"
+            />
+          </div>
+        </div>
+      </div>
+      <ImageView open={isPopupOpen} imgSrc={src} close={closePopup} />
+    </>
+  );
+};
 
 const ListingApprovalRequest = ({
   request: baseRequest,
@@ -31,6 +68,7 @@ const ListingApprovalRequest = ({
   const [approveModalOpen, setApproveModalOpen] = useState(false);
   const [declineDescription, setDeclineDescription] = useState("");
   const [declineDescriptionError, setDeclineDescriptionError] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
 
   let categoryLevelLabel = "Third Level";
 
@@ -295,6 +333,8 @@ const ListingApprovalRequest = ({
                           style={{ height: "400px" }}
                         >
                           <MultyMarkersMap
+                            userLocation={userLocation}
+                            setUserLocation={setUserLocation}
                             markers={[
                               {
                                 id: 1,
@@ -307,8 +347,28 @@ const ListingApprovalRequest = ({
                               lat: listing.rentalLat,
                               lng: listing.rentalLng,
                             }}
+                            center={mapCenter}
+                            setCenter={setMapCenter}
                           />
                         </div>
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Photos
+                      </h2>
+
+                      <div
+                        className="flex flex-wrap"
+                        style={{ width: "100%", gridGap: "0.5rem" }}
+                      >
+                        {listing.listingImages.map((image) => (
+                          <ListingPhotoView
+                            key={image.id}
+                            src={getListingImageByType(image.link, image.type)}
+                          />
+                        ))}
                       </div>
                     </section>
 

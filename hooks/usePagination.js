@@ -6,6 +6,7 @@ const usePagination = ({
   onError = null,
   getDopProps = null,
   defaultData = null,
+  needInit = true,
 }) => {
   const router = useRouter();
   const isFirstRef = useRef(true);
@@ -14,14 +15,14 @@ const usePagination = ({
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
 
-  const [options, setOptions] = useState(defaultData.options ?? {});
+  const [options, setOptions] = useState(defaultData?.options ?? {});
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(null);
   const [orderType, setOrderType] = useState(null);
   const [filter, setFilter] = useState("");
 
-  const [items, setItems] = useState(defaultData.items ?? []);
+  const [items, setItems] = useState(defaultData?.items ?? []);
   const [canMoveNextPage, setCanMoveNextPage] = useState(true);
   const [canMovePrevPage, setCanMovePrevPage] = useState(true);
 
@@ -120,7 +121,9 @@ const usePagination = ({
       updateStateByOption(gotOptions, unusualKeys);
       setItems(gotItems);
     } catch (e) {
-      onError(e);
+      if (onError) {
+        onError(e);
+      }
     }
   };
 
@@ -149,7 +152,7 @@ const usePagination = ({
 
       setItems(gotItems);
     }
-  }, [defaultData.options]);
+  }, [defaultData?.options]);
 
   useEffect(() => {
     const dopBody = {};
@@ -186,7 +189,9 @@ const usePagination = ({
         updateStateByOption(gotOptions);
         setItems(gotItems);
       } else {
-        onChangeOptions(dopBody);
+        if (needInit) {
+          onChangeOptions(dopBody);
+        }
       }
     } else {
       onChangeOptions(dopBody);

@@ -50,3 +50,17 @@ export const dateToInput = (daysAfterCurrent = 0) => {
 
   return dateToInputString(daysLater);
 };
+
+export const getDateByCurrentAdd = (daysToAdd = 0) => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysToAdd);
+  date.setHours(23, 59, 59, 999);
+  return date;
+};
+
+export const getDateByCurrentReject = (daysToReject = 0) => {
+  const date = new Date();
+  date.setDate(date.getDate() - daysToReject);
+  date.setHours(0, 0, 0, 0);
+  return date;
+};

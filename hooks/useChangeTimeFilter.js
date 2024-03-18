@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { timeConverter } from "../utils";
+import {
+  getDateByCurrentAdd,
+  getDateByCurrentReject,
+  timeConverter,
+} from "../utils";
 
 const useWatchChangeTimeFilter = ({
   toTime,
@@ -8,6 +12,8 @@ const useWatchChangeTimeFilter = ({
   setFromTime,
   options,
   rebuild,
+  defaultFromTime = null,
+  defaultToTime = null,
 }) => {
   const getTimeToProp = (date) => (date ? timeConverter(date) : null);
 
@@ -18,8 +24,16 @@ const useWatchChangeTimeFilter = ({
     )
       return;
 
-    setFromTime(new Date(options.fromTime));
-    setToTime(new Date(options.toTime));
+    if (!defaultToTime) {
+      defaultToTime = getDateByCurrentAdd(1);
+    }
+
+    if (!defaultFromTime) {
+      defaultFromTime = getDateByCurrentReject(1);
+    }
+
+    setFromTime(new Date(options.fromTime ?? defaultFromTime));
+    setToTime(new Date(options.toTime ?? defaultToTime));
   }, [options.toTime, options.fromTime]);
 
   const handleChangeTimeFilter = (dates) => {

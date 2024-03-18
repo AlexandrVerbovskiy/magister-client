@@ -86,7 +86,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         }`}
       >
         {/* Sidebar header */}
-        <div className="flex justify-between mb-10 pr-3 sm:px-2">
+        <div className="flex justify-between mb-10 mt-1 pr-3 sm:px-2">
           {/* Close button */}
           <button
             ref={trigger}

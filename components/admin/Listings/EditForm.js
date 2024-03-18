@@ -10,7 +10,7 @@ import { getUserNameIdList } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
 import lodash from "lodash";
-import EditPhotosSection from "../Listings/EditPhotosSection";
+import EditPhotosSection from "./EditPhotosSection";
 import {
   useListingPhotosEdit,
   useAdminPage,
@@ -145,12 +145,10 @@ const EditForm = ({ listing, categories, save }) => {
     setRadius(STATIC.baseListingMapCircleRadius);
   };
 
-  const handleChangeAddress = async (event) => {
+  const handleChangeAddress = async (newAddress) => {
     try {
-      const newAddress = event.target.value;
       setAddress(newAddress);
       setAddressError(null);
-      setMainError(null);
       const newCoords = await getCoordsByAddress(newAddress);
       setLat(newCoords.lat);
       setLng(newCoords.lng);

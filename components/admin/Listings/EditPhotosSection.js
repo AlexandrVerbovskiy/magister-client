@@ -28,7 +28,7 @@ const ImageView = ({
   };
 
   return (
-    <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 p-2 gallery-flex-parent">
+    <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
       <div
         className="bg-gray-100 border shadow-md flex flex-col form-group"
         onClick={handleImageClick}
@@ -170,7 +170,7 @@ const EditPhotosSection = ({
           Photos
         </h2>
 
-        <div className="flex flex-wrap" style={{ width: "100%" }}>
+        <div className="flex flex-wrap" style={{ width: "100%", gridGap: "0.5rem" }}>
           {infosToView.map((file) => (
             <ImageView
               key={file.localId}
@@ -186,7 +186,7 @@ const EditPhotosSection = ({
           ))}
 
           {files.length + linkFiles.length < 5 && (
-            <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 p-2 gallery-flex-parent">
+            <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
               <div className="bg-gray-100 border rounded-lg shadow-md flex flex-col form-group">
                 <div
                   className="add-more-image p-4 cursor-pointer"

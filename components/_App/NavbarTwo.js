@@ -224,7 +224,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
               <div className="logo">
                 <Link href="/">
                   <img
-                    src="/images/rent-about-logo.png"
+                    src="/images/rent-about-logo-black.png"
                     className="logo-image"
                     alt="logo"
                   />
