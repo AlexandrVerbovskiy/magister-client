@@ -152,17 +152,19 @@ const Banner = ({ popularCategories }) => {
             </div>
           </form>
 
-          <ul className="popular-search-list">
-            <li>Popular:</li>
+          {popularCategories.length && (
+            <ul className="popular-search-list">
+              <li>Popular:</li>
 
-            {popularCategories.map((category) => (
-              <li key={category}>
-                <Link href={`/listing-list?categories=${category}`}>
-                  {category}
-                </Link>
-              </li>
-            ))}
-          </ul>
+              {popularCategories.map((category) => (
+                <li key={category}>
+                  <Link href={`/listing-list?categories=${category}`}>
+                    {category}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
