@@ -284,11 +284,16 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                   <li className="nav-item">
                     <Link
                       href="/listing-list"
-                      className="dropdown-toggle nav-link"
+                      className={`${
+                        categories.length > 0 ? "dropdown-toggle " : ""
+                      }nav-link`}
                     >
                       Listings
                     </Link>
-                    <CategoriesNavbar categories={categories} />
+
+                    {categories.length > 0 && (
+                      <CategoriesNavbar categories={categories} />
+                    )}
                   </li>
 
                   {isAuth && (
