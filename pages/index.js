@@ -19,7 +19,7 @@ import DuringRental from "../components/Common/DuringRental";
 const Index = ({ topListings, categories }) => {
   const { setLoading } = useContext(IndiceContext);
   const popularCategories = [];
-  const topCategories = [];
+  let topCategories = [];
   const maxTopCategoriesSectionView = 11;
 
   Object.keys(categories).forEach((level) => {
@@ -28,11 +28,12 @@ const Index = ({ topListings, categories }) => {
         popularCategories.push(category.name);
       }
 
-      if (topCategories.length < maxTopCategoriesSectionView) {
-        topCategories.push(category);
-      }
+      topCategories.push(category);
     });
   });
+
+  topCategories.sort((a, b) => a.countListings - b.countListings);
+  topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
 
   useEffect(() => {
     setLoading(false);
