@@ -9,6 +9,7 @@ const Input = ({
   placeholder = "",
   setError = () => {},
   children,
+  name = null,
 }) => {
   const handleInput = (e) => {
     setError(null);
@@ -21,6 +22,7 @@ const Input = ({
       <input
         type={type}
         className="form-control"
+        name={name}
         value={value}
         onInput={handleInput}
         placeholder={placeholder}

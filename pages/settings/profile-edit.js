@@ -10,6 +10,7 @@ import {
   generateMyPhoneVerifyCode,
   changeTwoFactorAuth,
   noNeedRegularViewInfoForm,
+  getUserProfileEditPageOptions,
 } from "../../services";
 import {
   getFilePath,
@@ -136,13 +137,8 @@ const ProfileEdit = () => {
 
   const hasChanges = () => {
     if (newPhoto) return true;
-
     const dataToSave = objectToSave();
-
-    const userToCheck = {
-      ...userToState(),
-    };
-
+    const userToCheck = userToState();
     return !lodash.isEqual(userToCheck, dataToSave);
   };
 
@@ -524,6 +520,7 @@ const ProfileEdit = () => {
               onInput={handleInputPhoneCode}
               type="text"
               placeholder="Code"
+              name="phoneCode"
               className="form-control"
             />
           </div>
@@ -553,11 +550,12 @@ const ProfileEdit = () => {
           <h1>Settings</h1>
           <ol className="breadcrumb">
             <li className="item">
-              <Link href="/settings/">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/profile-edit">Profile Edit</Link>
+              <Link href="/settings/">Settings</Link>
             </li>
+            <li className="item">Profile Edit</li>
           </ol>
         </div>
 
@@ -574,9 +572,7 @@ const ProfileEdit = () => {
 
         {!user.hasPasswordAccess && (
           <div className="row">
-            <div className="col-12">
-              {profileFormSection}
-            </div>
+            <div className="col-12">{profileFormSection}</div>
           </div>
         )}
       </div>
@@ -584,15 +580,16 @@ const ProfileEdit = () => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
-  if (baseSideProps.props.user.needRegularViewInfoForm) {
-    noNeedRegularViewInfoForm(baseSideProps.props.authToken);
+const boostServerSideProps = async ({ baseSideProps }) => {
+  if (baseSideProps.user.needRegularViewInfoForm) {
+    noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
 
-  return baseSideProps;
+  const options = await getUserProfileEditPageOptions(baseSideProps.authToken);
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default ProfileEdit;

@@ -3,12 +3,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
+import CategoriesNavbar from "../CategoriesNavbar";
 
 const NavbarThree = () => {
   const {
     success: mainSuccess,
     isAuth,
     isSupport,
+    toggleSideMenu,
+    categories = {},
   } = useContext(IndiceContext);
 
   // Add active class
@@ -19,7 +22,6 @@ const NavbarThree = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const { toggleSideMenu } = useContext(IndiceContext);
   const [showMenu, setshowMenu] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [displayDropdownProfile, setDisplayDropdownProfile] = useState(false);
@@ -70,6 +72,16 @@ const NavbarThree = () => {
                   <Link href="/" className="nav-link">
                     Home
                   </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    href="/listing-list"
+                    className="dropdown-toggle nav-link"
+                  >
+                    Listings
+                  </Link>
+                  <CategoriesNavbar categories={categories} />
                 </li>
 
                 {isAuth && (

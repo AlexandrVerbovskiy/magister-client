@@ -41,24 +41,24 @@ const TableItem = ({
 
   return (
     <tr>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {eventName}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {user.id != userId && (
-          <Link href={`/admin/user-edit/${userId}`}>{userEmail}</Link>
+          <Link href={`/admin/users/edit/${userId}`}>{userEmail}</Link>
         )}
         {user.id == userId && userEmail}
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-semibold">
           <RoleSpan role={userRole} />
         </div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">
           <div className="font-medium">{timeConverter(createdAt)}</div>
         </div>

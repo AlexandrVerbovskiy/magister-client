@@ -12,8 +12,8 @@ const BaseModal = ({ active, toggleActive, children, className = "" }) => {
               <i className="bx bx-x"></i>
             </button>
 
-            <div className="tab-content mt-0" id="myTabContent">
-              <div className="tab-pane fade show active" id="login">
+            <div className="tab-content mt-0">
+              <div className="tab-pane fade show active">
                 <div className="miran-login">{children}</div>
               </div>
             </div>

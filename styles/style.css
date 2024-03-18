@@ -369,7 +369,7 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item:first-child {
   margin-left: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:hover a,
+.miran-nav .navbar .navbar-nav .nav-item.active:not(.disabled):hover a,
 .miran-nav .navbar .navbar-nav .nav-item.active a {
   color: var(--mainColor);
 }
@@ -419,9 +419,10 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -250px;
+  left: 250px;
   margin-top: 15px;
   visibility: hidden;
+  box-shadow: 0 0 100px 5px rgba(0, 0, 0, 0.3);
 }
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu li a {
   color: var(--blackColor);
@@ -466,8 +467,10 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: 250px;
+  left: -250px;
   visibility: hidden;
+  margin-top: -12px;
+  box-shadow: 0 0 100px 15px rgba(0, 0, 0, 0.3);
 }
 .miran-nav
   .navbar
@@ -532,6 +535,7 @@ Navbar Area CSS
   opacity: 0;
   left: -250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -606,6 +610,7 @@ Navbar Area CSS
   opacity: 0;
   left: 250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -690,6 +695,7 @@ Navbar Area CSS
   opacity: 0;
   left: -250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -784,6 +790,7 @@ Navbar Area CSS
   opacity: 0;
   left: 250px;
   visibility: hidden;
+  margin-top: -11px;
 }
 .miran-nav
   .navbar
@@ -1026,15 +1033,19 @@ Navbar Area CSS
 .miran-nav
   .navbar
   .navbar-nav
-  .nav-item
-  .dropdown-menu
-  li:hover
-  .dropdown-menu {
+  > .nav-item
+  > .dropdown-menu
+  > li:hover
+  > .dropdown-menu {
   opacity: 1;
   visibility: visible;
   margin-top: 0;
 }
-.miran-nav .navbar .navbar-nav .nav-item:hover .dropdown-menu {
+.miran-nav
+  .navbar
+  .navbar-nav
+  > .nav-item:not(.disabled):hover
+  > .dropdown-menu {
   opacity: 1;
   visibility: visible;
   margin-top: 0;
@@ -1116,6 +1127,8 @@ Navbar Area CSS
 .miran-nav .navbar .others-option .option-item span:hover::before {
   transform: scaleX(1);
 }
+
+.add-listing-link-btn,
 .miran-nav .navbar .others-option .option-item .default-btn {
   position: relative;
   box-shadow: unset !important;
@@ -1126,11 +1139,18 @@ Navbar Area CSS
   padding-top: 11px;
   padding-bottom: 11px;
 }
+.add-listing-link-btn i,
 .miran-nav .navbar .others-option .option-item .default-btn i {
   margin-right: 5px;
 }
+
+.add-listing-link-btn:hover,
 .miran-nav .navbar .others-option .option-item .default-btn:hover {
   background-color: var(--mainColor);
+  color: var(--whiteColor);
+}
+
+.add-listing-link-btn:hover i {
   color: var(--whiteColor);
 }
 
@@ -1151,10 +1171,7 @@ Navbar Area CSS
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a.active {
   color: var(--mainColor);
 }
-.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item:hover a,
-.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item.active a {
-  color: var(--mainColor);
-}
+
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
   color: var(--blackColor);
 }
@@ -1706,6 +1723,8 @@ Navbar Area CSS
 .navbar-style-two .miran-nav .navbar .others-option .option-item span:hover i {
   color: var(--mainColor2);
 }
+
+.navbar-style-two .add-listing-link-btn,
 .navbar-style-two .miran-nav .navbar .others-option .option-item .default-btn {
   color: var(--mainColor2);
   border-color: var(--mainColor2);
@@ -2126,12 +2145,39 @@ Navbar Area CSS
 Main Banner Area CSS
 =================================================*/
 .main-banner-area {
-  padding-top: 330px;
+  padding-top: 290px;
   padding-bottom: 250px;
-  background-image: url(/images/main-banner-bg1.jpg);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  position: relative;
+}
+
+.main-banner-area .background-image-list {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.main-banner-area .background-image-list .swiper {
+  height: 100%;
+}
+
+.main-banner-area .background-image {
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.main-banner-area .container {
+  position: relative;
+  z-index: 1;
 }
 
 .main-banner-content {
@@ -2316,6 +2362,8 @@ Main Banner Area CSS
 .main-banner-content form .submit-btn {
   padding-left: 5px;
 }
+
+.base-main-button,
 .main-banner-content form .submit-btn button {
   display: block;
   width: 100%;
@@ -2328,6 +2376,15 @@ Main Banner Area CSS
   border-radius: 30px;
   transition: var(--transition);
 }
+
+.base-main-button{
+  width: max-content;
+  padding: 11px 40px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.base-main-button:hover,
 .main-banner-content form .submit-btn button:hover {
   background-color: var(--blackColor);
   color: var(--whiteColor);
@@ -3165,6 +3222,10 @@ Features Area CSS
   transition: var(--transition);
   padding: 40px 20px;
   border-radius: 5px;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .single-features-box .icon {
   margin-bottom: 25px;
@@ -3252,6 +3313,7 @@ Listings Area CSS
 }
 
 .single-listings-box {
+  position: relative;
   box-shadow: 5px 5px #b2eaea;
   transition: var(--transition);
   background-color: var(--whiteColor);
@@ -3264,11 +3326,17 @@ Listings Area CSS
   border-radius: 5px 5px 0 0;
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .single-listings-box .listings-image img {
   border-radius: 5px 5px 0 0;
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
 }
-.single-listings-box .listings-image::before {
+.single-listings-box .listings-image:not(:has(img))::before {
   content: "";
   position: absolute;
   left: 0;
@@ -3337,6 +3405,8 @@ Listings Area CSS
   position: relative;
   z-index: 1;
 }
+
+/*
 .single-listings-box .listings-image .single-image::before {
   content: "";
   position: absolute;
@@ -3348,7 +3418,8 @@ Listings Area CSS
   background-color: #000000;
   border-radius: 5px 5px 0 0;
   opacity: 0.25;
-}
+}*/
+
 .single-listings-box .listings-content {
   padding: 28px 20px 25px;
   position: relative;
@@ -3461,6 +3532,8 @@ Listings Area CSS
 .single-listings-box.without-boxshadow {
   box-shadow: unset;
 }
+
+.single-listings-box.hovered,
 .single-listings-box:hover {
   box-shadow: 5px 5px var(--mainColor);
   border-color: var(--mainColor);
@@ -3857,7 +3930,8 @@ Listings Area CSS
 
 .all-listings-list {
   padding-right: 30px;
-  margin-left: -40px;
+  margin-left: 0 !important;
+  height: 100%;
 }
 
 .map-container.fw-map.side-full-map {
@@ -5253,9 +5327,7 @@ Listings Details Area CSS
   font-size: 20px;
   color: var(--blackColor);
 }
-.listings-sidebar .listings_contact_details ul li i.bx-map {
-  margin-top: 7px;
-}
+
 .listings-sidebar .listings_contact_details ul li:nth-child(1),
 .listings-sidebar .listings_contact_details ul li:nth-child(3) {
   color: var(--mainColor);
@@ -10278,7 +10350,8 @@ Author Area CSS
 Pagination CSS
 =================================================*/
 .pagination-area {
-  margin-top: 35px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 .pagination-area .page-numbers {
   width: 40px;
@@ -10368,6 +10441,8 @@ Widget Sidebar CSS
   display: block;
   margin-bottom: 0;
 }
+
+.search-header-section .search-field,
 .widget-area .widget_search form .search-field {
   height: 50px;
   color: var(--blackColor);
@@ -10380,21 +10455,29 @@ Widget Sidebar CSS
   transition: var(--transition);
   font-weight: 400;
 }
+
+.search-header-section .search-field::-moz-placeholder,
 .widget-area .widget_search form .search-field::-moz-placeholder {
   color: var(--optionalColor);
   -moz-transition: var(--transition);
   transition: var(--transition);
 }
+.search-header-section .search-field::placeholder,
 .widget-area .widget_search form .search-field::placeholder {
   color: var(--optionalColor);
   transition: var(--transition);
 }
+.search-header-section .search-field:focus::-moz-placeholder,
 .widget-area .widget_search form .search-field:focus::-moz-placeholder {
   color: transparent;
 }
+.search-header-section .search-field:focus::placeholder,
 .widget-area .widget_search form .search-field:focus::placeholder {
   color: transparent;
 }
+
+.search-header-section .search-field[type="search"]::-ms-clear,
+.search-header-section .search-field[type="search"]::-ms-reveal,
 .widget-area .widget_search form .search-field[type="search"]::-ms-clear,
 .widget-area .widget_search form .search-field[type="search"]::-ms-reveal,
 .widget-area
@@ -12002,7 +12085,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: -250px;
+  left: 250px;
 }
 .main-content
   .navbar-area
@@ -12510,11 +12593,11 @@ Dashboard CSS
   visibility: visible;
 }
 .main-content .listing-area {
+  position: relative;
   background-color: var(--whiteColor);
   box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05);
-  padding: 25px 20px 0;
+  padding: 25px 20px;
   border-radius: 5px;
-  margin-bottom: 30px;
 }
 .main-content .listing-area .nav {
   list-style-type: none;
@@ -13729,6 +13812,8 @@ Dashboard CSS
 .my-profile-box form .form-group .form-control:focus::placeholder {
   color: transparent;
 }
+
+.add-listings-box.footer-section button,
 .my-profile-box form button {
   display: block;
   width: 100%;
@@ -13742,6 +13827,9 @@ Dashboard CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+
+.add-listings-box.footer-section button:hover,
 .my-profile-box form button:hover {
   background-color: #3b99ca;
   color: var(--whiteColor);
@@ -13757,12 +13845,14 @@ Dashboard CSS
   width: 100%;
   max-height: 300px;
 }
+
 .my-profile-box .profile-box .file-upload {
   display: inline-block;
   position: absolute;
   left: 15px;
   bottom: 15px;
 }
+
 .my-profile-box .profile-box .file-upload .inputfile {
   width: 0.1px;
   height: 0.1px;
@@ -13771,6 +13861,7 @@ Dashboard CSS
   position: absolute;
   z-index: -1;
 }
+
 .my-profile-box .profile-box .file-upload .inputfile + label {
   color: var(--blackColor);
   background-color: var(--whiteColor);
@@ -13783,6 +13874,7 @@ Dashboard CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
 .my-profile-box .profile-box .file-upload i {
   position: absolute;
   left: 25px;
@@ -13794,11 +13886,11 @@ Dashboard CSS
 .my-profile-box .profile-box .file-upload .inputfile:focus + label,
 .my-profile-box .profile-box .file-upload .inputfile + label:hover {
   background-color: var(--mainColor);
-  color: var(--whiteColor)!important;
+  color: var(--whiteColor) !important;
 }
 
-.my-profile-box .profile-box .file-upload .inputfile + label:hover *{
-  color: var(--whiteColor)!important;
+.my-profile-box .profile-box .file-upload .inputfile + label:hover * {
+  color: var(--whiteColor) !important;
 }
 
 .my-profile-box .profile-box .file-upload .inputfile + label {
@@ -15572,14 +15664,27 @@ Dashboard CSS
   font-variant: normal;
   font-size: 18px;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover {
   background-color: #fafafa;
   color: var(--mainColor);
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover::before {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover::before {
   width: 3px;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link:hover .icon {
+.sidemenu-area
+  .sidemenu-body
+  .sidemenu-nav
+  .nav-item
+  .nav-link:not(.disabled):hover
+  .icon {
   transform: rotateY(-180deg);
   color: var(--mainColor);
 }
@@ -16102,6 +16207,24 @@ Dashboard CSS
   justify-content: center;
 }
 
+.main-banner-content .banner-one-heading-fixed {
+  margin-right: 14px;
+}
+
+.main-banner-content .banner-one-heading-scrollable {
+  height: 110px;
+}
+
+.main-banner-content .banner-one-heading-scrollable .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.main-banner-content .banner-one-heading .swiper-slide {
+  display: flex;
+  text-wrap: nowrap;
+}
+
 .banner-content .banner-two-heading {
   display: flex;
 }
@@ -16120,11 +16243,29 @@ Dashboard CSS
   margin-right: 11px;
 }
 
-.dashbaord-category-select {
+.dashboard-category-select {
   background: #f6f6f6;
   border: 1px solid #eee;
   width: 100%;
   padding: 14px;
+}
+
+.custom-search-select > [class*="-control"] {
+  height: 48px;
+  background: #f9f9f9 !important;
+  transition: var(--transition);
+  border-radius: 5px;
+  border: 1px solid #e5e7f2 !important;
+  color: var(--blackColor) !important;
+  font-weight: 400;
+  font-size: var(--fontSize);
+  padding: 0 5px;
+  box-shadow: none !important;
+}
+
+.custom-search-select > [class*="-control"]:hover {
+  border: 1px solid #e5e7f2 !important;
+  box-shadow: none !important;
 }
 
 .blog-select {
@@ -16228,10 +16369,10 @@ Dashboard CSS
   background: #888;
 }
 
-.nav-item:hover .icon {
+/*.nav-item:not(.disabled):hover .icon {
   transform: rotateY(-180deg);
   color: var(--mainColor);
-}
+}*/
 
 .sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .active {
   background-color: #fafafa;
@@ -16290,12 +16431,6 @@ Dashboard CSS
   margin-right: 15px;
   margin-bottom: 15px;
   display: inline-block;
-}
-
-.dropzone {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .dropzone h3 {
@@ -16624,7 +16759,7 @@ Preloader Area CSS
   justify-content: center;
 }
 
-.document-verification>form{
+.document-verification > form {
   padding-top: 0 !important;
 }
 
@@ -16634,12 +16769,12 @@ Preloader Area CSS
   color: #555555 !important;
 }
 
-.profile-phone-error{
+.profile-phone-error {
   margin-top: -22px;
   padding: 0;
 }
 
-.document-view .profile-box > label{
+.document-view .profile-box > label {
   height: 42px;
   display: flex !important;
   align-items: flex-end;
@@ -16663,11 +16798,501 @@ Preloader Area CSS
   background-color: #f8f8f8;
 }
 
-.view-picture-parent{
+.view-picture-parent {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   z-index: 9999999999;
+}
+
+.tips-popup-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: all 0.2s ease-in-out;
+  z-index: 999;
+  background: white;
+  color: #686868;
+}
+
+.tips-popup-wrapper.active {
+  max-height: 200px;
+}
+
+.tips-popup {
+  max-height: 200px;
+  overflow: auto;
+  border-top: 1px solid #30eded;
+}
+
+.navbar-search-box .tips-popup {
+  border-top: 0 !important;
+}
+
+.tips-popup .tip {
+  text-align: start;
+  padding: 5px 10px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.tips-popup .tip:hover {
+  background-color: #f2f2f2;
+}
+
+.page-title-bg form .popup-places-filter .submit-btn {
+  padding-left: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .page-title-bg form .popup-places-filter .submit-btn {
+    padding-left: 5px;
+  }
+}
+
+.listings-widget-area .widget-title {
+  cursor: pointer;
+}
+
+.showed-more,
+.listings-widget-area .widget,
+.listings-widget-area .widget .widget-body,
+.listings-widget-area .widget .widget-body ul,
+.listings-widget-area .widget .widget-title::before {
+  transition: all 0.4s ease-in-out;
+}
+
+.listings-widget-area .widget .widget-body,
+.listings-widget-area .widget .widget-body ul {
+  overflow: hidden;
+}
+
+.listings-widget-area .widget.close {
+  padding-bottom: 0;
+}
+
+.listings-widget-area .widget.close .widget-body {
+  max-height: 0 !important;
+}
+
+.listings-widget-area .widget.close .widget-title::before {
+  transform: rotate(180deg);
+}
+
+.date-input[type="date"] {
+  cursor: pointer;
+  border: 1px solid #d5d5d5;
+  color: #666666;
+  padding: 2px 5px;
+}
+
+.date-input[type="date"]::-webkit-inner-spin-button,
+.date-input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.date-filter,
+.date-filter input {
+  width: 100%;
+}
+
+.showed-more {
+  overflow: hidden;
+}
+
+.showed-more.close {
+  max-height: 0 !important;
+}
+
+.listing-area {
+  min-height: 63vh;
+}
+
+.no-listing {
+  width: calc(300px - 65px);
+  height: calc(300px - 65px);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(35px - 50%));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.no-listing-text {
+  margin-top: 10px;
+}
+
+.no-listing-btn {
+  margin-top: 10px;
+}
+
+.no-listing-btn i {
+  transition: color 0.2s ease-out;
+}
+
+.no-listing-img {
+  width: calc(180px - 65px);
+  height: calc(180px - 65px);
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  background-image: url("/images/claim-your-business.png");
+}
+
+.listing-category-select {
+  cursor: pointer;
+}
+
+.add-listings-box .form-group:has(.is-invalid) {
+  margin-bottom: 2px !important;
+}
+
+.dropzone.add-listings-box .gallery-flex {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  background-color: #f6f6f6;
+  border: 1px solid #eee;
+  cursor: pointer;
+}
+
+.dropzone.add-listings-box .gallery-flex img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.dropzone.add-listings-box .add-more-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.gallery-flex-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  border: 1px solid var(--mainColor);
+  background-color: var(--mainColor);
+  width: 34px;
+  height: 34px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-10px, 10px) rotate(45deg);
+}
+
+.remove-file-btn i::before {
+  transform: rotate(45deg);
+}
+
+.popup-get-image .gallery-flex {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
+.popup-get-image .dropzone.add-listings-box {
+  padding: 0 !important;
+}
+
+.popup-get-image .dropzone {
+  width: 100%;
+  height: 200px;
+}
+
+.invoice-btn-box.gallery-flex {
+  margin-top: 0;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-btn-box.gallery-flex img {
+  margin-top: 0;
+  max-height: 100%;
+  box-sizing: border-box;
+}
+
+.listing-area .add-listing-link-btn {
+  padding: 5px 15px;
+}
+
+.page-numbers.disabled {
+  color: gray !important;
+  cursor: auto;
+  box-shadow: -2px 3px #d5d5d5 !important;
+  border-color: #d5d5d5 !important;
+}
+
+.page-numbers.disabled.next {
+  box-shadow: 3px 3px #d5d5d5 !important;
+}
+
+.page-numbers.disabled:hover {
+  color: gray !important;
+  background-color: var(--whiteColor);
+}
+
+.listings-image .swiper-wrapper,
+.listings-image {
+  height: 225px;
+}
+
+.listings-image .swiper-slide {
+  height: auto;
+}
+
+.listings-image .single-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.listings-image .single-image img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.single-image-bpx {
+  height: 225px;
+  background-color: #fbfbfb;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-image-bpx img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.listings-details-image {
+  max-height: 500px;
+  min-height: 500px;
+}
+
+.listings-details-image .swiper {
+  min-height: 500px;
+  background-color: #eeeeee;
+}
+
+.listings-details-image img {
+  width: 100%;
+  height: 500px;
+  filter: blur(5px);
+}
+
+.listings-details-image .container-fluid {
+  z-index: 9;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.search-header-section .search-field {
+  height: 40px !important;
+  padding: 0 0 0 15px;
+}
+
+.add-listings-box.footer-section {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.add-listings-box.footer-section button {
+  width: 300px;
+}
+
+.alert-dismissible {
+  overflow-wrap: break-word;
+}
+
+.dropdown-filter {
+  font-size: var(--fontSize);
+}
+
+.dropdown-filter .filter-trigger {
+  border: 1px solid #96e3e3;
+  color: #96e3e3;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-filter .filter-trigger:hover {
+  border: var(--mainColor);
+  border: 1px solid var(--mainColor);
+}
+
+.dropdown-filter .filter-trigger svg {
+  width: 16px;
+  height: 16px;
+  fill: #96e3e3;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-filter .filter-trigger:hover svg {
+  fill: var(--mainColor);
+}
+
+.dropdown-filter .dropdown-menu {
+  font-size: 13px;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000,
+    0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.01);
+}
+
+.dropdown-filter .dropdown-menu .form-check {
+  margin-bottom: 0;
+}
+
+.dropdown-filter .dropdown-menu .label-section {
+  color: rgb(148 163 184);
+}
+
+.listing-request-status {
+  padding: 7px;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 10px;
+}
+
+.listing-request-status.approved {
+  background-color: var(--mainColor);
+}
+
+.listing-request-status.unapproved {
+  background-color: red;
+}
+
+.listing-request-status.not_processed {
+  background-color: #eeeeee;
+}
+
+.custom-tooltip-parent {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  z-index: 999;
+  font-size: 13px;
+  width: 200px;
+  line-height: 13px;
+}
+
+.sidemenu-nav .nav-link.disabled {
+  pointer-events: all !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.no-listing-found,
+.send-create-listing-category-notification {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.send-create-listing-category-notification button {
+  margin-bottom: 20px;
+}
+
+.no-listing-found .image-parent,
+.send-create-listing-category-notification .image-parent {
+  width: 400px;
+  height: 400px;
+}
+
+.no-listing-found .description,
+.send-create-listing-category-notification .description {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.all-listings-list > .row:has(.no-listing-found),
+.all-listings-list > .row:has(.send-create-listing-category-notification) {
+  height: 100%;
+}
+
+.single-category-box .icon:has(img) {
+  line-height: normal !important;
+}
+
+/*.dropdown-menu.test {
+  opacity: 1!important;
+  visibility: visible!important;
+}*/
+
+.category-nav-link {
+  display: flex !important;
+}
+
+.category-nav-link img {
+  margin-right: 8px;
+}
+
+.main-banner-content .swiper-slide {
+  text-align: center;
+}
+
+.main-banner-content .swiper-slide span {
+  width: 100%;
+}
+
+.logo-image{
+  height: 34px!important;
 }

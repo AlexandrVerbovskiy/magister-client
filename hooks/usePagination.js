@@ -1,34 +1,53 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useDebugValue } from "react";
 import { useRouter } from "next/router";
 
-const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
+const usePagination = ({
+  getItemsFunc,
+  onError = null,
+  getDopProps = null,
+  defaultData = null,
+  needInit = true,
+}) => {
   const router = useRouter();
+  const isFirstRef = useRef(true);
+  const isFirstDefaultDataRef = useRef(true);
 
   const countPagesRef = useRef(0);
   const countItemsRef = useRef(0);
 
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState(defaultData?.options ?? {});
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(null);
   const [orderType, setOrderType] = useState(null);
   const [filter, setFilter] = useState("");
 
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(defaultData?.items ?? []);
   const [canMoveNextPage, setCanMoveNextPage] = useState(true);
   const [canMovePrevPage, setCanMovePrevPage] = useState(true);
 
   const [currentFrom, setCurrentFrom] = useState(0);
   const [currentTo, setCurrentTo] = useState(0);
 
-  const updateStateByOption = (gotOptions) => {
+  const updateStateByOption = (gotOptions, unusualKeys = []) => {
     setOptions(gotOptions);
     setPage(gotOptions.page);
     setItemsPerPage(gotOptions.count);
     setOrder(gotOptions.order);
     setOrderType(gotOptions.orderType);
+    setFilter(gotOptions.filter);
 
     const queryParams = {};
+
+    if (getDopProps) {
+      const dopProps = getDopProps();
+
+      Object.keys(dopProps).forEach((key) => {
+        if (dopProps[key]) {
+          queryParams[key] = dopProps[key];
+        }
+      });
+    }
 
     if (gotOptions.page > 1) {
       queryParams["page"] = gotOptions.page;
@@ -45,16 +64,20 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
       queryParams["filter"] = gotOptions.filter;
     }
 
-    if (dopProps) {
-      Object.keys(dopProps).forEach((key) => {
-        if (dopProps[key]) {
-          queryParams[key] = dopProps[key];
-        }
-      });
-    }
+    unusualKeys.forEach((key) => {
+      if (gotOptions[key]) {
+        queryParams[key] = gotOptions[key];
+      }
+    });
 
     const props = Object.keys(queryParams)
-      .map((param) => `${param}=${queryParams[param]}`)
+      .map((param) => {
+        if (Array.isArray(queryParams[param])) {
+          return queryParams[param].map((val) => `${param}=${val}`).join("&");
+        } else {
+          return `${param}=${queryParams[param]}`;
+        }
+      })
       .join("&");
 
     const currentLink = window.location.href;
@@ -65,20 +88,27 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
       (props ? `?${props}` : "");
 
     if (currentLink !== newLinkPart) {
-      window.history.replaceState(null, null, newLinkPart);
+      router.replace(newLinkPart, undefined, { shallow: true });
     }
   };
 
-  const onChangeOptions = async (dopBody = {}) => {
+  const onChangeOptions = async (dopBody = {}, unusualKeys = []) => {
     try {
-      const res = await getItemsFunc({
+      let props = {
+        clientTime: Date.now(),
         order,
         orderType,
         itemsPerPage,
         filter,
-        ...dopProps,
-        ...dopBody,
-      });
+      };
+
+      if (getDopProps) {
+        props = { ...props, ...getDopProps() };
+      }
+
+      props = { ...props, ...dopBody };
+
+      const res = await getItemsFunc(props);
 
       const {
         options: gotOptions,
@@ -88,12 +118,41 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
 
       countPagesRef.current = gotOptions.totalPages;
       countItemsRef.current = gotCountItems;
-      updateStateByOption(gotOptions);
+      updateStateByOption(gotOptions, unusualKeys);
       setItems(gotItems);
     } catch (e) {
-      onError(e);
+      if (onError) {
+        onError(e);
+      }
     }
   };
+
+  useEffect(() => {
+    if (!defaultData || isFirstDefaultDataRef.current) {
+      isFirstDefaultDataRef.current = false;
+      return;
+    }
+
+    if (defaultData) {
+      const {
+        options: gotOptions,
+        items: gotItems,
+        countItems: gotCountItems,
+      } = defaultData;
+
+      countPagesRef.current = gotOptions.totalPages;
+      countItemsRef.current = gotCountItems;
+
+      setOptions(gotOptions);
+      setPage(gotOptions.page);
+      setItemsPerPage(gotOptions.count);
+      setOrder(gotOptions.order);
+      setOrderType(gotOptions.orderType);
+      setFilter(gotOptions.filter);
+
+      setItems(gotItems);
+    }
+  }, [defaultData?.options]);
 
   useEffect(() => {
     const dopBody = {};
@@ -115,7 +174,28 @@ const usePagination = ({ getItemsFunc, onError = null, dopProps = null }) => {
       dopBody["filter"] = filter;
     }
 
-    onChangeOptions(dopBody);
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+
+      if (defaultData) {
+        const {
+          options: gotOptions,
+          items: gotItems,
+          countItems: gotCountItems,
+        } = defaultData;
+
+        countPagesRef.current = gotOptions.totalPages;
+        countItemsRef.current = gotCountItems;
+        updateStateByOption(gotOptions);
+        setItems(gotItems);
+      } else {
+        if (needInit) {
+          onChangeOptions(dopBody);
+        }
+      }
+    } else {
+      onChangeOptions(dopBody);
+    }
   }, []);
 
   useEffect(() => {

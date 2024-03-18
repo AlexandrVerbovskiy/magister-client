@@ -9,20 +9,22 @@ import LogsTable from "../../components/admin/Logs/Table";
 import Datepicker from "../../components/admin/Datepicker";
 import { adminSideProps } from "../../middlewares";
 
-import { useAdminPage, usePagination } from "../../hooks";
+import {
+  useAdminPage,
+  usePagination,
+  useChangeTimeFilter,
+  useInitPaginationTimeFilter,
+} from "../../hooks";
 import { IndiceContext } from "../../contexts";
-import { getLogList } from "../../services";
-import { timeConverter } from "../../utils";
+import { getAdminLogListPageOptions, getLogList } from "../../services";
 
-const Logs = () => {
+const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [panelItem, setPanelItem] = useState(false);
 
-  const [fromTime, setFromTime] = useState(null);
-  const [toTime, setToTime] = useState(null);
-
-  const getTimeToProp = (date) => (date ? timeConverter(date) : null);
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -44,41 +46,23 @@ const Logs = () => {
   } = usePagination({
     getItemsFunc: (data) => getLogList(data, authToken),
     onError: (e) => error.set(e.message),
-    dopProps: {
-      fromTime,
-      toTime,
-    },
+    getDopProps: getTimeFilterProps,
+    defaultData: pageProps,
+  });
+
+  const { handleChangeTimeFilter } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
   });
 
   const handleSelectPanelItem = (id) =>
     setPanelItem(logs.find((log) => log.id === id));
 
   const handlePanelItemClear = () => setPanelItem(null);
-
-  const handleChange = (dates) => {
-    let [from, to] = dates;
-
-    if (from && to) {
-      setFromTime(new Date(from));
-      setToTime(new Date(to));
-
-      rebuild({
-        fromTime: getTimeToProp(new Date(from)),
-        toTime: getTimeToProp(new Date(to)),
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (
-      getTimeToProp(fromTime) == options.fromTime &&
-      getTimeToProp(toTime) == options.toTime
-    )
-      return;
-
-    setFromTime(new Date(options.fromTime));
-    setToTime(new Date(options.toTime));
-  }, [options.toTime, options.fromTime]);
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -96,7 +80,7 @@ const Logs = () => {
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <Datepicker
                     value={[fromTime, toTime]}
-                    onChange={handleChange}
+                    onChange={handleChangeTimeFilter}
                   />
                   <SearchForm value={filter} onInput={changeFilter} />
                 </div>
@@ -136,6 +120,16 @@ const Logs = () => {
   );
 };
 
-export const getServerSideProps = adminSideProps;
+const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const options = await getAdminLogListPageOptions(
+    { ...context.query, clientTime: Date.now() },
+    baseSideProps.authToken
+  );
+
+  return { ...options };
+};
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default Logs;

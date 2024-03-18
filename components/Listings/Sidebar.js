@@ -1,172 +1,203 @@
-import React from "react"; 
+import React, { useState, useRef, useEffect } from "react";
+import DateInput from "../FormComponents/DateInput";
+import { dateToInputString, leveliseCategories } from "../../utils";
+import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 
-const Sidebar = () => {
+const cities = [
+  { name: "Warrington", value: "Warrington", title: "Warrington" },
+  { name: "Manchester", value: "Manchester", title: "Manchester" },
+];
+
+const Sidebar = ({
+  categories: baseCategories,
+  selectedCities,
+  setSelectedCities,
+  selectedCategories,
+  setSelectedCategories,
+  fromDateFilter,
+  setFromDateFilter,
+  toDateFilter,
+  setToDateFilter,
+}) => {
+  const categories = leveliseCategories(baseCategories);
+
+  const [mainFilterOpen, setMainFilterOpen] = useState(true);
+  const [categoriesOpen, setCategoriesOpen] = useState(true);
+  const [cityOpen, setCityOpen] = useState(true);
+
+  const mainFilterFullUlRef = useRef(null);
+
+  const [mainFilterMaxHeight, setMainFilterMaxHeight] = useState(null);
+
+  const updateTimeFilterHeight = () => {
+    if (mainFilterFullUlRef.current) {
+      const childHeight = mainFilterFullUlRef.current.scrollHeight + 1;
+      setMainFilterMaxHeight(childHeight);
+    }
+  };
+
+  useEffect(() => updateTimeFilterHeight(), [mainFilterFullUlRef.current]);
+
+  useEffect(() => {
+    setInterval(updateTimeFilterHeight, 250);
+  }, []);
+
+  const handleChangeCheckedCategory = (value) => {
+    let newSelectedCategories = selectedCategories;
+
+    if (selectedCategories.includes(value)) {
+      newSelectedCategories = newSelectedCategories.filter(
+        (category) => category != value
+      );
+    } else {
+      newSelectedCategories = [...newSelectedCategories, value];
+    }
+
+    setSelectedCategories(newSelectedCategories);
+  };
+
+  const handleChangeCheckedCity = (value) => {
+    let newSelectedCities = selectedCities;
+
+    if (selectedCities.includes(value)) {
+      newSelectedCities = newSelectedCities.filter((city) => city != value);
+    } else {
+      newSelectedCities = [...newSelectedCities, value];
+    }
+
+    setSelectedCities(newSelectedCities);
+  };
+
+  const handleFromDateFilterChange = (value) => {
+    setFromDateFilter(value);
+
+    if (!toDateFilter || value > toDateFilter) {
+      setToDateFilter(value);
+    }
+  };
+
+  const handleToDateFilterChange = (value) => {
+    setToDateFilter(value);
+  };
+
+  const CategoryLi = ({ category, style = {} }) => (
+    <li key={category.name} style={style}>
+      <input
+        id={category.name}
+        type="checkbox"
+        name={`categories[${category.name}]`}
+        onChange={() => handleChangeCheckedCategory(category.name)}
+        checked={selectedCategories.includes(category.name)}
+        value={category.name}
+      />
+      <label htmlFor={category.name}>{category.name} </label>
+    </li>
+  );
+
+  const FirstCategoryLevelLi = ({ item }) => (
+    <>
+      <CategoryLi category={item} />
+      {item.children.map((sCategory) => (
+        <React.Fragment key={sCategory.name}>
+          <CategoryLi style={{ paddingLeft: "25px" }} category={sCategory} />
+          {sCategory.children.map((tCategory) => (
+            <CategoryLi
+              style={{ paddingLeft: "50px" }}
+              category={tCategory}
+              key={tCategory.name}
+            />
+          ))}
+        </React.Fragment>
+      ))}
+    </>
+  );
+
+  const CityLi = ({ item }) => (
+    <li>
+      <input
+        id={item.name}
+        type="checkbox"
+        value={item.value}
+        name={`cities[${item.name}]`}
+        onChange={() => handleChangeCheckedCity(item.value)}
+        checked={selectedCities.includes(item.value)}
+      />
+      <label htmlFor={item.name}>{item.title} </label>
+    </li>
+  );
+
   return (
     <>
       <aside className="listings-widget-area">
-        <section className="widget widget_filters">
-          <h3 className="widget-title">Filters</h3>
+        <section
+          className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setMainFilterOpen(!mainFilterOpen)}
+          >
+            Filters
+          </h3>
 
-          <ul>
-            <li>
-              <button type="button">$</button>
-            </li>
-            <li>
-              <button type="button">$$</button>
-            </li>
-            <li>
-              <button type="button">$$$</button>
-            </li>
-            <li>
-              <button type="button">$$$$</button>
-            </li>
-          </ul>
+          <div
+            className="widget-body"
+            style={
+              !mainFilterMaxHeight
+                ? null
+                : { maxHeight: `${mainFilterMaxHeight}px` }
+            }
+          >
+            <ul ref={mainFilterFullUlRef}>
+              <li className="d-flex align-items-end date-filter-row">
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="from_date">From</label>
+                  <DateInput
+                    min={new Date().toISOString().split("T")[0]}
+                    name="from_date"
+                    value={
+                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
+                    }
+                    onInput={(value) => handleFromDateFilterChange(value)}
+                  />
+                </div>
+
+                <div style={{ marginLeft: "10px", marginRight: "10px" }}>-</div>
+
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="to_date">To</label>
+                  <DateInput
+                    min={
+                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
+                    }
+                    name="to_date"
+                    value={toDateFilter ? dateToInputString(toDateFilter) : ""}
+                    onInput={(value) => handleToDateFilterChange(value)}
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
         </section>
 
-        <section className="widget widget_categories">
-          <h3 className="widget-title">Categories</h3>
+        <SidebarCheckboxesSection
+          title="City"
+          open={cityOpen}
+          setOpen={setCityOpen}
+          items={cities}
+          selectedItems={selectedCities}
+          handleChangeChecked={handleChangeCheckedCity}
+          LiItemElement={CityLi}
+        />
 
-          <ul>
-            <li>
-              <input id="categories1" type="checkbox" />
-              <label htmlFor="categories1">Restaurant</label>
-            </li>
-
-            <li>
-              <input id="categories2" type="checkbox" />
-              <label htmlFor="categories2">Hotel</label>
-            </li>
-
-            <li>
-              <input id="categories3" type="checkbox" />
-              <label htmlFor="categories3">Beauty & Spa</label>
-            </li>
-
-            <li>
-              <input id="categories4" type="checkbox" />
-              <label htmlFor="categories4">Fitness</label>
-            </li>
-
-            <li>
-              <input id="categories5" type="checkbox" />
-              <label htmlFor="categories5">Shopping</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories6" type="checkbox" />
-              <label htmlFor="categories6">Hospital</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories7" type="checkbox" />
-              <label htmlFor="categories7">Events</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories8" type="checkbox" />
-              <label htmlFor="categories8">Clothing</label>
-            </li>
-            
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
-        </section>
-
-        <section className="widget widget_features">
-          <h3 className="widget-title">Features</h3>
-
-          <ul>
-            <li>
-              <input id="categories1" type="checkbox" />
-              <label htmlFor="categories1">Restaurant</label>
-            </li>
-
-            <li>
-              <input id="categories2" type="checkbox" />
-              <label htmlFor="categories2">Hotel</label>
-            </li>
-
-            <li>
-              <input id="categories3" type="checkbox" />
-              <label htmlFor="categories3">Beauty & Spa</label>
-            </li>
-
-            <li>
-              <input id="categories4" type="checkbox" />
-              <label htmlFor="categories4">Fitness</label>
-            </li>
-            
-            <li>
-              <input id="categories5" type="checkbox" />
-              <label htmlFor="categories5">Shopping</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories6" type="checkbox" />
-              <label htmlFor="categories6">Hospital</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories7" type="checkbox" />
-              <label htmlFor="categories7">Events</label>
-            </li>
-
-            <li className="hide">
-              <input id="categories8" type="checkbox" />
-              <label htmlFor="categories8">Clothing</label>
-            </li>
-
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
-        </section>
-
-        <section className="widget widget_distance">
-          <h3 className="widget-title">Distance</h3>
-
-          <ul>
-            <li>
-              <input id="distance1" type="checkbox" />
-              <label htmlFor="distance1">Driving (5 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance2" type="checkbox" />
-              <label htmlFor="distance2">Walking (1 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance3" type="checkbox" />
-              <label htmlFor="distance3">Biking (2 mi.)</label>
-            </li>
-
-            <li>
-              <input id="distance4" type="checkbox" />
-              <label htmlFor="distance4">Within 4 blocks</label>
-            </li>
-
-            <li>
-              <input id="distance5" type="checkbox" />
-              <label htmlFor="distance5">Bicycle (6 mi.)</label>
-            </li>
-
-            <li className="hide">
-              <input id="distance6" type="checkbox" />
-              <label htmlFor="distance6">Driving (10 mi.)</label>
-            </li>
-
-            <li className="hide">
-              <input id="distance7" type="checkbox" />
-              <label htmlFor="distance7">Walking (11 mi.)</label>
-            </li>
-
-            <li className="see-all-btn">
-              <span>See All</span>
-            </li>
-          </ul>
-        </section>
+        <SidebarCheckboxesSection
+          title="Categories"
+          open={categoriesOpen}
+          setOpen={setCategoriesOpen}
+          items={categories}
+          selectedItems={selectedCategories}
+          handleChangeChecked={handleChangeCheckedCategory}
+          LiItemElement={FirstCategoryLevelLi}
+        />
       </aside>
     </>
   );

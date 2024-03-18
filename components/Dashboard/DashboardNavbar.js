@@ -12,7 +12,16 @@ const DashboardNavbar = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const { displaySideMenu, toggleSideMenu } = useContext(IndiceContext);
+  const { displaySideMenu, toggleSideMenu, user, error } =
+    useContext(IndiceContext);
+
+  const needVerifyAccount = (e) => {
+    if (!user.verified) {
+      e.preventDefault();
+      error.set(`You need to be verified to rent and rent tools. To verify, send the
+      necessary data via the "Documents Verification" page`);
+    }
+  };
 
   return (
     <>
@@ -25,7 +34,11 @@ const DashboardNavbar = () => {
       >
         <div className="sidemenu-header">
           <Link href="/" className="navbar-brand d-flex align-items-center">
-            <img src="/images/black-logo.png" alt="image" />
+            <img
+              src="/images/rent-about-logo-black.png"
+              className="logo-image"
+              alt="logo"
+            />
           </Link>
 
           <div
@@ -55,6 +68,21 @@ const DashboardNavbar = () => {
                   <i className="bx bx-home-circle"></i>
                 </span>
                 <span className="menu-title">Main Settings</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                href="/settings/listings/"
+                className={`nav-link ${
+                  currentPath.includes("/settings/listings/") && "active"
+                }  ${!user.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bx-layer"></i>
+                </span>
+                <span className="menu-title">Listings</span>
               </Link>
             </li>
 

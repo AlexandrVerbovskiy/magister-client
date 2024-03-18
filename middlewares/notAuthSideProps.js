@@ -1,6 +1,7 @@
+import { middlewareCallbackWrapper } from "../utils";
 import userSideProps from "./userSideProps";
 
-const notAuthSideProps = async (context) => {
+const notAuthSideProps = async (context, callback = null) => {
   const { props } = await userSideProps(context);
   const { user } = props;
 
@@ -10,7 +11,11 @@ const notAuthSideProps = async (context) => {
     };
   }
 
-  return { props };
+  return await middlewareCallbackWrapper({
+    callback,
+    res: props,
+    context,
+  });
 };
 
 export default notAuthSideProps;

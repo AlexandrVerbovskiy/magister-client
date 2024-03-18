@@ -8,6 +8,7 @@ const Switch = ({ id, checked, changeChecked, onText, offText }) => {
           className="sr-only"
           checked={checked}
           onChange={changeChecked}
+          name={id}
         />
         <label className="bg-slate-400 dark:bg-slate-700" htmlFor={id}>
           <span className="bg-white shadow-sm" aria-hidden="true"></span>

@@ -1,64 +1,94 @@
-import React from 'react';
+import React from "react";
+import { useCategoryCity } from "../../hooks";
+import SearchTipsPopup from "../SearchTipsPopup";
+import Link from "next/link";
+import { getFullListingSearchLink } from "../../utils";
 
 const PopularPlacesFilter = () => {
+  const {
+    handleChangeCity,
+    handleCategoryTipClick,
+    handleChangeCategory,
+    handleCityTipClick,
+    searchCategory,
+    searchCity,
+    categoryTipsPopupActive,
+    categoryTips,
+    cityTipsPopupActive,
+    cityTips,
+    openCityTipsPopup,
+    closeCityTipsPopup,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    categoryFilterRef,
+    cityFilterRef,
+  } = useCategoryCity();
+
   return (
     <>
-      <div className='page-title-bg'>
-        <div className='container'>
-          <h2>Find Popular Places</h2>
+      <div className="page-title-bg">
+        <div className="container">
+          <h2>What would you like to rent?</h2>
           <form>
-            <div className='row m-0 align-items-center'>
-              <div className='col-lg-4 col-md-12 p-0'>
-                <div className='form-group'>
+            <div className="row m-0 align-items-center">
+              <div className="col-lg-6 col-md-6 p-0">
+                <div className="form-group">
                   <label>
-                    <i className='flaticon-search'></i>
+                    <i className="flaticon-search"></i>
                   </label>
+
                   <input
-                    type='text'
-                    className='form-control'
-                    placeholder='What are you looking for?'
+                    type="text"
+                    name="category"
+                    className="form-control"
+                    placeholder="What are you looking for?"
+                    ref={categoryFilterRef}
+                    onFocus={() => openCategoryTipsPopup(searchCategory)}
+                    onBlur={closeCategoryTipsPopup}
+                    value={searchCategory}
+                    onInput={handleChangeCategory}
+                  />
+
+                  <SearchTipsPopup
+                    active={categoryTipsPopupActive}
+                    tips={categoryTips}
+                    handleTipClick={handleCategoryTipClick}
                   />
                 </div>
               </div>
 
-              <div className='col-lg-3 col-md-6 p-0'>
-                <div className='form-group'>
+              <div className="col-lg-3 col-md-6 p-0">
+                <div className="form-group">
                   <label>
-                    <i className='flaticon-pin'></i>
+                    <i className="flaticon-pin"></i>
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    placeholder='Location'
+                    type="text"
+                    className="form-control"
+                    placeholder="Location"
+                    name="city"
+                    ref={cityFilterRef}
+                    onFocus={() => openCityTipsPopup(searchCity)}
+                    onBlur={closeCityTipsPopup}
+                    value={searchCity}
+                    onInput={handleChangeCity}
+                  />
+
+                  <SearchTipsPopup
+                    active={cityTipsPopupActive}
+                    tips={cityTips}
+                    handleTipClick={handleCityTipClick}
                   />
                 </div>
               </div>
 
-              <div className='col-lg-3 col-md-6 p-0'>
-                <div className='form-group category-select pagebanner-select-custom'>
-                  <label className="category-icon">
-                    <i className='flaticon-category'></i>
-                  </label>
-                  <select className="banner-form-select-pagebanner">
-                    <option>All Categories</option>
-                    <option>Restaurants</option>
-                    <option>Events</option>
-                    <option>Clothing</option>
-                    <option>Bank</option>
-                    <option>Fitness</option>
-                    <option>Bookstore</option>
-                    <option>Shopping</option>
-                    <option>Hotels</option>
-                    <option>Hospitals</option>
-                    <option>Culture</option>
-                    <option>Beauty</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className='col-lg-2 col-md-12 p-0'>
-                <div className='submit-btn'>
-                  <button type='submit'>Search Now</button>
+              <div className="col-lg-3 col-md-12 p-0 popup-places-filter">
+                <div className="submit-btn">
+                  <Link
+                    href={getFullListingSearchLink(searchCity, searchCategory)}
+                  >
+                    <button type="button">Search Now</button>
+                  </Link>
                 </div>
               </div>
             </div>

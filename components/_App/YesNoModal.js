@@ -1,4 +1,11 @@
-const YesNoModal = ({ active, toggleActive, title, body = null, onAccept }) => {
+const YesNoModal = ({
+  active,
+  toggleActive,
+  title,
+  body = null,
+  onAccept,
+  acceptText = "Save",
+}) => {
   const handleAccept = () => {
     toggleActive();
     onAccept();
@@ -19,7 +26,7 @@ const YesNoModal = ({ active, toggleActive, title, body = null, onAccept }) => {
               <i className="bx bx-x"></i>
             </button>
 
-            <div className="tab-content mt-0" id="myTabContent">
+            <div className="tab-content mt-0">
               <div className="tab-pane fade show active" id="login">
                 <div className="miran-login">
                   <span className="sub-title mb-2">
@@ -37,7 +44,7 @@ const YesNoModal = ({ active, toggleActive, title, body = null, onAccept }) => {
                       Cancel
                     </button>
                     <button type="button" onClick={handleAccept}>
-                      Save
+                      {acceptText}
                     </button>
                   </form>
                 </div>

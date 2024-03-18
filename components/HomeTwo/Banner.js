@@ -1,16 +1,16 @@
-import React from 'react';
-import Link from  'next/link';
+import React from "react";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
 const Banner = () => {
   return (
     <>
-      <section className='banner-area'>
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-lg-8 col-md-12'>
-              <div className='banner-content'>
+      <section className="banner-area">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-8 col-md-12">
+              <div className="banner-content">
                 <h1 className="banner-two-heading">
                   <Swiper
                     autoplay={{
@@ -20,61 +20,65 @@ const Banner = () => {
                     modules={[Autoplay]}
                   >
                     <SwiperSlide>
-                      Find Nearby <span className="color-0ec6c6">Hotels</span>
+                      Find Near by <span className="color-0ec6c6">Hotels</span>
                     </SwiperSlide>
 
                     <SwiperSlide>
-                      Find Nearby <span className="color-0ec6c6">Restaurants</span>
+                     Find Near by {" "}
+                      <span className="color-0ec6c6">Restaurants</span>
                     </SwiperSlide>
 
                     <SwiperSlide>
-                      Find Nearby <span className="color-0ec6c6">Beauty</span>
+                      Find Near by <span className="color-0ec6c6">Beauty</span>
                     </SwiperSlide>
 
                     <SwiperSlide>
-                      Find Nearby <span className="color-0ec6c6">Fitness</span>
+                      Find Near by <span className="color-0ec6c6">Fitness</span>
                     </SwiperSlide>
-                    
+
                     <SwiperSlide>
-                      Find Nearby <span className="color-0ec6c6">Shopping</span>
+                      Find Near by{" "}
+                      <span className="color-0ec6c6">Shopping</span>
                     </SwiperSlide>
                   </Swiper>
                 </h1>
-                
+
                 <p>Expolore top-rated attractions, activities and more...</p>
 
                 <form>
-                  <div className='row m-0 align-items-center'>
-                    <div className='col-lg-4 col-md-12 p-0'>
-                      <div className='form-group'>
+                  <div className="row m-0 align-items-center">
+                    <div className="col-lg-4 col-md-12 p-0">
+                      <div className="form-group">
                         <label>
-                          <i className='flaticon-search'></i>
+                          <i className="flaticon-search"></i>
                         </label>
                         <input
-                          type='text'
-                          className='form-control'
-                          placeholder='What are you looking for?'
+                          name="category"
+                          type="text"
+                          className="form-control"
+                          placeholder="What are you looking for?"
                         />
                       </div>
                     </div>
 
-                    <div className='col-lg-3 col-md-6 p-0'>
-                      <div className='form-group'>
+                    <div className="col-lg-3 col-md-6 p-0">
+                      <div className="form-group">
                         <label>
-                          <i className='flaticon-pin'></i>
+                          <i className="flaticon-pin"></i>
                         </label>
                         <input
-                          type='text'
-                          className='form-control'
-                          placeholder='Location'
+                          name="location"
+                          type="text"
+                          className="form-control"
+                          placeholder="Location"
                         />
                       </div>
                     </div>
 
-                    <div className='col-lg-3 col-md-6 p-0'>
-                      <div className='form-group category-select'>
-                        <label className='category-icon'>
-                          <i className='flaticon-category'></i>
+                    <div className="col-lg-3 col-md-6 p-0">
+                      <div className="form-group category-select">
+                        <label className="category-icon">
+                          <i className="flaticon-category"></i>
                         </label>
                         <select className="banner-form-select-two">
                           <option>All Categories</option>
@@ -93,53 +97,41 @@ const Banner = () => {
                       </div>
                     </div>
 
-                    <div className='col-lg-2 col-md-12 p-0'>
-                      <div className='submit-btn'>
-                        <button type='submit'>Search Now</button>
+                    <div className="col-lg-2 col-md-12 p-0">
+                      <div className="submit-btn">
+                        <button type="submit">Search Now</button>
                       </div>
                     </div>
                   </div>
                 </form>
 
-                <ul className='popular-search-list'>
+                <ul className="popular-search-list">
                   <li>Popular:</li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Restaurants
-                    </Link>
+                    <Link href="/grid-listings-with-map">Restaurants</Link>
                   </li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Events
-                    </Link>
+                    <Link href="/grid-listings-with-map">Events</Link>
                   </li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Clothing
-                    </Link>
+                    <Link href="/grid-listings-with-map">Clothing</Link>
                   </li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Bank
-                    </Link>
+                    <Link href="/grid-listings-with-map">Bank</Link>
                   </li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Fitness
-                    </Link>
+                    <Link href="/grid-listings-with-map">Fitness</Link>
                   </li>
                   <li>
-                    <Link href="/grid-listings-with-map">
-                      Bookstore
-                    </Link>
+                    <Link href="/grid-listings-with-map">Bookstore</Link>
                   </li>
                 </ul>
               </div>
             </div>
 
-            <div className='col-lg-4 col-md-12'>
-              <div className='banner-image'>
-                <img src='/images/banner-img1.png' alt='image' />
+            <div className="col-lg-4 col-md-12">
+              <div className="banner-image">
+                <img src="/images/banner-img1.png" alt="image" />
               </div>
             </div>
           </div>

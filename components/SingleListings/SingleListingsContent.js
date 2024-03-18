@@ -1,21 +1,76 @@
-import React from "react"; 
+import React, { useContext, useState } from "react";
+import ClipboardJS from "clipboard";
+import { IndiceContext } from "../../contexts";
+import { getFilePath, getListingImageByType } from "../../utils";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+import ImagePopup from "../_App/ImagePopup";
+import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
-const SingleListingsContent = () => {
+import STATIC from "../../static";
+
+const SingleListingsContent = ({ listing }) => {
+  const { success, error } = useContext(IndiceContext);
+  const [userLocation, setUserLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
+
+  const handleShareClick = () => {
+    const clipboard = new ClipboardJS("#shareButton", {
+      text: function () {
+        return window.location.href;
+      },
+    });
+    clipboard.on("success", function (e) {
+      success.set("Link copied successfully");
+      clipboard.destroy();
+    });
+    clipboard.on("error", function (e) {
+      error.set("Link copied error: " + e.message);
+      clipboard.destroy();
+    });
+    clipboard.onClick(event);
+  };
+
+  const [currentOpenImg, setCurrentOpenImg] = useState(null);
+
+  const closeCurrentOpenImg = () => setCurrentOpenImg(null);
+
   return (
     <>
       <section className="listings-details-area pb-70">
         <div className="listings-details-image">
-          <img src="/images/listings-details.jpg" alt="image" />
+          <Swiper
+            loop={true}
+            autoplay={{
+              delay: 8000,
+            }}
+            modules={[Autoplay]}
+          >
+            {listing.listingImages.map((image) => (
+              <SwiperSlide key={image.link}>
+                <img
+                  src={getListingImageByType(image.link, image.type)}
+                  alt="image"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
           <div className="container">
             <div className="container">
               <div className="listings-details-content">
-                <span className="meta">
-                  <i className="flaticon-furniture-and-household"></i>
-                  Restaurant
-                </span>
+                {listing.categoryInfo.map((category, index) => (
+                  <span
+                    className="meta"
+                    key={category.name}
+                    style={index > 0 ? { marginLeft: "10px" } : {}}
+                  >
+                    <i className="flaticon-furniture-and-household"></i>
+                    {category.name}
+                  </span>
+                ))}
 
-                <h3>Chipotle Mexican Grill</h3>
+                <h3>{listing.name}</h3>
 
                 <div className="rating d-flex align-items-center">
                   <span className="bx bxs-star checked"></span>
@@ -27,20 +82,18 @@ const SingleListingsContent = () => {
                 </div>
 
                 <ul className="d-flex align-items-center">
-                  <li className="phone-number">
-                    <a href="#">
-                      <i className="bx bx-phone-call"></i> (+212) 279-1456
-                    </a>
-                  </li>
-                  <li className="time">
-                    <i className="bx bx-time-five"></i>
-                    <span>Currently Open</span>
-                    08:00 AM - 10:00 PM
-                  </li>
+                  {listing.userPhone && (
+                    <li className="phone-number">
+                      <a href="#">
+                        <i className="bx bx-phone-call"></i>
+                        {listing.userPhone}
+                      </a>
+                    </li>
+                  )}
                   <li className="location">
                     <i className="bx bx-map"></i>
-                    <span>Location</span>
-                    New York, USA
+                    <span>City</span>
+                    {listing.city}
                   </li>
                 </ul>
               </div>
@@ -50,7 +103,7 @@ const SingleListingsContent = () => {
           <div className="container-fluid">
             <ul className="share-save">
               <li>
-                <div className="share">
+                <div className="share" onClick={handleShareClick}>
                   <i className="bx bx-share-alt"></i> Share
                 </div>
 
@@ -86,136 +139,43 @@ const SingleListingsContent = () => {
           <div className="row">
             <div className="col-lg-8 col-md-12">
               <div className="listings-details-desc">
-                <h3>Chipotle Mexican Grill</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis. Lorem ipsum dolor sit
-                  amet, consectetur adipiscing elit, sed do eiusmod tempor
-                  incididunt ut labore et dolore magna aliqua. Quis ipsum
-                  suspendisse ultrices gravida. Risus commodo viverra maecenas
-                  accumsan lacus vel facilisis.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis. Lorem ipsum dolor sit
-                  amet, consectetur.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Quis ipsum suspendisse ultrices gravida.
-                </p>
-
-                <h3>Amenities</h3>
-                <ul className="amenities-list">
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Parking Street
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Vegan Options
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Kids Activities Nearby
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Accepts Apple Pay
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Accepts Google Pay
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Wheelchair Accessible
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Takes Reservations
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Offers Takeout
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Bike Parking
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Good for Kids
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Accepts Cryptocurrency
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <i className="bx bx-check"></i> Accepts Credit Cards
-                    </span>
-                  </li>
-                </ul>
+                <h3>{listing.name}</h3>
+                <p>{listing.description}</p>
 
                 <h3>Gallery</h3>
                 <div id="gallery">
-                  <div className="row justify-content-center">
-                    <div className="col-lg-4 col-md-6">
-                      <div className="single-image-bpx">
-                        <img src="/images/gallery/gallery1.jpg" alt="image" />
-                      </div>
-                    </div>
+                  <div
+                    className="row justify-content-center"
+                    style={{ gridRowGap: "10px" }}
+                  >
+                    {listing.listingImages.map((image, index) => {
+                      const imgLink = getListingImageByType(
+                        image.link,
+                        image.type
+                      );
 
-                    <div className="col-lg-4 col-md-6">
-                      <div className="single-image-bpx">
-                        <img src="/images/gallery/gallery2.jpg" alt="image" />
-                      </div>
-                    </div>
+                      return (
+                        <div
+                          className="col-lg-4 col-md-6"
+                          style={{ cursor: "zoom-in" }}
+                          onClick={() => setCurrentOpenImg(imgLink)}
+                        >
+                          <div className="single-image-bpx">
+                            <img
+                              src={imgLink}
+                              alt={`${listing.name} image ${index}`}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
 
-                    <div className="col-lg-4 col-md-6">
-                      <div className="single-image-bpx">
-                        <img src="/images/gallery/gallery3.jpg" alt="image" />
-                      </div>
-                    </div>
+                    <ImagePopup
+                      photoUrl={currentOpenImg}
+                      open={currentOpenImg}
+                      close={closeCurrentOpenImg}
+                    />
                   </div>
-                </div>
-
-                <h3>Pricing</h3>
-                <div id="pricing">
-                  <ul className="pricing-list">
-                    <li>
-                      Pizza <span>$15</span>
-                    </li>
-                    <li>
-                      Burger <span>$10</span>
-                    </li>
-                    <li>
-                      Cool Drink <span>$12</span>
-                    </li>
-                    <li>
-                      Fried Rice <span>$08</span>
-                    </li>
-                    <li>
-                      Orange Juice <span>$05</span>
-                    </li>
-                  </ul>
                 </div>
 
                 <h3>Review</h3>
@@ -837,19 +797,64 @@ const SingleListingsContent = () => {
                   <h3>Contact Details</h3>
                   <ul>
                     <li>
-                      <i className="bx bx-globe"></i>
-                      <a href="#">www.indice.com</a>
+                      <i className="bx bx-envelope"></i>
+                      <a href="#">{listing.userEmail}</a>
                     </li>
+                    {listing.userPhone && (
+                      <li>
+                        <i className="bx bx-phone-call"></i>
+                        <a href="tel:+2122791456">{listing.userPhone}</a>
+                      </li>
+                    )}
+                    {listing.userPlaceWork && (
+                      <li>
+                        <i className="bx bx-building"></i>
+                        <a href="#">{listing.userPlaceWork}</a>
+                      </li>
+                    )}
                     <li>
-                      <i className="bx bx-phone-call"></i>
-                      <a href="tel:+2122791456">(+212) 279-1456</a>
+                      <i className="bx bx-map" style={{ marginTop: "7px" }}></i>{" "}
+                      {listing.city}
                     </li>
+                  </ul>
+                </div>
+
+                <div className="listings-widget listings_contact_details">
+                  <h3>Location</h3>
+                  <ul>
                     <li>
-                      <i className="bx bx-directions"></i>
-                      <a href="#">Get Directions</a>
+                      <i className="bx bx-map" style={{ marginTop: "0px" }}></i>{" "}
+                      {listing.city}
                     </li>
-                    <li>
-                      <i className="bx bx-map"></i> New York, USA
+
+                    {listing.address && (
+                      <li>
+                        <i
+                          className="bx bx-map"
+                          style={{ marginTop: "0px" }}
+                        ></i>{" "}
+                        {listing.address}
+                      </li>
+                    )}
+                    <li style={{ height: "400px", paddingLeft: "0" }}>
+                      <MultyMarkersMap
+                        markers={[
+                          {
+                            id: 1,
+                            lat: listing.rentalLat,
+                            lng: listing.rentalLng,
+                            radius: listing.rentalRadius,
+                          },
+                        ]}
+                        baseCenter={{
+                          lat: listing.rentalLat,
+                          lng: listing.rentalLng,
+                        }}
+                        userLocation={userLocation}
+                        setUserLocation={setUserLocation}
+                        center={mapCenter}
+                        setCenter={setMapCenter}
+                      />
                     </li>
                   </ul>
                 </div>
@@ -858,12 +863,18 @@ const SingleListingsContent = () => {
                   <h3>Hosted By</h3>
                   <div className="author">
                     <div className="d-flex align-items-center">
-                      <img src="/images/user1.jpg" alt="image" />
+                      <img
+                        src={
+                          listing.userPhoto
+                            ? getFilePath(listing.userPhoto)
+                            : STATIC.defaultPhotoLink
+                        }
+                        alt={listing.userName}
+                      />
                       <div className="title">
                         <h4>
-                          <a href="#">John Smith</a>
+                          <a href="#">{listing.userName}</a>
                         </h4>
-                        <span>20 Places Hosted</span>
                       </div>
                     </div>
 
@@ -877,26 +888,37 @@ const SingleListingsContent = () => {
 
                         <div className="col-lg-7 col-md-7">
                           <ul className="social">
-                            <li>
-                              <a href="#">
-                                <i className="bx bxl-facebook"></i>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="#">
-                                <i className="bx bxl-twitter"></i>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="#">
-                                <i className="bx bxl-linkedin"></i>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="#">
-                                <i className="bx bxl-instagram"></i>
-                              </a>
-                            </li>
+                            {listing.userInstagramUrl && (
+                              <li>
+                                <a href={listing.userFacebookUrl}>
+                                  <i className="bx bxl-facebook"></i>
+                                </a>
+                              </li>
+                            )}
+
+                            {listing.userTwitterUrl && (
+                              <li>
+                                <a href={listing.userTwitterUrl}>
+                                  <i className="bx bxl-twitter"></i>
+                                </a>
+                              </li>
+                            )}
+
+                            {listing.userLinkedinUrl && (
+                              <li>
+                                <a href={listing.userLinkedinUrl}>
+                                  <i className="bx bxl-linkedin"></i>
+                                </a>
+                              </li>
+                            )}
+
+                            {listing.userInstagramUrl && (
+                              <li>
+                                <a href={listing.userInstagramUrl}>
+                                  <i className="bx bxl-instagram"></i>
+                                </a>
+                              </li>
+                            )}
                           </ul>
                         </div>
                       </div>

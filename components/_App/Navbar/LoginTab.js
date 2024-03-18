@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Input from "../../FormComponents/Input";
 import SocialAuth from "./SocialAuth";
 import { validatePassword, validateEmail } from "../../../utils";
@@ -22,7 +22,7 @@ const LoginTab = ({
   setUser,
   rememberMe,
   setRememberMe,
-  handleCloseBtn,
+  activePopup,
 }) => {
   const router = useRouter();
 
@@ -43,6 +43,16 @@ const LoginTab = ({
     setPassword(e.target.value);
     setPasswordError(null);
   };
+
+  useEffect(() => {
+    if (!activePopup) {
+      setFormError(null);
+      setPasswordError(null);
+      setEmailError(null);
+      setEmail("");
+      setPassword("");
+    }
+  }, [activePopup]);
 
   const handleResendEmailVerify = async (e) => {
     e.preventDefault();
@@ -136,6 +146,7 @@ const LoginTab = ({
 
           <form>
             <Input
+              name="email"
               type="text"
               value={email}
               placeholder="Email"
@@ -144,6 +155,7 @@ const LoginTab = ({
             />
 
             <Input
+              name="password"
               type="password"
               value={password}
               placeholder="Password"
@@ -153,6 +165,7 @@ const LoginTab = ({
 
             <div className="form-group form-check">
               <input
+                name="rememberMe"
                 type="checkbox"
                 className={`form-check-input`}
                 id="remember-me"

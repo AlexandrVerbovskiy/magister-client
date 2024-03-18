@@ -29,6 +29,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Your Name</label>
                 <input
+                  name="name"
                   type="text"
                   className="form-control"
                   defaultValue="Andy Smith"
@@ -40,6 +41,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Email</label>
                 <input
+                  name="email"
                   type="email"
                   className="form-control"
                   defaultValue="hello@andysmith.com"
@@ -51,6 +53,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Phone</label>
                 <input
+                  name="phone"
                   type="text"
                   className="form-control"
                   defaultValue="+88 (123) 123456"
@@ -62,6 +65,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Address</label>
                 <input
+                  name="address"
                   type="text"
                   className="form-control"
                   defaultValue="Wonder Street, USA, New York"
@@ -73,6 +77,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Website</label>
                 <input
+                  name="website"
                   type="text"
                   className="form-control"
                   defaultValue="EnvyTheme.com"
@@ -84,6 +89,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Bio</label>
                 <textarea
+                  name="bio"
                   cols="30"
                   rows="6"
                   placeholder="Short description about you..."
@@ -96,6 +102,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Facebook URL</label>
                 <input
+                  name="facebookUrl"
                   type="text"
                   className="form-control"
                   placeholder="https://www.facebook.com/"
@@ -108,6 +115,7 @@ const ProfileDetailsForm = () => {
                 <label>Twitter URL</label>
                 <input
                   type="text"
+                  name="twitterUrl"
                   className="form-control"
                   placeholder="https://twitter.com/"
                 />
@@ -119,6 +127,7 @@ const ProfileDetailsForm = () => {
                 <label>Linkedin URL</label>
                 <input
                   type="text"
+                  name="linkedinUrl"
                   className="form-control"
                   placeholder="https://www.linkedin.com/"
                 />
@@ -129,6 +138,7 @@ const ProfileDetailsForm = () => {
               <div className="form-group">
                 <label>Instagram URL</label>
                 <input
+                  name="instagramUrl"
                   type="text"
                   className="form-control"
                   placeholder="https://instagram.com/"

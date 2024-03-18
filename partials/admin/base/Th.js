@@ -1,4 +1,11 @@
-const Th = ({ title, value, orderType, canOrder = true, onClick }) => {
+const Th = ({
+  title,
+  value,
+  orderType,
+  canOrder = true,
+  onClick,
+  width = null,
+}) => {
   const handleClick = () => {
     if (!canOrder || !onClick) return;
     onClick(value);
@@ -16,8 +23,11 @@ const Th = ({ title, value, orderType, canOrder = true, onClick }) => {
 
   return (
     <th
+      width={width}
       onClick={handleClick}
-      className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap cursor-pointer"
+      className={`px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap ${
+        canOrder && onClick ? "cursor-pointer" : ""
+      }`}
     >
       <div className="font-semibold text-left flex">
         <div className="mr-1">{title}</div>
