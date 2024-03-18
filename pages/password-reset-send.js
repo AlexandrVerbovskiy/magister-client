@@ -41,7 +41,11 @@ const PasswordResetSend = () => {
         <div className="d-table-cell">
           <div className="coming-soon-content">
             <Link href="/" className="logo">
-              <img src="/images/black-logo.png" alt="image" />
+              <img
+                src="/images/rent-about-logo-black.png"
+                className="logo-image"
+                alt="logo"
+              />
             </Link>
 
             <h2>Password reset</h2>
@@ -62,7 +66,7 @@ const PasswordResetSend = () => {
                 <span className="label-title">
                   <i className="bx bx-envelope"></i>
                 </span>
-                <ErrorSpan error={emailError}/>
+                <ErrorSpan error={emailError} />
               </div>
 
               <button

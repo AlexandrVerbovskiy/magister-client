@@ -118,19 +118,19 @@ export function validatePhoneNumber(phoneNumber) {
 }
 
 export function validatePrice(priceString) {
-  const formatRegex = /^\$?\d+(\.\d{1,2})?$/;
+  const formatRegex = /^\d+(\.\d{1,2})?$/;
 
-  if (!formatRegex.test(priceString)) {
-    return "Price should be a positive number with optional decimal values and may include the dollar sign '$'";
+  if (!formatRegex.test(`${priceString}`)) {
+    return "Price should be a positive number with optional decimal values";
   }
 
-  const numericValue = parseFloat(priceString.replace(/\$/, ""));
+  const numericValue = parseFloat(`${priceString}`.replace(/\$/, ""));
 
   if (isNaN(numericValue) || numericValue <= 0) {
     return "Price should be a positive number";
   }
 
-  const resSmallTextValidation = validateSmallText(priceString);
+  const resSmallTextValidation = validateSmallText(`${priceString}`);
   if (resSmallTextValidation !== true) return resSmallTextValidation;
 
   return true;
@@ -147,4 +147,14 @@ export function validateUrl(url) {
   } catch (error) {
     return "Invalid URL";
   }
+}
+
+export function validateInteger(number) {
+  const integerRegex = /^\d+$/;
+
+  if (!integerRegex.test(number)) {
+    return "The value must be an integer";
+  }
+
+  return true;
 }

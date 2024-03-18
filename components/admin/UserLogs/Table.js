@@ -2,19 +2,13 @@ import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 
-const LogsTable = ({
-  logs,
-  orderField,
-  orderType,
-  onClickTh,
-  totalCount,
-}) => {
+const LogsTable = ({ logs, orderField, orderType, onClickTh, totalCount }) => {
   const ths = [
-    { title: "Id", value: "id" },
-    { title: "Event", value: "event_name" },
-    { title: "User Email", value: "user_email" },
-    { title: "User Role", value: "user_role" },
-    { title: "Created At", value: "created_at" },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Event", value: "event_name", width: "30%" },
+    { title: "User Email", value: "user_email", width: "30%" },
+    { title: "User Role", value: "user_role", width: "15%" },
+    { title: "Created At", value: "created_at", width: "15%" },
   ];
 
   return (
@@ -30,14 +24,13 @@ const LogsTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />
@@ -46,10 +39,7 @@ const LogsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {logs.map((log) => (
-                <TableItem
-                  key={log.id}
-                  {...log}
-                />
+                <TableItem key={log.id} {...log} />
               ))}
             </tbody>
           </table>

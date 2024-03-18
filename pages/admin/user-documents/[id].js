@@ -1,10 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import Router, { useRouter } from "next/router";
-import {
-  changeVerified,
-  getFullUserById,
-  getUserDocuments,
-} from "../../../services";
+import React, { useState,  useContext } from "react";
+import { useRouter } from "next/router";
+import { changeVerified, getUserDocumentsPageOption } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Sidebar from "../../../partials/admin/Sidebar";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -13,31 +9,13 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../middlewares";
 
-const UserDocuments = () => {
+const UserDocuments = ({ documents, user: baseUser }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
-  const [user, setUser] = useState(null);
-  const [documents, setDocuments] = useState(null);
+  const [user, setUser] = useState(baseUser);
   const router = useRouter();
   const { id } = router.query;
-
-  const init = async () => {
-    try {
-      const gotDocuments = await getUserDocuments(id, authToken);
-      const gotUser = await getFullUserById(id, authToken);
-      setDocuments(gotDocuments);
-      setUser(gotUser);
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  useEffect(() => {
-    if (id) {
-      init();
-    }
-  }, [id]);
 
   const handleVerifyClick = async () => {
     try {
@@ -70,7 +48,7 @@ const UserDocuments = () => {
               <BreadCrumbs
                 links={[
                   { title: "Users", href: "/admin/users" },
-                  { title: user.name, href: "/admin/user-edit/" + user.id },
+                  { title: user.name, href: "/admin/users/edit/" + user.id },
                   { title: "Documents" },
                 ]}
               />
@@ -104,6 +82,13 @@ const UserDocuments = () => {
   );
 };
 
-export const getServerSideProps = supportSideProps;
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const id = context.params.id;
+  const options = await getUserDocumentsPageOption(id, baseSideProps.authToken);
+  return { ...options };
+};
+
+export const getServerSideProps = (context) =>
+  supportSideProps(context, boostServerSideProps);
 
 export default UserDocuments;

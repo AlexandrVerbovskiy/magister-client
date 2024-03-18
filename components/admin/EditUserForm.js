@@ -29,6 +29,7 @@ const roleOptions = [
 ];
 
 const EditUserForm = ({ user, save, currentTitle }) => {
+  const [prevUserInfo, setPrevUserInfo] = useState(user);
   const [accessLeaveModalOpen, setAccessLeaveModalOpen] = useState(false);
 
   const { error, success } = useContext(IndiceContext);
@@ -109,7 +110,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setSuspicious(resUserToState.suspicious);
     setVerified(resUserToState.verified);
     setPlaceWork(resUserToState.placeWork);
-  }, [user]);
+  }, [user.id]);
 
   const getObjectToSave = () => ({
     name,
@@ -155,7 +156,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     if (newPhoto) return true;
 
     const dataToSave = getObjectToSave();
-    const userToCheck = userToState(user);
+    const userToCheck = userToState(prevUserInfo);
 
     return !lodash.isEqual(userToCheck, dataToSave);
   };
@@ -294,6 +295,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
     try {
       const { user } = await save(formData);
+      setPrevUserInfo(user);
       success.set("User saved successfully");
 
       if (user.photo) {
@@ -377,6 +379,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <Input
+                            name="name"
                             value={name}
                             setValue={setName}
                             error={nameError}
@@ -396,6 +399,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             options={roleOptions}
                             selected={role}
                             setSelected={setRole}
+                            needSearch={false}
                           />
                         </div>
                       </div>
@@ -408,6 +412,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <div className="flex flex-wrap mt-2">
                         <div className="mr-2">
                           <Input
+                            name="email"
                             value={email}
                             setValue={handleChangeEmail}
                             setError={setEmailError}
@@ -435,6 +440,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <div className="flex flex-wrap mt-2">
                         <div className="mr-2">
                           <Input
+                            name="phone"
                             value={phone}
                             setValue={handleChangePhone}
                             setError={setPhoneError}
@@ -468,6 +474,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <Input
+                            name="facebookUrl"
                             value={facebookUrl}
                             setValue={setFacebookUrl}
                             error={facebookUrlError}
@@ -478,6 +485,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         </div>
                         <div className="sm:w-1/4">
                           <Input
+                            name="linkedinUrl"
                             value={linkedinUrl}
                             setValue={setLinkedinUrl}
                             error={linkedinUrlError}
@@ -491,6 +499,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <Input
+                            name="instagramUrl"
                             value={instagramUrl}
                             setValue={setInstagramUrl}
                             error={instagramUrlError}
@@ -501,6 +510,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         </div>
                         <div className="sm:w-1/4">
                           <Input
+                            name="twitterUrl"
                             value={twitterUrl}
                             setValue={setTwitterUrl}
                             error={twitterUrlError}
@@ -619,6 +629,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <Textarea
+                          name="briefBio"
                           value={briefBio}
                           setValue={setBriefBio}
                           error={briefBioError}
@@ -638,6 +649,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <Textarea
+                          name="contactDetails"
                           row="3"
                           value={contactDetails}
                           setValue={setContactDetails}
@@ -658,6 +670,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <Textarea
+                          name="placeWork"
                           value={placeWork}
                           setValue={setPlaceWork}
                           row="3"

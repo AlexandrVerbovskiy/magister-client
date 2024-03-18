@@ -17,19 +17,29 @@ const UsersTable = ({
   const { isAdmin } = useContext(IndiceContext);
 
   const ths = [
-    { title: "Id", value: "id" },
-    { title: "Name", value: "name" },
-    { title: "Email", value: "email" },
-    { title: "Phone", value: "phone" },
-    { title: "Verified", value: "verified", canOrder: false },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Name", value: "name", width: isAdmin ? "20%" : "25%" },
+    { title: "Email", value: "email", width: isAdmin ? "15%" : "20%" },
+    { title: "Phone", value: "phone", width: "10%" },
+    { title: "Verified", value: "verified", canOrder: false, width: "10%" },
   ];
 
   if (isAdmin) {
-    ths.push({ title: "Active", value: "active", canOrder: false });
+    ths.push({
+      title: "Active",
+      value: "active",
+      canOrder: false,
+      width: "10%",
+    });
   }
 
-  ths.push({ title: "Role", value: "role" });
-  ths.push({ title: "Actions", value: "actions", canOrder: false });
+  ths.push({ title: "Role", value: "role", width: "10%" });
+  ths.push({
+    title: "Actions",
+    value: "actions",
+    canOrder: false,
+    width: "15%",
+  });
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -44,14 +54,13 @@ const UsersTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+          <table className="admin-table table-fixed  w-full dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (
                   <Th
-                    title={th.title}
                     key={th.value}
-                    value={th.value}
+                    {...th}
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                   />
@@ -60,21 +69,25 @@ const UsersTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {users.map((user) => {
-                return <TableItem
+                return (
+                  <TableItem
                     key={user.id}
                     {...user}
                     onChangeRole={(role) =>
-                        handleSetRole(user.id, user.name, role)
+                      handleSetRole(user.id, user.name, role)
                     }
-                    onChangeActive={() => handleChangeActive(user.id, user.name)}
+                    onChangeActive={() =>
+                      handleChangeActive(user.id, user.name)
+                    }
                     onDeleteClick={(e) => {
                       e.stopPropagation();
                       openDeleteModal(user.id, user.name);
                     }}
                     onChangeVerified={() =>
-                        handleChangeVerified(user.id, user.name)
+                      handleChangeVerified(user.id, user.name)
                     }
-                />
+                  />
+                );
               })}
             </tbody>
           </table>

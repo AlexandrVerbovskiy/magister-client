@@ -9,32 +9,56 @@ import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
+import useSearchCategory from "../../../hooks/useSearchCategory";
+import SearchTipsPopup from "../../SearchTipsPopup";
+import { getListingSearchLink } from "../../../utils";
+import CategoriesNavbar from "../../CategoriesNavbar";
 
-const Navbar = () => {
+const Navbar = ({ canShowSearch = true }) => {
   const {
     isAuth,
     success: mainSuccess,
     isSupport,
     onLogin,
+    error: mainError,
+    categories = {},
   } = useContext(IndiceContext);
 
-  const [currentPath, setCurrentPath] = useState("");
+  const categoryFilterRef = useRef(null);
+  const smallCategoryFilterRef = useRef(null);
+
+  const {
+    categoryTipsPopupActive,
+    categoryTips,
+    openCategoryTipsPopup,
+    closeCategoryTipsPopup,
+    updateCategoryTips,
+  } = useSearchCategory();
+
+  const [searchCategory, setSearchCategory] = useState("");
+
   const router = useRouter();
-
-  useEffect(() => {
-    setCurrentPath(router.asPath);
-  }, [router]);
-
-  const isCurrentPath = (link) => {
-    if (link.charAt(0) === "/") link = link.slice(1);
-    return currentPath.includes("/" + link);
-  };
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [sticky, setSticky] = useState(false);
 
   //sticky menu
+
+  const handleChangeCategory = (e) => {
+    const newValue = e.target.value;
+    updateCategoryTips(newValue);
+    setSearchCategory(newValue);
+  };
+
+  const handleCategoryTipClick = (value) => {
+    categoryFilterRef.current.blur();
+    smallCategoryFilterRef.current.blur();
+    setSearchCategory(value);
+    updateCategoryTips(value);
+    const link = getListingSearchLink(value);
+    router.push(link);
+  };
 
   const showStickyMenu = () => {
     if (window.scrollY >= 80) {
@@ -43,6 +67,7 @@ const Navbar = () => {
       setSticky(false);
     }
   };
+
   if (typeof window !== "undefined") {
     // browser code
     window.addEventListener("scroll", showStickyMenu);
@@ -76,7 +101,11 @@ const Navbar = () => {
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {
+      mainError.set(e.message);
+    }
   };
 
   const [userToAuth, setUserToAuth] = useState(null);
@@ -161,6 +190,18 @@ const Navbar = () => {
     setTypeModalError(null);
   };
 
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchCategory) return;
+
+    handleSearchClick();
+  };
+
+  const handleSearchClick = () => {
+    const link = getListingSearchLink(searchCategory);
+    router.push(link);
+  };
+
   return (
     <>
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
@@ -183,7 +224,11 @@ const Navbar = () => {
               </div>
               <div className="logo">
                 <Link href="/">
-                  <img src="/images/logo.png" alt="logo" />
+                  <img
+                    src="/images/rent-about-logo.png"
+                    className="logo-image"
+                    alt="logo"
+                  />
                 </Link>
               </div>
             </div>
@@ -194,26 +239,61 @@ const Navbar = () => {
           <div className="container-fluid">
             <nav className="navbar navbar-expand-md navbar-light">
               <Link href="/" className="navbar-brand">
-                <img src="/images/logo.png" alt="logo" />
+                <img
+                  src="/images/rent-about-logo.png"
+                  className="logo-image"
+                  alt="logo"
+                />
               </Link>
 
               <div className="collapse navbar-collapse mean-menu">
-                <form className="navbar-search-box search-box-one">
-                  <label>
-                    <i className="flaticon-search"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="input-search"
-                    placeholder="What are you looking for?"
-                  />
-                </form>
+                {canShowSearch && (
+                  <form
+                    onSubmit={handleSearchSubmit}
+                    className="navbar-search-box search-box-one"
+                  >
+                    <label
+                      onClick={handleSearchClick}
+                      className="cursor-pointer"
+                    >
+                      <i className="flaticon-search"></i>
+                    </label>
+
+                    <input
+                      type="text"
+                      className="input-search"
+                      placeholder="What are you looking for?"
+                      name="listingCategorySearch"
+                      ref={categoryFilterRef}
+                      value={searchCategory}
+                      onFocus={() => openCategoryTipsPopup(searchCategory)}
+                      onBlur={closeCategoryTipsPopup}
+                      onInput={handleChangeCategory}
+                    />
+
+                    <SearchTipsPopup
+                      active={categoryTipsPopupActive}
+                      tips={categoryTips}
+                      handleTipClick={handleCategoryTipClick}
+                    />
+                  </form>
+                )}
 
                 <ul className="navbar-nav">
                   <li className="nav-item">
                     <Link href="/" className="nav-link">
                       Home
                     </Link>
+                  </li>
+
+                  <li className="nav-item">
+                    <Link
+                      href="/listing-list"
+                      className="dropdown-toggle nav-link"
+                    >
+                      Listings
+                    </Link>
+                    <CategoriesNavbar categories={categories} />
                   </li>
 
                   {isAuth && (
@@ -276,18 +356,38 @@ const Navbar = () => {
             <div className={displayMiniAuth ? "container active" : "container"}>
               <div className="option-inner">
                 <div className="others-option">
-                  <div className="option-item">
-                    <form className="navbar-search-box">
-                      <label>
-                        <i className="flaticon-search"></i>
-                      </label>
-                      <input
-                        type="text"
-                        className="input-search"
-                        placeholder="What are you looking for?"
-                      />
-                    </form>
-                  </div>
+                  {canShowSearch && (
+                    <div className="option-item">
+                      <form
+                        onSubmit={handleSearchSubmit}
+                        className="navbar-search-box"
+                      >
+                        <label
+                          onClick={handleSearchClick}
+                          className="cursor-pointer"
+                        >
+                          <i className="flaticon-search"></i>
+                        </label>
+                        <input
+                          type="text"
+                          className="input-search"
+                          placeholder="What are you looking for?"
+                          name="listingCategorySearch"
+                          ref={smallCategoryFilterRef}
+                          value={searchCategory}
+                          onFocus={() => openCategoryTipsPopup(searchCategory)}
+                          onBlur={closeCategoryTipsPopup}
+                          onInput={handleChangeCategory}
+                        />
+
+                        <SearchTipsPopup
+                          active={categoryTipsPopupActive}
+                          tips={categoryTips}
+                          handleTipClick={handleCategoryTipClick}
+                        />
+                      </form>
+                    </div>
+                  )}
 
                   {!isAuth && (
                     <div className="option-item">
@@ -378,9 +478,10 @@ const Navbar = () => {
                     </TabList>
                   </ul>
 
-                  <div className="tab-content" id="myTabContent">
+                  <div className="tab-content">
                     <TabPanel>
                       <LoginTab
+                        activePopup={displayAuth}
                         setUser={setUserToAuth}
                         email={loginEmail}
                         setEmail={setLoginEmail}
@@ -399,6 +500,7 @@ const Navbar = () => {
 
                     <TabPanel>
                       <RegisterTab
+                        activePopup={displayAuth}
                         moveToLogin={handleLoginTabActive}
                         closeModal={closeModals}
                       />

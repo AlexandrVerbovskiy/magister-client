@@ -12,10 +12,11 @@ import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
-import env from "../../../env";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 
-const UserVerifyRequest = ({ info }) => {
+const UserVerifyRequest = ({ info: baseInfo }) => {
+  const [info, setInfo] = useState(baseInfo);
+
   const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
@@ -38,14 +39,23 @@ const UserVerifyRequest = ({ info }) => {
         ? "Verified successfully"
         : "Declined successfully";
       success.set(message);
-      router.push("/admin/user-documents/" + info.userId);
+
+      setInfo((prev) => ({
+        ...prev,
+        hasResponse: true,
+        failedDescription: description,
+      }));
     } catch (e) {
       error.set(e.message);
     }
   };
 
   const handleAcceptClick = async () => {
-    await handleBaseVerifyChangeClick(true);
+    try {
+      await handleBaseVerifyChangeClick(true);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   const handleDeclineClick = (e) => {
@@ -63,8 +73,12 @@ const UserVerifyRequest = ({ info }) => {
       return;
     }
 
-    setAccessDeclineModalOpen(false);
-    await handleBaseVerifyChangeClick(false, declineDescription);
+    try {
+      await handleBaseVerifyChangeClick(false, declineDescription);
+      setAccessDeclineModalOpen(false);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -82,7 +96,7 @@ const UserVerifyRequest = ({ info }) => {
                   { title: "Users", href: "/admin/users" },
                   {
                     title: info.userName,
-                    href: "/admin/user-edit/" + info.userId,
+                    href: "/admin/users/edit/" + info.userId,
                   },
                   { title: "Verify Request" },
                 ]}
@@ -94,27 +108,58 @@ const UserVerifyRequest = ({ info }) => {
                 <div className="grow">
                   <DocumentList {...info} />
 
-                  <footer>
-                    <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
-                      <div className="flex self-start">
-                        <button
-                          type="button"
-                          onClick={handleDeclineClick}
-                          className="btn bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Decline
-                        </button>
+                  {!info.hasResponse && (
+                    <footer>
+                      <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex self-start">
+                          <button
+                            type="button"
+                            onClick={handleDeclineClick}
+                            className="btn bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            Decline
+                          </button>
 
-                        <button
-                          type="button"
-                          onClick={handleAcceptClick}
-                          className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-2"
-                        >
-                          Accept
-                        </button>
+                          <button
+                            type="button"
+                            onClick={handleAcceptClick}
+                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-2"
+                          >
+                            Accept
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </footer>
+                    </footer>
+                  )}
+
+                  {info.hasResponse && (
+                    <footer>
+                      <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                        <section className="flex gap-x-4 flex-row">
+                          {info.failedDescription ? (
+                            <div
+                              className="w-full fade text-sm show bg-rose-500 text-white px-4 py-3 rounded relative"
+                              role="alert"
+                            >
+                              <span className="block sm:inline">
+                                <b>Rejected: </b>
+                                {info.failedDescription}
+                              </span>
+                            </div>
+                          ) : (
+                            <div
+                              className="w-full fade text-sm show bg-emerald-500 text-white px-4 py-3 rounded relative"
+                              role="alert"
+                            >
+                              <span className="block sm:inline">
+                                <b>Accepted</b>
+                              </span>
+                            </div>
+                          )}
+                        </section>
+                      </div>
+                    </footer>
+                  )}
                 </div>
               </div>
             </div>
@@ -130,7 +175,7 @@ const UserVerifyRequest = ({ info }) => {
             <div style={{ width: "100%" }}>
               <div className="mb-2">
                 <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                  Are yiu sure you want decline this request?
+                  Are you sure you want decline this request?
                 </div>
               </div>
               <div className="text-sm mb-2">
@@ -141,6 +186,7 @@ const UserVerifyRequest = ({ info }) => {
 
               <div className="mb-2">
                 <textarea
+                  name="declineDescription"
                   className="form-input w-full"
                   rows="6"
                   value={declineDescription}
@@ -171,32 +217,15 @@ const UserVerifyRequest = ({ info }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await supportSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
+const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
 
-  if (!id) {
-    return {
-      notFound: true,
-    };
-  }
+  const info = await getUserVerifyRequestById(id, baseSideProps.authToken);
 
-  try {
-    const info = await getUserVerifyRequestById(
-      id,
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, info },
-    };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
+  return { info };
 };
+
+export const getServerSideProps = (context) =>
+  supportSideProps(context, boostServerSideProps);
 
 export default UserVerifyRequest;

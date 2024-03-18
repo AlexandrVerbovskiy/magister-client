@@ -6,13 +6,17 @@ import { getFilePath } from "../../utils";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 
-const defaultPhotoLink = "/images/admin/user-avatar-80.png";
+import STATIC from "../../static";
 
 function DropdownProfile({ align }) {
   const router = useRouter();
-  const { success: mainSuccess, user } = useContext(IndiceContext);
+  const {
+    success: mainSuccess,
+    user,
+    error: mainError,
+  } = useContext(IndiceContext);
   const name = user ? user.name : "";
-  const photo = user && user.photo ? getFilePath(user.photo) : defaultPhotoLink;
+  const photo = user && user.photo ? getFilePath(user.photo) : STATIC.defaultPhotoLink;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -45,7 +49,11 @@ function DropdownProfile({ align }) {
   });
 
   const handleSignOut = async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {
+      mainError.set(e);
+    }
   };
 
   return (

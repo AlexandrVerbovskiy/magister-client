@@ -8,6 +8,7 @@
   margin-bottom: 1rem;
   border-radius: 0.375rem;
   padding-right: 3rem;
+  max-width: 400px;
 }
 
 .main-site-alert.alert-success {
@@ -121,7 +122,7 @@ Preloader Area CSS
   margin-top: 0 !important;
 }
 
-.document-view h2{
+.document-view h2 {
   height: 55px;
   display: flex !important;
   align-items: flex-end;
@@ -145,6 +146,130 @@ Preloader Area CSS
   background-color: #f8f8f8;
 }
 
+.relative-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(6px, -11px);
+  padding: 0 1px;
+  background-color: white;
+  z-index: 9;
+}
+
+.create-listing-category-button div {
+  width: 200px;
+}
+
+.category-list-item .error-span {
+  margin-top: 5px;
+}
+
+.admin-map-parent .form-group {
+  width: 100%;
+}
+
+.add-listings-box {
+  margin-bottom: 30px;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+.add-listings-box h3 {
+  padding: 20px 25px 19px;
+  border-bottom: 1px dashed #eeeeee;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  margin-left: -25px;
+  margin-right: -25px;
+}
+.add-listings-box .form-group {
+  position: relative;
+}
+.add-listings-box .form-group label {
+  display: block;
+  margin-bottom: 12px;
+  color: #000000;
+  position: relative;
+  padding-left: 25px;
+  font-weight: 500;
+}
+
+.dropzone.add-listings-box .add-more-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+}
+
+.gallery-flex {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-flex img,
+.gallery-flex-parent img {
+  max-width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.gallery-flex-parent > div {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-flex-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  width: 34px;
+  height: 34px;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-5px, 0) rotate(45deg);
+  border-radius: 50%;
+}
+
+.category-list-item-image button {
+  text-wrap: nowrap;
+}
+
+.category-list-item-image .image-input-parent {
+  flex-direction: column;
+}
+
+.category-list-item-image div:has(> img),
+.category-list-item-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 0;
+}
+
+#access-delete-category-listing-modal,
+#access-delete-category-listing-modal > div {
+  overflow: unset !important;
+}
+
 @keyframes preloader {
   0% {
     transform: scale(0, 0);
@@ -153,5 +278,40 @@ Preloader Area CSS
   100% {
     transform: scale(1, 1);
     opacity: 0;
+  }
+}
+
+.category-image-parent img {
+  border-radius: 0 !important;
+}
+
+.admin-table .overflow-separate,
+.admin-table td:not(:has(*)) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adaptive-logo-image,
+.logo-image {
+  height: 32px;
+}
+
+.adaptive-logo-image {
+  background-image: url("/images/rent-about-logo.svg");
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+}
+
+.listing-gallery-flex-parent > div {
+  height: 300px !important;
+}
+
+.sidebar-expanded .adaptive-logo-image {
+  background-image: url("/images/rent-about-logo.png");
+}
+
+@media (min-width: 1536px) {
+  .adaptive-logo-image {
+    background-image: url("/images/rent-about-logo.png");
   }
 }

@@ -1,21 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import { authSideProps } from "../../middlewares";
+import { getSettingsPageOptions } from "../../services";
 
 const Dashboard = () => {
-  const router = useRouter();
-  const [formError, setFormError] = useState(null);
   const { user } = useContext(IndiceContext);
-  const { success, setLoading } = useContext(IndiceContext);
-
-  const handleSaveClick = async () => {
-    setFormError(null);
-    success.set("Profile updated successfully");
-  };
+  const { setLoading } = useContext(IndiceContext);
 
   useEffect(() => {
     setLoading(false);
@@ -40,7 +33,7 @@ const Dashboard = () => {
           className="notification-alert alert alert-success alert-dismissible fade show"
           role="alert"
         >
-          Welcome, <b>{user.name}</b>!
+          Welcome, <b>{user?.name}</b>!
           <button
             type="button"
             className="btn-close"
@@ -80,6 +73,12 @@ const Dashboard = () => {
   );
 };
 
-export const getServerSideProps = authSideProps;
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const options = await getSettingsPageOptions(baseSideProps.authToken);
+  return { ...options };
+};
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default Dashboard;

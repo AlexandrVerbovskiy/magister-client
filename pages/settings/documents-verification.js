@@ -6,20 +6,20 @@ import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
 import {
   saveMyDocuments,
-  getMyDocuments,
   userVerifyRequestCreate,
-  canSendVerifyRequest,
+  getCurrentUserDocumentsPageOptions,
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
 
-const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
+const DocumentsVerification = ({
+  documents,
+  canSend,
+  lastAnswerDescription,
+}) => {
   const [formError, setFormError] = useState(null);
   const { success, setLoading, user, authToken } = useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
-  const [lastDeclineDescription, setLastDeclineDescription] = useState(
-    lastAnswerDescription
-  );
 
   const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
@@ -108,45 +108,47 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   };
 
   const initDocuments = async () => {
-    if (docs.proofOfAddressLink) {
-      setProofOfAddressLink(getFilePath(docs.proofOfAddressLink));
+    if (documents.proofOfAddressLink) {
+      setProofOfAddressLink(getFilePath(documents.proofOfAddressLink));
     } else {
       setProofOfAddressLink(null);
     }
 
-    if (docs.reputableBankIdLink) {
-      setReputableBankIdLink(getFilePath(docs.reputableBankIdLink));
+    if (documents.reputableBankIdLink) {
+      setReputableBankIdLink(getFilePath(documents.reputableBankIdLink));
     } else {
       setReputableBankIdLink(null);
     }
 
-    if (docs.utilityLink) {
-      setUtilityLink(getFilePath(docs.utilityLink));
+    if (documents.utilityLink) {
+      setUtilityLink(getFilePath(documents.utilityLink));
     } else {
       setUtilityLink(null);
     }
 
-    if (docs.hmrcLink) {
-      setHmrcLink(getFilePath(docs.hmrcLink));
+    if (documents.hmrcLink) {
+      setHmrcLink(getFilePath(documents.hmrcLink));
     } else {
       setHmrcLink(null);
     }
 
-    if (docs.councilTaxBillLink) {
-      setCouncilTaxBillLink(getFilePath(docs.councilTaxBillLink));
+    if (documents.councilTaxBillLink) {
+      setCouncilTaxBillLink(getFilePath(documents.councilTaxBillLink));
     } else {
       setCouncilTaxBillLink(null);
     }
 
-    if (docs.passportOrDrivingIdLink) {
-      setPassportOrDrivingIdLink(getFilePath(docs.passportOrDrivingIdLink));
+    if (documents.passportOrDrivingIdLink) {
+      setPassportOrDrivingIdLink(
+        getFilePath(documents.passportOrDrivingIdLink)
+      );
     } else {
       setPassportOrDrivingIdLink(null);
     }
 
-    if (docs.confirmMoneyLaunderingChecksAndComplianceLink) {
+    if (documents.confirmMoneyLaunderingChecksAndComplianceLink) {
       setConfirmMoneyLaunderingChecksAndComplianceLink(
-        getFilePath(docs.confirmMoneyLaunderingChecksAndComplianceLink)
+        getFilePath(documents.confirmMoneyLaunderingChecksAndComplianceLink)
       );
     } else {
       setConfirmMoneyLaunderingChecksAndComplianceLink(null);
@@ -211,7 +213,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
       try {
         await saveMyDocuments(formData, authToken);
       } catch (e) {
-        setFormError(e);
+        setFormError(e.message);
       } finally {
         setSaveDocumentsDisabled(false);
       }
@@ -238,7 +240,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
       success.set(message);
       setActiveSendRequestBtn(false);
     } catch (e) {
-      setFormError(e);
+      setFormError(e.message);
     } finally {
       setSaveDocumentsDisabled(false);
       setSendRequestDisabled(false);
@@ -247,7 +249,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
 
   useEffect(() => {
     initDocuments();
-  }, [docs]);
+  }, [documents]);
 
   return (
     <>
@@ -259,13 +261,12 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
           <h1>Settings</h1>
           <ol className="breadcrumb">
             <li className="item">
-              <Link href="/settings/">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/documents-verification">
-                Documents Verification
-              </Link>
+              <Link href="/settings/">Settings</Link>
             </li>
+            <li className="item"> Documents Verification</li>
           </ol>
         </div>
 
@@ -274,14 +275,15 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
             <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              {lastDeclineDescription && (
+              {!user?.verified && lastAnswerDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
                     <div
                       className="alert-dismissible fade show alert alert-danger"
                       role="alert"
                     >
-                      {lastDeclineDescription}
+                      <b>Rejected feedback: </b>
+                      {lastAnswerDescription}
                     </div>
                   </div>
                 </div>
@@ -295,7 +297,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={proofOfAddressLink}
                       onChange={handleProofOfAddressChange}
                       name="proofOfAddressLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -305,7 +307,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={reputableBankIdLink}
                       onChange={handleReputableBankIdChange}
                       name="reputableBankIdLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -315,7 +317,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={utilityLink}
                       onChange={handleUtilityChange}
                       name="utilityLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -325,7 +327,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={hmrcLink}
                       onChange={handleHmrcChange}
                       name="hmrcLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -335,7 +337,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={councilTaxBillLink}
                       onChange={handleCouncilTaxBillChange}
                       name="councilTaxBillLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -345,7 +347,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                       photoUrl={passportOrDrivingIdLink}
                       onChange={handlePassportOrDrivingIdChange}
                       name="passportOrDrivingIdLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -357,7 +359,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                         handleConfirmMoneyLaunderingChecksAndComplianceChange
                       }
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
-                      disabled={user.verified}
+                      disabled={user?.verified}
                     />
                   </div>
 
@@ -372,7 +374,7 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
                     </div>
                   )}
 
-                  {!user.verified && (
+                  {!user?.verified && (
                     <div className="col-12">
                       <div className="form-group d-flex gap-2 justify-content-between">
                         <button
@@ -407,25 +409,14 @@ const DocumentsVerification = ({ docs, canSend, lastAnswerDescription }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await authSideProps(context);
-  if (baseSideProps.notFound) return baseSideProps;
-
-  try {
-    const docs = await getMyDocuments(baseSideProps.props.authToken);
-    let { canSend, lastAnswerDescription } = await canSendVerifyRequest(
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, canSend, lastAnswerDescription, docs },
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      notFound: true,
-    };
-  }
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const options = await getCurrentUserDocumentsPageOptions(
+    baseSideProps.authToken
+  );
+  return { ...options };
 };
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
 
 export default DocumentsVerification;

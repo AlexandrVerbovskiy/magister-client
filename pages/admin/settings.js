@@ -15,12 +15,16 @@ import { IndiceContext } from "../../contexts";
 const Settings = ({ userLogActive: baseUserLogActive }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [userLogActive, setUserLogActive] = useState(baseUserLogActive);
-  const { authToken, success } = useContext(IndiceContext);
+  const { authToken, success, error } = useContext(IndiceContext);
 
   const handleChange = async (value) => {
-    const res = await setUserLogActiveRequest(value, authToken);
-    success.set("Operation done success");
-    setUserLogActive(res);
+    try {
+      const res = await setUserLogActiveRequest(value, authToken);
+      success.set("Operation done success");
+      setUserLogActive(res);
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -69,29 +73,13 @@ const Settings = ({ userLogActive: baseUserLogActive }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const baseSideProps = await adminSideProps(context);
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const userLogActive = await getUserLogActiveRequest(baseSideProps.authToken);
 
-  if (baseSideProps.notFound) {
-    return {
-      notFound: true,
-    };
-  }
-
-  try {
-    const userLogActive = await getUserLogActiveRequest(
-      baseSideProps.props.authToken
-    );
-
-    return {
-      props: { ...baseSideProps.props, userLogActive },
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      notFound: true,
-    };
-  }
+  return { userLogActive };
 };
+
+export const getServerSideProps = (context) =>
+  adminSideProps(context, boostServerSideProps);
 
 export default Settings;

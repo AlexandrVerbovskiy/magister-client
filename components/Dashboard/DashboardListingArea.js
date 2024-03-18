@@ -36,7 +36,7 @@ const DashboardListingArea = () => {
             </TabList>
           </ul>
 
-          <div className="tab-content" id="myTabContent">
+          <div className="tab-content">
             <div className="tab-pane fade show active" id="all-listing">
               <TabPanel>
                 <div className="row">

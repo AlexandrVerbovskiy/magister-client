@@ -4,7 +4,7 @@ import LangDropdown from "./LangDropdown";
 const Footer = ({ bgColor }) => {
   return (
     <>
-      <footer className={`footer-area ${bgColor}`}>
+      <footer className={`footer-area ${bgColor ?? ""}`}>
         <div className="container">
           <div className="row">
             <div className="col-lg-3 col-sm-6 col-md-6">
@@ -152,7 +152,7 @@ const Footer = ({ bgColor }) => {
                 <h3>Languages</h3>
 
                 <LangDropdown />
-       
+
                 <h3>Countries</h3>
                 <div className="country-switch">
                   <select>

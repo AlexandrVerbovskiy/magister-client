@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 
 const PageHeaderWithMap = () => {
   return (
@@ -16,6 +16,7 @@ const PageHeaderWithMap = () => {
                   <i className="flaticon-search"></i>
                 </label>
                 <input
+                  name="category"
                   type="text"
                   className="form-control"
                   placeholder="What are you looking for?"
@@ -29,6 +30,7 @@ const PageHeaderWithMap = () => {
                   <i className="flaticon-pin"></i>
                 </label>
                 <input
+                  name="location"
                   type="text"
                   className="form-control"
                   placeholder="Location"

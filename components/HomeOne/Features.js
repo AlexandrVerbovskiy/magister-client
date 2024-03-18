@@ -2,71 +2,55 @@ import React from "react";
 import Link from "next/link";
 
 const Features = () => {
+  const items = [
+    {
+      text: `Find something nearby Explore nearby items and filter your
+  search by location.`,
+      icon: "flaticon-commerce",
+      link: "/",
+    },
+    {
+      text: `Request and book Reach out to the owner to borrow their items
+      for the dates you need. Once they confirm, you can secure the
+      items by making a payment.`,
+      icon: "flaticon-project",
+      link: "/",
+    },
+    {
+      text: `Verify If you haven't already done so, you'll be
+      prompted to verify your identity. This ensures a robust
+      rental process. After verification, your rental will be
+      confirmed..`,
+      icon: "flaticon-growth",
+      link: "/",
+    },
+  ];
+
   return (
     <>
       <section className="features-area ptb-100">
         <div className="container">
           <div className="section-title">
-            <h2>
-              Your Small Business Start With <span>Indice</span>
-            </h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-              ipsum suspendisse ultrices gravida. Risus commodo viverra.
-            </p>
+            <h2>You're safe with us</h2>
           </div>
 
           <div className="row justify-content-center">
-            <div className="col-lg-4 col-md-6 col-sm-6">
-              <div className="single-features-box">
-                <div className="icon">
-                  <i className="flaticon-commerce"></i>
+            {items.map((item) => (
+              <div
+                key={item.icon}
+                className="col-lg-4 col-md-6 col-sm-6 d-flex"
+              >
+                <div className="single-features-box">
+                  <div className="icon">
+                    <i className={item.icon}></i>
+                  </div>
+                  <p>{item.text}</p>
+                  <Link href={item.link} className="link-btn">
+                    Get Start Now
+                  </Link>
                 </div>
-                <h3>Lunch Your Business</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore.
-                </p>
-                <Link href="/contact" className="link-btn">
-                  Get Start Now
-                </Link>
               </div>
-            </div>
-
-            <div className="col-lg-4 col-md-6 col-sm-6">
-              <div className="single-features-box">
-                <div className="icon">
-                  <i className="flaticon-project"></i>
-                </div>
-                <h3>Manage Your Business</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore.
-                </p>
-                <Link href="/contact" className="link-btn">
-                  Get Start Now
-                </Link>
-              </div>
-            </div>
-
-            <div
-              className="col-lg-4 col-md-6 col-sm-6"
-            >
-              <div className="single-features-box">
-                <div className="icon">
-                  <i className="flaticon-growth"></i>
-                </div>
-                <h3>Grow Your Business</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore.
-                </p>
-                <Link href="/contact" className="link-btn">
-                  Get Start Now
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
