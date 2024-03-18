@@ -16212,7 +16212,7 @@ Dashboard CSS
 }
 
 .main-banner-content .banner-one-heading-scrollable {
-  height: 110px;
+  max-height: 110px;
 }
 
 .main-banner-content .banner-one-heading-scrollable .swiper {
