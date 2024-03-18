@@ -310,6 +310,10 @@ Preloader Area CSS
   background-image: url("/images/rent-about-logo.png");
 }
 
+.dropdown-classic{
+  min-height: 37.6px;
+}
+
 @media (min-width: 1536px) {
   .adaptive-logo-image {
     background-image: url("/images/rent-about-logo.png");

@@ -132,7 +132,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
     let hasError = false;
 
-    const names = [];
+    const names = {};
     const localIdErrors = {};
 
     Object.keys(newCategories).forEach((key) => {
@@ -143,15 +143,22 @@ const ListingCategories = ({ categories: baseCategories }) => {
           return;
         }
 
-        if (names.includes(category.name)) {
+        if (Object.values(names).includes(category.name)) {
           localIdErrors[category.localId] =
             "Cannot create two identical categories";
           hasError = true;
+
+          Object.keys(names).forEach(
+            (localId) =>
+              (localIdErrors[localId] =
+                "Cannot create two identical categories")
+          );
+
           return;
         }
 
         localIdErrors[category.localId] = null;
-        names.push(category.name);
+        names[category.localId] = category.name;
       });
     });
 

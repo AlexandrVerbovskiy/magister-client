@@ -199,7 +199,13 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
   const handleSearchClick = () => {
     const link = getListingSearchLink(searchCategory);
-    router.push(link);
+
+    if (window.location.pathname.includes("/listing-list/")) {
+      router.push(link).then(() => window.location.reload());
+    } else {
+      router.push(link);
+    }
+
     setSearchCategory("");
     document.querySelector(".navbar-search-box input").blur();
   };

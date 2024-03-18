@@ -21,6 +21,7 @@ const userSideProps = async (context, callback = null) => {
     /*Object.keys(context.req.cookies).forEach((cookieName) => {
       context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
     });*/
+
     return { props: { user: null } };
   }
 

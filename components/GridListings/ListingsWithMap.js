@@ -18,6 +18,7 @@ import STATIC from "../../static";
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
 const ListingsWithMap = ({
+  authToken,
   categories: baseCategories,
   pageProps: basePageProps,
   canSendCreateNotifyRequest: baseCanSendCreateNotifyRequest,
@@ -96,7 +97,7 @@ const ListingsWithMap = ({
 
   useEffect(() => setCategories(baseCategories), [baseCategories]);
 
-  const { error, success, authToken = null } = useContext(IndiceContext);
+  const { error, success } = useContext(IndiceContext);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter(defaultTimeFilterValues);
