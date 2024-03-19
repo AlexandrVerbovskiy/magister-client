@@ -72,6 +72,8 @@ const EditPhotosSection = ({
   setFiles,
   fileError,
   setFileError,
+  photoPopupError,
+  setPhotoPopupError,
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
@@ -103,6 +105,8 @@ const EditPhotosSection = ({
         const newFiles = acceptedFiles.slice(0, 1);
 
         if (newFiles.length > 0) {
+          setPhotoPopupError(null);
+
           setPhotoPopupPhoto(
             Object.assign(newFiles[0], {
               preview: URL.createObjectURL(newFiles[0]),
@@ -167,7 +171,12 @@ const EditPhotosSection = ({
   return (
     <>
       <div {...getRootPropsBase()} className="dropzone add-listings-box">
-        <h3>Photos</h3>
+        <h3>
+          Photos
+          <div style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
+            You can add maximum 5 files
+          </div>
+        </h3>
 
         <div className="row" style={{ width: "100%" }}>
           {infosToView.map((file) => (
@@ -274,8 +283,10 @@ const EditPhotosSection = ({
             </div>
           )}
 
+          <ErrorSpan error={photoPopupError} className="d-block mb-3"/>
+
           <button type="button" onClick={handlePhotoAddByPopup}>
-            {photoPopupLocalFileId ? "Save" : "Append"}
+            {photoPopupLocalFileId ? "Update" : "Append"}
           </button>
         </form>
       </BaseModal>

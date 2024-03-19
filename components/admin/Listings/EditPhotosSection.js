@@ -71,6 +71,8 @@ const EditPhotosSection = ({
   setFiles,
   fileError,
   setFileError,
+  photoPopupError,
+  setPhotoPopupError,
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
@@ -102,6 +104,8 @@ const EditPhotosSection = ({
         const newFiles = acceptedFiles.slice(0, 1);
 
         if (newFiles.length > 0) {
+          setPhotoPopupError(null);
+
           setPhotoPopupPhoto(
             Object.assign(newFiles[0], {
               preview: URL.createObjectURL(newFiles[0]),
@@ -170,7 +174,12 @@ const EditPhotosSection = ({
           Photos
         </h2>
 
-        <div className="flex flex-wrap" style={{ width: "100%", gridGap: "0.5rem" }}>
+        <div class="text-sm">You can add maximum 5 files</div>
+
+        <div
+          className="flex flex-wrap mt-5"
+          style={{ width: "100%", gridGap: "0.5rem" }}
+        >
           {infosToView.map((file) => (
             <ImageView
               key={file.localId}
@@ -288,6 +297,8 @@ const EditPhotosSection = ({
                         />
                       </div>
                     )}
+
+                    <ErrorSpan error={photoPopupError} />
                   </div>
                 )}
               </div>
@@ -298,7 +309,7 @@ const EditPhotosSection = ({
                 onClick={handlePhotoAddByPopup}
                 className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
               >
-                {photoPopupLocalFileId ? "Save" : "Append"}
+                {photoPopupLocalFileId ? "Update" : "Append"}
               </button>
             </div>
           </div>

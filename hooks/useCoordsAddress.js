@@ -63,6 +63,7 @@ const useCoordsAddress = () => {
   };
 
   const getCoordsByAddress = async (address) => {
+    if (!address) return null;
     const res = await fromAddress(address);
     const coords = res.results[0].geometry.location;
     if (!coords) throw new Error("Undefined address");

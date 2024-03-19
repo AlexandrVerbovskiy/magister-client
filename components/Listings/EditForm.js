@@ -93,6 +93,8 @@ const EditForm = ({
     setLinkFiles,
     fileError,
     setFileError,
+    photoPopupError,
+    setPhotoPopupError,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
@@ -166,7 +168,10 @@ const EditForm = ({
       setAddress(newAddress);
       setAddressError(null);
       setMainError(null);
+
       const newCoords = await getCoordsByAddress(newAddress);
+      if (!newCoords) return;
+
       setLat(newCoords.lat);
       setLng(newCoords.lng);
       setCenter({ lat: newCoords.lat, lng: newCoords.lng });
@@ -661,7 +666,7 @@ const EditForm = ({
               <InputWithIcon
                 label="Postcode:"
                 icon="bx bx-menu-alt-left"
-                placeholder="e.g. 55 County Laois"
+                placeholder="WA1 1AF"
                 value={postcode}
                 onInput={handleChangePostcode}
                 error={postcodeError}
@@ -714,6 +719,8 @@ const EditForm = ({
           setFiles={setFiles}
           fileError={fileError}
           setFileError={setFileError}
+          photoPopupError={photoPopupError}
+          setPhotoPopupError={setPhotoPopupError}
         />
 
         <div className="add-listings-box">

@@ -332,6 +332,11 @@ Preloader Area CSS
   max-width: calc(100% - 18px);
 }
 
+.dropdown-classic>button>span{
+  width: calc(100% - 20px);
+}
+
+.dropdown-classic>button>span>span,
 .select-option span,
 .listing-categories-parent-select button > span > span {
   overflow: hidden;
