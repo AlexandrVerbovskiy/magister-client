@@ -73,6 +73,8 @@ const EditForm = ({ listing, categories, save }) => {
     setLinkFiles,
     fileError,
     setFileError,
+    photoPopupError,
+    setPhotoPopupError,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
@@ -151,7 +153,10 @@ const EditForm = ({ listing, categories, save }) => {
     try {
       setAddress(newAddress);
       setAddressError(null);
+
       const newCoords = await getCoordsByAddress(newAddress);
+      if (!newCoords) return;
+
       setLat(newCoords.lat);
       setLng(newCoords.lng);
       setCenter({ lat: newCoords.lat, lng: newCoords.lng });
@@ -451,7 +456,7 @@ const EditForm = ({ listing, categories, save }) => {
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         {listing.name}
@@ -642,7 +647,7 @@ const EditForm = ({ listing, categories, save }) => {
                               <Input
                                 name="postcode"
                                 label="Postcode"
-                                placeholder="e.g. 55 County Laois"
+                                placeholder="WA1 1AF"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={postcode}
                                 setValue={setPostcode}
@@ -702,6 +707,8 @@ const EditForm = ({ listing, categories, save }) => {
                         setFiles={setFiles}
                         fileError={fileError}
                         setFileError={setFileError}
+                        photoPopupError={photoPopupError}
+                        setPhotoPopupError={setPhotoPopupError}
                       />
 
                       <section>

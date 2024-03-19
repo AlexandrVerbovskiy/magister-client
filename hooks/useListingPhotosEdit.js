@@ -21,6 +21,7 @@ const useListingPhotoEdit = () => {
   const [photoPopupLink, setPhotoPopupLink] = useState("");
   const [photoPopupType, setPhotoPopupType] = useState("storage");
   const [photoPopupLocalFileId, setPhotoPopupLocalFileId] = useState(null);
+  const [photoPopupError, setPhotoPopupError] = useState(null);
 
   const handleClosePhotoPopup = () => {
     setPhotoPopupLink("");
@@ -28,6 +29,7 @@ const useListingPhotoEdit = () => {
     setPhotoPopupPhoto(null);
     setPhotoPopupActive(null);
     setPhotoPopupLocalFileId(null);
+    setPhotoPopupError(null);
   };
 
   const adaptLinkPropsToLocal = (list) =>
@@ -41,6 +43,8 @@ const useListingPhotoEdit = () => {
   const handlePhotoAddByPopup = () => {
     setFileError(null);
 
+    let success = true;
+
     if (photoPopupType === "storage") {
       let found = null;
       let date = Date.now();
@@ -49,8 +53,14 @@ const useListingPhotoEdit = () => {
         const newFiles = files.map((file) => {
           if (file.localId != photoPopupLocalFileId) return file;
 
-          found = { ...file, preview: URL.createObjectURL(photoPopupPhoto) };
-          return found;
+          if (!photoPopupPhoto) {
+            setPhotoPopupError("No file selected");
+            success = false;
+            return file;
+          } else {
+            found = { ...file, preview: URL.createObjectURL(photoPopupPhoto) };
+            return found;
+          }
         });
 
         setFiles(newFiles);
@@ -72,14 +82,19 @@ const useListingPhotoEdit = () => {
       }
 
       if (!photoPopupLocalFileId || !found) {
-        setFiles((prev) => [
-          ...prev,
-          Object.assign(photoPopupPhoto, {
-            preview: URL.createObjectURL(photoPopupPhoto),
-            localId: uniqueId(),
-            date,
-          }),
-        ]);
+        if (photoPopupPhoto) {
+          setFiles((prev) => [
+            ...prev,
+            Object.assign(photoPopupPhoto, {
+              preview: URL.createObjectURL(photoPopupPhoto),
+              localId: uniqueId(),
+              date,
+            }),
+          ]);
+        } else {
+          success = false;
+          setPhotoPopupError("No file selected");
+        }
       }
     } else {
       let found = null;
@@ -125,7 +140,9 @@ const useListingPhotoEdit = () => {
       }
     }
 
-    handleClosePhotoPopup();
+    if (success) {
+      handleClosePhotoPopup();
+    }
   };
 
   return {
@@ -149,6 +166,8 @@ const useListingPhotoEdit = () => {
     setLinkFiles,
     fileError,
     setFileError,
+    photoPopupError,
+    setPhotoPopupError
   };
 };
 

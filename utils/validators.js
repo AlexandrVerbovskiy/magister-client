@@ -1,6 +1,6 @@
 export function validateBigText(text) {
-  if (text && text.length > 10000) {
-    return "The string size exceeds 10 000 characters";
+  if (text && text.length > 2000) {
+    return "The string size exceeds 2000 characters";
   }
 
   return true;
