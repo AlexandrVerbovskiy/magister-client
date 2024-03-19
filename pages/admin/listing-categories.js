@@ -38,6 +38,11 @@ const ListingCategories = ({ categories: baseCategories }) => {
               parentName = initCategory.name;
             }
           });
+
+          if (!parentLocalId) {
+            parentLocalId = initCategories["firstLevel"][0].localId;
+            parentName = initCategories["firstLevel"][0].name;
+          }
         }
 
         if (level == "thirdLevel") {
@@ -47,13 +52,17 @@ const ListingCategories = ({ categories: baseCategories }) => {
               parentName = initCategory.name;
             }
           });
+
+          if (!parentLocalId) {
+            parentLocalId = initCategories["secondLevel"][0].localId;
+            parentName = initCategories["secondLevel"][0].name;
+          }
         }
 
         initCategories[level].push({
           ...category,
           localId: uniqueId(),
           error: null,
-          parentLocalId: null,
           parentId,
           parentLocalId,
           parentName,
@@ -144,7 +153,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
         }
 
         if (category.name.length > 255) {
-          localIdErrors[category.localId] = "Name cannot be higher than 255 symbols";
+          localIdErrors[category.localId] =
+            "Name cannot be higher than 255 symbols";
           hasError = true;
           return;
         }
