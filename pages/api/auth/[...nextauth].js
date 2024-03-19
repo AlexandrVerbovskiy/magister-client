@@ -66,7 +66,7 @@ export default NextAuth({
           user.authToken = res.authToken;
           user.needRegularViewInfoForm = res.needRegularViewInfoForm;
         } catch (e) {
-          return "/?error" + encodeURI(e.message);
+          return "/?error=" + encodeURI(e.message);
         }
       }
 
