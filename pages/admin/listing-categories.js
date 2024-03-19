@@ -416,10 +416,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
           );
         });
 
-        console.log("Categories: ", categories);
         const res = await saveListingCategories(dataToSave, authToken);
-        console.log("Res: ", res);
-
         setPrevCategories(res);
         setCategories(categoriesToState(res));
       }

@@ -332,6 +332,7 @@ Preloader Area CSS
   max-width: calc(100% - 18px);
 }
 
+.select-option span,
 .listing-categories-parent-select button > span > span {
   overflow: hidden;
   text-overflow: ellipsis;
