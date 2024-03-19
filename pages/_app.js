@@ -16,14 +16,17 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
-  const importStyle = async (importFunc, key) => {
+  const importStyle = async (importFuncs, key) => {
     stylesRef.current[key].forEach((elem) =>
       document.querySelector("head").append(elem)
     );
 
     if (!loadedRef.current[key]) {
       loadedRef.current[key] = true;
-      await importFunc();
+
+      for(let i = 0; i < importFuncs.length; i++){
+        await importFuncs[i]();
+      }
 
       document
         .querySelectorAll(styleSelector)
@@ -52,9 +55,17 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     });
 
     if (type == "admin") {
-      await importStyle(() => import(`../styles/admin/index.css`), "admin");
+      await importStyle(
+        [
+          () => import(`../styles/admin/main.css`),
+          () => import(`../styles/admin/utility-patterns.css`),
+          () => import(`../styles/admin/flatpickr.css`),
+          () => import(`../styles/admin/dop.css`),
+        ],
+        "admin"
+      );
     } else {
-      await importStyle(() => import(`../styles/index.css`), "base");
+      await importStyle([() => import(`../styles/index.css`)], "base");
     }
 
     onEnd();

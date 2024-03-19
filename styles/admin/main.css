@@ -2,9 +2,3 @@
 
 @import "tailwindcss/base.css";
 @import "tailwindcss/components.css";
-
-@import "./utility-patterns.css";
-@import "./flatpickr.css";
-
-@import "tailwindcss/utilities.css";
-@import "./style.css";
