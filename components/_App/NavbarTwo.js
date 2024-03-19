@@ -13,6 +13,7 @@ import useSearchCategory from "../../hooks/useSearchCategory";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
 import CategoriesNavbar from "../CategoriesNavbar";
+import ListingLi from "./Navbar/ListingLi";
 
 const NavbarTwo = ({ canShowSearch = true }) => {
   const {
@@ -201,7 +202,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     const link = getListingSearchLink(searchCategory);
 
     if (window.location.pathname.includes("/listing-list/")) {
-      router.push(link).then(() => window.location.reload());
+      router.push(link).then(() => router.reload());
     } else {
       router.push(link);
     }
@@ -287,20 +288,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     </Link>
                   </li>
 
-                  <li className="nav-item">
-                    <Link
-                      href="/listing-list"
-                      className={`${
-                        categories.length > 0 ? "dropdown-toggle " : ""
-                      }nav-link`}
-                    >
-                      Listings
-                    </Link>
-
-                    {categories.length > 0 && (
-                      <CategoriesNavbar categories={categories} />
-                    )}
-                  </li>
+                  <ListingLi />
 
                   {isAuth && (
                     <li className="nav-item">

@@ -143,6 +143,12 @@ const ListingCategories = ({ categories: baseCategories }) => {
           return;
         }
 
+        if (category.name.length > 255) {
+          localIdErrors[category.localId] = "Name cannot be higher than 255 symbols";
+          hasError = true;
+          return;
+        }
+
         if (Object.values(names).includes(category.name)) {
           localIdErrors[category.localId] =
             "Cannot create two identical categories";
@@ -410,7 +416,10 @@ const ListingCategories = ({ categories: baseCategories }) => {
           );
         });
 
+        console.log("Categories: ", categories);
         const res = await saveListingCategories(dataToSave, authToken);
+        console.log("Res: ", res);
+
         setPrevCategories(res);
         setCategories(categoriesToState(res));
       }

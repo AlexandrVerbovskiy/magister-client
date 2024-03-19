@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 const PopularPlacesFilter = () => {
   const router = useRouter();
-  
+
   const {
     handleChangeCity,
     handleCategoryTipClick,
@@ -31,7 +31,7 @@ const PopularPlacesFilter = () => {
     const link = getFullListingSearchLink(searchCity, searchCategory);
 
     if (window.location.pathname.includes("/listing-list/")) {
-      router.push(link).then(() => window.location.reload());
+      router.push(link).then(() => router.reload());
     } else {
       router.push(link);
     }

@@ -310,12 +310,35 @@ Preloader Area CSS
   background-image: url("/images/rent-about-logo.png");
 }
 
-.dropdown-classic{
+.dropdown-classic {
   min-height: 37.6px;
 }
 
 @media (min-width: 1536px) {
   .adaptive-logo-image {
     background-image: url("/images/rent-about-logo.png");
+  }
+}
+
+.listing-categories-parent-select {
+  width: 100%;
+}
+
+.listing-categories-parent-select button {
+  min-width: 0;
+}
+
+.listing-categories-parent-select button > span {
+  max-width: calc(100% - 18px);
+}
+
+.listing-categories-parent-select button > span > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .listing-categories-parent-select {
+    width: 150px;
   }
 }
