@@ -12,6 +12,7 @@ const GridListingsFullMap = ({
   options,
   countItems,
   canSendCreateNotifyRequest,
+  authToken,
 }) => (
   <>
     <NavbarTwo canShowSearch={true} />
@@ -19,6 +20,7 @@ const GridListingsFullMap = ({
     <PopularPlacesFilter />
 
     <ListingsWithMap
+      authToken={authToken}
       categories={categories}
       pageProps={{ items, options, countItems }}
       canSendCreateNotifyRequest={canSendCreateNotifyRequest}

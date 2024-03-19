@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { getFilePath } from "../../utils";
-import STATE from "../../static";
 
-const Category = ({ topCategories }) => {
+const Category = ({ topCategories, needShowMore}) => {
   return (
     <>
       <section className="category-area pt-100 pb-70">
@@ -21,9 +20,7 @@ const Category = ({ topCategories }) => {
           <div className="row">
             {topCategories.map((info) => (
               <div className="col-lg-2 col-sm-6 col-md-4" key={info.id}>
-                <div
-                  className="single-category-box d-flex flex-column align-items-center"
-                >
+                <div className="single-category-box d-flex flex-column align-items-center">
                   <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
                   </div>
@@ -37,15 +34,17 @@ const Category = ({ topCategories }) => {
               </div>
             ))}
 
-            <div className="col-lg-2 col-sm-6 col-md-4">
-              <div className="single-category-box more-categories">
-                <div className="icon">
-                  <i className="flaticon-more-1"></i>
+            {needShowMore && (
+              <div className="col-lg-2 col-sm-6 col-md-4">
+                <div className="single-category-box more-categories">
+                  <div className="icon">
+                    <i className="flaticon-more-1"></i>
+                  </div>
+                  <h3>More Categories</h3>
+                  <Link href="/listing-list" className="link-btn"></Link>
                 </div>
-                <h3>More Categories</h3>
-                <Link href="/listing-list" className="link-btn"></Link>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

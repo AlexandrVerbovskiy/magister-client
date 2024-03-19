@@ -133,7 +133,7 @@ const CategoryListItem = ({
           "shadow rounded-sm border px-5 py-4 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
         }
       >
-        <div className="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2">
+        <div className="md:flex justify-between items-center space-y-4 md:space-y-0 space-x-2 gap-x-4">
           <div className="flex items-center space-x-3 md:space-x-4 w-full">
             <div className="flex-col inline-flex text-slate-800 dark:text-slate-100 relative w-full">
               <Input
@@ -145,8 +145,15 @@ const CategoryListItem = ({
                 setValue={onChangeName}
               />
             </div>
-
-            <div className="category-list-item-image">
+          </div>
+          <div
+            className="flex flex-col sm:flex-row space-x-4 gap-4 items-start sm:items-center sm:justify-between md:justify-start"
+            style={{ marginLeft: "0" }}
+          >
+            <div
+              className="category-list-item-image"
+              style={{ marginLeft: "0" }}
+            >
               <ImageInput
                 btnText="Change Photo"
                 photoUrl={photoUrl}
@@ -156,7 +163,10 @@ const CategoryListItem = ({
             </div>
 
             {hasParent && (
-              <div className="inline-flex text-slate-800 dark:text-slate-100 relative">
+              <div
+                className="inline-flex text-slate-800 dark:text-slate-100 relative listing-categories-parent-select"
+                style={{ marginLeft: "0" }}
+              >
                 <label className="block text-sm font-medium relative-label">
                   Parent Name
                 </label>
@@ -167,44 +177,44 @@ const CategoryListItem = ({
                 />
               </div>
             )}
-          </div>
-          <div className="flex items-center space-x-4 pl-10 md:pl-0">
-            <div className="text-sm text-slate-500 dark:text-slate-400 italic whitespace-nowrap"></div>
 
-            <div
-              onClick={onPopularClick}
-              className={`w-20 justify-center cursor-pointer text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 ${
-                popular
-                  ? "bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-400/30 dark:hover:bg-emerald-300/30 text-emerald-600 dark:text-emerald-400"
-                  : "bg-red-100 hover:bg-red-200 dark:bg-red-400/30 dark:hover:bg-red-300/30 text-red-600 dark:text-red-400"
-              }`}
-            >
-              {popular ? "Popular" : "Unpopular"}
-            </div>
-
-            <button
-              onClick={handleDeleteClick}
-              className="text-slate-300 dark:text-slate-600 hover:text-slate-400 dark:hover:text-slate-500"
-            >
-              <span className="sr-only">Delete</span>
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="icon icon-tabler icon-tabler-x"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="#656565"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div style={{ marginLeft: 0 }} className="flex gap-x-4">
+              <div
+                onClick={onPopularClick}
+                className={`w-20 justify-center cursor-pointer text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 ${
+                  popular
+                    ? "bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-400/30 dark:hover:bg-emerald-300/30 text-emerald-600 dark:text-emerald-400"
+                    : "bg-red-100 hover:bg-red-200 dark:bg-red-400/30 dark:hover:bg-red-300/30 text-red-600 dark:text-red-400"
+                }`}
               >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M18 6l-12 12" />
-                <path d="M6 6l12 12" />
-              </svg>
-            </button>
+                {popular ? "Popular" : "Unpopular"}
+              </div>
+
+              <button
+                onClick={handleDeleteClick}
+                className="text-slate-300 dark:text-slate-600 hover:text-slate-400 dark:hover:text-slate-500"
+                style={{ marginLeft: 0 }}
+              >
+                <span className="sr-only">Delete</span>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="icon icon-tabler icon-tabler-x"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="#656565"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M18 6l-12 12" />
+                  <path d="M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
 

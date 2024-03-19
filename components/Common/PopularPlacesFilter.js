@@ -3,8 +3,11 @@ import { useCategoryCity } from "../../hooks";
 import SearchTipsPopup from "../SearchTipsPopup";
 import Link from "next/link";
 import { getFullListingSearchLink } from "../../utils";
+import { useRouter } from "next/router";
 
 const PopularPlacesFilter = () => {
+  const router = useRouter();
+
   const {
     handleChangeCity,
     handleCategoryTipClick,
@@ -23,6 +26,16 @@ const PopularPlacesFilter = () => {
     categoryFilterRef,
     cityFilterRef,
   } = useCategoryCity();
+
+  const handleSubmit = () => {
+    const link = getFullListingSearchLink(searchCity, searchCategory);
+
+    if (window.location.pathname.includes("/listing-list/")) {
+      router.push(link).then(() => router.reload());
+    } else {
+      router.push(link);
+    }
+  };
 
   return (
     <>
@@ -84,11 +97,9 @@ const PopularPlacesFilter = () => {
 
               <div className="col-lg-3 col-md-12 p-0 popup-places-filter">
                 <div className="submit-btn">
-                  <Link
-                    href={getFullListingSearchLink(searchCity, searchCategory)}
-                  >
-                    <button type="button">Search Now</button>
-                  </Link>
+                  <button type="button" onClick={handleSubmit}>
+                    Search Now
+                  </button>
                 </div>
               </div>
             </div>
