@@ -181,7 +181,7 @@ const CategoryListItem = ({
             <div style={{ marginLeft: 0 }} className="flex gap-x-4">
               <div
                 onClick={onPopularClick}
-                className={`w-20 justify-center cursor-pointer text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 ${
+                className={`transition ease-in-out duration-150 w-20 justify-center cursor-pointer text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 ${
                   popular
                     ? "bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-400/30 dark:hover:bg-emerald-300/30 text-emerald-600 dark:text-emerald-400"
                     : "bg-red-100 hover:bg-red-200 dark:bg-red-400/30 dark:hover:bg-red-300/30 text-red-600 dark:text-red-400"
