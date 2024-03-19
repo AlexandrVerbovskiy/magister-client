@@ -103,7 +103,7 @@ function DropdownClassic({
               <button
                 key={option.value}
                 tabIndex="0"
-                className={`flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 cursor-pointer ${
+                className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 cursor-pointer ${
                   option.value === selected && "text-indigo-500"
                 }`}
                 onClick={() => {
