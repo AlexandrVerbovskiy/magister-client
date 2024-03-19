@@ -33,6 +33,8 @@ const Index = ({ topListings, categories }) => {
   });
 
   topCategories.sort((a, b) => a.countListings - b.countListings);
+  const moreCategoriesThanView =
+    topCategories.length > maxTopCategoriesSectionView;
   topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const Index = ({ topListings, categories }) => {
 
       <ListingArea listings={topListings} />
 
-      <Category topCategories={topCategories} />
+      <Category topCategories={topCategories} needShowMore={moreCategoriesThanView}/>
 
       <DestinationsTwo />
 

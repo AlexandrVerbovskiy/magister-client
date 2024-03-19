@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import CategoriesNavbar from "../CategoriesNavbar";
+import ListingLi from "./Navbar/ListingLi";
 
 const NavbarThree = () => {
   const {
@@ -74,15 +75,7 @@ const NavbarThree = () => {
                   </Link>
                 </li>
 
-                <li className="nav-item">
-                  <Link
-                    href="/listing-list"
-                    className="dropdown-toggle nav-link"
-                  >
-                    Listings
-                  </Link>
-                  <CategoriesNavbar categories={categories} />
-                </li>
+                <ListingLi />
 
                 {isAuth && (
                   <li className="nav-item">

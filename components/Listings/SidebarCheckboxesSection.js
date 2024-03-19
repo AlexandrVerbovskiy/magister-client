@@ -58,14 +58,16 @@ const SidebarCheckboxesSection = ({
           </ul>
         </div>
 
-        <ul ref={showMoreUlRef} style={{ paddingTop: "11px" }}>
-          <li
-            className="see-all-btn"
-            onClick={() => setShowedMore(!showedMore)}
-          >
-            <span>{showedMore ? "See Less" : "See All"} </span>
-          </li>
-        </ul>
+        {items.length > 5 && (
+          <ul ref={showMoreUlRef} style={{ paddingTop: "11px" }}>
+            <li
+              className="see-all-btn"
+              onClick={() => setShowedMore(!showedMore)}
+            >
+              <span>{showedMore ? "See Less" : "See All"} </span>
+            </li>
+          </ul>
+        )}
       </div>
     </section>
   );

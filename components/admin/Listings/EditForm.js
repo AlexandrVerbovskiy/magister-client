@@ -48,7 +48,9 @@ const EditForm = ({ listing, categories, save }) => {
   const [prevListing, setPrevListing] = useState(listing);
 
   const [categoryLevel, setCategoryLevel] = useState(baseCategoryLevel);
-  const baseCategory = categories[categoryLevel][0]["id"];
+  const baseCategory = categories[categoryLevel][0]
+    ? categories[categoryLevel][0]["id"]
+    : null;
 
   const {
     adaptLinkPropsToLocal,

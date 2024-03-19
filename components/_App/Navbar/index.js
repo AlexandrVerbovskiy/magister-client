@@ -12,7 +12,7 @@ import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
-import CategoriesNavbar from "../../CategoriesNavbar";
+import ListingLi from "./ListingLi";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -21,7 +21,6 @@ const Navbar = ({ canShowSearch = true }) => {
     isSupport,
     onLogin,
     error: mainError,
-    categories = {},
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -270,7 +269,6 @@ const Navbar = ({ canShowSearch = true }) => {
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
                     />
-
                     <SearchTipsPopup
                       active={categoryTipsPopupActive}
                       tips={categoryTips}
@@ -286,15 +284,7 @@ const Navbar = ({ canShowSearch = true }) => {
                     </Link>
                   </li>
 
-                  <li className="nav-item">
-                    <Link
-                      href="/listing-list"
-                      className="dropdown-toggle nav-link"
-                    >
-                      Listings
-                    </Link>
-                    <CategoriesNavbar categories={categories} />
-                  </li>
+                  <ListingLi/>
 
                   {isAuth && (
                     <li className="nav-item">
