@@ -155,6 +155,10 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
     changePermissions(userInfo);
   };
 
+  const setVerified = (verified) => {
+    setUser((prev) => ({ ...prev, verified }));
+  };
+
   return {
     authToken,
     updateUserFields,
@@ -176,6 +180,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       set: handleSetSuccess,
       clear: clearSuccess,
     },
+    setVerified,
     handleSetSuccess,
   };
 };
