@@ -354,9 +354,17 @@ const EditForm = ({
     const formData = new FormData();
 
     if (files) {
-      files.forEach((file, index) => formData.append(`files[${index}]`, file));
-    }
+      let indexCount = 0;
 
+      files.forEach((file) => {
+        if (file.id) {
+          formData.append(`files[id][${file.id}]`, file);
+        } else {
+          formData.append(`files[index][${indexCount}]`, file);
+          indexCount++;
+        }
+      });
+    }
     const info = objectToSave();
     info["listingImages"] = JSON.stringify(info["listingImages"]);
     Object.keys(info).forEach((key) => formData.append(key, info[key]));

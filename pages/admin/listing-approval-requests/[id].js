@@ -414,10 +414,14 @@ const ListingApprovalRequest = ({
                             htmlFor="approved"
                           >
                             Listing Request Status:
-                          </label>{" "}
+                          </label>
                         </div>
                         <div className="block text-sm">
-                          {request.approved ? "Approved" : "Not approved"}
+                          {request.approved !== null && request.approved
+                            ? "Accepted approval"
+                            : "Rejected approval"}
+
+                          {request.approved === null && "Waiting for approval"}
                         </div>
                       </div>
 

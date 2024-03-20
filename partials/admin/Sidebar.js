@@ -285,139 +285,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 </Link>
               </li>
 
-              {/* Logs */}
-              {isAdmin && (
-                <li
-                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                    isCurrentPath("user-event-logs") && "bg-slate-900"
-                  }`}
-                >
-                  <Link
-                    href="/admin/user-event-logs"
-                    className={`block text-slate-200 truncate transition duration-150 ${
-                      isCurrentPath("user-event-logs")
-                        ? "hover:text-slate-200"
-                        : "hover:text-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24"
-                          width="24"
-                          viewBox="0 0 20 20"
-                        >
-                          <title>file content</title>
-                          <g fill="none" className="nc-icon-wrapper">
-                            <path
-                              d="M15.487,5.427l-3.914-3.914c-.331-.331-.77-.513-1.237-.513H4.75c-1.517,0-2.75,1.233-2.75,2.75V14.25c0,1.517,1.233,2.75,2.75,2.75H13.25c1.517,0,2.75-1.233,2.75-2.75V6.664c0-.467-.182-.907-.513-1.237Zm-9.737,.573h2c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75h-2c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75Zm6.5,7.5H5.75c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75h6.5c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75Zm0-3H5.75c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75h6.5c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75Zm2.182-4h-2.932c-.55,0-1-.45-1-1V2.579l.013-.005,3.922,3.921-.002,.005Z"
-                              className={`stroke-current ${
-                                isCurrentPath("user-event-logs")
-                                  ? "text-indigo-500"
-                                  : "text-slate-600"
-                              }`}
-                            ></path>
-                          </g>
-                        </svg>
-                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                          User Logs
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              )}
-
-              {/* Listing Categories */}
-              {isAdmin && (
-                <li
-                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-                    isCurrentPath("listing-categories") && "bg-slate-900"
-                  }`}
-                >
-                  <Link
-                    href="/admin/listing-categories"
-                    className={`block text-slate-200 truncate transition duration-150 ${
-                      isCurrentPath("listing-categories")
-                        ? "hover:text-slate-200"
-                        : "hover:text-white"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="icon icon-tabler icon-tabler-tools"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1"
-                          stroke="#2c3e50"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                          <path
-                            d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M14.5 5.5l4 4"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M12 8l-5 -5l-4 4l5 5"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M7 8l-1.5 1.5"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M16 12l5 5l-4 4l-5 -5"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                          <path
-                            d="M16 17l-1.5 1.5"
-                            className={`stroke-current ${
-                              isCurrentPath("listing-categories")
-                                ? "text-indigo-500"
-                                : "text-slate-600"
-                            }`}
-                          />
-                        </svg>
-
-                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                          Listing Categories
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </li>
-              )}
-
               {/* Listings */}
               {isAdmin && (
                 <li
@@ -591,6 +458,139 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
                         <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                           Users Search Story
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              )}
+
+              {/* Logs */}
+              {isAdmin && (
+                <li
+                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                    isCurrentPath("user-event-logs") && "bg-slate-900"
+                  }`}
+                >
+                  <Link
+                    href="/admin/user-event-logs"
+                    className={`block text-slate-200 truncate transition duration-150 ${
+                      isCurrentPath("user-event-logs")
+                        ? "hover:text-slate-200"
+                        : "hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24"
+                          width="24"
+                          viewBox="0 0 20 20"
+                        >
+                          <title>file content</title>
+                          <g fill="none" className="nc-icon-wrapper">
+                            <path
+                              d="M15.487,5.427l-3.914-3.914c-.331-.331-.77-.513-1.237-.513H4.75c-1.517,0-2.75,1.233-2.75,2.75V14.25c0,1.517,1.233,2.75,2.75,2.75H13.25c1.517,0,2.75-1.233,2.75-2.75V6.664c0-.467-.182-.907-.513-1.237Zm-9.737,.573h2c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75h-2c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75Zm6.5,7.5H5.75c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75h6.5c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75Zm0-3H5.75c-.414,0-.75-.336-.75-.75s.336-.75,.75-.75h6.5c.414,0,.75,.336,.75,.75s-.336,.75-.75,.75Zm2.182-4h-2.932c-.55,0-1-.45-1-1V2.579l.013-.005,3.922,3.921-.002,.005Z"
+                              className={`stroke-current ${
+                                isCurrentPath("user-event-logs")
+                                  ? "text-indigo-500"
+                                  : "text-slate-600"
+                              }`}
+                            ></path>
+                          </g>
+                        </svg>
+                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                          User Logs
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              )}
+
+              {/* Listing Categories */}
+              {isAdmin && (
+                <li
+                  className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
+                    isCurrentPath("listing-categories") && "bg-slate-900"
+                  }`}
+                >
+                  <Link
+                    href="/admin/listing-categories"
+                    className={`block text-slate-200 truncate transition duration-150 ${
+                      isCurrentPath("listing-categories")
+                        ? "hover:text-slate-200"
+                        : "hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="icon icon-tabler icon-tabler-tools"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1"
+                          stroke="#2c3e50"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                          <path
+                            d="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                          <path
+                            d="M14.5 5.5l4 4"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                          <path
+                            d="M12 8l-5 -5l-4 4l5 5"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                          <path
+                            d="M7 8l-1.5 1.5"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                          <path
+                            d="M16 12l5 5l-4 4l-5 -5"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                          <path
+                            d="M16 17l-1.5 1.5"
+                            className={`stroke-current ${
+                              isCurrentPath("listing-categories")
+                                ? "text-indigo-500"
+                                : "text-slate-600"
+                            }`}
+                          />
+                        </svg>
+
+                        <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                          Listing Categories
                         </span>
                       </div>
                     </div>

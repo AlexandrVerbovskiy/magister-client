@@ -25,7 +25,7 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
-          <Edit href={`/admin/user-verify-requests/edit/${id}`} />
+          <Edit href={`/admin/user-verify-requests/${id}`} />
         </div>
       </td>
     </tr>
