@@ -249,7 +249,7 @@ const Navbar = ({ canShowSearch = true }) => {
                 {canShowSearch && (
                   <form
                     onSubmit={handleSearchSubmit}
-                    className="navbar-search-box search-box-one"
+                    className="navbar-search-box search-box-one position-absolute"
                   >
                     <label
                       onClick={handleSearchClick}

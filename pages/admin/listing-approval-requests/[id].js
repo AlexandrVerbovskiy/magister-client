@@ -20,7 +20,6 @@ import ImageView from "../../../components/admin/Form/ImageView";
 
 const ListingPhotoView = ({ src }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mapCenter, setMapCenter] = useState(null);
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -59,6 +58,7 @@ const ListingApprovalRequest = ({
 }) => {
   const [listing, setListing] = useState(baseListing);
   const [request, setRequest] = useState(baseRequest);
+  const [mapCenter, setMapCenter] = useState(null);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
@@ -185,7 +185,7 @@ const ListingApprovalRequest = ({
                         <div className="flex w-full gap-2">
                           <div className=" w-full sm:w-1/2">
                             <InputView
-                              label="Keywords:"
+                              label="Keywords"
                               name="keyWords"
                               placeholder="Maximum 15, should be separated by commas"
                               labelClassName="block text-sm font-medium mb-1"
@@ -330,7 +330,7 @@ const ListingApprovalRequest = ({
 
                         <div
                           className="flex w-full admin-map-parent"
-                          style={{ height: "400px" }}
+                          style={{ height: "500px" }}
                         >
                           <MultyMarkersMap
                             userLocation={userLocation}

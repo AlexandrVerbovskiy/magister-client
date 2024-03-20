@@ -43,7 +43,7 @@ const Index = ({ topListings, categories }) => {
 
   return (
     <>
-      <Navbar canShowSearch={false} />
+      <Navbar canShowSearch={true} />
 
       <Banner popularCategories={popularCategories} />
 

@@ -4044,7 +4044,7 @@
   .others-option-for-responsive .option-inner .others-option .option-item {
     margin-top: 20px;
   }
-  .others-option-for-responsive .option-inner .others-option .option-item span {
+  .others-option-for-responsive .option-inner .others-option .option-item:has(span) {
     display: none;
   }
   .main-banner-area {
