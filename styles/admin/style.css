@@ -343,6 +343,10 @@ Preloader Area CSS
   text-overflow: ellipsis;
 }
 
+.add-more-image{
+  cursor: pointer;
+}
+
 @media (min-width: 640px) {
   .listing-categories-parent-select {
     width: 150px;

@@ -328,7 +328,7 @@ const ListingList = (pageProps) => {
                                     href={`/listing-list/?categories=${listing.categoryName}`}
                                   >
                                     <i className="flaticon-furniture-and-household"></i>
-                                    {listing.categoryName}
+                                    <span>{listing.categoryName}</span>
                                   </Link>
                                 </li>
                                 <li>
@@ -336,7 +336,7 @@ const ListingList = (pageProps) => {
                                     href={`/listing-list/?city=${listing.city}`}
                                   >
                                     <i className="flaticon-pin"></i>
-                                    {listing.city}
+                                    <span>{listing.city}</span>
                                   </Link>
                                 </li>
                               </ul>

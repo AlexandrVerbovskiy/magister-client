@@ -317,7 +317,7 @@ const EditForm = ({ listing, categories, save }) => {
       }
 
       if (keyWords && validateBigText(keyWords) !== true) {
-        setNameError(validateBigText(keyWords));
+        setKeyWordsError(validateBigText(keyWords));
         hasError = true;
       }
 
@@ -486,7 +486,7 @@ const EditForm = ({ listing, categories, save }) => {
                             <div className=" w-full sm:w-1/2">
                               <Input
                                 name="keyWords"
-                                label="Keywords:"
+                                label="Keywords"
                                 placeholder="Maximum 15, should be separated by commas"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={keyWords}
@@ -597,7 +597,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 setValue={setMinRentalDays}
                                 error={minRentalDaysError}
                                 setError={setMinRentalDaysError}
-                                label="Min rental days"
+                                label="Min rental days(not required)"
                                 placeholder="0"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"

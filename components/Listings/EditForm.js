@@ -397,7 +397,7 @@ const EditForm = ({
       }
 
       if (keyWords && validateBigText(keyWords) !== true) {
-        setNameError(validateBigText(keyWords));
+        setKeyWordsError(validateBigText(keyWords));
         hasError = true;
       }
 
@@ -622,7 +622,7 @@ const EditForm = ({
 
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label="Min rental days:"
+                label="Min rental days(not required):"
                 icon="bx bx-menu-alt-left"
                 placeholder="0"
                 value={minRentalDays}

@@ -255,7 +255,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                 {canShowSearch && (
                   <form
                     onSubmit={handleSearchSubmit}
-                    className="navbar-search-box search-box-one"
+                    className="navbar-search-box search-box-one position-absolute"
                   >
                     <label onClick={handleSearchClick}>
                       <i className="flaticon-search"></i>

@@ -67,6 +67,7 @@ Default CSS
   --blackColor: #221638;
   --fontSize: 15px;
   --transition: 0.5s;
+  --listing-categories-popup-width: 220px;
 }
 
 body {
@@ -379,7 +380,7 @@ Navbar Area CSS
   left: 0;
   z-index: 99;
   opacity: 0;
-  width: 250px;
+  width: var(--listing-categories-popup-width);
   display: block;
   border-radius: 0;
   padding: 10px 0;
@@ -404,7 +405,7 @@ Navbar Area CSS
   font-weight: 500;
 }
 
-.miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li a span{
+.miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li a span {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 18px);
@@ -430,7 +431,7 @@ Navbar Area CSS
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: 250px;
+  left: var(--listing-categories-popup-width);
   margin-top: 15px;
   visibility: hidden;
   box-shadow: 0 0 100px 5px rgba(0, 0, 0, 0.3);
@@ -478,9 +479,8 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -250px;
+  left: var(--listing-categories-popup-width);
   visibility: hidden;
-  margin-top: -12px;
   box-shadow: 0 0 100px 15px rgba(0, 0, 0, 0.3);
 }
 .miran-nav
@@ -544,7 +544,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -250px;
+  left: -1 * var(--listing-categories-popup-width);
   visibility: hidden;
   margin-top: -11px;
 }
@@ -619,7 +619,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: 250px;
+  left: var(--listing-categories-popup-width);;
   visibility: hidden;
   margin-top: -11px;
 }
@@ -704,7 +704,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -250px;
+  left: -1*var(--listing-categories-popup-width);
   visibility: hidden;
   margin-top: -11px;
 }
@@ -799,7 +799,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: 250px;
+  left: var(--listing-categories-popup-width);;
   visibility: hidden;
   margin-top: -11px;
 }
@@ -1825,7 +1825,7 @@ Navbar Area CSS
   .option-item:first-child {
   margin-top: 0;
 }
-.others-option-for-responsive .option-inner .others-option .option-item span {
+.others-option-for-responsive .option-inner .others-option .option-item:has(span) {
   display: inline-block;
   cursor: pointer;
   color: #221638;
@@ -1833,7 +1833,7 @@ Navbar Area CSS
   font-weight: 500;
   position: relative;
 }
-.others-option-for-responsive .option-inner .others-option .option-item span i {
+.others-option-for-responsive .option-inner .others-option .option-item:has(span) i {
   margin-right: 2px;
   color: var(--mainColor);
   position: relative;
@@ -3468,6 +3468,7 @@ Listings Area CSS
   margin-bottom: 5px;
   list-style-type: none;
 }
+
 .single-listings-box .listings-content .listings-meta li {
   display: inline-block;
   margin-right: 12px;
@@ -3475,11 +3476,23 @@ Listings Area CSS
   margin-bottom: 10px;
   font-weight: 600;
   font-size: 13px;
+  width: 100%;
 }
 .single-listings-box .listings-content .listings-meta li a {
   color: var(--optionalColor);
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
+
+.single-listings-box .listings-content .listings-meta li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 30px);
+  display: inline-block;
+  margin-left: 5px;
+}
+
 .single-listings-box .listings-content .listings-meta li i {
   font-weight: normal;
   color: var(--mainColor);
@@ -12069,8 +12082,8 @@ Dashboard CSS
   z-index: 999;
   height: auto;
   top: 0;
-  left: 250px;
-  width: calc(100% - 250px);
+  left: var(--listing-categories-popup-width);;
+  width: calc(100% - var(--listing-categories-popup-width));
   animation: unset !important;
 }
 .main-content .navbar-area .miran-nav {
@@ -12090,7 +12103,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: 250px;
+  left: var(--listing-categories-popup-width);;
 }
 .main-content
   .navbar-area
@@ -12103,22 +12116,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: 250px;
-}
-.main-content
-  .navbar-area
-  .miran-nav
-  .navbar
-  .navbar-nav
-  .nav-item
-  .dropdown-menu
-  li
-  .dropdown-menu
-  li
-  .dropdown-menu
-  li
-  .dropdown-menu {
-  left: 250px;
+  left: var(--listing-categories-popup-width);;
 }
 .main-content
   .navbar-area
@@ -12132,10 +12130,8 @@ Dashboard CSS
   li
   .dropdown-menu
   li
-  .dropdown-menu
-  li
   .dropdown-menu {
-  left: -250px;
+  left: var(--listing-categories-popup-width);;
 }
 .main-content
   .navbar-area
@@ -12151,10 +12147,8 @@ Dashboard CSS
   li
   .dropdown-menu
   li
-  .dropdown-menu
-  li
   .dropdown-menu {
-  left: 250px;
+  left: -1*var(--listing-categories-popup-width);;
 }
 .main-content
   .navbar-area
@@ -12172,10 +12166,29 @@ Dashboard CSS
   li
   .dropdown-menu
   li
+  .dropdown-menu {
+  left: var(--listing-categories-popup-width);;
+}
+.main-content
+  .navbar-area
+  .miran-nav
+  .navbar
+  .navbar-nav
+  .nav-item
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
   .dropdown-menu
   li
   .dropdown-menu {
-  left: -250px;
+  left: -1*var(--listing-categories-popup-width);;
 }
 .main-content .navbar-area .miran-nav .navbar .others-option {
   margin-left: auto;
@@ -12285,7 +12298,7 @@ Dashboard CSS
   .profile-nav-item.dropdown
   .dropdown-menu {
   padding: 15px 15px 10px;
-  min-width: 230px;
+  min-width: var(--listing-categories-popup-width);
   max-width: 280px;
   position: absolute;
   right: 0;
@@ -12780,7 +12793,7 @@ Dashboard CSS
   border-radius: 2px;
   border: none;
   display: block;
-  width: 230px;
+  width: var(--listing-categories-popup-width);
   transition: var(--transition);
   opacity: 0;
   visibility: hidden;
@@ -17323,13 +17336,13 @@ Preloader Area CSS
   height: 34px !important;
 }
 
-.widget_distance label{
+.widget_distance label {
   max-width: calc(100% - 38px);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.category-area h3{
+.category-area h3 {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;

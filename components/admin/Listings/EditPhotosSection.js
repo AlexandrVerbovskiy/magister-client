@@ -174,7 +174,7 @@ const EditPhotosSection = ({
           Photos
         </h2>
 
-        <div class="text-sm">You can add maximum 5 files</div>
+        <div className="text-sm">You can add maximum 5 files</div>
 
         <div
           className="flex flex-wrap mt-5"
