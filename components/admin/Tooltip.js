@@ -4,7 +4,7 @@ import Transition from "../../utils/transition";
 function Tooltip({
   children,
   title = "Base tooltip text",
-  className,
+  className = "",
   bg,
   size,
   position,
