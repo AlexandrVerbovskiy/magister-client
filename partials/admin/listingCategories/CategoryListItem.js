@@ -155,7 +155,7 @@ const CategoryListItem = ({
               style={{ marginLeft: "0" }}
             >
               <ImageInput
-                btnText="Change Photo"
+                btnText="Change"
                 photoUrl={photoUrl}
                 fileSizeLimit={env.MAX_SMALL_FILE_SIZE}
                 onChange={onChangePhoto}

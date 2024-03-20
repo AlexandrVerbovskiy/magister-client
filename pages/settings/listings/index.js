@@ -317,6 +317,8 @@ const ListingList = (pageProps) => {
                                 listing.approved
                                   ? true
                                   : listing.requestApproved
+                                  ? false
+                                  : listing.requestApproved
                               }
                               requestId={listing.requestId}
                             />
