@@ -17347,3 +17347,8 @@ Preloader Area CSS
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.listings-details-desc p,
+.listings-details-desc h3 {
+    word-break: break-all;
+  }

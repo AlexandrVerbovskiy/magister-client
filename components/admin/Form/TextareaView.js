@@ -10,6 +10,7 @@ const TextareaView = ({
     <>
       {label && <label className={labelClassName}>{label}</label>}
       <textarea
+        style={{ resize: "none" }}
         rows={rows}
         className="form-input w-full"
         value={value}

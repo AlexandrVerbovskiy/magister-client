@@ -1,6 +1,6 @@
 import { useDropzone } from "react-dropzone";
 import ModalBlank from "../ModalBlank";
-import { getListingImageByType, uniqueId } from "../../../utils";
+import { getListingImageByType, uniqueImageId } from "../../../utils";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
@@ -83,12 +83,13 @@ const EditPhotosSection = ({
           0,
           5 - files.length - linkFiles.length
         );
+
         setFiles((prev) => [
           ...prev,
           ...newFiles.map((file) =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-              localId: uniqueId(),
+              localId: uniqueImageId(),
               date: Date.now(),
             })
           ),
@@ -109,7 +110,7 @@ const EditPhotosSection = ({
           setPhotoPopupPhoto(
             Object.assign(newFiles[0], {
               preview: URL.createObjectURL(newFiles[0]),
-              localId: uniqueId(),
+              localId: uniqueImageId(),
               date: Date.now(),
             })
           );
@@ -120,9 +121,17 @@ const EditPhotosSection = ({
     });
 
   const handleChangePhotoPopupType = (value) => {
+    if (value === photoPopupType) return;
+
     setPhotoPopupLink("");
     setPhotoPopupPhoto(null);
     setPhotoPopupType(value);
+    setPhotoPopupError(null);
+  };
+
+  const handleChangePhotoPopupLink = (value) => {
+    setPhotoPopupLink(value);
+    setPhotoPopupError(null);
   };
 
   const handleStartEditImage = (localId, type) => {
@@ -251,8 +260,9 @@ const EditPhotosSection = ({
                       placeholder="https://storage.google.com"
                       labelClassName="block text-sm font-medium mb-1"
                       value={photoPopupLink}
-                      setValue={setPhotoPopupLink}
+                      setValue={handleChangePhotoPopupLink}
                       inputClassName="form-input w-full"
+                      error={photoPopupError}
                     />
 
                     {photoPopupLink.length > 0 && (

@@ -7,7 +7,7 @@ import STATIC from "../../static";
 import { onCurrentUserLocation } from "../../utils";
 
 import {
-  uniqueId,
+  uniqueImageId,
   validateBigText,
   validateInteger,
   validatePrice,
@@ -104,9 +104,6 @@ const EditForm = ({
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [keyWords, setKeyWords] = useState("");
-  const [keyWordsError, setKeyWordsError] = useState(null);
-
   const [category, setCategory] = useState(baseCategory);
   const [categoryError, setCategoryError] = useState(null);
 
@@ -153,12 +150,6 @@ const EditForm = ({
   const handleChangeName = (e) => {
     setName(e.target.value);
     setNameError(null);
-    setMainError(null);
-  };
-
-  const handleChangeKeyWords = (e) => {
-    setKeyWords(e.target.value);
-    setKeyWordsError(null);
     setMainError(null);
   };
 
@@ -278,12 +269,12 @@ const EditForm = ({
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
       type: elem.type,
+      id: elem.id,
     }));
 
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      keyWords: listing.keyWords ?? "",
       categoryId: listing.categoryId ?? baseCategory,
       description: listing.description ?? "",
       rentalTerms: listing.rentalTerms ?? "",
@@ -304,12 +295,12 @@ const EditForm = ({
     const listingImages = linkFiles.map((elem) => ({
       link: elem.link,
       type: elem.type,
+      id: elem.id,
     }));
 
     return {
       address,
       name,
-      keyWords,
       categoryId: category,
       description,
       rentalTerms,
@@ -329,7 +320,6 @@ const EditForm = ({
   useEffect(() => {
     const data = listingToState();
     setName(data.name);
-    setKeyWords(data.keyWords);
     setCategory(data.categoryId);
     setDescription(data.description);
     setRentalTerms(data.rentalTerms);
@@ -347,7 +337,7 @@ const EditForm = ({
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
       date: Date.now(),
-      localId: uniqueId(),
+      localId: uniqueImageId(),
     }));
 
     setLinkFiles(adaptedImages);
@@ -388,16 +378,6 @@ const EditForm = ({
 
       if (name && validateSmallText(name) !== true) {
         setNameError(validateSmallText(name));
-        hasError = true;
-      }
-
-      if (!keyWords) {
-        setKeyWordsError("Required field");
-        hasError = true;
-      }
-
-      if (keyWords && validateBigText(keyWords) !== true) {
-        setKeyWordsError(validateBigText(keyWords));
         hasError = true;
       }
 
@@ -552,7 +532,7 @@ const EditForm = ({
           <h3>Basic Informations</h3>
 
           <div className="row">
-            <div className="col-lg-12 col-md-12">
+            <div className="col-lg-6 col-md-6">
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
@@ -577,18 +557,6 @@ const EditForm = ({
                   handleChangeCategory={handleChangeCategory}
                 />
               </ErrorIconWrapper>
-            </div>
-
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Keywords:"
-                icon="bx bxs-key"
-                placeholder="Maximum 15 , should be separated by commas"
-                value={keyWords}
-                onInput={handleChangeKeyWords}
-                error={keyWordsError}
-                name="keywords"
-              />
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@
       .navbar-search-box {
         margin-left: 0;
         margin-right: 40px;
-        
+
         label {
           left: auto;
           right: 0;
@@ -85,7 +85,7 @@
     }
 
     .popular-search-list {
-      padding: 0; 
+      padding: 0;
       text-align: right;
 
       li {
@@ -102,8 +102,8 @@
   .single-listings-box {
     .listings-content {
       .author {
-        right: auto; 
-        left: 20px; 
+        right: auto;
+        left: 20px;
 
         span {
           margin-left: 0;
@@ -125,8 +125,8 @@
       }
       .rating {
         .count {
-          margin-left: 0; 
-          margin-right: 3px; 
+          margin-left: 0;
+          margin-right: 3px;
         }
       }
     }
@@ -137,14 +137,14 @@
       .title {
         margin-left: 0;
         margin-right: 13px;
-      } 
+      }
     }
   }
 
   .single-how-it-works-box {
     &::before {
-      right: auto; 
-      left: -100px; 
+      right: auto;
+      left: -100px;
     }
   }
 
@@ -155,7 +155,7 @@
         left: 20px;
       }
       .post-meta {
-        padding-right: 0; 
+        padding-right: 0;
 
         li {
           margin-right: 0;
@@ -177,8 +177,8 @@
   .app-download-content {
     .btn-box {
       .playstore-btn {
-        margin-right: 0; 
-        margin-left: 15px; 
+        margin-right: 0;
+        margin-left: 15px;
 
         &:last-child {
           margin-left: 0;
@@ -189,7 +189,7 @@
 
   .single-footer-widget {
     .link-list {
-      padding-right: 0; 
+      padding-right: 0;
     }
   }
 
@@ -324,7 +324,7 @@
 
   .shorting-menu {
     .filter {
-      i { 
+      i {
         margin-right: 0;
         margin-left: 5px;
       }
@@ -338,8 +338,8 @@
         padding-right: 20px;
       }
       button {
-        right: auto; 
-        left: 0; 
+        right: auto;
+        left: 0;
       }
     }
   }
@@ -349,7 +349,7 @@
     margin-right: 20px;
   }
 
-  .single-funfacts { 
+  .single-funfacts {
     padding-left: 0;
     padding-right: 65px;
 
@@ -362,7 +362,7 @@
   .single-team-member {
     .member-image {
       .social {
-        padding-right: 0; 
+        padding-right: 0;
       }
     }
   }
@@ -379,12 +379,14 @@
 
     .widget_filters {
       ul {
-        padding-right: 0; 
+        padding-right: 0;
       }
     }
-    .widget_categories, .widget_features, .widget_distance {
+    .widget_categories,
+    .widget_features,
+    .widget_distance {
       ul {
-        padding-right: 0; 
+        padding-right: 0;
 
         li {
           label {
@@ -425,7 +427,7 @@
         .form-control {
           padding-left: 15px;
           padding-right: 30px;
-        } 
+        }
       }
       .submit-btn {
         padding-left: 0;
@@ -433,7 +435,6 @@
       }
     }
   }
-
 
   .main-content {
     .navbar-area {
@@ -461,7 +462,7 @@
                     ul {
                       .nav-item {
                         .nav-link {
-                          padding: 5px 25px 5px 15px; 
+                          padding: 5px 25px 5px 15px;
                           text-align: right;
 
                           i {
@@ -478,7 +479,7 @@
                       padding: 0;
                       .nav-item {
                         .nav-link {
-                          padding: 5px 25px 5px 15px; 
+                          padding: 5px 25px 5px 15px;
                           text-align: right;
 
                           i {
@@ -504,8 +505,8 @@
         .nav-item {
           .nav-link {
             .icon {
-              margin-right: 0; 
-              margin-left: 5px; 
+              margin-right: 0;
+              margin-left: 5px;
             }
 
             .badge {
@@ -515,11 +516,10 @@
 
             &.collapsed-nav-link {
               &::after {
-                right: auto; 
-                left: 15px; 
+                right: auto;
+                left: 15px;
               }
             }
-
           }
           .icon {
             margin-right: 0;
@@ -545,9 +545,9 @@
       padding-right: 12px;
 
       .item {
-        margin-right: 0; 
-        margin-left: 25px; 
- 
+        margin-right: 0;
+        margin-left: 25px;
+
         &::before {
           right: auto;
           left: -20px;
@@ -556,8 +556,8 @@
     }
   }
 
-  .stats-card-box { 
-    padding: 35px 115px 34px 25px; 
+  .stats-card-box {
+    padding: 35px 115px 34px 25px;
 
     .icon-box {
       left: auto;
@@ -568,7 +568,7 @@
   .recent-activities-box {
     ul {
       padding-right: 0;
-      
+
       li {
         padding-left: 45px;
         padding-right: 75px;
@@ -670,12 +670,11 @@
         }
       }
     }
-
   }
 
   .me-2 {
     margin-right: 0 !important;
-    margin-left: 0.5rem!important;
+    margin-left: 0.5rem !important;
   }
   .me-1 {
     margin-right: 0 !important;
@@ -689,7 +688,7 @@
           &.name {
             .info {
               ul {
-                padding-right: 0; 
+                padding-right: 0;
 
                 li {
                   margin-right: 0;
@@ -715,7 +714,7 @@
 
           &.details {
             ul {
-              padding-right: 0; 
+              padding-right: 0;
 
               li {
                 i {
@@ -725,9 +724,9 @@
               }
             }
           }
-          
+
           &.action {
-            .default-btn { 
+            .default-btn {
               &.danger {
                 margin-left: 0;
                 margin-right: 8px;
@@ -741,7 +740,7 @@
 
   .earnings-box {
     ul {
-      padding-right: 0; 
+      padding-right: 0;
 
       li {
         padding-left: 25px;
@@ -769,8 +768,8 @@
   }
 
   .visitor-reviews-box {
-    .user-review { 
-      padding: 25px 135px 25px 20px; 
+    .user-review {
+      padding: 25px 135px 25px 20px;
 
       .user {
         left: auto;
@@ -805,8 +804,8 @@
   .add-listings-box {
     .form-group {
       label {
-        padding-left: 0; 
-        padding-right: 25px; 
+        padding-left: 0;
+        padding-right: 25px;
 
         i {
           left: auto;
@@ -842,8 +841,8 @@
   .single-products-box {
     .products-content {
       .add-to-cart {
-        right: auto; 
-        left: 0; 
+        right: auto;
+        left: 0;
       }
       .price {
         .old-price {
@@ -883,7 +882,7 @@
     .tab-content {
       .tab-pane {
         ul {
-          padding-right: 0; 
+          padding-right: 0;
 
           li {
             padding-left: 0;
@@ -923,7 +922,7 @@
       }
     }
   }
- 
+
   .cart-table {
     table {
       tbody {
@@ -931,7 +930,7 @@
           td {
             &.product-subtotal {
               .remove {
-                float: left; 
+                float: left;
               }
             }
           }
@@ -940,7 +939,8 @@
     }
   }
 
-  .billing-details, .order-details  {
+  .billing-details,
+  .order-details {
     .title {
       &::before {
         left: auto;
@@ -949,9 +949,9 @@
     }
   }
 
-  .form-check { 
-    padding-left: 0; 
-    padding-right: 1.5em; 
+  .form-check {
+    padding-left: 0;
+    padding-right: 1.5em;
 
     .form-check-input {
       float: right;
@@ -960,28 +960,55 @@
     }
   }
 
-
-  .order-details .payment-box .payment-method p [type=radio]:checked + label, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label {
-    padding-left: 0; 
-    padding-right: 27px; 
-  } 
-
-  .order-details .payment-box .payment-method p [type=radio]:checked + label::before, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label::before {
-    left: auto; 
-    right: 0; 
+  .order-details .payment-box .payment-method p [type="radio"]:checked + label,
+  .order-details
+    .payment-box
+    .payment-method
+    p
+    [type="radio"]:not(:checked)
+    + label {
+    padding-left: 0;
+    padding-right: 27px;
   }
 
-  .order-details .payment-box .payment-method p [type=radio]:checked + label::after, .order-details .payment-box .payment-method p [type=radio]:not(:checked) + label::after {
-    left: auto; 
-    right: 3px; 
+  .order-details
+    .payment-box
+    .payment-method
+    p
+    [type="radio"]:checked
+    + label::before,
+  .order-details
+    .payment-box
+    .payment-method
+    p
+    [type="radio"]:not(:checked)
+    + label::before {
+    left: auto;
+    right: 0;
+  }
+
+  .order-details
+    .payment-box
+    .payment-method
+    p
+    [type="radio"]:checked
+    + label::after,
+  .order-details
+    .payment-box
+    .payment-method
+    p
+    [type="radio"]:not(:checked)
+    + label::after {
+    left: auto;
+    right: 3px;
   }
 
   .widget-area {
     .widget {
       .widget-title {
         &::before {
-          left: auto; 
-          right: 0; 
+          left: auto;
+          right: 0;
         }
       }
     }
@@ -992,8 +1019,8 @@
           padding: 2px 15px 0 0;
         }
         button {
-          right: auto; 
-          left: 5px; 
+          right: auto;
+          left: 5px;
         }
       }
     }
@@ -1035,7 +1062,7 @@
     .article-content {
       .entry-meta {
         ul {
-          padding-right: 0; 
+          padding-right: 0;
 
           li {
             margin-right: 0;
@@ -1070,13 +1097,13 @@
             right: 0;
           }
         }
-      } 
+      }
     }
 
     .article-footer {
       .article-share {
         .social {
-          padding-right: 0; 
+          padding-right: 0;
 
           li {
             span {
@@ -1095,29 +1122,30 @@
     }
   }
 
-  blockquote::after, .blockquote::after {
-    left: auto; 
+  blockquote::after,
+  .blockquote::after {
+    left: auto;
     right: 0;
   }
 
   .prev-link-wrapper {
     .image-prev {
-      margin-right: 0; 
-      margin-left: 20px; 
+      margin-right: 0;
+      margin-left: 20px;
     }
   }
 
   .next-link-wrapper {
     .image-next {
-      margin-left: 0; 
-      margin-right: 20px; 
+      margin-left: 0;
+      margin-right: 20px;
     }
   }
 
   .comments-area {
-    .comment-body { 
-      padding-left: 0; 
-      padding-right: 70px; 
+    .comment-body {
+      padding-left: 0;
+      padding-right: 70px;
     }
     .comment-author {
       .avatar {
@@ -1127,8 +1155,20 @@
     }
   }
 
-  .comments-area .comment-respond input[type=date], .comments-area .comment-respond input[type=time], .comments-area .comment-respond input[type=datetime-local], .comments-area .comment-respond input[type=week], .comments-area .comment-respond input[type=month], .comments-area .comment-respond input[type=text], .comments-area .comment-respond input[type=email], .comments-area .comment-respond input[type=url], .comments-area .comment-respond input[type=password], .comments-area .comment-respond input[type=search], .comments-area .comment-respond input[type=tel], .comments-area .comment-respond input[type=number], .comments-area .comment-respond textarea {
-    padding: 1px 15px 0 0; 
+  .comments-area .comment-respond input[type="date"],
+  .comments-area .comment-respond input[type="time"],
+  .comments-area .comment-respond input[type="datetime-local"],
+  .comments-area .comment-respond input[type="week"],
+  .comments-area .comment-respond input[type="month"],
+  .comments-area .comment-respond input[type="text"],
+  .comments-area .comment-respond input[type="email"],
+  .comments-area .comment-respond input[type="url"],
+  .comments-area .comment-respond input[type="password"],
+  .comments-area .comment-respond input[type="search"],
+  .comments-area .comment-respond input[type="tel"],
+  .comments-area .comment-respond input[type="number"],
+  .comments-area .comment-respond textarea {
+    padding: 1px 15px 0 0;
   }
 
   .comments-area .comment-respond .comment-form-cookies-consent {
@@ -1136,13 +1176,13 @@
     padding-right: 20px;
   }
   .comments-area .comment-respond .comment-form-cookies-consent input {
-    left: auto; 
-    right: 0; 
+    left: auto;
+    right: 0;
   }
 
   .page-title-content {
     ul {
-      padding-right: 0; 
+      padding-right: 0;
 
       li {
         &::before {
@@ -1156,7 +1196,7 @@
   .single-pricing-box {
     .pricing-features {
       ul {
-        padding-right: 0; 
+        padding-right: 0;
 
         li {
           padding-left: 0;
@@ -1209,17 +1249,16 @@
     }
   }
 
-
   .coming-soon-content {
     form {
       .form-group {
         .input-newsletter {
-          padding: 0 32px 0 0; 
+          padding: 0 32px 0 0;
         }
         .label-title {
           i {
             left: auto;
-          right: 0;
+            right: 0;
           }
         }
       }
@@ -1227,8 +1266,8 @@
   }
 
   .contact-info-box {
-    padding-left: 0; 
-    padding-right: 100px; 
+    padding-left: 0;
+    padding-right: 100px;
 
     .back-icon {
       right: auto;
@@ -1243,7 +1282,7 @@
   .listings-sidebar {
     .listings_contact_details {
       ul {
-        padding-right: 0; 
+        padding-right: 0;
 
         li {
           padding-left: 0;
@@ -1267,7 +1306,7 @@
         .author-profile {
           .social {
             padding-right: 0;
-            
+
             li {
               margin-left: 0px;
               margin-right: 5px;
@@ -1282,8 +1321,8 @@
     .listings-details-content {
       .meta {
         i {
-          margin-right: 0; 
-          margin-left: 3px; 
+          margin-right: 0;
+          margin-left: 3px;
         }
       }
 
@@ -1294,7 +1333,7 @@
           margin-right: 0;
           margin-left: 25px;
 
-          &.time  {
+          &.time {
             padding-left: 0;
             padding-right: 58px;
 
@@ -1303,7 +1342,7 @@
               right: 0;
             }
           }
-          &.location  {
+          &.location {
             padding-left: 0;
             padding-right: 55px;
 
@@ -1328,7 +1367,7 @@
         }
         .comments {
           .like-unlike {
-            padding-right: 0; 
+            padding-right: 0;
 
             li {
               margin-right: 0;
@@ -1348,7 +1387,7 @@
     }
 
     .amenities-list {
-      padding-right: 0; 
+      padding-right: 0;
 
       li {
         span {
@@ -1374,7 +1413,7 @@
       }
     }
   }
-  
+
   .author-sidebar {
     .user-profile {
       .title {
@@ -1384,7 +1423,7 @@
     }
     .user-contact-info {
       .user-contact {
-        padding-right: 0; 
+        padding-right: 0;
 
         li {
           a {
@@ -1416,10 +1455,8 @@
     }
   }
 
-
   // Responsive CSS
-  @media only screen and (max-width : 767px) {
-
+  @media only screen and (max-width: 767px) {
     .main-banner-content {
       form {
         .form-group {
@@ -1433,8 +1470,8 @@
     }
 
     .banner-form-select-two {
-      margin-left: 0; 
-      margin-right: 20px; 
+      margin-left: 0;
+      margin-right: 20px;
     }
     .banner-content {
       form {
@@ -1464,19 +1501,19 @@
       }
     }
 
-    .single-funfacts { 
+    .single-funfacts {
       padding-right: 0;
     }
-    
-    .all-listings-list { 
-      padding-left: 0; 
+
+    .all-listings-list {
+      padding-left: 0;
     }
 
     .page-title-bg {
       form {
         .form-group {
           margin-right: 0;
-  
+
           label {
             right: 5px;
           }
@@ -1498,9 +1535,9 @@
     }
 
     .visitor-reviews-box {
-      .user-review { 
-        padding: 25px 25px 25px 20px; 
-  
+      .user-review {
+        padding: 25px 25px 25px 20px;
+
         .user {
           right: 0;
         }
@@ -1520,19 +1557,18 @@
     }
 
     .comments-area {
-      .comment-body { 
+      .comment-body {
         padding-right: 0;
       }
       .comment-author {
-        .avatar { 
+        .avatar {
           right: 0;
         }
       }
     }
   }
 
-  @media only screen and (min-width : 768px) and (max-width : 991px) {
-
+  @media only screen and (min-width: 768px) and (max-width: 991px) {
     .main-banner-content {
       form {
         .form-group {
@@ -1546,8 +1582,8 @@
     }
 
     .banner-form-select-two {
-      margin-left: 0; 
-      margin-right: 20px; 
+      margin-left: 0;
+      margin-right: 20px;
     }
     .banner-content {
       form {
@@ -1569,7 +1605,7 @@
       form {
         .form-group {
           margin-right: 0;
-          
+
           label {
             right: 5px;
           }
@@ -1577,28 +1613,26 @@
       }
     }
 
-    .all-listings-list { 
-      padding-left: 0; 
+    .all-listings-list {
+      padding-left: 0;
     }
 
     .page-title-bg {
       form {
         .form-group {
           margin-right: 0;
-  
+
           label {
             right: 5px;
           }
         }
       }
     }
-
   }
 
-  @media only screen and (min-width : 992px) and (max-width : 1199px) {
-
-    .all-listings-list { 
-      padding-left: 0; 
+  @media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .all-listings-list {
+      padding-left: 0;
     }
 
     .stats-card-box {
@@ -1613,7 +1647,7 @@
     .invoices-box {
       ul {
         li {
-          padding-left: 140px; 
+          padding-left: 140px;
 
           ul {
             li {
@@ -1623,45 +1657,43 @@
         }
       }
     }
-
   }
 
-  @media only screen and (min-width : 1200px) and (max-width : 1355px) {
+  @media only screen and (min-width: 1200px) and (max-width: 1355px) {
     .others-option-for-responsive {
       .dot-menu {
-        right: auto; 
-        left: -10px; 
+        right: auto;
+        left: -10px;
       }
       .container {
-        .container { 
-          right: auto; 
-          left: 0; 
+        .container {
+          right: auto;
+          left: 0;
         }
       }
     }
   }
 
-
-  @media only screen and (max-width : 1199px) {
-    .hamburger-menu { 
-      right: auto; 
-      left: 0; 
+  @media only screen and (max-width: 1199px) {
+    .hamburger-menu {
+      right: auto;
+      left: 0;
     }
     .others-option-for-responsive {
       .dot-menu {
-        right: auto; 
-        left: 60px; 
+        right: auto;
+        left: 60px;
       }
       .container {
-        .container { 
-          right: auto; 
-          left: 0; 
+        .container {
+          right: auto;
+          left: 0;
         }
       }
     }
     .miran-nav {
       .navbar {
-        ul { 
+        ul {
           padding: 0;
         }
       }
@@ -1692,7 +1724,7 @@
                 ul {
                   .nav-item {
                     .nav-link {
-                      padding: 5px 25px 5px 15px; 
+                      padding: 5px 25px 5px 15px;
                       text-align: right;
 
                       i {
@@ -1709,7 +1741,7 @@
                   padding: 0;
                   .nav-item {
                     .nav-link {
-                      padding: 5px 25px 5px 15px; 
+                      padding: 5px 25px 5px 15px;
                       text-align: right;
 
                       i {
@@ -1726,11 +1758,4 @@
       }
     }
   }
-
-
-
-
-
-
-
 }
