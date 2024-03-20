@@ -1,9 +1,8 @@
-import { uniqueId } from "lodash";
 import { useDropzone } from "react-dropzone";
 import BaseModal from "../_App/BaseModal";
 import SelectWithIcon from "../FormComponents/SelectWithIcon";
 import InputWithIcon from "../FormComponents/InputWithIcon";
-import { getListingImageByType } from "../../utils";
+import { getListingImageByType, uniqueImageId } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import env from "../../env";
 
@@ -89,7 +88,7 @@ const EditPhotosSection = ({
           ...newFiles.map((file) =>
             Object.assign(file, {
               preview: URL.createObjectURL(file),
-              localId: uniqueId(),
+              localId: uniqueImageId(),
               date: Date.now(),
             })
           ),
@@ -110,7 +109,7 @@ const EditPhotosSection = ({
           setPhotoPopupPhoto(
             Object.assign(newFiles[0], {
               preview: URL.createObjectURL(newFiles[0]),
-              localId: uniqueId(),
+              localId: uniqueImageId(),
               date: Date.now(),
             })
           );
@@ -121,9 +120,17 @@ const EditPhotosSection = ({
     });
 
   const handleChangePhotoPopupType = (e) => {
+    if (e.value === photoPopupType) return;
+
     setPhotoPopupLink("");
     setPhotoPopupPhoto(null);
     setPhotoPopupType(e.value);
+    setPhotoPopupError(null);
+  };
+
+  const handleChangePhotoPopupLink = (value) => {
+    setPhotoPopupLink(value);
+    setPhotoPopupError(null);
   };
 
   const handleStartEditImage = (localId, type) => {
@@ -241,8 +248,9 @@ const EditPhotosSection = ({
               <InputWithIcon
                 name="photoPopupLink"
                 value={photoPopupLink}
-                onInput={(e) => setPhotoPopupLink(e.target.value)}
+                onInput={(e) => handleChangePhotoPopupLink(e.target.value)}
                 placeholder="https://storage.google.com"
+                error={photoPopupError}
               />
 
               {photoPopupLink.length > 0 && (
@@ -280,11 +288,10 @@ const EditPhotosSection = ({
                   <input name="modalImage" {...getInputPropsPopup()} />
                 </div>
               )}
+
+              <ErrorSpan error={photoPopupError} className="d-block mb-3" />
             </div>
           )}
-
-          <ErrorSpan error={photoPopupError} className="d-block mb-3"/>
-
           <button type="button" onClick={handlePhotoAddByPopup}>
             {photoPopupLocalFileId ? "Update" : "Append"}
           </button>

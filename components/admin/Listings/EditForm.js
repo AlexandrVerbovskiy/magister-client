@@ -17,7 +17,7 @@ import {
   useCoordsAddress,
 } from "../../../hooks";
 import {
-  uniqueId,
+  uniqueImageId,
   validateBigText,
   validateInteger,
   validatePrice,
@@ -88,9 +88,6 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
-
-  const [keyWords, setKeyWords] = useState("");
-  const [keyWordsError, setKeyWordsError] = useState(null);
 
   const [category, setCategory] = useState(baseCategory);
   const [categoryError, setCategoryError] = useState(null);
@@ -181,7 +178,6 @@ const EditForm = ({ listing, categories, save }) => {
   useEffect(() => {
     const data = listingToState();
     setName(data.name);
-    setKeyWords(data.keyWords);
     setCategory(data.categoryId);
     setDescription(data.description);
     setRentalTerms(data.rentalTerms);
@@ -204,7 +200,7 @@ const EditForm = ({ listing, categories, save }) => {
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
       date: Date.now(),
-      localId: uniqueId(),
+      localId: uniqueImageId(),
     }));
 
     setLinkFiles(adaptedImages);
@@ -222,6 +218,7 @@ const EditForm = ({ listing, categories, save }) => {
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
       type: elem.type,
+      id: elem.id,
     }));
 
     const categoryId = prevListing.categoryId ?? baseCategory;
@@ -237,7 +234,6 @@ const EditForm = ({ listing, categories, save }) => {
 
     return {
       name: prevListing.name ?? "",
-      keyWords: prevListing.keyWords ?? "",
       categoryId: categoryId,
       description: prevListing.description ?? "",
       rentalTerms: prevListing.rentalTerms ?? "",
@@ -262,12 +258,12 @@ const EditForm = ({ listing, categories, save }) => {
     const listingImages = linkFiles.map((elem) => ({
       link: elem.link,
       type: elem.type,
+      id: elem.id,
     }));
 
     return {
       name,
       address,
-      keyWords,
       categoryId: category,
       description,
       rentalTerms,
@@ -308,16 +304,6 @@ const EditForm = ({ listing, categories, save }) => {
 
       if (name && validateSmallText(name) !== true) {
         setNameError(validateSmallText(name));
-        hasError = true;
-      }
-
-      if (!keyWords) {
-        setKeyWordsError("Required field");
-        hasError = true;
-      }
-
-      if (keyWords && validateBigText(keyWords) !== true) {
-        setKeyWordsError(validateBigText(keyWords));
         hasError = true;
       }
 
@@ -399,9 +385,16 @@ const EditForm = ({ listing, categories, save }) => {
         const formData = new FormData();
 
         if (files) {
-          files.forEach((file, index) =>
-            formData.append(`files[${index}]`, file)
-          );
+          let indexCount = 0;
+
+          files.forEach((file) => {
+            if (file.id) {
+              formData.append(`files[id][${file.id}]`, file);
+            } else {
+              formData.append(`files[index][${indexCount}]`, file);
+              indexCount++;
+            }
+          });
         }
 
         const info = objectToSave();
@@ -468,36 +461,21 @@ const EditForm = ({ listing, categories, save }) => {
                         </h2>
 
                         <div className="flex flex-col gap-2">
-                          <div className="w-full">
-                            <Input
-                              name="name"
-                              value={name}
-                              setValue={setName}
-                              error={nameError}
-                              setError={setNameError}
-                              label="Name"
-                              placeholder="Name of tool"
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
                           <div className="flex w-full gap-2">
-                            <div className=" w-full sm:w-1/2">
+                            <div className="w-full sm:w-1/2">
                               <Input
-                                name="keyWords"
-                                label="Keywords"
-                                placeholder="Maximum 15, should be separated by commas"
+                                name="name"
+                                value={name}
+                                setValue={setName}
+                                error={nameError}
+                                setError={setNameError}
+                                label="Name"
+                                placeholder="Name of tool"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={keyWords}
-                                setValue={setKeyWords}
-                                error={keyWordsError}
-                                setError={setKeyWordsError}
                                 inputClassName="form-input w-full"
                               />
                             </div>
-
-                            <div className=" w-full sm:w-1/2">
+                            <div className="w-full sm:w-1/2">
                               <label
                                 className="block text-sm font-medium mb-1"
                                 htmlFor="role"
@@ -515,6 +493,7 @@ const EditForm = ({ listing, categories, save }) => {
                               <ErrorSpan error={ownerIdError} />
                             </div>
                           </div>
+
                           <div className="flex w-full gap-2">
                             <div className="w-1/2">
                               <label

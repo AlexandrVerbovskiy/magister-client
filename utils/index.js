@@ -9,6 +9,7 @@ export { default as middlewareCallbackWrapper } from "./middlewareCallbackWrappe
 export { default as getNumberLevelByName } from "./getNumberLevelByName";
 export { default as leveliseCategories } from "./leveliseCategories";
 export { default as onCurrentUserLocation } from "./onCurrentUserLocation";
+export { default as uniqueImageId } from "./uniqueImageId";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";

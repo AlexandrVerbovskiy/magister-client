@@ -171,30 +171,19 @@ const ListingApprovalRequest = ({
                       </h2>
 
                       <div className="flex flex-col gap-2">
-                        <div className="w-full">
-                          <InputView
-                            value={listing.name}
-                            label="User Name"
-                            name="name"
-                            placeholder="Name of tool"
-                            labelClassName="block text-sm font-medium mb-1"
-                            inputClassName="form-input w-full"
-                          />
-                        </div>
-
                         <div className="flex w-full gap-2">
-                          <div className=" w-full sm:w-1/2">
+                          <div className="w-full sm:w-1/2">
                             <InputView
-                              label="Keywords"
-                              name="keyWords"
-                              placeholder="Maximum 15, should be separated by commas"
+                              value={listing.name}
+                              label="User Name"
+                              name="name"
+                              placeholder="Name of tool"
                               labelClassName="block text-sm font-medium mb-1"
-                              value={listing.keyWords}
                               inputClassName="form-input w-full"
                             />
                           </div>
 
-                          <div className=" w-full sm:w-1/2">
+                          <div className="w-full sm:w-1/2">
                             <InputView
                               value={listing.userName}
                               label="Owner"

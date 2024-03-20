@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { uniqueId } from "../utils";
+import { uniqueImageId, validateSmallText } from "../utils";
 
 const useListingPhotoEdit = () => {
   const [files, setFiles] = useState([]);
@@ -13,6 +13,7 @@ const useListingPhotoEdit = () => {
     const newLinkFiles = linkFiles.filter(
       (file) => file.localId !== localIdToRemove
     );
+
     setLinkFiles(newLinkFiles);
   };
 
@@ -35,7 +36,7 @@ const useListingPhotoEdit = () => {
   const adaptLinkPropsToLocal = (list) =>
     list.map((info) => ({
       link: info.link,
-      localId: uniqueId(),
+      localId: uniqueImageId(),
       type: info.type,
       date: Date.now(),
     }));
@@ -48,6 +49,8 @@ const useListingPhotoEdit = () => {
     if (photoPopupType === "storage") {
       let found = null;
       let date = Date.now();
+      let localId = uniqueImageId();
+      let id = null;
 
       if (photoPopupLocalFileId) {
         const newFiles = files.map((file) => {
@@ -73,6 +76,8 @@ const useListingPhotoEdit = () => {
 
         if (file) {
           date = file.date;
+          localId = file.localId;
+          id = file.id;
         }
 
         const newLinkFiles = linkFiles.filter(
@@ -87,8 +92,9 @@ const useListingPhotoEdit = () => {
             ...prev,
             Object.assign(photoPopupPhoto, {
               preview: URL.createObjectURL(photoPopupPhoto),
-              localId: uniqueId(),
+              localId: localId,
               date,
+              id,
             }),
           ]);
         } else {
@@ -99,6 +105,14 @@ const useListingPhotoEdit = () => {
     } else {
       let found = null;
       let date = Date.now();
+      let localId = uniqueImageId();
+      let id = null;
+
+      if (validateSmallText(photoPopupLink) !== true) {
+        setPhotoPopupError(validateSmallText(photoPopupLink));
+        success = false;
+        return;
+      }
 
       if (photoPopupLocalFileId) {
         const newLinkFiles = linkFiles.map((file) => {
@@ -118,6 +132,8 @@ const useListingPhotoEdit = () => {
 
         if (file) {
           date = file.date;
+          localId = file.localId;
+          id = file.id;
         }
 
         const newFiles = files.filter(
@@ -132,9 +148,10 @@ const useListingPhotoEdit = () => {
           ...prev,
           {
             link: photoPopupLink,
-            localId: uniqueId(),
+            localId,
             type: "url",
             date,
+            id,
           },
         ]);
       }
@@ -167,7 +184,7 @@ const useListingPhotoEdit = () => {
     fileError,
     setFileError,
     photoPopupError,
-    setPhotoPopupError
+    setPhotoPopupError,
   };
 };
 
