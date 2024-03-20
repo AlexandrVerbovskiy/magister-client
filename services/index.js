@@ -8,3 +8,4 @@ export * from "./searchedWords";
 export * from "./listings";
 export * from "./main";
 export * from "./listingApprovalRequests";
+export * from "./isCurrentPath";

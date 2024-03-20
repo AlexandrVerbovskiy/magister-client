@@ -11,6 +11,7 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import { getFilePath } from "../../utils";
+import YesNoModal from "../../components/_App/YesNoModal";
 
 const DocumentsVerification = ({
   documents,
@@ -18,8 +19,11 @@ const DocumentsVerification = ({
   lastAnswerDescription,
 }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading, user, authToken } = useContext(IndiceContext);
+  const { success, setLoading, user, authToken, setVerified } =
+    useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
+  const [userVerified, setUserVerified] = useState(user.verified);
+  const [activeReverifiedModal, setActiveReverifiedModal] = useState(false);
 
   const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
@@ -204,14 +208,16 @@ const DocumentsVerification = ({
   const handleSaveClick = async () => {
     if (saveDocumentsDisabled) return;
 
-    setSaveDocumentsDisabled(true);
     setFormError(null);
-
     const formData = dataToSave();
 
     if (formData) {
+      setSaveDocumentsDisabled(true);
+
       try {
         await saveMyDocuments(formData, authToken);
+        setUserVerified(false);
+        setVerified(false);
       } catch (e) {
         setFormError(e.message);
       } finally {
@@ -220,6 +226,11 @@ const DocumentsVerification = ({
     }
 
     success.set("Documents updated successfully");
+  };
+
+  const handleBeforeSaveClick = async (e) => {
+    e.preventDefault();
+    setActiveReverifiedModal(true);
   };
 
   const handleSendRequestToVerify = async () => {
@@ -297,7 +308,6 @@ const DocumentsVerification = ({
                       photoUrl={proofOfAddressLink}
                       onChange={handleProofOfAddressChange}
                       name="proofOfAddressLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -307,7 +317,6 @@ const DocumentsVerification = ({
                       photoUrl={reputableBankIdLink}
                       onChange={handleReputableBankIdChange}
                       name="reputableBankIdLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -317,7 +326,6 @@ const DocumentsVerification = ({
                       photoUrl={utilityLink}
                       onChange={handleUtilityChange}
                       name="utilityLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -327,7 +335,6 @@ const DocumentsVerification = ({
                       photoUrl={hmrcLink}
                       onChange={handleHmrcChange}
                       name="hmrcLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -337,7 +344,6 @@ const DocumentsVerification = ({
                       photoUrl={councilTaxBillLink}
                       onChange={handleCouncilTaxBillChange}
                       name="councilTaxBillLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -347,7 +353,6 @@ const DocumentsVerification = ({
                       photoUrl={passportOrDrivingIdLink}
                       onChange={handlePassportOrDrivingIdChange}
                       name="passportOrDrivingIdLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -359,7 +364,6 @@ const DocumentsVerification = ({
                         handleConfirmMoneyLaunderingChecksAndComplianceChange
                       }
                       name="confirmMoneyLaunderingChecksAndComplianceLink"
-                      disabled={user?.verified}
                     />
                   </div>
 
@@ -374,37 +378,48 @@ const DocumentsVerification = ({
                     </div>
                   )}
 
-                  {!user?.verified && (
-                    <div className="col-12">
-                      <div className="form-group d-flex gap-2 justify-content-between">
+                  <div className="col-12">
+                    <div className="form-group d-flex gap-2 justify-content-between">
+                      <button
+                        type="button"
+                        style={{ width: "300px" }}
+                        onClick={
+                          userVerified ? handleBeforeSaveClick : handleSaveClick
+                        }
+                        disabled={saveDocumentsDisabled}
+                      >
+                        Save Changes
+                      </button>
+
+                      {!userVerified && activeSendRequestBtn && (
                         <button
                           type="button"
                           style={{ width: "300px" }}
-                          onClick={handleSaveClick}
-                          disabled={saveDocumentsDisabled}
+                          onClick={handleSendRequestToVerify}
+                          disabled={sendRequestDisabled}
                         >
-                          Save Changes
+                          Send Request To Verify
                         </button>
-
-                        {activeSendRequestBtn && (
-                          <button
-                            type="button"
-                            style={{ width: "300px" }}
-                            onClick={handleSendRequestToVerify}
-                            disabled={sendRequestDisabled}
-                          >
-                            Send Request To Verify
-                          </button>
-                        )}
-                      </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
+
+      {userVerified && (
+        <YesNoModal
+          active={activeReverifiedModal}
+          toggleActive={() => setActiveReverifiedModal(false)}
+          title="Are you sure you want update documents?"
+          body="When you update your documents, your profile will automatically be transferred to an unverified status. Until the administrator confirms your profile, you will not be able to manage the listings. A verification request will be sent automatically."
+          onAccept={handleSaveClick}
+          acceptText="Update Documents"
+        />
+      )}
     </>
   );
 };

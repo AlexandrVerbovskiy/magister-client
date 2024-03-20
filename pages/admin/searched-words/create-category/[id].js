@@ -67,7 +67,7 @@ const createCategoryBySearch = ({
   }
 
   if (baseLevel == 3) {
-    baseParentOptions = getParentOptions("thirdLevel");
+    baseParentOptions = getParentOptions("secondLevel");
   }
 
   const [parentIdOptions, setParentIdOptions] = useState(baseParentOptions);
