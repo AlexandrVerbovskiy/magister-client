@@ -8,6 +8,7 @@ function Tooltip({
   bg,
   size,
   position,
+  style = null,
 }) {
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -70,7 +71,10 @@ function Tooltip({
       onBlur={() => setTooltipOpen(false)}
     >
       {children}
-      <div className={`z-10 absolute ${positionOuterClasses(position)}`}>
+      <div
+        className={`z-10 absolute ${positionOuterClasses(position)}`}
+        style={style ? style : {}}
+      >
         <Transition
           show={tooltipOpen}
           tag="div"

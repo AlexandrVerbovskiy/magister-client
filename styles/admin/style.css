@@ -332,19 +332,32 @@ Preloader Area CSS
   max-width: calc(100% - 18px);
 }
 
-.dropdown-classic>button>span{
+.dropdown-classic > button > span {
   width: calc(100% - 20px);
 }
 
-.dropdown-classic>button>span>span,
+.dropdown-classic > button > span > span,
 .select-option span,
 .listing-categories-parent-select button > span > span {
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.add-more-image{
+.add-more-image {
   cursor: pointer;
+}
+
+.sidebar-group-header svg {
+  transition: all 0.2s ease-in-out;
+}
+
+.sidebar-group-body {
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.sidebar-group-body:not(:has(> ul.shown)) {
+  max-height: 0 !important;
 }
 
 @media (min-width: 640px) {

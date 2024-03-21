@@ -619,7 +619,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
   visibility: hidden;
   margin-top: -11px;
 }
@@ -704,7 +704,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: -1*var(--listing-categories-popup-width);
+  left: -1 * var(--listing-categories-popup-width);
   visibility: hidden;
   margin-top: -11px;
 }
@@ -799,7 +799,7 @@ Navbar Area CSS
   .dropdown-menu {
   top: 0;
   opacity: 0;
-  left: var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
   visibility: hidden;
   margin-top: -11px;
 }
@@ -1825,7 +1825,10 @@ Navbar Area CSS
   .option-item:first-child {
   margin-top: 0;
 }
-.others-option-for-responsive .option-inner .others-option .option-item:has(span) {
+.others-option-for-responsive
+  .option-inner
+  .others-option
+  .option-item:has(span) {
   display: inline-block;
   cursor: pointer;
   color: #221638;
@@ -1833,7 +1836,11 @@ Navbar Area CSS
   font-weight: 500;
   position: relative;
 }
-.others-option-for-responsive .option-inner .others-option .option-item:has(span) i {
+.others-option-for-responsive
+  .option-inner
+  .others-option
+  .option-item:has(span)
+  i {
   margin-right: 2px;
   color: var(--mainColor);
   position: relative;
@@ -12082,7 +12089,7 @@ Dashboard CSS
   z-index: 999;
   height: auto;
   top: 0;
-  left: var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
   width: calc(100% - var(--listing-categories-popup-width));
   animation: unset !important;
 }
@@ -12103,7 +12110,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
 }
 .main-content
   .navbar-area
@@ -12116,22 +12123,7 @@ Dashboard CSS
   .dropdown-menu
   li
   .dropdown-menu {
-  left: var(--listing-categories-popup-width);;
-}
-.main-content
-  .navbar-area
-  .miran-nav
-  .navbar
-  .navbar-nav
-  .nav-item
-  .dropdown-menu
-  li
-  .dropdown-menu
-  li
-  .dropdown-menu
-  li
-  .dropdown-menu {
-  left: var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
 }
 .main-content
   .navbar-area
@@ -12145,10 +12137,8 @@ Dashboard CSS
   li
   .dropdown-menu
   li
-  .dropdown-menu
-  li
   .dropdown-menu {
-  left: -1*var(--listing-categories-popup-width);;
+  left: var(--listing-categories-popup-width);
 }
 .main-content
   .navbar-area
@@ -12164,10 +12154,8 @@ Dashboard CSS
   li
   .dropdown-menu
   li
-  .dropdown-menu
-  li
   .dropdown-menu {
-  left: var(--listing-categories-popup-width);;
+  left: -1 * var(--listing-categories-popup-width);
 }
 .main-content
   .navbar-area
@@ -12185,10 +12173,29 @@ Dashboard CSS
   li
   .dropdown-menu
   li
+  .dropdown-menu {
+  left: var(--listing-categories-popup-width);
+}
+.main-content
+  .navbar-area
+  .miran-nav
+  .navbar
+  .navbar-nav
+  .nav-item
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
+  .dropdown-menu
+  li
   .dropdown-menu
   li
   .dropdown-menu {
-  left: -1*var(--listing-categories-popup-width);;
+  left: -1 * var(--listing-categories-popup-width);
 }
 .main-content .navbar-area .miran-nav .navbar .others-option {
   margin-left: auto;
@@ -17350,5 +17357,5 @@ Preloader Area CSS
 
 .listings-details-desc p,
 .listings-details-desc h3 {
-    word-break: break-all;
-  }
+  word-break: break-all;
+}

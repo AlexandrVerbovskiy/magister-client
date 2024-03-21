@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { isCurrentAdminPath } from "../../services/isCurrentPath";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 
-const SideGroupedLinks = ({
+const SidebarGroupedLinks = ({
   setSidebarExpanded,
   title,
   sublinks = [],
@@ -12,6 +12,8 @@ const SideGroupedLinks = ({
 }) => {
   const router = useRouter();
   const [isCurrent, setIsCurrent] = useState(false);
+  const [bodyMaxHeight, setBodyMaxHeight] = useState(0);
+  const ulRef = useRef(null);
 
   useEffect(() => {
     setIsCurrent(false);
@@ -23,6 +25,10 @@ const SideGroupedLinks = ({
     });
   }, [router.asPath]);
 
+  useEffect(() => {
+    setBodyMaxHeight(ulRef.current.scrollHeight);
+  }, [ulRef.current]);
+
   return (
     <SidebarLinkGroup activecondition={isCurrent}>
       {(handleClick, open) => {
@@ -30,7 +36,7 @@ const SideGroupedLinks = ({
           <React.Fragment>
             <a
               href="#0"
-              className={`block text-slate-200 truncate transition duration-150 ${
+              className={`sidebar-group-header block text-slate-200 truncate transition duration-150 ${
                 isCurrent ? "hover:text-slate-200" : "hover:text-white"
               }`}
               onClick={(e) => {
@@ -60,8 +66,11 @@ const SideGroupedLinks = ({
                 </div>
               </div>
             </a>
-            <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-              <ul className={`pl-9 mt-1 ${!open && "hidden"}`}>
+            <div
+              style={{ maxHeight: bodyMaxHeight }}
+              className="sidebar-group-body lg:hidden lg:sidebar-expanded:block 2xl:block"
+            >
+              <ul ref={ulRef} className={`pl-9 mt-1 ${open ? "shown" : ""}`}>
                 {sublinks.map((sublink) => (
                   <li className="mb-1 last:mb-0" key={sublink.href}>
                     <Link
@@ -88,4 +97,4 @@ const SideGroupedLinks = ({
   );
 };
 
-export default SideGroupedLinks;
+export default SidebarGroupedLinks;

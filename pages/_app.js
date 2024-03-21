@@ -16,7 +16,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
-  const importStyle = async (importFuncs, key) => {
+  const importStyle = async (importFuncs, key, isFirst) => {
     stylesRef.current[key].forEach((elem) =>
       document.querySelector("head").append(elem)
     );
@@ -24,7 +24,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (!loadedRef.current[key]) {
       loadedRef.current[key] = true;
 
-      for(let i = 0; i < importFuncs.length; i++){
+      for (let i = 0; i < importFuncs.length; i++) {
         await importFuncs[i]();
       }
 
@@ -36,6 +36,8 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 
   const onChangeType = async () => {
     onStart();
+
+    const isFirst = isFirstCall.current;
 
     if (isFirstCall.current) {
       isFirstCall.current = false;
@@ -68,7 +70,11 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       await importStyle([() => import(`../styles/index.css`)], "base");
     }
 
-    onEnd();
+    if (!isFirst) {
+      setTimeout(onEnd, 500);
+    } else {
+      onEnd();
+    }
   };
 
   useEffect(() => {

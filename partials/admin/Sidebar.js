@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import { isCurrentAdminPath } from "../../services/isCurrentPath";
 import SidebarTypicalLink from "./SidebarTypicalLink";
-import SideGroupedLinks from "./SideGroupedLinks";
+import SidebarGroupedLinks from "./SidebarGroupedLinks";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const trigger = useRef(null);
@@ -147,7 +147,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 )}
               />
 
-              <SideGroupedLinks
+              <SidebarGroupedLinks
                 setSidebarExpanded={setSidebarExpanded}
                 title="Users"
                 sublinks={[
@@ -197,7 +197,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               />
 
               {isAdmin && (
-                <SideGroupedLinks
+                <SidebarGroupedLinks
                   setSidebarExpanded={setSidebarExpanded}
                   title="Listings"
                   sublinks={[
