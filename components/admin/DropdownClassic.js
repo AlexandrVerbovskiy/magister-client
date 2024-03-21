@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import Transition from "../../utils/transition";
+import DropdownClassicOptionWrapper from "./DropdownClassicOptionWrapper";
 
 function DropdownClassic({
   options,
   selected,
   setSelected,
   needSearch = true,
+  disabledText = null,
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,30 +101,40 @@ function DropdownClassic({
             />
           )}
           {filteredOptions.map((option) => {
+            const disabled = option["active"] === false;
+
             return (
-              <button
+              <DropdownClassicOptionWrapper
+                tooltipText={disabledText}
+                disabled={disabled}
                 key={option.value}
-                tabIndex="0"
-                className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 cursor-pointer ${
-                  option.value === selected && "text-indigo-500"
-                }`}
-                onClick={() => {
-                  setSelected(option.value);
-                  setDropdownOpen(false);
-                }}
               >
-                <svg
-                  className={`shrink-0 mr-2 fill-current text-indigo-500 ${
-                    option.value !== selected && "invisible"
-                  }`}
-                  width="12"
-                  height="9"
-                  viewBox="0 0 12 9"
+                <button
+                  tabIndex="0"
+                  className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 ${
+                    disabled ? "cursor-auto " : "cursor-pointer "
+                  }${option.value === selected && "text-indigo-500"}`}
+                  onClick={() => {
+                    if (disabled) return;
+                    setSelected(option.value);
+                    setDropdownOpen(false);
+                  }}
                 >
-                  <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                </svg>
-                <span>{option.title}</span>
-              </button>
+                  <svg
+                    className={`shrink-0 mr-2 fill-current text-indigo-500 ${
+                      option.value !== selected && "invisible"
+                    }`}
+                    width="12"
+                    height="9"
+                    viewBox="0 0 12 9"
+                  >
+                    <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                  </svg>
+                  <span className={disabled ? "text-gray-200" : ""}>
+                    {option.title}
+                  </span>
+                </button>
+              </DropdownClassicOptionWrapper>
             );
           })}
         </div>

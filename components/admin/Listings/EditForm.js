@@ -489,6 +489,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 selected={ownerId}
                                 onChange={handleChangeOwner}
                                 selectedTitle={ownerName}
+                                disabledText="You can't select not verified user"
                               />
                               <ErrorSpan error={ownerIdError} />
                             </div>
@@ -741,11 +742,26 @@ const EditForm = ({ listing, categories, save }) => {
                           <Switch
                             id="approved"
                             checked={approved}
-                            changeChecked={() => setApproved(!approved)}
+                            changeChecked={() => {
+                              if (
+                                prevListing.ownerId !== ownerId ||
+                                prevListing.userVerified
+                              ) {
+                                setApproved(!approved);
+                              }
+                            }}
                             onText="Yes"
                             offText="No"
                           />
                         </div>
+                        <ErrorSpan
+                          error={
+                            prevListing.ownerId == ownerId &&
+                            !prevListing.userVerified
+                              ? "You cannot change verify the listing because the owner of the listing is unverified"
+                              : ""
+                          }
+                        />
                       </section>
                     </div>
 
