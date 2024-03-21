@@ -13,6 +13,8 @@ import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
+import useNavListingCategories from "../../../hooks/useNavListingCategories";
+import ListingCategorySelect from "../ListingCategorySelect"
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -33,6 +35,15 @@ const Navbar = ({ canShowSearch = true }) => {
     closeCategoryTipsPopup,
     updateCategoryTips,
   } = useSearchCategory();
+
+  const {
+    navbarCategories,
+    handleChangeCategory: handleChangePopupCategory,
+    handleListingClick,
+    categoriesLength,
+    activePopup,
+    setActivePopup,
+  } = useNavListingCategories();
 
   const [searchCategory, setSearchCategory] = useState("");
 
@@ -284,7 +295,10 @@ const Navbar = ({ canShowSearch = true }) => {
                     </Link>
                   </li>
 
-                  <ListingLi/>
+                  <ListingLi
+                    categoriesLength={categoriesLength}
+                    handleListingClick={handleListingClick}
+                  />
 
                   {isAuth && (
                     <li className="nav-item">
@@ -425,6 +439,15 @@ const Navbar = ({ canShowSearch = true }) => {
           codeModalError={codeModalError}
           handleCheckCode={handleCheckCode}
           handleClose={handleCloseCodeModal}
+        />
+      )}
+
+      {categoriesLength > 0 && (
+        <ListingCategorySelect
+          active={activePopup}
+          setActive={setActivePopup}
+          categories={navbarCategories}
+          onChange={handleChangePopupCategory}
         />
       )}
 

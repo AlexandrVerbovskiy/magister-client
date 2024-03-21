@@ -15,7 +15,7 @@ const GridListingsFullMap = ({
   authToken,
 }) => (
   <>
-    <NavbarTwo canShowSearch={true} />
+    <NavbarTwo />
 
     <PopularPlacesFilter />
 

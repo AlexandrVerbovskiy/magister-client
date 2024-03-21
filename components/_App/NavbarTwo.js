@@ -12,8 +12,9 @@ import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
-import CategoriesNavbar from "../CategoriesNavbar";
 import ListingLi from "./Navbar/ListingLi";
+import ListingCategorySelect from "./ListingCategorySelect";
+import useNavListingCategories from "../../hooks/useNavListingCategories";
 
 const NavbarTwo = ({ canShowSearch = true }) => {
   const {
@@ -22,8 +23,16 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     isSupport,
     onLogin,
     error: mainError,
-    categories = {},
   } = useContext(IndiceContext);
+
+  const {
+    navbarCategories,
+    handleChangeCategory: handleChangePopupCategory,
+    handleListingClick,
+    categoriesLength,
+    activePopup,
+    setActivePopup,
+  } = useNavListingCategories();
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
@@ -288,7 +297,10 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     </Link>
                   </li>
 
-                  <ListingLi />
+                  <ListingLi
+                    categoriesLength={categoriesLength}
+                    handleListingClick={handleListingClick}
+                  />
 
                   {isAuth && (
                     <li className="nav-item">
@@ -495,6 +507,15 @@ const NavbarTwo = ({ canShowSearch = true }) => {
             </div>
           </div>
         </>
+      )}
+
+      {categoriesLength > 0 && (
+        <ListingCategorySelect
+          active={activePopup}
+          setActive={setActivePopup}
+          categories={navbarCategories}
+          onChange={handleChangePopupCategory}
+        />
       )}
     </>
   );
