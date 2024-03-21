@@ -28,8 +28,8 @@ const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const baseStatusFilter = router.query.status ?? "all";
-  const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
+  /*const baseStatusFilter = router.query.status ?? "all";
+  const [statusFilter, setStatusFilter] = useState(baseStatusFilter);*/
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter();
@@ -55,7 +55,7 @@ const UserVerifyRequests = (pageProps) => {
     getItemsFunc: (data) =>
       getAdminListingApprovalRequestsList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: () => ({ ...getTimeFilterProps(), status: statusFilter }),
+    getDopProps: () => ({ ...getTimeFilterProps() }),
     defaultData: pageProps,
   });
 
@@ -87,7 +87,7 @@ const UserVerifyRequests = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Listing Approve Requests" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <DropdownFilter align="left">
+                  {/*<DropdownFilter align="left">
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
                       Status
                     </div>
@@ -108,7 +108,7 @@ const UserVerifyRequests = (pageProps) => {
                         />
                       ))}
                     </ul>
-                  </DropdownFilter>
+                  </DropdownFilter>*/}
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
