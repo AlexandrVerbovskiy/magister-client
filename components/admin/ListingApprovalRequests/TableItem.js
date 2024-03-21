@@ -5,10 +5,13 @@ import Moderate from "../FastActions/Moderate";
 import Tooltip from "../Tooltip";
 
 const ActiveSpan = ({ active }) => {
-  const text = active ? "YES" : "NO";
-  let dopClass = active
-    ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
-    : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+  const text = active === null ? "-" : active ? "YES" : "NO";
+  let dopClass =
+    active === null
+      ? "bg-gray-100 dark:bg-gray-500/30 text-gray-500"
+      : active
+      ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
+      : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
 
   return (
     <div
@@ -16,12 +19,19 @@ const ActiveSpan = ({ active }) => {
     >
       <Tooltip
         title={
-          active
+          active === null
+            ? "The request hasn't answer, so tool cannot be rented"
+            : active
             ? "The instrument is approved, so it can be rented"
             : "The tool is not approved, so it cannot be rented"
         }
       >
-        <span className="overflow-separate">{text}</span>
+        <span
+          className="overflow-separate flex justify-center"
+          style={{ width: "24px" }}
+        >
+          {text}
+        </span>
       </Tooltip>
     </div>
   );
