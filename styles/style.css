@@ -17359,3 +17359,92 @@ Preloader Area CSS
 .listings-details-desc h3 {
   word-break: break-all;
 }
+
+.category-select-modal .miran-login {
+  display: flex;
+}
+
+.categories-select-level-column {
+  width: calc(100% / 3);
+  overflow: hidden;
+}
+
+.categories-select-option {
+  display: flex;
+  align-items: center;
+}
+
+.category-select-modal .modal-dialog {
+  max-width: 90%;
+}
+
+.category-select-modal .modal-dialog .modal-content {
+  padding: 20px;
+}
+
+.categories-select-option {
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.categories-select-option:hover,
+.categories-select-option.active {
+  color: var(--mainColor);
+}
+
+.categories-select-option .category-option-image {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.categories-select-option .category-option-name {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categories-select-option:has(> .category-option-image):has(
+    > .category-option-show-children
+  )
+  .category-option-name {
+  width: calc(100% - 45px);
+}
+
+.categories-select-option:has(> .category-option-image) .category-option-name {
+  width: calc(100% - 30px);
+}
+
+.categories-select-option:has(> .category-option-show-children)
+  .category-option-name {
+  width: calc(100% - 15px);
+}
+
+.category-select-modal:has(.categories-select-level-column:nth-of-type(2))
+  .categories-select-level-column:nth-of-type(1),
+.category-select-modal:has(.categories-select-level-column:nth-of-type(3))
+  .categories-select-level-column:nth-of-type(2) {
+  border-right: 1px solid var(--mainColor);
+}
+
+.categories-select-level-column:nth-of-type(3),
+.categories-select-level-column:nth-of-type(2) {
+  border-left: 1px solid var(--mainColor);
+}
+
+.category-select-modal .modal-dialog {
+  align-items: flex-start;
+  top: 50px;
+}
+
+.categories-select-level-column {
+  overflow-y: auto;
+  max-height: calc(100vh - 150px);
+  overflow-x: hidden;
+}
+
+.map-container.fw-map.side-full-map #main-full-map {
+  height: 800px;
+}

@@ -3,17 +3,25 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
-import CategoriesNavbar from "../CategoriesNavbar";
 import ListingLi from "./Navbar/ListingLi";
+import ListingCategorySelect from "./ListingCategorySelect";
+import useNavListingCategories from "../../hooks/useNavListingCategories";
 
 const NavbarThree = () => {
   const {
-    success: mainSuccess,
     isAuth,
     isSupport,
     toggleSideMenu,
-    categories = {},
   } = useContext(IndiceContext);
+
+  const {
+    navbarCategories,
+    handleChangeCategory: handleChangePopupCategory,
+    handleListingClick,
+    categoriesLength,
+    activePopup,
+    setActivePopup,
+  } = useNavListingCategories();
 
   // Add active class
   const [currentPath, setCurrentPath] = useState("");
@@ -75,7 +83,10 @@ const NavbarThree = () => {
                   </Link>
                 </li>
 
-                <ListingLi />
+                <ListingLi
+                  categoriesLength={categoriesLength}
+                  handleListingClick={handleListingClick}
+                />
 
                 {isAuth && (
                   <li className="nav-item">
@@ -97,6 +108,15 @@ const NavbarThree = () => {
           </nav>
         </div>
       </div>
+
+      {categoriesLength > 0 && (
+        <ListingCategorySelect
+          active={activePopup}
+          setActive={setActivePopup}
+          categories={navbarCategories}
+          onChange={handleChangePopupCategory}
+        />
+      )}
     </>
   );
 };

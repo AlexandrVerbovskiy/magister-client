@@ -4,7 +4,10 @@ import DashboardNavbar from "../Dashboard/DashboardNavbar";
 import React, { useState, useContext, useEffect } from "react";
 import lodash from "lodash";
 import STATIC from "../../static";
-import { onCurrentUserLocation } from "../../utils";
+import {
+  convertToSelectPopupCategories,
+  onCurrentUserLocation,
+} from "../../utils";
 
 import {
   uniqueImageId,
@@ -43,34 +46,17 @@ const EditForm = ({
   clearRejectDescription,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
+  categories = convertToSelectPopupCategories(categories);
 
-  const levels = [
-    { name: "firstLevel", label: "First level" },
-    { name: "secondLevel", label: "Second level" },
-    { name: "thirdLevel", label: "Third level" },
-  ];
+  let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
 
-  const categorizedCategories = levels.reduce((result, level) => {
-    result[level.name] = {
-      label: level.label,
-      popular: categories[level.name].filter((category) => category.popular),
-      unpopular: categories[level.name].filter((category) => !category.popular),
-    };
-    return result;
-  }, {});
-
-  const baseCategoryKey = Object.keys(categorizedCategories).filter(
-    (key) =>
-      categorizedCategories[key].popular.length ||
-      categorizedCategories[key].unpopular.length
-  )[0];
-
-  const baseCategory = baseCategoryKey
-    ? (
-        categorizedCategories[baseCategoryKey].popular[0] ??
-        categorizedCategories[baseCategoryKey].unpopular[0]
-      ).id
-    : "";
+  if (baseCategoryId) {
+    ["secondLevel", "thirdLevel"].forEach((level) =>
+      categories[level].forEach((category) => {
+        if (category.parentId == baseCategoryId) baseCategoryId = category.id;
+      })
+    );
+  }
 
   const {
     adaptLinkPropsToLocal,
@@ -104,7 +90,7 @@ const EditForm = ({
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [category, setCategory] = useState(baseCategory);
+  const [category, setCategory] = useState(baseCategoryId);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -184,8 +170,8 @@ const EditForm = ({
     }
   };
 
-  const handleChangeCategory = (e) => {
-    setCategory(e.value);
+  const handleChangeCategory = (categoryId) => {
+    setCategory(categoryId);
     setCategoryError(null);
     setMainError(null);
   };
@@ -275,7 +261,7 @@ const EditForm = ({
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      categoryId: listing.categoryId ?? baseCategory,
+      categoryId: listing.categoryId ?? baseCategoryId,
       description: listing.description ?? "",
       rentalTerms: listing.rentalTerms ?? "",
       postcode: listing.postcode ?? "",
@@ -559,8 +545,8 @@ const EditForm = ({
                 error={categoryError}
               >
                 <CategorySelect
-                  categorizedCategories={categorizedCategories}
-                  category={category}
+                  categories={categories}
+                  selectedCategoryId={category}
                   categoryError={categoryError}
                   handleChangeCategory={handleChangeCategory}
                 />

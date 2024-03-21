@@ -17,6 +17,7 @@ import {
   useCoordsAddress,
 } from "../../../hooks";
 import {
+  convertToSelectPopupCategories,
   uniqueImageId,
   validateBigText,
   validateInteger,
@@ -26,19 +27,12 @@ import {
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
 import ErrorSpan from "../ErrorSpan";
-
-const categoryLevelOptions = [
-  { value: "firstLevel", title: "First Level", default: true },
-  { value: "secondLevel", title: "Second Level" },
-  { value: "thirdLevel", title: "Third Level" },
-];
+import CategorySelect from "./CategorySelect";
 
 const cityOptions = [
   { value: "Warrington", title: "Warrington" },
   { value: "Manchester", title: "Manchester" },
 ];
-
-const baseCategoryLevel = "firstLevel";
 
 const baseCity = cityOptions[0]["value"];
 
@@ -47,10 +41,17 @@ const EditForm = ({ listing, categories, save }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [prevListing, setPrevListing] = useState(listing);
 
-  const [categoryLevel, setCategoryLevel] = useState(baseCategoryLevel);
-  const baseCategory = categories[categoryLevel][0]
-    ? categories[categoryLevel][0]["id"]
-    : null;
+  categories = convertToSelectPopupCategories(categories);
+
+  let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
+
+  if (baseCategoryId) {
+    ["secondLevel", "thirdLevel"].forEach((level) =>
+      categories[level].forEach((category) => {
+        if (category.parentId == baseCategoryId) baseCategoryId = category.id;
+      })
+    );
+  }
 
   const {
     adaptLinkPropsToLocal,
@@ -89,7 +90,7 @@ const EditForm = ({ listing, categories, save }) => {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [category, setCategory] = useState(baseCategory);
+  const [category, setCategory] = useState(baseCategoryId);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -129,11 +130,6 @@ const EditForm = ({ listing, categories, save }) => {
   const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
-
-  const handleChangeCategoryLevel = (newLevel) => {
-    setCategoryLevel(newLevel);
-    setCategory(categories[newLevel][0]["id"]);
-  };
 
   const handleChangeCity = (city) => {
     const lat = STATIC.cityCoords[city].lat;
@@ -175,6 +171,11 @@ const EditForm = ({ listing, categories, save }) => {
     }
   };
 
+  const handleChangeCategory = (newCategoryId) => {
+    setCategory(newCategoryId);
+    setCategoryError(null);
+  };
+
   useEffect(() => {
     const data = listingToState();
     setName(data.name);
@@ -194,7 +195,6 @@ const EditForm = ({ listing, categories, save }) => {
     setApproved(data.approved);
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
-    setCategoryLevel(data.categoryLevel);
     setAddress(data.address);
 
     const adaptedImages = data.listingImages.map((image) => ({
@@ -221,16 +221,7 @@ const EditForm = ({ listing, categories, save }) => {
       id: elem.id,
     }));
 
-    const categoryId = prevListing.categoryId ?? baseCategory;
-
-    const categoryLevel =
-      Object.keys(categories).filter((level) => {
-        const categoriesWithCurrentId = categories[level].filter(
-          (category) => category.id === prevListing.categoryId
-        );
-
-        return categoriesWithCurrentId.length > 0;
-      })[0] ?? "firstLevel";
+    const categoryId = prevListing.categoryId ?? baseCategoryId;
 
     return {
       name: prevListing.name ?? "",
@@ -249,7 +240,6 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
-      categoryLevel,
       address: prevListing.address ?? "",
     };
   };
@@ -279,7 +269,6 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved,
       ownerId,
-      categoryLevel,
     };
   };
 
@@ -462,7 +451,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                         <div className="flex flex-col gap-2">
                           <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full">
                               <Input
                                 name="name"
                                 value={name}
@@ -475,6 +464,9 @@ const EditForm = ({ listing, categories, save }) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+                          </div>
+
+                          <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <label
                                 className="block text-sm font-medium mb-1"
@@ -493,40 +485,20 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                               <ErrorSpan error={ownerIdError} />
                             </div>
-                          </div>
 
-                          <div className="flex w-full gap-2">
-                            <div className="w-1/2">
-                              <label
-                                className="block text-sm font-medium mb-1"
-                                htmlFor="role"
-                              >
-                                Category Level
-                              </label>
-                              <DropdownClassic
-                                options={categoryLevelOptions}
-                                selected={categoryLevel}
-                                setSelected={handleChangeCategoryLevel}
-                                needSearch={false}
-                              />
-                            </div>
-
-                            <div className="w-1/2">
+                            <div className="w-full sm:w-1/2">
                               <label
                                 className="block text-sm font-medium mb-1"
                                 htmlFor="role"
                               >
                                 Category
                               </label>
-                              <DropdownClassic
-                                options={categories[categoryLevel].map(
-                                  (category) => ({
-                                    value: category.id,
-                                    title: category.name,
-                                  })
-                                )}
-                                selected={category}
-                                setSelected={setCategory}
+
+                              <CategorySelect
+                                categories={categories}
+                                selectedCategoryId={category}
+                                categoryError={categoryError}
+                                handleChangeCategory={handleChangeCategory}
                               />
                             </div>
                           </div>

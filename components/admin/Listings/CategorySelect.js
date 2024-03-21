@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { getFilePath } from "../../utils";
-import ListingCategorySelect from "../_App/ListingCategorySelect";
+import { getFilePath } from "../../../utils";
 import ErrorSpan from "../ErrorSpan";
+import ListingCategorySelectPopup from "./ListingCategorySelectPopup";
 
 const CategorySelect = ({
   categories,
@@ -15,8 +15,11 @@ const CategorySelect = ({
   return (
     <>
       <div
-        className="form-control d-flex align-items-center cursor-pointer"
-        onClick={() => setActive(true)}
+        className="form-input w-full cursor-pointer listing-category-select"
+        onClick={(e) => {
+          e.stopPropagation();
+          setActive(true);
+        }}
       >
         {selectedCategoryInfo.image && (
           <img
@@ -32,13 +35,13 @@ const CategorySelect = ({
 
       <ErrorSpan error={categoryError} />
 
-      <ListingCategorySelect
+      <ListingCategorySelectPopup
         active={active}
         setActive={setActive}
         categories={categories}
         onChange={handleChangeCategory}
-        selectedCategoryId={selectedCategoryId}
         setSelectedCategoryInfo={setSelectedCategoryInfo}
+        selectedCategoryId={selectedCategoryId}
       />
     </>
   );

@@ -310,6 +310,7 @@ Preloader Area CSS
   background-image: url("/images/rent-about-logo.png");
 }
 
+.form-input,
 .dropdown-classic {
   min-height: 37.6px;
 }
@@ -358,6 +359,101 @@ Preloader Area CSS
 
 .sidebar-group-body:not(:has(> ul.shown)) {
   max-height: 0 !important;
+}
+
+.listing-category-select {
+  display: flex;
+}
+
+.listing-category-select > span {
+  display: inline-block;
+  width: calc(100% - 15px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-select-modal {
+  display: flex;
+  padding: 10px 0;
+}
+
+.categories-select-level-column {
+  width: calc(100% / 3);
+  overflow: hidden;
+}
+
+.categories-select-option {
+  display: flex;
+  align-items: center;
+}
+
+.categories-select-level-column{
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  overflow-x: hidden;
+}
+
+
+[role="dialog"]:has(.category-select-modal) {
+  align-items: start;
+}
+
+[role="dialog"]:has(.category-select-modal) > div {
+  max-width: 90%;
+}
+
+.categories-select-option {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.categories-select-option:hover,
+.categories-select-option.active {
+  color: rgb(99 102 241 / var(--tw-bg-opacity));
+}
+
+.categories-select-option .category-option-image {
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.categories-select-option .category-option-name {
+  display: inline-block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categories-select-option:has(> .category-option-image):has(
+    > .category-option-show-children
+  )
+  .category-option-name {
+  width: calc(100% - 45px);
+}
+
+.categories-select-option:has(> .category-option-image) .category-option-name {
+  width: calc(100% - 30px);
+}
+
+.categories-select-option:has(> .category-option-show-children)
+  .category-option-name {
+  width: calc(100% - 15px);
+}
+
+.category-select-modal:has(.categories-select-level-column:nth-of-type(2))
+  .categories-select-level-column:nth-of-type(1),
+.category-select-modal:has(.categories-select-level-column:nth-of-type(3))
+  .categories-select-level-column:nth-of-type(2) {
+  border-right: 1px solid;
+  border-color: rgb(226 232 240);
+}
+
+.categories-select-level-column:nth-of-type(3),
+.categories-select-level-column:nth-of-type(2) {
+  border-left: 1px solid;
+  border-color: rgb(226 232 240);
 }
 
 @media (min-width: 640px) {
