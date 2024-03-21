@@ -99,7 +99,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             />
           </button>
           {/* Logo */}
-          <Link href="/" className="block w-full">
+          <Link href="/" className="hidden lg:block w-full">
             <div className="adaptive-logo-image" />
           </Link>
         </div>
