@@ -265,7 +265,7 @@ const EditPhotosSection = ({
             <div
               className="dropzone add-listings-box"
               {...getRootPropsPopup()}
-              style={{ marginBottom: "15px" }}
+              style={{ marginBottom: "25px" }}
             >
               {!photoPopupPhoto && !photoPopupLink && (
                 <div className="gallery-flex form-group">

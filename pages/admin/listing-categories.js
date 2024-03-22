@@ -454,8 +454,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
             <CategoryList
               checkCategoryListingDoubling={checkCategoryListingDoubling}
-              deletePopupMessage={
-                "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
+              getDeletePopupMessage={(name) =>
+                `Are you sure you want to delete category <b>${name}</b>?<br/>(all subcategories will be deleted too)<br/>Please select the category into which the listings of the current category will move:`
               }
               parentOptions={firstLevelOptions}
               canCreate={true}
@@ -465,8 +465,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
             <CategoryList
               checkCategoryListingDoubling={checkCategoryListingDoubling}
-              deletePopupMessage={
-                "Are you sure you want to delete this category?<br/> (all subcategories will be deleted too)"
+              getDeletePopupMessage={(name) =>
+                `Are you sure you want to delete category <b>${name}</b>?<br/> (all subcategories will be deleted too)<br/>Please select the category into which the listings of the current category will move:`
               }
               parentOptions={secondLevelOptions}
               name="Second Level"
@@ -477,8 +477,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
             <CategoryList
               checkCategoryListingDoubling={checkCategoryListingDoubling}
-              deletePopupMessage={
-                "Are you sure you want to delete this category?"
+              getDeletePopupMessage={(name) =>
+                `Are you sure you want to delete category <b>${name}</b>?<br/>Please select the category into which the listings of the current category will move:`
               }
               parentOptions={thirdLevelOptions}
               name="Third Level"
