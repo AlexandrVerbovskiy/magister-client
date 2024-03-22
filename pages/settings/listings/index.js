@@ -252,12 +252,15 @@ const ListingList = (pageProps) => {
 
               <div className="tab-content">
                 <div className="tab-pane fade show active" id="all-listing">
-                  <div className="row">
+                  <div
+                    className="row"
+                    style={{ alignItems: "stretch", gridRowGap: "20px" }}
+                  >
                     {listings.map((listing) => {
                       return (
                         <div
                           key={listing.id}
-                          className="col-xl-4 col-lg-6 col-md-6"
+                          className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
                         >
                           <div className="single-listings-box">
                             <div className="listings-image">
