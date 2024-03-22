@@ -300,6 +300,10 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
 }
 
+.category-image-parent{
+  overflow: hidden;
+}
+
 .category-image-parent img {
   border-radius: 0 !important;
 }
