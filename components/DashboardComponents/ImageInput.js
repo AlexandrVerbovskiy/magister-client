@@ -25,6 +25,7 @@ const ImageInput = ({
   const handleChange = (e) => {
     setError(null);
     const img = e.target.files[0];
+    if (!img) return;
 
     if (img.size > fileSizeLimit) {
       setError("File can't be larger than " + fileSizeLimit + " bytes");

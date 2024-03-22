@@ -11,6 +11,7 @@ export { default as leveliseCategories } from "./leveliseCategories";
 export { default as onCurrentUserLocation } from "./onCurrentUserLocation";
 export { default as uniqueImageId } from "./uniqueImageId";
 export { default as convertToSelectPopupCategories } from "./convertToSelectPopupCategories";
+export { default as isClickedOnVisualImagePart } from "./isClickedOnVisualImagePart";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";
