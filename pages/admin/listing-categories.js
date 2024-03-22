@@ -164,11 +164,10 @@ const ListingCategories = ({ categories: baseCategories }) => {
             "Cannot create two identical categories";
           hasError = true;
 
-          Object.keys(names).forEach(
-            (localId) =>
-              (localIdErrors[localId] =
-                "Cannot create two identical categories")
-          );
+          Object.keys(names).forEach((localId) => {
+            if (names[localId] == category.name)
+              localIdErrors[localId] = "Cannot create two identical categories";
+          });
 
           return;
         }
