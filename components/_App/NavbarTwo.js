@@ -51,7 +51,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [sticky, setSticky] = useState(window.scrollY >= 80);
+  const [sticky, setSticky] = useState(true);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
@@ -77,6 +77,10 @@ const NavbarTwo = ({ canShowSearch = true }) => {
       setSticky(false);
     }
   };
+
+  useEffect(()=>{
+    showStickyMenu()
+  }, [])
 
   if (typeof window !== "undefined") {
     // browser code
