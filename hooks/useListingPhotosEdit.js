@@ -114,6 +114,11 @@ const useListingPhotoEdit = () => {
         }
       }
     } else {
+      if (!photoPopupLink) {
+        setPhotoPopupError("Link is required");
+        return;
+      }
+
       let found = null;
       let date = Date.now();
       let localId = uniqueImageId();
