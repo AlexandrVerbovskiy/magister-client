@@ -12,11 +12,14 @@ function DropdownProfile({ align }) {
   const router = useRouter();
   const {
     success: mainSuccess,
-    user,
+    sessionUser,
     error: mainError,
   } = useContext(IndiceContext);
-  const name = user ? user.name : "";
-  const photo = user && user.photo ? getFilePath(user.photo) : STATIC.defaultPhotoLink;
+  const name = sessionUser ? sessionUser.name : "";
+  const photo =
+    sessionUser && sessionUser.photo
+      ? getFilePath(sessionUser.photo)
+      : STATIC.defaultPhotoLink;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 

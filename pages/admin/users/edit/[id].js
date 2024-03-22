@@ -24,7 +24,7 @@ const UserEdit = ({ editableUser }) => {
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
   const editableUser = await getFullUserById(id, baseSideProps.authToken);
-  const currentUser = baseSideProps.user;
+  const currentUser = baseSideProps.sessionUser;
 
   if (currentUser.id === editableUser.id) {
     throw new Error("Permission denied");

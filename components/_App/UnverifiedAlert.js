@@ -3,13 +3,13 @@ import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
 
 const UnverifiedAlert = ({ statusCode }) => {
-  const { user } = useContext(IndiceContext);
+  const { sessionUser } = useContext(IndiceContext);
   const router = useRouter();
 
   if (
     statusCode ||
-    !user ||
-    user.verified ||
+    !sessionUser ||
+    sessionUser.verified ||
     router.asPath.includes("/settings/") ||
     router.asPath.includes("/admin/")
   )

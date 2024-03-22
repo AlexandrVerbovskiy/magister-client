@@ -37,7 +37,7 @@ const TableItem = ({
   eventName,
   createdAt,
 }) => {
-  const { user } = useContext(IndiceContext);
+  const { sessionUser } = useContext(IndiceContext);
 
   return (
     <tr>
@@ -48,10 +48,10 @@ const TableItem = ({
         {eventName}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        {user.id != userId && (
+        {sessionUser.id != userId && (
           <Link href={`/admin/users/edit/${userId}`}>{userEmail}</Link>
         )}
-        {user.id == userId && userEmail}
+        {sessionUser.id == userId && userEmail}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-semibold">

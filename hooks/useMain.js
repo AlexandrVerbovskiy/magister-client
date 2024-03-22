@@ -162,7 +162,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
   return {
     authToken,
     updateUserFields,
-    user,
+    sessionUser: user,
     onLogin,
     isAuth,
     isAdmin,

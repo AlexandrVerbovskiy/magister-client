@@ -39,7 +39,7 @@ const ProfileEdit = () => {
     success,
     setLoading,
     updateUserFields,
-    user,
+    sessionUser,
     authToken,
   } = useContext(IndiceContext);
 
@@ -124,15 +124,15 @@ const ProfileEdit = () => {
   });
 
   const userToState = () => ({
-    name: user?.name ?? "",
-    phone: user?.phone ?? "",
-    facebookUrl: user?.facebookUrl ?? "",
-    linkedinUrl: user?.linkedinUrl ?? "",
-    instagramUrl: user?.instagramUrl ?? "",
-    twitterUrl: user?.twitterUrl ?? "",
-    briefBio: user?.briefBio ?? "",
-    contactDetails: user?.contactDetails ?? "",
-    placeWork: user?.placeWork ?? "",
+    name: sessionUser?.name ?? "",
+    phone: sessionUser?.phone ?? "",
+    facebookUrl: sessionUser?.facebookUrl ?? "",
+    linkedinUrl: sessionUser?.linkedinUrl ?? "",
+    instagramUrl: sessionUser?.instagramUrl ?? "",
+    twitterUrl: sessionUser?.twitterUrl ?? "",
+    briefBio: sessionUser?.briefBio ?? "",
+    contactDetails: sessionUser?.contactDetails ?? "",
+    placeWork: sessionUser?.placeWork ?? "",
   });
 
   const hasChanges = () => {
@@ -143,7 +143,7 @@ const ProfileEdit = () => {
   };
 
   const initUser = () => {
-    const userPhoto = user.photo;
+    const userPhoto = sessionUser.photo;
 
     if (userPhoto) {
       setPhotoUrl(getFilePath(userPhoto));
@@ -263,7 +263,7 @@ const ProfileEdit = () => {
 
         const newData = { ...info };
 
-        if (info.phone != (user.phone ?? "")) {
+        if (info.phone != (sessionUser.phone ?? "")) {
           newData["photoVerified"] = false;
         }
 
@@ -355,7 +355,7 @@ const ProfileEdit = () => {
   const handleVerifyPhoneClick = async () => {
     const userInfo = userToState();
 
-    if (userInfo.phone == phone && user.phoneVerified) return;
+    if (userInfo.phone == phone && sessionUser.phoneVerified) return;
 
     const resPhoneValidate = validatePhoneNumber(phone);
 
@@ -405,13 +405,13 @@ const ProfileEdit = () => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!sessionUser) return;
 
     initUser();
     setLoading(false);
-  }, [user]);
+  }, [sessionUser]);
 
-  if (!user) return <></>;
+  if (!sessionUser) return <></>;
 
   const profileFormSection = (
     <ProfileSection
@@ -422,7 +422,7 @@ const ProfileEdit = () => {
         setName,
         nameError,
         setNameError,
-        user,
+        user: sessionUser,
         phone,
         setPhone,
         setPhoneError,
@@ -490,7 +490,9 @@ const ProfileEdit = () => {
   );
 
   const securityFormSection = (
-    <SecuritySection formInfo={{ handleTwoFactorAuthChange, user }} />
+    <SecuritySection
+      formInfo={{ handleTwoFactorAuthChange, user: sessionUser }}
+    />
   );
 
   return (
@@ -559,7 +561,7 @@ const ProfileEdit = () => {
           </ol>
         </div>
 
-        {user.hasPasswordAccess && (
+        {sessionUser.hasPasswordAccess && (
           <div className="row">
             <div className="col-lg-6 col-md-12">{profileFormSection}</div>
 
@@ -570,7 +572,7 @@ const ProfileEdit = () => {
           </div>
         )}
 
-        {!user.hasPasswordAccess && (
+        {!sessionUser.hasPasswordAccess && (
           <div className="row">
             <div className="col-12">{profileFormSection}</div>
           </div>
@@ -581,7 +583,7 @@ const ProfileEdit = () => {
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  if (baseSideProps.user.needRegularViewInfoForm) {
+  if (baseSideProps.sessionUser.needRegularViewInfoForm) {
     noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
 

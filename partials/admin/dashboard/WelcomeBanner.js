@@ -3,8 +3,8 @@ import { IndiceContext } from "../../../contexts";
 import { timeName } from "../../../utils";
 
 function WelcomeBanner() {
-  const { user } = useContext(IndiceContext);
-  const name = user?user.name : "";
+  const { sessionUser } = useContext(IndiceContext);
+  const name = sessionUser?.name ?? "";
   const dayPart = timeName();
 
   return (

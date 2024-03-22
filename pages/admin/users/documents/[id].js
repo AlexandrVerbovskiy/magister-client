@@ -1,13 +1,13 @@
 import React, { useState,  useContext } from "react";
 import { useRouter } from "next/router";
-import { changeVerified, getUserDocumentsPageOption } from "../../../services";
-import { IndiceContext } from "../../../contexts";
-import Sidebar from "../../../partials/admin/Sidebar";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import Header from "../../../partials/admin/Header";
-import { useAdminPage } from "../../../hooks";
-import DocumentList from "../../../components/admin/Users/DocumentList";
-import { supportSideProps } from "../../../middlewares";
+import { changeVerified, getUserDocumentsPageOption } from "../../../../services";
+import { IndiceContext } from "../../../../contexts";
+import Sidebar from "../../../../partials/admin/Sidebar";
+import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
+import Header from "../../../../partials/admin/Header";
+import { useAdminPage } from "../../../../hooks";
+import DocumentList from "../../../../components/admin/Users/DocumentList";
+import { supportSideProps } from "../../../../middlewares";
 
 const UserDocuments = ({ documents, user: baseUser }) => {
   const { error, success, authToken } = useContext(IndiceContext);
