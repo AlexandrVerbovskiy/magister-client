@@ -76,6 +76,8 @@ const EditForm = ({ listing, categories, save }) => {
     setFileError,
     photoPopupError,
     setPhotoPopupError,
+    linkSuccessPhoto,
+    successLoadLinkPhoto,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
@@ -661,6 +663,8 @@ const EditForm = ({ listing, categories, save }) => {
                         setFileError={setFileError}
                         photoPopupError={photoPopupError}
                         setPhotoPopupError={setPhotoPopupError}
+                        linkSuccessPhoto={linkSuccessPhoto}
+                        successLoadLinkPhoto={successLoadLinkPhoto}
                       />
 
                       <section>

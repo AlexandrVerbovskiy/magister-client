@@ -172,10 +172,7 @@ function DropdownClassicAjax({
             onChange={(e) => handleChangeSearchTerm(e.target.value)}
           />
 
-          <div
-            className="select-options-list"
-            style={{ maxHeight: "200px", overflow: "auto" }}
-          >
+          <div className="select-options-list">
             {options.map((option) => {
               const disabled = option["active"] === false;
 

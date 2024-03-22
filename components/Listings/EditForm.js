@@ -81,6 +81,8 @@ const EditForm = ({
     setFileError,
     photoPopupError,
     setPhotoPopupError,
+    linkSuccessPhoto,
+    successLoadLinkPhoto,
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
@@ -683,6 +685,8 @@ const EditForm = ({
           setFileError={setFileError}
           photoPopupError={photoPopupError}
           setPhotoPopupError={setPhotoPopupError}
+          linkSuccessPhoto={linkSuccessPhoto}
+          successLoadLinkPhoto={successLoadLinkPhoto}
         />
 
         <div className="add-listings-box">

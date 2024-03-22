@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { uniqueImageId, validateSmallText } from "../utils";
+import React, { useEffect, useState } from "react";
+import { uniqueImageId, validateBigText } from "../utils";
 
 const useListingPhotoEdit = () => {
   const [files, setFiles] = useState([]);
   const [linkFiles, setLinkFiles] = useState([]);
   const [fileError, setFileError] = useState(null);
+  const [linkSuccessPhoto, setLinkSuccessPhoto] = useState(false);
+
+  useEffect(() => setLinkSuccessPhoto(false), [linkFiles]);
 
   const removeFile = (localIdToRemove) => {
     const newFiles = files.filter((file) => file.localId !== localIdToRemove);
@@ -114,6 +117,11 @@ const useListingPhotoEdit = () => {
         }
       }
     } else {
+      if (!linkSuccessPhoto) {
+        setPhotoPopupError("Image wasn't found");
+        return;
+      }
+
       if (!photoPopupLink) {
         setPhotoPopupError("Link is required");
         return;
@@ -124,8 +132,8 @@ const useListingPhotoEdit = () => {
       let localId = uniqueImageId();
       let id = null;
 
-      if (validateSmallText(photoPopupLink) !== true) {
-        setPhotoPopupError(validateSmallText(photoPopupLink));
+      if (validateBigText(photoPopupLink) !== true) {
+        setPhotoPopupError(validateBigText(photoPopupLink));
         success = false;
         return;
       }
@@ -201,6 +209,8 @@ const useListingPhotoEdit = () => {
     setFileError,
     photoPopupError,
     setPhotoPopupError,
+    linkSuccessPhoto,
+    successLoadLinkPhoto: () => setLinkSuccessPhoto(true),
   };
 };
 
