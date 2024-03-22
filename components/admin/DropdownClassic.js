@@ -103,7 +103,6 @@ function DropdownClassic({
 
           <div
             className="select-options-list"
-            style={{ maxHeight: "200px", overflow: "auto" }}
           >
             {filteredOptions.map((option) => {
               const disabled = option["active"] === false;

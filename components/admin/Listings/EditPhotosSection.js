@@ -70,6 +70,8 @@ const EditPhotosSection = ({
   setFileError,
   photoPopupError,
   setPhotoPopupError,
+  linkSuccessPhoto,
+  successLoadLinkPhoto,
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
@@ -264,7 +266,18 @@ const EditPhotosSection = ({
 
                     {photoPopupLink.length > 0 && (
                       <div className="bg-gray-100 invoice-btn-box gallery-flex form-group mt-2">
-                        <img src={photoPopupLink} />
+                        <img
+                          onLoad={successLoadLinkPhoto}
+                          style={
+                            linkSuccessPhoto
+                              ? {}
+                              : {
+                                  width: "20px",
+                                  height: "20px",
+                                }
+                          }
+                          src={photoPopupLink}
+                        />
                       </div>
                     )}
                   </div>
