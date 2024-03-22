@@ -16836,7 +16836,7 @@ Preloader Area CSS
 }
 
 .document-view .image-box {
-  height: calc(100% - 42px);
+  height: 300px;
   width: 100%;
   display: flex;
   max-width: 300px;
@@ -16845,6 +16845,7 @@ Preloader Area CSS
   align-items: center;
   background-color: #f8f8f8;
   justify-content: center;
+  overflow: hidden;
 }
 
 .view-picture-parent {
