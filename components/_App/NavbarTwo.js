@@ -51,7 +51,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [sticky, setSticky] = useState(false);
+  const [sticky, setSticky] = useState(window.scrollY >= 80);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
