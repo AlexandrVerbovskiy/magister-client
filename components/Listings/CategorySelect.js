@@ -17,6 +17,9 @@ const CategorySelect = ({
       <div
         className="form-control d-flex align-items-center cursor-pointer"
         onClick={() => setActive(true)}
+        style={{
+          maxWidth: "100%",
+        }}
       >
         {selectedCategoryInfo.image && (
           <img
@@ -27,7 +30,9 @@ const CategorySelect = ({
             src={getFilePath(selectedCategoryInfo.image)}
           />
         )}
-        <span>{selectedCategoryInfo.name ?? ""}</span>
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+          {selectedCategoryInfo.name ?? ""}
+        </span>
       </div>
 
       <ErrorSpan error={categoryError} />

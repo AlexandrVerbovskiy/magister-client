@@ -70,20 +70,31 @@ const useListingPhotoEdit = () => {
       }
 
       if (photoPopupLocalFileId && !found) {
-        const file = linkFiles.filter(
-          (file) => file.localId == photoPopupLocalFileId
-        )[0];
+        if (photoPopupPhoto) {
+          const file = linkFiles.filter(
+            (file) => file.localId == photoPopupLocalFileId
+          )[0];
 
-        if (file) {
-          date = file.date;
-          localId = file.localId;
-          id = file.id;
+          if (file) {
+            date = file.date;
+            localId = file.localId;
+            id = file.id;
+          }
+
+          const newLinkFiles = linkFiles.filter(
+            (file) => file.localId != photoPopupLocalFileId
+          );
+          setLinkFiles(newLinkFiles);
+        } else {
+          const newLinkFiles = linkFiles.map((file) => {
+            if (file.localId != photoPopupLocalFileId) return file;
+
+            found = { ...file, link: photoPopupLink, type: "storage" };
+            return found;
+          });
+
+          setLinkFiles(newLinkFiles);
         }
-
-        const newLinkFiles = linkFiles.filter(
-          (file) => file.localId != photoPopupLocalFileId
-        );
-        setLinkFiles(newLinkFiles);
       }
 
       if (!photoPopupLocalFileId || !found) {

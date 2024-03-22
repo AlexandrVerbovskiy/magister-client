@@ -15,7 +15,7 @@ const CategoryList = ({
   parentOptions = [{ value: "", title: "-", default: true }],
   disabledReason = null,
   canCreate = null,
-  deletePopupMessage = null,
+  getDeletePopupMessage = null,
 }) => {
   if (canCreate === null) canCreate = parentOptions.length > 0;
 
@@ -61,7 +61,7 @@ const CategoryList = ({
               <section className="flex gap-y-4 flex-col">
                 {list.map((elem) => (
                   <CategoryListItem
-                    deletePopupMessage={deletePopupMessage}
+                    deletePopupMessage={getDeletePopupMessage(elem.name)}
                     parentOptions={parentOptions}
                     key={elem.localId}
                     categories={categories}
