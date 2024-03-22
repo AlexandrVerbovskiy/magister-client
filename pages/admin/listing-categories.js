@@ -66,6 +66,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
           parentId,
           parentLocalId,
           parentName,
+          isNew: false,
         });
       });
     });
@@ -192,7 +193,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
     return hasError;
   };
 
-  const handleRemove = ({ localId, newChildCategory }) => {
+  const handleRemove = ({ localId, newChildCategory = null }) => {
     const firstSecondLevelIdsToDelete = [];
     const categoriesToDelete = [];
 
@@ -218,38 +219,54 @@ const ListingCategories = ({ categories: baseCategories }) => {
       (category) => category.localId
     );
 
-    setReplaceDeleteInfosCategories((prev) => {
-      prev = prev.map((elem) =>
-        categoriesToDeleteIds.includes(elem.newChildCategory.localId)
-          ? { ...elem, newChildCategory }
-          : elem
-      );
+    if (newChildCategory) {
+      setReplaceDeleteInfosCategories((prev) => {
+        prev = prev.map((elem) =>
+          categoriesToDeleteIds.includes(elem.newChildCategory.localId)
+            ? { ...elem, newChildCategory }
+            : elem
+        );
 
-      Object.keys(categories).forEach((key) =>
-        categories[key].forEach((category) => {
-          if (categoriesToDeleteIds.includes(category.localId) && category.id) {
-            prev = [
-              {
-                deletedId: category.id,
-                deletedName: category.name,
-                newChildCategory,
-              },
-              ...prev,
-            ];
-          }
-        })
-      );
+        Object.keys(categories).forEach((key) =>
+          categories[key].forEach((category) => {
+            if (
+              categoriesToDeleteIds.includes(category.localId) &&
+              category.id
+            ) {
+              prev = [
+                {
+                  deletedId: category.id,
+                  deletedName: category.name,
+                  newChildCategory,
+                },
+                ...prev,
+              ];
+            }
+          })
+        );
 
-      return prev;
-    });
+        return prev;
+      });
+    }
 
     setCategories((prev) => {
       const res = { firstLevel: [], secondLevel: [], thirdLevel: [] };
 
       Object.keys(prev).forEach((level) => {
-        res[level] = prev[level].filter(
-          (category) => !categoriesToDeleteIds.includes(category.localId)
-        );
+        res[level] = prev[level]
+          .filter(
+            (category) => !categoriesToDeleteIds.includes(category.localId)
+          )
+          .map((category) => {
+            if (
+              newChildCategory &&
+              category.localId === newChildCategory.localId
+            ) {
+              return { ...category, isNew: false };
+            } else {
+              return category;
+            }
+          });
       });
 
       return res;
@@ -290,6 +307,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
           parentId: null,
           popular: false,
           localId: uniqueId(),
+          isNew: true,
         },
         ...res[level],
       ];
