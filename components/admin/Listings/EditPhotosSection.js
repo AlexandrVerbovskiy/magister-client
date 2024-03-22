@@ -28,21 +28,18 @@ const ImageView = ({
   };
 
   return (
-    <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
-      <div
-        className="bg-gray-100 border shadow-md flex flex-col form-group"
-        onClick={handleImageClick}
-      >
-        <img src={path} className="object-cover w-full h-auto" />
+    <div className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
+      <div className="flex flex-col form-group" onClick={handleImageClick}>
+        <img src={path} />
         <input name="image[]" {...inputProps} className="mt-2" />
-        <button
-          type="button"
-          className="remove-file-btn bg-indigo-500 text-white px-4 py-2 mt-2 rounded-md hover:bg-indigo-600"
-          onClick={handleRemoveClick}
-        >
-          +
-        </button>
       </div>
+      <button
+        type="button"
+        className="remove-file-btn bg-indigo-500 text-white px-4 py-2 mt-2 rounded-md hover:bg-indigo-600"
+        onClick={handleRemoveClick}
+      >
+        +
+      </button>
     </div>
   );
 };
@@ -204,8 +201,8 @@ const EditPhotosSection = ({
           ))}
 
           {files.length + linkFiles.length < 5 && (
-            <div className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
-              <div className="bg-gray-100 border rounded-lg shadow-md flex flex-col form-group">
+            <div className="bg-gray-100 border rounded-lg shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
+              <div className="flex flex-col form-group">
                 <div
                   className="add-more-image p-4 cursor-pointer"
                   onClick={(e) => {
@@ -287,7 +284,7 @@ const EditPhotosSection = ({
                     )}
 
                     {!photoPopupPhoto && photoPopupLink && (
-                      <div className="invoice-btn-box gallery-flex form-group bg-gray-100 cursor-pointer">
+                      <div className="invoice-btn-box gallery-flex form-group bg-gray-100 border rounded-lg shadow-md cursor-pointer">
                         <img
                           src={getListingImageByType(photoPopupLink, "storage")}
                         />
@@ -299,7 +296,7 @@ const EditPhotosSection = ({
                     )}
 
                     {photoPopupPhoto && (
-                      <div className="invoice-btn-box gallery-flex form-group bg-gray-100 cursor-pointer">
+                      <div className="invoice-btn-box gallery-flex form-group bg-gray-100 border rounded-lg shadow-md cursor-pointer">
                         <img src={photoPopupPhoto.preview} />
                         <input
                           name="modalPhotoInput"
