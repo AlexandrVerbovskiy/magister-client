@@ -1,7 +1,16 @@
+import { useRef } from "react";
 import STATIC from "../../static";
+import { isClickedOnVisualImagePart } from "../../utils";
 
 const ImagePopup = ({ open, close, photoUrl }) => {
+  const supportImageRef = useRef(null);
   if (!open) return;
+
+  const handleImageClick = (e) => {
+    if (!isClickedOnVisualImagePart(e, supportImageRef.current)) {
+      close();
+    }
+  };
 
   return (
     <div className="view-picture-parent bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -13,14 +22,26 @@ const ImagePopup = ({ open, close, photoUrl }) => {
       >
         <div
           className="modal-dialog modal-dialog-centered modal-xl"
-          style={{ maxWidth: "42rem" }}
+          style={{ height: "90%", width: "90%", overflow: "hidden" }}
         >
-          <div className="modal-content">
-            <div className="modal-body">
+          <div
+            className="modal-content w-100 h-100"
+            style={{ background: "transparent", border: "0" }}
+          >
+            <div className="modal-body w-100 h-100">
               <img
+                onClick={handleImageClick}
                 src={photoUrl ?? STATIC.defaultPhotoLink}
                 alt="image"
-                className="img-fluid"
+                className="img-fluid w-100 h-100"
+                style={{
+                  objectFit: "contain",
+                }}
+              />
+              <img
+                ref={supportImageRef}
+                className="d-none"
+                src={photoUrl ?? STATIC.defaultPhotoLink}
               />
             </div>
           </div>

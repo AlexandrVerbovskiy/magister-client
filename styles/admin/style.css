@@ -146,6 +146,12 @@ Preloader Area CSS
   background-color: #f8f8f8;
 }
 
+.image-box img{
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
 .relative-label {
   position: absolute;
   top: 0;

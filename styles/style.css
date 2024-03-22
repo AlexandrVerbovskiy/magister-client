@@ -13877,10 +13877,12 @@ Dashboard CSS
   border-radius: 5px;
   width: 100%;
 }
-.my-profile-box .profile-box .image-box img {
+
+.image-box img {
   border-radius: 5px;
+  height: 100%;
   width: 100%;
-  max-height: 300px;
+  object-fit: contain;
 }
 
 .my-profile-box .profile-box .file-upload {
@@ -16842,6 +16844,7 @@ Preloader Area CSS
   position: relative;
   align-items: center;
   background-color: #f8f8f8;
+  justify-content: center;
 }
 
 .view-picture-parent {
