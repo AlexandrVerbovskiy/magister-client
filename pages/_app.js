@@ -86,7 +86,7 @@ function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true);
 
   const pageType = pageProps.pageType;
-  const user = pageProps.user;
+  const sessionUser = pageProps.sessionUser;
   const authToken = pageProps.authToken;
   const categories = pageProps.categories ?? {};
 
@@ -100,7 +100,7 @@ function MyApp({ Component, pageProps }) {
     <SessionProvider>
       <IndiceProvider
         authToken={authToken}
-        userInfo={user}
+        userInfo={sessionUser}
         dopProps={{ setLoading }}
         categories={categories}
       >

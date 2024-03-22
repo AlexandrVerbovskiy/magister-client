@@ -26,7 +26,12 @@ const SidebarGroupedLinks = ({
   }, [router.asPath]);
 
   useEffect(() => {
-    setBodyMaxHeight(ulRef.current.scrollHeight);
+    const styles = window.getComputedStyle(ulRef.current);
+    const margin =
+      parseFloat(styles["marginTop"]) + parseFloat(styles["marginBottom"]);
+
+    const height = Math.ceil(ulRef.current.offsetHeight + margin);
+    setBodyMaxHeight(height);
   }, [ulRef.current]);
 
   return (

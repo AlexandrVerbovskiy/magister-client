@@ -52,7 +52,8 @@ const RoleSpan = ({ role, onClick = () => {} }) => {
 };
 
 const EmailSpan = ({ email, verified }) => {
-  let className = "text-left cursor-pointer overflow-separate overflow-separate";
+  let className =
+    "text-left cursor-pointer overflow-separate overflow-separate";
   let tooltipText = "";
 
   if (verified) {
@@ -110,7 +111,7 @@ const TableItem = ({
   onChangeActive,
   onChangeVerified,
 }) => {
-  const { user: currentUser, isAdmin } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
 
   const handleRoleClick = () => {
@@ -129,7 +130,7 @@ const TableItem = ({
     setRolePopupActive(false);
   };
 
-  const isCurrent = currentUser?.id == id;
+  const isCurrent = sessionUser?.id == id;
 
   const handleChangeActive = () => {
     if (isCurrent || role === "admin") return;
@@ -217,7 +218,7 @@ const TableItem = ({
         <div className="flex text-left">
           {!isCurrent && role !== "admin" && (
             <div className="mr-2 flex items-center">
-              <Documents href={`/admin/user-documents/${id}`} />
+              <Documents href={`/admin/users/documents/${id}`} />
             </div>
           )}
 

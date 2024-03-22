@@ -19,10 +19,10 @@ const DocumentsVerification = ({
   lastAnswerDescription,
 }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading, user, authToken, setVerified } =
+  const { success, setLoading, sessionUser, authToken, setVerified } =
     useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
-  const [userVerified, setUserVerified] = useState(user.verified);
+  const [userVerified, setUserVerified] = useState(sessionUser.verified);
   const [activeReverifiedModal, setActiveReverifiedModal] = useState(false);
 
   const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
@@ -286,7 +286,7 @@ const DocumentsVerification = ({
             <div className="my-profile-box document-verification">
               <h3>Documents</h3>
 
-              {!user?.verified && lastAnswerDescription && (
+              {!sessionUser?.verified && lastAnswerDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
                     <div

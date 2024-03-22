@@ -12,11 +12,11 @@ const DashboardNavbar = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const { displaySideMenu, toggleSideMenu, user, error } =
+  const { displaySideMenu, toggleSideMenu, sessionUser, error } =
     useContext(IndiceContext);
 
   const needVerifyAccount = (e) => {
-    if (!user.verified) {
+    if (!sessionUser.verified) {
       e.preventDefault();
       error.set(`You need to be verified to rent and rent tools. To verify, send the
       necessary data via the "Documents Verification" page`);
@@ -76,7 +76,7 @@ const DashboardNavbar = () => {
                 href="/settings/listings/"
                 className={`nav-link ${
                   currentPath.includes("/settings/listings/") && "active"
-                }  ${!user.verified ? "disabled" : ""}`}
+                }  ${!sessionUser.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">

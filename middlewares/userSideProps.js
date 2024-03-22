@@ -3,18 +3,18 @@ import { getMyInfo } from "../services";
 import { middlewareCallbackWrapper } from "../utils";
 
 const userSideProps = async (context, callback = null) => {
-  const res = { user: null };
+  const res = { sessionUser: null };
 
   try {
     const resGetSession = await getSession(context);
 
     if (resGetSession) {
       const authToken = resGetSession.user.authToken;
-      const user = await getMyInfo(authToken);
+      const sessionUser = await getMyInfo(authToken);
 
-      if (!user) throw new Error("User not found");
+      if (!sessionUser) throw new Error("User not found");
 
-      res["user"] = user;
+      res["sessionUser"] = sessionUser;
       res["authToken"] = authToken;
     }
   } catch (e) {
@@ -22,7 +22,7 @@ const userSideProps = async (context, callback = null) => {
       context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
     });*/
 
-    return { props: { user: null } };
+    return { props: { sessionUser: null } };
   }
 
   return await middlewareCallbackWrapper({

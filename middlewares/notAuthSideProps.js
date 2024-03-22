@@ -3,9 +3,9 @@ import userSideProps from "./userSideProps";
 
 const notAuthSideProps = async (context, callback = null) => {
   const { props } = await userSideProps(context);
-  const { user } = props;
+  const { sessionUser } = props;
 
-  if (user) {
+  if (sessionUser) {
     return {
       notFound: true,
     };
