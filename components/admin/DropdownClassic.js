@@ -76,7 +76,7 @@ function DropdownClassic({
       <Transition
         show={dropdownOpen}
         tag="div"
-        className="z-10 absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+        className="z-10 absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
         enter="transition ease-out duration-100 transform"
         enterStart="opacity-0 -translate-y-2"
         enterEnd="opacity-100 translate-y-0"
@@ -100,43 +100,49 @@ function DropdownClassic({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           )}
-          {filteredOptions.map((option) => {
-            const disabled = option["active"] === false;
 
-            return (
-              <DropdownClassicOptionWrapper
-                tooltipText={disabledText}
-                disabled={disabled}
-                key={option.value}
-              >
-                <button
-                  tabIndex="0"
-                  className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 ${
-                    disabled ? "cursor-auto " : "cursor-pointer "
-                  }${option.value === selected && "text-indigo-500"}`}
-                  onClick={() => {
-                    if (disabled) return;
-                    setSelected(option.value);
-                    setDropdownOpen(false);
-                  }}
+          <div
+            className="select-options-list"
+            style={{ maxHeight: "200px", overflow: "auto" }}
+          >
+            {filteredOptions.map((option) => {
+              const disabled = option["active"] === false;
+
+              return (
+                <DropdownClassicOptionWrapper
+                  tooltipText={disabledText}
+                  disabled={disabled}
+                  key={option.value}
                 >
-                  <svg
-                    className={`shrink-0 mr-2 fill-current text-indigo-500 ${
-                      option.value !== selected && "invisible"
-                    }`}
-                    width="12"
-                    height="9"
-                    viewBox="0 0 12 9"
+                  <button
+                    tabIndex="0"
+                    className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 ${
+                      disabled ? "cursor-auto " : "cursor-pointer "
+                    }${option.value === selected && "text-indigo-500"}`}
+                    onClick={() => {
+                      if (disabled) return;
+                      setSelected(option.value);
+                      setDropdownOpen(false);
+                    }}
                   >
-                    <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                  </svg>
-                  <span className={disabled ? "text-gray-200" : ""}>
-                    {option.title}
-                  </span>
-                </button>
-              </DropdownClassicOptionWrapper>
-            );
-          })}
+                    <svg
+                      className={`shrink-0 mr-2 fill-current text-indigo-500 ${
+                        option.value !== selected && "invisible"
+                      }`}
+                      width="12"
+                      height="9"
+                      viewBox="0 0 12 9"
+                    >
+                      <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                    </svg>
+                    <span className={disabled ? "text-gray-200" : ""}>
+                      {option.title}
+                    </span>
+                  </button>
+                </DropdownClassicOptionWrapper>
+              );
+            })}
+          </div>
         </div>
       </Transition>
     </div>
