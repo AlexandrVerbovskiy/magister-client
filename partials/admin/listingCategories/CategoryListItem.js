@@ -25,6 +25,7 @@ const CategoryListItem = ({
   onDeleteClick = () => {},
   error = null,
   deletePopupMessage = null,
+  isNew = false,
 }) => {
   const [defaultNewCategory, setDefaultNewCategory] = useState(null);
   const [categoriesToChangeOptions, setCategoriesToChangeOptions] = useState(
@@ -106,6 +107,12 @@ const CategoryListItem = ({
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();
+
+    if (isNew) {
+      onDeleteClick();
+      setNewChildCategory(null);
+      return;
+    }
 
     if (checkHasError()) return;
 
