@@ -11,7 +11,8 @@ const UpdateListing = ({
   lastRequestInfo = {},
 }) => {
   const baseCanSendRequest =
-    !baseListing.approved && (!lastRequestInfo || lastRequestInfo.approved !== null);
+    !baseListing.approved &&
+    (!lastRequestInfo || lastRequestInfo.approved !== null);
   const baseRejectDescription = lastRequestInfo.rejectDescription;
 
   const [listing, setListing] = useState(baseListing);
