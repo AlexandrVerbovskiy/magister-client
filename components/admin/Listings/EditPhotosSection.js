@@ -75,9 +75,9 @@ const EditPhotosSection = ({
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
-      maxFiles: env.MAX_FILE_SIZE,
+      maxSize: env.MAX_FILE_SIZE,
       accept: acceptImageOptions,
-      onDrop: (acceptedFiles) => {
+      onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
           0,
           5 - files.length - linkFiles.length
@@ -93,19 +93,23 @@ const EditPhotosSection = ({
             })
           ),
         ]);
-        setFileError(null);
+
+        if (fileRejections.length > 0) {
+          setFileError(fileRejections[0]["errors"][0].message);
+        } else {
+          setFileError(null);
+        }
       },
     });
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: acceptImageOptions,
-      onDrop: (acceptedFiles) => {
+      maxSize: env.MAX_FILE_SIZE,
+      onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
         if (newFiles.length > 0) {
-          setPhotoPopupError(null);
-
           setPhotoPopupPhoto(
             Object.assign(newFiles[0], {
               preview: URL.createObjectURL(newFiles[0]),
@@ -115,6 +119,12 @@ const EditPhotosSection = ({
           );
         } else {
           setPhotoPopupPhoto(null);
+        }
+
+        if (fileRejections.length > 0) {
+          setPhotoPopupError(fileRejections[0]["errors"][0].message);
+        } else {
+          setPhotoPopupError(null);
         }
       },
     });

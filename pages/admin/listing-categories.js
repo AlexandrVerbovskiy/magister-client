@@ -160,6 +160,12 @@ const ListingCategories = ({ categories: baseCategories }) => {
           return;
         }
 
+        if (category.name.toLowerCase() === "all") {
+          localIdErrors[category.localId] = "Name cannot be 'All'";
+          hasError = true;
+          return;
+        }
+
         if (Object.values(names).includes(category.name)) {
           localIdErrors[category.localId] =
             "Cannot create two identical categories";
