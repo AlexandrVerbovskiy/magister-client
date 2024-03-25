@@ -78,9 +78,9 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     }
   };
 
-  useEffect(()=>{
-    showStickyMenu()
-  }, [])
+  useEffect(() => {
+    showStickyMenu();
+  }, []);
 
   if (typeof window !== "undefined") {
     // browser code
@@ -515,6 +515,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
       {categoriesLength > 0 && (
         <ListingCategorySelect
+          needAll={true}
           active={activePopup}
           setActive={setActivePopup}
           categories={navbarCategories}

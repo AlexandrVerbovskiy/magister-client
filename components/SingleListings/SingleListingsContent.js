@@ -156,6 +156,7 @@ const SingleListingsContent = ({ listing }) => {
 
                       return (
                         <div
+                          key={image.id}
                           className="col-lg-4 col-md-6"
                           style={{ cursor: "zoom-in" }}
                           onClick={() => setCurrentOpenImg(imgLink)}
@@ -785,6 +786,21 @@ const SingleListingsContent = ({ listing }) => {
               <div className="listings-sidebar">
                 <div className="listings-widget book_listings">
                   <h3>Booking Online</h3>
+                  {listing.minRentalDays && (
+                    <ul style={{ listStyle: "none", padding: "0" }}>
+                      <li>
+                        <i
+                          style={{
+                            fontSize: "20px",
+                            transform: "translateY(3px)",
+                            marginRight: "4px",
+                          }}
+                          className="bx bx-envelope"
+                        ></i>
+                        Min rental:{listing.minRentalDays} days
+                      </li>
+                    </ul>
+                  )}
                   <a href="#" className="default-btn">
                     Book Now
                   </a>

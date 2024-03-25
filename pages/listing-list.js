@@ -11,8 +11,9 @@ const GridListingsFullMap = ({
   items,
   options,
   countItems,
-  canSendCreateNotifyRequest,
   authToken,
+  needSubscriptionNewCategory,
+  hasListings,
 }) => (
   <>
     <NavbarTwo />
@@ -23,7 +24,8 @@ const GridListingsFullMap = ({
       authToken={authToken}
       categories={categories}
       pageProps={{ items, options, countItems }}
-      canSendCreateNotifyRequest={canSendCreateNotifyRequest}
+      needSubscriptionNewCategory={needSubscriptionNewCategory}
+      hasListings={hasListings}
     />
 
     <Footer bgColor="bg-f5f5f5" />

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
 import { getFilePath } from "../../utils";
 
-const CategoryOption = ({ category, active = false, onClick }) => {
+const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
   return (
     <div
       className={`categories-select-option${active ? " active" : ""}`}
       onClick={onClick}
     >
-      {category.image && (
+      {Icon && <Icon />}
+      {!Icon && category.image && (
         <img
           width="25px"
           height="25px"
@@ -33,6 +34,7 @@ const ListingCategorySelect = ({
   onChange,
   setSelectedCategoryInfo = () => {},
   selectedCategoryId = null,
+  needAll = false,
 }) => {
   useEffect(() => {
     let foundCategory = {};
@@ -80,7 +82,31 @@ const ListingCategorySelect = ({
   });
 
   const handleOptionClick = (categoryId, level, hasChild = false) => {
-    if (!hasChild) {
+    if (
+      !hasChild ||
+      (!categoryId &&
+        (level == "firstLevel" || !selectedByLevels["firstLevel"]))
+    ) {
+      onChange(categoryId);
+      setActive(false);
+      setSelectedByLevels({
+        firstLevel: null,
+        secondLevel: null,
+        thirdLevel: null,
+      });
+      return;
+    }
+
+    if (!categoryId) {
+      if (level == "thirdLevel") {
+        categoryId =
+          selectedByLevels["secondLevel"] ?? selectedByLevels["firstLevel"];
+      }
+
+      if (level == "secondLevel") {
+        categoryId = selectedByLevels["firstLevel"];
+      }
+
       onChange(categoryId);
       setActive(false);
       setSelectedByLevels({
@@ -107,6 +133,13 @@ const ListingCategorySelect = ({
     });
   };
 
+  const burgerIcon = () => (
+    <i
+      className="bx bx-menu category-option-show-children"
+      style={{ marginRight: "17px" }}
+    ></i>
+  );
+
   return (
     <BaseModal
       className="category-select-modal"
@@ -114,6 +147,16 @@ const ListingCategorySelect = ({
       toggleActive={() => setActive(false)}
     >
       <div className="categories-select-level-column sidebar-left">
+        {needAll && (
+          <CategoryOption
+            key="all"
+            category={{ image: null, name: "All" }}
+            onClick={() => handleOptionClick(null, "firstLevel", false)}
+            active={false}
+            Icon={burgerIcon}
+          />
+        )}
+
         {categories["firstLevel"].map((category) => (
           <CategoryOption
             key={category.id}
@@ -130,8 +173,18 @@ const ListingCategorySelect = ({
         ))}
       </div>
 
-      {selectedByLevels["firstLevel"] && (
+      {(needAll || selectedByLevels["firstLevel"]) && (
         <div className="categories-select-level-column sidebar-left">
+          {needAll && (
+            <CategoryOption
+              key="all"
+              category={{ image: null, name: "All" }}
+              onClick={() => handleOptionClick(null, "secondLevel", false)}
+              active={false}
+              Icon={burgerIcon}
+            />
+          )}
+
           {categories["secondLevel"]
             .filter(
               (category) => category.parentId == selectedByLevels["firstLevel"]
@@ -153,8 +206,18 @@ const ListingCategorySelect = ({
         </div>
       )}
 
-      {selectedByLevels["secondLevel"] && (
+      {(needAll || selectedByLevels["secondLevel"]) && (
         <div className="categories-select-level-column sidebar-left">
+          {needAll && (
+            <CategoryOption
+              key="all"
+              category={{ image: null, name: "All" }}
+              onClick={() => handleOptionClick(null, "thirdLevel", false)}
+              active={false}
+              Icon={burgerIcon}
+            />
+          )}
+
           {categories["thirdLevel"]
             .filter(
               (category) => category.parentId == selectedByLevels["secondLevel"]

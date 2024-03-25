@@ -8,11 +8,7 @@ import ListingCategorySelect from "./ListingCategorySelect";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 
 const NavbarThree = () => {
-  const {
-    isAuth,
-    isSupport,
-    toggleSideMenu,
-  } = useContext(IndiceContext);
+  const { isAuth, isSupport, toggleSideMenu } = useContext(IndiceContext);
 
   const {
     navbarCategories,
@@ -111,6 +107,7 @@ const NavbarThree = () => {
 
       {categoriesLength > 0 && (
         <ListingCategorySelect
+          needAll={true}
           active={activePopup}
           setActive={setActivePopup}
           categories={navbarCategories}
