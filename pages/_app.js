@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { IndiceProvider } from "../contexts";
 import Layout from "../components/_App/Layout";
 import Loader from "../components/Shared/Loader";
+import GlobalError from "../components/GlobalError/ErrorContent";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
@@ -89,12 +90,19 @@ function MyApp({ Component, pageProps }) {
   const sessionUser = pageProps.sessionUser;
   const authToken = pageProps.authToken;
   const categories = pageProps.categories ?? {};
+  const globalError = pageProps.globalError ?? null;
 
   useImportGlobalStyle({
     type: pageType,
     onStart: () => setLoading(true),
     onEnd: () => setLoading(false),
   });
+
+  if (globalError) {
+    return (
+      <GlobalError status={globalError.status} message={globalError.message} />
+    );
+  }
 
   return (
     <SessionProvider>

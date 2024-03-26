@@ -14,7 +14,7 @@ import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import useNavListingCategories from "../../../hooks/useNavListingCategories";
-import ListingCategorySelect from "../ListingCategorySelect";
+import ListingPopup from "./ListingPopup";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -38,7 +38,6 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const {
     navbarCategories,
-    handleChangeCategory: handleChangePopupCategory,
     handleListingClick,
     categoriesLength,
     activePopup,
@@ -443,12 +442,10 @@ const Navbar = ({ canShowSearch = true }) => {
       )}
 
       {categoriesLength > 0 && (
-        <ListingCategorySelect
-          needAll={true}
+        <ListingPopup
           active={activePopup}
           setActive={setActivePopup}
           categories={navbarCategories}
-          onChange={handleChangePopupCategory}
         />
       )}
 

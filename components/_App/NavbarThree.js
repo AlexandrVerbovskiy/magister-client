@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import ListingLi from "./Navbar/ListingLi";
-import ListingCategorySelect from "./ListingCategorySelect";
+import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 
 const NavbarThree = () => {
@@ -106,12 +106,10 @@ const NavbarThree = () => {
       </div>
 
       {categoriesLength > 0 && (
-        <ListingCategorySelect
-          needAll={true}
+        <ListingPopup
           active={activePopup}
           setActive={setActivePopup}
           categories={navbarCategories}
-          onChange={handleChangePopupCategory}
         />
       )}
     </>

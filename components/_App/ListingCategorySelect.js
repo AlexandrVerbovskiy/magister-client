@@ -2,6 +2,23 @@ import { useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
 import { getFilePath } from "../../utils";
 
+const BurgerIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="25"
+    height="25"
+    fill="currentColor"
+    className="bi bi-list"
+    viewBox="0 0 16 16"
+    style={{ marginRight: "5px" }}
+  >
+    <path
+      fillRule="evenodd"
+      d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+    />
+  </svg>
+);
+
 const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
   return (
     <div
@@ -9,6 +26,7 @@ const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
       onClick={onClick}
     >
       {Icon && <Icon />}
+
       {!Icon && category.image && (
         <img
           width="25px"
@@ -17,6 +35,9 @@ const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
           src={getFilePath(category.image)}
         />
       )}
+
+      {!Icon && !category.image && <div className="category-option-image" />}
+
       <span className="category-option-name">{category.name}</span>
       {category.countChildren ? (
         <i className="bx bx-chevron-right category-option-show-children"></i>
@@ -133,13 +154,6 @@ const ListingCategorySelect = ({
     });
   };
 
-  const burgerIcon = () => (
-    <i
-      className="bx bx-menu category-option-show-children"
-      style={{ marginRight: "17px" }}
-    ></i>
-  );
-
   return (
     <BaseModal
       className="category-select-modal"
@@ -153,7 +167,7 @@ const ListingCategorySelect = ({
             category={{ image: null, name: "All" }}
             onClick={() => handleOptionClick(null, "firstLevel", false)}
             active={false}
-            Icon={burgerIcon}
+            Icon={BurgerIcon}
           />
         )}
 
@@ -181,7 +195,7 @@ const ListingCategorySelect = ({
               category={{ image: null, name: "All" }}
               onClick={() => handleOptionClick(null, "secondLevel", false)}
               active={false}
-              Icon={burgerIcon}
+              Icon={BurgerIcon}
             />
           )}
 
@@ -214,7 +228,7 @@ const ListingCategorySelect = ({
               category={{ image: null, name: "All" }}
               onClick={() => handleOptionClick(null, "thirdLevel", false)}
               active={false}
-              Icon={burgerIcon}
+              Icon={BurgerIcon}
             />
           )}
 

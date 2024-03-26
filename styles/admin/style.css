@@ -413,7 +413,8 @@ div.add-listings-box.dropzone > .gallery-flex {
 
 .categories-select-level-column {
   overflow-y: auto;
-  max-height: calc(100vh - 100px);
+  min-height: 400px !important;
+  max-height: 400px !important;
   overflow-x: hidden;
 }
 
