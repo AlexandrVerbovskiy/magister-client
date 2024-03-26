@@ -235,13 +235,24 @@ const ListingsWithMap = ({
     rebuild({ ...location }, ["lat", "lng"]);
   };
 
+  const categoriesNames = [];
+
+  Object.keys(categories).forEach((level) => {
+    const names = categories[level].map((category) => category.name);
+    categoriesNames.push(...names);
+  });
+
+  console.log(categoriesNames);
+
+  const cityNames = cities.map((city) => city.name);
+
   return (
     <>
       <PopularPlacesFilter
-        selectedCategories={options.categories}
-        selectedCities={options.cities}
-        categories={categories}
-        cities={cities}
+        selectedCategories={selectedCategories}
+        selectedCities={selectedCities}
+        categories={categoriesNames}
+        cities={cityNames}
       />
 
       <div className="listings-area ptb-100">
