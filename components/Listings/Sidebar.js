@@ -3,11 +3,6 @@ import DateInput from "../FormComponents/DateInput";
 import { dateToInputString, leveliseCategories } from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 
-const cities = [
-  { name: "Warrington", value: "Warrington", title: "Warrington" },
-  { name: "Manchester", value: "Manchester", title: "Manchester" },
-];
-
 const Sidebar = ({
   categories: baseCategories,
   selectedCities,
@@ -18,6 +13,7 @@ const Sidebar = ({
   setFromDateFilter,
   toDateFilter,
   setToDateFilter,
+  cities: baseCities,
 }) => {
   const categories = leveliseCategories(baseCategories);
 
@@ -183,7 +179,7 @@ const Sidebar = ({
           title="City"
           open={cityOpen}
           setOpen={setCityOpen}
-          items={cities}
+          items={baseCities}
           selectedItems={selectedCities}
           handleChangeChecked={handleChangeCheckedCity}
           LiItemElement={CityLi}
