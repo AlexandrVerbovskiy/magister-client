@@ -242,8 +242,6 @@ const ListingsWithMap = ({
     categoriesNames.push(...names);
   });
 
-  console.log(categoriesNames);
-
   const cityNames = cities.map((city) => city.name);
 
   return (
