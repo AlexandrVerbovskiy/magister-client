@@ -7,6 +7,7 @@ const usePagination = ({
   getDopProps = null,
   defaultData = null,
   needInit = true,
+  onSendRequest = null,
 }) => {
   const router = useRouter();
   const isFirstRef = useRef(true);
@@ -120,6 +121,10 @@ const usePagination = ({
       countItemsRef.current = gotCountItems;
       updateStateByOption(gotOptions, unusualKeys);
       setItems(gotItems);
+
+      if (onSendRequest) {
+        onSendRequest({ items: gotItems });
+      }
     } catch (e) {
       if (onError) {
         onError(e);

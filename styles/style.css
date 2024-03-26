@@ -17293,7 +17293,7 @@ Preloader Area CSS
 .send-create-listing-category-notification {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   flex-direction: column;
   padding-top: 50px;
 }
@@ -17447,7 +17447,8 @@ Preloader Area CSS
 
 .categories-select-level-column {
   overflow-y: auto;
-  max-height: calc(100vh - 150px);
+  max-height: 400px;
+  max-height: 400px;
   overflow-x: hidden;
 }
 
@@ -17455,9 +17456,31 @@ Preloader Area CSS
   height: 800px;
 }
 
-.listing-list-elem-parent .single-listings-box{
+.listing-list-elem-parent .single-listings-box {
   display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.category-navbar-popup > div {
+  max-width: 800px !important;
+}
+
+.category-navbar-popup .modal-dialog {
+  top: 65px;
+  min-height: auto;
+}
+
+.category-navbar-popup .categories-select-level-column {
+  min-height: 250px !important;
+  max-height: 250px !important;
+}
+
+.category-option-name {
+  line-height: 20px;
+}
+
+.global-error-title {
+  color: #ccd2e0;
 }

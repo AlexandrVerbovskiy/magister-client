@@ -22,7 +22,7 @@ const ListingsWithMap = ({
   categories: baseCategories,
   pageProps: basePageProps,
   needSubscriptionNewCategory = false,
-  hasListings = false,
+  hasListings: baseHasListings,
 }) => {
   const isFirstRef = useRef(true);
   const router = useRouter();
@@ -41,6 +41,7 @@ const ListingsWithMap = ({
   const [canSendCreateNotifyRequest, setCanSendCreateNotifyRequest] = useState(
     needSubscriptionNewCategory
   );
+  const [hasListings, setHasListings] = useState(baseHasListings);
 
   const initCategories = () => {
     const pagePropsCategories = pageProps.options?.categories;
@@ -131,6 +132,9 @@ const ListingsWithMap = ({
     }),
     //defaultData: pageProps,
     needInit: false,
+    onSendRequest: ({ items }) => {
+      setHasListings(items.length > 0);
+    },
   });
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
@@ -298,49 +302,45 @@ const ListingsWithMap = ({
                         </div>
                       ))}
 
-                      {(!hasListings || listings.length == 0) &&
-                        listings.length == 0 &&
-                        canSendCreateNotifyRequest && (
-                          <div className="send-create-listing-category-notification">
-                            <div className="image-parent">
-                              <img src="/images/contact.png" alt="image" />
-                            </div>
-
-                            <div className="description">
-                              Unfortunately, the searched category was not
-                              found.
-                              <br />
-                              It will be added in the future. <br />
-                              Sign up for a notification so you don't miss this
-                              event!
-                            </div>
-
-                            <button
-                              onClick={
-                                handleSendSubscribeNotificationOnCreateCategory
-                              }
-                              className="default-btn"
-                              type="button"
-                            >
-                              Subscribe on update listing categories
-                            </button>
+                      {!hasListings && canSendCreateNotifyRequest && (
+                        <div className="send-create-listing-category-notification">
+                          <div className="image-parent">
+                            <img src="/images/contact.png" alt="image" />
                           </div>
-                        )}
 
-                      {(!hasListings || listings.length == 0) &&
-                        !canSendCreateNotifyRequest && (
-                          <div className="no-listing-found">
-                            <div className="image-parent">
-                              <img src="/images/banner-img1.png" alt="image" />
-                            </div>
-
-                            <div className="description">
-                              Unfortunately, no listings were found for the
-                              specified parameters.
-                              <br /> Try searching for something similar
-                            </div>
+                          <div className="description">
+                            Unfortunately, the searched category was not found.
+                            <br />
+                            It will be added in the future. <br />
+                            Sign up for a notification so you don't miss this
+                            event!
                           </div>
-                        )}
+
+                          <button
+                            onClick={
+                              handleSendSubscribeNotificationOnCreateCategory
+                            }
+                            className="default-btn"
+                            type="button"
+                          >
+                            Subscribe on update listing categories
+                          </button>
+                        </div>
+                      )}
+
+                      {!hasListings && !canSendCreateNotifyRequest && (
+                        <div className="no-listing-found">
+                          <div className="image-parent">
+                            <img src="/images/banner-img1.png" alt="image" />
+                          </div>
+
+                          <div className="description">
+                            Unfortunately, no listings were found for the
+                            specified parameters.
+                            <br /> Try searching for something similar
+                          </div>
+                        </div>
+                      )}
 
                       {listings.length > 0 && (
                         <Pagination
