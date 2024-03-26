@@ -406,7 +406,6 @@ const EditForm = ({ listing, categories, save }) => {
       success.set("Updated successfully");
       return true;
     } catch (e) {
-      console.log(e);
       error.set(e.message);
     } finally {
       setDisabled(false);

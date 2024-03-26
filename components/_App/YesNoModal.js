@@ -5,6 +5,7 @@ const YesNoModal = ({
   body = null,
   onAccept,
   acceptText = "Save",
+  actionsParentClass = "mt-2",
 }) => {
   const handleAccept = () => {
     toggleActive();
@@ -35,7 +36,10 @@ const YesNoModal = ({
 
                   <span>{body}</span>
 
-                  <form method="get" className="d-flex gap-2 mt-2">
+                  <form
+                    method="get"
+                    className={`${actionsParentClass} d-flex gap-2`}
+                  >
                     <button
                       type="button"
                       className="button-danger"

@@ -277,7 +277,6 @@ const ProfileEdit = () => {
 
         return true;
       } catch (e) {
-        console.log(e.message);
         setProfileFormError(e.message);
         return false;
       }
