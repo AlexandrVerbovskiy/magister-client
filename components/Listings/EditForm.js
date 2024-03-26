@@ -1,7 +1,7 @@
+import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import NavbarThree from "../_App/NavbarThree";
 import DashboardNavbar from "../Dashboard/DashboardNavbar";
-import React, { useState, useContext, useEffect } from "react";
 import lodash from "lodash";
 import STATIC from "../../static";
 import {
@@ -88,6 +88,7 @@ const EditForm = ({
   const [disabled, setDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
   const [activeSentRequestPopup, setActiveSentRequestPopup] = useState(false);
+  const [activeUpdatePopup, setActiveUpdatePopup] = useState(false);
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
@@ -360,89 +361,93 @@ const EditForm = ({
     return formData;
   };
 
+  const validate = () => {
+    let hasError = false;
+
+    if (!name) {
+      setNameError("Required field");
+      hasError = true;
+    }
+
+    if (name && validateSmallText(name) !== true) {
+      setNameError(validateSmallText(name));
+      hasError = true;
+    }
+
+    if (!category) {
+      setCategoryError("Required field");
+      hasError = true;
+    }
+
+    if (!postcode) {
+      setPostcodeError("Required field");
+      hasError = true;
+    }
+
+    if (postcode && validateSmallText(postcode) !== true) {
+      setPostcodeError(validateSmallText(postcode));
+      hasError = true;
+    }
+
+    if (minRentalDays && validateInteger(minRentalDays) !== true) {
+      setMinRentalDaysError(validateInteger(minRentalDays));
+      hasError = true;
+    }
+
+    if (!countStoredItems) {
+      setCountStoredItemsError("Required field");
+      hasError = true;
+    }
+
+    if (countStoredItems && validateInteger(countStoredItems) !== true) {
+      setCountStoredItemsError(validateInteger(countStoredItems));
+      hasError = true;
+    }
+
+    if (description && validateBigText(description) !== true) {
+      setDescriptionError(validateBigText(description));
+      hasError = true;
+    }
+
+    if (rentalTerms && validateBigText(rentalTerms) !== true) {
+      setRentalTermsError(validateBigText(rentalTerms));
+      hasError = true;
+    }
+
+    if (!pricePerDay) {
+      setPricePerDayError("Required field");
+      hasError = true;
+    }
+
+    if (pricePerDay && validatePrice(pricePerDay) !== true) {
+      setPricePerDayError(validatePrice(pricePerDay));
+      hasError = true;
+    }
+
+    if (!compensationCost) {
+      setCompensationCostError("Required field");
+      hasError = true;
+    }
+
+    if (files.length + linkFiles.length < 1) {
+      setFileError("At least one photo is required");
+      hasError = true;
+    }
+
+    if (compensationCost && validatePrice(compensationCost) !== true) {
+      setCompensationCostError(validatePrice(compensationCost));
+      hasError = true;
+    }
+
+    return !hasError;
+  };
+
   const handleSubmit = async (needShowMessage = true) => {
     try {
       if (disabled) return;
       setMainError(null);
 
-      let hasError = false;
-
-      if (!name) {
-        setNameError("Required field");
-        hasError = true;
-      }
-
-      if (name && validateSmallText(name) !== true) {
-        setNameError(validateSmallText(name));
-        hasError = true;
-      }
-
-      if (!category) {
-        setCategoryError("Required field");
-        hasError = true;
-      }
-
-      if (!postcode) {
-        setPostcodeError("Required field");
-        hasError = true;
-      }
-
-      if (postcode && validateSmallText(postcode) !== true) {
-        setPostcodeError(validateSmallText(postcode));
-        hasError = true;
-      }
-
-      if (minRentalDays && validateInteger(minRentalDays) !== true) {
-        setMinRentalDaysError(validateInteger(minRentalDays));
-        hasError = true;
-      }
-
-      if (!countStoredItems) {
-        setCountStoredItemsError("Required field");
-        hasError = true;
-      }
-
-      if (countStoredItems && validateInteger(countStoredItems) !== true) {
-        setCountStoredItemsError(validateInteger(countStoredItems));
-        hasError = true;
-      }
-
-      if (description && validateBigText(description) !== true) {
-        setDescriptionError(validateBigText(description));
-        hasError = true;
-      }
-
-      if (rentalTerms && validateBigText(rentalTerms) !== true) {
-        setRentalTermsError(validateBigText(rentalTerms));
-        hasError = true;
-      }
-
-      if (!pricePerDay) {
-        setPricePerDayError("Required field");
-        hasError = true;
-      }
-
-      if (pricePerDay && validatePrice(pricePerDay) !== true) {
-        setPricePerDayError(validatePrice(pricePerDay));
-        hasError = true;
-      }
-
-      if (!compensationCost) {
-        setCompensationCostError("Required field");
-        hasError = true;
-      }
-
-      if (files.length + linkFiles.length < 1) {
-        setFileError("At least one photo is required");
-        hasError = true;
-      }
-
-      if (compensationCost && validatePrice(compensationCost) !== true) {
-        setCompensationCostError(validatePrice(compensationCost));
-        hasError = true;
-      }
-
-      if (hasError) return false;
+      if (!validate()) return false;
 
       setDisabled(true);
 
@@ -490,6 +495,33 @@ const EditForm = ({
   const activateSendRequestPopup = (e) => {
     e.preventDefault();
     setActiveSentRequestPopup(true);
+  };
+
+  const activateUpdatePopup = (e) => {
+    e.preventDefault();
+    setActiveUpdatePopup(true);
+  };
+
+  const handleAcceptUpdate = async () => {
+    await handleSubmit(true);
+    setActiveUpdatePopup(false);
+  };
+
+  const handleBaseUpdateClick = async (e) => {
+    if (listing.id && listing.approved) {
+      if (disabled) return;
+      setMainError(null);
+
+      if (!validate()) return false;
+
+      if (hasChanges()) {
+        activateUpdatePopup(e);
+      } else {
+        await handleSubmit(true);
+      }
+    } else {
+      handleSubmit(true);
+    }
   };
 
   return (
@@ -739,9 +771,9 @@ const EditForm = ({
             <button
               type="button"
               disabled={disabled}
-              onClick={() => handleSubmit(true)}
+              onClick={handleBaseUpdateClick}
             >
-              Submit Listings
+              {listing.id ? "Update Listing" : "Create Listing"}
             </button>
 
             {canSendRequest && listing.id && (
@@ -755,6 +787,18 @@ const EditForm = ({
             )}
           </div>
         </div>
+
+        <YesNoModal
+          active={activeUpdatePopup}
+          toggleActive={() => setActiveUpdatePopup(false)}
+          onAccept={handleAcceptUpdate}
+          title="Are you sure you want update listing?"
+          body={
+            "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. An approval request will be sent automatically"
+          }
+          acceptText="Update"
+          actionsParentClass="mt-4"
+        />
 
         <YesNoModal
           active={activeSentRequestPopup}

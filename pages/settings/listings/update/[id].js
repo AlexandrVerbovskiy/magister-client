@@ -25,6 +25,7 @@ const UpdateListing = ({
     formData.append("id", id);
     const res = await updateListing(formData, authToken);
     setListing(res);
+    setCanSendRequest(false);
     return res;
   };
 

@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import useSearchCategory from "./useSearchCategory";
 import useSearchCity from "./useSearchCity";
 
-const useCategoryCity = () => {
+const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
   const categoryFilterRef = useRef(null);
   const cityFilterRef = useRef(null);
 
@@ -22,8 +22,8 @@ const useCategoryCity = () => {
     updateCityTips,
   } = useSearchCity();
 
-  const [searchCategory, setSearchCategory] = useState("");
-  const [searchCity, setSearchCity] = useState("");
+  const [searchCategory, setSearchCategory] = useState(baseCategory);
+  const [searchCity, setSearchCity] = useState(baseCity);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;

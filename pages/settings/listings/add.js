@@ -21,6 +21,7 @@ const AddListing = ({ categories }) => {
       formData.append("id", id);
       const res = await updateListing(formData, authToken);
       setListing(res);
+      setCanSendRequest(false);
       return res;
     } else {
       const res = await createListing(formData, authToken);

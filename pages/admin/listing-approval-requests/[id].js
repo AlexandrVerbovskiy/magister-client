@@ -35,15 +35,15 @@ const ListingPhotoView = ({ src }) => {
         className="xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent listing-gallery-flex-parent"
         onClick={openPopup}
       >
-        <div className="bg-gray-100 border shadow-md flex flex-col form-group">
-          <div className="image-box cursor-zoom-in">
-            <img
-              src={src}
-              alt="image"
-              width="300px"
-              height="300px"
-              className="object-cover w-full h-auto"
-            />
+        <div
+          style={{ height: "200px", width: "100%" }}
+          className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent"
+        >
+          <div
+            style={{ height: "100%", width: "100%" }}
+            className="flex flex-col form-group cursor-zoom-in"
+          >
+            <img src={src} />
           </div>
         </div>
       </div>
@@ -349,8 +349,8 @@ const ListingApprovalRequest = ({
                       </h2>
 
                       <div
-                        className="flex flex-wrap"
-                        style={{ width: "100%", gridGap: "0.5rem" }}
+                        className="flex flex-wrap mt-5"
+                        style={{ width: "100%", gap: "0.5rem" }}
                       >
                         {listing.listingImages.map((image) => (
                           <ListingPhotoView
@@ -417,11 +417,11 @@ const ListingApprovalRequest = ({
                           </label>
                         </div>
                         <div className="block text-sm">
-                          {request.approved !== null && request.approved
+                          {request.approved === null
+                            ? "Waiting for approval"
+                            : request.approved
                             ? "Accepted approval"
                             : "Rejected approval"}
-
-                          {request.approved === null && "Waiting for approval"}
                         </div>
                       </div>
 

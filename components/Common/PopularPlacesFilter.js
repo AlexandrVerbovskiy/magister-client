@@ -5,7 +5,14 @@ import Link from "next/link";
 import { getFullListingSearchLink } from "../../utils";
 import { useRouter } from "next/router";
 
-const PopularPlacesFilter = () => {
+const PopularPlacesFilter = ({
+  selectedCategories,
+  selectedCities,
+  categories,
+  cities,
+}) => {
+  console.log({ selectedCategories, selectedCities, categories, cities });
+
   const router = useRouter();
 
   const {

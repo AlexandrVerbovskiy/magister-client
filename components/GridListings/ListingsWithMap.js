@@ -9,6 +9,7 @@ import { getListingList } from "../../services";
 import { IndiceContext } from "../../contexts";
 import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
+import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
@@ -16,6 +17,11 @@ import { getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
+
+const cities = [
+  { name: "Warrington", value: "Warrington", title: "Warrington" },
+  { name: "Manchester", value: "Manchester", title: "Manchester" },
+];
 
 const ListingsWithMap = ({
   authToken,
@@ -231,6 +237,13 @@ const ListingsWithMap = ({
 
   return (
     <>
+      <PopularPlacesFilter
+        selectedCategories={options.categories}
+        selectedCities={options.cities}
+        categories={categories}
+        cities={cities}
+      />
+
       <div className="listings-area ptb-100">
         <div className="container-fluid">
           <div className="row m-0">
@@ -247,6 +260,7 @@ const ListingsWithMap = ({
                     selectedCategories={selectedCategories}
                     setSelectedCategories={handleSelectedCategories}
                     categories={categories}
+                    cities={cities}
                   />
                 </div>
 

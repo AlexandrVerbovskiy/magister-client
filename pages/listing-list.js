@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Footer from "../components/_App/Footer";
-import PopularPlacesFilter from "../components/Common/PopularPlacesFilter";
 import ListingsWithMap from "../components/GridListings/ListingsWithMap";
 import NavbarTwo from "../components/_App/NavbarTwo";
 import { userSideProps } from "../middlewares";
@@ -17,8 +16,6 @@ const GridListingsFullMap = ({
 }) => (
   <>
     <NavbarTwo />
-
-    <PopularPlacesFilter />
 
     <ListingsWithMap
       authToken={authToken}

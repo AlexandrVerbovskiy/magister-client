@@ -51,7 +51,10 @@ const Index = ({ topListings, categories }) => {
 
       <ListingArea listings={topListings} />
 
-      <Category topCategories={topCategories} needShowMore={moreCategoriesThanView}/>
+      <Category
+        topCategories={topCategories}
+        needShowMore={moreCategoriesThanView}
+      />
 
       <DestinationsTwo />
 
