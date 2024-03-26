@@ -17488,6 +17488,19 @@ Preloader Area CSS
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
+input:-webkit-autofill:active,
+input:-internal-autofill-selected {
+  transition: background-color 5000s ease-in-out 0s!important;
+  transform:scale(1) translateY(0) translateX(0)!important;
+  color: inherit!important;
+}
+
+.input-search:-webkit-autofill,
+.input-search:-webkit-autofill:hover,
+.input-search:-webkit-autofill:focus,
+.input-search:-webkit-autofill:active,
+.input-search:-internal-autofill-selected{
+  color: white!important;
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow:0 0 0 50px transparent inset; 
 }

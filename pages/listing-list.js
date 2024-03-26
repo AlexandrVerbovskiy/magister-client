@@ -13,25 +13,33 @@ const GridListingsFullMap = ({
   authToken,
   needSubscriptionNewCategory,
   hasListings,
-}) => (
-  <>
-    <NavbarTwo />
+  clientIP,
+}) => {
+  console.log(clientIP);
+  return (
+    <>
+      <NavbarTwo />
 
-    <ListingsWithMap
-      authToken={authToken}
-      categories={categories}
-      pageProps={{ items, options, countItems }}
-      needSubscriptionNewCategory={needSubscriptionNewCategory}
-      hasListings={hasListings}
-    />
+      <ListingsWithMap
+        authToken={authToken}
+        categories={categories}
+        pageProps={{ items, options, countItems }}
+        needSubscriptionNewCategory={needSubscriptionNewCategory}
+        hasListings={hasListings}
+      />
 
-    <Footer bgColor="bg-f5f5f5" />
-  </>
-);
+      <Footer bgColor="bg-f5f5f5" />
+    </>
+  );
+};
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const { categories: baseCategories = [], cities: baseCities = [] } =
     context.query;
+
+  const clientIP =
+    context.req.headers["x-forwarded-for"] ||
+    context.req.connection.remoteAddress;
 
   const categories = [];
   const cities = [];
@@ -58,7 +66,7 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     baseSideProps.authToken
   );
 
-  return { ...options };
+  return { ...options, clientIP };
 };
 
 export const getServerSideProps = (context) =>
