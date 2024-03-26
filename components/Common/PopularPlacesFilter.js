@@ -10,7 +10,6 @@ const PopularPlacesFilter = ({
   categories,
   cities,
 }) => {
-  console.log({ selectedCategories, selectedCities, categories, cities });
   let notFoundCategory = "";
   let notFoundCity = "";
 
