@@ -1,7 +1,6 @@
 import React from "react";
 import { useCategoryCity } from "../../hooks";
 import SearchTipsPopup from "../SearchTipsPopup";
-import Link from "next/link";
 import { getFullListingSearchLink } from "../../utils";
 import { useRouter } from "next/router";
 
@@ -12,6 +11,36 @@ const PopularPlacesFilter = ({
   cities,
 }) => {
   console.log({ selectedCategories, selectedCities, categories, cities });
+  let notFoundCategory = "";
+  let notFoundCity = "";
+
+  selectedCategories.forEach((selectedCategory) => {
+    let countFound = 0;
+
+    categories.forEach((category) => {
+      if (category.toLowerCase() === selectedCategory.toLowerCase()) {
+        countFound++;
+      }
+    });
+
+    if (!countFound) {
+      notFoundCategory = selectedCategory;
+    }
+  });
+
+  selectedCities.forEach((selectedCity) => {
+    let countFound = 0;
+
+    cities.forEach((city) => {
+      if (city.toLowerCase() === selectedCity.toLowerCase()) {
+        countFound++;
+      }
+    });
+
+    if (!countFound) {
+      notFoundCity = selectedCity;
+    }
+  });
 
   const router = useRouter();
 
@@ -32,7 +61,10 @@ const PopularPlacesFilter = ({
     closeCategoryTipsPopup,
     categoryFilterRef,
     cityFilterRef,
-  } = useCategoryCity();
+  } = useCategoryCity({
+    baseCity: notFoundCity,
+    baseCategory: notFoundCategory,
+  });
 
   const handleSubmit = () => {
     const link = getFullListingSearchLink(searchCity, searchCategory);
