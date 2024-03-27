@@ -25,6 +25,7 @@ const MultyMarkersMap = ({
   setUserLocation,
   center,
   setCenter,
+  defaultLocation = null,
 }) => {
   const mapRef = useRef(null);
 
@@ -35,16 +36,21 @@ const MultyMarkersMap = ({
   }
 
   useEffect(() => {
-    onCurrentUserLocation(
-      ({ lat, lng }) => {
-        setUserLocation({ lat, lng });
-        if (!baseCenter) setCenter({ lat, lng });
-      },
-      () => {
-        setUserLocation(null);
-        setCenter(baseCenter);
-      }
-    );
+    if (defaultLocation) {
+      setUserLocation(defaultLocation);
+      if (!baseCenter) setCenter(defaultLocation);
+    } else {
+      onCurrentUserLocation(
+        ({ lat, lng }) => {
+          setUserLocation({ lat, lng });
+          if (!baseCenter) setCenter({ lat, lng });
+        },
+        () => {
+          setUserLocation(null);
+          setCenter(baseCenter);
+        }
+      );
+    }
   }, []);
 
   return (

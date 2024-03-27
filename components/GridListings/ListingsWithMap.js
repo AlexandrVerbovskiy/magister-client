@@ -125,6 +125,7 @@ const ListingsWithMap = ({
   } = usePagination({
     getItemsFunc: async (data) => {
       const res = await getListingList(data, authToken);
+      console.log(res.test);
       setCanSendCreateNotifyRequest(res.canSendCreateNotifyRequest);
       return res;
     },
@@ -136,8 +137,8 @@ const ListingsWithMap = ({
       lat: searchLocation?.lat,
       lng: searchLocation?.lng,
     }),
-    //defaultData: pageProps,
-    needInit: false,
+    defaultData: pageProps,
+    needInit: true,
     onSendRequest: ({ items }) => {
       setHasListings(items.length > 0);
     },
@@ -391,6 +392,10 @@ const ListingsWithMap = ({
                     onMouseOut={setMarkerUnactive}
                     center={mapCenter}
                     setCenter={setMapCenter}
+                    defaultLocation={{
+                      lat: pageProps.options?.lat,
+                      lng: pageProps.options?.lng,
+                    }}
                   />
                 </div>
               </div>
