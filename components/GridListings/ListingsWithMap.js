@@ -13,9 +13,13 @@ import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
-import { getDateByCurrentAdd } from "../../utils";
+import {
+  getDateByCurrentAdd,
+  getDateByCurrentReject,
+  timeConverter,
+} from "../../utils";
 import STATIC from "../../static";
-import { isEqual } from "lodash";
+import { isEqual, difference } from "lodash";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
@@ -196,26 +200,47 @@ const ListingsWithMap = ({
     const queryParamsToCompare = { ...queryParams };
     const hookParamsToCompare = { ...hookParams };
 
-    if (queryParamsToCompare.fromTime) {
-      queryParamsToCompare.fromTime =
-        queryParamsToCompare.fromTime.split(" ")[0];
-    }
+    const baseTimeWrap = (time, type = "to") => {
+      if (!time) {
+        if (type == "to") {
+          time = defaultTimeFilterValues.defaultToTime;
+        } else {
+          time = defaultTimeFilterValues.defaultFromTime;
+        }
 
-    if (queryParamsToCompare.toTime) {
-      queryParamsToCompare.toTime = queryParamsToCompare.toTime.split(" ")[0];
-    }
+        time = timeConverter(time);
+      }
 
-    if (hookParamsToCompare.fromTime) {
-      hookParamsToCompare.fromTime = hookParamsToCompare.fromTime.split(" ")[0];
-    }
+      return time.split(" ")[0];
+    };
 
-    if (hookParamsToCompare.toTime) {
-      hookParamsToCompare.toTime = hookParamsToCompare.toTime.split(" ")[0];
-    }
+    queryParamsToCompare.toTime = baseTimeWrap(
+      queryParamsToCompare.toTime,
+      "to"
+    );
+
+    queryParamsToCompare.fromTime = baseTimeWrap(
+      queryParamsToCompare.fromTime,
+      "from"
+    );
+
+    hookParamsToCompare.toTime = baseTimeWrap(hookParamsToCompare.toTime, "to");
+
+    hookParamsToCompare.fromTime = baseTimeWrap(
+      hookParamsToCompare.fromTime,
+      "from"
+    );
 
     if (!isEqual(hookParamsToCompare, queryParamsToCompare)) {
-      console.log("197");
-      rebuild(queryParams, ["categories", "cities"]);
+      rebuild(queryParams, [
+        "categories",
+        "cities",
+        "toTime",
+        "fromTime",
+        "filter",
+        "order",
+        "orderType",
+      ]);
     }
   }, [router.query]);
 
