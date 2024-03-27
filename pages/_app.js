@@ -72,7 +72,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     }
 
     if (!isFirst) {
-      console.log("started")
       setTimeout(onEnd, 500);
     } else {
       onEnd();

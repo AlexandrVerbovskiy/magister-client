@@ -13,7 +13,14 @@ export const timeConverter = (time) => {
     hour12: false,
   });
 
-  return `${formattedDate} ${formattedTime}`;
+  const formattedDateParts = formattedDate.split("/");
+
+  const fullFormattedDate =
+    `${formattedDateParts[0].length < 2 ? "0" : ""}${formattedDateParts[0]}/` +
+    `${formattedDateParts[1].length < 2 ? "0" : ""}${formattedDateParts[1]}/` +
+    `${formattedDateParts[2]}`;
+
+  return `${fullFormattedDate} ${formattedTime}`;
 };
 
 export const timeNormalConverter = (time) => {
