@@ -37,8 +37,16 @@ const MultyMarkersMap = ({
 
   useEffect(() => {
     if (defaultLocation) {
-      setUserLocation(defaultLocation);
-      if (!baseCenter) setCenter(defaultLocation);
+      const defaultCoords = {
+        lat: Number(defaultLocation.lat),
+        lng: Number(defaultLocation.lng),
+      };
+      
+      setUserLocation(defaultCoords);
+
+      if (!baseCenter) {
+        setCenter(defaultCoords);
+      }
     } else {
       onCurrentUserLocation(
         ({ lat, lng }) => {

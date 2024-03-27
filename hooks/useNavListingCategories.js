@@ -16,25 +16,15 @@ const useNavListingCategories = () => {
 
   const handleChangeCategory = (categoryId = null) => {
     if (!categoryId) {
-      const link = `/listing-list`;
-
-      if (window.location.pathname.includes("/listing-list/")) {
-        router.push(link).then(() => router.reload());
-      } else {
-        router.push(link);
-      }
+      router.push(`/listing-list`);
+      return;
     }
 
     Object.keys(categories).forEach((level) => {
       categories[level].forEach((category) => {
         if (category.id === categoryId) {
           const link = `/listing-list?categories=${category.name}`;
-
-          if (window.location.pathname.includes("/listing-list/")) {
-            router.push(link).then(() => router.reload());
-          } else {
-            router.push(link);
-          }
+          router.push(link);
         }
       });
     });

@@ -13,26 +13,21 @@ const GridListingsFullMap = ({
   authToken,
   needSubscriptionNewCategory,
   hasListings,
-  test,
-}) => {
-  console.log(test);
-  
-  return (
-    <>
-      <NavbarTwo />
+}) => (
+  <>
+    <NavbarTwo />
 
-      <ListingsWithMap
-        authToken={authToken}
-        categories={categories}
-        pageProps={{ items, options, countItems }}
-        needSubscriptionNewCategory={needSubscriptionNewCategory}
-        hasListings={hasListings}
-      />
+    <ListingsWithMap
+      authToken={authToken}
+      categories={categories}
+      pageProps={{ items, options, countItems }}
+      needSubscriptionNewCategory={needSubscriptionNewCategory}
+      hasListings={hasListings}
+    />
 
-      <Footer bgColor="bg-f5f5f5" />
-    </>
-  );
-};
+    <Footer bgColor="bg-f5f5f5" />
+  </>
+);
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const { categories: baseCategories = [], cities: baseCities = [] } =
