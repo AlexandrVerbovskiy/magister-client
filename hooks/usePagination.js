@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useDebugValue } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
 const usePagination = ({
@@ -93,22 +93,25 @@ const usePagination = ({
     }
   };
 
+  const getFullProps = (dopBody = {}) => {
+    let props = {
+      clientTime: Date.now(),
+      order,
+      orderType,
+      itemsPerPage,
+      filter,
+    };
+
+    if (getDopProps) {
+      props = { ...props, ...getDopProps() };
+    }
+
+    return { ...props, ...dopBody };
+  };
+
   const onChangeOptions = async (dopBody = {}, unusualKeys = []) => {
     try {
-      let props = {
-        clientTime: Date.now(),
-        order,
-        orderType,
-        itemsPerPage,
-        filter,
-      };
-
-      if (getDopProps) {
-        props = { ...props, ...getDopProps() };
-      }
-
-      props = { ...props, ...dopBody };
-
+      const props = getFullProps(dopBody);
       const res = await getItemsFunc(props);
 
       const {
@@ -230,7 +233,6 @@ const usePagination = ({
 
     setOrder(newOrder);
     setOrderType(newType);
-
     onChangeOptions({ order: newOrder, orderType: newType });
   };
 
@@ -280,6 +282,7 @@ const usePagination = ({
     rebuild: onChangeOptions,
     setItemFields,
     options,
+    getFullProps,
   };
 };
 

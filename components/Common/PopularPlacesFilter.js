@@ -67,12 +67,7 @@ const PopularPlacesFilter = ({
 
   const handleSubmit = () => {
     const link = getFullListingSearchLink(searchCity, searchCategory);
-
-    if (window.location.pathname.includes("/listing-list/")) {
-      router.push(link).then(() => router.reload());
-    } else {
-      router.push(link);
-    }
+    router.push(link);
   };
 
   return (

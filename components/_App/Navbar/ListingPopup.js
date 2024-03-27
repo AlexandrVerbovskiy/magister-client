@@ -91,11 +91,8 @@ const ListingPopup = ({ active, setActive, categories }) => {
       link += `?categories=${categoryName}`;
     }
 
-    if (window.location.pathname.includes("/listing-list/")) {
-      router.push(link).then(() => router.reload());
-    } else {
-      router.push(link);
-    }
+    router.push(link);
+    setActive(false);
   };
 
   const handleClickFirstCategory = (categoryId) => {

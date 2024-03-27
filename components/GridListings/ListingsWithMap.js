@@ -15,6 +15,7 @@ import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
 import { getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
+import { isEqual } from "lodash";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
@@ -30,7 +31,9 @@ const ListingsWithMap = ({
   needSubscriptionNewCategory = false,
   hasListings: baseHasListings,
 }) => {
-  const isFirstRef = useRef(true);
+  const isFirstRefOptionsChange = useRef(true);
+  const isFirstRefQueryChange = useRef(true);
+
   const router = useRouter();
 
   const [userLocation, setUserLocation] = useState(null);
@@ -92,8 +95,8 @@ const ListingsWithMap = ({
   const [selectedCities, setSelectedCities] = useState(initCities());
 
   useEffect(() => {
-    if (isFirstRef.current) {
-      isFirstRef.current = false;
+    if (isFirstRefOptionsChange.current) {
+      isFirstRefOptionsChange.current = false;
       return;
     }
 
@@ -122,10 +125,10 @@ const ListingsWithMap = ({
     options,
     order,
     handleChangeOrder,
+    getFullProps,
   } = usePagination({
     getItemsFunc: async (data) => {
       const res = await getListingList(data, authToken);
-      console.log(res.test);
       setCanSendCreateNotifyRequest(res.canSendCreateNotifyRequest);
       return res;
     },
@@ -138,11 +141,83 @@ const ListingsWithMap = ({
       lng: searchLocation?.lng,
     }),
     defaultData: pageProps,
-    needInit: true,
+    needInit: false,
     onSendRequest: ({ items }) => {
       setHasListings(items.length > 0);
     },
   });
+
+  useEffect(() => {
+    if (isFirstRefQueryChange.current) {
+      isFirstRefQueryChange.current = false;
+      return;
+    }
+
+    const queryParams = {
+      categories: [],
+      cities: [],
+      filter: "",
+      fromTime: router.query?.fromTime ?? null,
+      order: router.query?.order ?? null,
+      orderType: router.query?.orderType ?? "desc",
+      toTime: router.query?.toTime ?? null,
+    };
+
+    const fullHookParams = getFullProps();
+    const hookParams = {
+      categories: fullHookParams.categories ?? [],
+      cities: fullHookParams.cities ?? [],
+      filter: fullHookParams.filter ?? "",
+      fromTime: fullHookParams.fromTime ?? null,
+      order: fullHookParams.order ?? null,
+      orderType: fullHookParams.orderType ?? "desc",
+      toTime: fullHookParams.toTime ?? null,
+    };
+
+    let routerCategories = router.query.categories;
+    let routerCities = router.query.cities;
+
+    if (routerCategories) {
+      if (typeof routerCategories == "string") {
+        routerCategories = [routerCategories];
+      }
+
+      queryParams.categories = routerCategories;
+    }
+
+    if (routerCities) {
+      if (typeof routerCities == "string") {
+        routerCities = [routerCities];
+      }
+
+      queryParams.cities = routerCities;
+    }
+
+    const queryParamsToCompare = { ...queryParams };
+    const hookParamsToCompare = { ...hookParams };
+
+    if (queryParamsToCompare.fromTime) {
+      queryParamsToCompare.fromTime =
+        queryParamsToCompare.fromTime.split(" ")[0];
+    }
+
+    if (queryParamsToCompare.toTime) {
+      queryParamsToCompare.toTime = queryParamsToCompare.toTime.split(" ")[0];
+    }
+
+    if (hookParamsToCompare.fromTime) {
+      hookParamsToCompare.fromTime = hookParamsToCompare.fromTime.split(" ")[0];
+    }
+
+    if (hookParamsToCompare.toTime) {
+      hookParamsToCompare.toTime = hookParamsToCompare.toTime.split(" ")[0];
+    }
+
+    if (!isEqual(hookParamsToCompare, queryParamsToCompare)) {
+      console.log("197");
+      rebuild(queryParams, ["categories", "cities"]);
+    }
+  }, [router.query]);
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
     options,
@@ -233,7 +308,7 @@ const ListingsWithMap = ({
 
     setSearchLocation(center);
     setMapCenter(center);
-    rebuild({ ...location }, ["lat", "lng"]);
+    //rebuild({ ...location }, ["lat", "lng"]);
   };
 
   const categoriesNames = [];
