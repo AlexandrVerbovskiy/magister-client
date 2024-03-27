@@ -16387,17 +16387,23 @@ Dashboard CSS
   background: #888;
 }
 
+.left-scrollable::-webkit-scrollbar,
 .sidebar-left::-webkit-scrollbar {
   width: 7px;
 }
+
+.left-scrollable::-webkit-scrollbar-track,
 .sidebar-left::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
+
+.left-scrollable::-webkit-scrollbar-thumb,
 .sidebar-left::-webkit-scrollbar-thumb {
   background: #cfcfcf;
   border-radius: 20px;
 }
 
+.left-scrollable::-webkit-scrollbar-thumb:hover,
 .sidebar-left::-webkit-scrollbar-thumb:hover {
   background: #888;
 }
@@ -17446,10 +17452,13 @@ Preloader Area CSS
 }
 
 .categories-select-level-column {
-  overflow-y: auto;
-  max-height: 400px;
+  min-height: 400px;
+}
+
+.category-select-modal .miran-login{
   max-height: 400px;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .map-container.fw-map.side-full-map #main-full-map {
@@ -17490,17 +17499,48 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active,
 input:-internal-autofill-selected {
-  transition: background-color 5000s ease-in-out 0s!important;
-  transform:scale(1) translateY(0) translateX(0)!important;
-  color: inherit!important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  transform: scale(1) translateY(0) translateX(0) !important;
+  color: inherit !important;
 }
 
 .input-search:-webkit-autofill,
 .input-search:-webkit-autofill:hover,
 .input-search:-webkit-autofill:focus,
 .input-search:-webkit-autofill:active,
-.input-search:-internal-autofill-selected{
-  color: white!important;
+.input-search:-internal-autofill-selected {
+  color: white !important;
   -webkit-text-fill-color: white;
-  -webkit-box-shadow:0 0 0 50px transparent inset; 
+  -webkit-box-shadow: 0 0 0 50px transparent inset;
+}
+
+.custom-search-select.blog-select [class*="-control"] {
+  background-color: transparent !important;
+  border: 0 !important;
+  height: auto !important;
+  cursor: pointer;
+  width: 170px;
+}
+
+.custom-search-select.blog-select [class*="-indicatorContainer"] {
+  padding: 0 0 0 5px!important;
+}
+
+.custom-search-select.blog-select [class*="indicatorSeparator"] {
+  display: none!important;
+  width: 0!important;
+}
+
+.custom-search-select.blog-select [class*="-ValueContainer"] {
+  font-weight: 600;
+  font-size: 15px!important;
+  padding: 0!important;
+  text-align: left!important;
+}
+
+.custom-search-select.blog-select  [class*="-option"]{
+  font-weight: 400!important;
+  text-align: left!important;
+  cursor: pointer!important;
+  font-size: 15px!important;
 }
