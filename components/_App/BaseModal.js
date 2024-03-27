@@ -35,7 +35,7 @@ const BaseModal = ({
 
             <div className="tab-content mt-0">
               <div className="tab-pane fade show active">
-                <div className="miran-login">{children}</div>
+                <div className="miran-login left-scrollable">{children}</div>
               </div>
             </div>
           </div>

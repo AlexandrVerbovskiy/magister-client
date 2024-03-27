@@ -160,94 +160,98 @@ const ListingCategorySelect = ({
       active={active}
       toggleActive={() => setActive(false)}
     >
-      <div className="categories-select-level-column sidebar-left">
-        {needAll && (
-          <CategoryOption
-            key="all"
-            category={{ image: null, name: "All" }}
-            onClick={() => handleOptionClick(null, "firstLevel", false)}
-            active={false}
-            Icon={BurgerIcon}
-          />
+      <div className="d-flex w-100 h-100">
+        <div className="categories-select-level-column sidebar-left">
+          {needAll && (
+            <CategoryOption
+              key="all"
+              category={{ image: null, name: "All" }}
+              onClick={() => handleOptionClick(null, "firstLevel", false)}
+              active={false}
+              Icon={BurgerIcon}
+            />
+          )}
+
+          {categories["firstLevel"].map((category) => (
+            <CategoryOption
+              key={category.id}
+              category={category}
+              onClick={() =>
+                handleOptionClick(
+                  category.id,
+                  "firstLevel",
+                  !!category.countChildren
+                )
+              }
+              active={category.id == selectedByLevels["firstLevel"]}
+            />
+          ))}
+        </div>
+
+        {(needAll || selectedByLevels["firstLevel"]) && (
+          <div className="categories-select-level-column sidebar-left">
+            {needAll && (
+              <CategoryOption
+                key="all"
+                category={{ image: null, name: "All" }}
+                onClick={() => handleOptionClick(null, "secondLevel", false)}
+                active={false}
+                Icon={BurgerIcon}
+              />
+            )}
+
+            {categories["secondLevel"]
+              .filter(
+                (category) =>
+                  category.parentId == selectedByLevels["firstLevel"]
+              )
+              .map((category) => (
+                <CategoryOption
+                  key={category.id}
+                  category={category}
+                  onClick={() =>
+                    handleOptionClick(
+                      category.id,
+                      "secondLevel",
+                      !!category.countChildren
+                    )
+                  }
+                  active={category.id == selectedByLevels["secondLevel"]}
+                />
+              ))}
+          </div>
         )}
 
-        {categories["firstLevel"].map((category) => (
-          <CategoryOption
-            key={category.id}
-            category={category}
-            onClick={() =>
-              handleOptionClick(
-                category.id,
-                "firstLevel",
-                !!category.countChildren
+        {(needAll || selectedByLevels["secondLevel"]) && (
+          <div className="categories-select-level-column sidebar-left">
+            {needAll && (
+              <CategoryOption
+                key="all"
+                category={{ image: null, name: "All" }}
+                onClick={() => handleOptionClick(null, "thirdLevel", false)}
+                active={false}
+                Icon={BurgerIcon}
+              />
+            )}
+
+            {categories["thirdLevel"]
+              .filter(
+                (category) =>
+                  category.parentId == selectedByLevels["secondLevel"]
               )
-            }
-            active={category.id == selectedByLevels["firstLevel"]}
-          />
-        ))}
+              .map((category) => (
+                <CategoryOption
+                  key={category.id}
+                  onClick={() =>
+                    handleOptionClick(category.id, "thirdLevel", false)
+                  }
+                  active={category.id == selectedByLevels["thirdLevel"]}
+                  category={category}
+                />
+              ))}
+          </div>
+        )}
       </div>
-
-      {(needAll || selectedByLevels["firstLevel"]) && (
-        <div className="categories-select-level-column sidebar-left">
-          {needAll && (
-            <CategoryOption
-              key="all"
-              category={{ image: null, name: "All" }}
-              onClick={() => handleOptionClick(null, "secondLevel", false)}
-              active={false}
-              Icon={BurgerIcon}
-            />
-          )}
-
-          {categories["secondLevel"]
-            .filter(
-              (category) => category.parentId == selectedByLevels["firstLevel"]
-            )
-            .map((category) => (
-              <CategoryOption
-                key={category.id}
-                category={category}
-                onClick={() =>
-                  handleOptionClick(
-                    category.id,
-                    "secondLevel",
-                    !!category.countChildren
-                  )
-                }
-                active={category.id == selectedByLevels["secondLevel"]}
-              />
-            ))}
-        </div>
-      )}
-
-      {(needAll || selectedByLevels["secondLevel"]) && (
-        <div className="categories-select-level-column sidebar-left">
-          {needAll && (
-            <CategoryOption
-              key="all"
-              category={{ image: null, name: "All" }}
-              onClick={() => handleOptionClick(null, "thirdLevel", false)}
-              active={false}
-              Icon={BurgerIcon}
-            />
-          )}
-
-          {categories["thirdLevel"]
-            .filter(
-              (category) => category.parentId == selectedByLevels["secondLevel"]
-            )
-            .map((category) => (
-              <CategoryOption
-                key={category.id}
-                onClick={() =>
-                  handleOptionClick(category.id, "thirdLevel", false)
-                }
-                active={category.id == selectedByLevels["thirdLevel"]}
-                category={category}
-              />
-            ))}
-        </div>
-      )}
     </BaseModal>
   );
 };

@@ -20,6 +20,7 @@ import {
 } from "../../utils";
 import STATIC from "../../static";
 import { isEqual, difference } from "lodash";
+import Select from "react-select";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
@@ -345,6 +346,13 @@ const ListingsWithMap = ({
 
   const cityNames = cities.map((city) => city.name);
 
+  const orderOptions = [
+    { label: "Default", value: "default" },
+    { label: "Latest", value: "latest" },
+    { label: "Price: low to high", value: "price_to_high" },
+    { label: "Price: high to low", value: "price_to_low" },
+  ];
+
   return (
     <>
       <PopularPlacesFilter
@@ -386,25 +394,24 @@ const ListingsWithMap = ({
 
                         <div className="col-lg-7 col-md-6 ordering">
                           <div className="d-flex justify-content-end">
-                            <div className="select-box">
+                            <div
+                              className="d-flex select-box"
+                              style={{ zIndex: "999", alignItems: "center" }}
+                            >
                               <label>Sort By:</label>
-                              <select
-                                className="blog-select"
-                                value={order ?? "default"}
-                                name="orderSelect"
-                                onChange={(e) =>
-                                  handleChangeOrder(e.target.value)
+
+                              <Select
+                                options={orderOptions}
+                                value={
+                                  orderOptions.find(
+                                    (option) => option.value === order
+                                  ) ?? orderOptions[0]
                                 }
-                              >
-                                <option value="default">Default</option>
-                                <option value="latest">Latest</option>
-                                <option value="price_to_high">
-                                  Price: low to high
-                                </option>
-                                <option value="price_to_low">
-                                  Price: high to low
-                                </option>
-                              </select>
+                                onChange={handleChangeOrder}
+                                isSearchable={false}
+                                className="custom-search-select blog-select"
+                                name="listing-order-select"
+                              />
                             </div>
                           </div>
                         </div>
