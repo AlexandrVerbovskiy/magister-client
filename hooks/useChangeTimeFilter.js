@@ -45,14 +45,6 @@ const useWatchChangeTimeFilter = ({
       toDate = new Date(fromDate);
     }
 
-    if (from) {
-      fromDate.setHours(0, 0, 0, 0);
-    }
-
-    if (to) {
-      toDate.setHours(23, 59, 59, 999);
-    }
-
     const propFromDate = getTimeToProp(fromDate);
     const propToDate = getTimeToProp(toDate);
 
