@@ -43,8 +43,6 @@ export const deleteListingByAdmin = async (id, authToken) => {
 
 export const getListingList = async (params, authToken = null) => {
   const data = await post(`/list`, params, authToken);
-  console.log("test: ", data.body.test);
-  console.log("ip: ", data.body.ip);
   return data.body;
 };
 
