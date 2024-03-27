@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, useRef } from "react";
 import { SessionProvider } from "next-auth/react";
 
 import { IndiceProvider } from "../contexts";
@@ -72,13 +72,14 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     }
 
     if (!isFirst) {
+      console.log("started")
       setTimeout(onEnd, 500);
     } else {
       onEnd();
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     onChangeType();
   }, [type]);
 };
@@ -95,7 +96,9 @@ function MyApp({ Component, pageProps }) {
   useImportGlobalStyle({
     type: pageType,
     onStart: () => setLoading(true),
-    onEnd: () => setLoading(false),
+    onEnd: () => {
+      setLoading(false)
+    },
   });
 
   if (globalError) {

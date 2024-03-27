@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import Navbar from "../components/_App/Navbar";
 import Banner from "../components/HomeOne/Banner";
 import Footer from "../components/_App/Footer";
-import { IndiceContext } from "../contexts";
 import { userSideProps } from "../middlewares";
 import { getIndexOptions } from "../services";
 import Features from "../components/HomeOne/Features";
@@ -17,7 +16,6 @@ import BeforeTheRental from "../components/Common/BeforeTheRental";
 import DuringRental from "../components/Common/DuringRental";
 
 const Index = ({ topListings, categories }) => {
-  const { setLoading } = useContext(IndiceContext);
   const popularCategories = [];
   let topCategories = [];
   const maxTopCategoriesSectionView = 11;
@@ -36,10 +34,6 @@ const Index = ({ topListings, categories }) => {
   const moreCategoriesThanView =
     topCategories.length > maxTopCategoriesSectionView;
   topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
-
-  useEffect(() => {
-    setLoading(false);
-  });
 
   return (
     <>
