@@ -17523,7 +17523,7 @@ input:-internal-autofill-selected {
   border: 0 !important;
   height: auto !important;
   cursor: pointer;
-  width: 170px;
+  width: 185px;
 }
 
 .custom-search-select.blog-select [class*="-indicatorContainer"] {
