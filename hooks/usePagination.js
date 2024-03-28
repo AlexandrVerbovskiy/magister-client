@@ -108,6 +108,8 @@ const usePagination = ({
       })
       .join("&");
 
+    console.log(queryParams, props);
+
     const currentLink = window.location.href;
 
     const newLinkPart =
