@@ -107,6 +107,13 @@ const ListingsWithMap = ({
 
   const [selectedCities, setSelectedCities] = useState(initCities());
 
+  const [searchCategory, setSearchCategory] = useState(
+    basePageProps.options.searchCategory
+  );
+  const [searchCity, setSearchCity] = useState(
+    basePageProps.options.searchCity
+  );
+
   useEffect(() => {
     if (isFirstRefOptionsChange.current) {
       isFirstRefOptionsChange.current = false;
@@ -115,9 +122,11 @@ const ListingsWithMap = ({
 
     setSelectedCities(initCities());
     setSelectedCategories(initCategories());
+    setSearchCategory(pageProps.options.searchCategory);
+    setSearchCity(pageProps.options.searchCity);
   }, [pageProps.options]);
 
-  useEffect(() => setPageProps(cloneObject(basePageProps)), [basePageProps]);
+  useEffect(() => setPageProps(basePageProps), [basePageProps]);
 
   useEffect(() => setCategories(baseCategories), [baseCategories]);
 
@@ -158,11 +167,11 @@ const ListingsWithMap = ({
       lat: { value: searchLocation?.lat, hidden: () => true },
       lng: { value: searchLocation?.lng, hidden: () => true },
       searchCity: {
-        value: cloneObject(pageProps.options.searchCity),
+        value: searchCity,
         name: "search-city",
       },
       searchCategory: {
-        value: cloneObject(pageProps.options.searchCategory),
+        value: searchCategory,
         name: "search-category",
       },
     }),
@@ -291,8 +300,8 @@ const ListingsWithMap = ({
         selectedCities={selectedCities}
         categories={categoriesNames}
         cities={cityNames}
-        searchCity={cloneObject(pageProps.options.searchCity)}
-        searchCategory={cloneObject(pageProps.options.searchCategory)}
+        searchCity={searchCity}
+        searchCategory={searchCategory}
       />
 
       <div className="listings-area ptb-100">
@@ -312,10 +321,8 @@ const ListingsWithMap = ({
                     setSelectedCategories={handleSelectedCategories}
                     categories={categories}
                     cities={cities}
-                    searchCity={cloneObject(pageProps.options.searchCity)}
-                    searchCategory={cloneObject(
-                      pageProps.options.searchCategory
-                    )}
+                    searchCity={searchCity}
+                    searchCategory={searchCategory}
                   />
                 </div>
 

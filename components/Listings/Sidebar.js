@@ -67,28 +67,38 @@ const Sidebar = ({
 
   const handleChangeCheckedCategory = (value) => {
     let newSelectedCategories = selectedCategories;
+    let needRemoveSearch = false;
 
     if (selectedCategories.includes(value)) {
       newSelectedCategories = newSelectedCategories.filter(
         (category) => category != value
       );
+
+      if (searchCategory) {
+        needRemoveSearch = value.toLowerCase() === searchCategory.toLowerCase();
+      }
     } else {
       newSelectedCategories = [...newSelectedCategories, value];
     }
 
-    setSelectedCategories(newSelectedCategories);
+    setSelectedCategories(newSelectedCategories, needRemoveSearch);
   };
 
   const handleChangeCheckedCity = (value) => {
     let newSelectedCities = selectedCities;
+    let needRemoveSearch = false;
 
     if (selectedCities.includes(value)) {
       newSelectedCities = newSelectedCities.filter((city) => city != value);
+
+      if (searchCity) {
+        needRemoveSearch = value.toLowerCase() === searchCity.toLowerCase();
+      }
     } else {
       newSelectedCities = [...newSelectedCities, value];
     }
 
-    setSelectedCities(newSelectedCities);
+    setSelectedCities(newSelectedCities, needRemoveSearch);
   };
 
   const handleFromDateFilterChange = (value) => {
