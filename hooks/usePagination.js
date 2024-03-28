@@ -71,8 +71,6 @@ const usePagination = ({
 
     if (dopProps) {
       Object.keys(dopProps).forEach((key) => {
-        if (!gotOptions[key]) return;
-
         let checkHidden = null;
         let paramName = key;
 
@@ -99,6 +97,7 @@ const usePagination = ({
     }
 
     const props = Object.keys(queryParams)
+      .filter((param) => queryParams[param])
       .map((param) => {
         if (Array.isArray(queryParams[param])) {
           return queryParams[param].map((val) => `${param}=${val}`).join("&");
