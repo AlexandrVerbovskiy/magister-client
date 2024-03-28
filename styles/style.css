@@ -17411,6 +17411,10 @@ Preloader Area CSS
   margin-right: 5px;
 }
 
+.category-option-image:not(:has(*)){
+  background-color: #ededed;
+}
+
 .categories-select-option .category-option-name {
   display: inline-block;
   width: 100%;

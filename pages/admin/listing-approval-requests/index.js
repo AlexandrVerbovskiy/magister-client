@@ -55,7 +55,7 @@ const UserVerifyRequests = (pageProps) => {
     getItemsFunc: (data) =>
       getAdminListingApprovalRequestsList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: () => ({ ...getTimeFilterProps() }),
+    getDopProps: getTimeFilterProps,
     defaultData: pageProps,
   });
 
@@ -146,8 +146,11 @@ const UserVerifyRequests = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const fromTime = context.query["from-time"];
+  const toTime = context.query["to-time"];
+
   const options = await getAdminListingApprovalRequestListPageOptions(
-    { ...context.query, clientTime: Date.now() },
+    { ...context.query, fromTime, toTime, clientTime: Date.now() },
     baseSideProps.authToken
   );
 

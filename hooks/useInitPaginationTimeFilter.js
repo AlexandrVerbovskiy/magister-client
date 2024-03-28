@@ -36,14 +36,44 @@ const useInitPaginationTimeFilter = ({
 
   const getTimeToProp = (date) => (date ? timeNormalConverter(date) : null);
 
+  const fromTimePropHidden = (newValue) => {
+    if (defaultFromTime) {
+      console.log(getTimeToProp(newValue), getTimeToProp(defaultFromTime))
+      return getTimeToProp(newValue) == getTimeToProp(defaultFromTime);
+    }
+
+    return false;
+  };
+
+  const toTimePropHidden = (newValue) => {
+    if (defaultToTime) {
+      console.log(getTimeToProp(newValue), getTimeToProp(defaultToTime))
+      return getTimeToProp(newValue) == getTimeToProp(defaultToTime);
+    }
+
+    return false;
+  };
+
+  const fromTimeProp = {
+    value: getTimeToProp(fromTime),
+    name: "from-time",
+    hidden: fromTimePropHidden,
+  };
+
+  const toTimeProp = {
+    value: getTimeToProp(toTime),
+    name: "to-time",
+    hidden: toTimePropHidden,
+  };
+
   return {
     fromTime,
     setFromTime,
     toTime,
     setToTime,
     getTimeFilterProps: () => ({
-      fromTime: getTimeToProp(fromTime),
-      toTime: getTimeToProp(toTime),
+      fromTime: fromTimeProp,
+      toTime: toTimeProp,
     }),
   };
 };

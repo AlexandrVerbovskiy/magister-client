@@ -50,7 +50,14 @@ const SearchedWords = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getSearchedWordList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: () => ({ viewed: viewedFilter, accepted: acceptedFilter }),
+    getDopProps: () => ({
+      viewed: {
+        value: viewedFilter,
+      },
+      accepted: {
+        value: acceptedFilter,
+      },
+    }),
     defaultData: pageProps,
   });
 
@@ -151,7 +158,7 @@ const SearchedWords = (pageProps) => {
   );
 };
 
-const boostServerSideProps = async ({context, baseSideProps}) => {
+const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminSearchedWordListPageOptions(
     context.query,
     baseSideProps.authToken

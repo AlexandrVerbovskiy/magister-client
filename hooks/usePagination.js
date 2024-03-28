@@ -39,13 +39,17 @@ const usePagination = ({
     setFilter(gotOptions.filter);
 
     const queryParams = {};
+    const dopProps = getDopProps ? getDopProps() : null;
 
-    if (getDopProps) {
-      const dopProps = getDopProps();
-
+    if (dopProps) {
       Object.keys(dopProps).forEach((key) => {
-        if (dopProps[key]) {
-          queryParams[key] = dopProps[key];
+        if (
+          dopProps[key] &&
+          dopProps[key].value &&
+          (!dopProps[key].hidden || !dopProps[key].hidden(dopProps[key].value))
+        ) {
+          const queryName = dopProps[key].name ?? key;
+          queryParams[queryName] = dopProps[key].value;
         }
       });
     }
@@ -65,11 +69,38 @@ const usePagination = ({
       queryParams["filter"] = gotOptions.filter;
     }
 
+    console.log(gotOptions);
+
     unusualKeys.forEach((key) => {
       if (gotOptions[key]) {
-        queryParams[key] = gotOptions[key];
+        let checkHidden = null;
+        let paramName = key;
+
+        if (dopProps) {
+          Object.keys(dopProps).forEach((dopPropsKey) => {
+            if (key === dopPropsKey || dopProps[key]?.name === dopPropsKey) {
+              if (dopProps[dopPropsKey].hidden) {
+                checkHidden = dopProps[dopPropsKey].hidden;
+              }
+
+              if (dopProps[dopPropsKey].name) {
+                paramName = dopProps[dopPropsKey].name;
+              }
+            }
+          });
+        }
+
+        if (!checkHidden || !checkHidden(gotOptions[key])) {
+          queryParams[paramName] = gotOptions[key];
+        } else {
+          if (queryParams[paramName]) {
+            delete queryParams[paramName];
+          }
+        }
       }
     });
+
+    console.log(queryParams);
 
     const props = Object.keys(queryParams)
       .map((param) => {
@@ -103,7 +134,14 @@ const usePagination = ({
     };
 
     if (getDopProps) {
-      props = { ...props, ...getDopProps() };
+      const bodyPropsInfo = getDopProps();
+      const bodyProps = {};
+      Object.keys(bodyPropsInfo).forEach((key) => {
+        const bodyName = bodyPropsInfo[key].key ?? key;
+        bodyProps[bodyName] = bodyPropsInfo[key].value;
+      });
+
+      props = { ...props, ...bodyProps };
     }
 
     return { ...props, ...dopBody };

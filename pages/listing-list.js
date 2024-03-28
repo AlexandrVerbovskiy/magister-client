@@ -52,6 +52,11 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     baseCities.forEach((city) => cities.push(city));
   }
 
+  const searchCity = context.query["search-city"];
+  const searchCategory = context.query["search-category"];
+  const fromTime = context.query["from-time"];
+  const toTime = context.query["to-time"];
+
   const options = await getListingListOptions(
     {
       ...context.query,
@@ -59,6 +64,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
       cities,
       categories,
       clientIp,
+      searchCity,
+      searchCategory,
+      fromTime,
+      toTime,
     },
     baseSideProps.authToken
   );

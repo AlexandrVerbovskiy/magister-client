@@ -152,7 +152,11 @@ const ListingList = (pageProps) => {
     getItemsFunc: (data) => getUserListingList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
-    getDopProps: () => ({ status: statusFilter }),
+    getDopProps: () => ({
+      status: {
+        value: statusFilter,
+      },
+    }),
   });
 
   const handleAcceptDelete = async () => {
