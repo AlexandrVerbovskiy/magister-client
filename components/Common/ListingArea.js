@@ -38,7 +38,10 @@ const ListingArea = ({ listings }) => {
             className="listings-slides"
           >
             {listings.map((listing) => (
-              <SwiperSlide key={listing.id}>
+              <SwiperSlide
+                key={listing.id}
+                style={{ display: "flex", height: "auto" }}
+              >
                 <ListingItem listing={listing} />
               </SwiperSlide>
             ))}

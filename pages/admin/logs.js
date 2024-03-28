@@ -121,8 +121,11 @@ const Logs = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const fromTime = context.query["from-time"];
+  const toTime = context.query["to-time"];
+
   const options = await getAdminLogListPageOptions(
-    { ...context.query, clientTime: Date.now() },
+    { ...context.query, fromTime, toTime, clientTime: Date.now() },
     baseSideProps.authToken
   );
 

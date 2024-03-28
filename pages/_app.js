@@ -9,6 +9,7 @@ import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 import "../styles/index.css";
+import { useIsomorphicLayoutEffect } from "../hooks";
 
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
@@ -78,7 +79,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     }
   };
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     onChangeType();
   }, [type]);
 };
@@ -96,7 +97,7 @@ function MyApp({ Component, pageProps }) {
     type: pageType,
     onStart: () => setLoading(true),
     onEnd: () => {
-      setLoading(false)
+      setLoading(false);
     },
   });
 

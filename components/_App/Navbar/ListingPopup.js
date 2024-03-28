@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BaseModal from "../BaseModal";
 import { getFilePath } from "../../../utils";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const BurgerIcon = () => (
   <svg
@@ -20,11 +21,24 @@ const BurgerIcon = () => (
   </svg>
 );
 
-const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
+const CategoryOption = ({
+  category,
+  onClick,
+  href = null,
+  active = false,
+  Icon = null,
+}) => {
   return (
-    <a
+    <Link
       className={`categories-select-option${active ? " active" : ""}`}
-      onClick={onClick}
+      onClick={(e) => {
+        if (!href) {
+          e.preventDefault();
+        }
+
+        onClick();
+      }}
+      href={href ?? "#"}
     >
       {Icon && <Icon />}
 
@@ -45,7 +59,7 @@ const CategoryOption = ({ category, active = false, onClick, Icon = null }) => {
       ) : (
         <></>
       )}
-    </a>
+    </Link>
   );
 };
 
@@ -85,10 +99,10 @@ const ListingPopup = ({ active, setActive, categories }) => {
   }, []);
 
   const handleClickCategory = (categoryName = null) => {
-    let link = "/listing-list";
+    let link = "";
 
     if (categoryName) {
-      link += `?categories=${categoryName}`;
+      link += ``;
     }
 
     router.push(link);
@@ -124,19 +138,23 @@ const ListingPopup = ({ active, setActive, categories }) => {
     }
   };
 
-  const handleClickThirdAllCategory = () => {
-    const newCategoryInfo = categories["secondLevel"].find(
-      (c) => c.id === selectedSecondCategory
-    );
-    handleClickCategory(newCategoryInfo.name);
-  };
+  const firstSelectedCategoryInfo = categories["firstLevel"].find(
+    (c) => c.id === selectedFirstCategory
+  );
 
-  const handleClickSecondAllCategory = () => {
-    const newCategoryInfo = categories["firstLevel"].find(
-      (c) => c.id === selectedFirstCategory
-    );
-    handleClickCategory(newCategoryInfo.name);
-  };
+  const secondSelectedCategoryInfo = categories["secondLevel"].find(
+    (c) => c.id === selectedSecondCategory
+  );
+
+  const firstAllLink = `/listing-list`;
+
+  const secondAllLink = firstSelectedCategoryInfo
+    ? `/listing-list?categories=${firstSelectedCategoryInfo.name}`
+    : firstAllLink;
+
+  const thirdAllLink = secondSelectedCategoryInfo
+    ? `/listing-list?categories=${secondSelectedCategoryInfo.name}`
+    : secondAllLink;
 
   return (
     <BaseModal
@@ -150,7 +168,8 @@ const ListingPopup = ({ active, setActive, categories }) => {
           key="all"
           category={{ image: null, name: "All" }}
           Icon={BurgerIcon}
-          onClick={() => handleClickCategory()}
+          href={firstAllLink}
+          onClick={() => setActive(false)}
         />
 
         {categories["firstLevel"].map((category) => (
@@ -158,7 +177,18 @@ const ListingPopup = ({ active, setActive, categories }) => {
             key={category.id}
             category={category}
             active={selectedFirstCategory == category.id}
-            onClick={() => handleClickFirstCategory(category.id)}
+            href={
+              category.countChildren
+                ? null
+                : `/listing-list?categories=${category.name}`
+            }
+            onClick={() => {
+              if (category.countChildren) {
+                handleClickFirstCategory(category.id);
+              } else {
+                setActive(false);
+              }
+            }}
           />
         ))}
       </div>
@@ -168,7 +198,8 @@ const ListingPopup = ({ active, setActive, categories }) => {
           key="all"
           category={{ image: null, name: "All" }}
           Icon={BurgerIcon}
-          onClick={() => handleClickSecondAllCategory()}
+          href={secondAllLink}
+          onClick={() => setActive(false)}
         />
 
         {categories["secondLevel"]
@@ -178,7 +209,18 @@ const ListingPopup = ({ active, setActive, categories }) => {
               key={category.id}
               category={category}
               active={selectedSecondCategory == category.id}
-              onClick={() => handleClickSecondCategory(category.id)}
+              href={
+                category.countChildren
+                  ? null
+                  : `/listing-list?categories=${category.name}`
+              }
+              onClick={() => {
+                if (category.countChildren) {
+                  handleClickSecondCategory(category.id);
+                } else {
+                  setActive(false);
+                }
+              }}
             />
           ))}
       </div>
@@ -188,7 +230,8 @@ const ListingPopup = ({ active, setActive, categories }) => {
           key="all"
           category={{ image: null, name: "All" }}
           Icon={BurgerIcon}
-          onClick={() => handleClickThirdAllCategory()}
+          href={thirdAllLink}
+          onClick={() => setActive(false)}
         />
 
         {categories["thirdLevel"]
@@ -197,7 +240,8 @@ const ListingPopup = ({ active, setActive, categories }) => {
             <CategoryOption
               key={category.id}
               category={category}
-              onClick={() => handleClickCategory(category.name)}
+              href={`/listing-list?categories=${category.name}`}
+              onClick={() => setActive(false)}
             />
           ))}
       </div>

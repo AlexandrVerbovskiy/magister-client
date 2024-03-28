@@ -13,13 +13,8 @@ import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
-import {
-  getDateByCurrentAdd,
-  getDateByCurrentReject,
-  timeConverter,
-} from "../../utils";
+import { getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
-import { isEqual, difference } from "lodash";
 import Select from "react-select";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
@@ -37,7 +32,6 @@ const ListingsWithMap = ({
   hasListings: baseHasListings,
 }) => {
   const isFirstRefOptionsChange = useRef(true);
-  const isFirstRefQueryChange = useRef(true);
 
   const router = useRouter();
 
@@ -55,7 +49,16 @@ const ListingsWithMap = ({
   const [canSendCreateNotifyRequest, setCanSendCreateNotifyRequest] = useState(
     needSubscriptionNewCategory
   );
+
   const [hasListings, setHasListings] = useState(baseHasListings);
+
+  useEffect(() => {
+    setHasListings(baseHasListings);
+  }, [baseHasListings]);
+
+  useEffect(() => {
+    setCanSendCreateNotifyRequest(needSubscriptionNewCategory);
+  }, [needSubscriptionNewCategory]);
 
   const initCategories = () => {
     const pagePropsCategories = pageProps.options?.categories;
@@ -130,7 +133,6 @@ const ListingsWithMap = ({
     options,
     order,
     handleChangeOrder,
-    getFullProps,
   } = usePagination({
     getItemsFunc: async (data) => {
       const res = await getListingList(data, authToken);
@@ -140,10 +142,17 @@ const ListingsWithMap = ({
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
       ...getTimeFilterProps(),
-      categories: selectedCategories.length > 0 ? selectedCategories : null,
-      cities: selectedCities.length > 0 ? selectedCities : null,
-      lat: searchLocation?.lat,
-      lng: searchLocation?.lng,
+      categories: {
+        value: selectedCategories.length > 0 ? selectedCategories : null,
+      },
+      cities: { value: selectedCities.length > 0 ? selectedCities : null },
+      lat: { value: searchLocation?.lat, hidden: () => true },
+      lng: { value: searchLocation?.lng, hidden: () => true },
+      searchCity: { value: pageProps.options.searchCity, name: "search-city" },
+      searchCategory: {
+        value: pageProps.options.searchCategory,
+        name: "search-category",
+      },
     }),
     defaultData: pageProps,
     needInit: false,
@@ -151,99 +160,6 @@ const ListingsWithMap = ({
       setHasListings(items.length > 0);
     },
   });
-
-  useEffect(() => {
-    if (isFirstRefQueryChange.current) {
-      isFirstRefQueryChange.current = false;
-      return;
-    }
-
-    const queryParams = {
-      categories: [],
-      cities: [],
-      filter: "",
-      fromTime: router.query?.fromTime ?? null,
-      order: router.query?.order ?? null,
-      orderType: router.query?.orderType ?? "desc",
-      toTime: router.query?.toTime ?? null,
-    };
-
-    const fullHookParams = getFullProps();
-    const hookParams = {
-      categories: fullHookParams.categories ?? [],
-      cities: fullHookParams.cities ?? [],
-      filter: fullHookParams.filter ?? "",
-      fromTime: fullHookParams.fromTime ?? null,
-      order: fullHookParams.order ?? null,
-      orderType: fullHookParams.orderType ?? "desc",
-      toTime: fullHookParams.toTime ?? null,
-    };
-
-    let routerCategories = router.query.categories;
-    let routerCities = router.query.cities;
-
-    if (routerCategories) {
-      if (typeof routerCategories == "string") {
-        routerCategories = [routerCategories];
-      }
-
-      queryParams.categories = routerCategories;
-    }
-
-    if (routerCities) {
-      if (typeof routerCities == "string") {
-        routerCities = [routerCities];
-      }
-
-      queryParams.cities = routerCities;
-    }
-
-    const queryParamsToCompare = { ...queryParams };
-    const hookParamsToCompare = { ...hookParams };
-
-    const baseTimeWrap = (time, type = "to") => {
-      if (!time) {
-        if (type == "to") {
-          time = defaultTimeFilterValues.defaultToTime;
-        } else {
-          time = defaultTimeFilterValues.defaultFromTime;
-        }
-
-        time = timeConverter(time);
-      }
-
-      return time.split(" ")[0];
-    };
-
-    queryParamsToCompare.toTime = baseTimeWrap(
-      queryParamsToCompare.toTime,
-      "to"
-    );
-
-    queryParamsToCompare.fromTime = baseTimeWrap(
-      queryParamsToCompare.fromTime,
-      "from"
-    );
-
-    hookParamsToCompare.toTime = baseTimeWrap(hookParamsToCompare.toTime, "to");
-
-    hookParamsToCompare.fromTime = baseTimeWrap(
-      hookParamsToCompare.fromTime,
-      "from"
-    );
-
-    if (!isEqual(hookParamsToCompare, queryParamsToCompare)) {
-      rebuild(queryParams, [
-        "categories",
-        "cities",
-        "toTime",
-        "fromTime",
-        "filter",
-        "order",
-        "orderType",
-      ]);
-    }
-  }, [router.query]);
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
     options,
@@ -334,7 +250,6 @@ const ListingsWithMap = ({
 
     setSearchLocation(center);
     setMapCenter(center);
-    //rebuild({ ...location }, ["lat", "lng"]);
   };
 
   const categoriesNames = [];
@@ -360,6 +275,8 @@ const ListingsWithMap = ({
         selectedCities={selectedCities}
         categories={categoriesNames}
         cities={cityNames}
+        searchCity={pageProps.options.searchCity}
+        searchCategory={pageProps.options.searchCategory}
       />
 
       <div className="listings-area ptb-100">

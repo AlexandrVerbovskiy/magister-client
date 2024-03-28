@@ -9,6 +9,8 @@ const PopularPlacesFilter = ({
   selectedCities,
   categories,
   cities,
+  searchCity: baseSearchCity = null,
+  searchCategory: baseSearchCategory = null,
 }) => {
   let notFoundCategory = "";
   let notFoundCity = "";
@@ -61,8 +63,8 @@ const PopularPlacesFilter = ({
     categoryFilterRef,
     cityFilterRef,
   } = useCategoryCity({
-    baseCity: notFoundCity,
-    baseCategory: notFoundCategory,
+    baseCity: baseSearchCity ?? notFoundCity,
+    baseCategory: baseSearchCategory ?? notFoundCategory,
   });
 
   const handleSubmit = () => {

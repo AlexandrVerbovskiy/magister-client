@@ -7,7 +7,14 @@ const ListingItem = ({ listing, hovered = false }) => {
   const images = listing.images ?? [];
 
   return (
-    <div className={`single-listings-box w-100 ${hovered ? "hovered" : ""}`}>
+    <div
+      className={`single-listings-box w-100 ${hovered ? "hovered" : ""}`}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
       <div className="listings-image">
         {images.length == 1 && (
           <img
