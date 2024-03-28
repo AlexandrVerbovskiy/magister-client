@@ -18,7 +18,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
   const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
-  const importStyle = async (importFuncs, key, isFirst) => {
+  const importStyle = async (importFuncs, key) => {
     stylesRef.current[key].forEach((elem) =>
       document.querySelector("head").append(elem)
     );
@@ -30,9 +30,11 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
         await importFuncs[i]();
       }
 
-      document
-        .querySelectorAll(styleSelector)
-        .forEach((elem) => stylesRef.current[key].push(elem.cloneNode(true)));
+      document.querySelectorAll(styleSelector).forEach((elem) => {
+        elem.classList.add(key);
+        const clonedElement = elem.cloneNode(true);
+        stylesRef.current[key].push(clonedElement);
+      });
     }
   };
 
@@ -49,12 +51,22 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
           !elem.innerText.includes("MIT License | https://tailwindcss.com") &&
           !elem.hasAttribute("data-n-p")
         ) {
-          stylesRef.current["base"].push(elem.cloneNode(true));
+          elem.classList.add("base");
+          const clonedElement = elem.cloneNode(true);
+          stylesRef.current["base"].push(clonedElement);
         }
       });
     }
 
     document.querySelectorAll(styleSelector).forEach((elem) => {
+      const currentStyleType = type == "admin" ? "base" : "admin";
+
+      if (!elem.classList.contains(currentStyleType)) {
+        elem.classList.add(currentStyleType);
+        const clonedElement = elem.cloneNode(true);
+        stylesRef.current[currentStyleType].push(clonedElement);
+      }
+
       elem.remove();
     });
 

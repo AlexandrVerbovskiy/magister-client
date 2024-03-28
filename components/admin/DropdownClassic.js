@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Transition from "../../utils/transition";
 import DropdownClassicOptionWrapper from "./DropdownClassicOptionWrapper";
+import STATIC from "../../static";
 
 function DropdownClassic({
   options,
@@ -98,6 +99,7 @@ function DropdownClassic({
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              maxLength={STATIC.maxSearchInputLength}
             />
           )}
 

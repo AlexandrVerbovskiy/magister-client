@@ -1,8 +1,8 @@
-import ENV from "../env";
+import { getFilePath } from "./axios";
 
 const getListingImageByType = (link, type) => {
   if (type == "storage") {
-    return ENV.SERVER_URL + ENV.SERVER_STORAGE + "/" + link;
+    return getFilePath(link);
   }
 
   return link;

@@ -5,4 +5,5 @@ export default {
   },
   baseListingMapCircleRadius: 500,
   defaultPhotoLink: "/images/admin/user-avatar-80.png",
+  maxSearchInputLength: 255,
 };

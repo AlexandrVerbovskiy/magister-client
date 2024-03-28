@@ -15,7 +15,7 @@ const GridListingsFullMap = ({
   hasListings,
 }) => (
   <>
-    <NavbarTwo />
+    <NavbarTwo canShowSearch={false} />
 
     <ListingsWithMap
       authToken={authToken}

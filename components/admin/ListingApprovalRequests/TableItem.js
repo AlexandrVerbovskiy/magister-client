@@ -3,6 +3,7 @@ import { fullTimeConverter } from "../../../utils";
 import View from "../FastActions/View";
 import Moderate from "../FastActions/Moderate";
 import Tooltip from "../Tooltip";
+import TableDateView from "../../admin/TableDateView";
 
 const ActiveSpan = ({ active }) => {
   const text = active === null ? "-" : active ? "YES" : "NO";
@@ -15,7 +16,7 @@ const ActiveSpan = ({ active }) => {
 
   return (
     <div
-      className={`cursor-pointer text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
+      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
     >
       <Tooltip
         title={
@@ -74,10 +75,8 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <ActiveSpan active={approved} />
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium text-sky-500">
-          <div>{fullTimeConverter(createdAt)}</div>
-        </div>
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <TableDateView date={createdAt} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">

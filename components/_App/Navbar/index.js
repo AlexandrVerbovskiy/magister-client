@@ -15,6 +15,7 @@ import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import useNavListingCategories from "../../../hooks/useNavListingCategories";
 import ListingPopup from "./ListingPopup";
+import STATIC from "../../../static";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -278,6 +279,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
+                      maxLength={STATIC.maxSearchInputLength}
                     />
                     <SearchTipsPopup
                       active={categoryTipsPopupActive}
@@ -381,6 +383,7 @@ const Navbar = ({ canShowSearch = true }) => {
                           onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
+                          maxLength={STATIC.maxSearchInputLength}
                         />
 
                         <SearchTipsPopup

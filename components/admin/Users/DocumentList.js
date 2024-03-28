@@ -2,12 +2,11 @@ import React, { useState } from "react";
 
 import { getFilePath } from "../../../utils";
 import ImageView from "../Form/ImageView";
-
-const defaultLink = "/images/admin/user-avatar-80.png";
+import STATIC from "../../../static";
 
 const DocumentView = ({ label, url }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const imgSrc = url ? getFilePath(url) : defaultLink;
+  const imgSrc = url ? getFilePath(url) : STATIC.defaultPhotoLink;
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -27,7 +26,7 @@ const DocumentView = ({ label, url }) => {
         <div className="image-box cursor-zoom-in" onClick={openPopup}>
           <img src={imgSrc} alt="image" width="300px" height="300px" />
         </div>
-        
+
         <ImageView open={isPopupOpen} imgSrc={imgSrc} close={closePopup} />
       </div>
     </div>

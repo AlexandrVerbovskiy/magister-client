@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { fullTimeConverter } from "../../../utils";
 import Edit from "../FastActions/Edit";
+import TableDateView from "../../admin/TableDateView";
 
 const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
   return (
@@ -19,9 +19,7 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium text-sky-500">
-          <div>{fullTimeConverter(createdAt)}</div>
-        </div>
+        <TableDateView date={createdAt} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">

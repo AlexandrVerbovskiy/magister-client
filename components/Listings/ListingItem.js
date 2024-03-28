@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getFilePath, getListingImageByType } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import STATIC from "../../static";
 
 const ListingItem = ({ listing, hovered = false }) => {
   const images = listing.images ?? [];
@@ -62,7 +63,14 @@ const ListingItem = ({ listing, hovered = false }) => {
       <div className="listings-content">
         <div className="author">
           <div className="d-flex align-items-center">
-            <img src={getFilePath(listing.userPhoto)} alt="image" />
+            <img
+              src={
+                listing.userPhoto
+                  ? getFilePath(listing.userPhoto)
+                  : STATIC.defaultPhotoLink
+              }
+              alt="image"
+            />
             <span>{listing.userName}</span>
           </div>
         </div>
