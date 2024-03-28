@@ -13,7 +13,7 @@ import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
-import { getDateByCurrentAdd } from "../../utils";
+import { cloneObject, getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
 import Select from "react-select";
 
@@ -22,6 +22,13 @@ const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 const cities = [
   { name: "Warrington", value: "Warrington", title: "Warrington" },
   { name: "Manchester", value: "Manchester", title: "Manchester" },
+];
+
+const orderOptions = [
+  { label: "Default", value: "default" },
+  { label: "Latest", value: "latest" },
+  { label: "Price: low to high", value: "price_to_high" },
+  { label: "Price: high to low", value: "price_to_low" },
 ];
 
 const ListingsWithMap = ({
@@ -45,7 +52,7 @@ const ListingsWithMap = ({
   };
 
   const [categories, setCategories] = useState(baseCategories);
-  const [pageProps, setPageProps] = useState(basePageProps);
+  const [pageProps, setPageProps] = useState(cloneObject(basePageProps));
   const [canSendCreateNotifyRequest, setCanSendCreateNotifyRequest] = useState(
     needSubscriptionNewCategory
   );
@@ -62,8 +69,7 @@ const ListingsWithMap = ({
 
   const initCategories = () => {
     const pagePropsCategories = pageProps.options?.categories;
-
-    if (pagePropsCategories) return pagePropsCategories;
+    if (pagePropsCategories) return cloneObject(pagePropsCategories);
 
     const routerCategories = router.query.categories;
 
@@ -80,8 +86,7 @@ const ListingsWithMap = ({
 
   const initCities = () => {
     const pagePropsCities = pageProps.options?.cities;
-
-    if (pagePropsCities) return pagePropsCities;
+    if (pagePropsCities) return cloneObject(pagePropsCities);
 
     const routerCities = router.query.cities;
 
@@ -112,7 +117,7 @@ const ListingsWithMap = ({
     setSelectedCategories(initCategories());
   }, [pageProps.options]);
 
-  useEffect(() => setPageProps(basePageProps), [basePageProps]);
+  useEffect(() => setPageProps(cloneObject(basePageProps)), [basePageProps]);
 
   useEffect(() => setCategories(baseCategories), [baseCategories]);
 
@@ -153,11 +158,11 @@ const ListingsWithMap = ({
       lat: { value: searchLocation?.lat, hidden: () => true },
       lng: { value: searchLocation?.lng, hidden: () => true },
       searchCity: {
-        value: pageProps.options.searchCity,
+        value: cloneObject(pageProps.options.searchCity),
         name: "search-city",
       },
       searchCategory: {
-        value: pageProps.options.searchCategory,
+        value: cloneObject(pageProps.options.searchCategory),
         name: "search-category",
       },
     }),
@@ -178,18 +183,29 @@ const ListingsWithMap = ({
     ...defaultTimeFilterValues,
   });
 
-  const handleSelectedCategories = (categories) => {
-    setSelectedCategories(categories);
-    rebuild({ categories });
+  const handleSelectedCategories = (categories, needRemoveSearch = false) => {
+    setSelectedCategories(cloneObject(categories));
+
+    const rebuildProps = { categories };
+    if (needRemoveSearch) {
+      rebuildProps["searchCategory"] = null;
+    }
+
+    rebuild(rebuildProps);
   };
 
-  const handleSelectedCities = (cities) => {
+  const handleSelectedCities = (cities, needRemoveSearch = false) => {
     const searchCenter =
       userLocation ?? STATIC.cityCoords[cities[0]] ?? defaultCenter;
 
-    setSelectedCities(cities);
-    rebuild({ cities, ...searchCenter });
+    setSelectedCities(cloneObject(cities));
 
+    const rebuildProps = { cities, ...searchCenter };
+    if (needRemoveSearch) {
+      rebuildProps["searchCity"] = null;
+    }
+
+    rebuild(rebuildProps);
     setMapCenter(searchCenter);
   };
 
@@ -268,13 +284,6 @@ const ListingsWithMap = ({
 
   const cityNames = cities.map((city) => city.name);
 
-  const orderOptions = [
-    { label: "Default", value: "default" },
-    { label: "Latest", value: "latest" },
-    { label: "Price: low to high", value: "price_to_high" },
-    { label: "Price: high to low", value: "price_to_low" },
-  ];
-
   return (
     <>
       <PopularPlacesFilter
@@ -282,8 +291,8 @@ const ListingsWithMap = ({
         selectedCities={selectedCities}
         categories={categoriesNames}
         cities={cityNames}
-        searchCity={pageProps.options.searchCity}
-        searchCategory={pageProps.options.searchCategory}
+        searchCity={cloneObject(pageProps.options.searchCity)}
+        searchCategory={cloneObject(pageProps.options.searchCategory)}
       />
 
       <div className="listings-area ptb-100">
@@ -303,6 +312,10 @@ const ListingsWithMap = ({
                     setSelectedCategories={handleSelectedCategories}
                     categories={categories}
                     cities={cities}
+                    searchCity={cloneObject(pageProps.options.searchCity)}
+                    searchCategory={cloneObject(
+                      pageProps.options.searchCategory
+                    )}
                   />
                 </div>
 
@@ -331,7 +344,7 @@ const ListingsWithMap = ({
                                     (option) => option.value === order
                                   ) ?? orderOptions[0]
                                 }
-                                onChange={handleChangeOrder}
+                                onChange={(e) => handleChangeOrder(e.value)}
                                 isSearchable={false}
                                 className="custom-search-select blog-select"
                                 name="listing-order-select"

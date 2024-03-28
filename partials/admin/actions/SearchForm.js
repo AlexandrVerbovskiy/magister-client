@@ -1,4 +1,5 @@
 import React from "react";
+import STATIC from "../../../static";
 
 function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
   return (
@@ -14,6 +15,7 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
         type="search"
         placeholder={placeholder}
         name="search"
+        maxLength={STATIC.maxSearchInputLength}
       />
       <button
         className="absolute inset-0 right-auto group"

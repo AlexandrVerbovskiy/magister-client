@@ -17548,3 +17548,7 @@ input:-internal-autofill-selected {
   cursor: pointer!important;
   font-size: 15px!important;
 }
+
+/*.map-container .gm-fullscreen-control img:not(:first-child){
+  display: none;
+}*/

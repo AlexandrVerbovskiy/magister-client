@@ -2,6 +2,7 @@ import Link from "next/link";
 import { fullTimeConverter } from "../../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../../contexts";
+import TableDateView from "../TableDateView";
 
 const RoleSpan = ({ role }) => {
   let dopClassName =
@@ -59,9 +60,7 @@ const TableItem = ({
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium text-sky-500">
-          <div className="font-medium">{fullTimeConverter(createdAt)}</div>
-        </div>
+        <TableDateView date={createdAt} />
       </td>
     </tr>
   );

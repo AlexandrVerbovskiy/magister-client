@@ -14,7 +14,34 @@ const Sidebar = ({
   toDateFilter,
   setToDateFilter,
   cities: baseCities,
+  searchCity,
+  searchCategory,
 }) => {
+  const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
+  const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
+
+  useEffect(() => {
+    const newValue = [...selectedCategories];
+
+    if (searchCategory) {
+      newValue.push(searchCategory);
+    }
+
+    const newValueLower = newValue.map((value) => value.toLowerCase());
+    setSelectedCategoriesLower(newValueLower);
+  }, [searchCategory, selectedCategories]);
+
+  useEffect(() => {
+    const newValue = [...selectedCities];
+
+    if (searchCity) {
+      newValue.push(searchCity);
+    }
+
+    const newValueLower = newValue.map((value) => value.toLowerCase());
+    setSelectedCitiesLower(newValueLower);
+  }, [searchCity, selectedCities]);
+
   const categories = leveliseCategories(baseCategories);
 
   const [mainFilterOpen, setMainFilterOpen] = useState(true);
@@ -83,7 +110,7 @@ const Sidebar = ({
         type="checkbox"
         name={`categories[${category.name}]`}
         onChange={() => handleChangeCheckedCategory(category.name)}
-        checked={selectedCategories.includes(category.name)}
+        checked={selectedCategoriesLower.includes(category.name.toLowerCase())}
         value={category.name}
       />
       <label htmlFor={category.name}>{category.name} </label>
@@ -116,7 +143,7 @@ const Sidebar = ({
         value={item.value}
         name={`cities[${item.name}]`}
         onChange={() => handleChangeCheckedCity(item.value)}
-        checked={selectedCities.includes(item.value)}
+        checked={selectedCitiesLower.includes(item.value.toLowerCase())}
       />
       <label htmlFor={item.name}>{item.title} </label>
     </li>

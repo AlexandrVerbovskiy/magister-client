@@ -3,6 +3,7 @@ import { useCategoryCity } from "../../hooks";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getFullListingSearchLink } from "../../utils";
 import { useRouter } from "next/router";
+import STATIC from "../../static";
 
 const PopularPlacesFilter = ({
   selectedCategories,
@@ -95,6 +96,7 @@ const PopularPlacesFilter = ({
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
+                    maxLength={STATIC.maxSearchInputLength}
                   />
 
                   <SearchTipsPopup
@@ -120,6 +122,7 @@ const PopularPlacesFilter = ({
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
+                    maxLength={STATIC.maxSearchInputLength}
                   />
 
                   <SearchTipsPopup

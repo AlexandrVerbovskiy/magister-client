@@ -1,4 +1,5 @@
 import { fullTimeConverter, getFilenameByPath } from "../../../utils";
+import TableDateView from "../../admin/TableDateView";
 
 const StatusSpan = ({ status }) => {
   let className = "font-medium text-left";
@@ -45,9 +46,7 @@ const TableItem = ({
         <div className="font-medium">{line}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium text-sky-500">
-          <div className="font-medium">{fullTimeConverter(createdAt)}</div>
-        </div>
+        <TableDateView date={createdAt} />
       </td>
     </tr>
   );

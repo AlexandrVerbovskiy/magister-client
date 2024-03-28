@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 
 function Datepicker({ align, value, onChange }) {
+  const [pickerValue, setPickerValue] = useState(value);
+
+  useEffect(() => {
+    setPickerValue(value);
+  }, [value]);
+
   const options = {
     mode: "range",
     static: true,
@@ -23,12 +29,20 @@ function Datepicker({ align, value, onChange }) {
     },
   };
 
+  const onClose = (newValue) => {
+    if (newValue.length < 2) {
+      setPickerValue([]);
+      setTimeout(() => setPickerValue(value));
+    }
+  };
+
   return (
     <div className="relative">
       <Flatpickr
         className="form-input pl-9 dark:bg-slate-800 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem]"
-        value={value}
+        value={pickerValue}
         options={options}
+        onClose={onClose}
       />
       <div className="absolute inset-0 right-auto flex items-center pointer-events-none">
         <svg

@@ -5,6 +5,7 @@ import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
+import STATIC from "../../static";
 
 const Banner = ({ popularCategories }) => {
   const {
@@ -105,6 +106,7 @@ const Banner = ({ popularCategories }) => {
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
+                    maxLength={STATIC.maxSearchInputLength}
                   />
 
                   <SearchTipsPopup
@@ -130,6 +132,7 @@ const Banner = ({ popularCategories }) => {
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
+                    maxLength={STATIC.maxSearchInputLength}
                   />
 
                   <SearchTipsPopup

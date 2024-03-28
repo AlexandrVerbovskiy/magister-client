@@ -19,6 +19,7 @@ import { getListingImageByType } from "../../../utils";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import { useRouter } from "next/router";
+import STATIC from "../../../static";
 
 const Tooltip = ({ text, children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -94,6 +95,7 @@ const TabHeaderSection = ({
           name="search"
           className="search-field"
           placeholder="Search..."
+          maxLength={STATIC.maxSearchInputLength}
         />
       </label>
     </li>

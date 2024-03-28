@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import Transition from "../../utils/transition";
 import { IndiceContext } from "../../contexts";
 import DropdownClassicOptionWrapper from "./DropdownClassicOptionWrapper";
+import STATIC from "../../static";
 
 function DropdownClassicAjax({
   fetchOptions,
@@ -170,6 +171,7 @@ function DropdownClassicAjax({
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => handleChangeSearchTerm(e.target.value)}
+            maxLength={STATIC.maxSearchInputLength}
           />
 
           <div className="select-options-list">
@@ -213,7 +215,9 @@ function DropdownClassicAjax({
           </div>
 
           {loading && <div>Loading...</div>}
-          {options.length < 1 && !hasMore && !loading && <div>No options</div>}
+          {options.length < 1 && !hasMore && !loading && (
+            <div style={{ padding: "5px 12px" }}>No options</div>
+          )}
         </div>
       </Transition>
     </div>
