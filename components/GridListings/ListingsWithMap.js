@@ -144,11 +144,18 @@ const ListingsWithMap = ({
       ...getTimeFilterProps(),
       categories: {
         value: selectedCategories.length > 0 ? selectedCategories : null,
+        hidden: (newValue) => newValue.length == 0,
       },
-      cities: { value: selectedCities.length > 0 ? selectedCities : null },
+      cities: {
+        value: selectedCities.length > 0 ? selectedCities : null,
+        hidden: (newValue) => newValue.length == 0,
+      },
       lat: { value: searchLocation?.lat, hidden: () => true },
       lng: { value: searchLocation?.lng, hidden: () => true },
-      searchCity: { value: pageProps.options.searchCity, name: "search-city" },
+      searchCity: {
+        value: pageProps.options.searchCity,
+        name: "search-city",
+      },
       searchCategory: {
         value: pageProps.options.searchCategory,
         name: "search-category",
