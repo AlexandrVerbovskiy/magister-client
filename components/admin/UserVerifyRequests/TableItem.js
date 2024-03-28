@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { timeConverter } from "../../../utils";
+import { fullTimeConverter } from "../../../utils";
 import Edit from "../FastActions/Edit";
 
 const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
@@ -20,7 +20,7 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">
-          <div>{timeConverter(createdAt)}</div>
+          <div>{fullTimeConverter(createdAt)}</div>
         </div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">

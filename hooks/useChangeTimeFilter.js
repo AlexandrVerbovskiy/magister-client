@@ -56,8 +56,7 @@ const useWatchChangeTimeFilter = ({
         {
           fromTime: propFromDate,
           toTime: propToDate,
-        },
-        ["fromTime", "toTime"]
+        }
       );
     }
   };

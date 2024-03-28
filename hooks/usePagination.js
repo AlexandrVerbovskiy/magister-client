@@ -30,7 +30,7 @@ const usePagination = ({
   const [currentFrom, setCurrentFrom] = useState(0);
   const [currentTo, setCurrentTo] = useState(0);
 
-  const updateStateByOption = (gotOptions, unusualKeys = []) => {
+  const updateStateByOption = (gotOptions) => {
     setOptions(gotOptions);
     setPage(gotOptions.page);
     setItemsPerPage(gotOptions.count);
@@ -69,26 +69,24 @@ const usePagination = ({
       queryParams["filter"] = gotOptions.filter;
     }
 
-    console.log(gotOptions);
+    if (dopProps) {
+      Object.keys(dopProps).forEach((key) => {
+        if (!gotOptions[key]) return;
 
-    unusualKeys.forEach((key) => {
-      if (gotOptions[key]) {
         let checkHidden = null;
         let paramName = key;
 
-        if (dopProps) {
-          Object.keys(dopProps).forEach((dopPropsKey) => {
-            if (key === dopPropsKey || dopProps[key]?.name === dopPropsKey) {
-              if (dopProps[dopPropsKey].hidden) {
-                checkHidden = dopProps[dopPropsKey].hidden;
-              }
-
-              if (dopProps[dopPropsKey].name) {
-                paramName = dopProps[dopPropsKey].name;
-              }
+        Object.keys(dopProps).forEach((dopPropsKey) => {
+          if (key === dopPropsKey || dopProps[key]?.name === dopPropsKey) {
+            if (dopProps[dopPropsKey].hidden) {
+              checkHidden = dopProps[dopPropsKey].hidden;
             }
-          });
-        }
+
+            if (dopProps[dopPropsKey].name) {
+              paramName = dopProps[dopPropsKey].name;
+            }
+          }
+        });
 
         if (!checkHidden || !checkHidden(gotOptions[key])) {
           queryParams[paramName] = gotOptions[key];
@@ -97,10 +95,8 @@ const usePagination = ({
             delete queryParams[paramName];
           }
         }
-      }
-    });
-
-    console.log(queryParams);
+      });
+    }
 
     const props = Object.keys(queryParams)
       .map((param) => {
@@ -147,7 +143,7 @@ const usePagination = ({
     return { ...props, ...dopBody };
   };
 
-  const onChangeOptions = async (dopBody = {}, unusualKeys = []) => {
+  const onChangeOptions = async (dopBody = {}) => {
     try {
       const props = getFullProps(dopBody);
       const res = await getItemsFunc(props);
@@ -160,7 +156,7 @@ const usePagination = ({
 
       countPagesRef.current = gotOptions.totalPages;
       countItemsRef.current = gotCountItems;
-      updateStateByOption(gotOptions, unusualKeys);
+      updateStateByOption(gotOptions);
       setItems(gotItems);
 
       if (onSendRequest) {

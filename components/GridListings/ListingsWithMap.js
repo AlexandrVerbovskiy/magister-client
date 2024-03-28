@@ -173,7 +173,7 @@ const ListingsWithMap = ({
 
   const handleSelectedCategories = (categories) => {
     setSelectedCategories(categories);
-    rebuild({ categories }, ["categories"]);
+    rebuild({ categories });
   };
 
   const handleSelectedCities = (cities) => {
@@ -181,7 +181,7 @@ const ListingsWithMap = ({
       userLocation ?? STATIC.cityCoords[cities[0]] ?? defaultCenter;
 
     setSelectedCities(cities);
-    rebuild({ cities, ...searchCenter }, ["cities", "lat", "lng"]);
+    rebuild({ cities, ...searchCenter });
 
     setMapCenter(searchCenter);
   };

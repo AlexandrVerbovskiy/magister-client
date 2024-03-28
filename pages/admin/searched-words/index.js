@@ -63,12 +63,12 @@ const SearchedWords = (pageProps) => {
 
   const handleChangeAcceptedFilter = (value) => {
     setAcceptedFilter(value);
-    rebuild({ accepted: value }, ["accepted"]);
+    rebuild({ accepted: value });
   };
 
   const handleChangeViewedFilter = (value) => {
     setViewedFilter(value);
-    rebuild({ viewed: value }, ["viewed"]);
+    rebuild({ viewed: value });
   };
 
   return (

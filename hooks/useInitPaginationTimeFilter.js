@@ -38,7 +38,6 @@ const useInitPaginationTimeFilter = ({
 
   const fromTimePropHidden = (newValue) => {
     if (defaultFromTime) {
-      console.log(getTimeToProp(newValue), getTimeToProp(defaultFromTime))
       return getTimeToProp(newValue) == getTimeToProp(defaultFromTime);
     }
 
@@ -47,7 +46,6 @@ const useInitPaginationTimeFilter = ({
 
   const toTimePropHidden = (newValue) => {
     if (defaultToTime) {
-      console.log(getTimeToProp(newValue), getTimeToProp(defaultToTime))
       return getTimeToProp(newValue) == getTimeToProp(defaultToTime);
     }
 
