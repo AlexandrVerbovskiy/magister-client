@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import useSearchCategory from "./useSearchCategory";
 import useSearchCity from "./useSearchCity";
 
@@ -24,6 +24,14 @@ const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
 
   const [searchCategory, setSearchCategory] = useState(baseCategory);
   const [searchCity, setSearchCity] = useState(baseCity);
+
+  useEffect(() => {
+    setSearchCity(baseCity);
+  }, [baseCity]);
+
+  useEffect(() => {
+    setSearchCategory(baseCategory);
+  }, [baseCategory]);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
