@@ -301,7 +301,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
 }
 
-.category-image-parent{
+.category-image-parent {
   overflow: hidden;
 }
 
@@ -355,6 +355,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 
 .listing-categories-parent-select button > span {
   max-width: calc(100% - 18px);
+  text-wrap: nowrap;
 }
 
 .dropdown-classic > button > span {
