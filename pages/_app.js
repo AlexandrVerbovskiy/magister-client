@@ -58,9 +58,17 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       });
     }
 
-    document.querySelectorAll(styleSelector).forEach((elem) => {
-      const currentStyleType = type == "admin" ? "base" : "admin";
+    let currentStyleType = "base";
 
+    if (isFirst) {
+      currentStyleType = type ?? "base";
+    } else {
+      currentStyleType = type === "admin" ? "base" : "admin";
+    }
+
+    loadedRef.current[currentStyleType] = true;
+
+    document.querySelectorAll(styleSelector).forEach((elem) => {
       if (!elem.classList.contains(currentStyleType)) {
         elem.classList.add(currentStyleType);
         const clonedElement = elem.cloneNode(true);
