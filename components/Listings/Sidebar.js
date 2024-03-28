@@ -69,7 +69,10 @@ const Sidebar = ({
     let newSelectedCategories = selectedCategories;
     let needRemoveSearch = false;
 
-    if (selectedCategories.includes(value)) {
+    if (
+      selectedCategories.includes(value) ||
+      (searchCategory && value.toLowerCase() === searchCategory.toLowerCase())
+    ) {
       newSelectedCategories = newSelectedCategories.filter(
         (category) => category != value
       );
@@ -81,6 +84,8 @@ const Sidebar = ({
       newSelectedCategories = [...newSelectedCategories, value];
     }
 
+    console.log(newSelectedCategories);
+
     setSelectedCategories(newSelectedCategories, needRemoveSearch);
   };
 
@@ -88,7 +93,10 @@ const Sidebar = ({
     let newSelectedCities = selectedCities;
     let needRemoveSearch = false;
 
-    if (selectedCities.includes(value)) {
+    if (
+      selectedCities.includes(value) ||
+      (searchCity && value.toLowerCase() === searchCity.toLowerCase())
+    ) {
       newSelectedCities = newSelectedCities.filter((city) => city != value);
 
       if (searchCity) {

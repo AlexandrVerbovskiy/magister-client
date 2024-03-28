@@ -122,8 +122,6 @@ const ListingsWithMap = ({
 
     setSelectedCities(initCities());
     setSelectedCategories(initCategories());
-    setSearchCategory(pageProps.options.searchCategory);
-    setSearchCity(pageProps.options.searchCity);
   }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
@@ -181,6 +179,11 @@ const ListingsWithMap = ({
       setHasListings(items.length > 0);
     },
   });
+
+  useEffect(() => {
+    setSearchCategory(options.searchCategory);
+    setSearchCity(options.searchCity);
+  }, [options]);
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
     options,
