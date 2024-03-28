@@ -245,7 +245,7 @@ const ListingsWithMap = ({
     if (authToken) {
       try {
         await createListingCategoryCreateNotification(
-          selectedCategories[0],
+          searchCategory,
           authToken
         );
         setCanSendCreateNotifyRequest(false);
