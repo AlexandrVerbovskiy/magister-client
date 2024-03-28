@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getFilePath } from "../../utils";
 
-const Category = ({ topCategories, needShowMore}) => {
+const Category = ({ topCategories, needShowMore }) => {
   return (
     <>
       <section className="category-area pt-100 pb-70">
@@ -17,15 +17,28 @@ const Category = ({ topCategories, needShowMore}) => {
             </p>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ height: "100%" }}>
             {topCategories.map((info) => (
-              <div className="col-lg-2 col-sm-6 col-md-4" key={info.id}>
-                <div className="single-category-box d-flex flex-column align-items-center">
+              <div
+                className="col-lg-2 col-sm-6 col-md-4"
+                key={info.id}
+                style={{
+                  display: "flex",
+                  height: "auto",
+                  flexDirection: "row",
+                }}
+              >
+                <div
+                  className="single-category-box d-flex flex-column align-items-center"
+                  style={{ width: "100%", justifyContent: "space-between" }}
+                >
                   <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
                   </div>
-                  <h3>{info.name}</h3>
-                  <span>{info.countListings} Listings</span>
+                  <div>
+                    <h3>{info.name}</h3>
+                    <span>{info.countListings} Listings</span>
+                  </div>
                   <Link
                     href={`/listing-list/?categories=${info.name}`}
                     className="link-btn"
