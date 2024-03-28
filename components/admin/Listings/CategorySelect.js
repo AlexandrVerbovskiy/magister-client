@@ -23,8 +23,8 @@ const CategorySelect = ({
       >
         {selectedCategoryInfo.image && (
           <img
-            width="25px"
-            height="25px"
+            width="20px"
+            height="20px"
             className="category-option-image"
             style={{ marginRight: "5px" }}
             src={getFilePath(selectedCategoryInfo.image)}
