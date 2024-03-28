@@ -61,12 +61,14 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     let currentStyleType = "base";
 
     if (isFirst) {
-      currentStyleType = type ?? "base";
+      currentStyleType = "base";
     } else {
-      currentStyleType = type === "admin" ? "base" : "admin";
+      if (type == "admin") {
+        currentStyleType = "base";
+      } else {
+        currentStyleType = "admin";
+      }
     }
-
-    loadedRef.current[currentStyleType] = true;
 
     document.querySelectorAll(styleSelector).forEach((elem) => {
       if (!elem.classList.contains(currentStyleType)) {
