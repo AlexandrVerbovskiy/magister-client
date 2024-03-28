@@ -33,12 +33,6 @@ const Dashboard = () => {
           role="alert"
         >
           Welcome, <b>{sessionUser?.name}</b>!
-          <button
-            type="button"
-            className="btn-close"
-            data-dismiss="alert"
-            aria-label="Close"
-          ></button>
         </div>
 
         <div className="row">
@@ -56,12 +50,6 @@ const Dashboard = () => {
                     <a href="#">Hills Hotel</a>
                   </strong>{" "}
                   has been approved!
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-dismiss="alert"
-                    aria-label="Close"
-                  ></button>
                 </li>
               </ul>
             </div>

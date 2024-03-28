@@ -20,6 +20,24 @@ export const timeConverter = (time) => {
   return `${fullFormattedDate}`;
 };
 
+export const fullTimeConverter = (time) => {
+  const dateObject = new Date(time);
+
+  const formattedDate = dateObject.toLocaleDateString("en-US");
+  const formattedTime = dateObject.toLocaleTimeString("en-US", {
+    hour12: false,
+  });
+
+  const formattedDateParts = formattedDate.split("/");
+
+  const fullFormattedDate =
+    `${formattedDateParts[0].length < 2 ? "0" : ""}${formattedDateParts[0]}/` +
+    `${formattedDateParts[1].length < 2 ? "0" : ""}${formattedDateParts[1]}/` +
+    `${formattedDateParts[2]}`;
+
+  return `${fullFormattedDate} ${formattedTime}`;
+};
+
 export const timeNormalConverter = (time) => {
   const date = new Date(time);
 

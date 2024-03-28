@@ -1,4 +1,4 @@
-import { timeConverter, getFilenameByPath } from "../../../utils";
+import { fullTimeConverter, getFilenameByPath } from "../../../utils";
 
 const StatusSpan = ({ status }) => {
   let className = "font-medium text-left";
@@ -46,7 +46,7 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">
-          <div className="font-medium">{timeConverter(createdAt)}</div>
+          <div className="font-medium">{fullTimeConverter(createdAt)}</div>
         </div>
       </td>
     </tr>

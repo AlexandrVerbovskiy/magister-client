@@ -70,7 +70,7 @@ const UserVerifyRequests = (pageProps) => {
 
   const handleChangeStatusFilter = (status) => {
     setStatusFilter(status);
-    rebuild({ status: status }, ["status"]);
+    rebuild({ status: status });
   };
 
   return (

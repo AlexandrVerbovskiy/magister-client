@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { timeConverter, getFilenameByPath } from "../../../utils";
+import { fullTimeConverter, getFilenameByPath } from "../../../utils";
 
 function TransactionPanel({ panelItem, handlePanelItemClear }) {
   const closeBtn = useRef(null);
@@ -57,7 +57,7 @@ function TransactionPanel({ panelItem, handlePanelItemClear }) {
               Log Info
             </div>
             <div className="text-sm text-center italic">
-              {panelItem && timeConverter(panelItem.createdAt)}
+              {panelItem && fullTimeConverter(panelItem.createdAt)}
             </div>
             {/* Details */}
             <div className="drop-shadow-lg mt-12">
@@ -129,7 +129,7 @@ function TransactionPanel({ panelItem, handlePanelItemClear }) {
                 <div className="flex justify-between space-x-1">
                   <span className="italic">Created at:</span>
                   <span className="font-medium text-slate-700 dark:text-slate-100 text-right">
-                    {panelItem && timeConverter(panelItem.createdAt)}
+                    {panelItem && fullTimeConverter(panelItem.createdAt)}
                   </span>
                 </div>
               </div>
