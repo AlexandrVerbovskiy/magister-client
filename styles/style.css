@@ -13114,8 +13114,9 @@ Dashboard CSS
 
 .breadcrumb-area {
   border-radius: 5px;
-  display: flex;
-  align-items: center;
+  display: inline;
+  /*display: flex;
+  align-items: center;*/
   margin-bottom: 40px;
 }
 .breadcrumb-area h1 {
@@ -13126,7 +13127,7 @@ Dashboard CSS
   font-size: 22px;
   font-weight: 600;
 }
-.breadcrumb-area h1::before {
+/*.breadcrumb-area h1::before {
   content: "";
   position: absolute;
   right: 0;
@@ -13135,15 +13136,15 @@ Dashboard CSS
   height: 16px;
   width: 1px;
   background: #cecece;
-}
+}*/
 .breadcrumb-area .breadcrumb {
   background-color: transparent;
   border-radius: 0;
   margin-bottom: 0;
-  padding-left: 12px;
+  padding-left: 0;
   padding-right: 0;
   padding-bottom: 0;
-  padding-top: 0;
+  padding-top: 5px;
 }
 .breadcrumb-area .breadcrumb .item {
   color: var(--optionalColor);

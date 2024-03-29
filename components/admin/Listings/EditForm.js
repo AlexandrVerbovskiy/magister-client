@@ -719,6 +719,7 @@ const EditForm = ({ listing, categories, save }) => {
                             checked={approved}
                             changeChecked={() => {
                               if (
+                                prevListing.ownerId ||
                                 prevListing.ownerId !== ownerId ||
                                 prevListing.userVerified
                               ) {
@@ -731,6 +732,7 @@ const EditForm = ({ listing, categories, save }) => {
                         </div>
                         <ErrorSpan
                           error={
+                            prevListing.ownerId &&
                             prevListing.ownerId == ownerId &&
                             !prevListing.userVerified
                               ? "You cannot change verify the listing because the owner of the listing is unverified"

@@ -269,7 +269,7 @@ const DocumentsVerification = ({
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Settings</h1>
+          <h1>Documents Verification</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/">Home</Link>
@@ -277,7 +277,7 @@ const DocumentsVerification = ({
             <li className="item">
               <Link href="/settings/">Settings</Link>
             </li>
-            <li className="item"> Documents Verification</li>
+            <li className="item">Documents Verification</li>
           </ol>
         </div>
 

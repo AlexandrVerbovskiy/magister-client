@@ -548,7 +548,7 @@ const ProfileEdit = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Settings</h1>
+          <h1>Profile Edit</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/">Home</Link>
