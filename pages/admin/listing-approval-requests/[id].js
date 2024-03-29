@@ -36,7 +36,7 @@ const ListingPhotoView = ({ src }) => {
         onClick={openPopup}
       >
         <div
-          style={{ height: "200px", width: "100%" }}
+          style={{ height: "200px !important", width: "100%" }}
           className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent"
         >
           <div
