@@ -264,6 +264,11 @@ const DocumentsVerification = ({
     }
   };
 
+  const handleUpdateAccept = async () => {
+    await handleSaveClick();
+    setActiveSendRequestBtn(false);
+  };
+
   useEffect(() => {
     initDocuments();
   }, [documents]);
@@ -422,7 +427,7 @@ const DocumentsVerification = ({
           toggleActive={() => setActiveReverifiedModal(false)}
           title="Are you sure you want update documents?"
           body="When you update your documents, your profile will automatically be transferred to an unverified status. Until the administrator confirms your profile, you will not be able to manage the listings. A verification request will be sent automatically"
-          onAccept={handleSaveClick}
+          onAccept={handleUpdateAccept}
           acceptText="Update Documents"
           actionsParentClass="mt-4"
         />
