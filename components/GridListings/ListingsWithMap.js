@@ -15,7 +15,7 @@ import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
 import { cloneObject, getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
-import Select from "react-select";
+import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 
 const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
 
@@ -347,7 +347,7 @@ const ListingsWithMap = ({
                             >
                               <label>Sort By:</label>
 
-                              <Select
+                              <AdaptiveSelect
                                 options={orderOptions}
                                 value={
                                   orderOptions.find(

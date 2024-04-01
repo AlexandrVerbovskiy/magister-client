@@ -18,7 +18,7 @@ const TableItem = ({ id, userName, userEmail, userId, createdAt }) => {
           <Link href={`/admin/users/edit/${userId}`}>{userEmail}</Link>
         </div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <TableDateView date={createdAt} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">

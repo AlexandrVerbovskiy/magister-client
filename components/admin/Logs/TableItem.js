@@ -45,7 +45,7 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium">{line}</div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <TableDateView date={createdAt} />
       </td>
     </tr>

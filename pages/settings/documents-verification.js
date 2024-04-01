@@ -230,7 +230,13 @@ const DocumentsVerification = ({
 
   const handleBeforeSaveClick = async (e) => {
     e.preventDefault();
-    setActiveReverifiedModal(true);
+    const formData = dataToSave();
+
+    if (formData) {
+      setActiveReverifiedModal(true);
+    } else {
+      handleSaveClick();
+    }
   };
 
   const handleSendRequestToVerify = async () => {

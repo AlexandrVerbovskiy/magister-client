@@ -1,6 +1,6 @@
 import ErrorSpan from "../ErrorSpan";
+import AdaptiveSelect from "./AdaptiveSelect";
 import ErrorIconWrapper from "./ErrorIconWrapper";
-import Select from "react-select";
 
 const SelectWithIcon = ({
   onChange,
@@ -15,7 +15,7 @@ const SelectWithIcon = ({
 }) => {
   return (
     <ErrorIconWrapper label={label} icon={icon} error={error}>
-      <Select
+      <AdaptiveSelect
         options={options}
         value={options.find((option) => option.value === value)}
         onChange={onChange}
