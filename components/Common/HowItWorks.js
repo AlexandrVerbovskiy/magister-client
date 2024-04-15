@@ -6,7 +6,7 @@ const HowItWorks = ({ bgColor }) => {
       <section className={`how-it-works-area pt-100 pb-70 ${bgColor}`}>
         <div className="container">
           <div className="section-title">
-            <h2>How It Works</h2>
+            <h2>You're safe with us</h2>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
@@ -20,7 +20,7 @@ const HowItWorks = ({ bgColor }) => {
                 <div className="icon">
                   <i className="flaticon-placeholder"></i>
                 </div>
-                <h3>Our Insurance Guarantee</h3>
+                <h3>How it works</h3>
                 <p>
                   Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
                   maecenas accumsan lacus vel facilisis.
@@ -33,7 +33,7 @@ const HowItWorks = ({ bgColor }) => {
                 <div className="icon">
                   <i className="flaticon-support-1"></i>
                 </div>
-                <h3>Owner journey</h3>
+                <h3>User Verification</h3>
                 <p>
                   Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
                   maecenas accumsan lacus vel facilisis.
@@ -46,7 +46,7 @@ const HowItWorks = ({ bgColor }) => {
                 <div className="icon">
                   <i className="flaticon-tick"></i>
                 </div>
-                <h3>Renter journey</h3>
+                <h3>Insurance Guarantee</h3>
                 <p>
                   Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
                   maecenas accumsan lacus vel facilisis.
