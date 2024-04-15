@@ -67,6 +67,10 @@ const ListingCategories = ({ categories: baseCategories }) => {
           parentLocalId,
           parentName,
           isNew: false,
+          orderIndex:
+            category.orderIndex === null
+              ? initCategories[level].length
+              : category.orderIndex,
         });
       });
     });
@@ -83,6 +87,10 @@ const ListingCategories = ({ categories: baseCategories }) => {
           value: category.localId,
           title: category.name,
           default: levelOptions.length < 1,
+          orderIndex:
+            category.orderIndex === null
+              ? levelOptions.length
+              : category.orderIndex,
         });
       }
     });
@@ -199,6 +207,38 @@ const ListingCategories = ({ categories: baseCategories }) => {
     return hasError;
   };
 
+  const autoUpdateOrderIndexes = () => {
+    setCategories((prev) => {
+      const res = { ...prev };
+
+      Object.keys(prev).forEach((level) => {
+        const allOrderIndexes = res[level].map((elem) => elem["orderIndex"]);
+
+        allOrderIndexes.sort((a, b) => a - b);
+
+        let deletedIndex;
+        for (let i = 0; i < allOrderIndexes.length - 1; i++) {
+          if (allOrderIndexes[i + 1] - allOrderIndexes[i] !== 1) {
+            deletedIndex = allOrderIndexes[i] + 1;
+            break;
+          }
+        }
+
+        if (!deletedIndex) {
+          deletedIndex = allOrderIndexes[allOrderIndexes.length - 1] + 1;
+        }
+
+        for (let i = 0; i < res[level].length; i++) {
+          if (res[level][i]["orderIndex"] > deletedIndex) {
+            res[level][i]["orderIndex"]--;
+          }
+        }
+      });
+
+      return res;
+    });
+  };
+
   const handleRemove = ({ localId, newChildCategory = null }) => {
     const firstSecondLevelIdsToDelete = [];
     const categoriesToDelete = [];
@@ -277,6 +317,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
       return res;
     });
+
+    autoUpdateOrderIndexes();
   };
 
   const handleCreate = (level) => {
@@ -322,6 +364,22 @@ const ListingCategories = ({ categories: baseCategories }) => {
     });
   };
 
+  const handleChangeOrderIndexes = ({ level, info }) => {
+    setCategories((prev) => {
+      const res = { ...prev };
+
+      Object.keys(info).forEach((id) => {
+        for (let i = 0; i < res[level].length; i++) {
+          if (res[level][i]["id"] == id) {
+            res[level][i]["orderIndex"] = info[id];
+          }
+        }
+      });
+
+      return res;
+    });
+  };
+
   const getLevelInfo = (level) => ({
     handleChangeField: ({ localId, field, value }) =>
       handleChangeField({ level, localId, field, value }),
@@ -330,6 +388,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
     handleCreate: () => handleCreate(level),
     handleChangePhoto: ({ localId, image }) =>
       handleChangePhoto({ localId, level, image }),
+    handleChangeOrderIndexes: (info) =>
+      handleChangeOrderIndexes({ level, info }),
     list: categories[level],
     categories,
   });
@@ -380,6 +440,11 @@ const ListingCategories = ({ categories: baseCategories }) => {
           );
         }
 
+        dataToSave.append(
+          `categoriesToSave[${level}][${index}][orderIndex]`,
+          category.orderIndex
+        );
+
         if (category.level) {
           dataToSave.append(
             `categoriesToSave[${level}][${index}][level]`,
@@ -424,6 +489,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
           popular: category.popular,
           parentId: parent?.id ?? null,
           image: category.imageFile ?? category.image,
+          orderIndex: dataToCompare[level].length,
         });
       });
     });

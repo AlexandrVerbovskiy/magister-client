@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CategoryListItem from "./CategoryListItem";
 import Tooltip from "../../../components/admin/Tooltip";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
 
 const CategoryList = ({
   name,
@@ -16,7 +24,46 @@ const CategoryList = ({
   disabledReason = null,
   canCreate = null,
   getDeletePopupMessage = null,
+  handleChangeOrderIndexes,
 }) => {
+  const [state, setState] = useState({ items: [] });
+
+  useEffect(() => {
+    list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
+    console.log(list);
+    setState({ items: list });
+  }, [list]);
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const startIndex = result.source.index;
+    const endIndex = result.destination.index;
+    const newItems = reorder(state.items, startIndex, endIndex);
+
+    const updatedItems = newItems.map((item, index) => {
+      return {
+        ...item,
+        orderIndex: index,
+      };
+    });
+
+    setState({
+      items: updatedItems,
+    });
+
+    const orderIndexesToUpdate = {};
+
+    updatedItems.forEach(
+      (updatedItem) =>
+        (orderIndexesToUpdate[updatedItem["id"]] = updatedItem["orderIndex"])
+    );
+
+    handleChangeOrderIndexes(orderIndexesToUpdate);
+  };
+
   if (canCreate === null) canCreate = parentOptions.length > 0;
 
   const createButton = (
@@ -56,60 +103,88 @@ const CategoryList = ({
             </h2>
           </div>
 
-          {list.length > 0 && (
+          {state.items.length > 0 && (
             <div className="p-6 space-y-6 pt-0">
               <section className="flex gap-y-4 flex-col">
-                {list.map((elem) => (
-                  <CategoryListItem
-                    deletePopupMessage={getDeletePopupMessage(elem.name)}
-                    parentOptions={parentOptions}
-                    key={elem.localId}
-                    categories={categories}
-                    {...elem}
-                    hasParent={hasParent}
-                    checkHasError={checkCategoryListingDoubling}
-                    onChangePhoto={(e) => {
-                      if (e.target.files.length) {
-                        handleChangePhoto({
-                          localId: elem.localId,
-                          image: e.target.files[0],
-                        });
-                      }
-                    }}
-                    onChangeParent={(value) =>
-                      handleChangeField({
-                        localId: elem.localId,
-                        value,
-                        field: "parentLocalId",
-                      })
-                    }
-                    onChangeName={(value) => {
-                      handleChangeField({
-                        localId: elem.localId,
-                        value,
-                        field: "name",
-                      });
-                      handleChangeField({
-                        localId: elem.localId,
-                        value: null,
-                        field: "error",
-                      });
-                    }}
-                    onPopularClick={() =>
-                      handleChangeField({
-                        localId: elem.localId,
-                        value: !elem.popular,
-                        field: "popular",
-                      })
-                    }
-                    onDeleteClick={(newChildCategory) => {
-                      handleRemove({
-                        localId: elem.localId,
-                        newChildCategory,
-                      });
-                    }}
-                  />
-                ))}
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="droppable">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        style={{ height: 71.56 * state.items.length + "px" }}
+                      >
+                        {state.items.map((elem, index) => (
+                          <Draggable
+                            key={elem.id}
+                            draggableId={`${elem.id}`}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                              >
+                                <CategoryListItem
+                                  deletePopupMessage={getDeletePopupMessage(
+                                    elem.name
+                                  )}
+                                  parentOptions={parentOptions}
+                                  key={elem.localId}
+                                  categories={categories}
+                                  {...elem}
+                                  hasParent={hasParent}
+                                  checkHasError={checkCategoryListingDoubling}
+                                  onChangePhoto={(e) => {
+                                    if (e.target.files.length) {
+                                      handleChangePhoto({
+                                        localId: elem.localId,
+                                        image: e.target.files[0],
+                                      });
+                                    }
+                                  }}
+                                  onChangeParent={(value) =>
+                                    handleChangeField({
+                                      localId: elem.localId,
+                                      value,
+                                      field: "parentLocalId",
+                                    })
+                                  }
+                                  onChangeName={(value) => {
+                                    handleChangeField({
+                                      localId: elem.localId,
+                                      value,
+                                      field: "name",
+                                    });
+                                    handleChangeField({
+                                      localId: elem.localId,
+                                      value: null,
+                                      field: "error",
+                                    });
+                                  }}
+                                  onPopularClick={() =>
+                                    handleChangeField({
+                                      localId: elem.localId,
+                                      value: !elem.popular,
+                                      field: "popular",
+                                    })
+                                  }
+                                  onDeleteClick={(newChildCategory) => {
+                                    handleRemove({
+                                      localId: elem.localId,
+                                      newChildCategory,
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
               </section>
             </div>
           )}

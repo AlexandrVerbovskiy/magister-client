@@ -172,25 +172,27 @@ const ListingPopup = ({ active, setActive, categories }) => {
           onClick={() => setActive(false)}
         />
 
-        {categories["firstLevel"].map((category) => (
-          <CategoryOption
-            key={category.id}
-            category={category}
-            active={selectedFirstCategory == category.id}
-            href={
-              category.countChildren
-                ? null
-                : `/listing-list?categories=${category.name}`
-            }
-            onClick={() => {
-              if (category.countChildren) {
-                handleClickFirstCategory(category.id);
-              } else {
-                setActive(false);
+        {categories["firstLevel"]
+          .sort((a, b) => a.orderIndex - b.orderIndex)
+          .map((category) => (
+            <CategoryOption
+              key={category.id}
+              category={category}
+              active={selectedFirstCategory == category.id}
+              href={
+                category.countChildren
+                  ? null
+                  : `/listing-list?categories=${category.name}`
               }
-            }}
-          />
-        ))}
+              onClick={() => {
+                if (category.countChildren) {
+                  handleClickFirstCategory(category.id);
+                } else {
+                  setActive(false);
+                }
+              }}
+            />
+          ))}
       </div>
 
       <div className="categories-select-level-column sidebar-left">
@@ -204,6 +206,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
 
         {categories["secondLevel"]
           .filter((category) => category.parentId == selectedFirstCategory)
+          .sort((a, b) => a.orderIndex - b.orderIndex)
           .map((category) => (
             <CategoryOption
               key={category.id}
@@ -236,6 +239,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
 
         {categories["thirdLevel"]
           .filter((category) => category.parentId == selectedSecondCategory)
+          .sort((a, b) => a.orderIndex - b.orderIndex)
           .map((category) => (
             <CategoryOption
               key={category.id}
