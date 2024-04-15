@@ -18,6 +18,7 @@ import {
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../../middlewares";
+import { baseListPageParams } from "../../../utils";
 
 const Users = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -178,7 +179,7 @@ const Users = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserListPageOptions(
-    context.query,
+    baseListPageParams(context.query),
     baseSideProps.authToken
   );
 

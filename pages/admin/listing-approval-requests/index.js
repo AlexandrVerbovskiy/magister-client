@@ -22,6 +22,7 @@ import {
 } from "../../../services";
 import { useRouter } from "next/router";
 import DropdownFilter from "../../../components/admin/DropdownFilter";
+import { baseTimeListPageParams } from "../../../utils";
 
 const UserVerifyRequests = (pageProps) => {
   const router = useRouter();
@@ -146,11 +147,8 @@ const UserVerifyRequests = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const fromTime = context.query["from-time"];
-  const toTime = context.query["to-time"];
-
   const options = await getAdminListingApprovalRequestListPageOptions(
-    { ...context.query, fromTime, toTime, clientTime: Date.now() },
+    baseTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

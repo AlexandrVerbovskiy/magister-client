@@ -4,6 +4,7 @@ import ListingsWithMap from "../components/GridListings/ListingsWithMap";
 import NavbarTwo from "../components/_App/NavbarTwo";
 import { userSideProps } from "../middlewares";
 import { getListingListOptions } from "../services";
+import { baseTimeListPageParams } from "../utils";
 
 const GridListingsFullMap = ({
   categories,
@@ -54,20 +55,15 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 
   const searchCity = context.query["search-city"];
   const searchCategory = context.query["search-category"];
-  const fromTime = context.query["from-time"];
-  const toTime = context.query["to-time"];
 
   const options = await getListingListOptions(
     {
-      ...context.query,
-      clientTime: Date.now(),
+      ...baseTimeListPageParams(context.query),
       cities,
       categories,
       clientIp,
       searchCity,
       searchCategory,
-      fromTime,
-      toTime,
     },
     baseSideProps.authToken
   );
