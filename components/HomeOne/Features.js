@@ -4,23 +4,17 @@ import Link from "next/link";
 const Features = () => {
   const items = [
     {
-      text: `Find something nearby Explore nearby items and filter your
-  search by location.`,
+      text: `Unlock value. Earn a passive income.`,
       icon: "flaticon-commerce",
       link: "/",
     },
     {
-      text: `Request and book Reach out to the owner to borrow their items
-      for the dates you need. Once they confirm, you can secure the
-      items by making a payment.`,
+      text: `Reduce waste. Live sustainably.`,
       icon: "flaticon-project",
       link: "/",
     },
     {
-      text: `Verify If you haven't already done so, you'll be
-      prompted to verify your identity. This ensures a robust
-      rental process. After verification, your rental will be
-      confirmed..`,
+      text: `Open access. Access on demand.`,
       icon: "flaticon-growth",
       link: "/",
     },
@@ -31,7 +25,7 @@ const Features = () => {
       <section className="features-area ptb-100">
         <div className="container">
           <div className="section-title">
-            <h2>You're safe with us</h2>
+            <h2>Your business (Key Brand Messaging)</h2>
           </div>
 
           <div className="row justify-content-center">

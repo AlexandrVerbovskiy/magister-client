@@ -3248,7 +3248,7 @@ Features Area CSS
   padding: 40px 20px;
   border-radius: 5px;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   flex-direction: column;
   justify-content: space-between;
 }
