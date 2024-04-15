@@ -17,6 +17,7 @@ import {
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import { getAdminLogListPageOptions, getLogList } from "../../services";
+import { baseTimeListPageParams } from "../../utils";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -121,11 +122,8 @@ const Logs = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const fromTime = context.query["from-time"];
-  const toTime = context.query["to-time"];
-
   const options = await getAdminLogListPageOptions(
-    { ...context.query, fromTime, toTime, clientTime: Date.now() },
+    baseTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

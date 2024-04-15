@@ -17,6 +17,7 @@ import {
 } from "../../../services";
 import SearchedWordTable from "../../../components/admin/SearchedWord/Table";
 import { useRouter } from "next/router";
+import { baseListPageParams } from "../../../utils";
 
 const SearchedWords = (pageProps) => {
   const router = useRouter();
@@ -160,7 +161,7 @@ const SearchedWords = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminSearchedWordListPageOptions(
-    context.query,
+    baseListPageParams(context.query),
     baseSideProps.authToken
   );
 

@@ -61,7 +61,7 @@ const usePagination = ({
     if (gotOptions.order) {
       queryParams["order"] = gotOptions.order;
       if (gotOptions.orderType) {
-        queryParams["orderType"] = gotOptions.orderType;
+        queryParams["order-type"] = gotOptions.orderType;
       }
     }
 
@@ -197,7 +197,8 @@ const usePagination = ({
 
   useEffect(() => {
     const dopBody = {};
-    const { order, orderType, page, filter } = router.query;
+    const { order, page, filter } = router.query;
+    const orderType = router.query["order-type"];
 
     if (order) {
       dopBody["order"] = order;

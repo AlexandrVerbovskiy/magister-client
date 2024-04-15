@@ -14,7 +14,7 @@ import {
 import { usePagination } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getListingImageByType } from "../../../utils";
+import { baseListPageParams, getListingImageByType } from "../../../utils";
 
 import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
@@ -423,7 +423,7 @@ const ListingList = (pageProps) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const options = await getUserListingListOptions(
-    context.query,
+    baseListPageParams(context.query),
     baseSideProps.authToken
   );
 

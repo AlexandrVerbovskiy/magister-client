@@ -19,6 +19,7 @@ import {
   getAdminUserUserVerifyRequestListPageOptions,
   getUserVerifyRequestList,
 } from "../../../services";
+import { baseTimeListPageParams } from "../../../utils";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -111,11 +112,8 @@ const UserVerifyRequests = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const fromTime = context.query["from-time"];
-  const toTime = context.query["to-time"];
-
   const options = await getAdminUserUserVerifyRequestListPageOptions(
-    { ...context.query, fromTime, toTime, clientTime: Date.now() },
+    baseTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 
