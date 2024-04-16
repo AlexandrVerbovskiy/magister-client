@@ -1,22 +1,25 @@
 import React from "react";
 import Link from "next/link";
 
-const Features = () => {
+const YourBusiness = () => {
   const items = [
     {
-      text: `Unlock value. Earn a passive income.`,
+      title: `Unlock value. Earn a passive income.`,
       icon: "flaticon-commerce",
       link: "/",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
-      text: `Reduce waste. Live sustainably.`,
+      title: `Reduce waste. Live sustainably.`,
       icon: "flaticon-project",
       link: "/",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
-      text: `Open access. Access on demand.`,
+      title: `Open access. Access on demand.`,
       icon: "flaticon-growth",
       link: "/",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
   ];
 
@@ -38,6 +41,7 @@ const Features = () => {
                   <div className="icon">
                     <i className={item.icon}></i>
                   </div>
+                  <h3>{item.title}</h3>
                   <p>{item.text}</p>
                   <Link href={item.link} className="link-btn">
                     Get Start Now
@@ -54,4 +58,4 @@ const Features = () => {
   );
 };
 
-export default Features;
+export default YourBusiness;

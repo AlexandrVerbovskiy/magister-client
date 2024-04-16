@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import { getFilePath, getListingImageByType } from "../../utils";
@@ -8,9 +8,10 @@ import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
+import BookingModal from "./BookingModal";
 
-const SingleListingsContent = ({ listing }) => {
-  const { success, error } = useContext(IndiceContext);
+const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
+  const { success, error, sessionUser } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
 
@@ -32,8 +33,29 @@ const SingleListingsContent = ({ listing }) => {
   };
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
+  const [createOrderModalActive, setCreateOrderModalActive] = useState(false);
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
+
+  const handleMakeBooking = () => {
+    setCreateOrderModalActive(false);
+  };
+
+  const handleMakeBookingTriggerClick = (e) => {
+    e.preventDefault();
+
+    if (sessionUser) {
+      setCreateOrderModalActive(true);
+    } else {
+      const triggerBtn = document.querySelector(".sign-form-trigger");
+
+      if (triggerBtn) {
+        triggerBtn.click();
+      }
+    }
+  };
+
+  console.log(listing);
 
   return (
     <>
@@ -801,9 +823,14 @@ const SingleListingsContent = ({ listing }) => {
                       </li>
                     </ul>
                   )}
-                  <a href="#" className="default-btn">
+                  <button
+                    type="button"
+                    className="default-btn w-100"
+                    onClick={handleMakeBookingTriggerClick}
+                  >
                     Book Now
-                  </a>
+                  </button>
+
                   <span>
                     By <a href="#">Booking.com</a>
                   </span>
@@ -946,6 +973,17 @@ const SingleListingsContent = ({ listing }) => {
           </div>
         </div>
       </section>
+
+      {sessionUser && (
+        <BookingModal
+          handleMakeBooking={handleMakeBooking}
+          price={listing.pricePerDay}
+          minRentalDays={listing.minRentalDays}
+          fee={tenantBaseCommissionPercent}
+          createOrderModalActive={createOrderModalActive}
+          setCreateOrderModalActive={setCreateOrderModalActive}
+        />
+      )}
     </>
   );
 };

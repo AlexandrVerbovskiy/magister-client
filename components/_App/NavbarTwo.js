@@ -325,7 +325,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         onClick={toggleAuth}
-                        className="auth-one"
+                        className="auth-one sign-form-trigger"
                       >
                         <i className="flaticon-user"></i> Login / Register
                       </span>
@@ -337,7 +337,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         onClick={handleSignOut}
-                        className="auth-one"
+                        className="auth-one sign-out-trigger"
                       >
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
@@ -395,7 +395,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
                   {!isAuth && (
                     <div className="option-item">
-                      <span data-toggle="modal" onClick={toggleAuth}>
+                      <span data-toggle="modal" className="sign-form-trigger" onClick={toggleAuth}>
                         <i className="flaticon-user"></i> Login / Register
                       </span>
                     </div>
@@ -403,7 +403,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
                   {isAuth && (
                     <div className="option-item">
-                      <span data-toggle="modal" onClick={handleSignOut}>
+                      <span data-toggle="modal" className="sign-out-trigger" onClick={handleSignOut}>
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
                     </div>

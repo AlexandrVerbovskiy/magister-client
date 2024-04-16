@@ -1,6 +1,6 @@
 import React from "react";
 
-const HowItWorks = ({ bgColor }) => {
+const SafeWithUs = ({ bgColor }) => {
   return (
     <>
       <section className={`how-it-works-area pt-100 pb-70 ${bgColor}`}>
@@ -16,16 +16,18 @@ const HowItWorks = ({ bgColor }) => {
 
           <div className="row justify-content-center">
             <div className="col-lg-4 col-md-6 col-sm-6">
-              <div className="single-how-it-works-box">
-                <div className="icon">
-                  <i className="flaticon-placeholder"></i>
+              <a href="#how-it-works-section">
+                <div className="single-how-it-works-box">
+                  <div className="icon">
+                    <i className="flaticon-placeholder"></i>
+                  </div>
+                  <h3>How it works</h3>
+                  <p>
+                    Quis ipsum suspendisse ultrices gravida. Risus commodo
+                    viverra maecenas accumsan lacus vel facilisis.
+                  </p>
                 </div>
-                <h3>How it works</h3>
-                <p>
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis.
-                </p>
-              </div>
+              </a>
             </div>
 
             <div className="col-lg-4 col-md-6 col-sm-6">
@@ -60,4 +62,4 @@ const HowItWorks = ({ bgColor }) => {
   );
 };
 
-export default HowItWorks;
+export default SafeWithUs;

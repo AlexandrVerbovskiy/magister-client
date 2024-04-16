@@ -4,16 +4,17 @@ import Banner from "../components/HomeOne/Banner";
 import Footer from "../components/_App/Footer";
 import { userSideProps } from "../middlewares";
 import { getIndexOptions } from "../services";
-import Features from "../components/HomeOne/Features";
+import YourBusiness from "../components/HomeOne/YourBusiness";
 import ListingArea from "../components/Common/ListingArea";
 import Category from "../components/HomeOne/Category";
 import DestinationsTwo from "../components/Common/DestinationsTwo";
 import Feedback from "../components/Common/Feedback";
 import AppDownload from "../components/Common/AppDownload";
 import Blog from "../components/Common/Blog";
-import HowItWorks from "../components/Common/HowItWorks";
+import SafeWithUs from "../components/Common/SafeWithUs";
 import BeforeTheRental from "../components/Common/BeforeTheRental";
 import DuringRental from "../components/Common/DuringRental";
+import HowItWorks from "../components/HomeOne/HowItWorks";
 
 const Index = ({ topListings, categories }) => {
   const popularCategories = [];
@@ -41,7 +42,7 @@ const Index = ({ topListings, categories }) => {
 
       <Banner popularCategories={popularCategories} />
 
-      <Features />
+      <YourBusiness />
 
       <ListingArea listings={topListings} />
 
@@ -52,9 +53,11 @@ const Index = ({ topListings, categories }) => {
 
       <DestinationsTwo />
 
+      <HowItWorks />
+
       <Feedback />
 
-      <HowItWorks bgColor="bg-f9f9f9" />
+      <SafeWithUs bgColor="bg-f9f9f9" />
 
       <DuringRental />
 
