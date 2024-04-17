@@ -16,6 +16,11 @@ export const getListingFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
+export const getOrderFullByIdOptions = async (id, authToken = null) => {
+  const data = await get(`/order-full-by-id-options/${id}`, authToken);
+  return data.body;
+};
+
 export const getCreateListingOptions = async (authToken) => {
   const data = await get(`/create-listing-options`, authToken);
   return data.body;

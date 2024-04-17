@@ -83,3 +83,10 @@ export const getDateByCurrentReject = (daysToReject = 0) => {
   date.setHours(0, 0, 0, 0);
   return date;
 };
+
+export const getDaysDifference = (startDate, endDate) => {
+  const start = new Date(startDate).getTime();
+  const end = new Date(endDate).getTime();
+  const difference = Math.abs(end - start);
+  return Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+};

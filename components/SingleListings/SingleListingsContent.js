@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
-import { getFilePath, getListingImageByType } from "../../utils";
+import {
+  getFilePath,
+  getListingImageByType,
+  shakeUnverifiedAlert,
+} from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
@@ -9,11 +13,14 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import BookingModal from "./BookingModal";
+import { createOrder } from "../../services";
+import { useRouter } from "next/router";
 
 const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
-  const { success, error, sessionUser } = useContext(IndiceContext);
+  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const router = useRouter();
 
   const handleShareClick = () => {
     const clipboard = new ClipboardJS("#shareButton", {
@@ -37,15 +44,36 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const handleMakeBooking = () => {
-    setCreateOrderModalActive(false);
+  const handleMakeBooking = async ({ price, fromDate, toDate }) => {
+    try {
+      const id = await createOrder(
+        {
+          pricePerDay: price,
+          startDate: fromDate,
+          endDate: toDate,
+          listingId: listing.id,
+        },
+        authToken
+      );
+      setCreateOrderModalActive(false);
+      router.push(`/order/${id}`);
+      success.set(
+        "Booking made successfully. Wait for a response from the owner"
+      );
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   const handleMakeBookingTriggerClick = (e) => {
     e.preventDefault();
 
     if (sessionUser) {
-      setCreateOrderModalActive(true);
+      if (sessionUser.verified) {
+        setCreateOrderModalActive(true);
+      } else {
+        shakeUnverifiedAlert();
+      }
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
 
@@ -54,8 +82,6 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
       }
     }
   };
-
-  console.log(listing);
 
   return (
     <>
@@ -828,7 +854,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     className="default-btn w-100"
                     onClick={handleMakeBookingTriggerClick}
                   >
-                    Book Now
+                    Book Now ${listing.pricePerDay}(per day)
                   </button>
 
                   <span>
@@ -982,6 +1008,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
           fee={tenantBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           setCreateOrderModalActive={setCreateOrderModalActive}
+          listingName={listing.name}
         />
       )}
     </>

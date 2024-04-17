@@ -2,18 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { getDateByCurrentAdd, validatePrice } from "../../utils";
-import InputWithIcon from "../FormComponents/InputWithIcon";
+import { getDateByCurrentAdd, getDaysDifference } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
-
-const getDaysDifference = (startDate, endDate) => {
-  const start = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-
-  const difference = Math.abs(end - start);
-
-  return Math.ceil(difference / (1000 * 3600 * 24)) + 1;
-};
+import OfferOwnPrice from "./OfferOwnPrice";
+import YesNoModal from "../../components/_App/YesNoModal";
 
 const BookingModal = ({
   handleMakeBooking,
@@ -22,9 +14,12 @@ const BookingModal = ({
   createOrderModalActive,
   setCreateOrderModalActive,
   minRentalDays,
+  listingName,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
-  const [priceError, setPriceError] = useState(null);
+  const [offerPriceActive, setOfferPriceActive] = useState(false);
+  const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
+    useState(false);
 
   const calculateFeeByDaysCount = (count, price, fee) => {
     const totalFee = (fee * price * count) / 100;
@@ -95,8 +90,6 @@ const BookingModal = ({
       ],
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr.replace("to", "-");
-        const customClass = align ? align : "";
-        instance.calendarContainer.classList.add(`flatpickr-${customClass}`);
       },
       onChange: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr.replace("to", "-");
@@ -120,28 +113,13 @@ const BookingModal = ({
     });
   }, [fromDate, toDate, price, fee]);
 
-  const handleChangePrice = (e) => {
-    const newPrice = e.target.value;
-    setPrice(newPrice);
-    setPriceError(null);
-  };
-
   const handleSubmit = () => {
-    let hasError = true;
+    let hasError = false;
 
     if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
       setCalendarError(
         `You can only rent a listing for more than ${minRentalDays} days`
       );
-    }
-
-    if (!price) {
-      setPriceError("Required field");
-      hasError = true;
-    }
-
-    if (price && validatePrice(price) !== true) {
-      setPriceError(validatePrice(price));
       hasError = true;
     }
 
@@ -149,12 +127,22 @@ const BookingModal = ({
       return;
     }
 
-    handleMakeBooking();
+    setActiveAcceptSendBookingRequest(true);
+  };
+
+  const handleSendBookingRequest = () => {
+    setActiveAcceptSendBookingRequest(false);
+    handleMakeBooking({ price, fromDate, toDate });
+  };
+
+  const handleOfferYourPrice = (e) => {
+    e.preventDefault();
+    setOfferPriceActive(true);
   };
 
   return (
     <BaseModal
-      className="make-order-modal"
+      className="scrollable-modal make-order-modal"
       active={createOrderModalActive}
       toggleActive={() => setCreateOrderModalActive(false)}
     >
@@ -162,24 +150,15 @@ const BookingModal = ({
         <span>Book Now</span>
       </span>
 
-      <form className="mt-3 booking-form  left-hidden-scrollable">
+      <div className="mt-3 booking-form left-scrollable">
         <div className="flatpickr-parent-wrapper popup-widget">
           <div ref={calendarContainer}></div>
           <ErrorSpan error={calendarError} />
         </div>
 
         <div className="popup-widget" style={{ padding: "15px 30px 15px" }}>
-          <InputWithIcon
-            type="number"
-            value={price}
-            error={priceError}
-            label="Your proposal price per day:"
-            placeholder="532.00"
-            onInput={handleChangePrice}
-            name="proposal-price"
-          />
-
           <div>Listing Price Per Day: ${defaultPrice}</div>
+          {price != defaultPrice && <div>Offered price: ${price}</div>}
           {fee && <div>Fee: {fee}%</div>}
           {minRentalDays && (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
@@ -189,10 +168,42 @@ const BookingModal = ({
           <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
         </div>
 
-        <button className="mt-4" type="button" onClick={handleSubmit}>
+        <button
+          className="mt-4 default-modal-button"
+          type="button"
+          onClick={handleSubmit}
+        >
           Send Request
         </button>
-      </form>
+
+        <a
+          href="#"
+          className="mt-1 d-flex justify-content-center"
+          onClick={handleOfferYourPrice}
+        >
+          Offer Your Price
+        </a>
+
+        <OfferOwnPrice
+          offerPriceActive={offerPriceActive}
+          setOfferPriceActive={setOfferPriceActive}
+          price={price}
+          setPrice={setPrice}
+        />
+
+        <YesNoModal
+          active={activeAcceptSendBookingRequest}
+          toggleActive={() => setActiveAcceptSendBookingRequest(false)}
+          title="Please confirm the booking"
+          onAccept={handleSendBookingRequest}
+          acceptText="Confirm"
+          body={
+            fromDate.toDateString() == toDate.toDateString()
+              ? `'${listingName}' rental during ${fromDate.toDateString()} for $${price} per day`
+              : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${price} per day`
+          }
+        />
+      </div>
     </BaseModal>
   );
 };

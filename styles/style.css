@@ -4716,6 +4716,7 @@ Listings Details Area CSS
   font-size: 14.5px;
   margin: 0;
 }
+
 .listings-details-desc .write-a-review .default-btn {
   position: absolute;
   top: 50%;
@@ -4725,6 +4726,14 @@ Listings Details Area CSS
   color: var(--whiteColor);
   border-color: var(--mainColor);
 }
+
+.order_widget .default-btn{
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  border-color: var(--mainColor);
+}
+
+.order_widget .default-btn:hover,
 .listings-details-desc .write-a-review .default-btn:hover {
   box-shadow: 5px 5px var(--blackColor);
 }
@@ -5337,11 +5346,15 @@ Listings Details Area CSS
 .listings-sidebar .book_listings span a:hover {
   color: var(--mainColor);
 }
+
+.listings-sidebar .order_widget ul, 
 .listings-sidebar .listings_contact_details ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
+
+.listings-sidebar .order_widget ul li, 
 .listings-sidebar .listings_contact_details ul li {
   position: relative;
   border-top: 1px solid #e3e3e3;
@@ -5350,13 +5363,19 @@ Listings Details Area CSS
   padding-bottom: 14px;
   padding-left: 25px;
 }
+
+.listings-sidebar .order_widget ul li a, 
 .listings-sidebar .listings_contact_details ul li a {
   display: inline-block;
   color: var(--optionalColor);
 }
+
+.listings-sidebar .order_widget ul li a:hover, 
 .listings-sidebar .listings_contact_details ul li a:hover {
   color: var(--mainColor);
 }
+
+.listings-sidebar .order_widget ul li i, 
 .listings-sidebar .listings_contact_details ul li i {
   position: absolute;
   left: 0;
@@ -17856,4 +17875,73 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.loginRegisterModal .modal-dialog .modal-content button.close {
+  background-color: red !important;
+  border-radius: 50% !important;
+  color: var(--whiteColor) !important;
+  padding: 3px 0 0 !important;
+  border: none !important;
+  width: 32px !important;
+}
+
+.scrollable-modal > .modal-dialog > .modal-content {
+  padding: 40px 0px !important;
+}
+
+.scrollable-modal
+  > .modal-dialog
+  > .modal-content
+  > .tab-content
+  > .tab-pane
+  > div
+  > * {
+  padding: 0 40px !important;
+}
+
+.listings-details-content .meta {
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.default-modal-button {
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  border: none;
+  font-weight: 600;
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  padding: 14px 30px 13px;
+  transition: var(--transition);
+}
+
+.default-modal-button:hover {
+  background-color: var(--blackColor);
+}
+
+.shaked {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+
+.order_widget li {
+  color: black!important;
+  padding-left: 0!important;
+}
+
+.booking-operations{
+  display: flex;
+}
+
+.order_widget .booking-operations button:nth-child(1),
+.order_widget .booking-operations button:nth-child(2){
+  margin-right: 10px;
+}
+
+.order_widget .booking-operations button:nth-child(2),
+.order_widget .booking-operations button:nth-child(3){
+  margin-left: 10px;
 }
