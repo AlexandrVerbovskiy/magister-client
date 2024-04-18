@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import DateInput from "../FormComponents/DateInput";
-import { dateToInputString, leveliseCategories } from "../../utils";
+import {
+  dateToInputString,
+  leveliseCategories,
+  separateDate,
+} from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 
 const Sidebar = ({
@@ -83,8 +87,6 @@ const Sidebar = ({
     } else {
       newSelectedCategories = [...newSelectedCategories, value];
     }
-
-    console.log(newSelectedCategories);
 
     setSelectedCategories(newSelectedCategories, needRemoveSearch);
   };
@@ -193,7 +195,7 @@ const Sidebar = ({
                 <div className="d-flex flex-column date-filter">
                   <label htmlFor="from_date">From</label>
                   <DateInput
-                    min={new Date().toISOString().split("T")[0]}
+                    min={separateDate(new Date())}
                     name="from_date"
                     value={
                       fromDateFilter ? dateToInputString(fromDateFilter) : ""

@@ -15,7 +15,7 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
         type="search"
         placeholder={placeholder}
         name="search"
-        maxLength={STATIC.maxSearchInputLength}
+        maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
       />
       <button
         className="absolute inset-0 right-auto group"

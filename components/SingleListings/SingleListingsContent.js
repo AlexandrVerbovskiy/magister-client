@@ -1,18 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
-import { getFilePath, getListingImageByType } from "../../utils";
+import {
+  getFilePath,
+  getListingImageByType,
+  separateDate,
+  shakeUnverifiedAlert,
+} from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
+import BookingModal from "./BookingModal";
+import { createOrder } from "../../services";
+import { useRouter } from "next/router";
 
-const SingleListingsContent = ({ listing }) => {
-  const { success, error } = useContext(IndiceContext);
+const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
+  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const router = useRouter();
 
   const handleShareClick = () => {
     const clipboard = new ClipboardJS("#shareButton", {
@@ -32,8 +41,48 @@ const SingleListingsContent = ({ listing }) => {
   };
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
+  const [createOrderModalActive, setCreateOrderModalActive] = useState(false);
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
+
+  const handleMakeBooking = async ({ price, fromDate, toDate }) => {
+    try {
+      const id = await createOrder(
+        {
+          pricePerDay: price,
+          startDate: fromDate,
+          endDate: toDate,
+          listingId: listing.id,
+        },
+        authToken
+      );
+      setCreateOrderModalActive(false);
+      router.push(`/order/${id}`);
+      success.set(
+        "Booking made successfully. Wait for a response from the owner"
+      );
+    } catch (e) {
+      error.set(e);
+    }
+  };
+
+  const handleMakeBookingTriggerClick = (e) => {
+    e.preventDefault();
+
+    if (sessionUser) {
+      if (sessionUser.verified) {
+        setCreateOrderModalActive(true);
+      } else {
+        shakeUnverifiedAlert();
+      }
+    } else {
+      const triggerBtn = document.querySelector(".sign-form-trigger");
+
+      if (triggerBtn) {
+        triggerBtn.click();
+      }
+    }
+  };
 
   return (
     <>
@@ -801,9 +850,14 @@ const SingleListingsContent = ({ listing }) => {
                       </li>
                     </ul>
                   )}
-                  <a href="#" className="default-btn">
-                    Book Now
-                  </a>
+                  <button
+                    type="button"
+                    className="default-btn w-100"
+                    onClick={handleMakeBookingTriggerClick}
+                  >
+                    Book Now ${listing.pricePerDay}(per day)
+                  </button>
+
                   <span>
                     By <a href="#">Booking.com</a>
                   </span>
@@ -946,6 +1000,19 @@ const SingleListingsContent = ({ listing }) => {
           </div>
         </div>
       </section>
+
+      {sessionUser && (
+        <BookingModal
+          handleMakeBooking={handleMakeBooking}
+          price={listing.pricePerDay}
+          minRentalDays={listing.minRentalDays}
+          fee={tenantBaseCommissionPercent}
+          createOrderModalActive={createOrderModalActive}
+          setCreateOrderModalActive={setCreateOrderModalActive}
+          listingName={listing.name}
+          blockedDates={listing.blockedDates}
+        />
+      )}
     </>
   );
 };

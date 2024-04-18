@@ -279,7 +279,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
-                      maxLength={STATIC.maxSearchInputLength}
+                      maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                     />
                     <SearchTipsPopup
                       active={categoryTipsPopupActive}
@@ -324,7 +324,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         onClick={toggleAuth}
-                        className="auth-one"
+                        className="auth-one sign-form-trigger"
                       >
                         <i className="flaticon-user"></i> Login / Register
                       </span>
@@ -336,7 +336,7 @@ const Navbar = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         onClick={handleSignOut}
-                        className="auth-one"
+                        className="auth-one sign-out-trigger"
                       >
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
@@ -383,7 +383,7 @@ const Navbar = ({ canShowSearch = true }) => {
                           onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
-                          maxLength={STATIC.maxSearchInputLength}
+                          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                         />
 
                         <SearchTipsPopup
@@ -397,7 +397,11 @@ const Navbar = ({ canShowSearch = true }) => {
 
                   {!isAuth && (
                     <div className="option-item">
-                      <span data-toggle="modal" onClick={toggleAuth}>
+                      <span
+                        data-toggle="modal"
+                        className="sign-form-trigger"
+                        onClick={toggleAuth}
+                      >
                         <i className="flaticon-user"></i> Login / Register
                       </span>
                     </div>
@@ -405,7 +409,7 @@ const Navbar = ({ canShowSearch = true }) => {
 
                   {isAuth && (
                     <div className="option-item">
-                      <span data-toggle="modal" onClick={handleSignOut}>
+                      <span data-toggle="modal" className="sign-out-trigger" onClick={handleSignOut}>
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
                     </div>

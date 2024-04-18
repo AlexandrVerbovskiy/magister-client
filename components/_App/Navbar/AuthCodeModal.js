@@ -14,7 +14,7 @@ const AuthCodeModal = ({
         <span>Enter Verified Code</span>
       </span>
 
-      <form method="get">
+      <form method="get" onSubmit={(e) => e.preventDefault}>
         <div className="form-group">
           <input
             name="verifyCode"

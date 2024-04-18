@@ -2598,6 +2598,7 @@
     margin-right: auto;
   }
 }
+
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .listing-area {
@@ -4195,3 +4196,39 @@
     margin-left: -55px;
   }
 } /*# sourceMappingURL=responsive.css.map */
+
+@media only screen and (max-width: 726px) {
+  .scrollable-modal
+    > .modal-dialog
+    > .modal-content
+    > .tab-content
+    > .tab-pane
+    > div
+    > * {
+    padding: 0 20px !important;
+  }
+
+  .popup-widget {
+    padding: 15px;
+  }
+
+  .flatpickr-parent-wrapper.popup-widget {
+    margin-bottom: 30px;
+    background-color: transparent;
+    border: 0;
+    border-radius: 5px;
+  }
+
+  .booking-operations {
+    flex-direction: column;
+    grid-row-gap: 10px;
+  }
+
+  .order_widget .booking-operations>button:nth-child(1), .order_widget .booking-operations>button:nth-child(2){
+    margin-right: 0!important;
+  }
+
+  .order_widget .booking-operations>button:nth-child(2), .order_widget .booking-operations>button:nth-child(3){
+    margin-left: 0!important;
+  }
+}

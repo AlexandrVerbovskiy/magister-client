@@ -2432,6 +2432,7 @@ Main Banner Area CSS
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-wrap: nowrap;
 }
 .main-banner-content .popular-search-list li a::before {
   content: "";
@@ -4715,6 +4716,7 @@ Listings Details Area CSS
   font-size: 14.5px;
   margin: 0;
 }
+
 .listings-details-desc .write-a-review .default-btn {
   position: absolute;
   top: 50%;
@@ -4724,6 +4726,14 @@ Listings Details Area CSS
   color: var(--whiteColor);
   border-color: var(--mainColor);
 }
+
+.order_widget .default-btn{
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  border-color: var(--mainColor);
+}
+
+.order_widget .default-btn:hover,
 .listings-details-desc .write-a-review .default-btn:hover {
   box-shadow: 5px 5px var(--blackColor);
 }
@@ -5336,11 +5346,15 @@ Listings Details Area CSS
 .listings-sidebar .book_listings span a:hover {
   color: var(--mainColor);
 }
+
+.listings-sidebar .order_widget ul, 
 .listings-sidebar .listings_contact_details ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
+
+.listings-sidebar .order_widget ul li, 
 .listings-sidebar .listings_contact_details ul li {
   position: relative;
   border-top: 1px solid #e3e3e3;
@@ -5349,13 +5363,19 @@ Listings Details Area CSS
   padding-bottom: 14px;
   padding-left: 25px;
 }
+
+.listings-sidebar .order_widget ul li a, 
 .listings-sidebar .listings_contact_details ul li a {
   display: inline-block;
   color: var(--optionalColor);
 }
+
+.listings-sidebar .order_widget ul li a:hover, 
 .listings-sidebar .listings_contact_details ul li a:hover {
   color: var(--mainColor);
 }
+
+.listings-sidebar .order_widget ul li i, 
 .listings-sidebar .listings_contact_details ul li i {
   position: absolute;
   left: 0;
@@ -6507,6 +6527,18 @@ How It Works Area CSS
   padding-left: 26px;
   padding-right: 26px;
 }
+
+.small-icon-image{
+  width: 80px;
+  height: 80px;
+}
+
+.safe-with-us-img img{
+  height: 70px;
+  width: 70px;
+  margin-bottom: 5px;
+}
+
 .single-how-it-works-box .icon {
   margin-bottom: 30px;
   display: inline-block;
@@ -11360,9 +11392,14 @@ All Modal CSS
 =================================================*/
 .loginRegisterModal .modal-dialog {
   max-width: 500px;
-  margin-top: 0;
   margin-bottom: 0;
 }
+
+.modal-xxl>.modal-dialog {
+  max-width: 800px;
+  margin-bottom: 0;
+}
+
 .loginRegisterModal .modal-dialog .modal-content {
   background-color: var(--whiteColor);
   border: none;
@@ -13770,6 +13807,8 @@ Dashboard CSS
   top: 4px;
   right: -9px;
 }
+
+.error-span,
 .earnings-box ul li ul li.unpaid,
 .earnings-box ul li ul li.fee-price {
   color: red;
@@ -16388,22 +16427,29 @@ Dashboard CSS
   background: #888;
 }
 
+.left-hidden-scrollable::-webkit-scrollbar {
+  width: 0px;
+}
+
 .left-scrollable::-webkit-scrollbar,
 .sidebar-left::-webkit-scrollbar {
   width: 7px;
 }
 
+.left-hidden-scrollable::-webkit-scrollbar-track,
 .left-scrollable::-webkit-scrollbar-track,
 .sidebar-left::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
+.left-hidden-scrollable::-webkit-scrollbar-thumb,
 .left-scrollable::-webkit-scrollbar-thumb,
 .sidebar-left::-webkit-scrollbar-thumb {
   background: #cfcfcf;
   border-radius: 20px;
 }
 
+.left-hidden-scrollable::-webkit-scrollbar-thumb:hover,
 .left-scrollable::-webkit-scrollbar-thumb:hover,
 .sidebar-left::-webkit-scrollbar-thumb:hover {
   background: #888;
@@ -17589,7 +17635,7 @@ input:-internal-autofill-selected {
   box-sizing: border-box !important;
 }
 
-.custom-search-select [class*="-option"]:hover{
+.custom-search-select [class*="-option"]:hover {
   background-color: rgba(38, 132, 255, 0.08) !important;
 }
 
@@ -17692,4 +17738,234 @@ input:-internal-autofill-selected {
   opacity: 0 !important;
   position: relative !important;
   transform: scale(0.01) !important;
+}
+
+.flatpickr-day.inRange,
+.flatpickr-day.selected.startRange,
+.flatpickr-day.startRange.startRange,
+.flatpickr-day.endRange.startRange,
+.flatpickr-day.selected.endRange,
+.flatpickr-day.startRange.endRange,
+.flatpickr-day.endRange.endRange {
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  background-color: var(--mainColor) !important;
+  color: white !important;
+}
+
+.flatpickr-day.inRange {
+  background-color: var(--mainColor2) !important;
+}
+
+/*.flatpickr-day.today.startRange,
+.flatpickr-day.today.endRange,
+.flatpickr-day.today.inRange {
+  background-color: var(--blackColor) !important;
+}*/
+
+.flatpickr-day.flatpickr-disabled {
+  color: rgba(57, 57, 57, 0.2) !important;
+}
+
+.flatpickr-parent-wrapper {
+  display: flex;
+  width: 100% !important;
+  justify-content: center;
+}
+
+.flatpickr-calendar.inline {
+  top: 0 !important;
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month :hover {
+  color: #1e293b !important;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: currentColor !important;
+}
+
+.flatpickr-current-month span.cur-month:hover {
+  background: none !important;
+}
+
+.flatpickr-current-month {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  position: static !important;
+  height: auto !important;
+  width: auto !important;
+  left: auto !important;
+  padding: 0 !important;
+}
+
+.flatpickr-current-month span.cur-month {
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+.flatpickr-current-month span.cur-month:hover {
+  background: none !important;
+}
+
+.flatpickr-current-month input.cur-year {
+  font-weight: inherit !important;
+  box-shadow: none !important;
+}
+
+.flatpickr-months .flatpickr-month {
+  color: #1a202c !important;
+  height: auto !important;
+  line-height: inherit !important;
+}
+
+.flatpickr-current-month .numInputWrapper,
+.flatpickr-current-month input.cur-year,
+.flatpickr-monthDropdown-months {
+  background-color: transparent !important;
+}
+
+.flatpickr-current-month .arrowUp,
+.flatpickr-current-month .arrowDown {
+  display: none !important;
+}
+
+.flatpickr-months {
+  align-items: center !important;
+  margin-top: -8px !important;
+  margin-bottom: 6px !important;
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  position: static !important;
+  height: auto !important;
+  color: #6b7280 !important;
+  transition-property: color !important;
+  transition-duration: 150ms !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-delay: 0s !important;
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month :hover {
+  color: #1e293b !important;
+}
+
+.flatpickr-months .flatpickr-prev-month svg,
+.flatpickr-months .flatpickr-next-month svg {
+  width: 10px !important;
+  height: 11px !important;
+  fill: currentColor !important;
+}
+
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  fill: currentColor !important;
+}
+
+.flatpickr-months .flatpickr-prev-month.flatpickr-disabled,
+.flatpickr-months .flatpickr-next-month.flatpickr-disabled {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.popup-widget {
+  margin-bottom: 30px;
+  background-color: #fbfbfb;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 30px;
+}
+
+.booking-form {
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.loginRegisterModal .modal-dialog .modal-content button.close {
+  background-color: red !important;
+  border-radius: 50% !important;
+  color: var(--whiteColor) !important;
+  padding: 3px 0 0 !important;
+  border: none !important;
+  width: 32px !important;
+}
+
+.scrollable-modal > .modal-dialog > .modal-content {
+  padding: 40px 0px !important;
+}
+
+.scrollable-modal
+  > .modal-dialog
+  > .modal-content
+  > .tab-content
+  > .tab-pane
+  > div
+  > * {
+  padding: 0 40px !important;
+}
+
+.listings-details-content .meta {
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.default-modal-button {
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  border: none;
+  font-weight: 600;
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  padding: 14px 30px 13px;
+  transition: var(--transition);
+}
+
+.default-modal-button:hover {
+  background-color: var(--blackColor);
+}
+
+.shaked {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+
+.order_widget li {
+  color: black!important;
+  padding-left: 0!important;
+}
+
+.booking-operations{
+  display: flex;
+}
+
+.order_widget .booking-operations>button:nth-child(1),
+.order_widget .booking-operations>button:nth-child(2){
+  margin-right: 10px;
+}
+
+.order_widget .booking-operations>button:nth-child(2),
+.order_widget .booking-operations>button:nth-child(3){
+  margin-left: 10px;
+}
+
+.order-info-widget{
+  padding: "15px 30px 15px"
 }

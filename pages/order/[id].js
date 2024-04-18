@@ -1,17 +1,17 @@
 import React from "react";
 import NavbarTwo from "../../components/_App/NavbarTwo";
 import Footer from "../../components/_App/Footer";
-import SingleListingsContent from "../../components/SingleListings/SingleListingsContent";
 import { userSideProps } from "../../middlewares";
-import { getListingFullByIdOptions } from "../../services";
+import { getOrderFullByIdOptions, getOrderFullInfo } from "../../services";
+import OrderContent from "../../components/SingleListings/OrderContent";
 
-const Listing = ({ listing, tenantBaseCommissionPercent }) => {
+const Listing = ({ order, tenantBaseCommissionPercent }) => {
   return (
     <>
       <NavbarTwo />
 
-      <SingleListingsContent
-        listing={listing}
+      <OrderContent
+        order={order}
         tenantBaseCommissionPercent={tenantBaseCommissionPercent}
       />
 
@@ -22,8 +22,7 @@ const Listing = ({ listing, tenantBaseCommissionPercent }) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-  const options = await getListingFullByIdOptions(id, baseSideProps.authToken);
-
+  const options = await getOrderFullByIdOptions(id, baseSideProps.authToken);
   return { ...options, id };
 };
 

@@ -171,7 +171,7 @@ function DropdownClassicAjax({
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => handleChangeSearchTerm(e.target.value)}
-            maxLength={STATIC.maxSearchInputLength}
+            maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
           />
 
           <div className="select-options-list">
