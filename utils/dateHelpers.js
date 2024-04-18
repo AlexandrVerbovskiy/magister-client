@@ -132,3 +132,8 @@ export const separateDate = (date) => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const checkStringDateHigherOrEqualCurrentDate = (date) => {
+  const currentDate = separateDate(new Date());
+  return date >= currentDate;
+};

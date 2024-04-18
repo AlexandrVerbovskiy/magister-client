@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import {
+  checkStringDateHigherOrEqualCurrentDate,
+  getDaysDifference,
   getFilePath,
   getListingImageByType,
   separateDate,
@@ -21,14 +23,18 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   const [mapCenter, setMapCenter] = useState(null);
   const [updateRequestModalActive, setUpdateRequestModalActive] =
     useState(false);
+  const [orderStatus, setOrderStatus] = useState(
+    STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
+  );
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const [startDateValid, setStartDateValid] = useState(true);
-  const [endDateValid, setEndDateValid] = useState(true);
   const [isOwner, setIsOwner] = useState(true);
   const [isTenant, setIsTenant] = useState(true);
+
+  const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
+  const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
   const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
@@ -38,16 +44,58 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   };
 
   useEffect(() => {
-    const currentDate = separateDate(new Date());
-    setStartDateValid(order.offerStartDate >= currentDate);
-    setEndDateValid(order.offerEndDate >= currentDate);
     setIsOwner(order.ownerId == sessionUser.id);
     setIsTenant(order.tenantId == sessionUser.id);
+    setOrderStatus(order.status);
+
+    if (order.previousUpdateRequest) {
+      setPrevUpdateRequest(order.previousUpdateRequest);
+    } else {
+      if (order.actualUpdateRequest) {
+        setPrevUpdateRequest({
+          senderId: order.tenantId,
+          startDate: order.startDate,
+          endDate: order.endDate,
+          pricePerDay: order.offerPricePerDay,
+        });
+      }
+    }
+
+    setActualUpdateRequest(order.actualUpdateRequest);
   }, [order.id]);
 
   const handleCreateUpdateRequest = ({ price, fromDate, toDate }) => {
     try {
       setUpdateRequestModalActive(false);
+
+      if (isOwner) {
+        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_TENANT);
+      } else {
+        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER);
+      }
+
+      if (actualUpdateRequest) {
+        setPrevUpdateRequest({
+          senderId: actualUpdateRequest.senderId,
+          startDate: actualUpdateRequest.newStartDate,
+          endDate: actualUpdateRequest.newEndDate,
+          pricePerDay: actualUpdateRequest.newPricePerDay,
+        });
+      } else {
+        setPrevUpdateRequest({
+          senderId: order.tenantId,
+          startDate: order.offerStartDate,
+          endDate: order.offerEndDate,
+          pricePerDay: order.offerPricePerDay,
+        });
+      }
+
+      setActualUpdateRequest({
+        senderId: sessionUser.userId,
+        newStartDate: fromDate,
+        newEndDate: toDate,
+        newPricePerDay: price,
+      });
 
       success.set(
         "Booking updates successfully. Wait for a response from the " +
@@ -152,129 +200,349 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                 </div>
 
                 <div className="listings-sidebar">
-                  <div className="listings-widget order_widget">
-                    <h3>Booking Info</h3>
+                  {!actualUpdateRequest && (
+                    <div className="listings-widget order_widget">
+                      <h3>Booking Info</h3>
 
-                    <ul style={{ listStyle: "none", padding: "0" }}>
-                      <li>Min rental: {order.listingMinRentalDays} days</li>
+                      <ul style={{ listStyle: "none", padding: "0" }}>
+                        <li
+                          style={
+                            order.listingPricePerDay != order.offerPricePerDay
+                              ? { textDecoration: "line-through" }
+                              : {}
+                          }
+                        >
+                          Listing price per day: ${order.listingPricePerDay}
+                        </li>
 
-                      <li
-                        style={
-                          order.listingPricePerDay != order.offerPricePerDay
-                            ? { textDecoration: "line-through" }
-                            : {}
-                        }
-                      >
-                        Listing price per day: ${order.listingPricePerDay}
-                      </li>
-
-                      {order.listingPricePerDay != order.offerPricePerDay && (
-                        <li>Offer price per day: ${order.offerPricePerDay}</li>
-                      )}
-
-                      {timeNormalConverter(order.offerStartDate) ===
-                      timeNormalConverter(order.offerEndDate) ? (
-                        <>
+                        {order.listingPricePerDay != order.offerPricePerDay && (
                           <li>
-                            Rental date:{" "}
-                            <span
-                              className={startDateValid ? "" : "error-span"}
-                            >
-                              {timeNormalConverter(order.offerStartDate)}
-                            </span>{" "}
+                            Offer price per day: ${order.offerPricePerDay}
                           </li>
-                        </>
-                      ) : (
-                        <>
-                          <li>
-                            Rental duration:{" "}
-                            <span
-                              className={startDateValid ? "" : "error-span"}
-                            >
-                              {timeNormalConverter(order.offerStartDate)}
-                            </span>{" "}
-                            -{" "}
-                            <span className={endDateValid ? "" : "error-span"}>
-                              {timeNormalConverter(order.offerEndDate)}
-                            </span>
+                        )}
+
+                        {timeNormalConverter(order.offerStartDate) ===
+                        timeNormalConverter(order.offerEndDate) ? (
+                          <>
+                            <li>
+                              Rental date:{" "}
+                              <span
+                                className={
+                                  checkStringDateHigherOrEqualCurrentDate(
+                                    order.offerStartDate
+                                  )
+                                    ? ""
+                                    : "error-span"
+                                }
+                              >
+                                {timeNormalConverter(order.offerStartDate)}
+                              </span>{" "}
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li>
+                              Rental duration:{" "}
+                              <span
+                                className={
+                                  checkStringDateHigherOrEqualCurrentDate(
+                                    order.offerStartDate
+                                  )
+                                    ? ""
+                                    : "error-span"
+                                }
+                              >
+                                {timeNormalConverter(order.offerStartDate)}
+                              </span>{" "}
+                              -{" "}
+                              <span
+                                className={
+                                  checkStringDateHigherOrEqualCurrentDate(
+                                    order.offerEndDate
+                                  )
+                                    ? ""
+                                    : "error-span"
+                                }
+                              >
+                                {timeNormalConverter(order.offerEndDate)}
+                              </span>
+                            </li>
+                          </>
+                        )}
+
+                        <li>Fee: {order.fee}%</li>
+
+                        {order.offerPricePerDay != order.listingPricePerDay && (
+                          <li style={{ fontWeight: 700 }}>
+                            Price with listing price per day: $
+                            {calculateCurrentTotalPrice(
+                              order.listingPricePerDay,
+                              order.duration,
+                              tenantBaseCommissionPercent
+                            )}
                           </li>
-                        </>
-                      )}
+                        )}
 
-                      <li>Fee: {order.fee}%</li>
-
-                      {order.offerPricePerDay != order.listingPricePerDay && (
                         <li style={{ fontWeight: 700 }}>
-                          Price with listing price per day: $
+                          Fact offer price: $
                           {calculateCurrentTotalPrice(
-                            order.listingPricePerDay,
+                            order.offerPricePerDay,
                             order.duration,
                             tenantBaseCommissionPercent
                           )}
                         </li>
-                      )}
-
-                      <li style={{ fontWeight: 700 }}>
-                        Fact offer price: $
-                        {calculateCurrentTotalPrice(
-                          order.offerPricePerDay,
-                          order.duration,
-                          tenantBaseCommissionPercent
-                        )}
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="listings-widget order_widget">
-                    <h3>Booking operations</h3>
-
-                    <div className="booking-operations">
-                      {startDateValid && (
-                        <button className="default-btn" type="button">
-                          Accept
-                        </button>
-                      )}
-
-                      <button className="default-btn" type="button">
-                        Reject
-                      </button>
-
-                      <button
-                        className="default-btn"
-                        type="button"
-                        onClick={handleActivateCreateRequest}
-                      >
-                        Offer other terms
-                      </button>
-
-                      <CreateUpdateOrderRequestModal
-                        handleCreateUpdateRequest={handleCreateUpdateRequest}
-                        price={order.listingPricePerDay}
-                        proposalPrice={order.offerPricePerDay}
-                        proposalStartDate={order.offerStartDate}
-                        proposalEndDate={order.offerEndDate}
-                        minRentalDays={order.listingMinRentalDays}
-                        fee={tenantBaseCommissionPercent}
-                        updateRequestModalActive={updateRequestModalActive}
-                        setUpdateRequestModalActive={
-                          setUpdateRequestModalActive
-                        }
-                        listingName={order.listingName}
-                        blockedDates={order.blockedDates}
-                      />
+                      </ul>
                     </div>
-                  </div>
+                  )}
+
+                  {actualUpdateRequest && (
+                    <div className="row">
+                      <div className="col col-12 col-md-6">
+                        <div className="listings-widget order_widget">
+                          <h3>{isOwner ? "Tenant" : "Owner"} Proposal Info</h3>
+
+                          <ul style={{ listStyle: "none", padding: "0" }}>
+                            <li
+                              style={
+                                order.listingPricePerDay !=
+                                prevUpdateRequest.pricePerDay
+                                  ? { textDecoration: "line-through" }
+                                  : {}
+                              }
+                            >
+                              Listing price per day: ${order.listingPricePerDay}
+                            </li>
+
+                            {order.listingPricePerDay !=
+                              prevUpdateRequest.pricePerDay && (
+                              <li>
+                                Offer price per day: $
+                                {prevUpdateRequest.pricePerDay}
+                              </li>
+                            )}
+
+                            {timeNormalConverter(
+                              prevUpdateRequest.startDate
+                            ) ===
+                            timeNormalConverter(prevUpdateRequest.endDate) ? (
+                              <>
+                                <li>
+                                  Rental date:{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        prevUpdateRequest.startDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      prevUpdateRequest.startDate
+                                    )}
+                                  </span>{" "}
+                                </li>
+                              </>
+                            ) : (
+                              <>
+                                <li>
+                                  Rental duration:{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        prevUpdateRequest.startDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      prevUpdateRequest.startDate
+                                    )}
+                                  </span>{" "}
+                                  -{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        prevUpdateRequest.endDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      prevUpdateRequest.endDate
+                                    )}
+                                  </span>
+                                </li>
+                              </>
+                            )}
+
+                            <li>Fee: {order.fee}%</li>
+
+                            {prevUpdateRequest.pricePerDay !=
+                              order.listingPricePerDay && (
+                              <li style={{ fontWeight: 700 }}>
+                                Price with listing price per day: $
+                                {calculateCurrentTotalPrice(
+                                  order.listingPricePerDay,
+                                  getDaysDifference(
+                                    prevUpdateRequest.startDate,
+                                    prevUpdateRequest.endDate
+                                  ),
+                                  tenantBaseCommissionPercent
+                                )}
+                              </li>
+                            )}
+
+                            <li style={{ fontWeight: 700 }}>
+                              Fact offer price: $
+                              {calculateCurrentTotalPrice(
+                                prevUpdateRequest.pricePerDay,
+                                getDaysDifference(
+                                  prevUpdateRequest.startDate,
+                                  prevUpdateRequest.endDate
+                                ),
+                                tenantBaseCommissionPercent
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="col col-12 col-md-6">
+                        <div className="listings-widget order_widget">
+                          <h3>Your Proposal</h3>
+
+                          <ul style={{ listStyle: "none", padding: "0" }}>
+                            <li
+                              style={
+                                order.listingPricePerDay !=
+                                actualUpdateRequest.newPricePerDay
+                                  ? { textDecoration: "line-through" }
+                                  : {}
+                              }
+                            >
+                              Listing price per day: ${order.listingPricePerDay}
+                            </li>
+
+                            {order.listingPricePerDay !=
+                              actualUpdateRequest.newPricePerDay && (
+                              <li>
+                                Offer price per day: $
+                                {actualUpdateRequest.newPricePerDay}
+                              </li>
+                            )}
+
+                            {timeNormalConverter(
+                              actualUpdateRequest.newStartDate
+                            ) ===
+                            timeNormalConverter(
+                              actualUpdateRequest.newEndDate
+                            ) ? (
+                              <>
+                                <li>
+                                  Rental date:{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        actualUpdateRequest.newStartDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      actualUpdateRequest.newStartDate
+                                    )}
+                                  </span>{" "}
+                                </li>
+                              </>
+                            ) : (
+                              <>
+                                <li>
+                                  Rental duration:{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        actualUpdateRequest.newStartDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      actualUpdateRequest.newStartDate
+                                    )}
+                                  </span>{" "}
+                                  -{" "}
+                                  <span
+                                    className={
+                                      checkStringDateHigherOrEqualCurrentDate(
+                                        actualUpdateRequest.newEndDate
+                                      )
+                                        ? ""
+                                        : "error-span"
+                                    }
+                                  >
+                                    {timeNormalConverter(
+                                      actualUpdateRequest.newEndDate
+                                    )}
+                                  </span>
+                                </li>
+                              </>
+                            )}
+
+                            <li>Fee: {order.fee}%</li>
+
+                            {actualUpdateRequest.newPricePerDay !=
+                              order.listingPricePerDay && (
+                              <li style={{ fontWeight: 700 }}>
+                                Price with listing price per day: $
+                                {calculateCurrentTotalPrice(
+                                  order.listingPricePerDay,
+                                  getDaysDifference(
+                                    actualUpdateRequest.newStartDate,
+                                    actualUpdateRequest.newEndDate
+                                  ),
+                                  tenantBaseCommissionPercent
+                                )}
+                              </li>
+                            )}
+
+                            <li style={{ fontWeight: 700 }}>
+                              Fact offer price: $
+                              {calculateCurrentTotalPrice(
+                                actualUpdateRequest.newPricePerDay,
+                                getDaysDifference(
+                                  actualUpdateRequest.newStartDate,
+                                  actualUpdateRequest.newEndDate
+                                ),
+                                tenantBaseCommissionPercent
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {((isOwner &&
-                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+                    orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
                     (isTenant &&
-                      order.status ==
-                        STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+                      orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
                     <div className="listings-widget order_widget">
                       <h3>Booking operations</h3>
 
                       <div className="booking-operations">
-                        {startDateValid && (
+                        {((actualUpdateRequest &&
+                          checkStringDateHigherOrEqualCurrentDate(
+                            actualUpdateRequest.newStartDate
+                          )) ||
+                          (!actualUpdateRequest &&
+                            checkStringDateHigherOrEqualCurrentDate(
+                              order.offerStartDate
+                            ))) && (
                           <button className="default-btn" type="button">
                             Accept
                           </button>
