@@ -6527,6 +6527,18 @@ How It Works Area CSS
   padding-left: 26px;
   padding-right: 26px;
 }
+
+.small-icon-image{
+  width: 80px;
+  height: 80px;
+}
+
+.safe-with-us-img img{
+  height: 70px;
+  width: 70px;
+  margin-bottom: 5px;
+}
+
 .single-how-it-works-box .icon {
   margin-bottom: 30px;
   display: inline-block;

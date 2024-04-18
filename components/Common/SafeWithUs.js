@@ -18,8 +18,8 @@ const SafeWithUs = ({ bgColor }) => {
             <div className="col-lg-4 col-md-6 col-sm-6">
               <a href="#how-it-works-section">
                 <div className="single-how-it-works-box">
-                  <div className="icon">
-                    <i className="flaticon-placeholder"></i>
+                  <div className="icon safe-with-us-img">
+                    <img src="/images/home/icons-how_it_works.png" />
                   </div>
                   <h3>How it works</h3>
                   <p>
@@ -32,8 +32,8 @@ const SafeWithUs = ({ bgColor }) => {
 
             <div className="col-lg-4 col-md-6 col-sm-6">
               <div className="single-how-it-works-box">
-                <div className="icon">
-                  <i className="flaticon-support-1"></i>
+                <div className="icon safe-with-us-img">
+                  <img src="/images/home/icons-user_verification.png" />
                 </div>
                 <h3>User Verification</h3>
                 <p>
@@ -45,8 +45,8 @@ const SafeWithUs = ({ bgColor }) => {
 
             <div className="col-lg-4 col-md-6 col-sm-6">
               <div className="single-how-it-works-box">
-                <div className="icon">
-                  <i className="flaticon-tick"></i>
+                <div className="icon safe-with-us-img">
+                  <img src="/images/home/icons-insurance_guarantee.png" />
                 </div>
                 <h3>Insurance Guarantee</h3>
                 <p>

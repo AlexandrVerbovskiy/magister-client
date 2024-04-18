@@ -5,19 +5,19 @@ const YourBusiness = () => {
   const items = [
     {
       title: `Unlock value. Earn a passive income.`,
-      icon: "flaticon-commerce",
+      image: "/images/home/icons-how_it_works.png",
       link: "/",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
       title: `Reduce waste. Live sustainably.`,
-      icon: "flaticon-project",
+      image: "/images/home/icons-sustainability.png",
       link: "/",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
       title: `Open access. Access on demand.`,
-      icon: "flaticon-growth",
+      image: "/images/home/icons-on_demand.png",
       link: "/",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
@@ -38,8 +38,8 @@ const YourBusiness = () => {
                 className="col-lg-4 col-md-6 col-sm-6 d-flex"
               >
                 <div className="single-features-box">
-                  <div className="icon">
-                    <i className={item.icon}></i>
+                  <div className="icon small-icon-image">
+                    <img src={item.image} />
                   </div>
                   <h3>{item.title}</h3>
                   <p>{item.text}</p>

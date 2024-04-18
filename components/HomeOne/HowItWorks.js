@@ -5,18 +5,18 @@ const HowItWorks = () => {
   const items = [
     {
       link: "/",
-      icon: "flaticon-commerce",
+      image: "/images/home/icons-how_it_works-1_find.png",
       text: "Find something nearby Explore nearby items and filter your search by location.",
     },
     {
-      icon: "flaticon-project",
+      image: "/images/home/icons-how_it_works-2_contact.png",
       link: "/",
       text: "Request and book Reach out to the owner to borrow their items for the dates you need. Once they confirm, you can secure the items by making a payment.",
     },
     {
-      icon: "flaticon-growth",
+      image: "/images/home/icons-how_it_works-3_delivery.png",
       link: "/",
-      text: "Verify If you haven&#39;t already done so, you&#39;ll be prompted to verify your identity. This ensures a robust rental process. After verification, your rental will be confirmed.",
+      text: "Verify If you haven't already done so, you'll be prompted to verify your identity. This ensures a robust rental process. After verification, your rental will be confirmed.",
     },
   ];
 
@@ -39,8 +39,8 @@ const HowItWorks = () => {
                 className="col-lg-4 col-md-6 col-sm-6 d-flex"
               >
                 <div className="single-features-box">
-                  <div className="icon">
-                    <i className={item.icon}></i>
+                  <div className="icon small-icon-image">
+                    <img src={item.image} />
                   </div>
                   <p>{item.text}</p>
                   <Link href={item.link} className="link-btn">
