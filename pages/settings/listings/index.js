@@ -95,7 +95,7 @@ const TabHeaderSection = ({
           name="search"
           className="search-field"
           placeholder="Search..."
-          maxLength={STATIC.maxSearchInputLength}
+          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
         />
       </label>
     </li>

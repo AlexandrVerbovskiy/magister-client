@@ -30,7 +30,6 @@ const CategoryList = ({
 
   useEffect(() => {
     list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
-    console.log(list);
     setState({ items: list });
   }, [list]);
 

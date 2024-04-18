@@ -90,3 +90,45 @@ export const getDaysDifference = (startDate, endDate) => {
   const difference = Math.abs(end - start);
   return Math.ceil(difference / (1000 * 3600 * 24)) + 1;
 };
+
+export const groupDates = (dates) => {
+  if (dates.length < 1) {
+    return [];
+  }
+
+  const groupedDates = [];
+
+  const sortedDates = dates
+    .map((dateStr) => dateStr)
+    .sort((a, b) => new Date(a) - new Date(b));
+
+  let currentStartDate = sortedDates[0];
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const currentDate = new Date(sortedDates[i]);
+    const prevDate = new Date(sortedDates[i - 1]);
+
+    const diffInDays = Math.round(
+      (currentDate - prevDate) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffInDays > 1) {
+      groupedDates.push({ from: currentStartDate, to: sortedDates[i - 1] });
+      currentStartDate = sortedDates[i];
+    }
+  }
+
+  groupedDates.push({
+    from: currentStartDate,
+    to: sortedDates[sortedDates.length - 1],
+  });
+
+  return groupedDates;
+};
+
+export const separateDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};

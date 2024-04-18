@@ -106,7 +106,7 @@ const Banner = ({ popularCategories }) => {
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
-                    maxLength={STATIC.maxSearchInputLength}
+                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                   />
 
                   <SearchTipsPopup
@@ -132,7 +132,7 @@ const Banner = ({ popularCategories }) => {
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
-                    maxLength={STATIC.maxSearchInputLength}
+                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                   />
 
                   <SearchTipsPopup

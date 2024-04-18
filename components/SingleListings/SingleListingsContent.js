@@ -4,6 +4,7 @@ import { IndiceContext } from "../../contexts";
 import {
   getFilePath,
   getListingImageByType,
+  separateDate,
   shakeUnverifiedAlert,
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -1009,6 +1010,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
           createOrderModalActive={createOrderModalActive}
           setCreateOrderModalActive={setCreateOrderModalActive}
           listingName={listing.name}
+          blockedDates={listing.blockedDates}
         />
       )}
     </>

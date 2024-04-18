@@ -4,6 +4,7 @@ import { IndiceContext } from "../../contexts";
 import {
   getFilePath,
   getListingImageByType,
+  separateDate,
   timeNormalConverter,
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,18 +13,49 @@ import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
+import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 
 const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const [updateRequestModalActive, setUpdateRequestModalActive] =
+    useState(false);
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
-  const [requestsModalActive, setRequestsModalActive] = useState(false);
 
-  const calculateCurrentTotalPrice = (pricePerDay, duration, fee) => {
-    return (pricePerDay * duration * (100 + fee)) / 100;
+  const [startDateValid, setStartDateValid] = useState(true);
+  const [endDateValid, setEndDateValid] = useState(true);
+  const [isOwner, setIsOwner] = useState(true);
+  const [isTenant, setIsTenant] = useState(true);
+
+  const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
+    (pricePerDay * duration * (100 + fee)) / 100;
+
+  const handleActivateCreateRequest = () => {
+    setUpdateRequestModalActive(true);
+  };
+
+  useEffect(() => {
+    const currentDate = separateDate(new Date());
+    setStartDateValid(order.offerStartDate >= currentDate);
+    setEndDateValid(order.offerEndDate >= currentDate);
+    setIsOwner(order.ownerId == sessionUser.id);
+    setIsTenant(order.tenantId == sessionUser.id);
+  }, [order.id]);
+
+  const handleCreateUpdateRequest = ({ price, fromDate, toDate }) => {
+    try {
+      setUpdateRequestModalActive(false);
+
+      success.set(
+        "Booking updates successfully. Wait for a response from the " +
+          (isOwner ? "tenant" : "owner")
+      );
+    } catch (e) {
+      error.set(e);
+    }
   };
 
   return (
@@ -145,15 +177,26 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                         <>
                           <li>
                             Rental date:{" "}
-                            {timeNormalConverter(order.offerStartDate)}
+                            <span
+                              className={startDateValid ? "" : "error-span"}
+                            >
+                              {timeNormalConverter(order.offerStartDate)}
+                            </span>{" "}
                           </li>
                         </>
                       ) : (
                         <>
                           <li>
                             Rental duration:{" "}
-                            {timeNormalConverter(order.offerStartDate)} -{" "}
-                            {timeNormalConverter(order.offerEndDate)}
+                            <span
+                              className={startDateValid ? "" : "error-span"}
+                            >
+                              {timeNormalConverter(order.offerStartDate)}
+                            </span>{" "}
+                            -{" "}
+                            <span className={endDateValid ? "" : "error-span"}>
+                              {timeNormalConverter(order.offerEndDate)}
+                            </span>
                           </li>
                         </>
                       )}
@@ -186,17 +229,87 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                     <h3>Booking operations</h3>
 
                     <div className="booking-operations">
-                      <button className="default-btn" type="button">
-                        Accept
-                      </button>
+                      {startDateValid && (
+                        <button className="default-btn" type="button">
+                          Accept
+                        </button>
+                      )}
+
                       <button className="default-btn" type="button">
                         Reject
                       </button>
-                      <button className="default-btn" type="button">
+
+                      <button
+                        className="default-btn"
+                        type="button"
+                        onClick={handleActivateCreateRequest}
+                      >
                         Offer other terms
                       </button>
+
+                      <CreateUpdateOrderRequestModal
+                        handleCreateUpdateRequest={handleCreateUpdateRequest}
+                        price={order.listingPricePerDay}
+                        proposalPrice={order.offerPricePerDay}
+                        proposalStartDate={order.offerStartDate}
+                        proposalEndDate={order.offerEndDate}
+                        minRentalDays={order.listingMinRentalDays}
+                        fee={tenantBaseCommissionPercent}
+                        updateRequestModalActive={updateRequestModalActive}
+                        setUpdateRequestModalActive={
+                          setUpdateRequestModalActive
+                        }
+                        listingName={order.listingName}
+                        blockedDates={order.blockedDates}
+                      />
                     </div>
                   </div>
+
+                  {((isOwner &&
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+                    (isTenant &&
+                      order.status ==
+                        STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+                    <div className="listings-widget order_widget">
+                      <h3>Booking operations</h3>
+
+                      <div className="booking-operations">
+                        {startDateValid && (
+                          <button className="default-btn" type="button">
+                            Accept
+                          </button>
+                        )}
+
+                        <button className="default-btn" type="button">
+                          Reject
+                        </button>
+
+                        <button
+                          className="default-btn"
+                          type="button"
+                          onClick={handleActivateCreateRequest}
+                        >
+                          Offer other terms
+                        </button>
+
+                        <CreateUpdateOrderRequestModal
+                          handleCreateUpdateRequest={handleCreateUpdateRequest}
+                          price={order.listingPricePerDay}
+                          proposalPrice={order.offerPricePerDay}
+                          proposalStartDate={order.startDate}
+                          proposalEndDate={order.endDate}
+                          minRentalDays={order.listingMinRentalDays}
+                          fee={tenantBaseCommissionPercent}
+                          updateRequestModalActive={updateRequestModalActive}
+                          setUpdateRequestModalActive={
+                            setUpdateRequestModalActive
+                          }
+                          listingName={order.listingName}
+                          blockedDates={order.blockedDates}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -244,7 +357,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                 </div>
 
                 <div className="listings-sidebar">
-                  {order.tenantId == sessionUser.id && (
+                  {isTenant && (
                     <div className="listings-widget listings_contact_details listings_author">
                       <h3>Listing Owner Details</h3>
 
@@ -287,7 +400,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                     </div>
                   )}
 
-                  {order.ownerId == sessionUser.id && (
+                  {isOwner && (
                     <div className="listings-widget listings_contact_details listings_author">
                       <h3>Tenant Details</h3>
 

@@ -96,7 +96,7 @@ const PopularPlacesFilter = ({
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
-                    maxLength={STATIC.maxSearchInputLength}
+                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                   />
 
                   <SearchTipsPopup
@@ -122,7 +122,7 @@ const PopularPlacesFilter = ({
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
-                    maxLength={STATIC.maxSearchInputLength}
+                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                   />
 
                   <SearchTipsPopup

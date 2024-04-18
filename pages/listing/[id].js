@@ -20,9 +20,9 @@ const Listing = ({ listing, tenantBaseCommissionPercent }) => {
   );
 };
 
-const boostServerSideProps = async ({ context }) => {
+const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-  const options = await getListingFullByIdOptions(id);
+  const options = await getListingFullByIdOptions(id, baseSideProps.authToken);
 
   return { ...options, id };
 };

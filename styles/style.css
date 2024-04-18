@@ -11394,6 +11394,12 @@ All Modal CSS
   max-width: 500px;
   margin-bottom: 0;
 }
+
+.modal-xxl>.modal-dialog {
+  max-width: 800px;
+  margin-bottom: 0;
+}
+
 .loginRegisterModal .modal-dialog .modal-content {
   background-color: var(--whiteColor);
   border: none;
@@ -13801,6 +13807,8 @@ Dashboard CSS
   top: 4px;
   right: -9px;
 }
+
+.error-span,
 .earnings-box ul li ul li.unpaid,
 .earnings-box ul li ul li.fee-price {
   color: red;
@@ -17750,11 +17758,11 @@ input:-internal-autofill-selected {
   background-color: var(--mainColor2) !important;
 }
 
-.flatpickr-day.today.startRange,
+/*.flatpickr-day.today.startRange,
 .flatpickr-day.today.endRange,
 .flatpickr-day.today.inRange {
   background-color: var(--blackColor) !important;
-}
+}*/
 
 .flatpickr-day.flatpickr-disabled {
   color: rgba(57, 57, 57, 0.2) !important;
@@ -17948,12 +17956,16 @@ input[type="number"] {
   display: flex;
 }
 
-.order_widget .booking-operations button:nth-child(1),
-.order_widget .booking-operations button:nth-child(2){
+.order_widget .booking-operations>button:nth-child(1),
+.order_widget .booking-operations>button:nth-child(2){
   margin-right: 10px;
 }
 
-.order_widget .booking-operations button:nth-child(2),
-.order_widget .booking-operations button:nth-child(3){
+.order_widget .booking-operations>button:nth-child(2),
+.order_widget .booking-operations>button:nth-child(3){
   margin-left: 10px;
+}
+
+.order-info-widget{
+  padding: "15px 30px 15px"
 }

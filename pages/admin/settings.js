@@ -72,7 +72,6 @@ const Settings = ({
   };
 
   const hasChanges = () => {
-    console.log(stateToOptions(), baseProps);
     return !lodash.isEqual(stateToOptions(), baseProps);
   };
 

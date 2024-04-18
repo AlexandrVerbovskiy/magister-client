@@ -2,7 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { getDateByCurrentAdd, getDaysDifference } from "../../utils";
+import {
+  calculateFeeByDaysCount,
+  calculateFullTotalByDaysCount,
+  calculateTotalPriceByDaysCount,
+  getDateByCurrentAdd,
+  getDaysDifference,
+  groupDates,
+  separateDate,
+} from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "./OfferOwnPrice";
 import YesNoModal from "../../components/_App/YesNoModal";
@@ -15,26 +23,12 @@ const BookingModal = ({
   setCreateOrderModalActive,
   minRentalDays,
   listingName,
+  blockedDates,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
   const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
     useState(false);
-
-  const calculateFeeByDaysCount = (count, price, fee) => {
-    const totalFee = (fee * price * count) / 100;
-    return totalFee.toFixed(2);
-  };
-
-  const calculateTotalPriceByDaysCount = (count, price, fee) =>
-    (price * count).toFixed(2);
-
-  const calculateFullTotalByDaysCount = (count, price, fee) => {
-    const total =
-      +calculateTotalPriceByDaysCount(count, price, fee) +
-      +calculateFeeByDaysCount(count, price, fee);
-    return total.toFixed(2);
-  };
 
   const defaultCountDays = minRentalDays ? minRentalDays : 0;
 
@@ -76,23 +70,18 @@ const BookingModal = ({
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
-      dateFormat: "M j, Y",
+      dateFormat: "Y-m-d",
       minDate: "today",
       static: true,
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
       yearSelectorType: "static",
-      disable: [
-        {
-          from: "2024-04-18",
-          to: "2024-04-24",
-        },
-      ],
+      disable: groupDates(blockedDates),
       onReady: (selectedDates, dateStr, instance) => {
-        instance.element.value = dateStr.replace("to", "-");
+        instance.element.value = dateStr;
       },
       onChange: (selectedDates, dateStr, instance) => {
-        instance.element.value = dateStr.replace("to", "-");
+        instance.element.value = dateStr;
         handleChangeDates(selectedDates);
       },
     });
@@ -132,7 +121,11 @@ const BookingModal = ({
 
   const handleSendBookingRequest = () => {
     setActiveAcceptSendBookingRequest(false);
-    handleMakeBooking({ price, fromDate, toDate });
+    handleMakeBooking({
+      price,
+      fromDate: separateDate(fromDate),
+      toDate: separateDate(toDate),
+    });
   };
 
   const handleOfferYourPrice = (e) => {
@@ -156,9 +149,27 @@ const BookingModal = ({
           <ErrorSpan error={calendarError} />
         </div>
 
-        <div className="popup-widget" style={{ padding: "15px 30px 15px" }}>
-          <div>Listing Price Per Day: ${defaultPrice}</div>
-          {price != defaultPrice && <div>Offered price: ${price}</div>}
+        <div className="popup-widget order-info-widget">
+          <div className="d-flex align-items-center">
+            Listing Price Per Day: ${defaultPrice}{" "}
+            {!(price != defaultPrice) && (
+              <i
+                class="bx bx-pencil ms-1"
+                onClick={handleOfferYourPrice}
+                style={{ cursor: "pointer" }}
+              ></i>
+            )}
+          </div>
+          {price != defaultPrice && (
+            <div className="d-flex align-items-center">
+              Offered price: ${price}{" "}
+              <i
+                class="bx bx-pencil ms-1"
+                onClick={handleOfferYourPrice}
+                style={{ cursor: "pointer" }}
+              ></i>
+            </div>
+          )}
           {fee && <div>Fee: {fee}%</div>}
           {minRentalDays && (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
@@ -175,14 +186,6 @@ const BookingModal = ({
         >
           Send Request
         </button>
-
-        <a
-          href="#"
-          className="mt-1 d-flex justify-content-center"
-          onClick={handleOfferYourPrice}
-        >
-          Offer Your Price
-        </a>
 
         <OfferOwnPrice
           offerPriceActive={offerPriceActive}
