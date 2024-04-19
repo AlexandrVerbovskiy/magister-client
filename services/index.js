@@ -10,3 +10,4 @@ export * from "./main";
 export * from "./listingApprovalRequests";
 export * from "./isCurrentPath";
 export * from "./orders";
+export * from "./orderUpdateRequestRequests";

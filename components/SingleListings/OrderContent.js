@@ -16,6 +16,7 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
+import { createOrderUpdateRequest } from "../../services";
 
 const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
@@ -64,7 +65,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
     setActualUpdateRequest(order.actualUpdateRequest);
   }, [order.id]);
 
-  const handleCreateUpdateRequest = ({ price, fromDate, toDate }) => {
+  const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
     try {
       setUpdateRequestModalActive(false);
 
@@ -73,6 +74,16 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
       } else {
         setOrderStatus(STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER);
       }
+
+      const request = await createOrderUpdateRequest(
+        {
+          orderId: order.id,
+          newStartDate: fromDate,
+          newEndDate: toDate,
+          newPricePerDay: price,
+        },
+        authToken
+      );
 
       if (actualUpdateRequest) {
         setPrevUpdateRequest({
