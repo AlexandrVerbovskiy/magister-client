@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
 import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
@@ -14,6 +13,7 @@ import {
 import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "./OfferOwnPrice";
 import YesNoModal from "../../components/_App/YesNoModal";
+import "flatpickr/dist/flatpickr.min.css";
 
 const BookingModal = ({
   handleMakeBooking,

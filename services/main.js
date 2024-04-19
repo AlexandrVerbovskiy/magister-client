@@ -144,3 +144,13 @@ export const getSettingsPageOptions = async (authToken) => {
   const data = await get(`/settings-options`, authToken);
   return data.body;
 };
+
+export const getBookingListOptions = async (params, authToken) => {
+  const data = await post("/booking-list-options", params, authToken);
+  return data.body;
+};
+
+export const getOrderListOptions = async (params, authToken) => {
+  const data = await post("/order-list-options", params, authToken);
+  return data.body;
+};

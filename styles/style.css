@@ -4727,7 +4727,7 @@ Listings Details Area CSS
   border-color: var(--mainColor);
 }
 
-.order_widget .default-btn{
+.order_widget .default-btn {
   background-color: var(--mainColor);
   color: var(--whiteColor);
   border-color: var(--mainColor);
@@ -5347,14 +5347,14 @@ Listings Details Area CSS
   color: var(--mainColor);
 }
 
-.listings-sidebar .order_widget ul, 
+.listings-sidebar .order_widget ul,
 .listings-sidebar .listings_contact_details ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
 
-.listings-sidebar .order_widget ul li, 
+.listings-sidebar .order_widget ul li,
 .listings-sidebar .listings_contact_details ul li {
   position: relative;
   border-top: 1px solid #e3e3e3;
@@ -5364,18 +5364,18 @@ Listings Details Area CSS
   padding-left: 25px;
 }
 
-.listings-sidebar .order_widget ul li a, 
+.listings-sidebar .order_widget ul li a,
 .listings-sidebar .listings_contact_details ul li a {
   display: inline-block;
   color: var(--optionalColor);
 }
 
-.listings-sidebar .order_widget ul li a:hover, 
+.listings-sidebar .order_widget ul li a:hover,
 .listings-sidebar .listings_contact_details ul li a:hover {
   color: var(--mainColor);
 }
 
-.listings-sidebar .order_widget ul li i, 
+.listings-sidebar .order_widget ul li i,
 .listings-sidebar .listings_contact_details ul li i {
   position: absolute;
   left: 0;
@@ -6528,12 +6528,12 @@ How It Works Area CSS
   padding-right: 26px;
 }
 
-.small-icon-image{
+.small-icon-image {
   width: 80px;
   height: 80px;
 }
 
-.safe-with-us-img img{
+.safe-with-us-img img {
   height: 70px;
   width: 70px;
   margin-bottom: 5px;
@@ -11395,7 +11395,7 @@ All Modal CSS
   margin-bottom: 0;
 }
 
-.modal-xxl>.modal-dialog {
+.modal-xxl > .modal-dialog {
   max-width: 800px;
   margin-bottom: 0;
 }
@@ -17948,24 +17948,66 @@ input[type="number"] {
 }
 
 .order_widget li {
-  color: black!important;
-  padding-left: 0!important;
+  color: black !important;
+  padding-left: 0 !important;
 }
 
-.booking-operations{
+.booking-operations {
   display: flex;
 }
 
-.order_widget .booking-operations>button:nth-child(1),
-.order_widget .booking-operations>button:nth-child(2){
+.order_widget .booking-operations > button:nth-child(1),
+.order_widget .booking-operations > button:nth-child(2) {
   margin-right: 10px;
 }
 
-.order_widget .booking-operations>button:nth-child(2),
-.order_widget .booking-operations>button:nth-child(3){
+.order_widget .booking-operations > button:nth-child(2),
+.order_widget .booking-operations > button:nth-child(3) {
   margin-left: 10px;
 }
 
-.order-info-widget{
-  padding: "15px 30px 15px"
+.order-info-widget {
+  padding: "15px 30px 15px";
+}
+
+.status-background-red {
+  background-color: #ff5b5c;
+}
+
+.status-background-green {
+  background-color: #39da8a;
+}
+
+.status-background-orange {
+  background-color: #fdac41;
+}
+
+.status-background-gray {
+  background-color: #475f7b;
+}
+
+.status-background-red,
+.status-background-green,
+.status-background-orange,
+.status-background-gray {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 9;
+  padding: 5px 10px;
+  color: white;
+}
+
+.flatpickr-date-filter>.flatpickr-wrapper>input{
+  height: 40px !important;
+  color: var(--blackColor);
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  transition: var(--transition);
+  font-weight: 400;
+  background-color: #f2f4f5;
+  width: 250px;
+    text-align: center;
 }

@@ -1,9 +1,9 @@
 import React from "react";
-import NavbarTwo from "../../components/_App/NavbarTwo";
-import Footer from "../../components/_App/Footer";
-import { userSideProps } from "../../middlewares";
-import { getOrderFullByIdOptions, getOrderFullInfo } from "../../services";
-import OrderContent from "../../components/SingleListings/OrderContent";
+import NavbarTwo from "../../../components/_App/NavbarTwo";
+import Footer from "../../../components/_App/Footer";
+import { authSideProps, userSideProps } from "../../../middlewares";
+import { getOrderFullByIdOptions, getOrderFullInfo } from "../../../services";
+import OrderContent from "../../../components/SingleListings/OrderContent";
 
 const Listing = ({ order, tenantBaseCommissionPercent }) => {
   return (
@@ -27,6 +27,6 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  authSideProps(context, boostServerSideProps);
 
 export default Listing;

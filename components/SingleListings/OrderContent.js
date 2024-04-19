@@ -17,6 +17,7 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 import STATIC from "../../static";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { createOrderUpdateRequest } from "../../services";
+import YesNoModal from "../_App/YesNoModal";
 
 const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
@@ -36,12 +37,22 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
+  const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
+  const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
 
   const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
 
   const handleActivateCreateRequest = () => {
     setUpdateRequestModalActive(true);
+  };
+
+  const handleAcceptOrder = () => {
+    setAcceptOrderModalActive(true);
+  };
+
+  const handleRejectOrder = () => {
+    setRejectOrderModalActive(true);
   };
 
   useEffect(() => {
@@ -116,6 +127,10 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
       error.set(e);
     }
   };
+
+  const handleAcceptAcceptOrder = async () => {};
+
+  const handleAcceptRejectOrder = async () => {};
 
   return (
     <>
@@ -554,12 +569,20 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             checkStringDateHigherOrEqualCurrentDate(
                               order.offerStartDate
                             ))) && (
-                          <button className="default-btn" type="button">
+                          <button
+                            className="default-btn"
+                            type="button"
+                            onClick={handleAcceptOrder}
+                          >
                             Accept
                           </button>
                         )}
 
-                        <button className="default-btn" type="button">
+                        <button
+                          className="default-btn"
+                          type="button"
+                          onClick={handleRejectOrder}
+                        >
                           Reject
                         </button>
 
@@ -585,6 +608,23 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           }
                           listingName={order.listingName}
                           blockedDates={order.blockedDates}
+                        />
+
+                        <YesNoModal
+                          active={acceptOrderModalActive}
+                          toggleActive={() => setAcceptOrderModalActive(false)}
+                          title="Operation confirmation"
+                          body="Confirm that the proposed booking conditions are actually suitable for you"
+                          onAccept={handleAcceptAcceptOrder}
+                          acceptText="Accept"
+                        />
+                        <YesNoModal
+                          active={rejectOrderModalActive}
+                          toggleActive={() => setRejectOrderModalActive(false)}
+                          title="Operation confirmation"
+                          body="Confirm that you really want to cancel the booking"
+                          onAccept={handleAcceptRejectOrder}
+                          acceptText="Accept"
                         />
                       </div>
                     </div>

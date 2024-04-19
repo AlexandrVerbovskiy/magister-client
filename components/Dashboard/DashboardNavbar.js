@@ -88,6 +88,36 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
+                href="/settings/bookings/"
+                className={`nav-link ${
+                  currentPath.includes("/settings/bookings/") && "active"
+                }  ${!sessionUser.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bx-timer"></i>
+                </span>
+                <span className="menu-title">Bookings</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                href="/settings/orders/"
+                className={`nav-link ${
+                  currentPath.includes("/settings/orders/") && "active"
+                }  ${!sessionUser.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bx-purchase-tag"></i>
+                </span>
+                <span className="menu-title">Orders</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
                 href="/settings/profile-edit/"
                 className={`nav-link ${
                   currentPath == "/settings/profile-edit/" && "active"
