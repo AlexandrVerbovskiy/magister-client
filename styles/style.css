@@ -17425,7 +17425,7 @@ Preloader Area CSS
 
 .categories-select-level-column {
   width: calc(100% / 3);
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .categories-select-option {

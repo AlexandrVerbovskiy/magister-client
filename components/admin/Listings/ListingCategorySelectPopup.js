@@ -114,66 +114,68 @@ const ListingCategorySelectPopup = ({
       setModalOpen={setActive}
     >
       <div className="category-select-modal">
-        <div className="categories-select-level-column sidebar-left">
-          {categories["firstLevel"].map((category) => (
-            <CategoryOption
-              key={category.id}
-              category={category}
-              onClick={() =>
-                handleOptionClick(
-                  category.id,
-                  "firstLevel",
-                  !!category.countChildren
+        <div className="d-flex w-100" style={{height: "max-content"}}>
+          <div className="categories-select-level-column sidebar-left">
+            {categories["firstLevel"].map((category) => (
+              <CategoryOption
+                key={category.id}
+                category={category}
+                onClick={() =>
+                  handleOptionClick(
+                    category.id,
+                    "firstLevel",
+                    !!category.countChildren
+                  )
+                }
+                active={category.id == selectedByLevels["firstLevel"]}
+              />
+            ))}
+          </div>
+
+          {selectedByLevels["firstLevel"] && (
+            <div className="categories-select-level-column sidebar-left">
+              {categories["secondLevel"]
+                .filter(
+                  (category) =>
+                    category.parentId == selectedByLevels["firstLevel"]
                 )
-              }
-              active={category.id == selectedByLevels["firstLevel"]}
-            />
-          ))}
+                .map((category) => (
+                  <CategoryOption
+                    key={category.id}
+                    category={category}
+                    onClick={() =>
+                      handleOptionClick(
+                        category.id,
+                        "secondLevel",
+                        !!category.countChildren
+                      )
+                    }
+                    active={category.id == selectedByLevels["secondLevel"]}
+                  />
+                ))}
+            </div>
+          )}
+
+          {selectedByLevels["secondLevel"] && (
+            <div className="categories-select-level-column sidebar-left">
+              {categories["thirdLevel"]
+                .filter(
+                  (category) =>
+                    category.parentId == selectedByLevels["secondLevel"]
+                )
+                .map((category) => (
+                  <CategoryOption
+                    key={category.id}
+                    onClick={() =>
+                      handleOptionClick(category.id, "thirdLevel", false)
+                    }
+                    active={category.id == selectedByLevels["thirdLevel"]}
+                    category={category}
+                  />
+                ))}
+            </div>
+          )}
         </div>
-
-        {selectedByLevels["firstLevel"] && (
-          <div className="categories-select-level-column sidebar-left">
-            {categories["secondLevel"]
-              .filter(
-                (category) =>
-                  category.parentId == selectedByLevels["firstLevel"]
-              )
-              .map((category) => (
-                <CategoryOption
-                  key={category.id}
-                  category={category}
-                  onClick={() =>
-                    handleOptionClick(
-                      category.id,
-                      "secondLevel",
-                      !!category.countChildren
-                    )
-                  }
-                  active={category.id == selectedByLevels["secondLevel"]}
-                />
-              ))}
-          </div>
-        )}
-
-        {selectedByLevels["secondLevel"] && (
-          <div className="categories-select-level-column sidebar-left">
-            {categories["thirdLevel"]
-              .filter(
-                (category) =>
-                  category.parentId == selectedByLevels["secondLevel"]
-              )
-              .map((category) => (
-                <CategoryOption
-                  key={category.id}
-                  onClick={() =>
-                    handleOptionClick(category.id, "thirdLevel", false)
-                  }
-                  active={category.id == selectedByLevels["thirdLevel"]}
-                  category={category}
-                />
-              ))}
-          </div>
-        )}
       </div>
     </ModalBasic>
   );
