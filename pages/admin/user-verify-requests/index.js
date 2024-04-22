@@ -78,6 +78,7 @@ const UserVerifyRequests = (pageProps) => {
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
+                    placeholder="Filter by sent time"
                   />
                   <SearchForm value={filter} onInput={changeFilter} />
                 </div>

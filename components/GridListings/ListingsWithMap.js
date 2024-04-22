@@ -49,7 +49,6 @@ const ListingsWithMap = ({
 
   const defaultTimeFilterValues = {
     defaultFromTime: getDateByCurrentAdd(0),
-    defaultToTime: getDateByCurrentAdd(2),
   };
 
   const [categories, setCategories] = useState(baseCategories);

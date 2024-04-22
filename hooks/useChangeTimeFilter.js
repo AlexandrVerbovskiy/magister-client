@@ -24,19 +24,16 @@ const useWatchChangeTimeFilter = ({
     )
       return;
 
-    if (!defaultToTime) {
-      defaultToTime = getDateByCurrentAdd(1);
+    if (options.fromTime || defaultFromTime) {
+      setFromTime(new Date(options.fromTime ?? defaultFromTime));
     }
 
-    if (!defaultFromTime) {
-      defaultFromTime = getDateByCurrentReject(1);
+    if (options.toTime || defaultToTime) {
+      setToTime(new Date(options.toTime ?? defaultToTime));
     }
-
-    setFromTime(new Date(options.fromTime ?? defaultFromTime));
-    setToTime(new Date(options.toTime ?? defaultToTime));
   }, [options.toTime, options.fromTime]);
 
-  const handleChangeTimeFilter = (dates) => {
+  const handleChangeTimeFilter = (dates, needRebuild = false) => {
     let [from, to] = dates;
     const fromDate = from ? new Date(from) : null;
     let toDate = to ? new Date(to) : null;
@@ -48,16 +45,14 @@ const useWatchChangeTimeFilter = ({
     const propFromDate = getTimeToProp(fromDate);
     const propToDate = getTimeToProp(toDate);
 
-    if (from && to) {
+    if ((from && to) || needRebuild) {
       setFromTime(fromDate);
       setToTime(toDate);
 
-      rebuild(
-        {
-          fromTime: propFromDate,
-          toTime: propToDate,
-        }
-      );
+      rebuild({
+        fromTime: propFromDate,
+        toTime: propToDate,
+      });
     }
   };
 

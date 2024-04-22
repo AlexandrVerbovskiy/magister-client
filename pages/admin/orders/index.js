@@ -84,6 +84,7 @@ const Orders = (pageProps) => {
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
+                    placeholder="From start to end date"
                   />
                   <SearchForm value={filter} onInput={changeFilter} />
                 </div>

@@ -42,7 +42,7 @@ const Table = ({ bookings, orderField, onClickTh, orderType, totalCount }) => {
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {bookings.map((booking) => (
-                <TableItem {...booking} />
+                <TableItem key={booking.id} {...booking} />
               ))}
             </tbody>
           </table>

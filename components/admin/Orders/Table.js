@@ -42,7 +42,7 @@ const Table = ({ orders, orderField, orderType, totalCount, onClickTh }) => {
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {orders.map((order) => (
-                <TableItem {...order} />
+                <TableItem key={order.id} {...order} />
               ))}
             </tbody>
           </table>

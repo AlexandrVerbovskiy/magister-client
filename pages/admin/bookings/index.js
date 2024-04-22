@@ -30,10 +30,7 @@ const Bookings = (pageProps) => {
   const { error, success, authToken } = useContext(IndiceContext);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter({
-      defaultFromTime: getDateByCurrentReject(30),
-      defaultToTime: getDateByCurrentAdd(30),
-    });
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -85,6 +82,7 @@ const Bookings = (pageProps) => {
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
+                    placeholder="From start to end date"
                   />
                   <SearchForm value={filter} onInput={changeFilter} />
                 </div>
