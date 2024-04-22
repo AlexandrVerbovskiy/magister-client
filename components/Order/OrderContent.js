@@ -12,7 +12,7 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
-import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
+import MultyMarkersMap from "../Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
@@ -278,18 +278,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                                     : "error-span"
                                 }
                               >
-                                {timeNormalConverter(order.offerStartDate)}
-                              </span>{" "}
-                              -{" "}
-                              <span
-                                className={
-                                  checkStringDateHigherOrEqualCurrentDate(
-                                    order.offerEndDate
-                                  )
-                                    ? ""
-                                    : "error-span"
-                                }
-                              >
+                                {timeNormalConverter(order.offerStartDate)} -{" "}
                                 {timeNormalConverter(order.offerEndDate)}
                               </span>
                             </li>
@@ -686,7 +675,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             src={
                               order.ownerPhoto
                                 ? getFilePath(order.ownerPhoto)
-                                : STATIC.defaultPhotoLink
+                                : STATIC.DEFAULT_PHOTO_LINK
                             }
                             alt={order.ownerName}
                           />
@@ -729,7 +718,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             src={
                               order.tenantPhoto
                                 ? getFilePath(order.tenantPhoto)
-                                : STATIC.defaultPhotoLink
+                                : STATIC.DEFAULT_PHOTO_LINK
                             }
                             alt={order.tenantName}
                           />

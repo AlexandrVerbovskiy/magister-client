@@ -1,10 +1,10 @@
 export default {
-  cityCoords: {
+  CITY_COORDS: {
     Warrington: { lat: 53.390044, lng: -2.59695 },
     Manchester: { lat: 53.48095, lng: -2.23743 },
   },
-  baseListingMapCircleRadius: 500,
-  defaultPhotoLink: "/images/admin/user-avatar-80.png",
+  BASE_LISTING_MAP_CIRCLE_RADIUS: 500,
+  DEFAULT_PHOTO_LINK: "/images/admin/user-avatar-80.png",
   MAX_SEARCH_INPUT_LENGTH: 255,
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",

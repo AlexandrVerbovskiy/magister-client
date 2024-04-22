@@ -31,7 +31,7 @@ const ImagePopup = ({ open, close, photoUrl }) => {
             <div className="modal-body w-100 h-100">
               <img
                 onClick={handleImageClick}
-                src={photoUrl ?? STATIC.defaultPhotoLink}
+                src={photoUrl ?? STATIC.DEFAULT_PHOTO_LINK}
                 alt="image"
                 className="img-fluid w-100 h-100"
                 style={{
@@ -41,7 +41,7 @@ const ImagePopup = ({ open, close, photoUrl }) => {
               <img
                 ref={supportImageRef}
                 className="d-none"
-                src={photoUrl ?? STATIC.defaultPhotoLink}
+                src={photoUrl ?? STATIC.DEFAULT_PHOTO_LINK}
               />
             </div>
           </div>

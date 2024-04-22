@@ -46,6 +46,11 @@ export const getListingList = async (params, authToken = null) => {
   return data.body;
 };
 
+export const getOwnerListingList = async (params, authToken = null) => {
+  const data = await post(`/owner-list`, params, authToken);
+  return data.body;
+};
+
 export const getAdminListingList = async (params, authToken) => {
   const data = await post(`/admin-list`, params, authToken);
   return data.body;

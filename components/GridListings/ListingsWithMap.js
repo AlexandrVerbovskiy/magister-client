@@ -5,7 +5,6 @@ import {
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
 } from "../../hooks";
-import { getListingList } from "../../services";
 import { IndiceContext } from "../../contexts";
 import Pagination from "../Pagination";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -17,7 +16,7 @@ import { cloneObject, getDateByCurrentAdd } from "../../utils";
 import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 
-const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
+const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
 
 const cities = [
   { name: "Warrington", value: "Warrington", title: "Warrington" },
@@ -35,8 +34,10 @@ const ListingsWithMap = ({
   authToken,
   categories: baseCategories,
   pageProps: basePageProps,
+  getListingListRequest,
   needSubscriptionNewCategory = false,
   hasListings: baseHasListings,
+  ownerId = null,
 }) => {
   const isFirstRefOptionsChange = useRef(true);
 
@@ -147,7 +148,7 @@ const ListingsWithMap = ({
     handleChangeOrder,
   } = usePagination({
     getItemsFunc: async (data) => {
-      const res = await getListingList(data, authToken);
+      const res = await getListingListRequest(data, authToken);
       setCanSendCreateNotifyRequest(res.canSendCreateNotifyRequest);
       return res;
     },
@@ -172,6 +173,7 @@ const ListingsWithMap = ({
         value: searchCategory,
         name: "search-category",
       },
+      ownerId: { value: ownerId, hidden: () => true },
     }),
     defaultData: pageProps,
     needInit: false,
@@ -208,7 +210,7 @@ const ListingsWithMap = ({
 
   const handleSelectedCities = (cities, needRemoveSearch = false) => {
     const searchCenter =
-      userLocation ?? STATIC.cityCoords[cities[0]] ?? defaultCenter;
+      userLocation ?? STATIC.CITY_COORDS[cities[0]] ?? defaultCenter;
 
     setSelectedCities(cloneObject(cities));
 
@@ -280,7 +282,7 @@ const ListingsWithMap = ({
   const changeUserLocation = (location) => {
     setUserLocation(location);
 
-    let center = STATIC.cityCoords[selectedCities[0]] ?? defaultCenter;
+    let center = STATIC.CITY_COORDS[selectedCities[0]] ?? defaultCenter;
     if (location) center = location;
 
     setSearchLocation(center);

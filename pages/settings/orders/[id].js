@@ -3,7 +3,7 @@ import NavbarTwo from "../../../components/_App/NavbarTwo";
 import Footer from "../../../components/_App/Footer";
 import { authSideProps, userSideProps } from "../../../middlewares";
 import { getOrderFullByIdOptions, getOrderFullInfo } from "../../../services";
-import OrderContent from "../../../components/SingleListings/OrderContent";
+import OrderContent from "../../../components/Order/OrderContent";
 
 const Listing = ({ order, tenantBaseCommissionPercent }) => {
   return (

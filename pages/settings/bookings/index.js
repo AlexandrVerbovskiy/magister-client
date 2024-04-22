@@ -12,14 +12,12 @@ import { IndiceContext } from "../../../contexts";
 import { getBookingListOptions } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import {
-  baseListPageParams,
   baseTimeListPageParams,
   getDateByCurrentAdd,
   getDateByCurrentReject,
 } from "../../../utils";
 import OrderItem from "../../../components/Listings/OrderItem";
-import STATIC from "../../../static";
-import DateFilter from "../../../components/FormComponents/DateFilter";
+import ListFilter from "../../../components/Order/ListFilter";
 
 const TabHeaderSection = ({
   type,
@@ -33,67 +31,25 @@ const TabHeaderSection = ({
   toTime,
 }) => (
   <ul
-    className="nav nav-tabs d-flex align-items-end justify-content-between"
+    className="nav nav-tabs d-flex align-items-center justify-content-between"
     id="myTab"
     style={style}
   >
-    <li className="nav-item">
+    <li className="nav-item" style={{ marginBottom: "21px" }}>
       <a className="nav-link active" id="all-listing-tab">
         <span className="menu-title">All Bookings ({countItems})</span>
       </a>
     </li>
 
-    <li
-      className="nav-item dropdown d-flex add-listings-box"
-      style={{ boxShadow: "none" }}
-    >
-      <div
-        className="form-group"
-        style={{ marginBottom: 0, display: "flex", alignItems: "center" }}
-      >
-        <ul className="facilities-list d-flex" style={{ marginBottom: "0" }}>
-          <li style={{ marginBottom: "0" }}>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                name="facilities-list"
-                checked={type == "tenant"}
-                onClick={() => changeType("tenant")}
-              />
-              <span>Tenant</span>
-            </label>
-          </li>
-          <li style={{ marginBottom: "0" }}>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                name="facilities-list"
-                checked={type == "owner"}
-                onClick={() => changeType("owner")}
-              />
-              <span>Owner</span>
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <DateFilter
-        value={[fromTime, toTime]}
-        onChange={handleChangeTimeFilter}
-      />
-
-      <label className="search-header-section">
-        <input
-          value={filter}
-          onChange={(e) => changeFilter(e.target.value)}
-          type="search"
-          name="search"
-          className="search-field"
-          placeholder="Search..."
-          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-        />
-      </label>
-    </li>
+    <ListFilter
+      type={type}
+      changeType={changeType}
+      filter={filter}
+      changeFilter={changeFilter}
+      handleChangeTimeFilter={handleChangeTimeFilter}
+      fromTime={fromTime}
+      toTime={toTime}
+    />
   </ul>
 );
 
@@ -121,6 +77,7 @@ const MyBookings = (pageProps) => {
     items: bookings,
     rebuild,
     options,
+    isFirstBookingCall,
   } = usePagination({
     getItemsFunc: (data) => getBookingListOptions(data, authToken),
     onError: (e) => error.set(e.message),
@@ -170,7 +127,8 @@ const MyBookings = (pageProps) => {
           </div>
         </div>
 
-        {bookings.length < 1 && pageProps.items.length < 1 && (
+        {((!isFirstBookingCall && bookings.length < 1) ||
+          (isFirstBookingCall && pageProps.items.length < 1)) && (
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
@@ -212,7 +170,7 @@ const MyBookings = (pageProps) => {
                     style={{ alignItems: "stretch", gridRowGap: "20px" }}
                   >
                     {bookings.map((booking) => (
-                      <OrderItem {...booking} />
+                      <OrderItem key={booking.id} {...booking} />
                     ))}
                   </div>
                 </div>

@@ -12,7 +12,7 @@ import {
   separateDate,
 } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
-import OfferOwnPrice from "./OfferOwnPrice";
+import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 

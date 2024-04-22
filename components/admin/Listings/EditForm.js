@@ -122,26 +122,26 @@ const EditForm = ({ listing, categories, save }) => {
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const [center, setCenter] = useState({
-    lat: STATIC.cityCoords[baseCity].lat,
-    lng: STATIC.cityCoords[baseCity].lng,
+    lat: STATIC.CITY_COORDS[baseCity].lat,
+    lng: STATIC.CITY_COORDS[baseCity].lng,
   });
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(STATIC.cityCoords[baseCity].lat);
-  const [lng, setLng] = useState(STATIC.cityCoords[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
+  const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
+  const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
+  const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
   const handleChangeCity = (city) => {
-    const lat = STATIC.cityCoords[city].lat;
-    const lng = STATIC.cityCoords[city].lng;
+    const lat = STATIC.CITY_COORDS[city].lat;
+    const lng = STATIC.CITY_COORDS[city].lng;
 
     setCity(city);
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(STATIC.baseListingMapCircleRadius);
+    setRadius(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
   };
 
   const handleChangeAddress = async (newAddress) => {
@@ -212,10 +212,10 @@ const EditForm = ({ listing, categories, save }) => {
     const city = prevListing.city ?? baseCity;
     const lat = prevListing.rentalLat
       ? Number(prevListing.rentalLat)
-      : STATIC.cityCoords[city].lat;
+      : STATIC.CITY_COORDS[city].lat;
     const lng = prevListing.rentalLng
       ? Number(prevListing.rentalLng)
-      : STATIC.cityCoords[city].lng;
+      : STATIC.CITY_COORDS[city].lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -238,7 +238,7 @@ const EditForm = ({ listing, categories, save }) => {
       minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: prevListing.radius ?? STATIC.baseListingMapCircleRadius,
+      rentalRadius: prevListing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,

@@ -4232,3 +4232,10 @@
     margin-left: 0!important;
   }
 }
+
+@media only screen and (max-width: 877px) {
+  .filter-nav-item{
+    padding-left: 0;
+    justify-content: space-between;
+  }
+}

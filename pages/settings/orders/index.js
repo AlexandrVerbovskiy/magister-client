@@ -2,7 +2,7 @@ import Link from "next/link";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import { getOrderList, getOrderListOptions } from "../../../services";
-import { baseListPageParams, baseTimeListPageParams } from "../../../utils";
+import { baseTimeListPageParams } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import { authSideProps } from "../../../middlewares";
@@ -12,9 +12,8 @@ import {
   useInitPaginationTimeFilter,
   usePagination,
 } from "../../../hooks";
-import STATIC from "../../../static";
 import OrderItem from "../../../components/Listings/OrderItem";
-import DateFilter from "../../../components/FormComponents/DateFilter";
+import ListFilter from "../../../components/Order/ListFilter";
 
 const TabHeaderSection = ({
   type,
@@ -28,7 +27,7 @@ const TabHeaderSection = ({
   toTime,
 }) => (
   <ul
-    className="nav nav-tabs d-flex align-items-end justify-content-between"
+    className="nav nav-tabs d-flex align-items-center justify-content-between"
     id="myTab"
     style={style}
   >
@@ -38,49 +37,15 @@ const TabHeaderSection = ({
       </a>
     </li>
 
-    <li className="nav-item dropdown d-flex add-listings-box">
-      <div className="form-group">
-        <ul className="facilities-list">
-          <li>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                name="facilities-list"
-                value="airport-shuttle"
-              />
-              <span>Airport Shuttle</span>
-            </label>
-          </li>
-          <li>
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                name="facilities-list"
-                value="air-conditioning"
-              />
-              <span>Air Conditioning</span>
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <DateFilter
-        value={[fromTime, toTime]}
-        onChange={handleChangeTimeFilter}
-      />
-
-      <label className="search-header-section ms-2">
-        <input
-          value={filter}
-          onChange={(e) => changeFilter(e.target.value)}
-          type="search"
-          name="search"
-          className="search-field"
-          placeholder="Search..."
-          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-        />
-      </label>
-    </li>
+    <ListFilter
+      type={type}
+      changeType={changeType}
+      filter={filter}
+      changeFilter={changeFilter}
+      handleChangeTimeFilter={handleChangeTimeFilter}
+      fromTime={fromTime}
+      toTime={toTime}
+    />
   </ul>
 );
 
@@ -104,6 +69,7 @@ const Orders = (pageProps) => {
     items: orders,
     rebuild,
     options,
+    isFirstBookingCall,
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -153,7 +119,8 @@ const Orders = (pageProps) => {
           </div>
         </div>
 
-        {orders.length < 1 && pageProps.items.length < 1 && (
+        {((!isFirstBookingCall && orders.length < 1) ||
+          (isFirstBookingCall && pageProps.items.length < 1)) && (
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
@@ -195,7 +162,7 @@ const Orders = (pageProps) => {
                     style={{ alignItems: "stretch", gridRowGap: "20px" }}
                   >
                     {orders.map((order) => (
-                      <OrderItem {...order} />
+                      <OrderItem key={order.id} {...order} />
                     ))}
                   </div>
                 </div>

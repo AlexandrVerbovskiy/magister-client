@@ -19,7 +19,7 @@ function DropdownProfile({ align }) {
   const photo =
     sessionUser && sessionUser.photo
       ? getFilePath(sessionUser.photo)
-      : STATIC.defaultPhotoLink;
+      : STATIC.DEFAULT_PHOTO_LINK;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 

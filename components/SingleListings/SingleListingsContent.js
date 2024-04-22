@@ -937,7 +937,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                         src={
                           listing.userPhoto
                             ? getFilePath(listing.userPhoto)
-                            : STATIC.defaultPhotoLink
+                            : STATIC.DEFAULT_PHOTO_LINK
                         }
                         alt={listing.userName}
                       />

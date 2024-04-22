@@ -251,7 +251,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-  height: 200px;
+  height: max-content;
   cursor: pointer;
 }
 

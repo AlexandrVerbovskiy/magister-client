@@ -17093,7 +17093,7 @@ Preloader Area CSS
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: max-content;
   margin-bottom: 10px;
 }
 
@@ -18008,6 +18008,15 @@ input[type="number"] {
   transition: var(--transition);
   font-weight: 400;
   background-color: #f2f4f5;
-  width: 250px;
+  width: 240px;
     text-align: center;
+}
+
+.flatpickr-parent-wrapper.flatpickr-date-filter{
+  width: unset!important;
+  margin-right: 20px;
+}
+
+.filter-nav-item{
+  padding-right: 0;
 }

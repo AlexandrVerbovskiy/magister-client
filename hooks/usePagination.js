@@ -317,6 +317,7 @@ const usePagination = ({
     setItemFields,
     options,
     getFullProps,
+    isFirstCall: isFirstRef.current,
   };
 };
 

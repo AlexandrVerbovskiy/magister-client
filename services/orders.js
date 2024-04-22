@@ -23,7 +23,17 @@ export const getBookingList = async (params, authToken) => {
   return data.body;
 };
 
+export const getAdminBookingList = async (params, authToken) => {
+  const data = await post(`/admin-booking-list`, params, authToken);
+  return data.body;
+};
+
 export const getOrderList = async (params, authToken) => {
   const data = await post(`/order-list`, params, authToken);
+  return data.body;
+};
+
+export const getAdminOrderList = async (params, authToken) => {
+  const data = await post(`/admin-order-list`, params, authToken);
   return data.body;
 };
