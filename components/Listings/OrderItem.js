@@ -2,95 +2,9 @@ import Link from "next/link";
 import { getListingImageByType } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import STATIC from "../../static";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-
-const StatusBlock = ({
-  status,
-  statusCancelled,
-  ownerId,
-  tenantId,
-  userId,
-}) => {
-  let orderStatus =
-    status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
-  let text = "Waiting confirmation";
-  let color = "status-background-gray";
-
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) {
-    color = "status-background-gray";
-
-    if (ownerId == userId) {
-      text = "Waiting your confirmation";
-    } else {
-      text = "Waiting owner confirmation";
-    }
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT) {
-    color = "status-background-gray";
-
-    if (tenantId == userId) {
-      text = "Waiting your confirmation";
-    } else {
-      text = "Waiting tenant confirmation";
-    }
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
-    color = "status-background-orange";
-    text = "Waiting payment";
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
-    color = "status-background-green";
-    text = "Waiting for delivery";
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-    color = "status-background-orange";
-    text = "Waiting for return";
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.FINISHED) {
-    color = "status-background-green";
-    text = "Finished";
-  }
-
-  if (orderStatus == STATIC.ORDER_STATUSES.REJECTED) {
-    color = "status-background-green";
-    text = "Rejected";
-  }
-
-  if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELED) {
-    color = "status-background-red";
-    text = "Cancelled";
-  }
-
-  if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE
-  ) {
-    color = "status-background-red";
-    text = "Waiting Cancelled";
-  }
-
-  if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
-  ) {
-    color = "status-background-red";
-    text = "Waiting Cancelled";
-  }
-
-  if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE
-  ) {
-    color = "status-background-red";
-    text = "Waiting Cancelled";
-  }
-
-  return <div className={`${color}`}>{text}</div>;
-};
+import StatusBlock from "./StatusBlock";
 
 const OrderItem = (order) => {
   const images = order.images ?? [];
@@ -105,7 +19,7 @@ const OrderItem = (order) => {
         <div className="listings-image">
           {images.length < 1 && (
             <Link
-              href={`/listing/${order.listingId}`}
+              href={`/settings/orders/${order.id}`}
               className="link-btn"
             ></Link>
           )}
@@ -117,7 +31,7 @@ const OrderItem = (order) => {
                 alt={order.listingName}
               />
               <Link
-                href={`/listing/${order.listingId}`}
+                href={`/settings/orders/${order.id}`}
                 className="link-btn"
               ></Link>
             </>
@@ -141,7 +55,7 @@ const OrderItem = (order) => {
                       alt={order.name}
                     />
                     <Link
-                      href={`/listing/${order.listingId}`}
+                      href={`/settings/orders/${order.id}`}
                       className="link-btn"
                     ></Link>
                   </div>
@@ -157,6 +71,7 @@ const OrderItem = (order) => {
           userId={sessionUser.userId}
           ownerId={order.ownerId}
           tenantId={order.tenantId}
+          dopClass="listing-card-status"
         />
 
         <div className="listings-content">

@@ -17,9 +17,10 @@ const DocumentsVerification = ({
   documents,
   canSend,
   lastAnswerDescription,
+  canChange,
 }) => {
   const [formError, setFormError] = useState(null);
-  const { success, setLoading, sessionUser, authToken, setVerified } =
+  const { success, setLoading, sessionUser, authToken, setVerified, error } =
     useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
   const [userVerified, setUserVerified] = useState(sessionUser.verified);
@@ -206,6 +207,13 @@ const DocumentsVerification = ({
   };
 
   const handleSaveClick = async () => {
+    if (!canChange) {
+      setFormError(
+        "You have an unfinished booking or order. Please finish all your orders and bookings before updating"
+      );
+      return;
+    }
+
     if (saveDocumentsDisabled) return;
 
     setFormError(null);

@@ -27,6 +27,7 @@ import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
 import { createListingApprovalRequest } from "../../services";
+import Switch from "../FormComponents/Switch";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -44,6 +45,7 @@ const EditForm = ({
   setCanSendRequest,
   rejectDescription,
   clearRejectDescription,
+  canChange,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
   categories = convertToSelectPopupCategories(categories);
@@ -121,6 +123,8 @@ const EditForm = ({
 
   const [minRentalDays, setMinRentalDays] = useState("");
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
+
+  const [active, setActive] = useState(true);
 
   const [center, setCenter] = useState({
     lat: STATIC.CITY_COORDS[baseCity].lat,
@@ -277,6 +281,7 @@ const EditForm = ({
       rentalLng: lng,
       rentalRadius: listing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
+      active: listing.active ?? true,
     };
   };
 
@@ -303,6 +308,7 @@ const EditForm = ({
       rentalLng: lng,
       rentalRadius: radius,
       listingImages,
+      active,
     };
   };
 
@@ -322,6 +328,7 @@ const EditForm = ({
     setLng(data.rentalLng);
     setRadius(data.rentalRadius);
     setAddress(data.address);
+    setActive(data.active);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -443,6 +450,13 @@ const EditForm = ({
   };
 
   const handleSubmit = async (needShowMessage = true) => {
+    if (!canChange) {
+      setMainError(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+      return;
+    }
+
     try {
       if (disabled) return;
       setMainError(null);
@@ -753,6 +767,15 @@ const EditForm = ({
                 error={rentalTermsError}
                 placeholder="Terms..."
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="add-listings-box">
+          <h3>Main Options</h3>
+          <div className="row">
+            <div className="col-lg-12 col-md-12">
+              <Switch title="Active" active={active} onChange={setActive} />
             </div>
           </div>
         </div>

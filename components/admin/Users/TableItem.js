@@ -227,10 +227,6 @@ const TableItem = ({
               <Edit href={`/admin/users/edit/${id}`} />
             </div>
           )}
-
-          {!isCurrent && role !== "admin" && isAdmin && (
-            <Delete onDeleteClick={onDeleteClick} />
-          )}
         </div>
       </td>
     </tr>

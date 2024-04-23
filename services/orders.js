@@ -37,3 +37,13 @@ export const getAdminOrderList = async (params, authToken) => {
   const data = await post(`/admin-order-list`, params, authToken);
   return data.body;
 };
+
+export const acceptOrder = async (id, authToken) => {
+  const data = await post(`/accept-booking`, { id }, authToken);
+  return data.body;
+};
+
+export const rejectOrder = async (id, authToken) => {
+  const data = await post(`/reject-booking`, { id }, authToken);
+  return data.body;
+};

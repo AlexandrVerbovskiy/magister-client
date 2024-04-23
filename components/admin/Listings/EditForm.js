@@ -81,6 +81,7 @@ const EditForm = ({ listing, categories, save }) => {
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
+  const [active, setActive] = useState(true);
 
   const [approved, setApproved] = useState(false);
 
@@ -198,6 +199,7 @@ const EditForm = ({ listing, categories, save }) => {
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
     setAddress(data.address);
+    setActive(data.active);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -243,6 +245,7 @@ const EditForm = ({ listing, categories, save }) => {
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
       address: prevListing.address ?? "",
+      active: prevListing.active ?? true,
     };
   };
 
@@ -271,6 +274,7 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved,
       ownerId,
+      active,
     };
   };
 
@@ -696,6 +700,29 @@ const EditForm = ({ listing, categories, save }) => {
                             row="7"
                             error={rentalTermsError}
                             setError={setRentalTermsError}
+                          />
+                        </div>
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Active
+                        </h2>
+                        <div className="flex flex-wrap mt-2">
+                          <div className="mr-2">
+                            <label
+                              className="block text-sm font-medium mb-1"
+                              htmlFor="approved"
+                            >
+                              If listing is active, users can rent it
+                            </label>
+                          </div>
+                          <Switch
+                            id="active"
+                            checked={active}
+                            changeChecked={() => setActive(!active)}
+                            onText="Yes"
+                            offText="No"
                           />
                         </div>
                       </section>

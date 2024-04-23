@@ -9,6 +9,7 @@ import {
   getAdminListingListPageOptions,
   getAdminListingList,
   deleteListingByAdmin,
+  changeActiveListingByAdmin,
 } from "../../../services";
 import SearchForm from "../../../partials/admin/actions/SearchForm";
 import ListingsTable from "../../../components/admin/Listings/Table";
@@ -40,6 +41,7 @@ const Listings = (pageProps) => {
     canMovePrevPage,
     items: listings,
     rebuild,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getAdminListingList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -63,6 +65,18 @@ const Listings = (pageProps) => {
       handleCloseDeleteModal();
       await rebuild();
       success.set(`${name} deleted successfully!`);
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
+  const handleChangeActiveClick = async (id, name) => {
+    try {
+      const { active } = await changeActiveListingByAdmin(id, authToken);
+      setItemFields({ active }, id);
+      success.set(
+        `${name} ${active ? "activated" : "deactivated"} successfully!`
+      );
     } catch (e) {
       error.set(e.message);
     }
@@ -105,6 +119,7 @@ const Listings = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 onClickDelete={handleOpenDeleteModal}
+                onClickChangeActive={handleChangeActiveClick}
               />
 
               <div className="mt-8">

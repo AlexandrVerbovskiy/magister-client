@@ -2477,6 +2477,8 @@
   .add-listings-box .form-group .nice-select .list .option {
     font-size: 14px;
   }
+
+  .switch-form-group .sidebar-widgets .box,
   .add-listings-box .form-group .sidebar-widgets .box {
     padding: 15px 10px;
   }

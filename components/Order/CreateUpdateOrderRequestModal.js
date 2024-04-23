@@ -256,7 +256,7 @@ const CreateUpdateOrderRequestModal = ({
                 Listing Price Per Day: ${defaultPrice}{" "}
                 {!(price != defaultPrice) && (
                   <i
-                    class="bx bx-pencil ms-1"
+                    className="bx bx-pencil ms-1"
                     onClick={handleOfferYourPrice}
                     style={{ cursor: "pointer" }}
                   ></i>
@@ -266,7 +266,7 @@ const CreateUpdateOrderRequestModal = ({
                 <div className="d-flex align-items-center">
                   Offered price: ${price}{" "}
                   <i
-                    class="bx bx-pencil ms-1"
+                    className="bx bx-pencil ms-1"
                     onClick={handleOfferYourPrice}
                     style={{ cursor: "pointer" }}
                   ></i>

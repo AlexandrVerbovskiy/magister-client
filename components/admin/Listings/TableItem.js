@@ -4,23 +4,24 @@ import View from "../FastActions/View";
 import Edit from "../FastActions/Edit";
 import Delete from "../FastActions/Delete";
 
-const ActiveSpan = ({ active }) => {
+const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
   let dopClass = active
     ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
     : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
 
   return (
     <div
       className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
+      style={onClick ? { cursor: "pointer" } : {}}
+      onClick={handleClick}
     >
-      <Tooltip
-        title={
-          active
-            ? "The instrument is approved, so it can be rented"
-            : "The tool is not approved, so it cannot be rented"
-        }
-      >
+      <Tooltip title={active ? activeText : inactiveText}>
         <span className="overflow-separate">{text}</span>
       </Tooltip>
     </div>
@@ -36,7 +37,9 @@ const TableItem = ({
   countStoredItems,
   pricePerDay,
   approved,
+  active,
   onClickDelete,
+  onChangeActive,
 }) => {
   return (
     <tr>
@@ -63,7 +66,20 @@ const TableItem = ({
       </td>
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <ActiveSpan active={approved} />
+        <ActiveSpan
+          active={approved}
+          activeText="The instrument is approved, so it can be rented"
+          inactiveText="The tool is not approved, so it cannot be rented"
+        />
+      </td>
+
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+        <ActiveSpan
+          active={active}
+          activeText="Users can rent it"
+          inactiveText="Users can't rent it"
+          onClick={onChangeActive}
+        />
       </td>
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
@@ -75,8 +91,6 @@ const TableItem = ({
           <div className="mr-2 flex items-center">
             <Edit href={`/admin/listings/edit/${id}`} />
           </div>
-
-          <Delete onDeleteClick={onClickDelete} />
         </div>
       </td>
     </tr>

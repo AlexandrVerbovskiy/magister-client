@@ -16,18 +16,21 @@ import MultyMarkersMap from "../Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
-import { createOrderUpdateRequest } from "../../services";
+import {
+  acceptOrder,
+  createOrderUpdateRequest,
+  rejectOrder,
+} from "../../services";
 import YesNoModal from "../_App/YesNoModal";
+import StatusBlock from "../Listings/StatusBlock";
 
-const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
-  const { success, error, sessionUser } = useContext(IndiceContext);
+const OrderContent = ({ order: baseOrder, tenantBaseCommissionPercent }) => {
+  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
+  const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [updateRequestModalActive, setUpdateRequestModalActive] =
     useState(false);
-  const [orderStatus, setOrderStatus] = useState(
-    STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
-  );
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -39,6 +42,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
   const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
@@ -58,35 +62,38 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser.id);
     setIsTenant(order.tenantId == sessionUser.id);
-    setOrderStatus(order.status);
 
-    if (order.previousUpdateRequest) {
-      setPrevUpdateRequest(order.previousUpdateRequest);
-    } else {
-      if (order.actualUpdateRequest) {
-        setPrevUpdateRequest({
-          senderId: order.tenantId,
-          startDate: order.startDate,
-          endDate: order.endDate,
-          pricePerDay: order.offerPricePerDay,
-        });
+    if (
+      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT
+    ) {
+      if (order.previousUpdateRequest) {
+        setPrevUpdateRequest(order.previousUpdateRequest);
+      } else {
+        if (order.actualUpdateRequest) {
+          setPrevUpdateRequest({
+            senderId: order.tenantId,
+            startDate: order.offerStartDate,
+            endDate: order.offerEndDate,
+            pricePerDay: order.offerPricePerDay,
+          });
+        }
       }
-    }
 
-    setActualUpdateRequest(order.actualUpdateRequest);
+      setActualUpdateRequest(order.actualUpdateRequest);
+    }
   }, [order.id]);
 
   const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
+    if (disabled) {
+      return;
+    }
+
     try {
+      setDisabled(true);
       setUpdateRequestModalActive(false);
 
-      if (isOwner) {
-        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_TENANT);
-      } else {
-        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER);
-      }
-
-      const request = await createOrderUpdateRequest(
+      await createOrderUpdateRequest(
         {
           orderId: order.id,
           newStartDate: fromDate,
@@ -119,18 +126,121 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
         newPricePerDay: price,
       });
 
+      if (isOwner) {
+        setOrder((prev) => ({
+          ...prev,
+          status: STATIC.ORDER_STATUSES.PENDING_TENANT,
+        }));
+      } else {
+        setOrder((prev) => ({
+          ...prev,
+          status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        }));
+      }
+
       success.set(
         "Booking updates successfully. Wait for a response from the " +
           (isOwner ? "tenant" : "owner")
       );
     } catch (e) {
       error.set(e);
+    } finally {
+      setDisabled(false);
     }
   };
 
-  const handleAcceptAcceptOrder = async () => {};
+  const setUpdatedOffer = (status, cancelStatus = null) => {
+    const offerPricePerDay = actualUpdateRequest
+      ? actualUpdateRequest.newPricePerDay
+      : order.offerPricePerDay;
+    const offerStartDate = actualUpdateRequest
+      ? actualUpdateRequest.newStartDate
+      : order.offerStartDate;
+    const offerEndDate = actualUpdateRequest
+      ? actualUpdateRequest.newEndDate
+      : order.offerEndDate;
 
-  const handleAcceptRejectOrder = async () => {};
+    const totalPrice = calculateCurrentTotalPrice(
+      offerPricePerDay,
+      getDaysDifference(offerStartDate, offerEndDate),
+      tenantBaseCommissionPercent
+    );
+
+    const updatedFields = {
+      offerPricePerDay,
+      offerStartDate,
+      offerEndDate,
+      factTotalPrice: totalPrice,
+    };
+
+    if (status) {
+      updatedFields["status"] = status;
+    }
+
+    if (cancelStatus) {
+      updatedFields["cancelStatus"] = cancelStatus;
+    }
+
+    setOrder((prev) => ({
+      ...prev,
+      ...updatedFields,
+    }));
+  };
+
+  const handleAcceptAcceptOrder = async () => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+
+      await acceptOrder(order.id, authToken);
+
+      setActualUpdateRequest(null);
+      setPrevUpdateRequest(null);
+      setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleAcceptRejectOrder = async () => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+
+      await rejectOrder(order.id, authToken);
+
+      setActualUpdateRequest(null);
+      setPrevUpdateRequest(null);
+
+      if (sessionUser.userId == order.ownerId) {
+        setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
+      } else {
+        setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELED);
+      }
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handlePayClick = async () => {
+    console.log("payed");
+
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+    } finally {
+      setDisabled(false);
+    }
+  };
 
   return (
     <>
@@ -298,6 +408,21 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           </li>
                         )}
 
+                        {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
+                          order.status !=
+                            STATIC.ORDER_STATUSES.PENDING_TENANT) && (
+                          <li className="order-status">
+                            Status:{" "}
+                            <StatusBlock
+                              status={order.status}
+                              statusCancelled={order.cancelStatus}
+                              ownerId={order.ownerId}
+                              tenantId={order.tenantId}
+                              userId={sessionUser.userId}
+                            />
+                          </li>
+                        )}
+
                         <li style={{ fontWeight: 700 }}>
                           Fact offer price: $
                           {calculateCurrentTotalPrice(
@@ -317,24 +442,10 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           <h3>{isOwner ? "Tenant" : "Owner"} Proposal Info</h3>
 
                           <ul style={{ listStyle: "none", padding: "0" }}>
-                            <li
-                              style={
-                                order.listingPricePerDay !=
-                                prevUpdateRequest.pricePerDay
-                                  ? { textDecoration: "line-through" }
-                                  : {}
-                              }
-                            >
-                              Listing price per day: ${order.listingPricePerDay}
+                            <li>
+                              Offer price per day: $
+                              {prevUpdateRequest.pricePerDay}
                             </li>
-
-                            {order.listingPricePerDay !=
-                              prevUpdateRequest.pricePerDay && (
-                              <li>
-                                Offer price per day: $
-                                {prevUpdateRequest.pricePerDay}
-                              </li>
-                            )}
 
                             {timeNormalConverter(
                               prevUpdateRequest.startDate
@@ -430,24 +541,10 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           <h3>Your Proposal</h3>
 
                           <ul style={{ listStyle: "none", padding: "0" }}>
-                            <li
-                              style={
-                                order.listingPricePerDay !=
-                                actualUpdateRequest.newPricePerDay
-                                  ? { textDecoration: "line-through" }
-                                  : {}
-                              }
-                            >
-                              Listing price per day: ${order.listingPricePerDay}
+                            <li>
+                              Offer price per day: $
+                              {actualUpdateRequest.newPricePerDay}
                             </li>
-
-                            {order.listingPricePerDay !=
-                              actualUpdateRequest.newPricePerDay && (
-                              <li>
-                                Offer price per day: $
-                                {actualUpdateRequest.newPricePerDay}
-                              </li>
-                            )}
 
                             {timeNormalConverter(
                               actualUpdateRequest.newStartDate
@@ -543,10 +640,11 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                   )}
 
                   {((isOwner &&
-                    orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
                     (isTenant &&
-                      orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
-                    <div className="listings-widget order_widget">
+                      order.status ==
+                        STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+                    <div className="listings-sidebar listings-widget order_widget">
                       <h3>Booking operations</h3>
 
                       <div className="booking-operations">
@@ -562,6 +660,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             className="default-btn"
                             type="button"
                             onClick={handleAcceptOrder}
+                            disabled={disabled}
                           >
                             Accept
                           </button>
@@ -571,6 +670,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           className="default-btn"
                           type="button"
                           onClick={handleRejectOrder}
+                          disabled={disabled}
                         >
                           Reject
                         </button>
@@ -579,6 +679,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           className="default-btn"
                           type="button"
                           onClick={handleActivateCreateRequest}
+                          disabled={disabled}
                         >
                           Offer other terms
                         </button>
@@ -586,9 +687,21 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                         <CreateUpdateOrderRequestModal
                           handleCreateUpdateRequest={handleCreateUpdateRequest}
                           price={order.listingPricePerDay}
-                          proposalPrice={order.offerPricePerDay}
-                          proposalStartDate={order.startDate}
-                          proposalEndDate={order.endDate}
+                          proposalPrice={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newPricePerDay
+                              : order.offerPricePerDay
+                          }
+                          proposalStartDate={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newStartDate
+                              : order.offerStartDate
+                          }
+                          proposalEndDate={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newEndDate
+                              : order.offerEndDate
+                          }
                           minRentalDays={order.listingMinRentalDays}
                           fee={tenantBaseCommissionPercent}
                           updateRequestModalActive={updateRequestModalActive}
@@ -618,6 +731,26 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                       </div>
                     </div>
                   )}
+
+                  {actualUpdateRequest &&
+                    order.status ==
+                      STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
+                    order.tenantId == sessionUser.userId && (
+                      <div className="listings-sidebar listings-widget order_widget">
+                        <h3>Payment</h3>
+
+                        <div className="booking-operations">
+                          <button
+                            className="default-btn"
+                            type="button"
+                            onClick={handlePayClick}
+                            disabled={disabled}
+                          >
+                            Pay by Stripe
+                          </button>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
