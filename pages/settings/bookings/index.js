@@ -60,10 +60,7 @@ const MyBookings = (pageProps) => {
   const [type, setType] = useState(router.query.type ?? "tenant");
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter({
-      defaultFromTime: getDateByCurrentReject(30),
-      defaultToTime: getDateByCurrentAdd(30),
-    });
+    useInitPaginationTimeFilter();
 
   const {
     page,

@@ -682,16 +682,17 @@ const OrderContent = ({
                           (!actualUpdateRequest &&
                             !checkStringDateLowerOrEqualCurrentDate(
                               order.offerStartDate
-                            ))) && (
-                          <button
-                            className="default-btn"
-                            type="button"
-                            onClick={handleAcceptOrder}
-                            disabled={disabled}
-                          >
-                            Accept
-                          </button>
-                        )}
+                            ))) &&
+                          (!conflictOrders || conflictOrders.length < 1) && (
+                            <button
+                              className="default-btn"
+                              type="button"
+                              onClick={handleAcceptOrder}
+                              disabled={disabled}
+                            >
+                              Accept
+                            </button>
+                          )}
 
                         <button
                           className="default-btn"

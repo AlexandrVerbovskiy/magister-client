@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   useAdminPage,
   useChangeTimeFilter,
@@ -21,13 +21,17 @@ import Header from "../../../partials/admin/Header";
 import BookingsTable from "../../../components/admin/Bookings/Table";
 
 import {
+  deleteOrder,
   getAdminBookingList,
   getAdminBookingsListPageOptions,
 } from "../../../services";
+import DeleteAccept from "../../../components/admin/DeleteAccept";
 
 const Bookings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+  const [toDeleteBookingInfo, setToDeleteBookingInfo] = useState({});
+  const [dangerModalOpen, setDangerModalOpen] = useState(false);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter();
@@ -65,6 +69,28 @@ const Bookings = (pageProps) => {
     rebuild,
   });
 
+  const handleCloseDeleteModal = () => {
+    setToDeleteBookingInfo(null);
+    setDangerModalOpen(false);
+  };
+
+  const handleOpenDeleteModal = (id) => {
+    setToDeleteBookingInfo({ id });
+    setDangerModalOpen(true);
+  };
+
+  const onDeleteAccept = async () => {
+    try {
+      const { id } = toDeleteBookingInfo;
+      await deleteOrder(id, authToken);
+      handleCloseDeleteModal();
+      await rebuild();
+      success.set(`Booking #${id} deleted successfully!`);
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -94,6 +120,7 @@ const Bookings = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                openDeleteModal={handleOpenDeleteModal}
               />
 
               <div className="mt-8">
@@ -112,6 +139,17 @@ const Bookings = (pageProps) => {
           </div>
         </main>
       </div>
+
+      <DeleteAccept
+        title="Delete booking?"
+        body={`Are you sure you want to remove booking ${
+          toDeleteBookingInfo?.id ?? ""
+        } from the system? All information about him will be lost`}
+        modalOpen={dangerModalOpen}
+        setModalOpen={setDangerModalOpen}
+        handleCloseDeleteModal={handleCloseDeleteModal}
+        onDeleteAccept={onDeleteAccept}
+      />
     </div>
   );
 };

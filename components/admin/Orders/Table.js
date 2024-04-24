@@ -1,9 +1,15 @@
 import React, { useContext } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
-import { IndiceContext } from "../../../contexts";
 
-const Table = ({ orders, orderField, orderType, totalCount, onClickTh }) => {
+const Table = ({
+  orders,
+  orderField,
+  orderType,
+  totalCount,
+  onClickTh,
+  openDeleteModal,
+}) => {
   const ths = [
     { title: "Id", value: "id", width: "10%" },
     { title: "Listing", value: "listings.name", width: "20%" },
@@ -42,7 +48,14 @@ const Table = ({ orders, orderField, orderType, totalCount, onClickTh }) => {
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {orders.map((order) => (
-                <TableItem key={order.id} {...order} />
+                <TableItem
+                  key={order.id}
+                  {...order}
+                  onDeleteClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteModal(order.id);
+                  }}
+                />
               ))}
             </tbody>
           </table>
