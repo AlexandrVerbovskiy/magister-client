@@ -10,5 +10,5 @@ export const createOrderUpdateRequest = async (
     { orderId, newStartDate, newEndDate, newPricePerDay },
     authToken
   );
-  return data.body.id;
+  return data.body.request;
 };

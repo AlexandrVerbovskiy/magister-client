@@ -62,17 +62,19 @@ const ListingItem = ({ listing, hovered = false }) => {
 
       <div className="listings-content">
         <div className="author">
-          <div className="d-flex align-items-center">
-            <img
-              src={
-                listing.userPhoto
-                  ? getFilePath(listing.userPhoto)
-                  : STATIC.defaultPhotoLink
-              }
-              alt="image"
-            />
-            <span>{listing.userName}</span>
-          </div>
+          <Link href={`/owner-listing-list/${listing.userId}`}>
+            <div className="d-flex align-items-center">
+              <img
+                src={
+                  listing.userPhoto
+                    ? getFilePath(listing.userPhoto)
+                    : STATIC.DEFAULT_PHOTO_LINK
+                }
+                alt="image"
+              />
+              <span>{listing.userName}</span>
+            </div>
+          </Link>
         </div>
         <ul className="listings-meta">
           <li>

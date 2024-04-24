@@ -9,16 +9,18 @@ const ListingsTable = ({
   onClickTh,
   totalCount,
   onClickDelete,
+  onClickChangeActive,
 }) => {
   const ths = [
-    { title: "Id", value: "id", width: "10%" },
-    { title: "Name", value: "name", width: "15%" },
+    { title: "Id", value: "id", width: "8%" },
+    { title: "Name", value: "name", width: "14%" },
     { title: "City", value: "city", width: "10%" },
-    { title: "Owner", value: "users.name", width: "15%" },
+    { title: "Owner", value: "users.name", width: "14%" },
     { title: "Category", value: "listing_categories.name", width: "10%" },
-    { title: "Count Stored", value: "count_stored_items", width: "10%" },
-    { title: "Price Per Day", value: "price_per_day", width: "10%" },
-    { title: "Approved", value: "approved", width: "10%" },
+    { title: "Count Stored", value: "count_stored_items", width: "9%" },
+    { title: "Price Per Day", value: "price_per_day", width: "9%" },
+    { title: "Approved", value: "approved", width: "8%" },
+    { title: "Active", value: "active", width: "8%" },
     { title: "Actions", value: "actions", canOrder: false, width: "10%" },
   ];
 
@@ -57,6 +59,9 @@ const ListingsTable = ({
                     e.stopPropagation();
                     onClickDelete(listing.id, listing.name);
                   }}
+                  onChangeActive={(e) =>
+                    onClickChangeActive(listing.id, listing.name)
+                  }
                 />
               ))}
             </tbody>

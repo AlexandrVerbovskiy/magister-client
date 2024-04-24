@@ -12,14 +12,6 @@ const useInitPaginationTimeFilter = ({
 } = {}) => {
   const router = useRouter();
 
-  if (!defaultToTime) {
-    defaultToTime = getDateByCurrentAdd(1);
-  }
-
-  if (!defaultFromTime) {
-    defaultFromTime = getDateByCurrentReject(1);
-  }
-
   let baseFromTime = router.query.fromTime ?? defaultFromTime;
   let baseToTime = router.query.toTime ?? defaultToTime;
 

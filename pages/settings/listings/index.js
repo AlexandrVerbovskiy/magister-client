@@ -7,6 +7,7 @@ import { Navigation } from "swiper/modules";
 
 import { authSideProps } from "../../../middlewares";
 import {
+  changeActiveListing,
   deleteListing,
   getUserListingList,
   getUserListingListOptions,
@@ -150,6 +151,7 @@ const ListingList = (pageProps) => {
     canMovePrevPage,
     items: listings,
     rebuild,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getUserListingList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -177,6 +179,19 @@ const ListingList = (pageProps) => {
   const handleDeleteItem = (e, id) => {
     e.preventDefault();
     setListingIdToDelete(id);
+  };
+
+  const handleChangeActiveItem = async (e, id, name) => {
+    e.preventDefault();
+    try {
+      const { active } = await changeActiveListing(id, authToken);
+      setItemFields({ active }, id);
+      success.set(
+        `${name} ${active ? "activated" : "deactivated"} successfully`
+      );
+    } catch (e) {
+      error.set(e.message);
+    }
   };
 
   const handleChangeStatusFilter = (status) => {
@@ -378,12 +393,16 @@ const ListingList = (pageProps) => {
                                 </Link>
                                 <Link
                                   onClick={(e) =>
-                                    handleDeleteItem(e, listing.id)
+                                    handleChangeActiveItem(
+                                      e,
+                                      listing.id,
+                                      listing.name
+                                    )
                                   }
                                   href="/"
                                   className="default-btn"
                                 >
-                                  Delete
+                                  {listing.active ? "Deactivate" : "Activate"}
                                 </Link>
                               </div>
                             </div>

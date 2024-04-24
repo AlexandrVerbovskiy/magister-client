@@ -18,7 +18,7 @@ const ImageInput = ({
   const [error, setError] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  if (!defaultUrl) defaultUrl = STATIC.defaultPhotoLink;
+  if (!defaultUrl) defaultUrl = STATIC.DEFAULT_PHOTO_LINK;
 
   if (!fileSizeLimit) fileSizeLimit = env.MAX_FILE_SIZE;
 

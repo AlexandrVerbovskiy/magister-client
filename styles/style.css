@@ -4727,7 +4727,7 @@ Listings Details Area CSS
   border-color: var(--mainColor);
 }
 
-.order_widget .default-btn{
+.order_widget .default-btn {
   background-color: var(--mainColor);
   color: var(--whiteColor);
   border-color: var(--mainColor);
@@ -5347,14 +5347,14 @@ Listings Details Area CSS
   color: var(--mainColor);
 }
 
-.listings-sidebar .order_widget ul, 
+.listings-sidebar .order_widget ul,
 .listings-sidebar .listings_contact_details ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
 
-.listings-sidebar .order_widget ul li, 
+.listings-sidebar .order_widget ul li,
 .listings-sidebar .listings_contact_details ul li {
   position: relative;
   border-top: 1px solid #e3e3e3;
@@ -5364,18 +5364,18 @@ Listings Details Area CSS
   padding-left: 25px;
 }
 
-.listings-sidebar .order_widget ul li a, 
+.listings-sidebar .order_widget ul li a,
 .listings-sidebar .listings_contact_details ul li a {
   display: inline-block;
   color: var(--optionalColor);
 }
 
-.listings-sidebar .order_widget ul li a:hover, 
+.listings-sidebar .order_widget ul li a:hover,
 .listings-sidebar .listings_contact_details ul li a:hover {
   color: var(--mainColor);
 }
 
-.listings-sidebar .order_widget ul li i, 
+.listings-sidebar .order_widget ul li i,
 .listings-sidebar .listings_contact_details ul li i {
   position: absolute;
   left: 0;
@@ -6528,12 +6528,12 @@ How It Works Area CSS
   padding-right: 26px;
 }
 
-.small-icon-image{
+.small-icon-image {
   width: 80px;
   height: 80px;
 }
 
-.safe-with-us-img img{
+.safe-with-us-img img {
   height: 70px;
   width: 70px;
   margin-bottom: 5px;
@@ -11395,7 +11395,7 @@ All Modal CSS
   margin-bottom: 0;
 }
 
-.modal-xxl>.modal-dialog {
+.modal-xxl > .modal-dialog {
   max-width: 800px;
   margin-bottom: 0;
 }
@@ -15221,6 +15221,8 @@ Dashboard CSS
   transform: scale(0.4);
   transition: transform 0.3s ease;
 }
+
+.switch-form-group .sidebar-widgets .box,
 .add-listings-box .form-group .sidebar-widgets .box {
   background: #f6f6f6;
   border: 1px solid #eeeeee;
@@ -15232,12 +15234,16 @@ Dashboard CSS
 .add-listings-box .form-group .sidebar-widgets .box:last-child {
   margin-bottom: 0;
 }
+
+.switch-form-group .sidebar-widgets .box .title,
 .add-listings-box .form-group .sidebar-widgets .box .title {
   display: block;
   color: var(--blackColor);
   position: relative;
   font-weight: 600;
 }
+
+.switch-form-group .sidebar-widgets .box .switch,
 .add-listings-box .form-group .sidebar-widgets .box .switch {
   padding-left: 0;
   margin-bottom: 0;
@@ -15248,9 +15254,13 @@ Dashboard CSS
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+.switch-form-group .sidebar-widgets .box .switch input,
 .add-listings-box .form-group .sidebar-widgets .box .switch input {
   display: none;
 }
+
+.switch-form-group .sidebar-widgets .box .switch input + span,
 .add-listings-box .form-group .sidebar-widgets .box .switch input + span {
   width: 48px;
   height: 28px;
@@ -15261,6 +15271,9 @@ Dashboard CSS
   background: var(--mainColor);
   box-shadow: 0 8px 16px -1px rgba(8, 141, 211, 0.2);
 }
+
+.switch-form-group .sidebar-widgets .box .switch input + span:before,
+.switch-form-group .sidebar-widgets .box .switch input + span:after,
 .add-listings-box .form-group .sidebar-widgets .box .switch input + span:before,
 .add-listings-box .form-group .sidebar-widgets .box .switch input + span:after {
   content: "";
@@ -15268,6 +15281,8 @@ Dashboard CSS
   position: absolute;
   transition: all 0.3s ease;
 }
+
+.switch-form-group .sidebar-widgets .box .switch input + span:before,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -15282,6 +15297,8 @@ Dashboard CSS
   border-radius: 9px;
   border: 5px solid var(--whiteColor);
 }
+
+.switch-form-group .sidebar-widgets .box .switch input + span:after,
 .add-listings-box .form-group .sidebar-widgets .box .switch input + span:after {
   top: 5px;
   left: 32px;
@@ -15292,6 +15309,8 @@ Dashboard CSS
   background: var(--whiteColor);
   opacity: 0;
 }
+
+.switch-form-group .sidebar-widgets .box .switch input + span:active,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -15301,6 +15320,8 @@ Dashboard CSS
   + span:active {
   transform: scale(0.92);
 }
+
+.switch-form-group .sidebar-widgets .box .switch input:checked + span,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -15311,6 +15332,8 @@ Dashboard CSS
   background: #48ea8b;
   box-shadow: 0 8px 16px -1px rgba(72, 234, 139, 0.2);
 }
+
+.switch-form-group .sidebar-widgets .box .switch input:checked + span:before,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -15324,6 +15347,8 @@ Dashboard CSS
   border-width: 3px;
   background: var(--whiteColor);
 }
+
+.switch-form-group .sidebar-widgets .box .switch input:checked + span:after,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -15333,6 +15358,13 @@ Dashboard CSS
   + span:after {
   animation: blobChecked 0.35s linear forwards 0.2s;
 }
+
+.switch-form-group
+  .sidebar-widgets
+  .box
+  .switch
+  input:not(:checked)
+  + span:before,
 .add-listings-box
   .form-group
   .sidebar-widgets
@@ -17093,7 +17125,7 @@ Preloader Area CSS
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: max-content;
   margin-bottom: 10px;
 }
 
@@ -17948,24 +17980,103 @@ input[type="number"] {
 }
 
 .order_widget li {
-  color: black!important;
-  padding-left: 0!important;
+  color: black !important;
+  padding-left: 0 !important;
 }
 
-.booking-operations{
+.booking-operations {
   display: flex;
 }
 
-.order_widget .booking-operations>button:nth-child(1),
-.order_widget .booking-operations>button:nth-child(2){
+.order_widget .booking-operations > button:nth-child(1),
+.order_widget .booking-operations > button:nth-child(2) {
   margin-right: 10px;
 }
 
-.order_widget .booking-operations>button:nth-child(2),
-.order_widget .booking-operations>button:nth-child(3){
+.order_widget .booking-operations > button:nth-child(2),
+.order_widget .booking-operations > button:nth-child(3) {
   margin-left: 10px;
 }
 
-.order-info-widget{
-  padding: "15px 30px 15px"
+.order-info-widget {
+  padding: "15px 30px 15px";
+}
+
+.status-background-red {
+  background-color: #f3103c;
+}
+
+.status-background-green {
+  background-color: #64bc36;
+}
+
+.status-background-orange {
+  background-color: #ffae00;
+}
+
+.status-background-base {
+  background-color: var(--mainColor);
+}
+
+.status-background-red,
+.status-background-green,
+.status-background-orange,
+.status-background-base {
+  padding: 5px 10px;
+  color: white;
+  border-radius: 5px;
+}
+
+.listing-card-status {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 9;
+}
+
+.flatpickr-date-filter > .flatpickr-wrapper > input {
+  height: 40px !important;
+  color: var(--blackColor);
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  transition: var(--transition);
+  font-weight: 400;
+  background-color: #f2f4f5;
+  width: 240px;
+  text-align: center;
+}
+
+.flatpickr-parent-wrapper.flatpickr-date-filter {
+  width: unset !important;
+  margin-right: 20px;
+}
+
+.filter-nav-item {
+  padding-right: 0;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.order-status > div,
+.order-status-small-span {
+  width: max-content;
+  margin-left: 5px;
+}
+
+.order-status-small-span {
+  padding: 0px 5px;
+  font-size: 12px;
+  line-height: 2;
+}
+
+
+.flatpickr-day.nextMonthDay:not(.notAllowed) {
+  color: rgba(57, 57, 57, 1)!important;
 }

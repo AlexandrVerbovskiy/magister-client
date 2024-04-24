@@ -4,7 +4,8 @@ import ListingsWithMap from "../components/GridListings/ListingsWithMap";
 import NavbarTwo from "../components/_App/NavbarTwo";
 import { userSideProps } from "../middlewares";
 import { getListingListOptions } from "../services";
-import { baseTimeListPageParams } from "../utils";
+import { listingListBaseServerSideProps } from "../utils";
+import { getListingList } from "../services";
 
 const GridListingsFullMap = ({
   categories,
@@ -24,6 +25,7 @@ const GridListingsFullMap = ({
       pageProps={{ items, options, countItems }}
       needSubscriptionNewCategory={needSubscriptionNewCategory}
       hasListings={hasListings}
+      getListingListRequest={getListingList}
     />
 
     <Footer bgColor="bg-f5f5f5" />
@@ -31,40 +33,8 @@ const GridListingsFullMap = ({
 );
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const { categories: baseCategories = [], cities: baseCities = [] } =
-    context.query;
-
-  const clientIp =
-    context.req.headers["x-forwarded-for"] ||
-    context.req.connection.remoteAddress;
-
-  const categories = [];
-  const cities = [];
-
-  if (typeof baseCategories == "string") {
-    categories.push(baseCategories);
-  } else {
-    baseCategories.forEach((category) => categories.push(category));
-  }
-
-  if (typeof baseCities == "string") {
-    cities.push(baseCities);
-  } else {
-    baseCities.forEach((city) => cities.push(city));
-  }
-
-  const searchCity = context.query["search-city"];
-  const searchCategory = context.query["search-category"];
-
   const options = await getListingListOptions(
-    {
-      ...baseTimeListPageParams(context.query),
-      cities,
-      categories,
-      clientIp,
-      searchCity,
-      searchCategory,
-    },
+    listingListBaseServerSideProps(context),
     baseSideProps.authToken
   );
 

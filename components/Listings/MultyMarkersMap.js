@@ -14,7 +14,7 @@ const hoveredMarker = require("../../public/images/maps/hovered-marker.svg")
 const userMarker = require("../../public/images/maps/user-marker.svg").default
   .src;
 
-const defaultCenter = STATIC.cityCoords[Object.keys(STATIC.cityCoords)[0]];
+const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
 
 const MultyMarkersMap = ({
   markers = [],

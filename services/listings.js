@@ -41,8 +41,23 @@ export const deleteListingByAdmin = async (id, authToken) => {
   return data.body;
 };
 
+export const changeActiveListing = async (id, authToken) => {
+  const data = await post(`/change-active`, { id }, authToken);
+  return data.body;
+};
+
+export const changeActiveListingByAdmin = async (id, authToken) => {
+  const data = await post(`/change-active-by-admin`, { id }, authToken);
+  return data.body;
+};
+
 export const getListingList = async (params, authToken = null) => {
   const data = await post(`/list`, params, authToken);
+  return data.body;
+};
+
+export const getOwnerListingList = async (params, authToken = null) => {
+  const data = await post(`/owner-list`, params, authToken);
   return data.body;
 };
 

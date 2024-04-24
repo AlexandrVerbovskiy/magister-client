@@ -12,7 +12,7 @@ import {
   separateDate,
 } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
-import OfferOwnPrice from "./OfferOwnPrice";
+import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 
@@ -34,12 +34,8 @@ const CreateUpdateOrderRequestModal = ({
     proposalEndDate
   );
 
-  const currentDate = separateDate(new Date());
-
-  const baseFromDate =
-    proposalStartDate >= currentDate ? new Date(proposalStartDate) : new Date();
-  const baseToDate =
-    proposalEndDate >= currentDate ? new Date(proposalEndDate) : new Date();
+  const baseFromDate = new Date();
+  const baseToDate = new Date();
 
   const { error } = useContext(IndiceContext);
 
@@ -107,7 +103,6 @@ const CreateUpdateOrderRequestModal = ({
       mode: "range",
       dateFormat: "Y-m-d",
       defaultDate: [new Date(proposalStartDate), new Date(proposalEndDate)],
-      disable: groupDates(blockedDates),
       monthSelectorType: "static",
       onChange: (selectedDates, dateStr, instance) => {
         instance.setDate(`${proposalStartDate} to ${proposalEndDate}`);
@@ -256,7 +251,7 @@ const CreateUpdateOrderRequestModal = ({
                 Listing Price Per Day: ${defaultPrice}{" "}
                 {!(price != defaultPrice) && (
                   <i
-                    class="bx bx-pencil ms-1"
+                    className="bx bx-pencil ms-1"
                     onClick={handleOfferYourPrice}
                     style={{ cursor: "pointer" }}
                   ></i>
@@ -266,7 +261,7 @@ const CreateUpdateOrderRequestModal = ({
                 <div className="d-flex align-items-center">
                   Offered price: ${price}{" "}
                   <i
-                    class="bx bx-pencil ms-1"
+                    className="bx bx-pencil ms-1"
                     onClick={handleOfferYourPrice}
                     style={{ cursor: "pointer" }}
                   ></i>

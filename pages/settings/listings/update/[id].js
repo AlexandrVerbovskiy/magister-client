@@ -9,6 +9,7 @@ const UpdateListing = ({
   listing: baseListing,
   id,
   lastRequestInfo = {},
+  canChange,
 }) => {
   const baseCanSendRequest =
     !baseListing.approved &&
@@ -39,6 +40,7 @@ const UpdateListing = ({
       setCanSendRequest={setCanSendRequest}
       rejectDescription={rejectDescription}
       clearRejectDescription={() => setRejectDescription(null)}
+      canChange={canChange}
     />
   );
 };

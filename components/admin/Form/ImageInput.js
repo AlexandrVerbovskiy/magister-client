@@ -18,7 +18,7 @@ const ImageInput = ({
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
-  if (!defaultUrl) defaultUrl = STATIC.defaultPhotoLink;
+  if (!defaultUrl) defaultUrl = STATIC.DEFAULT_PHOTO_LINK;
 
   const handleChange = (e) => {
     setError(null);

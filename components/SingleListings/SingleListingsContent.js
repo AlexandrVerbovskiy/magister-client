@@ -57,7 +57,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         authToken
       );
       setCreateOrderModalActive(false);
-      router.push(`/order/${id}`);
+      router.push(`/settings/orders/${id}`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );
@@ -937,7 +937,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                         src={
                           listing.userPhoto
                             ? getFilePath(listing.userPhoto)
-                            : STATIC.defaultPhotoLink
+                            : STATIC.DEFAULT_PHOTO_LINK
                         }
                         alt={listing.userName}
                       />

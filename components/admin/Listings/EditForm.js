@@ -81,6 +81,7 @@ const EditForm = ({ listing, categories, save }) => {
   } = useListingPhotosEdit();
 
   const [disabled, setDisabled] = useState(false);
+  const [active, setActive] = useState(true);
 
   const [approved, setApproved] = useState(false);
 
@@ -122,26 +123,26 @@ const EditForm = ({ listing, categories, save }) => {
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const [center, setCenter] = useState({
-    lat: STATIC.cityCoords[baseCity].lat,
-    lng: STATIC.cityCoords[baseCity].lng,
+    lat: STATIC.CITY_COORDS[baseCity].lat,
+    lng: STATIC.CITY_COORDS[baseCity].lng,
   });
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(STATIC.cityCoords[baseCity].lat);
-  const [lng, setLng] = useState(STATIC.cityCoords[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.baseListingMapCircleRadius);
+  const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
+  const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
+  const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
   const handleChangeCity = (city) => {
-    const lat = STATIC.cityCoords[city].lat;
-    const lng = STATIC.cityCoords[city].lng;
+    const lat = STATIC.CITY_COORDS[city].lat;
+    const lng = STATIC.CITY_COORDS[city].lng;
 
     setCity(city);
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(STATIC.baseListingMapCircleRadius);
+    setRadius(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
   };
 
   const handleChangeAddress = async (newAddress) => {
@@ -198,6 +199,7 @@ const EditForm = ({ listing, categories, save }) => {
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
     setAddress(data.address);
+    setActive(data.active);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -212,10 +214,10 @@ const EditForm = ({ listing, categories, save }) => {
     const city = prevListing.city ?? baseCity;
     const lat = prevListing.rentalLat
       ? Number(prevListing.rentalLat)
-      : STATIC.cityCoords[city].lat;
+      : STATIC.CITY_COORDS[city].lat;
     const lng = prevListing.rentalLng
       ? Number(prevListing.rentalLng)
-      : STATIC.cityCoords[city].lng;
+      : STATIC.CITY_COORDS[city].lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -238,11 +240,12 @@ const EditForm = ({ listing, categories, save }) => {
       minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: prevListing.radius ?? STATIC.baseListingMapCircleRadius,
+      rentalRadius: prevListing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
       address: prevListing.address ?? "",
+      active: prevListing.active ?? true,
     };
   };
 
@@ -271,6 +274,7 @@ const EditForm = ({ listing, categories, save }) => {
       listingImages,
       approved,
       ownerId,
+      active,
     };
   };
 
@@ -696,6 +700,29 @@ const EditForm = ({ listing, categories, save }) => {
                             row="7"
                             error={rentalTermsError}
                             setError={setRentalTermsError}
+                          />
+                        </div>
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Active
+                        </h2>
+                        <div className="flex flex-wrap mt-2">
+                          <div className="mr-2">
+                            <label
+                              className="block text-sm font-medium mb-1"
+                              htmlFor="approved"
+                            >
+                              If listing is active, users can rent it
+                            </label>
+                          </div>
+                          <Switch
+                            id="active"
+                            checked={active}
+                            changeChecked={() => setActive(!active)}
+                            onText="Yes"
+                            offText="No"
                           />
                         </div>
                       </section>

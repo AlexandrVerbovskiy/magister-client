@@ -78,6 +78,7 @@ const Logs = (pageProps) => {
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
+                    placeholder="Filter by create time"
                   />
                   <SearchForm value={filter} onInput={changeFilter} />
                 </div>

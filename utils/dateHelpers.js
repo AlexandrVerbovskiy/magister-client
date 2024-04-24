@@ -85,6 +85,10 @@ export const getDateByCurrentReject = (daysToReject = 0) => {
 };
 
 export const getDaysDifference = (startDate, endDate) => {
+  if (!startDate || !endDate) {
+    return 0;
+  }
+
   const start = new Date(startDate).getTime();
   const end = new Date(endDate).getTime();
   const difference = Math.abs(end - start);
@@ -133,7 +137,7 @@ export const separateDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
-export const checkStringDateHigherOrEqualCurrentDate = (date) => {
+export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   const currentDate = separateDate(new Date());
-  return date >= currentDate;
+  return date <= currentDate;
 };

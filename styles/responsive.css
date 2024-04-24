@@ -2477,6 +2477,8 @@
   .add-listings-box .form-group .nice-select .list .option {
     font-size: 14px;
   }
+
+  .switch-form-group .sidebar-widgets .box,
   .add-listings-box .form-group .sidebar-widgets .box {
     padding: 15px 10px;
   }
@@ -4230,5 +4232,12 @@
 
   .order_widget .booking-operations>button:nth-child(2), .order_widget .booking-operations>button:nth-child(3){
     margin-left: 0!important;
+  }
+}
+
+@media only screen and (max-width: 877px) {
+  .filter-nav-item{
+    padding-left: 0;
+    justify-content: space-between;
   }
 }

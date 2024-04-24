@@ -6,7 +6,7 @@ import STATIC from "../../../static";
 
 const DocumentView = ({ label, url }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const imgSrc = url ? getFilePath(url) : STATIC.defaultPhotoLink;
+  const imgSrc = url ? getFilePath(url) : STATIC.DEFAULT_PHOTO_LINK;
 
   const openPopup = () => {
     setIsPopupOpen(true);

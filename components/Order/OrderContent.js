@@ -2,30 +2,100 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import {
-  checkStringDateHigherOrEqualCurrentDate,
+  checkStringDateLowerOrEqualCurrentDate,
   getDaysDifference,
   getFilePath,
   getListingImageByType,
-  separateDate,
   timeNormalConverter,
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
-import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
+import MultyMarkersMap from "../Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
+import {
+  acceptOrder,
+  createOrderUpdateRequest,
+  rejectOrder,
+} from "../../services";
+import YesNoModal from "../_App/YesNoModal";
+import StatusBlock from "../Listings/StatusBlock";
 
-const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
-  const { success, error, sessionUser } = useContext(IndiceContext);
+const BaseDateSpan = ({
+  startDate,
+  endDate,
+  className = "",
+  tooltipText = null,
+}) => {
+  const Parent = ({ children }) => {
+    if (tooltipText) {
+      return (
+        <div dataBsToggle="tooltip" dataBsPlacement="top" title={tooltipText}>
+          {children}
+        </div>
+      );
+    }
+
+    return <div>{children}</div>;
+  };
+
+  if (timeNormalConverter(startDate) === timeNormalConverter(endDate)) {
+    return (
+      <Parent>
+        Rental date:{" "}
+        <span className={className}>{timeNormalConverter(startDate)}</span>
+      </Parent>
+    );
+  }
+
+  return (
+    <Parent>
+      Rental duration:{" "}
+      <span className={className}>{timeNormalConverter(startDate)}</span> -{" "}
+      <span className={className}>{timeNormalConverter(endDate)}</span>
+    </Parent>
+  );
+};
+
+const OrderContent = ({
+  order: baseOrder,
+  tenantBaseCommissionPercent,
+  blockedDates,
+  conflictOrders = null,
+}) => {
+  const CanBeErrorBaseDateSpan = ({ startDate, endDate }) => {
+    let tooltipErrorMessage = "";
+    let blocked = false;
+
+    if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+      tooltipErrorMessage = "Order start date is overdue";
+      blocked = true;
+    }
+
+    if (blockedDates && blockedDates.length > 0) {
+      tooltipErrorMessage =
+        "There are more priority bookings and orders for these dates";
+      blocked = true;
+    }
+
+    return (
+      <BaseDateSpan
+        startDate={startDate}
+        endDate={endDate}
+        className={blocked ? "error-span" : ""}
+        tooltipText={tooltipErrorMessage}
+      />
+    );
+  };
+
+  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
+  const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [updateRequestModalActive, setUpdateRequestModalActive] =
     useState(false);
-  const [orderStatus, setOrderStatus] = useState(
-    STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
-  );
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -35,6 +105,9 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
+  const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
+  const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
+  const [disabled, setDisabled] = useState(false);
 
   const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
@@ -43,36 +116,57 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
     setUpdateRequestModalActive(true);
   };
 
+  const handleAcceptOrder = () => {
+    setAcceptOrderModalActive(true);
+  };
+
+  const handleRejectOrder = () => {
+    setRejectOrderModalActive(true);
+  };
+
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser.id);
     setIsTenant(order.tenantId == sessionUser.id);
-    setOrderStatus(order.status);
 
-    if (order.previousUpdateRequest) {
-      setPrevUpdateRequest(order.previousUpdateRequest);
-    } else {
-      if (order.actualUpdateRequest) {
-        setPrevUpdateRequest({
-          senderId: order.tenantId,
-          startDate: order.startDate,
-          endDate: order.endDate,
-          pricePerDay: order.offerPricePerDay,
-        });
+    if (
+      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT
+    ) {
+      if (order.previousUpdateRequest) {
+        setPrevUpdateRequest(order.previousUpdateRequest);
+      } else {
+        if (order.actualUpdateRequest) {
+          setPrevUpdateRequest({
+            senderId: order.tenantId,
+            startDate: order.offerStartDate,
+            endDate: order.offerEndDate,
+            pricePerDay: order.offerPricePerDay,
+          });
+        }
       }
-    }
 
-    setActualUpdateRequest(order.actualUpdateRequest);
+      setActualUpdateRequest(order.actualUpdateRequest);
+    }
   }, [order.id]);
 
-  const handleCreateUpdateRequest = ({ price, fromDate, toDate }) => {
+  const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
+    if (disabled) {
+      return;
+    }
+
     try {
+      setDisabled(true);
       setUpdateRequestModalActive(false);
 
-      if (isOwner) {
-        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_TENANT);
-      } else {
-        setOrderStatus(STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER);
-      }
+      await createOrderUpdateRequest(
+        {
+          orderId: order.id,
+          newStartDate: fromDate,
+          newEndDate: toDate,
+          newPricePerDay: price,
+        },
+        authToken
+      );
 
       if (actualUpdateRequest) {
         setPrevUpdateRequest({
@@ -97,12 +191,119 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
         newPricePerDay: price,
       });
 
+      if (isOwner) {
+        setOrder((prev) => ({
+          ...prev,
+          status: STATIC.ORDER_STATUSES.PENDING_TENANT,
+        }));
+      } else {
+        setOrder((prev) => ({
+          ...prev,
+          status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        }));
+      }
+
       success.set(
         "Booking updates successfully. Wait for a response from the " +
           (isOwner ? "tenant" : "owner")
       );
     } catch (e) {
       error.set(e);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const setUpdatedOffer = (status, cancelStatus = null) => {
+    const offerPricePerDay = actualUpdateRequest
+      ? actualUpdateRequest.newPricePerDay
+      : order.offerPricePerDay;
+    const offerStartDate = actualUpdateRequest
+      ? actualUpdateRequest.newStartDate
+      : order.offerStartDate;
+    const offerEndDate = actualUpdateRequest
+      ? actualUpdateRequest.newEndDate
+      : order.offerEndDate;
+
+    const totalPrice = calculateCurrentTotalPrice(
+      offerPricePerDay,
+      getDaysDifference(offerStartDate, offerEndDate),
+      tenantBaseCommissionPercent
+    );
+
+    const updatedFields = {
+      offerPricePerDay,
+      offerStartDate,
+      offerEndDate,
+      factTotalPrice: totalPrice,
+    };
+
+    if (status) {
+      updatedFields["status"] = status;
+    }
+
+    if (cancelStatus) {
+      updatedFields["cancelStatus"] = cancelStatus;
+    }
+
+    setOrder((prev) => ({
+      ...prev,
+      ...updatedFields,
+    }));
+  };
+
+  const handleAcceptAcceptOrder = async () => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+
+      await acceptOrder(order.id, authToken);
+
+      setActualUpdateRequest(null);
+      setPrevUpdateRequest(null);
+      setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleAcceptRejectOrder = async () => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+
+      await rejectOrder(order.id, authToken);
+
+      setActualUpdateRequest(null);
+      setPrevUpdateRequest(null);
+
+      if (sessionUser.userId == order.ownerId) {
+        setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
+      } else {
+        setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELED);
+      }
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handlePayClick = async () => {
+    console.log("payed");
+
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+    } finally {
+      setDisabled(false);
     }
   };
 
@@ -221,54 +422,12 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           </li>
                         )}
 
-                        {timeNormalConverter(order.offerStartDate) ===
-                        timeNormalConverter(order.offerEndDate) ? (
-                          <>
-                            <li>
-                              Rental date:{" "}
-                              <span
-                                className={
-                                  checkStringDateHigherOrEqualCurrentDate(
-                                    order.offerStartDate
-                                  )
-                                    ? ""
-                                    : "error-span"
-                                }
-                              >
-                                {timeNormalConverter(order.offerStartDate)}
-                              </span>{" "}
-                            </li>
-                          </>
-                        ) : (
-                          <>
-                            <li>
-                              Rental duration:{" "}
-                              <span
-                                className={
-                                  checkStringDateHigherOrEqualCurrentDate(
-                                    order.offerStartDate
-                                  )
-                                    ? ""
-                                    : "error-span"
-                                }
-                              >
-                                {timeNormalConverter(order.offerStartDate)}
-                              </span>{" "}
-                              -{" "}
-                              <span
-                                className={
-                                  checkStringDateHigherOrEqualCurrentDate(
-                                    order.offerEndDate
-                                  )
-                                    ? ""
-                                    : "error-span"
-                                }
-                              >
-                                {timeNormalConverter(order.offerEndDate)}
-                              </span>
-                            </li>
-                          </>
-                        )}
+                        <li>
+                          <CanBeErrorBaseDateSpan
+                            startDate={order.offerStartDate}
+                            endDate={order.offerEndDate}
+                          />
+                        </li>
 
                         <li>Fee: {order.fee}%</li>
 
@@ -280,6 +439,21 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                               order.duration,
                               tenantBaseCommissionPercent
                             )}
+                          </li>
+                        )}
+
+                        {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
+                          order.status !=
+                            STATIC.ORDER_STATUSES.PENDING_TENANT) && (
+                          <li className="order-status">
+                            Status:{" "}
+                            <StatusBlock
+                              status={order.status}
+                              statusCancelled={order.cancelStatus}
+                              ownerId={order.ownerId}
+                              tenantId={order.tenantId}
+                              userId={sessionUser.userId}
+                            />
                           </li>
                         )}
 
@@ -302,81 +476,17 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           <h3>{isOwner ? "Tenant" : "Owner"} Proposal Info</h3>
 
                           <ul style={{ listStyle: "none", padding: "0" }}>
-                            <li
-                              style={
-                                order.listingPricePerDay !=
-                                prevUpdateRequest.pricePerDay
-                                  ? { textDecoration: "line-through" }
-                                  : {}
-                              }
-                            >
-                              Listing price per day: ${order.listingPricePerDay}
+                            <li>
+                              Offer price per day: $
+                              {prevUpdateRequest.pricePerDay}
                             </li>
 
-                            {order.listingPricePerDay !=
-                              prevUpdateRequest.pricePerDay && (
-                              <li>
-                                Offer price per day: $
-                                {prevUpdateRequest.pricePerDay}
-                              </li>
-                            )}
-
-                            {timeNormalConverter(
-                              prevUpdateRequest.startDate
-                            ) ===
-                            timeNormalConverter(prevUpdateRequest.endDate) ? (
-                              <>
-                                <li>
-                                  Rental date:{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        prevUpdateRequest.startDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      prevUpdateRequest.startDate
-                                    )}
-                                  </span>{" "}
-                                </li>
-                              </>
-                            ) : (
-                              <>
-                                <li>
-                                  Rental duration:{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        prevUpdateRequest.startDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      prevUpdateRequest.startDate
-                                    )}
-                                  </span>{" "}
-                                  -{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        prevUpdateRequest.endDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      prevUpdateRequest.endDate
-                                    )}
-                                  </span>
-                                </li>
-                              </>
-                            )}
+                            <li>
+                              <BaseDateSpan
+                                startDate={prevUpdateRequest.startDate}
+                                endDate={prevUpdateRequest.endDate}
+                              />
+                            </li>
 
                             <li>Fee: {order.fee}%</li>
 
@@ -415,83 +525,17 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           <h3>Your Proposal</h3>
 
                           <ul style={{ listStyle: "none", padding: "0" }}>
-                            <li
-                              style={
-                                order.listingPricePerDay !=
-                                actualUpdateRequest.newPricePerDay
-                                  ? { textDecoration: "line-through" }
-                                  : {}
-                              }
-                            >
-                              Listing price per day: ${order.listingPricePerDay}
+                            <li>
+                              Offer price per day: $
+                              {actualUpdateRequest.newPricePerDay}
                             </li>
 
-                            {order.listingPricePerDay !=
-                              actualUpdateRequest.newPricePerDay && (
-                              <li>
-                                Offer price per day: $
-                                {actualUpdateRequest.newPricePerDay}
-                              </li>
-                            )}
-
-                            {timeNormalConverter(
-                              actualUpdateRequest.newStartDate
-                            ) ===
-                            timeNormalConverter(
-                              actualUpdateRequest.newEndDate
-                            ) ? (
-                              <>
-                                <li>
-                                  Rental date:{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        actualUpdateRequest.newStartDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      actualUpdateRequest.newStartDate
-                                    )}
-                                  </span>{" "}
-                                </li>
-                              </>
-                            ) : (
-                              <>
-                                <li>
-                                  Rental duration:{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        actualUpdateRequest.newStartDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      actualUpdateRequest.newStartDate
-                                    )}
-                                  </span>{" "}
-                                  -{" "}
-                                  <span
-                                    className={
-                                      checkStringDateHigherOrEqualCurrentDate(
-                                        actualUpdateRequest.newEndDate
-                                      )
-                                        ? ""
-                                        : "error-span"
-                                    }
-                                  >
-                                    {timeNormalConverter(
-                                      actualUpdateRequest.newEndDate
-                                    )}
-                                  </span>
-                                </li>
-                              </>
-                            )}
+                            <li>
+                              <CanBeErrorBaseDateSpan
+                                startDate={actualUpdateRequest.newStartDate}
+                                endDate={actualUpdateRequest.newEndDate}
+                              />
+                            </li>
 
                             <li>Fee: {order.fee}%</li>
 
@@ -527,28 +571,134 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                     </div>
                   )}
 
+                  {isOwner &&
+                    conflictOrders &&
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER &&
+                    conflictOrders.length > 0 && (
+                      <div className="listings-sidebar listings-widget order_widget">
+                        <h3>Conflict Bookings/Orders</h3>
+
+                        <ul style={{ listStyle: "none", padding: "0" }}>
+                          {conflictOrders.map((conflictOrder) => {
+                            const tenantName = conflictOrder.tenantName;
+                            const tenantId = conflictOrder.tenantId;
+
+                            const startDate =
+                              conflictOrder.newStartDate ??
+                              conflictOrder.offerStartDate;
+
+                            const endDate =
+                              conflictOrder.newEndDate ??
+                              conflictOrder.offerEndDate;
+
+                            const pricePrice =
+                              conflictOrder.newPricePerDay ??
+                              conflictOrder.offerPricePerDay;
+
+                            const totalPrice = calculateCurrentTotalPrice(
+                              pricePrice,
+                              getDaysDifference(startDate, endDate),
+                              tenantBaseCommissionPercent
+                            );
+
+                            const isBooking = [
+                              STATIC.ORDER_STATUSES.FINISHED,
+                              STATIC.ORDER_STATUSES.PENDING_TENANT,
+                              STATIC.ORDER_STATUSES.PENDING_OWNER,
+                              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+                            ].includes(conflictOrder.status);
+
+                            return (
+                              <li>
+                                <div className="d-flex justify-content-between">
+                                  <div>
+                                    Id:{" "}
+                                    <a
+                                      href={`/settings/orders/${conflictOrder.id}`}
+                                    >
+                                      #{conflictOrder.id}
+                                    </a>
+                                  </div>
+
+                                  <a
+                                    href={`/settings/orders/${conflictOrder.id}`}
+                                  >
+                                    <StatusBlock
+                                      status={conflictOrder.status}
+                                      statusCancelled={
+                                        conflictOrder.cancelStatus
+                                      }
+                                      ownerId={conflictOrder.ownerId}
+                                      tenantId={conflictOrder.tenantId}
+                                      userId={sessionUser.userId}
+                                      dopClass="order-status-small-span"
+                                    />
+                                  </a>
+                                </div>
+
+                                <div>
+                                  Type: {isBooking ? "Booking" : "Order"}
+                                </div>
+
+                                <div>
+                                  Tenant:{" "}
+                                  <a href={`/users/${tenantId}`}>
+                                    {tenantName}
+                                  </a>
+                                </div>
+
+                                <div>
+                                  <BaseDateSpan
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                  />
+                                </div>
+
+                                <div>Price per day: ${pricePrice}</div>
+
+                                <div>
+                                  <b>Total price: ${totalPrice}</b>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+
                   {((isOwner &&
-                    orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
                     (isTenant &&
-                      orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
-                    <div className="listings-widget order_widget">
+                      order.status ==
+                        STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+                    <div className="listings-sidebar listings-widget order_widget">
                       <h3>Booking operations</h3>
 
                       <div className="booking-operations">
                         {((actualUpdateRequest &&
-                          checkStringDateHigherOrEqualCurrentDate(
+                          !checkStringDateLowerOrEqualCurrentDate(
                             actualUpdateRequest.newStartDate
                           )) ||
                           (!actualUpdateRequest &&
-                            checkStringDateHigherOrEqualCurrentDate(
+                            !checkStringDateLowerOrEqualCurrentDate(
                               order.offerStartDate
                             ))) && (
-                          <button className="default-btn" type="button">
+                          <button
+                            className="default-btn"
+                            type="button"
+                            onClick={handleAcceptOrder}
+                            disabled={disabled}
+                          >
                             Accept
                           </button>
                         )}
 
-                        <button className="default-btn" type="button">
+                        <button
+                          className="default-btn"
+                          type="button"
+                          onClick={handleRejectOrder}
+                          disabled={disabled}
+                        >
                           Reject
                         </button>
 
@@ -556,6 +706,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                           className="default-btn"
                           type="button"
                           onClick={handleActivateCreateRequest}
+                          disabled={disabled}
                         >
                           Offer other terms
                         </button>
@@ -563,9 +714,21 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                         <CreateUpdateOrderRequestModal
                           handleCreateUpdateRequest={handleCreateUpdateRequest}
                           price={order.listingPricePerDay}
-                          proposalPrice={order.offerPricePerDay}
-                          proposalStartDate={order.startDate}
-                          proposalEndDate={order.endDate}
+                          proposalPrice={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newPricePerDay
+                              : order.offerPricePerDay
+                          }
+                          proposalStartDate={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newStartDate
+                              : order.offerStartDate
+                          }
+                          proposalEndDate={
+                            actualUpdateRequest
+                              ? actualUpdateRequest.newEndDate
+                              : order.offerEndDate
+                          }
                           minRentalDays={order.listingMinRentalDays}
                           fee={tenantBaseCommissionPercent}
                           updateRequestModalActive={updateRequestModalActive}
@@ -573,11 +736,48 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             setUpdateRequestModalActive
                           }
                           listingName={order.listingName}
-                          blockedDates={order.blockedDates}
+                          blockedDates={blockedDates}
+                        />
+
+                        <YesNoModal
+                          active={acceptOrderModalActive}
+                          toggleActive={() => setAcceptOrderModalActive(false)}
+                          title="Operation confirmation"
+                          body="Confirm that the proposed booking conditions are actually suitable for you"
+                          onAccept={handleAcceptAcceptOrder}
+                          acceptText="Accept"
+                        />
+                        <YesNoModal
+                          active={rejectOrderModalActive}
+                          toggleActive={() => setRejectOrderModalActive(false)}
+                          title="Operation confirmation"
+                          body="Confirm that you really want to cancel the booking"
+                          onAccept={handleAcceptRejectOrder}
+                          acceptText="Accept"
                         />
                       </div>
                     </div>
                   )}
+
+                  {actualUpdateRequest &&
+                    order.status ==
+                      STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
+                    order.tenantId == sessionUser.userId && (
+                      <div className="listings-sidebar listings-widget order_widget">
+                        <h3>Payment</h3>
+
+                        <div className="booking-operations">
+                          <button
+                            className="default-btn"
+                            type="button"
+                            onClick={handlePayClick}
+                            disabled={disabled}
+                          >
+                            Pay by Stripe
+                          </button>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -635,7 +835,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             src={
                               order.ownerPhoto
                                 ? getFilePath(order.ownerPhoto)
-                                : STATIC.defaultPhotoLink
+                                : STATIC.DEFAULT_PHOTO_LINK
                             }
                             alt={order.ownerName}
                           />
@@ -678,7 +878,7 @@ const OrderContent = ({ order, tenantBaseCommissionPercent }) => {
                             src={
                               order.tenantPhoto
                                 ? getFilePath(order.tenantPhoto)
-                                : STATIC.defaultPhotoLink
+                                : STATIC.DEFAULT_PHOTO_LINK
                             }
                             alt={order.tenantName}
                           />
