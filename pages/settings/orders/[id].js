@@ -5,15 +5,12 @@ import { authSideProps, userSideProps } from "../../../middlewares";
 import { getOrderFullByIdOptions, getOrderFullInfo } from "../../../services";
 import OrderContent from "../../../components/Order/OrderContent";
 
-const Listing = ({ order, tenantBaseCommissionPercent }) => {
+const Listing = (props) => {
   return (
     <>
       <NavbarTwo />
 
-      <OrderContent
-        order={order}
-        tenantBaseCommissionPercent={tenantBaseCommissionPercent}
-      />
+      <OrderContent {...props} />
 
       <Footer bgColor="bg-f5f5f5" />
     </>

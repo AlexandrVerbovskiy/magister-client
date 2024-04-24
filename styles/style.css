@@ -18064,7 +18064,19 @@ input[type="number"] {
   padding-bottom: 9px;
 }
 
-.order-status > div {
+.order-status > div,
+.order-status-small-span {
   width: max-content;
   margin-left: 5px;
+}
+
+.order-status-small-span {
+  padding: 0px 5px;
+  font-size: 12px;
+  line-height: 2;
+}
+
+
+.flatpickr-day.nextMonthDay:not(.notAllowed) {
+  color: rgba(57, 57, 57, 1)!important;
 }
