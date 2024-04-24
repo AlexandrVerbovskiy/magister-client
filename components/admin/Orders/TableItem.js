@@ -1,3 +1,4 @@
+import Delete from "../FastActions/Delete";
 import View from "../FastActions/View";
 import CancelStatus from "./CancelStatus";
 import Status from "./Status";
@@ -10,6 +11,7 @@ const TableItem = ({
   factTotalPrice,
   status,
   cancelStatus,
+  onDeleteClick,
 }) => {
   return (
     <tr>
@@ -43,6 +45,8 @@ const TableItem = ({
           <div className="mr-2 flex items-center">
             <View href={`/admin/orders/${id}`} />
           </div>
+
+          <Delete onDeleteClick={onDeleteClick} />
         </div>
       </td>
     </tr>

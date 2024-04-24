@@ -47,3 +47,8 @@ export const rejectOrder = async (id, authToken) => {
   const data = await post(`/reject-booking`, { id }, authToken);
   return data.body;
 };
+
+export const deleteOrder = async (id, authToken) => {
+  const data = await post(`/delete`, { id }, authToken);
+  return data.body;
+};

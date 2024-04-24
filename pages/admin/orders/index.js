@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   useAdminPage,
   useChangeTimeFilter,
@@ -20,19 +20,20 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import {
+  deleteOrder,
   getAdminOrderList,
   getAdminOrderListPageOptions,
 } from "../../../services";
+import DeleteAccept from "../../../components/admin/DeleteAccept";
 
 const Orders = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+  const [toDeleteOrderInfo, setToDeleteOrderInfo] = useState({});
+  const [dangerModalOpen, setDangerModalOpen] = useState(false);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter({
-      defaultFromTime: getDateByCurrentReject(30),
-      defaultToTime: getDateByCurrentAdd(30),
-    });
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -67,6 +68,28 @@ const Orders = (pageProps) => {
     rebuild,
   });
 
+  const handleCloseDeleteModal = () => {
+    setToDeleteOrderInfo(null);
+    setDangerModalOpen(false);
+  };
+
+  const handleOpenDeleteModal = (id) => {
+    setToDeleteOrderInfo({ id });
+    setDangerModalOpen(true);
+  };
+
+  const onDeleteAccept = async () => {
+    try {
+      const { id } = toDeleteOrderInfo;
+      await deleteOrder(id, authToken);
+      handleCloseDeleteModal();
+      await rebuild();
+      success.set(`Order #${id} deleted successfully!`);
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -95,6 +118,7 @@ const Orders = (pageProps) => {
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
+                openDeleteModal={handleOpenDeleteModal}
                 totalCount={countItems}
               />
 
@@ -114,6 +138,17 @@ const Orders = (pageProps) => {
           </div>
         </main>
       </div>
+
+      <DeleteAccept
+        title="Delete order?"
+        body={`Are you sure you want to remove order ${
+          toDeleteOrderInfo?.id ?? ""
+        } from the system? All information about him will be lost`}
+        modalOpen={dangerModalOpen}
+        setModalOpen={setDangerModalOpen}
+        handleCloseDeleteModal={handleCloseDeleteModal}
+        onDeleteAccept={onDeleteAccept}
+      />
     </div>
   );
 };
