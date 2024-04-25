@@ -1,8 +1,8 @@
 import React from "react";
 import NavbarTwo from "../../../components/_App/NavbarTwo";
 import Footer from "../../../components/_App/Footer";
-import { authSideProps, userSideProps } from "../../../middlewares";
-import { getOrderFullByIdOptions, getOrderFullInfo } from "../../../services";
+import { authSideProps } from "../../../middlewares";
+import { getOrderFullByIdOptions } from "../../../services";
 import OrderContent from "../../../components/Order/OrderContent";
 
 const Listing = (props) => {
