@@ -22,7 +22,8 @@ const userSideProps = async (context, callback = null) => {
       context.res.setHeader("Set-Cookie", `${cookieName}=; Max-Age=-1; Path=/`);
     });*/
 
-    return { props: { sessionUser: null } };
+    res["sessionUser"] = null;
+    res["authToken"] = null;
   }
 
   return await middlewareCallbackWrapper({
