@@ -15,7 +15,7 @@ const CancelStatus = ({ status, baseClass = "" }) => {
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-    text = "Pending Tenant Cancel";
+    text = "Pending Rental Cancel";
     dopClassName = "bg-yellow-500";
   }
 

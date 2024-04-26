@@ -29,7 +29,7 @@ const StatusBlock = ({
     if (tenantId == userId) {
       text = "Waiting your confirmation";
     } else {
-      text = "Waiting tenant confirmation";
+      text = "Waiting rental confirmation";
     }
   }
 

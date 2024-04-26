@@ -28,7 +28,7 @@ const ListFilter = ({
                 checked={type == "tenant"}
                 onChange={() => changeType("tenant")}
               />
-              <span>Tenant</span>
+              <span>Rental</span>
             </label>
           </li>
           <li style={{ marginBottom: "0" }}>

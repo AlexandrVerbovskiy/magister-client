@@ -13,7 +13,7 @@ const Table = ({
   const ths = [
     { title: "Id", value: "id", width: "10%" },
     { title: "Listing", value: "listings.name", width: "20%" },
-    { title: "Tenant", value: "tenants.name", width: "20%" },
+    { title: "Rental", value: "tenants.name", width: "20%" },
     { title: "Owner", value: "owners.name", width: "20%" },
     { title: "Status", value: "orders.status", width: "10%" },
     { title: "Total Price", value: "fact_total_price", width: "10%" },

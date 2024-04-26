@@ -237,7 +237,7 @@ const Settings = ({
                               setValue={setTenantBaseCommissionPercent}
                               error={tenantBaseCommissionPercentError}
                               setError={setTenantBaseCommissionPercentError}
-                              label="Tenant Rent Commission"
+                              label="Rental Rent Commission"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
