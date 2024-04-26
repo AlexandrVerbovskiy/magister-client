@@ -2,7 +2,7 @@ import { useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-const DateFilter = ({ value, onChange }) => {
+const DateFilter = ({ value, onChange, placeholder = "Filter date" }) => {
   const [pickerValue, setPickerValue] = useState(value);
 
   const options = {
@@ -28,7 +28,11 @@ const DateFilter = ({ value, onChange }) => {
 
   return (
     <div className="flatpickr-parent-wrapper flatpickr-date-filter">
-      <Flatpickr value={pickerValue} options={options} />
+      <Flatpickr
+        value={pickerValue}
+        options={options}
+        placeholder={placeholder}
+      />
     </div>
   );
 };

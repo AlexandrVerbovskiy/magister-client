@@ -49,6 +49,7 @@ const ListFilter = ({
         <DateFilter
           value={[fromTime, toTime]}
           onChange={handleChangeTimeFilter}
+          placeholder="Rental dates of the listing"
         />
 
         <label className="search-header-section">

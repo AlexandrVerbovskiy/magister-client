@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { generateQrCode } from "../services/paymentRequests";
+import { generateQrCode, paymentTest } from "../services/paymentRequests";
 
 const Test = () => {
   const [img, setImg] = useState(null);
 
   const handleClick = async () => {
-    const res = await generateQrCode();
-    setImg(res);
+    await paymentTest();
   };
 
   return (

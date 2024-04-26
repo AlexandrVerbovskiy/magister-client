@@ -1,6 +1,13 @@
 import { generatePagination } from "../utils";
 
-const Pagination = ({ move, canNext, canPrev, page, countPages }) => {
+const Pagination = ({
+  move,
+  canNext,
+  canPrev,
+  page,
+  countPages,
+  viewOnlyMoreOnePage = false,
+}) => {
   const visiblePages = generatePagination(page, countPages);
 
   const handleNextClick = (e) => {
@@ -17,6 +24,10 @@ const Pagination = ({ move, canNext, canPrev, page, countPages }) => {
     e.preventDefault();
     if (pageNumber != page) move(pageNumber);
   };
+
+  if (viewOnlyMoreOnePage && countPages < 2) {
+    return <></>;
+  }
 
   return (
     <div className="pagination-area text-center">

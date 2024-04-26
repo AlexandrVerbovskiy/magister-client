@@ -428,6 +428,7 @@ const ListingsWithMap = ({
                           move={moveToPage}
                           canNext={canMoveNextPage}
                           canPrev={canMovePrevPage}
+                          viewOnlyMoreOnePage={true}
                         />
                       )}
                     </div>

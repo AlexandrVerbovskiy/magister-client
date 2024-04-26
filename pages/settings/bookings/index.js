@@ -18,6 +18,7 @@ import {
 } from "../../../utils";
 import OrderItem from "../../../components/Listings/OrderItem";
 import ListFilter from "../../../components/Order/ListFilter";
+import Pagination from "../../../components/Pagination";
 
 const TabHeaderSection = ({
   type,
@@ -117,7 +118,7 @@ const MyBookings = (pageProps) => {
                 <Link href="/">Home</Link>
               </li>
               <li className="item">
-                <Link href="/settings/">Settings</Link>
+                <Link href="/settings/">Dashboard</Link>
               </li>
               <li className="item">Bookings</li>
             </ol>
@@ -167,12 +168,25 @@ const MyBookings = (pageProps) => {
                     style={{ alignItems: "stretch", gridRowGap: "20px" }}
                   >
                     {bookings.map((booking) => (
-                      <OrderItem key={booking.id} {...booking} />
+                      <OrderItem
+                        key={booking.id}
+                        {...booking}
+                        link={`/settings/bookings/${booking.id}`}
+                      />
                     ))}
                   </div>
                 </div>
               </div>
             </section>
+
+            <Pagination
+              viewOnlyMoreOnePage={true}
+              page={page}
+              countPages={countPages}
+              move={moveToPage}
+              canNext={canMoveNextPage}
+              canPrev={canMovePrevPage}
+            />
           </>
         )}
       </div>

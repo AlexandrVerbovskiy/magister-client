@@ -10,3 +10,8 @@ export const generateQrCode = async () => {
   const data = await post(`/generate-qrcode`);
   return data.body.qrcode;
 };
+
+export const paymentTest = async () => {
+  const data = await post(`/test`);
+  return data.body;
+};

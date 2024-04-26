@@ -88,22 +88,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
     <>
       <section className="listings-details-area pb-70">
         <div className="listings-details-image">
-          <Swiper
-            loop={true}
-            autoplay={{
-              delay: 8000,
-            }}
-            modules={[Autoplay]}
-          >
-            {listing.listingImages.map((image) => (
-              <SwiperSlide key={image.link}>
-                <img
-                  src={getListingImageByType(image.link, image.type)}
-                  alt="image"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <div className="swiper"></div>
 
           <div className="container">
             <div className="container">

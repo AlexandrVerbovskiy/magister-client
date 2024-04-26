@@ -554,7 +554,7 @@ const ProfileEdit = () => {
               <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/">Settings</Link>
+              <Link href="/settings/">Dashboard</Link>
             </li>
             <li className="item">Profile Edit</li>
           </ol>

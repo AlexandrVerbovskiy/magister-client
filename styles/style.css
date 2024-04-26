@@ -17125,7 +17125,7 @@ Preloader Area CSS
   display: flex;
   align-items: center;
   justify-content: center;
-  height: max-content;
+  height: 200px;
   margin-bottom: 10px;
 }
 
@@ -17241,7 +17241,7 @@ Preloader Area CSS
 
 .listings-details-image .swiper {
   min-height: 500px;
-  background-color: #eeeeee;
+  background-color: #373737;
 }
 
 .listings-details-image img {
@@ -17979,6 +17979,13 @@ input[type="number"] {
   animation-iteration-count: infinite;
 }
 
+.order_widget{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .order_widget li {
   color: black !important;
   padding-left: 0 !important;
@@ -18046,6 +18053,8 @@ input[type="number"] {
   background-color: #f2f4f5;
   width: 240px;
   text-align: center;
+  text-align: start;
+  padding-left: 15px;
 }
 
 .flatpickr-parent-wrapper.flatpickr-date-filter {
@@ -18076,7 +18085,44 @@ input[type="number"] {
   line-height: 2;
 }
 
-
 .flatpickr-day.nextMonthDay:not(.notAllowed) {
-  color: rgba(57, 57, 57, 1)!important;
+  color: rgba(57, 57, 57, 1) !important;
+}
+
+.form-group-view .form-control.view-placeholder{
+  color: #999999 !important;
+}
+
+.form-group-view-input .form-control {
+  display: flex;
+  align-items: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.form-group-view-input .form-control > div {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+.form-group-view-textarea .form-control{
+  padding: 15px!important;
+}
+
+.order-proposal-info{
+  background-color: var(--whiteColor)!important;
+  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05)!important;
+  border-radius: 5px!important;
+  border: 0!important;
+}
+
+.order-info-main-opponent-info img{
+  width: 100px;
+  height: 100px;
+}
+.conflicted-orders li:not(:last-child){
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 15px;
 }

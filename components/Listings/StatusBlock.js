@@ -10,16 +10,16 @@ const StatusBlock = ({
 }) => {
   let orderStatus =
     status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
-  let text = "Waiting confirmation";
+  let text = "Waiting Verification";
   let color = "status-background-base";
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) {
     color = "status-background-base";
 
     if (ownerId == userId) {
-      text = "Waiting your confirmation";
+      text = "Pending Your Verification";
     } else {
-      text = "Waiting owner confirmation";
+      text = "Pending Owner Verification";
     }
   }
 
@@ -27,25 +27,25 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (tenantId == userId) {
-      text = "Waiting your confirmation";
+      text = "Pending Your Verification";
     } else {
-      text = "Waiting rental confirmation";
+      text = "Pending Rental Verification";
     }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     color = "status-background-green";
-    text = "Waiting payment";
+    text = "Pending Rental Payment";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
     color = "status-background-green";
-    text = "Waiting for delivery";
+    text = "Pending Delivery";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
     color = "status-background-base";
-    text = "Waiting for return";
+    text = "Pending Item Back";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.FINISHED) {
@@ -55,7 +55,7 @@ const StatusBlock = ({
 
   if (orderStatus == STATIC.ORDER_STATUSES.REJECTED) {
     color = "status-background-red";
-    text = "Rejected";
+    text = "Declined";
   }
 
   if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELED) {

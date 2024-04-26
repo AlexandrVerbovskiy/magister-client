@@ -305,7 +305,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                   {isAuth && (
                     <li className="nav-item">
                       <Link href="/settings/" className="nav-link">
-                        Settings
+                      Dashboard
                       </Link>
                     </li>
                   )}
