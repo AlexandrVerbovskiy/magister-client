@@ -1,17 +1,20 @@
-import React from "react"
-import { Elements } from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js"
-import Payment from "../components/Payment"
-import env from "../env"
-
-const stripePromise = loadStripe(env.STRIPE_PUBLIC_KEY)
+import React, { useState } from "react";
+import { generateQrCode } from "../services/paymentRequests";
 
 const Test = () => {
-  return (
-    <Elements stripe={stripePromise}>
-      <Payment />
-    </Elements>
-  )
-}
+  const [img, setImg] = useState(null);
 
-export default Test
+  const handleClick = async () => {
+    const res = await generateQrCode();
+    setImg(res);
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click</button>
+      {img && <img width="400px" height="400px" src={img} />}
+    </div>
+  );
+};
+
+export default Test;

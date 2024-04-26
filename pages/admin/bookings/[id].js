@@ -180,9 +180,9 @@ const Booking = (booking) => {
                             <div className="w-1/2">
                               <InputView
                                 value={booking.tenantName}
-                                label="Tenant"
-                                placeholder="Tenant Name"
-                                name="tenant"
+                                label="Rental"
+                                placeholder="Rental Name"
+                                name="rental"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

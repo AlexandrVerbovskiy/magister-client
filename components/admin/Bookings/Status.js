@@ -10,7 +10,7 @@ const Status = ({ status, baseClass = "" }) => {
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_TENANT) {
-    text = "Pending Tenant";
+    text = "Pending Rental";
     dopClassName = "bg-amber-500";
   }
 

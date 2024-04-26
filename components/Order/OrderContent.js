@@ -473,7 +473,7 @@ const OrderContent = ({
                     <div className="row">
                       <div className="col col-12 col-md-6">
                         <div className="listings-widget order_widget">
-                          <h3>{isOwner ? "Tenant" : "Owner"} Proposal Info</h3>
+                          <h3>{isOwner ? "Rental" : "Owner"} Proposal Info</h3>
 
                           <ul style={{ listStyle: "none", padding: "0" }}>
                             <li>
@@ -641,7 +641,7 @@ const OrderContent = ({
                                 </div>
 
                                 <div>
-                                  Tenant:{" "}
+                                  Rental:{" "}
                                   <a href={`/users/${tenantId}`}>
                                     {tenantName}
                                   </a>
