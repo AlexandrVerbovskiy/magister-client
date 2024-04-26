@@ -18,10 +18,7 @@ const OrderItem = (order) => {
       <div className="single-listings-box">
         <div className="listings-image">
           {images.length < 1 && (
-            <Link
-              href={`/settings/orders/${order.id}`}
-              className="link-btn"
-            ></Link>
+            <Link href={order.link} className="link-btn"></Link>
           )}
 
           {images.length == 1 && (
@@ -30,10 +27,7 @@ const OrderItem = (order) => {
                 src={getListingImageByType(images[0].link, images[0].type)}
                 alt={order.listingName}
               />
-              <Link
-                href={`/settings/orders/${order.id}`}
-                className="link-btn"
-              ></Link>
+              <Link href={order.link} className="link-btn"></Link>
             </>
           )}
 
@@ -54,10 +48,7 @@ const OrderItem = (order) => {
                       )}
                       alt={order.name}
                     />
-                    <Link
-                      href={`/settings/orders/${order.id}`}
-                      className="link-btn"
-                    ></Link>
+                    <Link href={order.link} className="link-btn"></Link>
                   </div>
                 </SwiperSlide>
               ))}
@@ -100,7 +91,7 @@ const OrderItem = (order) => {
 
         <div className="listings-footer">
           <div className="d-flex justify-content-between align-items-center">
-            <Link href={`/settings/orders/${order.id}`} className="default-btn">
+            <Link href={order.link} className="default-btn">
               View
             </Link>
           </div>

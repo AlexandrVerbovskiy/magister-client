@@ -552,7 +552,7 @@ const EditForm = ({
               <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/">Settings</Link>
+              <Link href="/settings/">Dashboard</Link>
             </li>
             <li className="item">
               <Link href="/settings/listings">Listings</Link>
