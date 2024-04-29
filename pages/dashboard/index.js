@@ -23,7 +23,7 @@ const Dashboard = () => {
           <h1>Settings</h1>
           <ol className="breadcrumb">
             <li className="item">
-              <Link href="/settings/">Home</Link>
+              <Link href="/dashboard/">Home</Link>
             </li>
           </ol>
         </div>

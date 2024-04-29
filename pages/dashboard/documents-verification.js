@@ -294,7 +294,7 @@ const DocumentsVerification = ({
               <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/">Dashboard</Link>
+              <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">Documents Verification</li>
           </ol>

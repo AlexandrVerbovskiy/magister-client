@@ -179,7 +179,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
       setCodeModalActive(false);
 
       if (res.user.needRegularViewInfoForm) {
-        router.push("/settings/profile-edit");
+        router.push("/dashboard/profile-edit");
       }
 
       mainSuccess.set("Successfully logged in");
@@ -304,7 +304,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
                   {isAuth && (
                     <li className="nav-item">
-                      <Link href="/settings/" className="nav-link">
+                      <Link href="/dashboard/" className="nav-link">
                       Dashboard
                       </Link>
                     </li>

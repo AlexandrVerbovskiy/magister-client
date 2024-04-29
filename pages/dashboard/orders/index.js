@@ -1,21 +1,17 @@
 import Link from "next/link";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
+import { getOrderList, getOrderListOptions } from "../../../services";
+import { baseTimeListPageParams } from "../../../utils";
+import { IndiceContext } from "../../../contexts";
+import { useContext, useState } from "react";
+import { authSideProps } from "../../../middlewares";
+import { useRouter } from "next/router";
 import {
   useChangeTimeFilter,
   useInitPaginationTimeFilter,
   usePagination,
 } from "../../../hooks";
-import { useRouter } from "next/router";
-import { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
-import { getBookingListOptions } from "../../../services";
-import { authSideProps } from "../../../middlewares";
-import {
-  baseTimeListPageParams,
-  getDateByCurrentAdd,
-  getDateByCurrentReject,
-} from "../../../utils";
 import OrderItem from "../../../components/Listings/OrderItem";
 import ListFilter from "../../../components/Order/ListFilter";
 import Pagination from "../../../components/Pagination";
@@ -36,7 +32,7 @@ const TabHeaderSection = ({
     id="myTab"
     style={style}
   >
-    <li className="nav-item" style={{ marginBottom: "21px" }}>
+    <li className="nav-item">
       <a className="nav-link active" id="all-listing-tab">
         <span className="menu-title">All Bookings ({countItems})</span>
       </a>
@@ -54,10 +50,9 @@ const TabHeaderSection = ({
   </ul>
 );
 
-const MyBookings = (pageProps) => {
+const Orders = (pageProps) => {
   const router = useRouter();
   const { error, success, authToken } = useContext(IndiceContext);
-
   const [type, setType] = useState(router.query.type ?? "tenant");
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
@@ -72,12 +67,12 @@ const MyBookings = (pageProps) => {
     changeFilter,
     canMoveNextPage,
     canMovePrevPage,
-    items: bookings,
+    items: orders,
     rebuild,
     options,
     isFirstBookingCall,
   } = usePagination({
-    getItemsFunc: (data) => getBookingListOptions(data, authToken),
+    getItemsFunc: (data) => getOrderList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
     getDopProps: () => ({
@@ -112,20 +107,20 @@ const MyBookings = (pageProps) => {
 
         <div className="header-section">
           <div className="breadcrumb-area">
-            <h1>Bookings</h1>
+            <h1>Orders</h1>
             <ol className="breadcrumb">
               <li className="item">
                 <Link href="/">Home</Link>
               </li>
               <li className="item">
-                <Link href="/settings/">Dashboard</Link>
+                <Link href="/dashboard/">Dashboard</Link>
               </li>
-              <li className="item">Bookings</li>
+              <li className="item">Orders</li>
             </ol>
           </div>
         </div>
 
-        {((!isFirstBookingCall && bookings.length < 1) ||
+        {((!isFirstBookingCall && orders.length < 1) ||
           (isFirstBookingCall && pageProps.items.length < 1)) && (
           <section className="listing-area">
             <TabHeaderSection
@@ -142,12 +137,12 @@ const MyBookings = (pageProps) => {
 
             <div className="no-listing">
               <div className="no-listing-img"></div>
-              <div className="no-listing-text">You have no bookings yet</div>
+              <div className="no-listing-text">You have no orders yet</div>
             </div>
           </section>
         )}
 
-        {bookings.length > 0 && (
+        {orders.length > 0 && (
           <>
             <section className="listing-area">
               <TabHeaderSection
@@ -167,11 +162,11 @@ const MyBookings = (pageProps) => {
                     className="row"
                     style={{ alignItems: "stretch", gridRowGap: "20px" }}
                   >
-                    {bookings.map((booking) => (
+                    {orders.map((order) => (
                       <OrderItem
-                        key={booking.id}
-                        {...booking}
-                        link={`/settings/bookings/${booking.id}`}
+                        key={order.id}
+                        {...order}
+                        link={`/dashboard/orders/${id}`}
                       />
                     ))}
                   </div>
@@ -197,11 +192,11 @@ const MyBookings = (pageProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const type = context.query.type === "owner" ? "owner" : "tenant";
   const params = { ...baseTimeListPageParams(context.query), type };
-  const options = await getBookingListOptions(params, baseSideProps.authToken);
+  const options = await getOrderListOptions(params, baseSideProps.authToken);
   return { ...options };
 };
 
 export const getServerSideProps = (context) =>
   authSideProps(context, boostServerSideProps);
 
-export default MyBookings;
+export default Orders;

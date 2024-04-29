@@ -18,16 +18,16 @@ const Listing = (props) => {
 
         <div className="header-section">
           <div className="breadcrumb-area">
-            <h1>Orders</h1>
+            <h1>Bookings</h1>
             <ol className="breadcrumb">
               <li className="item">
                 <Link href="/">Home</Link>
               </li>
               <li className="item">
-                <Link href="/settings/">Dashboard</Link>
+                <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href="/settings/orders">Orders</Link>
+                <Link href="/dashboard/bookings">Bookings</Link>
               </li>
               <li className="item">{props.order.listingName}</li>
             </ol>
