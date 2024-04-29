@@ -552,10 +552,10 @@ const EditForm = ({
               <Link href="/">Home</Link>
             </li>
             <li className="item">
-              <Link href="/settings/">Dashboard</Link>
+              <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href="/settings/listings">Listings</Link>
+              <Link href="/dashboard/listings">Listings</Link>
             </li>
             <li className="item">{listing.name ?? "Add Listings"}</li>
           </ol>

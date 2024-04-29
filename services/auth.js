@@ -108,3 +108,8 @@ export const authByProvider = async (body) => {
   const data = await post("/auth-by-provider", body);
   return data.body;
 };
+
+export const connectNewCreditCard = async (cardId, authToken) => {
+  const data = await post("/connect-new-credit-card", { cardId }, authToken);
+  return data.body;
+};

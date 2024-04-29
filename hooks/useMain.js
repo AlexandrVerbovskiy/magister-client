@@ -101,7 +101,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       setIsAuth(true);
 
       if (session.user.needRegularViewInfoForm) {
-        redirectLink = "/settings/profile-edit";
+        redirectLink = "/dashboard/profile-edit";
       }
 
       handleSetSuccess("Successfully logged in");

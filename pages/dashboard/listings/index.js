@@ -214,14 +214,14 @@ const ListingList = (pageProps) => {
                 <Link href="/">Home</Link>
               </li>
               <li className="item">
-                <Link href="/settings/">Dashboard</Link>
+                <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">Listings</li>
             </ol>
           </div>
 
           <Link
-            href="/settings/listings/add"
+            href="/dashboard/listings/add"
             className="default-btn add-listing-link-btn"
           >
             <span className="icon">
@@ -247,7 +247,7 @@ const ListingList = (pageProps) => {
               <div className="no-listing-text">You have no listings yet</div>
               <div className="no-listing-btn">
                 <Link
-                  href="/settings/listings/add"
+                  href="/dashboard/listings/add"
                   className="default-btn add-listing-link-btn"
                 >
                   <span className="icon">
@@ -386,7 +386,7 @@ const ListingList = (pageProps) => {
                             <div className="listings-footer">
                               <div className="d-flex justify-content-between align-items-center">
                                 <Link
-                                  href={`/settings/listings/update/${listing.id}`}
+                                  href={`/dashboard/listings/update/${listing.id}`}
                                   className="default-btn"
                                 >
                                   Edit

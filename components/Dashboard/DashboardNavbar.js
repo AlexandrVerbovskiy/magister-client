@@ -59,9 +59,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/"
+                href="/dashboard/"
                 className={`nav-link ${
-                  currentPath == "/settings/" && "active"
+                  currentPath == "/dashboard/" && "active"
                 }`}
               >
                 <span className="icon">
@@ -73,9 +73,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/listings/"
+                href="/dashboard/listings/"
                 className={`nav-link ${
-                  currentPath.includes("/settings/listings/") && "active"
+                  currentPath.includes("/dashboard/listings/") && "active"
                 }  ${!sessionUser.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
@@ -88,9 +88,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/bookings/"
+                href="/dashboard/bookings/"
                 className={`nav-link ${
-                  currentPath.includes("/settings/bookings/") && "active"
+                  currentPath.includes("/dashboard/bookings/") && "active"
                 }  ${!sessionUser.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
@@ -103,9 +103,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/orders/"
+                href="/dashboard/orders/"
                 className={`nav-link ${
-                  currentPath.includes("/settings/orders/") && "active"
+                  currentPath.includes("/dashboard/orders/") && "active"
                 }  ${!sessionUser.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
@@ -118,9 +118,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/profile-edit/"
+                href="/dashboard/profile-edit/"
                 className={`nav-link ${
-                  currentPath == "/settings/profile-edit/" && "active"
+                  currentPath == "/dashboard/profile-edit/" && "active"
                 }`}
               >
                 <span className="icon">
@@ -132,9 +132,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/settings/documents-verification/"
+                href="/dashboard/documents-verification/"
                 className={`nav-link ${
-                  currentPath == "/settings/documents-verification/" && "active"
+                  currentPath == "/dashboard/documents-verification/" && "active"
                 }`}
               >
                 <span className="icon">

@@ -11720,6 +11720,7 @@ All Modal CSS
   .form-group {
   margin-bottom: 15px;
 }
+
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -15014,6 +15015,8 @@ Dashboard CSS
   color: var(--optionalColor);
   font-weight: 400;
 }
+
+
 .add-listings-box .form-group .form-control {
   height: 48px;
   background: #f9f9f9 !important;
@@ -18125,4 +18128,39 @@ input[type="number"] {
 .conflicted-orders li:not(:last-child){
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 15px;
+}
+
+.stripe-card-append form{
+  padding: 0!important;
+}
+
+.stripe-card-append form>.row{
+  margin: 0!important;
+}
+
+.stripe-card-append form>.row>div:first-child{
+  padding-left: 0;
+}
+
+.stripe-card-append form>.row>div:last-child{
+  padding-right: 0;
+}
+
+.StripeElement{
+  border: 1px solid #d5d5d5 !important;
+  border-radius: 5px;
+  background-color: var(--whiteColor) !important;
+  color: #808080;
+  box-shadow: unset !important;
+  transition: var(--transition);
+  height: 45px;
+  font-size: 14.5px;
+  font-weight: 400;
+  display: block;
+  width: 100%;
+  padding: 9px  .75rem .375rem 15px;
+  line-height:1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

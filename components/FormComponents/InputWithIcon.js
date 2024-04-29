@@ -10,6 +10,10 @@ const InputWithIcon = ({
   type = "text",
   style = {},
   name = null,
+  maxLength = null,
+  max=null,
+  minLength = null,
+  min=null
 }) => (
   <ErrorIconWrapper label={label} icon={icon} error={error}>
     <input
@@ -20,6 +24,10 @@ const InputWithIcon = ({
       placeholder={placeholder}
       style={style}
       name={name}
+      maxLength={maxLength}
+      max={max}
+      minLength={minLength}
+      min={min}
     />
   </ErrorIconWrapper>
 );

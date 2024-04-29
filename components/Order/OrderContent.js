@@ -585,11 +585,18 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
+                <li>
+                  Fee:{" "}
+                  {isOwner
+                    ? ownerBaseCommissionPercent
+                    : tenantBaseCommissionPercent}
+                  %
+                </li>
 
                 {order.offerPricePerDay != order.listingPricePerDay && (
                   <li style={{ fontWeight: 700 }}>
-                    Price with listing price per day {isOwner ? "to get" : "to pay"}: $
+                    Price with listing price per day{" "}
+                    {isOwner ? "to get" : "to pay"}: $
                     {calculateCurrentTotalPrice(
                       order.listingPricePerDay,
                       order.duration,
@@ -642,7 +649,13 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
+                <li>
+                  Fee:{" "}
+                  {isOwner
+                    ? ownerBaseCommissionPercent
+                    : tenantBaseCommissionPercent}
+                  %
+                </li>
 
                 {prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
                   <li>
@@ -689,7 +702,13 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
+                <li>
+                  Fee:{" "}
+                  {isOwner
+                    ? ownerBaseCommissionPercent
+                    : tenantBaseCommissionPercent}
+                  %
+                </li>
 
                 {actualUpdateRequest.newPricePerDay !=
                   order.listingPricePerDay && (
@@ -770,12 +789,12 @@ const OrderContent = ({
                     <div className="d-flex justify-content-between">
                       <div>
                         Id:{" "}
-                        <a href={`/settings/orders/${conflictOrder.id}`}>
+                        <a href={`/dashboard/orders/${conflictOrder.id}`}>
                           #{conflictOrder.id}
                         </a>
                       </div>
 
-                      <a href={`/settings/orders/${conflictOrder.id}`}>
+                      <a href={`/dashboard/orders/${conflictOrder.id}`}>
                         <StatusBlock
                           status={conflictOrder.status}
                           statusCancelled={conflictOrder.cancelStatus}
@@ -800,7 +819,10 @@ const OrderContent = ({
                     <div>Price per day: ${pricePrice}</div>
 
                     <div>
-                      <b>Total price {isOwner ? "to get" : "to pay"}: ${totalPrice}</b>
+                      <b>
+                        Total price {isOwner ? "to get" : "to pay"}: $
+                        {totalPrice}
+                      </b>
                     </div>
                   </li>
                 );
@@ -810,92 +832,93 @@ const OrderContent = ({
         )}
 
       {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
-        <div className="order_widget add-listings-box">
-          <h3>Booking operations</h3>
-          <div className="booking-operations form-group">
-            {((actualUpdateRequest &&
-              !checkStringDateLowerOrEqualCurrentDate(
-                actualUpdateRequest.newStartDate
-              )) ||
-              (!actualUpdateRequest &&
+        (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) &&
+        order.cancelStatus != STATIC.ORDER_CANCELATION_STATUSES.CANCELED && (
+          <div className="order_widget add-listings-box">
+            <h3>Booking operations</h3>
+            <div className="booking-operations form-group">
+              {((actualUpdateRequest &&
                 !checkStringDateLowerOrEqualCurrentDate(
-                  order.offerStartDate
-                ))) &&
-              (!conflictOrders || conflictOrders.length < 1) && (
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={handleAcceptOrder}
-                  disabled={disabled}
-                >
-                  Accept
-                </button>
-              )}
+                  actualUpdateRequest.newStartDate
+                )) ||
+                (!actualUpdateRequest &&
+                  !checkStringDateLowerOrEqualCurrentDate(
+                    order.offerStartDate
+                  ))) &&
+                (!conflictOrders || conflictOrders.length < 1) && (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={handleAcceptOrder}
+                    disabled={disabled}
+                  >
+                    Accept
+                  </button>
+                )}
 
-            <button
-              className="default-btn"
-              type="button"
-              onClick={handleRejectOrder}
-              disabled={disabled}
-            >
-              Reject
-            </button>
+              <button
+                className="default-btn"
+                type="button"
+                onClick={handleRejectOrder}
+                disabled={disabled}
+              >
+                Reject
+              </button>
 
-            <button
-              className="default-btn"
-              type="button"
-              onClick={handleActivateCreateRequest}
-              disabled={disabled}
-            >
-              Offer other terms
-            </button>
+              <button
+                className="default-btn"
+                type="button"
+                onClick={handleActivateCreateRequest}
+                disabled={disabled}
+              >
+                Offer other terms
+              </button>
 
-            <CreateUpdateOrderRequestModal
-              handleCreateUpdateRequest={handleCreateUpdateRequest}
-              price={order.listingPricePerDay}
-              proposalPrice={
-                actualUpdateRequest
-                  ? actualUpdateRequest.newPricePerDay
-                  : order.offerPricePerDay
-              }
-              proposalStartDate={
-                actualUpdateRequest
-                  ? actualUpdateRequest.newStartDate
-                  : order.offerStartDate
-              }
-              proposalEndDate={
-                actualUpdateRequest
-                  ? actualUpdateRequest.newEndDate
-                  : order.offerEndDate
-              }
-              minRentalDays={order.listingMinRentalDays}
-              fee={tenantBaseCommissionPercent}
-              updateRequestModalActive={updateRequestModalActive}
-              setUpdateRequestModalActive={setUpdateRequestModalActive}
-              listingName={order.listingName}
-              blockedDates={blockedDates}
-            />
+              <CreateUpdateOrderRequestModal
+                handleCreateUpdateRequest={handleCreateUpdateRequest}
+                price={order.listingPricePerDay}
+                proposalPrice={
+                  actualUpdateRequest
+                    ? actualUpdateRequest.newPricePerDay
+                    : order.offerPricePerDay
+                }
+                proposalStartDate={
+                  actualUpdateRequest
+                    ? actualUpdateRequest.newStartDate
+                    : order.offerStartDate
+                }
+                proposalEndDate={
+                  actualUpdateRequest
+                    ? actualUpdateRequest.newEndDate
+                    : order.offerEndDate
+                }
+                minRentalDays={order.listingMinRentalDays}
+                fee={tenantBaseCommissionPercent}
+                updateRequestModalActive={updateRequestModalActive}
+                setUpdateRequestModalActive={setUpdateRequestModalActive}
+                listingName={order.listingName}
+                blockedDates={blockedDates}
+              />
 
-            <YesNoModal
-              active={acceptOrderModalActive}
-              toggleActive={() => setAcceptOrderModalActive(false)}
-              title="Operation confirmation"
-              body="Confirm that the proposed booking conditions are actually suitable for you"
-              onAccept={handleAcceptAcceptOrder}
-              acceptText="Accept"
-            />
-            <YesNoModal
-              active={rejectOrderModalActive}
-              toggleActive={() => setRejectOrderModalActive(false)}
-              title="Operation confirmation"
-              body="Confirm that you really want to cancel the booking"
-              onAccept={handleAcceptRejectOrder}
-              acceptText="Accept"
-            />
+              <YesNoModal
+                active={acceptOrderModalActive}
+                toggleActive={() => setAcceptOrderModalActive(false)}
+                title="Operation confirmation"
+                body="Confirm that the proposed booking conditions are actually suitable for you"
+                onAccept={handleAcceptAcceptOrder}
+                acceptText="Accept"
+              />
+              <YesNoModal
+                active={rejectOrderModalActive}
+                toggleActive={() => setRejectOrderModalActive(false)}
+                title="Operation confirmation"
+                body="Confirm that you really want to cancel the booking"
+                onAccept={handleAcceptRejectOrder}
+                acceptText="Accept"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {actualUpdateRequest &&
         order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&

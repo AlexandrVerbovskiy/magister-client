@@ -86,7 +86,7 @@ const NavbarThree = () => {
 
                 {isAuth && (
                   <li className="nav-item">
-                    <Link href="/settings/" className="nav-link">
+                    <Link href="/dashboard/" className="nav-link">
                       Dashboard
                     </Link>
                   </li>

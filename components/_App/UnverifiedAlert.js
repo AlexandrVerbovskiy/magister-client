@@ -10,7 +10,7 @@ const UnverifiedAlert = ({ statusCode }) => {
     statusCode ||
     !sessionUser ||
     sessionUser.verified ||
-    router.asPath.includes("/settings/") ||
+    router.asPath.includes("/dashboard/") ||
     router.asPath.includes("/admin/")
   )
     return;
@@ -24,7 +24,7 @@ const UnverifiedAlert = ({ statusCode }) => {
       <div>
         You need to be verified to rent and rent tools. To verify, send the
         necessary data via the{" "}
-        <a href="/settings/documents-verification">page</a>
+        <a href="/dashboard/documents-verification">page</a>
       </div>
     </div>
   );

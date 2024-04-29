@@ -119,7 +119,7 @@ const LoginTab = ({
         mainSuccess.set("Successfully logged in");
 
         if (res.user.needRegularViewInfoForm) {
-          router.push("/settings/profile-edit");
+          router.push("/dashboard/profile-edit");
         }
       }
     } catch (e) {
