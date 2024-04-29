@@ -64,6 +64,7 @@ const BaseDateSpan = ({
 const OrderContent = ({
   order: baseOrder,
   tenantBaseCommissionPercent,
+  ownerBaseCommissionPercent,
   blockedDates,
   conflictOrders = null,
 }) => {
@@ -111,8 +112,15 @@ const OrderContent = ({
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
   const [disabled, setDisabled] = useState(false);
 
-  const calculateCurrentTotalPrice = (pricePerDay, duration, fee) =>
+  const calculateCurrentTotalPayPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
+
+  const calculateCurrentTotalGetPrice = (pricePerDay, duration, fee) =>
+    (pricePerDay * duration * (100 - fee)) / 100;
+
+  const calculateCurrentTotalPrice = isOwner
+    ? calculateCurrentTotalGetPrice
+    : calculateCurrentTotalPayPrice;
 
   const handleActivateCreateRequest = () => {
     setUpdateRequestModalActive(true);
@@ -577,11 +585,11 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {order.fee}%</li>
+                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
 
                 {order.offerPricePerDay != order.listingPricePerDay && (
                   <li style={{ fontWeight: 700 }}>
-                    Price with listing price per day: $
+                    Price with listing price per day {isOwner ? "to get" : "to pay"}: $
                     {calculateCurrentTotalPrice(
                       order.listingPricePerDay,
                       order.duration,
@@ -605,7 +613,7 @@ const OrderContent = ({
                 )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price: $
+                  Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {calculateCurrentTotalPrice(
                     order.offerPricePerDay,
                     order.duration,
@@ -634,7 +642,7 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {order.fee}%</li>
+                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
 
                 {prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
                   <li>
@@ -651,7 +659,7 @@ const OrderContent = ({
                 )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price: $
+                  Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {calculateCurrentTotalPrice(
                     prevUpdateRequest.pricePerDay,
                     getDaysDifference(
@@ -681,12 +689,13 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>Fee: {order.fee}%</li>
+                <li>Fee: {isOwner?ownerBaseCommissionPercent:tenantBaseCommissionPercent}%</li>
 
                 {actualUpdateRequest.newPricePerDay !=
                   order.listingPricePerDay && (
                   <li>
-                    Price with listing price per day: $
+                    Price {isOwner ? "to get" : "to pay"} with listing price per
+                    day: $
                     {calculateCurrentTotalPrice(
                       order.listingPricePerDay,
                       getDaysDifference(
@@ -699,7 +708,7 @@ const OrderContent = ({
                 )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price: $
+                  Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {calculateCurrentTotalPrice(
                     actualUpdateRequest.newPricePerDay,
                     getDaysDifference(
@@ -791,7 +800,7 @@ const OrderContent = ({
                     <div>Price per day: ${pricePrice}</div>
 
                     <div>
-                      <b>Total price: ${totalPrice}</b>
+                      <b>Total price {isOwner ? "to get" : "to pay"}: ${totalPrice}</b>
                     </div>
                   </li>
                 );

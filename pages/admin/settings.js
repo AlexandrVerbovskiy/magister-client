@@ -170,7 +170,7 @@ const Settings = ({
                   <div className="grow">
                     <div className="p-6 space-y-6">
                       <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
-                        Main Settings
+                        Main
                       </h2>
 
                       <section>

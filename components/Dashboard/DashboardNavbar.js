@@ -67,7 +67,7 @@ const DashboardNavbar = () => {
                 <span className="icon">
                   <i className="bx bx-home-circle"></i>
                 </span>
-                <span className="menu-title">Main Settings</span>
+                <span className="menu-title">Main</span>
               </Link>
             </li>
 
