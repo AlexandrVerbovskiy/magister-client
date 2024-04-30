@@ -22,6 +22,13 @@ import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 
+const bookingStatuses = [
+  STATIC.ORDER_STATUSES.REJECTED,
+  STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_OWNER,
+  STATIC.ORDER_STATUSES.PENDING_TENANT,
+];
+
 const BaseDateSpan = ({
   startDate,
   endDate,
@@ -68,6 +75,7 @@ const OrderContent = ({
   ownerBaseCommissionPercent,
   blockedDates,
   conflictOrders = null,
+  canAcceptTenantListing = false,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
@@ -100,7 +108,10 @@ const OrderContent = ({
     if (
       blockedDates &&
       blockedDates.length > 0 &&
-      baseOrder.ownerId == sessionUser.id
+      baseOrder.ownerId == sessionUser.id &&
+      (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
+      order.cancelStatus == null
     ) {
       tooltipErrorMessage =
         "There are more priority bookings and orders for these dates";
@@ -315,6 +326,20 @@ const OrderContent = ({
   };
 
   const handlePayClick = async () => {
+    console.log("payed");
+
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleTenantGotListingApproveClick = async () => {
     console.log("payed");
 
     if (disabled) {
@@ -819,12 +844,24 @@ const OrderContent = ({
                     <div className="d-flex justify-content-between">
                       <div>
                         Id:{" "}
-                        <a href={`/dashboard/orders/${conflictOrder.id}`}>
+                        <a
+                          href={
+                            bookingStatuses.includes(conflictOrder.status)
+                              ? `/dashboard/bookings/${conflictOrder.id}`
+                              : `/dashboard/orders/${conflictOrder.id}`
+                          }
+                        >
                           #{conflictOrder.id}
                         </a>
                       </div>
 
-                      <a href={`/dashboard/orders/${conflictOrder.id}`}>
+                      <a
+                        href={
+                          bookingStatuses.includes(conflictOrder.status)
+                            ? `/dashboard/bookings/${conflictOrder.id}`
+                            : `/dashboard/orders/${conflictOrder.id}`
+                        }
+                      >
                         <StatusBlock
                           status={conflictOrder.status}
                           statusCancelled={conflictOrder.cancelStatus}
@@ -861,113 +898,151 @@ const OrderContent = ({
           </div>
         )}
 
-      {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) &&
-        order.cancelStatus != STATIC.ORDER_CANCELATION_STATUSES.CANCELED && (
-          <div className="order_widget add-listings-box">
-            <h3>Booking operations</h3>
-            <div className="booking-operations form-group">
-              {((actualUpdateRequest &&
-                !checkStringDateLowerOrEqualCurrentDate(
-                  actualUpdateRequest.newStartDate
-                )) ||
-                (!actualUpdateRequest &&
+      {order.cancelStatus == null && (
+        <>
+          {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+            (isTenant &&
+              order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+            <div className="order_widget add-listings-box">
+              <h3>Booking operations</h3>
+              <div className="booking-operations form-group">
+                {((actualUpdateRequest &&
                   !checkStringDateLowerOrEqualCurrentDate(
-                    order.offerStartDate
-                  ))) &&
-                (!conflictOrders || conflictOrders.length < 1) && (
+                    actualUpdateRequest.newStartDate
+                  )) ||
+                  (!actualUpdateRequest &&
+                    !checkStringDateLowerOrEqualCurrentDate(
+                      order.offerStartDate
+                    ))) &&
+                  (!conflictOrders || conflictOrders.length < 1) && (
+                    <button
+                      className="default-btn"
+                      type="button"
+                      onClick={handleAcceptOrder}
+                      disabled={disabled}
+                    >
+                      Accept
+                    </button>
+                  )}
+
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={handleRejectOrder}
+                  disabled={disabled}
+                >
+                  Reject
+                </button>
+
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={handleActivateCreateRequest}
+                  disabled={disabled}
+                >
+                  Offer other terms
+                </button>
+
+                <CreateUpdateOrderRequestModal
+                  handleCreateUpdateRequest={handleCreateUpdateRequest}
+                  price={order.listingPricePerDay}
+                  proposalPrice={
+                    actualUpdateRequest
+                      ? actualUpdateRequest.newPricePerDay
+                      : order.offerPricePerDay
+                  }
+                  proposalStartDate={
+                    actualUpdateRequest
+                      ? actualUpdateRequest.newStartDate
+                      : order.offerStartDate
+                  }
+                  proposalEndDate={
+                    actualUpdateRequest
+                      ? actualUpdateRequest.newEndDate
+                      : order.offerEndDate
+                  }
+                  minRentalDays={order.listingMinRentalDays}
+                  fee={tenantBaseCommissionPercent}
+                  updateRequestModalActive={updateRequestModalActive}
+                  setUpdateRequestModalActive={setUpdateRequestModalActive}
+                  listingName={order.listingName}
+                  blockedDates={blockedDates}
+                />
+
+                <YesNoModal
+                  active={acceptOrderModalActive}
+                  toggleActive={() => setAcceptOrderModalActive(false)}
+                  title="Operation confirmation"
+                  body="Confirm that the proposed booking conditions are actually suitable for you"
+                  onAccept={handleAcceptAcceptOrder}
+                  acceptText="Accept"
+                />
+                <YesNoModal
+                  active={rejectOrderModalActive}
+                  toggleActive={() => setRejectOrderModalActive(false)}
+                  title="Operation confirmation"
+                  body="Confirm that you really want to cancel the booking"
+                  onAccept={handleAcceptRejectOrder}
+                  acceptText="Accept"
+                />
+              </div>
+            </div>
+          )}
+
+          {order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
+            order.tenantId == sessionUser.userId && (
+              <div className="order_widget add-listings-box">
+                <h3>Payment</h3>
+
+                <div className="booking-operations form-group">
                   <button
                     className="default-btn"
                     type="button"
-                    onClick={handleAcceptOrder}
+                    onClick={handlePayClick}
                     disabled={disabled}
                   >
-                    Accept
+                    Pay by Stripe
                   </button>
-                )}
+                </div>
+              </div>
+            )}
 
-              <button
-                className="default-btn"
-                type="button"
-                onClick={handleRejectOrder}
-                disabled={disabled}
-              >
-                Reject
-              </button>
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+            order.ownerId == sessionUser.id && (
+              <div className="order_widget add-listings-box">
+                <h3>Renters QR code to confirm acceptance of the goods</h3>
 
-              <button
-                className="default-btn"
-                type="button"
-                onClick={handleActivateCreateRequest}
-                disabled={disabled}
-              >
-                Offer other terms
-              </button>
+                <div className="booking-operations form-group">
+                  <img
+                    width="200px"
+                    height="200px"
+                    src={`${order.tenantAcceptListingQrcode}`}
+                  />
+                </div>
+              </div>
+            )}
 
-              <CreateUpdateOrderRequestModal
-                handleCreateUpdateRequest={handleCreateUpdateRequest}
-                price={order.listingPricePerDay}
-                proposalPrice={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newPricePerDay
-                    : order.offerPricePerDay
-                }
-                proposalStartDate={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newStartDate
-                    : order.offerStartDate
-                }
-                proposalEndDate={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newEndDate
-                    : order.offerEndDate
-                }
-                minRentalDays={order.listingMinRentalDays}
-                fee={tenantBaseCommissionPercent}
-                updateRequestModalActive={updateRequestModalActive}
-                setUpdateRequestModalActive={setUpdateRequestModalActive}
-                listingName={order.listingName}
-                blockedDates={blockedDates}
-              />
+          {actualUpdateRequest &&
+            order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+            order.tenantId == sessionUser.id &&
+            canAcceptTenantListing && (
+              <div className="order_widget add-listings-box">
+                <h3>Approve that you have received the listing</h3>
 
-              <YesNoModal
-                active={acceptOrderModalActive}
-                toggleActive={() => setAcceptOrderModalActive(false)}
-                title="Operation confirmation"
-                body="Confirm that the proposed booking conditions are actually suitable for you"
-                onAccept={handleAcceptAcceptOrder}
-                acceptText="Accept"
-              />
-              <YesNoModal
-                active={rejectOrderModalActive}
-                toggleActive={() => setRejectOrderModalActive(false)}
-                title="Operation confirmation"
-                body="Confirm that you really want to cancel the booking"
-                onAccept={handleAcceptRejectOrder}
-                acceptText="Accept"
-              />
-            </div>
-          </div>
-        )}
-
-      {actualUpdateRequest &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
-        order.tenantId == sessionUser.userId && (
-          <div className="order_widget add-listings-box">
-            <h3>Payment</h3>
-
-            <div className="booking-operations form-group">
-              <button
-                className="default-btn"
-                type="button"
-                onClick={handlePayClick}
-                disabled={disabled}
-              >
-                Pay by Stripe
-              </button>
-            </div>
-          </div>
-        )}
+                <div className="booking-operations form-group">
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={handleTenantGotListingApproveClick}
+                    disabled={disabled}
+                  >
+                    Approve
+                  </button>
+                </div>
+              </div>
+            )}
+        </>
+      )}
     </>
   );
 };
