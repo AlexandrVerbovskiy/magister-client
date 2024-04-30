@@ -17,6 +17,7 @@ import {
   rejectOrder,
 } from "../../services";
 import YesNoModal from "../_App/YesNoModal";
+import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
@@ -68,31 +69,6 @@ const OrderContent = ({
   blockedDates,
   conflictOrders = null,
 }) => {
-  const CanBeErrorBaseDateSpan = ({ startDate, endDate }) => {
-    let tooltipErrorMessage = "";
-    let blocked = false;
-
-    if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
-      tooltipErrorMessage = "Order start date is overdue";
-      blocked = true;
-    }
-
-    if (blockedDates && blockedDates.length > 0) {
-      tooltipErrorMessage =
-        "There are more priority bookings and orders for these dates";
-      blocked = true;
-    }
-
-    return (
-      <BaseDateSpan
-        startDate={startDate}
-        endDate={endDate}
-        className={blocked ? "error-span" : ""}
-        tooltipText={tooltipErrorMessage}
-      />
-    );
-  };
-
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
@@ -111,6 +87,41 @@ const OrderContent = ({
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
   const [disabled, setDisabled] = useState(false);
+
+  const checkErrorData = (startDate) => {
+    let tooltipErrorMessage = "";
+    let blocked = false;
+
+    if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+      tooltipErrorMessage = "Order start date is overdue";
+      blocked = true;
+    }
+
+    if (
+      blockedDates &&
+      blockedDates.length > 0 &&
+      baseOrder.ownerId == sessionUser.id
+    ) {
+      tooltipErrorMessage =
+        "There are more priority bookings and orders for these dates";
+      blocked = true;
+    }
+
+    return { tooltipErrorMessage, blocked };
+  };
+
+  const CanBeErrorBaseDateSpan = ({ startDate, endDate }) => {
+    const { tooltipErrorMessage, blocked } = checkErrorData(startDate);
+
+    return (
+      <BaseDateSpan
+        startDate={startDate}
+        endDate={endDate}
+        className={blocked ? "error-span" : ""}
+        tooltipText={tooltipErrorMessage}
+      />
+    );
+  };
 
   const calculateCurrentTotalPayPrice = (pricePerDay, duration, fee) =>
     (pricePerDay * duration * (100 + fee)) / 100;
@@ -627,6 +638,14 @@ const OrderContent = ({
                     tenantBaseCommissionPercent
                   )}
                 </li>
+
+                {checkErrorData(order.offerStartDate).blocked && (
+                  <li>
+                    <ErrorBlockMessage>
+                      {checkErrorData(order.offerStartDate).tooltipErrorMessage}
+                    </ErrorBlockMessage>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -737,6 +756,17 @@ const OrderContent = ({
                     tenantBaseCommissionPercent
                   )}
                 </li>
+
+                {checkErrorData(actualUpdateRequest.newStartDate).blocked && (
+                  <li>
+                    <ErrorBlockMessage>
+                      {
+                        checkErrorData(actualUpdateRequest.newStartDate)
+                          .tooltipErrorMessage
+                      }
+                    </ErrorBlockMessage>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

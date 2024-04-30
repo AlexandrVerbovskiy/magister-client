@@ -818,35 +818,37 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
 
             <div className="col-lg-4 col-md-12">
               <div className="listings-sidebar">
-                <div className="listings-widget book_listings">
-                  <h3>Booking Online</h3>
-                  {listing.minRentalDays && (
-                    <ul style={{ listStyle: "none", padding: "0" }}>
-                      <li>
-                        <i
-                          style={{
-                            fontSize: "20px",
-                            transform: "translateY(3px)",
-                            marginRight: "4px",
-                          }}
-                          className="bx bx-envelope"
-                        ></i>
-                        Min rental:{listing.minRentalDays} days
-                      </li>
-                    </ul>
-                  )}
-                  <button
-                    type="button"
-                    className="default-btn w-100"
-                    onClick={handleMakeBookingTriggerClick}
-                  >
-                    Book Now ${listing.pricePerDay}(per day)
-                  </button>
+                {listing.approved && listing.userId != sessionUser.id && (
+                  <div className="listings-widget book_listings">
+                    <h3>Booking Online</h3>
+                    {listing.minRentalDays && (
+                      <ul style={{ listStyle: "none", padding: "0" }}>
+                        <li>
+                          <i
+                            style={{
+                              fontSize: "20px",
+                              transform: "translateY(3px)",
+                              marginRight: "4px",
+                            }}
+                            className="bx bx-envelope"
+                          ></i>
+                          Min rental:{listing.minRentalDays} days
+                        </li>
+                      </ul>
+                    )}
+                    <button
+                      type="button"
+                      className="default-btn w-100"
+                      onClick={handleMakeBookingTriggerClick}
+                    >
+                      Book Now ${listing.pricePerDay}(per day)
+                    </button>
 
-                  <span>
-                    By <a href="#">Booking.com</a>
-                  </span>
-                </div>
+                    <span>
+                      By <a href="#">Booking.com</a>
+                    </span>
+                  </div>
+                )}
 
                 <div className="listings-widget listings_contact_details">
                   <h3>Contact Details</h3>

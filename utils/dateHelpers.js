@@ -139,5 +139,5 @@ export const separateDate = (date) => {
 
 export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   const currentDate = separateDate(new Date());
-  return date <= currentDate;
+  return date < currentDate;
 };

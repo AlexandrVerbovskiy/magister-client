@@ -107,7 +107,7 @@ const BookingModal = ({
 
     if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
       setCalendarError(
-        `You can only rent a listing for more than ${minRentalDays} days`
+        `You can rent a listing only for more than ${minRentalDays} days`
       );
       hasError = true;
     }
@@ -146,7 +146,6 @@ const BookingModal = ({
       <div className="mt-3 booking-form left-scrollable">
         <div className="flatpickr-parent-wrapper popup-widget">
           <div ref={calendarContainer}></div>
-          <ErrorSpan error={calendarError} />
         </div>
 
         <div className="popup-widget order-info-widget">
@@ -178,6 +177,17 @@ const BookingModal = ({
           {fee && <div>Total Fee: ${totalFee}</div>}
           <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
         </div>
+
+        {calendarError && (
+          <div className="form-group">
+            <div
+              className="alert-dismissible fade show alert alert-danger"
+              role="alert"
+            >
+              {calendarError}
+            </div>
+          </div>
+        )}
 
         <button
           className="mt-4 default-modal-button"
