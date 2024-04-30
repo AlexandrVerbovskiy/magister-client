@@ -57,7 +57,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         authToken
       );
       setCreateOrderModalActive(false);
-      router.push(`/dashboard/orders/${id}`);
+      router.push(`/dashboard/bookings/${id}`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );

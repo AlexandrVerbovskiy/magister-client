@@ -40,7 +40,7 @@ const StatusBlock = ({
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
     color = "status-background-green";
-    text = "Pending Delivery";
+    text = "Pending Hand Over";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {

@@ -1,12 +1,12 @@
 import React from "react";
-import { authSideProps } from "../../../middlewares";
-import { getOrderFullByIdOptions } from "../../../services";
-import OrderContent from "../../../components/Order/OrderContent";
-import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
-import NavbarThree from "../../../components/_App/NavbarThree";
+import { authSideProps } from "../../../../middlewares";
+import { getTenantListingScanRentalCode } from "../../../../services";
+import OrderContent from "../../../../components/Order/OrderContent";
+import DashboardNavbar from "../../../../components/Dashboard/DashboardNavbar";
+import NavbarThree from "../../../../components/_App/NavbarThree";
 import Link from "next/link";
 
-const Listing = (props) => {
+const ApproveTenantListing = (props) => {
   return (
     <>
       <DashboardNavbar />
@@ -16,7 +16,7 @@ const Listing = (props) => {
 
         <div className="header-section">
           <div className="breadcrumb-area">
-            <h1>Bookings</h1>
+            <h1>Approving Hand Over </h1>
             <ol className="breadcrumb">
               <li className="item">
                 <Link href="/">Home</Link>
@@ -39,12 +39,15 @@ const Listing = (props) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const id = context.params.id;
-  const options = await getOrderFullByIdOptions(id, baseSideProps.authToken);
-  return { ...options, id };
+  const token = context.params.token;
+  const options = await getTenantListingScanRentalCode(
+    id,
+    baseSideProps.authToken
+  );
+  return { ...options, token };
 };
 
 export const getServerSideProps = (context) =>
   authSideProps(context, boostServerSideProps);
 
-export default Listing;
+export default ApproveTenantListing;
