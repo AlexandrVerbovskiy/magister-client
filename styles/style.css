@@ -17986,7 +17986,7 @@ input[type="number"] {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
 }
 
 .order_widget li {
@@ -18088,7 +18088,7 @@ input[type="number"] {
   line-height: 2;
 }
 
-.flatpickr-day.nextMonthDay:not(.notAllowed) {
+.flatpickr-day.nextMonthDay:not(.notAllowed):not(.flatpickr-disabled) {
   color: rgba(57, 57, 57, 1) !important;
 }
 

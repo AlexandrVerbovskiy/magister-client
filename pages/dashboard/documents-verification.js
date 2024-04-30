@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
+import ErrorBlockMessage from "../../components/_App/ErrorBlockMessage";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import ImageInput from "../../components/DashboardComponents/ImageInput";
@@ -308,13 +309,10 @@ const DocumentsVerification = ({
               {!sessionUser?.verified && lastAnswerDescription && (
                 <div className="row" style={{ padding: "0 25px" }}>
                   <div className="col-lg-12 col-md-12">
-                    <div
-                      className="alert-dismissible fade show alert alert-danger"
-                      role="alert"
-                    >
+                    <ErrorBlockMessage>
                       <b>Rejected feedback: </b>
                       {lastAnswerDescription}
-                    </div>
+                    </ErrorBlockMessage>
                   </div>
                 </div>
               )}
