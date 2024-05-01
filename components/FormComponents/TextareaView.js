@@ -5,7 +5,6 @@ const TextareaView = ({
   placeholder = "",
   rows = 3,
 }) => {
-  console.log(value, placeholder);
   return (
     <div className="form-group form-group-view form-group-view-textarea">
       {label && (

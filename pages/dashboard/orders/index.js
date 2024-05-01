@@ -166,7 +166,7 @@ const Orders = (pageProps) => {
                       <OrderItem
                         key={order.id}
                         {...order}
-                        link={`/dashboard/orders/${id}`}
+                        link={`/dashboard/orders/${order.id}`}
                       />
                     ))}
                   </div>

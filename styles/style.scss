@@ -909,6 +909,15 @@ Navbar Area CSS
               border-color: var(--mainColor);
             }
           }
+
+          .default-btn.error-btn {
+            color: white;
+            border-color: red;
+
+            &:hover {
+              background-color: red;
+            }
+          }
         }
       }
     }

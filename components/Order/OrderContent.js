@@ -6,6 +6,7 @@ import {
   getFilePath,
   getListingImageByType,
   timeNormalConverter,
+  validateBigText,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -14,13 +15,18 @@ import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import {
   acceptOrder,
   createOrderUpdateRequest,
+  paypalCreateOrder,
+  paypalOrderPayed,
   rejectOrder,
 } from "../../services";
 import YesNoModal from "../_App/YesNoModal";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
+import Textarea from "../../components/DashboardComponents/Textarea";
 import TextareaView from "../../components/FormComponents/TextareaView";
+import BaseModal from "../_App/BaseModal";
+import PaypalModal from "../PaypalModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -76,13 +82,12 @@ const OrderContent = ({
   blockedDates,
   conflictOrders = null,
   canAcceptTenantListing = false,
+  authToken,
 }) => {
-  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
+  const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
-  const [updateRequestModalActive, setUpdateRequestModalActive] =
-    useState(false);
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -92,30 +97,46 @@ const OrderContent = ({
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
-  const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
-  const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
+
+  const [updateRequestModalActive, setUpdateRequestModalActive] =
+    useState(false);
+  const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(false);
+  const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
+  const [cancelOrderModalActive, setCancelOrderModalActive] = useState(false);
+  const [disputeOrderModalActive, setDisputeOrderModalActive] = useState(false);
+  const [acceptTenantToolModalActive, setAcceptTenantToolModalActive] =
+    useState(false);
+
   const [disabled, setDisabled] = useState(false);
+
+  const [createDisputeDescription, setCreateDisputeDescription] = useState("");
+  const [createDisputeDescriptionError, setCreateDisputeDescriptionError] =
+    useState(null);
+
+  const isBookingWithoutAgreement =
+    (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
+    order.cancelStatus == null;
 
   const checkErrorData = (startDate) => {
     let tooltipErrorMessage = "";
     let blocked = false;
 
-    if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
-      tooltipErrorMessage = "Order start date is overdue";
-      blocked = true;
-    }
+    if (isBookingWithoutAgreement) {
+      if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+        tooltipErrorMessage = "Order start date is overdue";
+        blocked = true;
+      }
 
-    if (
-      blockedDates &&
-      blockedDates.length > 0 &&
-      baseOrder.ownerId == sessionUser.id &&
-      (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
-      order.cancelStatus == null
-    ) {
-      tooltipErrorMessage =
-        "There are more priority bookings and orders for these dates";
-      blocked = true;
+      if (
+        blockedDates &&
+        blockedDates.length > 0 &&
+        baseOrder.ownerId == sessionUser.id
+      ) {
+        tooltipErrorMessage =
+          "There are more priority bookings and orders for these dates";
+        blocked = true;
+      }
     }
 
     return { tooltipErrorMessage, blocked };
@@ -156,14 +177,23 @@ const OrderContent = ({
     setRejectOrderModalActive(true);
   };
 
+  const handleCancelClick = () => {
+    setCancelOrderModalActive(true);
+  };
+
+  const handleCreateDisputeClick = () => {
+    setDisputeOrderModalActive(true);
+  };
+
+  const handleTenantGotListingApproveActivate = async () => {
+    setAcceptTenantToolModalActive(true);
+  };
+
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser.id);
     setIsTenant(order.tenantId == sessionUser.id);
 
-    if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT
-    ) {
+    if (isBookingWithoutAgreement) {
       if (order.previousUpdateRequest) {
         setPrevUpdateRequest(order.previousUpdateRequest);
       } else {
@@ -260,7 +290,7 @@ const OrderContent = ({
     const totalPrice = calculateCurrentTotalPrice(
       offerPricePerDay,
       getDaysDifference(offerStartDate, offerEndDate),
-      tenantBaseCommissionPercent
+      isOwner ? ownerBaseCommissionPercent : tenantBaseCommissionPercent
     );
 
     const updatedFields = {
@@ -340,7 +370,7 @@ const OrderContent = ({
   };
 
   const handleTenantGotListingApproveClick = async () => {
-    console.log("payed");
+    console.log("tenant accept listing");
 
     if (disabled) {
       return;
@@ -348,6 +378,54 @@ const OrderContent = ({
 
     try {
       setDisabled(true);
+      setDisputeOrderModalActive(false);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleAcceptCreateDisputeClick = async () => {
+    let hasError = false;
+
+    if (!createDisputeDescription.length) {
+      setCreateDisputeDescriptionError("Required field");
+      hasError = true;
+    }
+
+    const resValidateDisputeDescription = validateBigText(
+      createDisputeDescription
+    );
+
+    if (resValidateDisputeDescription !== true) {
+      setCreateDisputeDescriptionError(resValidateDisputeDescription);
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+      setDisputeOrderModalActive(false);
+      setCreateDisputeDescriptionError("");
+      success.set(
+        "Dispute created successfully. Wait for the administrator to contact you"
+      );
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  const handleAcceptCancelOrder = async () => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+      setCancelOrderModalActive(false);
+      success.set("Order canceled successfully");
     } finally {
       setDisabled(false);
     }
@@ -600,27 +678,25 @@ const OrderContent = ({
               <h3>Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
-                <li
-                  style={
-                    order.listingPricePerDay != order.offerPricePerDay
-                      ? { textDecoration: "line-through" }
-                      : {}
-                  }
-                >
-                  Listing price per day: ${order.listingPricePerDay}
-                </li>
-
-                {order.listingPricePerDay != order.offerPricePerDay && (
-                  <li>Offer price per day: ${order.offerPricePerDay}</li>
-                )}
-
+                {isBookingWithoutAgreement &&
+                  order.listingPricePerDay != order.offerPricePerDay && (
+                    <li
+                      style={
+                        order.listingPricePerDay != order.offerPricePerDay
+                          ? { textDecoration: "line-through" }
+                          : {}
+                      }
+                    >
+                      Listing price per day: ${order.listingPricePerDay}
+                    </li>
+                  )}
+                <li>Offer price per day: ${order.offerPricePerDay}</li>
                 <li>
                   <CanBeErrorBaseDateSpan
                     startDate={order.offerStartDate}
                     endDate={order.offerEndDate}
                   />
                 </li>
-
                 <li>
                   Fee:{" "}
                   {isOwner
@@ -628,19 +704,6 @@ const OrderContent = ({
                     : tenantBaseCommissionPercent}
                   %
                 </li>
-
-                {order.offerPricePerDay != order.listingPricePerDay && (
-                  <li style={{ fontWeight: 700 }}>
-                    Price with listing price per day{" "}
-                    {isOwner ? "to get" : "to pay"}: $
-                    {calculateCurrentTotalPrice(
-                      order.listingPricePerDay,
-                      order.duration,
-                      tenantBaseCommissionPercent
-                    )}
-                  </li>
-                )}
-
                 {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
                   order.status != STATIC.ORDER_STATUSES.PENDING_TENANT) && (
                   <li className="order-status">
@@ -654,16 +717,54 @@ const OrderContent = ({
                     />
                   </li>
                 )}
+                {isBookingWithoutAgreement &&
+                  order.offerPricePerDay != order.listingPricePerDay && (
+                    <>
+                      {isOwner && (
+                        <li style={{ fontWeight: 700 }}>
+                          Price with listing price per day to get $
+                          {calculateCurrentTotalPrice(
+                            order.listingPricePerDay,
+                            order.duration,
+                            ownerBaseCommissionPercent
+                          )}
+                        </li>
+                      )}
 
-                <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to get" : "to pay"}: $
-                  {calculateCurrentTotalPrice(
-                    order.offerPricePerDay,
-                    order.duration,
-                    tenantBaseCommissionPercent
+                      {isTenant && (
+                        <li style={{ fontWeight: 700 }}>
+                          Price with listing price per day to pay$
+                          {calculateCurrentTotalPrice(
+                            order.listingPricePerDay,
+                            order.duration,
+                            tenantBaseCommissionPercent
+                          )}
+                        </li>
+                      )}
+                    </>
                   )}
-                </li>
 
+                {isOwner && (
+                  <li style={{ fontWeight: 700 }}>
+                    Fact offer price to get: $
+                    {calculateCurrentTotalPrice(
+                      order.offerPricePerDay,
+                      order.duration,
+                      ownerBaseCommissionPercent
+                    )}
+                  </li>
+                )}
+
+                {isOwner && (
+                  <li style={{ fontWeight: 700 }}>
+                    Fact offer price to pay: $
+                    {calculateCurrentTotalPrice(
+                      order.offerPricePerDay,
+                      order.duration,
+                      tenantBaseCommissionPercent
+                    )}
+                  </li>
+                )}
                 {checkErrorData(order.offerStartDate).blocked && (
                   <li>
                     <ErrorBlockMessage>
@@ -701,19 +802,20 @@ const OrderContent = ({
                   %
                 </li>
 
-                {prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
-                  <li>
-                    Price with listing price per day: $
-                    {calculateCurrentTotalPrice(
-                      order.listingPricePerDay,
-                      getDaysDifference(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.endDate
-                      ),
-                      tenantBaseCommissionPercent
-                    )}
-                  </li>
-                )}
+                {isBookingWithoutAgreement &&
+                  prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
+                    <li>
+                      Price with listing price per day: $
+                      {calculateCurrentTotalPrice(
+                        order.listingPricePerDay,
+                        getDaysDifference(
+                          prevUpdateRequest.startDate,
+                          prevUpdateRequest.endDate
+                        ),
+                        tenantBaseCommissionPercent
+                      )}
+                    </li>
+                  )}
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
@@ -928,19 +1030,19 @@ const OrderContent = ({
                 <button
                   className="default-btn"
                   type="button"
-                  onClick={handleRejectOrder}
-                  disabled={disabled}
-                >
-                  Reject
-                </button>
-
-                <button
-                  className="default-btn"
-                  type="button"
                   onClick={handleActivateCreateRequest}
                   disabled={disabled}
                 >
                   Offer other terms
+                </button>
+
+                <button
+                  className="default-btn error-btn"
+                  type="button"
+                  onClick={handleRejectOrder}
+                  disabled={disabled}
+                >
+                  Reject
                 </button>
 
                 <CreateUpdateOrderRequestModal
@@ -962,7 +1064,16 @@ const OrderContent = ({
                       : order.offerEndDate
                   }
                   minRentalDays={order.listingMinRentalDays}
-                  fee={tenantBaseCommissionPercent}
+                  fee={
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
+                      ? ownerBaseCommissionPercent
+                      : tenantBaseCommissionPercent
+                  }
+                  commissionType={
+                    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
+                      ? "reject"
+                      : "sum"
+                  }
                   updateRequestModalActive={updateRequestModalActive}
                   setUpdateRequestModalActive={setUpdateRequestModalActive}
                   listingName={order.listingName}
@@ -989,8 +1100,26 @@ const OrderContent = ({
             </div>
           )}
 
+          {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+            (isTenant &&
+              order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+            <div className="order_widget add-listings-box">
+              <h3>Cancel operation</h3>
+              <div className="booking-operations form-group">
+                <button
+                  className="default-btn error-btn"
+                  type="button"
+                  onClick={handleCancelClick}
+                  disabled={disabled}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
           {order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
-            order.tenantId == sessionUser.userId && (
+            isTenant && (
               <div className="order_widget add-listings-box">
                 <h3>Payment</h3>
 
@@ -1001,16 +1130,25 @@ const OrderContent = ({
                     onClick={handlePayClick}
                     disabled={disabled}
                   >
-                    Pay by Stripe
+                    Pay by Paypal
+                  </button>
+
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={handleCancelClick}
+                    disabled={disabled}
+                  >
+                    Cancel
                   </button>
                 </div>
               </div>
             )}
 
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
-            order.ownerId == sessionUser.id && (
+            isOwner && (
               <div className="order_widget add-listings-box">
-                <h3>Renters QR code to confirm acceptance of the goods</h3>
+                <h3>Renters QR code to confirm acceptance of the tool</h3>
 
                 <div className="booking-operations form-group">
                   <img
@@ -1022,27 +1160,107 @@ const OrderContent = ({
               </div>
             )}
 
-          {actualUpdateRequest &&
-            order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
-            order.tenantId == sessionUser.id &&
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+            isTenant &&
             canAcceptTenantListing && (
               <div className="order_widget add-listings-box">
-                <h3>Approve that you have received the listing</h3>
+                <h3>Approve that you have received the tool</h3>
 
                 <div className="booking-operations form-group">
                   <button
                     className="default-btn"
                     type="button"
-                    onClick={handleTenantGotListingApproveClick}
+                    onClick={handleTenantGotListingApproveActivate}
                     disabled={disabled}
                   >
                     Approve
+                  </button>
+
+                  <button
+                    className="default-btn error-btn"
+                    type="button"
+                    onClick={handleCreateDisputeClick}
+                    disabled={disabled}
+                  >
+                    Create Dispute
                   </button>
                 </div>
               </div>
             )}
         </>
       )}
+
+      <YesNoModal
+        active={cancelOrderModalActive}
+        toggleActive={() => setCancelOrderModalActive(false)}
+        title="Cancel confirmation"
+        body="To confirm the cancellation of the order, click the 'cancel'"
+        onAccept={handleAcceptCancelOrder}
+        acceptText="Cancel"
+        closeModalText="Close"
+      />
+
+      <BaseModal
+        active={disputeOrderModalActive}
+        toggleActive={() => setDisputeOrderModalActive(false)}
+        needCloseBtn={true}
+      >
+        <span className="sub-title mb-2">
+          <span>Do you really want to start a dispute?</span>
+        </span>
+        <form method="get" onSubmit={(e) => e.preventDefault}>
+          <span style={{ fontSize: "14px" }}>
+            It will be resolved with the intervention of administrators who will
+            see your correspondence and other information about the order.For
+            the better result, describe the dispute in as much detail as
+            possible
+          </span>
+
+          <div className="form-group mt-2 mb-4">
+            <Textarea
+              placeholder="Description..."
+              value={createDisputeDescription}
+              rows="5"
+              setValue={setCreateDisputeDescription}
+              error={createDisputeDescriptionError}
+              setError={setCreateDisputeDescriptionError}
+              name="create-dispute-description"
+            />
+          </div>
+
+          <div className="d-flex gap-2">
+            <button
+              type="button"
+              className="button-danger"
+              onClick={() => setDisputeOrderModalActive(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => handleAcceptCreateDisputeClick("email")}
+            >
+              Send
+            </button>
+          </div>
+        </form>
+      </BaseModal>
+
+      <YesNoModal
+        active={acceptTenantToolModalActive}
+        toggleActive={() => setAcceptTenantToolModalActive(false)}
+        title="Did you actually get the tool?"
+        onAccept={handleTenantGotListingApproveClick}
+        acceptText="Yes"
+        closeModalText="No"
+      />
+
+      <PaypalModal
+        amount={10}
+        createOrderRequest={paypalCreateOrder}
+        approveOrderRequest={paypalOrderPayed}
+        authToken={authToken}
+      />
     </>
   );
 };

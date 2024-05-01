@@ -11,4 +11,4 @@ export * from "./listingApprovalRequests";
 export * from "./isCurrentPath";
 export * from "./orders";
 export * from "./orderUpdateRequestRequests";
-export * from "./paymentRequests";
+export * from "./senderPaymentRequests";

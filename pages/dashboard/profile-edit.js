@@ -28,14 +28,8 @@ import {
   PasswordSection,
   ProfileSection,
   SecuritySection,
-  StripeCardSection,
+  AutofillSection,
 } from "../../components/ProfileEdit";
-
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import env from "../../env";
-
-const stripePromise = loadStripe(env.STRIPE_PUBLIC_KEY);
 
 const ProfileEdit = () => {
   const [profileFormError, setProfileFormError] = useState(null);
@@ -501,8 +495,6 @@ const ProfileEdit = () => {
     />
   );
 
-  const cardFormSection = <StripeCardSection active={!!sessionUser.id} />;
-
   return (
     <>
       <YesNoModal
@@ -576,7 +568,7 @@ const ProfileEdit = () => {
             <div className="col-lg-6 col-md-12">
               {securityFormSection}
               {passwordFormSection}
-              <Elements stripe={stripePromise}>{cardFormSection}</Elements>
+              {<AutofillSection />}
             </div>
           </div>
         )}

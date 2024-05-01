@@ -6,9 +6,25 @@ export const calculateFeeByDaysCount = (count, price, fee) => {
 export const calculateTotalPriceByDaysCount = (count, price, fee) =>
   (price * count).toFixed(2);
 
-export const calculateFullTotalByDaysCount = (count, price, fee) => {
-  const total =
-    +calculateTotalPriceByDaysCount(count, price, fee) +
-    +calculateFeeByDaysCount(count, price, fee);
+export const calculateFullTotalByDaysCount = (
+  count,
+  price,
+  fee,
+  type = "sum"
+) => {
+  let total;
+
+  if (type == "sum") {
+    total =
+      +calculateTotalPriceByDaysCount(count, price, fee) +
+      +calculateFeeByDaysCount(count, price, fee);
+  }
+
+  if (type == "reject") {
+    total =
+      +calculateTotalPriceByDaysCount(count, price, fee) -
+      +calculateFeeByDaysCount(count, price, fee);
+  }
+
   return total.toFixed(2);
 };
