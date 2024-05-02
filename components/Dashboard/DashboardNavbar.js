@@ -118,6 +118,36 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
+                href="/dashboard/my-earnings/"
+                className={`nav-link ${
+                  currentPath.includes("/dashboard/my-earnings/") && "active"
+                }  ${!sessionUser.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bx-dollar-circle"></i>
+                </span>
+                <span className="menu-title">My earnings</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                href="/dashboard/my-expenses/"
+                className={`nav-link ${
+                  currentPath.includes("/dashboard/my-expenses/") && "active"
+                }  ${!sessionUser.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bxl-paypal"></i>
+                </span>
+                <span className="menu-title">My expenses</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
                 href="/dashboard/profile-edit/"
                 className={`nav-link ${
                   currentPath == "/dashboard/profile-edit/" && "active"
@@ -134,7 +164,8 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/documents-verification/"
                 className={`nav-link ${
-                  currentPath == "/dashboard/documents-verification/" && "active"
+                  currentPath == "/dashboard/documents-verification/" &&
+                  "active"
                 }`}
               >
                 <span className="icon">

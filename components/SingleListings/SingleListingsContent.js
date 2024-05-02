@@ -4,11 +4,8 @@ import { IndiceContext } from "../../contexts";
 import {
   getFilePath,
   getListingImageByType,
-  separateDate,
   shakeUnverifiedAlert,
 } from "../../utils";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 

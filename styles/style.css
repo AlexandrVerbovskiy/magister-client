@@ -18002,13 +18002,13 @@ input[type="number"] {
   display: flex;
 }
 
-.order_widget .booking-operations > button:nth-child(1),
-.order_widget .booking-operations > button:nth-child(2) {
+.order_widget .booking-operations > button:nth-of-type(1),
+.order_widget .booking-operations > button:nth-of-type(2) {
   margin-right: 10px;
 }
 
-.order_widget .booking-operations > button:nth-child(2),
-.order_widget .booking-operations > button:nth-child(3) {
+.order_widget .booking-operations > button:nth-of-type(2),
+.order_widget .booking-operations > button:nth-of-type(3) {
   margin-left: 10px;
 }
 
@@ -18132,4 +18132,20 @@ input[type="number"] {
 .conflicted-orders li:not(:last-child) {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 15px;
+}
+
+.default-table-btn{
+  display: block;
+  width: max-content;
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  transition: var(--transition);
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 500;
+}
+
+.default-table-btn:hover {
+  background-color: var(--blackColor);
+  color: var(--whiteColor);
 }

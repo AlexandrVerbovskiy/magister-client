@@ -1,4 +1,4 @@
-import { adminSideProps } from "../../../middlewares";
+import { adminSideProps, supportSideProps } from "../../../middlewares";
 import { getAdminOrderInfo } from "../../../services";
 import { useAdminPage } from "../../../hooks";
 import Sidebar from "../../../partials/admin/Sidebar";
@@ -295,6 +295,6 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  supportSideProps(context, boostServerSideProps);
 
 export default Order;

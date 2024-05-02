@@ -27,7 +27,10 @@ export const getOrderFullByIdOptions = async (id, authToken = null) => {
 };
 
 export const getTenantListingScanRentalCode = async (token, authToken) => {
-  const data = await get(`/tenant-scanning-listing-rental-code/${token}`, authToken);
+  const data = await get(
+    `/tenant-scanning-listing-rental-code/${token}`,
+    authToken
+  );
   return data.body;
 };
 
@@ -117,6 +120,16 @@ export const getUserNameIdList = async (params) => {
   return data.body.list;
 };
 
+export const getSenderPaymentListOptions = async (params, authToken) => {
+  const data = await post(`/sender-payment-list-options`, params, authToken);
+  return data.body;
+};
+
+export const getRecipientPaymentListOptions = async (params, authToken) => {
+  const data = await post(`/recipient-payment-list-options`, params, authToken);
+  return data.body;
+};
+
 export const getAdminListingApprovalRequestListPageOptions = async (
   params,
   authToken
@@ -181,11 +194,11 @@ export const getAdminOrderListOptions = async (params, authToken) => {
 };
 
 export const getAdminBookingInfo = async (id, authToken) => {
-  const data = await get("/admin-full-booking-info-options/"+id, authToken);
+  const data = await get("/admin-full-booking-info-options/" + id, authToken);
   return data.body;
 };
 
 export const getAdminOrderInfo = async (id, authToken) => {
-  const data = await get("/admin-full-order-info-options/"+id, authToken);
+  const data = await get("/admin-full-order-info-options/" + id, authToken);
   return data.body;
 };

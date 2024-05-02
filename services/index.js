@@ -12,3 +12,4 @@ export * from "./isCurrentPath";
 export * from "./orders";
 export * from "./orderUpdateRequestRequests";
 export * from "./senderPaymentRequests";
+export * from "./recipientPaymentRequests";
