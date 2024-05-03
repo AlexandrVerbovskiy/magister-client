@@ -40,13 +40,16 @@ const BookingModal = ({
   lastAvailableDate.setDate(
     firstAvailableDate.getDate() + defaultCountDays - 1
   );
-  console.log(firstAvailableDate, new Date(lastAvailableDate));
-
-  console.log(firstAvailableDate.getDate());
 
   const calendarContainer = useRef(null);
   const [fromDate, setFromDate] = useState(firstAvailableDate);
   const [toDate, setToDate] = useState(lastAvailableDate);
+
+  /*const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
+  const [toDate, setToDate] = useState(
+    new Date(getDateByCurrentAdd(0 + defaultCountDays))
+  );*/
+
   const [calendarError, setCalendarError] = useState(null);
 
   const [totalPrice, setTotalPrice] = useState(0);

@@ -86,7 +86,7 @@ const ListingApprovalRequest = ({
       }));
       success.set("Rejected successfully");
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
   };
 
@@ -98,7 +98,7 @@ const ListingApprovalRequest = ({
       setRequest((prev) => ({ ...prev, approved: true }));
       success.set("Approved successfully");
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
   };
 

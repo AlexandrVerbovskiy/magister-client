@@ -255,7 +255,7 @@ const ListingsWithMap = ({
         setCanSendCreateNotifyRequest(false);
         success.set("Subscription done success");
       } catch (e) {
-        error.set(e);
+        error.set(e.message);
       }
     } else {
       document.querySelector(".flaticon-user").click();

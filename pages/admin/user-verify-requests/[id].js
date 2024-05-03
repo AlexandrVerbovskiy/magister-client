@@ -54,7 +54,7 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
     try {
       await handleBaseVerifyChangeClick(true);
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
   };
 
@@ -77,7 +77,7 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
       await handleBaseVerifyChangeClick(false, declineDescription);
       setAccessDeclineModalOpen(false);
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
   };
 
@@ -219,9 +219,7 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-
   const info = await getUserVerifyRequestById(id, baseSideProps.authToken);
-
   return { info };
 };
 
