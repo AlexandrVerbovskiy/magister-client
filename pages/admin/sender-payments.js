@@ -1,36 +1,28 @@
-import React, { useContext, useState } from "react";
-import Sidebar from "../../../partials/admin/Sidebar";
-import Header from "../../../partials/admin/Header";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
-import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import Datepicker from "../../../components/admin/Datepicker";
-import { adminSideProps } from "../../../middlewares";
-import ListingApprovalRequests from "../../../components/admin/ListingApprovalRequests/Table";
-import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
-
+import { useContext } from "react";
 import {
   useAdminPage,
-  usePagination,
-  useInitPaginationTimeFilter,
   useChangeTimeFilter,
-} from "../../../hooks";
-import { IndiceContext } from "../../../contexts";
+  useInitPaginationTimeFilter,
+  usePagination,
+} from "../../hooks";
+import { IndiceContext } from "../../contexts";
 import {
-  getAdminListingApprovalRequestListPageOptions,
-  getAdminListingApprovalRequestsList,
-} from "../../../services";
-import { useRouter } from "next/router";
-import DropdownFilter from "../../../components/admin/DropdownFilter";
-import { baseTimeListPageParams } from "../../../utils";
+  getAdminSenderPaymentList,
+  getAdminSenderPaymentListOptions,
+} from "../../services";
+import { adminSideProps } from "../../middlewares";
+import PaginationNumeric from "../../components/admin/PaginationNumeric";
+import SearchForm from "../../partials/admin/actions/SearchForm";
+import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
+import Header from "../../partials/admin/Header";
+import Sidebar from "../../partials/admin/Sidebar";
+import { baseTimeListPageParams } from "../../utils";
+import Datepicker from "../../components/admin/Datepicker";
+import SenderPaymentsTable from "../../components/admin/SenderPayments/Table";
 
-const UserVerifyRequests = (pageProps) => {
-  const router = useRouter();
+const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
-
-  /*const baseStatusFilter = router.query.status ?? "all";
-  const [statusFilter, setStatusFilter] = useState(baseStatusFilter);*/
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter();
@@ -49,12 +41,11 @@ const UserVerifyRequests = (pageProps) => {
     handleChangeOrder,
     canMoveNextPage,
     canMovePrevPage,
-    items: listingApprovalRequests,
+    items: payments,
     rebuild,
     options,
   } = usePagination({
-    getItemsFunc: (data) =>
-      getAdminListingApprovalRequestsList(data, authToken),
+    getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getTimeFilterProps,
     defaultData: pageProps,
@@ -69,11 +60,6 @@ const UserVerifyRequests = (pageProps) => {
     rebuild,
   });
 
-  const handleChangeStatusFilter = (status) => {
-    setStatusFilter(status);
-    rebuild({ status: status });
-  };
-
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -85,20 +71,19 @@ const UserVerifyRequests = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Listing Approve Requests" }]} />
-
+                <BreadCrumbs links={[{ title: "Sender Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
-                    placeholder="Filter by create time"
+                    placeholder="Filter by payment time"
                   />
                 </div>
               </div>
 
-              <ListingApprovalRequests
-                listingApprovalRequests={listingApprovalRequests}
+              <SenderPaymentsTable
+                payments={payments}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
@@ -126,7 +111,7 @@ const UserVerifyRequests = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const options = await getAdminListingApprovalRequestListPageOptions(
+  const options = await getAdminSenderPaymentListOptions(
     baseTimeListPageParams(context.query),
     baseSideProps.authToken
   );
@@ -137,4 +122,4 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 export const getServerSideProps = (context) =>
   adminSideProps(context, boostServerSideProps);
 
-export default UserVerifyRequests;
+export default SenderPayments;

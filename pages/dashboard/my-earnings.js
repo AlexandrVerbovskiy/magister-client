@@ -16,9 +16,14 @@ import Th from "../../components/DashboardComponents/Table/Th";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import Pagination from "../../components/Pagination";
-import { usePagination } from "../../hooks";
+import {
+  useChangeTimeFilter,
+  useInitPaginationTimeFilter,
+  usePagination,
+} from "../../hooks";
 import STATIC from "../../static";
 import EmptyTable from "../../components/DashboardComponents/Table/EmptyTable";
+import DateFilter from "../../components/FormComponents/DateFilter";
 
 const ths = [
   { title: "#Id", value: "sender_payments.id", width: "10%" },
@@ -29,53 +34,86 @@ const ths = [
   { title: "Actions", canOrder: false, width: "15%" },
 ];
 
-const Tr = (props) => {
-  let viewAction = (
-    <a
-      href={`/dashboard/orders/${props.orderId}`}
-      className="btn default-table-btn btn-sm"
-    >
-      View Order
-    </a>
-  );
-
-  if (
-    [
-      STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-      STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-      STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-    ].includes(props.orderStatus)
-  ) {
-    viewAction = (
-      <a
-        href={`/dashboard/bookings/${props.orderId}`}
-        className="btn default-table-btn btn-sm"
-      >
-        View Booking
-      </a>
-    );
-  }
-
+const Tr = ({
+  id,
+  orderId,
+  listingId,
+  listingName,
+  ownerId,
+  ownerName,
+  money,
+  createdAt,
+}) => {
   return (
     <tr>
-      <td style={{ fontWeight: "700" }}>#{props.id}</td>
+      <td style={{ fontWeight: "700" }}>#{id}</td>
       <td>
-        <a href={`/listing/${props.listingId}`}>{props.listingName}</a>
+        <a href={`/listing/${listingId}`}>{listingName}</a>
       </td>
       <td>
-        <a href={`/owner-listing-list/${props.ownerId}`}>{props.ownerName}</a>
+        <a href={`/owner-listing-list/${ownerId}`}>{ownerName}</a>
       </td>
-      <td>${props.money}</td>
-      <td style={{ fontWeight: "700" }}>
-        {fullTimeConverter(props.createdAt)}
+      <td>${money}</td>
+      <td style={{ fontWeight: "700" }}>{fullTimeConverter(createdAt)}</td>
+      <td style={{ fontSize: "12px" }}>
+        <a
+          href={`/dashboard/orders/${orderId}`}
+          className="btn default-table-btn btn-sm"
+        >
+          View Order
+        </a>
       </td>
-      <td style={{ fontSize: "12px" }}>{viewAction}</td>
     </tr>
   );
 };
 
+const TabHeaderSection = ({
+  filter,
+  changeFilter,
+  countItems,
+  fromTime,
+  toTime,
+  handleChangeTimeFilter,
+  style = {},
+}) => (
+  <ul
+    className="nav nav-tabs d-flex align-items-end justify-content-between"
+    id="myTab"
+    style={style}
+  >
+    <li className="nav-item">
+      <a className="nav-link active" id="all-listing-tab">
+        <span className="menu-title">All Earnings ({countItems})</span>
+      </a>
+    </li>
+
+    <li className="nav-item dropdown d-flex">
+      <label className="search-header-section me-3">
+        <input
+          value={filter}
+          onChange={(e) => changeFilter(e.target.value)}
+          type="text"
+          name="search"
+          className="search-field"
+          placeholder="Search..."
+          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+        />
+      </label>
+
+      <DateFilter
+        value={[fromTime, toTime]}
+        onChange={handleChangeTimeFilter}
+        placeholder="Creation date"
+      />
+    </li>
+  </ul>
+);
+
 const MyEarnings = (pageProps) => {
   const { error, success, authToken } = useContext(IndiceContext);
+
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -92,10 +130,20 @@ const MyEarnings = (pageProps) => {
     rebuild,
     setItemFields,
     order,
+    options,
   } = usePagination({
     getItemsFunc: (data) => getSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
+  });
+
+  const { handleChangeTimeFilter } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
   });
 
   return (
@@ -117,7 +165,15 @@ const MyEarnings = (pageProps) => {
           </ol>
         </div>
 
-        <div className="invoice-area">
+        <div className="listing-area">
+          <TabHeaderSection
+            filter={filter}
+            changeFilter={changeFilter}
+            countItems={countItems}
+            fromTime={fromTime}
+            toTime={toTime}
+            handleChangeTimeFilter={handleChangeTimeFilter}
+          />
           <div className="invoice-table table-responsive">
             {countItems > 0 ? (
               <>
@@ -137,7 +193,7 @@ const MyEarnings = (pageProps) => {
 
                   <tbody>
                     {payments.map((payment) => (
-                      <Tr key={payments.id} {...payment} />
+                      <Tr key={payment.id} {...payment} />
                     ))}
                   </tbody>
                 </table>

@@ -20,7 +20,7 @@ const Dashboard = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Settings</h1>
+          <h1>Dashboard</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/dashboard/">Home</Link>

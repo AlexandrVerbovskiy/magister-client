@@ -125,8 +125,18 @@ export const getSenderPaymentListOptions = async (params, authToken) => {
   return data.body;
 };
 
+export const getAdminSenderPaymentListOptions = async (params, authToken) => {
+  const data = await post(`/admin-sender-payment-list-options`, params, authToken);
+  return data.body;
+};
+
 export const getRecipientPaymentListOptions = async (params, authToken) => {
   const data = await post(`/recipient-payment-list-options`, params, authToken);
+  return data.body;
+};
+
+export const getAdminRecipientPaymentListOptions = async (params, authToken) => {
+  const data = await post(`/admin-recipient-payment-list-options`, params, authToken);
   return data.body;
 };
 

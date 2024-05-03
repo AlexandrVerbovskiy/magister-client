@@ -41,10 +41,7 @@ function DropdownFilter({ align, children }) {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen ? "true" : "false"}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
           <path d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
         </svg>
       </button>
@@ -52,7 +49,7 @@ function DropdownFilter({ align, children }) {
       <div
         ref={dropdown}
         className={`dropdown-menu${dropdownOpen ? " show" : ""} ${
-          align === "right" ? "dropdown-menu-right" : ""
+          align === "right" ? "dropdown-menu-end" : ""
         }`}
       >
         {children}

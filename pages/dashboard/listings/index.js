@@ -59,7 +59,19 @@ const TabHeaderSection = ({
     </li>
 
     <li className="nav-item dropdown d-flex">
-      <DropdownFilter align="left">
+      <label className="search-header-section me-3">
+        <input
+          value={filter}
+          onChange={(e) => changeFilter(e.target.value)}
+          type="text"
+          name="search"
+          className="search-field"
+          placeholder="Search..."
+          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+        />
+      </label>
+
+      <DropdownFilter align="right">
         <div className="pt-1.5 px-3">
           <div className="text-uppercase label-section">Status</div>
           <ul className="list-group list-group-flush">
@@ -89,17 +101,6 @@ const TabHeaderSection = ({
           </ul>
         </div>
       </DropdownFilter>
-      <label className="search-header-section ms-2">
-        <input
-          value={filter}
-          onChange={(e) => changeFilter(e.target.value)}
-          type="search"
-          name="search"
-          className="search-field"
-          placeholder="Search..."
-          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-        />
-      </label>
     </li>
   </ul>
 );

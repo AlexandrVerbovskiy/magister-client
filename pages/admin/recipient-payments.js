@@ -1,35 +1,38 @@
-import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../../partials/admin/Sidebar";
-import Header from "../../../partials/admin/Header";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
-import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import DropdownFilter from "../../../components/admin/DropdownFilter";
-import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
-
-import { adminSideProps } from "../../../middlewares";
-
-import { useAdminPage, usePagination } from "../../../hooks";
-import { IndiceContext } from "../../../contexts";
+import { useContext, useState } from "react";
+import { IndiceContext } from "../../contexts";
 import {
-  getAdminSearchedWordListPageOptions,
-  getSearchedWordList,
-} from "../../../services";
-import SearchedWordTable from "../../../components/admin/SearchedWord/Table";
+  useAdminPage,
+  useChangeTimeFilter,
+  useInitPaginationTimeFilter,
+  usePagination,
+} from "../../hooks";
+import {
+  getAdminRecipientPaymentList,
+  getAdminRecipientPaymentListOptions,
+} from "../../services";
+import SearchForm from "../../partials/admin/actions/SearchForm";
+import Sidebar from "../../partials/admin/Sidebar";
+import Header from "../../partials/admin/Header";
+import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
+import PaginationNumeric from "../../components/admin/PaginationNumeric";
+import Datepicker from "../../components/admin/Datepicker";
+import DropdownFilter from "../../components/admin/DropdownFilter";
+import { baseTimeListPageParams } from "../../utils";
+import { adminSideProps } from "../../middlewares";
 import { useRouter } from "next/router";
-import { baseListPageParams } from "../../../utils";
+import FilterRadioOption from "../../components/admin/Form/FilterRadioOption";
+import RecipientPaymentsTable from "../../components/admin/RecipientPayments/Table";
 
-const SearchedWords = (pageProps) => {
+const RecipientPayments = (pageProps) => {
   const router = useRouter();
-
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const baseViewedFilter = router.query.viewed ?? "all";
-  const baseAcceptedFilter = router.query.accepted ?? "all";
+  const [type, setType] = useState(router.query.type ?? "all");
+  const [status, setStatus] = useState(router.query.status ?? "all");
 
-  const [viewedFilter, setViewedFilter] = useState(baseViewedFilter);
-  const [acceptedFilter, setAcceptedFilter] = useState(baseAcceptedFilter);
+  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
+    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -45,31 +48,43 @@ const SearchedWords = (pageProps) => {
     handleChangeOrder,
     canMoveNextPage,
     canMovePrevPage,
-    items: searchedWords,
+    items: payments,
     rebuild,
     options,
   } = usePagination({
-    getItemsFunc: (data) => getSearchedWordList(data, authToken),
+    getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
-      viewed: {
-        value: viewedFilter,
+      ...getTimeFilterProps(),
+      type: {
+        value: type,
+        hidden: (value) => value == "all",
       },
-      accepted: {
-        value: acceptedFilter,
+      status: {
+        value: status,
+        hidden: (value) => value == "all",
       },
     }),
     defaultData: pageProps,
   });
 
-  const handleChangeAcceptedFilter = (value) => {
-    setAcceptedFilter(value);
-    rebuild({ accepted: value });
+  const { handleChangeTimeFilter } = useChangeTimeFilter({
+    options,
+    fromTime,
+    setFromTime,
+    toTime,
+    setToTime,
+    rebuild,
+  });
+
+  const handleChangeTypeFilter = (value) => {
+    setType(value);
+    rebuild({ type: value });
   };
 
-  const handleChangeViewedFilter = (value) => {
-    setViewedFilter(value);
-    rebuild({ viewed: value });
+  const handleChangeStatusFilter = (value) => {
+    setStatus(value);
+    rebuild({ status: value });
   };
 
   return (
@@ -83,47 +98,53 @@ const SearchedWords = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Users Search Story" }]} />
-
+                <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
+                  <Datepicker
+                    value={[fromTime, toTime]}
+                    onChange={handleChangeTimeFilter}
+                    placeholder="Filter by created time"
+                  />
+
                   <DropdownFilter align="right">
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Is Viewed
+                      Status
                     </div>
                     <ul className="mb-4">
                       {[
-                        { value: "yes", label: "Viewed" },
-                        { value: "no", label: "Unviewed" },
+                        { value: "waiting", label: "Waiting" },
+                        { value: "failed", label: "Failed" },
+                        { value: "completed", label: "Completed" },
+                        { value: "cancelled", label: "Cancelled" },
                         { value: "all", label: "All" },
                       ].map((option) => (
                         <FilterRadioOption
                           key={option.value}
-                          name="viewed"
+                          name="status"
                           label={option.label}
                           value={option.value}
-                          currentValue={viewedFilter}
-                          setCurrentValue={handleChangeViewedFilter}
+                          currentValue={status}
+                          setCurrentValue={handleChangeStatusFilter}
                         />
                       ))}
                     </ul>
-
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Is Accepted
+                      Type
                     </div>
                     <ul className="mb-4">
                       {[
-                        { value: "yes", label: "Accepted" },
-                        { value: "no", label: "Unaccepted" },
+                        { value: "rental", label: "Rental" },
+                        { value: "refund", label: "Refund" },
                         { value: "all", label: "All" },
                       ].map((option) => (
                         <FilterRadioOption
                           key={option.value}
-                          name="accepted"
+                          name="type"
                           label={option.label}
                           value={option.value}
-                          currentValue={acceptedFilter}
-                          setCurrentValue={handleChangeAcceptedFilter}
+                          currentValue={type}
+                          setCurrentValue={handleChangeTypeFilter}
                         />
                       ))}
                     </ul>
@@ -131,8 +152,8 @@ const SearchedWords = (pageProps) => {
                 </div>
               </div>
 
-              <SearchedWordTable
-                searchedWords={searchedWords}
+              <RecipientPaymentsTable
+                payments={payments}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
@@ -160,8 +181,13 @@ const SearchedWords = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const options = await getAdminSearchedWordListPageOptions(
-    baseListPageParams(context.query),
+  const type = context.query.type ?? "all";
+  const status = context.query.status ?? "all";
+
+  const params = { ...baseTimeListPageParams(context.query), status, type };
+
+  const options = await getAdminRecipientPaymentListOptions(
+    params,
     baseSideProps.authToken
   );
 
@@ -171,4 +197,4 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 export const getServerSideProps = (context) =>
   adminSideProps(context, boostServerSideProps);
 
-export default SearchedWords;
+export default RecipientPayments;

@@ -392,6 +392,12 @@ Navbar Area CSS
   border-top: 3px solid var(--mainColor);
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 }
+
+.miran-nav .navbar .navbar-nav .nav-item .dropdown-menu.dropdown-menu-end {
+  left: auto;
+  right: 0;
+}
+
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li {
   margin: 0;
 }
@@ -17328,6 +17334,10 @@ button.button-danger:hover {
   color: rgb(148 163 184);
 }
 
+.dropdown-filter .dropdown-menu.dropdown-menu-end{
+  right: 0;
+}
+
 .listing-request-status {
   padding: 7px;
   border-radius: 5px;
@@ -18020,6 +18030,10 @@ input[type="number"] {
   background-color: #f3103c;
 }
 
+.status-background-gray{
+  background-color: var(--optionalColor);
+}
+
 .status-background-green {
   background-color: #64bc36;
 }
@@ -18035,7 +18049,8 @@ input[type="number"] {
 .status-background-red,
 .status-background-green,
 .status-background-orange,
-.status-background-base {
+.status-background-base,
+.status-background-gray {
   padding: 5px 10px;
   color: white;
   border-radius: 5px;
@@ -18066,7 +18081,7 @@ input[type="number"] {
 
 .flatpickr-parent-wrapper.flatpickr-date-filter {
   width: unset !important;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }
 
 .filter-nav-item {
@@ -18148,4 +18163,9 @@ input[type="number"] {
 .default-table-btn:hover {
   background-color: var(--blackColor);
   color: var(--whiteColor);
+}
+
+.flatpickr-calendar{
+  right: 0!important;
+  left: auto!important;
 }
