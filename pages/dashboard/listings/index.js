@@ -17,6 +17,7 @@ import { IndiceContext } from "../../../contexts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { baseListPageParams, getListingImageByType } from "../../../utils";
 
+import EmptyTable from "../../../components/DashboardComponents/Table/EmptyTable";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import { useRouter } from "next/router";
@@ -58,7 +59,19 @@ const TabHeaderSection = ({
     </li>
 
     <li className="nav-item dropdown d-flex">
-      <DropdownFilter align="left">
+      <label className="search-header-section me-3">
+        <input
+          value={filter}
+          onChange={(e) => changeFilter(e.target.value)}
+          type="text"
+          name="search"
+          className="search-field"
+          placeholder="Search..."
+          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+        />
+      </label>
+
+      <DropdownFilter align="right">
         <div className="pt-1.5 px-3">
           <div className="text-uppercase label-section">Status</div>
           <ul className="list-group list-group-flush">
@@ -88,17 +101,6 @@ const TabHeaderSection = ({
           </ul>
         </div>
       </DropdownFilter>
-      <label className="search-header-section ms-2">
-        <input
-          value={filter}
-          onChange={(e) => changeFilter(e.target.value)}
-          type="search"
-          name="search"
-          className="search-field"
-          placeholder="Search..."
-          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-        />
-      </label>
     </li>
   </ul>
 );
@@ -159,6 +161,7 @@ const ListingList = (pageProps) => {
     getDopProps: () => ({
       status: {
         value: statusFilter,
+        hidden: (value) => value == "all",
       },
     }),
   });
@@ -260,171 +263,170 @@ const ListingList = (pageProps) => {
           </section>
         )}
 
-        {listings.length > 0 && (
-          <>
-            <section className="listing-area">
-              <TabHeaderSection
-                filter={filter}
-                changeFilter={changeFilter}
-                countItems={countItems}
-                statusFilter={statusFilter}
-                handleChangeStatusFilter={handleChangeStatusFilter}
-              />
+        <section className="listing-area">
+          <TabHeaderSection
+            filter={filter}
+            changeFilter={changeFilter}
+            countItems={countItems}
+            statusFilter={statusFilter}
+            handleChangeStatusFilter={handleChangeStatusFilter}
+          />
+          {listings.length > 0 ? (
+            <div className="tab-content">
+              <div className="tab-pane fade show active" id="all-listing">
+                <div
+                  className="row"
+                  style={{ alignItems: "stretch", gridRowGap: "20px" }}
+                >
+                  {listings.map((listing) => {
+                    return (
+                      <div
+                        key={listing.id}
+                        className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
+                      >
+                        <div className="single-listings-box">
+                          <div className="listings-image">
+                            {listing.images.length < 1 && (
+                              <Link
+                                href={`/listing/${listing.id}`}
+                                className="link-btn"
+                              ></Link>
+                            )}
 
-              <div className="tab-content">
-                <div className="tab-pane fade show active" id="all-listing">
-                  <div
-                    className="row"
-                    style={{ alignItems: "stretch", gridRowGap: "20px" }}
-                  >
-                    {listings.map((listing) => {
-                      return (
-                        <div
-                          key={listing.id}
-                          className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
-                        >
-                          <div className="single-listings-box">
-                            <div className="listings-image">
-                              {listing.images.length < 1 && (
+                            {listing.images.length == 1 && (
+                              <>
+                                <img
+                                  src={getListingImageByType(
+                                    listing.images[0].link,
+                                    listing.images[0].type
+                                  )}
+                                  alt={listing.name}
+                                />
                                 <Link
                                   href={`/listing/${listing.id}`}
                                   className="link-btn"
                                 ></Link>
-                              )}
+                              </>
+                            )}
 
-                              {listing.images.length == 1 && (
-                                <>
-                                  <img
-                                    src={getListingImageByType(
-                                      listing.images[0].link,
-                                      listing.images[0].type
-                                    )}
-                                    alt={listing.name}
-                                  />
-                                  <Link
-                                    href={`/listing/${listing.id}`}
-                                    className="link-btn"
-                                  ></Link>
-                                </>
-                              )}
+                            {listing.images.length > 1 && (
+                              <Swiper
+                                loop={true}
+                                navigation={true}
+                                modules={[Navigation]}
+                                className="listings-image-slides"
+                              >
+                                {listing.images.map((imageInfo) => (
+                                  <SwiperSlide key={imageInfo.link}>
+                                    <div className="single-image">
+                                      <img
+                                        src={getListingImageByType(
+                                          imageInfo.link,
+                                          imageInfo.type
+                                        )}
+                                        alt={listing.name}
+                                      />
+                                      <Link
+                                        href={`/listing/${listing.id}`}
+                                        className="link-btn"
+                                      ></Link>
+                                    </div>
+                                  </SwiperSlide>
+                                ))}
+                              </Swiper>
+                            )}
+                          </div>
 
-                              {listing.images.length > 1 && (
-                                <Swiper
-                                  loop={true}
-                                  navigation={true}
-                                  modules={[Navigation]}
-                                  className="listings-image-slides"
-                                >
-                                  {listing.images.map((imageInfo) => (
-                                    <SwiperSlide key={imageInfo.link}>
-                                      <div className="single-image">
-                                        <img
-                                          src={getListingImageByType(
-                                            imageInfo.link,
-                                            imageInfo.type
-                                          )}
-                                          alt={listing.name}
-                                        />
-                                        <Link
-                                          href={`/listing/${listing.id}`}
-                                          className="link-btn"
-                                        ></Link>
-                                      </div>
-                                    </SwiperSlide>
-                                  ))}
-                                </Swiper>
-                              )}
-                            </div>
+                          <StatusBlock
+                            requestApproved={
+                              listing.approved
+                                ? true
+                                : listing.requestApproved
+                                ? false
+                                : listing.requestApproved
+                            }
+                            requestId={listing.requestId}
+                          />
 
-                            <StatusBlock
-                              requestApproved={
-                                listing.approved
-                                  ? true
-                                  : listing.requestApproved
-                                  ? false
-                                  : listing.requestApproved
-                              }
-                              requestId={listing.requestId}
-                            />
-
-                            <div className="listings-content">
-                              <ul className="listings-meta">
-                                <li>
-                                  <Link
-                                    href={`/listing-list/?categories=${listing.categoryName}`}
-                                  >
-                                    <i className="flaticon-furniture-and-household"></i>
-                                    <span>{listing.categoryName}</span>
-                                  </Link>
-                                </li>
-                                <li>
-                                  <Link
-                                    href={`/listing-list/?city=${listing.city}`}
-                                  >
-                                    <i className="flaticon-pin"></i>
-                                    <span>{listing.city}</span>
-                                  </Link>
-                                </li>
-                              </ul>
-                              <h3>
-                                <Link href={`/listing/${listing.id}`}>
-                                  {listing.name}
-                                </Link>
-                              </h3>
-                              <div className="d-flex align-items-center justify-content-between">
-                                <div className="rating">
-                                  <i className="bx bxs-star"></i>
-                                  <i className="bx bxs-star"></i>
-                                  <i className="bx bxs-star"></i>
-                                  <i className="bx bxs-star-half"></i>
-                                  <i className="bx bx-star"></i>
-                                  <span className="count">(45)</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="listings-footer">
-                              <div className="d-flex justify-content-between align-items-center">
+                          <div className="listings-content">
+                            <ul className="listings-meta">
+                              <li>
                                 <Link
-                                  href={`/dashboard/listings/update/${listing.id}`}
-                                  className="default-btn"
+                                  href={`/listing-list/?categories=${listing.categoryName}`}
                                 >
-                                  Edit
+                                  <i className="flaticon-furniture-and-household"></i>
+                                  <span>{listing.categoryName}</span>
                                 </Link>
+                              </li>
+                              <li>
                                 <Link
-                                  onClick={(e) =>
-                                    handleChangeActiveItem(
-                                      e,
-                                      listing.id,
-                                      listing.name
-                                    )
-                                  }
-                                  href="/"
-                                  className="default-btn"
+                                  href={`/listing-list/?city=${listing.city}`}
                                 >
-                                  {listing.active ? "Deactivate" : "Activate"}
+                                  <i className="flaticon-pin"></i>
+                                  <span>{listing.city}</span>
                                 </Link>
+                              </li>
+                            </ul>
+                            <h3>
+                              <Link href={`/listing/${listing.id}`}>
+                                {listing.name}
+                              </Link>
+                            </h3>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div className="rating">
+                                <i className="bx bxs-star"></i>
+                                <i className="bx bxs-star"></i>
+                                <i className="bx bxs-star"></i>
+                                <i className="bx bxs-star-half"></i>
+                                <i className="bx bx-star"></i>
+                                <span className="count">(45)</span>
                               </div>
                             </div>
                           </div>
+
+                          <div className="listings-footer">
+                            <div className="d-flex justify-content-between align-items-center">
+                              <Link
+                                href={`/dashboard/listings/update/${listing.id}`}
+                                className="default-btn"
+                              >
+                                Edit
+                              </Link>
+                              <Link
+                                onClick={(e) =>
+                                  handleChangeActiveItem(
+                                    e,
+                                    listing.id,
+                                    listing.name
+                                  )
+                                }
+                                href="/"
+                                className="default-btn"
+                              >
+                                {listing.active ? "Deactivate" : "Activate"}
+                              </Link>
+                            </div>
+                          </div>
                         </div>
-                      );
-                    })}
-                  </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            </section>
+            </div>
+          ) : (
+            <EmptyTable entityName="listings" />
+          )}
+        </section>
 
-            <Pagination
-              viewOnlyMoreOnePage={true}
-              page={page}
-              countPages={countPages}
-              move={moveToPage}
-              canNext={canMoveNextPage}
-              canPrev={canMovePrevPage}
-            />
-          </>
-        )}
+        <Pagination
+          viewOnlyMoreOnePage={true}
+          page={page}
+          countPages={countPages}
+          move={moveToPage}
+          canNext={canMoveNextPage}
+          canPrev={canMovePrevPage}
+        />
       </div>
 
       <YesNoModal
@@ -443,7 +445,7 @@ const ListingList = (pageProps) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const options = await getUserListingListOptions(
-    baseListPageParams(context.query),
+    { ...baseListPageParams(context.query), status: context.query["status"] },
     baseSideProps.authToken
   );
 

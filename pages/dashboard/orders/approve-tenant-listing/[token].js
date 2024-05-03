@@ -25,7 +25,7 @@ const ApproveTenantListing = (props) => {
                 <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href="/dashboard/bookings">Bookings</Link>
+                <Link href="/dashboard/orders">Orders</Link>
               </li>
               <li className="item">{props.order.listingName}</li>
             </ol>
@@ -41,7 +41,7 @@ const ApproveTenantListing = (props) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const token = context.params.token;
   const options = await getTenantListingScanRentalCode(
-    id,
+    token,
     baseSideProps.authToken
   );
   return { ...options, token };

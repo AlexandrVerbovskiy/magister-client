@@ -13,7 +13,7 @@ const Sidebar = () => {
               <span className="screen-reader-text">Search for:</span>
               <input
                 name="search"
-                type="search"
+                type="text"
                 className="search-field"
                 placeholder="Search..."
               />

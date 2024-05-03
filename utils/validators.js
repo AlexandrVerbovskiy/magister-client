@@ -158,3 +158,10 @@ export function validateInteger(number) {
 
   return true;
 }
+
+export function validateCardNumber(number) {
+  const regex = new RegExp("^[0-9]{16}$");
+  if (!regex.test(number)) return "Invalid card number";
+
+  return true;
+}

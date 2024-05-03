@@ -5,7 +5,8 @@ const YesNoModal = ({
   body = null,
   onAccept,
   acceptText = "Save",
-  actionsParentClass = "mt-2",
+  actionsParentClass = "mt-4",
+  closeModalText = "Cancel",
 }) => {
   const handleAccept = () => {
     toggleActive();
@@ -45,7 +46,7 @@ const YesNoModal = ({
                       className="button-danger"
                       onClick={toggleActive}
                     >
-                      Cancel
+                      {closeModalText}
                     </button>
                     <button type="button" onClick={handleAccept}>
                       {acceptText}

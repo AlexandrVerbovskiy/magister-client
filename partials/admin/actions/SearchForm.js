@@ -12,7 +12,7 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
         onInput={(e) => onInput(e.target.value)}
         id="action-search"
         className="form-input pl-9 bg-white dark:bg-slate-800"
-        type="search"
+        type="text"
         placeholder={placeholder}
         name="search"
         maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}

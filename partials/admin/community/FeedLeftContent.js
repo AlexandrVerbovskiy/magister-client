@@ -21,7 +21,7 @@ function FeedLeftContent() {
               <input
                 id="feed-search-mobile"
                 className="form-input w-full pl-9 bg-white dark:bg-slate-800"
-                type="search"
+                type="text"
                 placeholder="Search…"
               />
               <button

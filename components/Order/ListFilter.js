@@ -45,24 +45,24 @@ const ListFilter = ({
         </ul>
       </div>
 
-      <div className="d-flex">
-        <DateFilter
-          value={[fromTime, toTime]}
-          onChange={handleChangeTimeFilter}
-          placeholder="Rental dates of the listing"
-        />
-
-        <label className="search-header-section">
+      <label className="search-header-section me-3">
           <input
             value={filter}
             onChange={(e) => changeFilter(e.target.value)}
-            type="search"
+            type="text"
             name="search"
             className="search-field"
             placeholder="Search..."
             maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
           />
         </label>
+
+      <div className="d-flex">
+        <DateFilter
+          value={[fromTime, toTime]}
+          onChange={handleChangeTimeFilter}
+          placeholder="Rental dates of the listing"
+        />
       </div>
     </li>
   );

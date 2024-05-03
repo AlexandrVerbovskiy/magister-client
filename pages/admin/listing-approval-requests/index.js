@@ -88,34 +88,12 @@ const UserVerifyRequests = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Listing Approve Requests" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  {/*<DropdownFilter align="left">
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Status
-                    </div>
-                    <ul className="mb-4">
-                      {[
-                        { value: "approved", label: "Approved" },
-                        { value: "unapproved", label: "Unapproved" },
-                        { value: "not_processed", label: "Not Processed" },
-                        { value: "all", label: "All" },
-                      ].map((option) => (
-                        <FilterRadioOption
-                          key={option.value}
-                          name="viewed"
-                          label={option.label}
-                          value={option.value}
-                          currentValue={statusFilter}
-                          setCurrentValue={handleChangeStatusFilter}
-                        />
-                      ))}
-                    </ul>
-                  </DropdownFilter>*/}
+                  <SearchForm value={filter} onInput={changeFilter} />
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
                     placeholder="Filter by create time"
                   />
-                  <SearchForm value={filter} onInput={changeFilter} />
                 </div>
               </div>
 

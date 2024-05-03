@@ -1,0 +1,103 @@
+import Textarea from "../DashboardComponents/Textarea";
+import BaseModal from "../_App/BaseModal";
+
+const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
+  const [modalActive, setModalActive] = useState(false);
+  const [description, setDescription] = useState("");
+  const [descriptionError, setDescriptionError] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+
+  const handleAcceptCreateDisputeClick = async () => {
+    if (disabled) {
+      return;
+    }
+
+    let hasError = false;
+
+    if (!description.length) {
+      setDescriptionError("Required field");
+      hasError = true;
+    }
+
+    const resValidateDisputeDescription = validateBigText(description);
+
+    if (resValidateDisputeDescription !== true) {
+      setDescriptionError(resValidateDisputeDescription);
+      hasError = true;
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      onCreateDispute();
+      setDisabled(true);
+      setDisputeOrderModalActive(false);
+      setDescription("");
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  return (
+    <>
+      <BaseModal
+        active={modalActive}
+        toggleActive={() => setModalActive(false)}
+        needCloseBtn={true}
+      >
+        <span className="sub-title mb-2">
+          <span>Do you really want to start a dispute?</span>
+        </span>
+        <form method="get" onSubmit={(e) => e.preventDefault}>
+          <span style={{ fontSize: "14px" }}>
+            It will be resolved with the intervention of administrators who will
+            see your correspondence and other information about the order.For
+            the better result, describe the dispute in as much detail as
+            possible
+          </span>
+
+          <div className="form-group mt-2 mb-4">
+            <Textarea
+              placeholder="Description..."
+              value={description}
+              rows="5"
+              setValue={setDescription}
+              error={descriptionError}
+              setError={setDescriptionError}
+              name="create-dispute-description"
+            />
+          </div>
+
+          <div className="d-flex gap-2">
+            <button
+              type="button"
+              className="button-danger"
+              onClick={() => setModalActive(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => handleAcceptCreateDisputeClick("email")}
+              disabled={disabled}
+            >
+              Send
+            </button>
+          </div>
+        </form>
+      </BaseModal>
+
+      <button
+        className="default-btn error-btn"
+        type="button"
+        onClick={() => setModalActive(true)}
+      >
+        Create Dispute
+      </button>
+    </>
+  );
+};
+
+export default CreateDisputeTriggerModal;

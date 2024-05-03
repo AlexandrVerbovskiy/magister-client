@@ -20,6 +20,7 @@ import {
   validateUrl,
   validateSmallText,
   validateBigText,
+  validateInteger,
 } from "../../utils";
 import ErrorSpan from "./ErrorSpan";
 import LeaveBtn from "./LeaveBtn";
@@ -67,6 +68,9 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [twitterUrl, setTwitterUrl] = useState("");
   const [twitterUrlError, setTwitterUrlError] = useState(null);
 
+  const [paypalId, setPaypalId] = useState("");
+  const [paypalIdError, setPaypalIdError] = useState(null);
+
   const [instagramUrl, setInstagramUrl] = useState("");
   const [instagramUrlError, setInstagramUrlError] = useState(null);
 
@@ -110,6 +114,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setSuspicious(resUserToState.suspicious);
     setVerified(resUserToState.verified);
     setPlaceWork(resUserToState.placeWork);
+    setPaypalId(resUserToState.paypalId);
   }, [user.id]);
 
   const getObjectToSave = () => ({
@@ -130,6 +135,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     active,
     suspicious,
     placeWork,
+    paypalId,
   });
 
   const userToState = (user) => ({
@@ -150,6 +156,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     suspicious: user.suspicious ?? false,
     verified: user.verified ?? false,
     placeWork: user.placeWork ?? "",
+    paypalId: user.paypalId ?? "",
   });
 
   const hasChanges = () => {
@@ -254,6 +261,13 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
     if (resPlaceWorkValidation !== true) {
       setPlaceWorkError(resPlaceWorkValidation);
+      hasError = true;
+    }
+
+    const resPaypalIdValidation = validateInteger(paypalId);
+
+    if (resPaypalIdValidation !== true) {
+      setPaypalIdError(resPaypalIdValidation);
       hasError = true;
     }
 
@@ -497,6 +511,30 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             error={twitterUrlError}
                             setError={setTwitterUrlError}
                             label="Twitter URL"
+                            labelClassName="block text-sm font-medium mb-1"
+                          />
+                        </div>
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Autofill Data
+                      </h2>
+                      <div className="text-sm">
+                        The date that will be automatically inserted into all
+                        specified fields
+                      </div>
+
+                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                        <div className="sm:w-1/4">
+                          <Input
+                            name="paypal-id"
+                            value={paypalId}
+                            setValue={setPaypalId}
+                            error={paypalIdError}
+                            setError={setPaypalIdError}
+                            label="Paypal Id"
                             labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>

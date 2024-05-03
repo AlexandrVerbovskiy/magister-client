@@ -4,18 +4,21 @@ import Link from "next/link";
 const YourBusiness = () => {
   const items = [
     {
+      id: 1,
       title: `Unlock value. Earn a passive income.`,
       image: "/images/home/icons-how_it_works.png",
       link: "/",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
+      id: 2,
       title: `Reduce waste. Live sustainably.`,
       image: "/images/home/icons-sustainability.png",
       link: "/",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
     },
     {
+      id: 3,
       title: `Open access. Access on demand.`,
       image: "/images/home/icons-on_demand.png",
       link: "/",
@@ -34,7 +37,7 @@ const YourBusiness = () => {
           <div className="row justify-content-center">
             {items.map((item) => (
               <div
-                key={item.icon}
+                key={item.id}
                 className="col-lg-4 col-md-6 col-sm-6 d-flex"
               >
                 <div className="single-features-box">

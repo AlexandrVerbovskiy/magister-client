@@ -7,8 +7,6 @@ import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
 
 const Listing = (props) => {
-  console.log(props);
-
   return (
     <>
       <DashboardNavbar />

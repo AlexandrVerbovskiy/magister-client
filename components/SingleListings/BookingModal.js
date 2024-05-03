@@ -5,12 +5,12 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
+  findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
   groupDates,
   separateDate,
 } from "../../utils";
-import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "./OfferOwnPrice";
 import YesNoModal from "../../components/_App/YesNoModal";
 import "flatpickr/dist/flatpickr.min.css";
@@ -31,12 +31,22 @@ const BookingModal = ({
     useState(false);
 
   const defaultCountDays = minRentalDays ? minRentalDays : 0;
+  const firstAvailableDate = findFirstAvailableDate(
+    blockedDates,
+    defaultCountDays
+  );
+
+  const lastAvailableDate = new Date();
+  lastAvailableDate.setDate(
+    firstAvailableDate.getDate() + defaultCountDays - 1
+  );
+  console.log(firstAvailableDate, new Date(lastAvailableDate));
+
+  console.log(firstAvailableDate.getDate());
 
   const calendarContainer = useRef(null);
-  const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
-  const [toDate, setToDate] = useState(
-    new Date(getDateByCurrentAdd(0 + defaultCountDays))
-  );
+  const [fromDate, setFromDate] = useState(firstAvailableDate);
+  const [toDate, setToDate] = useState(lastAvailableDate);
   const [calendarError, setCalendarError] = useState(null);
 
   const [totalPrice, setTotalPrice] = useState(0);

@@ -86,7 +86,8 @@ const SearchedWords = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Users Search Story" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <DropdownFilter align="left">
+                  <SearchForm value={filter} onInput={changeFilter} />
+                  <DropdownFilter align="right">
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
                       Is Viewed
                     </div>
@@ -127,7 +128,6 @@ const SearchedWords = (pageProps) => {
                       ))}
                     </ul>
                   </DropdownFilter>
-                  <SearchForm value={filter} onInput={changeFilter} />
                 </div>
               </div>
 

@@ -10,17 +10,16 @@ import {
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
-import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
-import {
-  acceptOrder,
-  createOrderUpdateRequest,
-  rejectOrder,
-} from "../../services";
-import YesNoModal from "../_App/YesNoModal";
+import { paypalCreateOrder, paypalOrderPayed } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
+import PaypalTriggerModal from "../PaypalTriggerModal";
+import CreateDisputeTriggerModal from "./CreateDisputeTriggerModal";
+import CancelTriggerModal from "./CancelTriggerModal";
+import BookingAgreementPanel from "./BookingAgreementPanel";
+import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -76,13 +75,12 @@ const OrderContent = ({
   blockedDates,
   conflictOrders = null,
   canAcceptTenantListing = false,
+  authToken,
 }) => {
-  const { success, error, sessionUser, authToken } = useContext(IndiceContext);
+  const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
-  const [updateRequestModalActive, setUpdateRequestModalActive] =
-    useState(false);
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -92,30 +90,36 @@ const OrderContent = ({
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
-  const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(null);
-  const [rejectOrderModalActive, setRejectOrderModalActive] = useState(null);
+
+  const [acceptTenantToolModalActive, setAcceptTenantToolModalActive] =
+    useState(false);
+
   const [disabled, setDisabled] = useState(false);
+
+  const isBookingWithoutAgreement =
+    (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
+    order.cancelStatus == null;
 
   const checkErrorData = (startDate) => {
     let tooltipErrorMessage = "";
     let blocked = false;
 
-    if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
-      tooltipErrorMessage = "Order start date is overdue";
-      blocked = true;
-    }
+    if (isBookingWithoutAgreement) {
+      if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+        tooltipErrorMessage = "Order start date is overdue";
+        blocked = true;
+      }
 
-    if (
-      blockedDates &&
-      blockedDates.length > 0 &&
-      baseOrder.ownerId == sessionUser.id &&
-      (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
-      order.cancelStatus == null
-    ) {
-      tooltipErrorMessage =
-        "There are more priority bookings and orders for these dates";
-      blocked = true;
+      if (
+        blockedDates &&
+        blockedDates.length > 0 &&
+        baseOrder.ownerId == sessionUser.id
+      ) {
+        tooltipErrorMessage =
+          "There are more priority bookings and orders for these dates";
+        blocked = true;
+      }
     }
 
     return { tooltipErrorMessage, blocked };
@@ -134,36 +138,25 @@ const OrderContent = ({
     );
   };
 
-  const calculateCurrentTotalPayPrice = (pricePerDay, duration, fee) =>
-    (pricePerDay * duration * (100 + fee)) / 100;
+  const calculateCurrentTotalPayPrice = (pricePerDay, duration) =>
+    (pricePerDay * duration * (100 + tenantBaseCommissionPercent)) / 100;
 
-  const calculateCurrentTotalGetPrice = (pricePerDay, duration, fee) =>
-    (pricePerDay * duration * (100 - fee)) / 100;
+  const calculateCurrentTotalGetPrice = (pricePerDay, duration) =>
+    (pricePerDay * duration * (100 - ownerBaseCommissionPercent)) / 100;
 
   const calculateCurrentTotalPrice = isOwner
     ? calculateCurrentTotalGetPrice
     : calculateCurrentTotalPayPrice;
 
-  const handleActivateCreateRequest = () => {
-    setUpdateRequestModalActive(true);
-  };
-
-  const handleAcceptOrder = () => {
-    setAcceptOrderModalActive(true);
-  };
-
-  const handleRejectOrder = () => {
-    setRejectOrderModalActive(true);
+  const handleTenantGotListingApproveActivate = async () => {
+    setAcceptTenantToolModalActive(true);
   };
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser.id);
     setIsTenant(order.tenantId == sessionUser.id);
 
-    if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT
-    ) {
+    if (isBookingWithoutAgreement) {
       if (order.previousUpdateRequest) {
         setPrevUpdateRequest(order.previousUpdateRequest);
       } else {
@@ -181,69 +174,46 @@ const OrderContent = ({
     }
   }, [order.id]);
 
-  const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
-    if (disabled) {
-      return;
-    }
-
-    try {
-      setDisabled(true);
-      setUpdateRequestModalActive(false);
-
-      await createOrderUpdateRequest(
-        {
-          orderId: order.id,
-          newStartDate: fromDate,
-          newEndDate: toDate,
-          newPricePerDay: price,
-        },
-        authToken
-      );
-
-      if (actualUpdateRequest) {
-        setPrevUpdateRequest({
-          senderId: actualUpdateRequest.senderId,
-          startDate: actualUpdateRequest.newStartDate,
-          endDate: actualUpdateRequest.newEndDate,
-          pricePerDay: actualUpdateRequest.newPricePerDay,
-        });
-      } else {
-        setPrevUpdateRequest({
-          senderId: order.tenantId,
-          startDate: order.offerStartDate,
-          endDate: order.offerEndDate,
-          pricePerDay: order.offerPricePerDay,
-        });
-      }
-
-      setActualUpdateRequest({
-        senderId: sessionUser.userId,
-        newStartDate: fromDate,
-        newEndDate: toDate,
-        newPricePerDay: price,
+  const onCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
+    if (actualUpdateRequest) {
+      setPrevUpdateRequest({
+        senderId: actualUpdateRequest.senderId,
+        startDate: actualUpdateRequest.newStartDate,
+        endDate: actualUpdateRequest.newEndDate,
+        pricePerDay: actualUpdateRequest.newPricePerDay,
       });
-
-      if (isOwner) {
-        setOrder((prev) => ({
-          ...prev,
-          status: STATIC.ORDER_STATUSES.PENDING_TENANT,
-        }));
-      } else {
-        setOrder((prev) => ({
-          ...prev,
-          status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-        }));
-      }
-
-      success.set(
-        "Booking updates successfully. Wait for a response from the " +
-          (isOwner ? "tenant" : "owner")
-      );
-    } catch (e) {
-      error.set(e);
-    } finally {
-      setDisabled(false);
+    } else {
+      setPrevUpdateRequest({
+        senderId: order.tenantId,
+        startDate: order.offerStartDate,
+        endDate: order.offerEndDate,
+        pricePerDay: order.offerPricePerDay,
+      });
     }
+
+    setActualUpdateRequest({
+      senderId: sessionUser.userId,
+      newStartDate: fromDate,
+      newEndDate: toDate,
+      newPricePerDay: price,
+    });
+
+    if (isOwner) {
+      setOrder((prev) => ({
+        ...prev,
+        status: STATIC.ORDER_STATUSES.PENDING_TENANT,
+      }));
+    } else {
+      setOrder((prev) => ({
+        ...prev,
+        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+      }));
+    }
+
+    success.set(
+      "Booking updates successfully. Wait for a response from the " +
+        (isOwner ? "tenant" : "owner")
+    );
   };
 
   const setUpdatedOffer = (status, cancelStatus = null) => {
@@ -259,8 +229,7 @@ const OrderContent = ({
 
     const totalPrice = calculateCurrentTotalPrice(
       offerPricePerDay,
-      getDaysDifference(offerStartDate, offerEndDate),
-      tenantBaseCommissionPercent
+      getDaysDifference(offerStartDate, offerEndDate)
     );
 
     const updatedFields = {
@@ -284,73 +253,31 @@ const OrderContent = ({
     }));
   };
 
-  const handleAcceptAcceptOrder = async () => {
-    if (disabled) {
-      return;
-    }
+  const onTenantGotListingApprove = async () => {
+    setOrder((prev) => ({
+      ...prev,
+      status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+    }));
 
-    try {
-      setDisabled(true);
-
-      await acceptOrder(order.id, authToken);
-
-      setActualUpdateRequest(null);
-      setPrevUpdateRequest(null);
-      setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
-    } finally {
-      setDisabled(false);
-    }
+    success.set("Approved successfully");
   };
 
-  const handleAcceptRejectOrder = async () => {
-    if (disabled) {
-      return;
-    }
-
-    try {
-      setDisabled(true);
-
-      await rejectOrder(order.id, authToken);
-
-      setActualUpdateRequest(null);
-      setPrevUpdateRequest(null);
-
-      if (sessionUser.userId == order.ownerId) {
-        setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
-      } else {
-        setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELED);
-      }
-    } finally {
-      setDisabled(false);
-    }
+  const onCreateDispute = () => {
+    success.set(
+      "Dispute created successfully. Wait for the administrator to contact you"
+    );
   };
 
-  const handlePayClick = async () => {
-    console.log("payed");
-
-    if (disabled) {
-      return;
-    }
-
-    try {
-      setDisabled(true);
-    } finally {
-      setDisabled(false);
-    }
+  const onCancel = () => {
+    success.set("Order canceled successfully");
   };
 
-  const handleTenantGotListingApproveClick = async () => {
-    console.log("payed");
-
-    if (disabled) {
-      return;
-    }
-
-    try {
-      setDisabled(true);
-    } finally {
-      setDisabled(false);
-    }
+  const onTenantPayed = () => {
+    success.set("Operation successful");
+    setOrder((prev) => ({
+      ...prev,
+      status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+    }));
   };
 
   return (
@@ -600,27 +527,25 @@ const OrderContent = ({
               <h3>Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
-                <li
-                  style={
-                    order.listingPricePerDay != order.offerPricePerDay
-                      ? { textDecoration: "line-through" }
-                      : {}
-                  }
-                >
-                  Listing price per day: ${order.listingPricePerDay}
-                </li>
-
-                {order.listingPricePerDay != order.offerPricePerDay && (
-                  <li>Offer price per day: ${order.offerPricePerDay}</li>
-                )}
-
+                {isBookingWithoutAgreement &&
+                  order.listingPricePerDay != order.offerPricePerDay && (
+                    <li
+                      style={
+                        order.listingPricePerDay != order.offerPricePerDay
+                          ? { textDecoration: "line-through" }
+                          : {}
+                      }
+                    >
+                      Listing price per day: ${order.listingPricePerDay}
+                    </li>
+                  )}
+                <li>Offer price per day: ${order.offerPricePerDay}</li>
                 <li>
                   <CanBeErrorBaseDateSpan
                     startDate={order.offerStartDate}
                     endDate={order.offerEndDate}
                   />
                 </li>
-
                 <li>
                   Fee:{" "}
                   {isOwner
@@ -628,19 +553,6 @@ const OrderContent = ({
                     : tenantBaseCommissionPercent}
                   %
                 </li>
-
-                {order.offerPricePerDay != order.listingPricePerDay && (
-                  <li style={{ fontWeight: 700 }}>
-                    Price with listing price per day{" "}
-                    {isOwner ? "to get" : "to pay"}: $
-                    {calculateCurrentTotalPrice(
-                      order.listingPricePerDay,
-                      order.duration,
-                      tenantBaseCommissionPercent
-                    )}
-                  </li>
-                )}
-
                 {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
                   order.status != STATIC.ORDER_STATUSES.PENDING_TENANT) && (
                   <li className="order-status">
@@ -654,16 +566,50 @@ const OrderContent = ({
                     />
                   </li>
                 )}
+                {isBookingWithoutAgreement &&
+                  order.offerPricePerDay != order.listingPricePerDay && (
+                    <>
+                      {isOwner && (
+                        <li style={{ fontWeight: 700 }}>
+                          Price with listing price per day to get $
+                          {calculateCurrentTotalPrice(
+                            order.listingPricePerDay,
+                            order.duration
+                          )}
+                        </li>
+                      )}
 
-                <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to get" : "to pay"}: $
-                  {calculateCurrentTotalPrice(
-                    order.offerPricePerDay,
-                    order.duration,
-                    tenantBaseCommissionPercent
+                      {isTenant && (
+                        <li style={{ fontWeight: 700 }}>
+                          Price with listing price per day to pay$
+                          {calculateCurrentTotalPrice(
+                            order.listingPricePerDay,
+                            order.duration
+                          )}
+                        </li>
+                      )}
+                    </>
                   )}
-                </li>
 
+                {isOwner && (
+                  <li style={{ fontWeight: 700 }}>
+                    Fact offer price to get: $
+                    {calculateCurrentTotalPrice(
+                      order.offerPricePerDay,
+                      order.duration
+                    )}
+                  </li>
+                )}
+
+                {isOwner && (
+                  <li style={{ fontWeight: 700 }}>
+                    Fact offer price to pay: $
+                    {calculateCurrentTotalPrice(
+                      order.offerPricePerDay,
+                      order.duration
+                    )}
+                  </li>
+                )}
                 {checkErrorData(order.offerStartDate).blocked && (
                   <li>
                     <ErrorBlockMessage>
@@ -701,19 +647,19 @@ const OrderContent = ({
                   %
                 </li>
 
-                {prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
-                  <li>
-                    Price with listing price per day: $
-                    {calculateCurrentTotalPrice(
-                      order.listingPricePerDay,
-                      getDaysDifference(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.endDate
-                      ),
-                      tenantBaseCommissionPercent
-                    )}
-                  </li>
-                )}
+                {isBookingWithoutAgreement &&
+                  prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
+                    <li>
+                      Price with listing price per day: $
+                      {calculateCurrentTotalPrice(
+                        order.listingPricePerDay,
+                        getDaysDifference(
+                          prevUpdateRequest.startDate,
+                          prevUpdateRequest.endDate
+                        )
+                      )}
+                    </li>
+                  )}
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
@@ -722,8 +668,7 @@ const OrderContent = ({
                     getDaysDifference(
                       prevUpdateRequest.startDate,
                       prevUpdateRequest.endDate
-                    ),
-                    tenantBaseCommissionPercent
+                    )
                   )}
                 </li>
               </ul>
@@ -764,8 +709,7 @@ const OrderContent = ({
                       getDaysDifference(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
-                      ),
-                      tenantBaseCommissionPercent
+                      )
                     )}
                   </li>
                 )}
@@ -777,8 +721,7 @@ const OrderContent = ({
                     getDaysDifference(
                       actualUpdateRequest.newStartDate,
                       actualUpdateRequest.newEndDate
-                    ),
-                    tenantBaseCommissionPercent
+                    )
                   )}
                 </li>
 
@@ -828,8 +771,7 @@ const OrderContent = ({
 
                 const totalPrice = calculateCurrentTotalPrice(
                   pricePrice,
-                  getDaysDifference(startDate, endDate),
-                  tenantBaseCommissionPercent
+                  getDaysDifference(startDate, endDate)
                 );
 
                 const isBooking = [
@@ -903,10 +845,10 @@ const OrderContent = ({
           {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
             (isTenant &&
               order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
-            <div className="order_widget add-listings-box">
-              <h3>Booking operations</h3>
-              <div className="booking-operations form-group">
-                {((actualUpdateRequest &&
+            <BookingAgreementPanel
+              onCreateUpdateRequest={onCreateUpdateRequest}
+              acceptView={
+                ((actualUpdateRequest &&
                   !checkStringDateLowerOrEqualCurrentDate(
                     actualUpdateRequest.newStartDate
                   )) ||
@@ -914,103 +856,82 @@ const OrderContent = ({
                     !checkStringDateLowerOrEqualCurrentDate(
                       order.offerStartDate
                     ))) &&
-                  (!conflictOrders || conflictOrders.length < 1) && (
-                    <button
-                      className="default-btn"
-                      type="button"
-                      onClick={handleAcceptOrder}
-                      disabled={disabled}
-                    >
-                      Accept
-                    </button>
-                  )}
+                (!conflictOrders || conflictOrders.length < 1)
+              }
+              listingName={order.listingName}
+              blockedDates={blockedDates}
+              listingPricePerDay={order.listingPricePerDay}
+              proposalPrice={
+                actualUpdateRequest
+                  ? actualUpdateRequest.newPricePerDay
+                  : order.offerPricePerDay
+              }
+              proposalStartDate={
+                actualUpdateRequest
+                  ? actualUpdateRequest.newStartDate
+                  : order.offerStartDate
+              }
+              proposalEndDate={
+                actualUpdateRequest
+                  ? actualUpdateRequest.newEndDate
+                  : order.offerEndDate
+              }
+              listingMinRentalDays={order.listingMinRentalDays}
+              fee={
+                order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
+                  ? ownerBaseCommissionPercent
+                  : tenantBaseCommissionPercent
+              }
+              commissionType={
+                order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
+                  ? "reject"
+                  : "sum"
+              }
+              setUpdatedOffer={setUpdatedOffer}
+              orderId={order.id}
+              ownerId={order.ownerId}
+            />
+          )}
 
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={handleRejectOrder}
-                  disabled={disabled}
-                >
-                  Reject
-                </button>
-
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={handleActivateCreateRequest}
-                  disabled={disabled}
-                >
-                  Offer other terms
-                </button>
-
-                <CreateUpdateOrderRequestModal
-                  handleCreateUpdateRequest={handleCreateUpdateRequest}
-                  price={order.listingPricePerDay}
-                  proposalPrice={
-                    actualUpdateRequest
-                      ? actualUpdateRequest.newPricePerDay
-                      : order.offerPricePerDay
-                  }
-                  proposalStartDate={
-                    actualUpdateRequest
-                      ? actualUpdateRequest.newStartDate
-                      : order.offerStartDate
-                  }
-                  proposalEndDate={
-                    actualUpdateRequest
-                      ? actualUpdateRequest.newEndDate
-                      : order.offerEndDate
-                  }
-                  minRentalDays={order.listingMinRentalDays}
-                  fee={tenantBaseCommissionPercent}
-                  updateRequestModalActive={updateRequestModalActive}
-                  setUpdateRequestModalActive={setUpdateRequestModalActive}
-                  listingName={order.listingName}
-                  blockedDates={blockedDates}
-                />
-
-                <YesNoModal
-                  active={acceptOrderModalActive}
-                  toggleActive={() => setAcceptOrderModalActive(false)}
-                  title="Operation confirmation"
-                  body="Confirm that the proposed booking conditions are actually suitable for you"
-                  onAccept={handleAcceptAcceptOrder}
-                  acceptText="Accept"
-                />
-                <YesNoModal
-                  active={rejectOrderModalActive}
-                  toggleActive={() => setRejectOrderModalActive(false)}
-                  title="Operation confirmation"
-                  body="Confirm that you really want to cancel the booking"
-                  onAccept={handleAcceptRejectOrder}
-                  acceptText="Accept"
-                />
+          {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+            (isTenant &&
+              order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)) && (
+            <div className="order_widget add-listings-box">
+              <h3>Cancel operation</h3>
+              <div className="booking-operations form-group">
+                <CancelTriggerModal onCancel={onCancel} />
               </div>
             </div>
           )}
 
           {order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
-            order.tenantId == sessionUser.userId && (
+            isTenant && (
               <div className="order_widget add-listings-box">
                 <h3>Payment</h3>
 
                 <div className="booking-operations form-group">
-                  <button
-                    className="default-btn"
-                    type="button"
-                    onClick={handlePayClick}
-                    disabled={disabled}
-                  >
-                    Pay by Stripe
-                  </button>
+                  <PaypalTriggerModal
+                    amount={calculateCurrentTotalPrice(
+                      order.offerPricePerDay,
+                      order.duration
+                    )}
+                    createOrderRequest={paypalCreateOrder}
+                    approveOrderRequest={paypalOrderPayed}
+                    authToken={authToken}
+                    orderId={order.id}
+                    listingName={order.listingName}
+                    onTenantPayed={onTenantPayed}
+                  />
+
+                  <CancelTriggerModal onCancel={onCancel} />
                 </div>
               </div>
             )}
 
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
-            order.ownerId == sessionUser.id && (
+            isOwner && (
               <div className="order_widget add-listings-box">
-                <h3>Renters QR code to confirm acceptance of the goods</h3>
+                <h3>Renters QR code to confirm acceptance of the tool</h3>
 
                 <div className="booking-operations form-group">
                   <img
@@ -1022,22 +943,20 @@ const OrderContent = ({
               </div>
             )}
 
-          {actualUpdateRequest &&
-            order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
-            order.tenantId == sessionUser.id &&
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+            isTenant &&
             canAcceptTenantListing && (
               <div className="order_widget add-listings-box">
-                <h3>Approve that you have received the listing</h3>
+                <h3>Approve that you have received the tool</h3>
 
                 <div className="booking-operations form-group">
-                  <button
-                    className="default-btn"
-                    type="button"
-                    onClick={handleTenantGotListingApproveClick}
-                    disabled={disabled}
-                  >
-                    Approve
-                  </button>
+                  <TenantGotListingApproveTriggerModal
+                    onApprove={onTenantGotListingApprove}
+                  />
+
+                  <CreateDisputeTriggerModal
+                    onCreateDispute={onCreateDispute}
+                  />
                 </div>
               </div>
             )}

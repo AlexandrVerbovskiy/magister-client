@@ -109,7 +109,7 @@ export const authByProvider = async (body) => {
   return data.body;
 };
 
-export const connectNewCreditCard = async (cardId, authToken) => {
-  const data = await post("/connect-new-credit-card", { cardId }, authToken);
+export const autofillSaveUserData = async ({ paypalId }, authToken) => {
+  const data = await post("/autofill-save", { paypalId }, authToken);
   return data.body;
 };

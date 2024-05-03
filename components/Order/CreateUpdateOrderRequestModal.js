@@ -28,6 +28,7 @@ const CreateUpdateOrderRequestModal = ({
   minRentalDays,
   listingName,
   blockedDates,
+  commissionType
 }) => {
   const proposalCountDays = getDaysDifference(
     proposalStartDate,
@@ -60,7 +61,7 @@ const CreateUpdateOrderRequestModal = ({
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
     setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
-    setFullTotal(calculateFullTotalByDaysCount(countDays, price, fee));
+    setFullTotal(calculateFullTotalByDaysCount(countDays, price, fee, commissionType));
   };
 
   const handleChangeDates = (dates) => {
@@ -231,7 +232,8 @@ const CreateUpdateOrderRequestModal = ({
                 {calculateFullTotalByDaysCount(
                   proposalCountDays,
                   proposalPrice,
-                  fee
+                  fee,
+                  commissionType
                 )}
               </div>
             </div>

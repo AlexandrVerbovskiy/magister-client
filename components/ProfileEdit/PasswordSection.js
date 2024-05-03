@@ -25,12 +25,12 @@ const PasswordSection = ({ formInfo }) => {
   } = formInfo;
 
   return (
-    <div className="my-profile-box change-password">
+    <div className="my-profile-box">
       <h3>Change Password</h3>
 
       <form method="get">
         <div className="row">
-          <div className="col-lg-12 col-md-12">
+          <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="Current Password"
               value={currentPassword}

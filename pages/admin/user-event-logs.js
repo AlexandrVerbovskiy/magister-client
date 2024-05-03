@@ -75,12 +75,12 @@ const Logs = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Logs" }]} />
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                  <SearchForm value={filter} onInput={changeFilter} />
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
                     placeholder="Filter by create time"
                   />
-                  <SearchForm value={filter} onInput={changeFilter} />
                 </div>
               </div>
 

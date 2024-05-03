@@ -72,7 +72,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 name="search"
                 id={searchId}
                 className="w-full dark:text-slate-300 bg-white dark:bg-slate-800 border-0 focus:ring-transparent placeholder-slate-400 dark:placeholder-slate-500 appearance-none py-3 pl-10 pr-4"
-                type="search"
+                type="text"
                 placeholder="Search Anything…"
                 ref={searchInput}
               />

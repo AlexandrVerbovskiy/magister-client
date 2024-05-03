@@ -392,6 +392,12 @@ Navbar Area CSS
   border-top: 3px solid var(--mainColor);
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 }
+
+.miran-nav .navbar .navbar-nav .nav-item .dropdown-menu.dropdown-menu-end {
+  left: auto;
+  right: 0;
+}
+
 .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li {
   margin: 0;
 }
@@ -4731,6 +4737,13 @@ Listings Details Area CSS
   background-color: var(--mainColor);
   color: var(--whiteColor);
   border-color: var(--mainColor);
+}
+
+.order_widget .default-btn.error-btn {
+  background-color: red;
+  color: white;
+  border-color: red;
+  box-shadow: 4px 4px rgb(255, 157, 157);
 }
 
 .order_widget .default-btn:hover,
@@ -11742,8 +11755,7 @@ All Modal CSS
   form
   button {
   display: block;
-  background-color: var(--mainColor);
-  color: var(--whiteColor);
+
   border: none;
   font-weight: 600;
   display: block;
@@ -11751,16 +11763,27 @@ All Modal CSS
   border-radius: 5px;
   padding: 14px 30px 13px;
   transition: var(--transition);
+  color: var(--whiteColor);
 }
+
 .loginRegisterModal
   .modal-dialog
   .modal-content
   .tab-content
   .miran-login
   form
-  button:hover {
+  button:not(.button-danger) {
+  background-color: var(--mainColor);
+}
+
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  form
+  button:not(.button-danger):hover {
   background-color: var(--blackColor);
-  color: var(--whiteColor);
 }
 .loginRegisterModal
   .modal-dialog
@@ -15016,7 +15039,6 @@ Dashboard CSS
   font-weight: 400;
 }
 
-
 .add-listings-box .form-group .form-control {
   height: 48px;
   background: #f9f9f9 !important;
@@ -16802,7 +16824,7 @@ Preloader Area CSS
   top: 40px;
 }
 
-.my-profile-box.change-password input {
+.my-profile-box .left-input-icon input {
   padding: 0 0 0 42px;
 }
 
@@ -16810,23 +16832,11 @@ Preloader Area CSS
   padding: 0 0 0 42px;
 }
 
-.yes-no-modal
-  .modal-dialog
-  .modal-content
-  .tab-content
-  .miran-login
-  form
-  button.button-danger {
+button.button-danger {
   background-color: #ee3535;
 }
 
-.yes-no-modal
-  .modal-dialog
-  .modal-content
-  .tab-content
-  .miran-login
-  form
-  button.button-danger:hover {
+button.button-danger:hover {
   background-color: #9e0000;
 }
 
@@ -17322,6 +17332,10 @@ Preloader Area CSS
 
 .dropdown-filter .dropdown-menu .label-section {
   color: rgb(148 163 184);
+}
+
+.dropdown-filter .dropdown-menu.dropdown-menu-end{
+  right: 0;
 }
 
 .listing-request-status {
@@ -17982,7 +17996,7 @@ input[type="number"] {
   animation-iteration-count: infinite;
 }
 
-.order_widget{
+.order_widget {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -17998,13 +18012,13 @@ input[type="number"] {
   display: flex;
 }
 
-.order_widget .booking-operations > button:nth-child(1),
-.order_widget .booking-operations > button:nth-child(2) {
+.order_widget .booking-operations > button:nth-of-type(1),
+.order_widget .booking-operations > button:nth-of-type(2) {
   margin-right: 10px;
 }
 
-.order_widget .booking-operations > button:nth-child(2),
-.order_widget .booking-operations > button:nth-child(3) {
+.order_widget .booking-operations > button:nth-of-type(2),
+.order_widget .booking-operations > button:nth-of-type(3) {
   margin-left: 10px;
 }
 
@@ -18014,6 +18028,10 @@ input[type="number"] {
 
 .status-background-red {
   background-color: #f3103c;
+}
+
+.status-background-gray{
+  background-color: var(--optionalColor);
 }
 
 .status-background-green {
@@ -18031,7 +18049,8 @@ input[type="number"] {
 .status-background-red,
 .status-background-green,
 .status-background-orange,
-.status-background-base {
+.status-background-base,
+.status-background-gray {
   padding: 5px 10px;
   color: white;
   border-radius: 5px;
@@ -18062,7 +18081,7 @@ input[type="number"] {
 
 .flatpickr-parent-wrapper.flatpickr-date-filter {
   width: unset !important;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }
 
 .filter-nav-item {
@@ -18092,7 +18111,7 @@ input[type="number"] {
   color: rgba(57, 57, 57, 1) !important;
 }
 
-.form-group-view .form-control.view-placeholder{
+.form-group-view .form-control.view-placeholder {
   color: #999999 !important;
 }
 
@@ -18110,57 +18129,43 @@ input[type="number"] {
   text-wrap: nowrap;
 }
 
-.form-group-view-textarea .form-control{
-  padding: 15px!important;
+.form-group-view-textarea .form-control {
+  padding: 15px !important;
 }
 
-.order-proposal-info{
-  background-color: var(--whiteColor)!important;
-  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05)!important;
-  border-radius: 5px!important;
-  border: 0!important;
+.order-proposal-info {
+  background-color: var(--whiteColor) !important;
+  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05) !important;
+  border-radius: 5px !important;
+  border: 0 !important;
 }
 
-.order-info-main-opponent-info img{
+.order-info-main-opponent-info img {
   width: 100px;
   height: 100px;
 }
-.conflicted-orders li:not(:last-child){
+.conflicted-orders li:not(:last-child) {
   border-bottom: 1px solid #eeeeee;
   padding-bottom: 15px;
 }
 
-.stripe-card-append form{
-  padding: 0!important;
-}
-
-.stripe-card-append form>.row{
-  margin: 0!important;
-}
-
-.stripe-card-append form>.row>div:first-child{
-  padding-left: 0;
-}
-
-.stripe-card-append form>.row>div:last-child{
-  padding-right: 0;
-}
-
-.StripeElement{
-  border: 1px solid #d5d5d5 !important;
-  border-radius: 5px;
-  background-color: var(--whiteColor) !important;
-  color: #808080;
-  box-shadow: unset !important;
-  transition: var(--transition);
-  height: 45px;
-  font-size: 14.5px;
-  font-weight: 400;
+.default-table-btn{
   display: block;
-  width: 100%;
-  padding: 9px  .75rem .375rem 15px;
-  line-height:1.5;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: max-content;
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
+  transition: var(--transition);
+  padding-left: 10px;
+  padding-right: 10px;
+  font-weight: 500;
+}
+
+.default-table-btn:hover {
+  background-color: var(--blackColor);
+  color: var(--whiteColor);
+}
+
+.flatpickr-calendar{
+  right: 0!important;
+  left: auto!important;
 }

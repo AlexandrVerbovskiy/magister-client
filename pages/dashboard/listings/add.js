@@ -43,6 +43,7 @@ const AddListing = ({ categories }) => {
       messageOnSuccess="Created successfully"
       canSendRequest={canSendRequest}
       setCanSendRequest={setCanSendRequest}
+      canChange={true}
     />
   );
 };

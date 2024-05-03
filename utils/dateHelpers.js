@@ -141,3 +141,38 @@ export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   const currentDate = separateDate(new Date());
   return date < currentDate;
 };
+
+const isDateBlocked = (startDate, blockedDates, numOfDays) => {
+  for (let i = 0; i < numOfDays; i++) {
+    let tempDate = new Date(startDate);
+    tempDate.setDate(startDate.getDate() + i);
+
+    if (blockedDates.includes(separateDate(tempDate))) {
+      return true;
+    }
+  }
+  return false;
+};
+
+export const findFirstAvailableDate = (blockedDates, numOfDays) => {
+  let today = new Date();
+  let firstAvailableDate = null;
+  let daysToCheck = 0;
+
+  while (!firstAvailableDate) {
+    let currentDate = new Date(today);
+    currentDate.setDate(today.getDate() + daysToCheck);
+
+    if (!numOfDays) {
+      numOfDays = 1;
+    }
+
+    if (!isDateBlocked(currentDate, blockedDates, numOfDays)) {
+      firstAvailableDate = currentDate;
+    } else {
+      daysToCheck++;
+    }
+  }
+
+  return firstAvailableDate;
+};

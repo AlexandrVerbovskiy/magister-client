@@ -505,3 +505,8 @@ div.add-listings-box.dropzone > .gallery-flex {
 .select-options-list:has(> *:nth-child(5)) > *:nth-child(3) {
   top: 100%;
 }
+
+.flatpickr-calendar{
+  right: 0!important;
+  left: auto!important;
+}
