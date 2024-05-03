@@ -55,7 +55,7 @@ function DropdownProfile({ align }) {
     try {
       await signOut({ redirect: false });
     } catch (e) {
-      mainError.set(e);
+      mainError.set(e.message);
     }
   };
 

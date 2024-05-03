@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
-import { isCurrentAdminPath } from "../../services/isCurrentPath";
 import SidebarTypicalLink from "./SidebarTypicalLink";
 import SidebarGroupedLinks from "./SidebarGroupedLinks";
 

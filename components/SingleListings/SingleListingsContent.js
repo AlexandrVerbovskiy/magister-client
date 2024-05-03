@@ -59,7 +59,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         "Booking made successfully. Wait for a response from the owner"
       );
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
   };
 

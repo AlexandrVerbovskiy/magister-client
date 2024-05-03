@@ -88,7 +88,7 @@ function DropdownClassicAjax({
         setPage((prevPage) => prevPage + 1);
       }
     } catch (e) {
-      error.set(e);
+      error.set(e.message);
     }
 
     setLoading(false);
