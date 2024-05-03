@@ -42,13 +42,13 @@ const BookingModal = ({
   );
 
   const calendarContainer = useRef(null);
-  /*const [fromDate, setFromDate] = useState(firstAvailableDate);
-  const [toDate, setToDate] = useState(lastAvailableDate);*/
+  const [fromDate, setFromDate] = useState(firstAvailableDate);
+  const [toDate, setToDate] = useState(lastAvailableDate);
 
-  const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
+  /*const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
   const [toDate, setToDate] = useState(
     new Date(getDateByCurrentAdd(0 + defaultCountDays))
-  );
+  );*/
 
   const [calendarError, setCalendarError] = useState(null);
 
