@@ -11,9 +11,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import { getBookingListOptions } from "../../../services";
 import { authSideProps } from "../../../middlewares";
-import {
-  baseTimeListPageParams,
-} from "../../../utils";
+import { baseTimeListPageParams } from "../../../utils";
 import OrderItem from "../../../components/Listings/OrderItem";
 import ListFilter from "../../../components/Order/ListFilter";
 import Pagination from "../../../components/Pagination";
@@ -147,7 +145,7 @@ const MyBookings = (pageProps) => {
 
         {bookings.length > 0 && (
           <>
-            <section className="listing-area">
+            <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
               <TabHeaderSection
                 filter={filter}
                 changeFilter={changeFilter}
@@ -159,24 +157,29 @@ const MyBookings = (pageProps) => {
                 toTime={toTime}
               />
 
-              <div className="tab-content">
-                <div className="tab-pane fade show active" id="all-listing">
-                  <div
-                    className="row"
-                    style={{ alignItems: "stretch", gridRowGap: "20px" }}
-                  >
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Details</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
                     {bookings.map((booking) => (
                       <OrderItem
+                        filterType={type}
                         key={booking.id}
                         {...booking}
                         link={`/dashboard/bookings/${booking.id}`}
                       />
                     ))}
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </section>
-
             <Pagination
               viewOnlyMoreOnePage={true}
               page={page}

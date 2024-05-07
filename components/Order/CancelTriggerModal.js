@@ -11,7 +11,7 @@ const CancelTriggerModal = ({ onCancel }) => {
     }
 
     try {
-      onCancel();
+      await onCancel();
       setDisabled(true);
       setModalActive(false);
     } finally {

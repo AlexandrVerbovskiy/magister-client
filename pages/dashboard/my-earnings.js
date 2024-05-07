@@ -27,10 +27,11 @@ import DateFilter from "../../components/FormComponents/DateFilter";
 
 const ths = [
   { title: "#Id", value: "sender_payments.id", width: "10%" },
-  { title: "Listing", value: "listings.name", width: "25%" },
+  { title: "Listing", value: "listings.name", width: "20%" },
   { title: "Owner", value: "owners.name", width: "20%" },
+  { title: "Type", value: "owners.received_type", width: "10%" },
   { title: "Price", value: "sender_payments.money", width: "10%" },
-  { title: "Payed at", value: "sender_payments.created_at", width: "20%" },
+  { title: "Payed at", value: "sender_payments.created_at", width: "15%" },
   { title: "Actions", canOrder: false, width: "15%" },
 ];
 
@@ -43,6 +44,7 @@ const Tr = ({
   ownerName,
   money,
   createdAt,
+  receivedType,
 }) => {
   return (
     <tr>
@@ -53,6 +55,7 @@ const Tr = ({
       <td>
         <a href={`/owner-listing-list/${ownerId}`}>{ownerName}</a>
       </td>
+      <td>{receivedType}</td>
       <td>${money}</td>
       <td style={{ fontWeight: "700" }}>{fullTimeConverter(createdAt)}</td>
       <td style={{ fontSize: "12px" }}>

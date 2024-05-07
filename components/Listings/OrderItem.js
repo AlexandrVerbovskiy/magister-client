@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "./StatusBlock";
 
-const OrderItem = (order) => {
+/*const OrderItem = (order) => {
   const images = order.images ?? [];
   const { sessionUser } = useContext(IndiceContext);
 
@@ -98,6 +98,73 @@ const OrderItem = (order) => {
         </div>
       </div>
     </div>
+  );
+};*/
+
+const OrderItem = (order) => {
+  return (
+    <tr>
+      <td className="name">
+        <img src="/images/user1.jpg" alt="image" />
+        <div className="info">
+          <span>James Anderson</span>
+          <ul>
+            <li>
+              <a href="tel:+21444556521">+214 4455 6521</a>
+            </li>
+            <li>
+              <a href="mailto:hello@james.com">hello@james.com</a>
+            </li>
+          </ul>
+          <a href="mailto:hello@james.com" className="default-btn">
+            <i className="bx bx-envelope"></i> Send Message
+          </a>
+        </div>
+      </td>
+
+      <td className="details">
+        <h4>
+          Farmis Hotel & Restaurant{" "}
+          <span className="bookings-status pending">Pending</span>
+        </h4>
+
+        <ul>
+          <li>
+            <i className="bx bx-map"></i>
+            <span>Address:</span>
+            40 Journal Square, NG USA
+          </li>
+          <li>
+            <i className="bx bx-calendar"></i>
+            <span>Date:</span>
+            20/05/2020
+          </li>
+          <li>
+            <i className="bx bx-purchase-tag"></i>
+            <span>Price:</span>
+            $1500
+          </li>
+          <li>
+            <i className="bx bx-group"></i>
+            <span>Persons:</span>4 Peoples
+          </li>
+          <li>
+            <i className="bx bx-credit-card-front"></i>
+            <span>Payment:</span>
+            <strong className="paid">Paid</strong> using Paypal
+          </li>
+        </ul>
+      </td>
+
+      <td className="action">
+        <a href="#" className="default-btn">
+          <i className="bx bx-check-circle"></i> Approve
+        </a>
+        <a href="#" className="default-btn danger">
+          <i className="bx bx-x-circle"></i> Reject
+        </a>
+      </td>
+    </tr>
   );
 };
 

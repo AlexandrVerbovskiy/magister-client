@@ -144,7 +144,7 @@ const Orders = (pageProps) => {
 
         {orders.length > 0 && (
           <>
-            <section className="listing-area">
+            <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
               <TabHeaderSection
                 filter={filter}
                 changeFilter={changeFilter}
@@ -156,21 +156,27 @@ const Orders = (pageProps) => {
                 toTime={toTime}
               />
 
-              <div className="tab-content">
-                <div className="tab-pane fade show active" id="all-listing">
-                  <div
-                    className="row"
-                    style={{ alignItems: "stretch", gridRowGap: "20px" }}
-                  >
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Details</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
                     {orders.map((order) => (
                       <OrderItem
+                        filterType={type}
                         key={order.id}
                         {...order}
                         link={`/dashboard/orders/${order.id}`}
                       />
                     ))}
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </section>
 

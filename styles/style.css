@@ -18169,3 +18169,7 @@ input[type="number"] {
   right: 0!important;
   left: auto!important;
 }
+
+.child-nav-tabs-mb-0 .nav-tabs{
+  margin-bottom: 0!important;
+}
