@@ -24,7 +24,9 @@ const DocumentsVerification = ({
   const { success, setLoading, sessionUser, authToken, setVerified, error } =
     useContext(IndiceContext);
   const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
-  const [userVerified, setUserVerified] = useState(sessionUser.verified);
+  const [userVerified, setUserVerified] = useState(
+    sessionUser?.verified ?? false
+  );
   const [activeReverifiedModal, setActiveReverifiedModal] = useState(false);
 
   const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);

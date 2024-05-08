@@ -67,11 +67,19 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
     e.preventDefault();
 
     if (sessionUser) {
-      if (sessionUser.verified) {
-        setCreateOrderModalActive(true);
-      } else {
+      if (!sessionUser?.verified) {
         shakeUnverifiedAlert();
+        return;
       }
+
+      if (!sessionUser?.paypalId) {
+        error.set(
+          "Fill in your PayPal details in your profile settings to start the booking process"
+        );
+        return;
+      }
+
+      setCreateOrderModalActive(true);
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
 
@@ -115,7 +123,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                 <ul className="d-flex align-items-center">
                   {listing.userPhone && (
                     <li className="phone-number">
-                      <a href="#">
+                      <a href={`tel:+${listing.userPhone}`}>
                         <i className="bx bx-phone-call"></i>
                         {listing.userPhone}
                       </a>
@@ -208,6 +216,15 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                       close={closeCurrentOpenImg}
                     />
                   </div>
+                </div>
+
+                <h3>Pricing</h3>
+                <div id="pricing">
+                  <ul className="pricing-list">
+                    <li>
+                      Rental price per day <span>${listing.pricePerDay}</span>
+                    </li>
+                  </ul>
                 </div>
 
                 <h3>Review</h3>
@@ -815,7 +832,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
 
             <div className="col-lg-4 col-md-12">
               <div className="listings-sidebar">
-                {listing.approved && listing.userId != sessionUser.id && (
+                {listing.approved && listing.userId != sessionUser?.id && (
                   <div className="listings-widget book_listings">
                     <h3>Booking Online</h3>
                     {listing.minRentalDays && (
@@ -838,7 +855,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                       className="default-btn w-100"
                       onClick={handleMakeBookingTriggerClick}
                     >
-                      Book Now ${listing.pricePerDay}(per day)
+                      Book Now ${listing.pricePerDay}/day
                     </button>
 
                     <span>
@@ -857,7 +874,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     {listing.userPhone && (
                       <li>
                         <i className="bx bx-phone-call"></i>
-                        <a href="tel:+2122791456">{listing.userPhone}</a>
+                        <a href={`tel:+${listing.userPhone}`}>
+                          {listing.userPhone}
+                        </a>
                       </li>
                     )}
                     {listing.userPlaceWork && (

@@ -43,6 +43,46 @@ export const acceptOrder = async (id, authToken) => {
   return data.body;
 };
 
+export const paypalOrderPayed = async (orderId, authToken) => {
+  const data = await post(`/paypal-order-payed`, { orderId }, authToken);
+  return data.body;
+};
+
+export const approveClientGotListing = async (token, authToken) => {
+  const data = await post(`/approve-client-got-listing`, { token }, authToken);
+  return data.body;
+};
+
+export const orderCancelByTenant = async (id, authToken) => {
+  const data = await post(`/cancel-by-tenant`, { id }, authToken);
+  return data.body;
+};
+
+export const orderCancelByOwner = async (id, authToken) => {
+  const data = await post(`/cancel-by-owner`, { id }, authToken);
+  return data.body;
+};
+
+export const orderAcceptCancelByTenant = async (id, authToken) => {
+  const data = await post(`/accept-cancel-by-tenant`, { id }, authToken);
+  return data.body;
+};
+
+export const orderAcceptCancelByOwner = async (id, authToken) => {
+  const data = await post(`/accept-cancel-by-owner`, { id }, authToken);
+  return data.body;
+};
+
+export const orderFullCancelPayed = async (id, authToken) => {
+  const data = await post(`/full-cancel-payed`, { id }, authToken);
+  return data.body;
+};
+
+export const orderFullCancel = async (id, authToken) => {
+  const data = await post(`/full-cancel`, { id }, authToken);
+  return data.body;
+};
+
 export const rejectOrder = async (id, authToken) => {
   const data = await post(`/reject-booking`, { id }, authToken);
   return data.body;
@@ -50,5 +90,10 @@ export const rejectOrder = async (id, authToken) => {
 
 export const deleteOrder = async (id, authToken) => {
   const data = await post(`/delete`, { id }, authToken);
+  return data.body;
+};
+
+export const finishedByOwner = async (id, authToken) => {
+  const data = await post(`/finished-by-owner`, { id }, authToken);
   return data.body;
 };

@@ -16,7 +16,7 @@ const ApproveTenantListing = (props) => {
 
         <div className="header-section">
           <div className="breadcrumb-area">
-            <h1>Approving Hand Over </h1>
+            <h1>Approving Handover </h1>
             <ol className="breadcrumb">
               <li className="item">
                 <Link href="/">Home</Link>

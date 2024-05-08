@@ -4,6 +4,10 @@
     min-height: 400px;
   }
 
+  .main-site-alert {
+    max-width: 80%;
+  }
+
   .no-listing {
     height: 200px;
   }
@@ -4226,17 +4230,19 @@
     grid-row-gap: 10px;
   }
 
-  .order_widget .booking-operations>button:nth-child(1), .order_widget .booking-operations>button:nth-child(2){
-    margin-right: 0!important;
+  .order_widget .booking-operations > button:nth-child(1),
+  .order_widget .booking-operations > button:nth-child(2) {
+    margin-right: 0 !important;
   }
 
-  .order_widget .booking-operations>button:nth-child(2), .order_widget .booking-operations>button:nth-child(3){
-    margin-left: 0!important;
+  .order_widget .booking-operations > button:nth-child(2),
+  .order_widget .booking-operations > button:nth-child(3) {
+    margin-left: 0 !important;
   }
 }
 
 @media only screen and (max-width: 877px) {
-  .filter-nav-item{
+  .filter-nav-item {
     padding-left: 0;
     justify-content: space-between;
   }

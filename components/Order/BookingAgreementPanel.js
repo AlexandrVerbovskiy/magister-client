@@ -7,6 +7,7 @@ import {
   rejectOrder,
   acceptOrder,
 } from "../../services";
+import STATIC from "../../static";
 
 const BookingAgreementPanel = ({
   acceptView,
@@ -20,6 +21,8 @@ const BookingAgreementPanel = ({
   listingMinRentalDays,
   fee,
   setUpdatedOffer,
+  setActualUpdateRequest,
+  setPrevUpdateRequest,
   orderId,
   ownerId,
   onCreateUpdateRequest,
@@ -30,8 +33,7 @@ const BookingAgreementPanel = ({
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(false);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
-  const { sessionUser, authToken } = useContext(IndiceContext);
-
+  const { sessionUser, authToken, error } = useContext(IndiceContext);
   const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
     if (disabled) {
       return;
@@ -52,6 +54,8 @@ const BookingAgreementPanel = ({
       );
 
       onCreateUpdateRequest({ price, fromDate, toDate });
+    } catch (e) {
+      error.set(e.message);
     } finally {
       setDisabled(false);
     }
@@ -70,6 +74,8 @@ const BookingAgreementPanel = ({
       setActualUpdateRequest(null);
       setPrevUpdateRequest(null);
       setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
+    } catch (e) {
+      error.set(e.message);
     } finally {
       setDisabled(false);
     }
@@ -88,11 +94,13 @@ const BookingAgreementPanel = ({
       setActualUpdateRequest(null);
       setPrevUpdateRequest(null);
 
-      if (sessionUser.userId == ownerId) {
+      if (sessionUser?.id == ownerId) {
         setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
       } else {
         setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELED);
       }
+    } catch (e) {
+      error.set(e.message);
     } finally {
       setDisabled(false);
     }

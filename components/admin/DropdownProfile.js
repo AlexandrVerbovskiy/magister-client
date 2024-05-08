@@ -15,10 +15,10 @@ function DropdownProfile({ align }) {
     sessionUser,
     error: mainError,
   } = useContext(IndiceContext);
-  const name = sessionUser ? sessionUser.name : "";
+  const name = sessionUser?.name ?? "";
   const photo =
-    sessionUser && sessionUser.photo
-      ? getFilePath(sessionUser.photo)
+    sessionUser && sessionUser?.photo
+      ? getFilePath(sessionUser?.photo)
       : STATIC.DEFAULT_PHOTO_LINK;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);

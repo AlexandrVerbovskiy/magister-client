@@ -135,7 +135,7 @@ const StatusBlock = ({ requestId, requestApproved }) => {
 
 const ListingList = (pageProps) => {
   const router = useRouter();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, success, authToken, sessionUser } = useContext(IndiceContext);
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);
 
@@ -202,6 +202,15 @@ const ListingList = (pageProps) => {
     rebuild({ status: status });
   };
 
+  const handleCreateListingClick = (e) => {
+    if (!sessionUser.paypalId) {
+      e.preventDefault();
+      error.set(
+        "You cannot create listing if your profile do not have a linked card for payment"
+      );
+    }
+  };
+
   return (
     <>
       <DashboardNavbar />
@@ -226,6 +235,7 @@ const ListingList = (pageProps) => {
           <Link
             href="/dashboard/listings/add"
             className="default-btn add-listing-link-btn"
+            onClick={handleCreateListingClick}
           >
             <span className="icon">
               <i className="flaticon-more"></i>

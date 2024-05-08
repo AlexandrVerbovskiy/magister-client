@@ -9,7 +9,7 @@ const AutofillSection = () => {
     useContext(IndiceContext);
 
   const [loading, setLoading] = useState(false);
-  const [paypalId, setPaypalId] = useState(sessionUser.paypalId ?? "");
+  const [paypalId, setPaypalId] = useState(sessionUser?.paypalId ?? "");
   const [paypalIdError, setPaypalIdError] = useState(null);
 
   const handleSubmit = async (e) => {
