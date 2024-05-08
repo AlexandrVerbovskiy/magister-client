@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Textarea from "../DashboardComponents/Textarea";
 import BaseModal from "../_App/BaseModal";
 import { IndiceContext } from "../../contexts";
+import { validateBigText } from "../../utils";
 
 const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
   const [modalActive, setModalActive] = useState(false);
@@ -34,9 +35,9 @@ const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
     }
 
     try {
-      onCreateDispute();
+      await onCreateDispute();
       setDisabled(true);
-      setDisputeOrderModalActive(false);
+      setModalActive(false);
       setDescription("");
     } catch (e) {
       error.set(e.message);

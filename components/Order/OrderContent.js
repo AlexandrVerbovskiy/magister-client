@@ -19,6 +19,9 @@ import {
   orderFullCancelPayed,
   paypalCreateOrder,
   paypalOrderPayed,
+  rejectOrder,
+  orderAcceptCancelByTenant,
+  orderAcceptCancelByOwner,
 } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
@@ -307,7 +310,7 @@ const OrderContent = ({
     }
   };
 
-  const orderAcceptCancelByOwner = async () => {
+  const onOrderAcceptCancelByOwner = async () => {
     try {
       await orderAcceptCancelByOwner(order.id, authToken);
 
@@ -322,7 +325,7 @@ const OrderContent = ({
     }
   };
 
-  const orderAcceptCancelByTenant = async () => {
+  const onOrderAcceptCancelByTenant = async () => {
     try {
       await orderAcceptCancelByTenant(order.id, authToken);
 
@@ -339,14 +342,24 @@ const OrderContent = ({
 
   const onCancel = async () => {
     try {
-      await orderFullCancel(order.id, authToken);
+      if (isOwner) {
+        await rejectOrder(order.id, authToken);
 
-      success.set("Order canceled successfully");
+        setActualUpdateRequest(null);
+        setPrevUpdateRequest(null);
+        setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
 
-      setOrder((prev) => ({
-        ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
-      }));
+        success.set("Order rejected successfully");
+      } else {
+        await orderFullCancel(order.id, authToken);
+
+        setOrder((prev) => ({
+          ...prev,
+          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+        }));
+
+        success.set("Order canceled successfully");
+      }
     } catch (e) {
       error.set(e.message);
     }
@@ -379,7 +392,7 @@ const OrderContent = ({
 
       setOrder((prev) => ({
         ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.FINISHED,
+        status: STATIC.ORDER_STATUSES.FINISHED,
       }));
     } catch (e) {
       error.set(e.message);
@@ -626,7 +639,7 @@ const OrderContent = ({
         </div>
       )}
 
-      {!actualUpdateRequest && (
+      {(order.cancelStatus != null || !actualUpdateRequest) && (
         <div className="row listings-sidebar" style={{ marginTop: 0 }}>
           <div className="col form-group">
             <div className="listings-widget order_widget  order-proposal-info">
@@ -729,7 +742,7 @@ const OrderContent = ({
         </div>
       )}
 
-      {actualUpdateRequest && (
+      {order.cancelStatus == null && actualUpdateRequest && (
         <div className="row listings-sidebar" style={{ marginTop: 0 }}>
           <div className="col col-12 col-md-6 form-group">
             <div className="listings-widget order_widget order-proposal-info">
@@ -1001,11 +1014,15 @@ const OrderContent = ({
             />
           )}
 
-          {((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ||
+          {((isOwner &&
+            [
+              STATIC.ORDER_STATUSES.PENDING_TENANT,
+              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            ].includes(order.status)) ||
             (isTenant &&
               order.status == STATIC.ORDER_STATUSES.PENDING_OWNER)) && (
             <div className="order_widget add-listings-box">
-              <h3>Cancel operation</h3>
+              <h3>Operations</h3>
               <div className="booking-operations form-group">
                 <CancelTriggerModal onCancel={onCancel} />
               </div>
@@ -1051,24 +1068,22 @@ const OrderContent = ({
               </div>
             )}
 
-          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
-            isTenant && (
-              <>
-                {canAcceptTenantListing ? (
-                  <div className="order_widget add-listings-box">
-                    <h3>Approve that you have received the tool</h3>
-
-                    <div className="booking-operations form-group">
-                      <TenantGotListingApproveTriggerModal
-                        onApprove={onTenantGotListingApprove}
-                      />
-                    </div>
-                  </div>
-                ) : (
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+            <>
+              {isTenant && (
+                <>
                   <div className="order_widget add-listings-box">
                     <h3>Operations</h3>
 
                     <div className="booking-operations form-group">
+                      {canAcceptTenantListing ? (
+                        <TenantGotListingApproveTriggerModal
+                          onApprove={onTenantGotListingApprove}
+                        />
+                      ) : (
+                        <></>
+                      )}
+
                       {canFastCancelPayed ? (
                         <CancelTriggerModal onCancel={onPayedFastCancel} />
                       ) : (
@@ -1078,9 +1093,24 @@ const OrderContent = ({
                       )}
                     </div>
                   </div>
-                )}
-              </>
-            )}
+                </>
+              )}
+
+              {isOwner && (
+                <>
+                  <div className="order_widget add-listings-box">
+                    <h3>Operations</h3>
+
+                    <div className="booking-operations form-group">
+                      <CreateDisputeTriggerModal
+                        onCreateDispute={onCreateDispute}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
 
@@ -1090,7 +1120,7 @@ const OrderContent = ({
           <div className="order_widget add-listings-box">
             <h3>Operations</h3>
             <div className="booking-operations form-group">
-              <CancelTriggerModal onCancel={orderAcceptCancelByOwner} />
+              <CancelTriggerModal onCancel={onOrderAcceptCancelByOwner} />
             </div>
           </div>
         )}
@@ -1101,23 +1131,22 @@ const OrderContent = ({
           <div className="order_widget add-listings-box">
             <h3>Operations</h3>
             <div className="booking-operations form-group">
-              <CancelTriggerModal onCancel={orderAcceptCancelByTenant} />
+              <CancelTriggerModal onCancel={onOrderAcceptCancelByTenant} />
             </div>
           </div>
         )}
 
-      {isOwner &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
-          <div className="order_widget add-listings-box">
-            <h3>Operations</h3>
-            <div className="booking-operations form-group">
-              {canFinalization && (
-                <FinishOrderTriggerModal onFinish={finishOrder} />
-              )}
-              <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
-            </div>
+      {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+        <div className="order_widget add-listings-box">
+          <h3>Operations</h3>
+          <div className="booking-operations form-group">
+            {isOwner && canFinalization && (
+              <FinishOrderTriggerModal onFinish={finishOrder} />
+            )}
+            <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
           </div>
-        )}
+        </div>
+      )}
     </>
   );
 };
