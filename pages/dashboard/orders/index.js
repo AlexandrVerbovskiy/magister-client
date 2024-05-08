@@ -171,7 +171,7 @@ const Orders = (pageProps) => {
                       <OrderItem
                         filterType={type}
                         key={order.id}
-                        {...order}
+                        order={order}
                         link={`/dashboard/orders/${order.id}`}
                       />
                     ))}

@@ -9,6 +9,7 @@
   border-radius: 0.375rem;
   padding-right: 3rem;
   max-width: 400px;
+  max-width: 40%;
 }
 
 .main-site-alert.alert-success {
@@ -509,4 +510,10 @@ div.add-listings-box.dropzone > .gallery-flex {
 .flatpickr-calendar{
   right: 0!important;
   left: auto!important;
+}
+
+@media only screen and (max-width: 767px) {
+  .main-site-alert {
+    max-width: 80%;
+  }
 }

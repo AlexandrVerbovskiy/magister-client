@@ -10,16 +10,16 @@ const StatusBlock = ({
 }) => {
   let orderStatus =
     status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
-  let text = "Waiting Verification";
+  let text = "Waiting Approval";
   let color = "status-background-base";
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) {
     color = "status-background-base";
 
     if (ownerId == userId) {
-      text = "Pending Your Verification";
+      text = "Pending Your Approval";
     } else {
-      text = "Pending Owner Verification";
+      text = "Pending Owner Approval";
     }
   }
 
@@ -27,20 +27,26 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (tenantId == userId) {
-      text = "Pending Your Verification";
+      text = "Pending Your Approval";
     } else {
-      text = "Pending Rental Verification";
+      text = "Pending Renter Approval";
     }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     color = "status-background-green";
-    text = "Pending Rental Payment";
+    text = "Pending Payment";
+
+    if (tenantId == userId) {
+      text = "Pending Payment";
+    } else {
+      text = "Pending Payment";
+    }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
     color = "status-background-green";
-    text = "Pending Hand Over";
+    text = "Pending Handover";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {

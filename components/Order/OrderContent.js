@@ -12,6 +12,7 @@ import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
 import {
   approveClientGotListing,
+  finishedByOwner,
   orderCancelByOwner,
   orderCancelByTenant,
   orderFullCancel,
@@ -28,6 +29,7 @@ import CreateDisputeTriggerModal from "./CreateDisputeTriggerModal";
 import CancelTriggerModal from "./CancelTriggerModal";
 import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
+import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -86,6 +88,7 @@ const OrderContent = ({
   authToken,
   acceptListingTenantToken = null,
   canFastCancelPayed = false,
+  canFinalization = false,
 }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
@@ -117,9 +120,9 @@ const OrderContent = ({
       }
 
       if (
-        blockedDates &&
-        blockedDates.length > 0 &&
-        baseOrder.ownerId == sessionUser.id
+        conflictOrders &&
+        conflictOrders.length > 0 &&
+        baseOrder.ownerId == sessionUser?.id
       ) {
         tooltipErrorMessage =
           "There are more priority bookings and orders for these dates";
@@ -154,8 +157,8 @@ const OrderContent = ({
     : calculateCurrentTotalPayPrice;
 
   useEffect(() => {
-    setIsOwner(order.ownerId == sessionUser.id);
-    setIsTenant(order.tenantId == sessionUser.id);
+    setIsOwner(order.ownerId == sessionUser?.id);
+    setIsTenant(order.tenantId == sessionUser?.id);
 
     if (isBookingWithoutAgreement) {
       if (order.previousUpdateRequest) {
@@ -193,7 +196,7 @@ const OrderContent = ({
     }
 
     setActualUpdateRequest({
-      senderId: sessionUser.userId,
+      senderId: sessionUser?.id,
       newStartDate: fromDate,
       newEndDate: toDate,
       newPricePerDay: price,
@@ -360,6 +363,23 @@ const OrderContent = ({
       setOrder((prev) => ({
         ...prev,
         cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+      }));
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
+  const finishOrder = async () => {
+    try {
+      await finishedByOwner(order.id, authToken);
+
+      success.set(
+        `Order finished successfully. Thank you for using the platform`
+      );
+
+      setOrder((prev) => ({
+        ...prev,
+        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.FINISHED,
       }));
     } catch (e) {
       error.set(e.message);
@@ -648,7 +668,7 @@ const OrderContent = ({
                       statusCancelled={order.cancelStatus}
                       ownerId={order.ownerId}
                       tenantId={order.tenantId}
-                      userId={sessionUser.userId}
+                      userId={sessionUser?.id}
                     />
                   </li>
                 )}
@@ -687,7 +707,7 @@ const OrderContent = ({
                   </li>
                 )}
 
-                {isOwner && (
+                {isTenant && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay: $
                     {calculateCurrentTotalPrice(
@@ -895,7 +915,7 @@ const OrderContent = ({
                           statusCancelled={conflictOrder.cancelStatus}
                           ownerId={conflictOrder.ownerId}
                           tenantId={conflictOrder.tenantId}
-                          userId={sessionUser.userId}
+                          userId={sessionUser?.id}
                           dopClass="order-status-small-span"
                         />
                       </a>
@@ -974,6 +994,8 @@ const OrderContent = ({
                   : "sum"
               }
               setUpdatedOffer={setUpdatedOffer}
+              setActualUpdateRequest={setActualUpdateRequest}
+              setPrevUpdateRequest={setPrevUpdateRequest}
               orderId={order.id}
               ownerId={order.ownerId}
             />
@@ -1044,7 +1066,7 @@ const OrderContent = ({
                   </div>
                 ) : (
                   <div className="order_widget add-listings-box">
-                    <h3>Cancel order operations</h3>
+                    <h3>Operations</h3>
 
                     <div className="booking-operations form-group">
                       {canFastCancelPayed ? (
@@ -1066,7 +1088,7 @@ const OrderContent = ({
         order.cancelStatus ==
           STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE && (
           <div className="order_widget add-listings-box">
-            <h3>Cancel operation</h3>
+            <h3>Operations</h3>
             <div className="booking-operations form-group">
               <CancelTriggerModal onCancel={orderAcceptCancelByOwner} />
             </div>
@@ -1077,9 +1099,22 @@ const OrderContent = ({
         order.cancelStatus ==
           STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE && (
           <div className="order_widget add-listings-box">
-            <h3>Cancel operation</h3>
+            <h3>Operations</h3>
             <div className="booking-operations form-group">
               <CancelTriggerModal onCancel={orderAcceptCancelByTenant} />
+            </div>
+          </div>
+        )}
+
+      {isOwner &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+          <div className="order_widget add-listings-box">
+            <h3>Operations</h3>
+            <div className="booking-operations form-group">
+              {canFinalization && (
+                <FinishOrderTriggerModal onFinish={finishOrder} />
+              )}
+              <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
             </div>
           </div>
         )}

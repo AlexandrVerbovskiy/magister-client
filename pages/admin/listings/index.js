@@ -20,7 +20,7 @@ import { baseListPageParams } from "../../../utils";
 
 const Listings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, success, sessionUser, authToken } = useContext(IndiceContext);
 
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});

@@ -519,11 +519,11 @@ const EditUserForm = ({ user, save, currentTitle }) => {
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Autofill Data
+                        Payment Info
                       </h2>
                       <div className="text-sm">
-                        The date that will be automatically inserted into all
-                        specified fields
+                        The data that will automatically be used to receive
+                        money
                       </div>
 
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
@@ -536,6 +536,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             setError={setPaypalIdError}
                             label="Paypal Id"
                             labelClassName="block text-sm font-medium mb-1"
+                            placeholder="Paypal id"
                           />
                         </div>
                       </div>

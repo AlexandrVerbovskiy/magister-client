@@ -1,6 +1,10 @@
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
+
 const TenantGotListingApproveTriggerModal = ({ onApprove }) => {
   const [modalActive, setModalActive] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const {error} = useContext(IndiceContext)
 
   const handleTenantGotListingApproveClick = async () => {
     if (disabled) {
@@ -11,6 +15,8 @@ const TenantGotListingApproveTriggerModal = ({ onApprove }) => {
       setDisabled(true);
       setModalActive(false);
       onApprove();
+    } catch (e) {
+      error.set(e.message);
     } finally {
       setDisabled(false);
     }

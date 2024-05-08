@@ -7,7 +7,7 @@ const supportSideProps = async (context, callback = null) => {
 
   if (
     !sessionUser ||
-    (sessionUser.role !== "admin" && sessionUser.role !== "support")
+    (sessionUser?.role !== "admin" && sessionUser?.role !== "support")
   ) {
     return {
       notFound: true,

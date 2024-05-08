@@ -5,12 +5,12 @@ const Status = ({ status, baseClass = "" }) => {
   let dopClassName = "bg-slate-300";
 
   if (status == STATIC.ORDER_STATUSES.PENDING_OWNER) {
-    text = "Pending Owner Verification";
+    text = "Pending Owner Approvement";
     dopClassName = "bg-purple-500";
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_TENANT) {
-    text = "Pending Rental Verification";
+    text = "Pending Rental Approvement";
     dopClassName = "bg-amber-500";
   }
 

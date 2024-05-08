@@ -1,11 +1,14 @@
+import { useContext } from "react";
 import Textarea from "../DashboardComponents/Textarea";
 import BaseModal from "../_App/BaseModal";
+import { IndiceContext } from "../../contexts";
 
 const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
   const [modalActive, setModalActive] = useState(false);
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const { error } = useContext(IndiceContext);
 
   const handleAcceptCreateDisputeClick = async () => {
     if (disabled) {
@@ -35,6 +38,8 @@ const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
       setDisabled(true);
       setDisputeOrderModalActive(false);
       setDescription("");
+    } catch (e) {
+      error.set(e.message);
     } finally {
       setDisabled(false);
     }

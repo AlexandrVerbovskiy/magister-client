@@ -92,3 +92,8 @@ export const deleteOrder = async (id, authToken) => {
   const data = await post(`/delete`, { id }, authToken);
   return data.body;
 };
+
+export const finishedByOwner = async (id, authToken) => {
+  const data = await post(`/finished-by-owner`, { id }, authToken);
+  return data.body;
+};

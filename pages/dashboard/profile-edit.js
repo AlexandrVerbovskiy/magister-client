@@ -101,6 +101,9 @@ const ProfileEdit = () => {
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const [currentPasswordType, setCurrentPasswordType] = useState("password");
 
+  const [paypalId, setPaypalId] = useState(sessionUser?.paypalId ?? "");
+  const [paypalIdError, setPaypalIdError] = useState(null);
+
   const handleChangePasswordType = () =>
     setPasswordType(passwordType == "password" ? "text" : "password");
   const handleChangeConfirmPasswordType = () =>
@@ -122,6 +125,7 @@ const ProfileEdit = () => {
     briefBio,
     contactDetails,
     placeWork,
+    paypalId,
   });
 
   const userToState = () => ({
@@ -134,6 +138,7 @@ const ProfileEdit = () => {
     briefBio: sessionUser?.briefBio ?? "",
     contactDetails: sessionUser?.contactDetails ?? "",
     placeWork: sessionUser?.placeWork ?? "",
+    paypalId: sessionUser?.paypalId ?? "",
   });
 
   const hasChanges = () => {
@@ -144,7 +149,7 @@ const ProfileEdit = () => {
   };
 
   const initUser = () => {
-    const userPhoto = sessionUser.photo;
+    const userPhoto = sessionUser?.photo;
 
     if (userPhoto) {
       setPhotoUrl(getFilePath(userPhoto));
@@ -163,6 +168,7 @@ const ProfileEdit = () => {
     setBriefBio(userInfo.briefBio);
     setContactDetails(userInfo.contactDetails);
     setPlaceWork(userInfo.placeWork);
+    setPaypalId(userInfo.paypalId);
   };
 
   const handlePhotoChange = (e) => {
@@ -186,6 +192,13 @@ const ProfileEdit = () => {
 
     if (resNameValidation !== true) {
       setNameError(resNameValidation);
+      hasError = true;
+    }
+
+    const resPaypalIdValidation = validateSmallText(paypalId);
+
+    if (resPaypalIdValidation !== true) {
+      setPaypalId(resPaypalIdValidation);
       hasError = true;
     }
 
@@ -264,7 +277,7 @@ const ProfileEdit = () => {
 
         const newData = { ...info };
 
-        if (info.phone != (sessionUser.phone ?? "")) {
+        if (info.phone != (sessionUser?.phone ?? "")) {
           newData["photoVerified"] = false;
         }
 
@@ -355,7 +368,7 @@ const ProfileEdit = () => {
   const handleVerifyPhoneClick = async () => {
     const userInfo = userToState();
 
-    if (userInfo.phone == phone && sessionUser.phoneVerified) return;
+    if (userInfo.phone == phone && sessionUser?.phoneVerified) return;
 
     const resPhoneValidate = validatePhoneNumber(phone);
 
@@ -458,6 +471,10 @@ const ProfileEdit = () => {
         setBriefBioError,
         placeWorkError,
         setPlaceWorkError,
+        paypalId,
+        setPaypalId,
+        paypalIdError,
+        setPaypalIdError,
       }}
     />
   );
@@ -561,19 +578,18 @@ const ProfileEdit = () => {
           </ol>
         </div>
 
-        {sessionUser.hasPasswordAccess && (
+        {sessionUser?.hasPasswordAccess && (
           <div className="row">
             <div className="col-lg-6 col-md-12">{profileFormSection}</div>
 
             <div className="col-lg-6 col-md-12">
               {securityFormSection}
               {passwordFormSection}
-              {<AutofillSection />}
             </div>
           </div>
         )}
 
-        {!sessionUser.hasPasswordAccess && (
+        {!sessionUser?.hasPasswordAccess && (
           <div className="row">
             <div className="col-12">{profileFormSection}</div>
           </div>

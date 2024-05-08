@@ -172,7 +172,7 @@ const MyBookings = (pageProps) => {
                       <OrderItem
                         filterType={type}
                         key={booking.id}
-                        {...booking}
+                        order={booking}
                         link={`/dashboard/bookings/${booking.id}`}
                       />
                     ))}

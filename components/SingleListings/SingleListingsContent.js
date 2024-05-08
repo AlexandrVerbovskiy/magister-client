@@ -67,11 +67,19 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
     e.preventDefault();
 
     if (sessionUser) {
-      if (sessionUser.verified) {
-        setCreateOrderModalActive(true);
-      } else {
+      if (!sessionUser?.verified) {
         shakeUnverifiedAlert();
+        return;
       }
+
+      if (!sessionUser?.paypalId) {
+        error.set(
+          "Fill in your PayPal details in your profile settings to start the booking process"
+        );
+        return;
+      }
+
+      setCreateOrderModalActive(true);
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
 
@@ -824,7 +832,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
 
             <div className="col-lg-4 col-md-12">
               <div className="listings-sidebar">
-                {listing.approved && listing.userId != sessionUser.id && (
+                {listing.approved && listing.userId != sessionUser?.id && (
                   <div className="listings-widget book_listings">
                     <h3>Booking Online</h3>
                     {listing.minRentalDays && (
@@ -866,7 +874,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     {listing.userPhone && (
                       <li>
                         <i className="bx bx-phone-call"></i>
-                        <a href={`tel:+${listing.userPhone}`}>{listing.userPhone}</a>
+                        <a href={`tel:+${listing.userPhone}`}>
+                          {listing.userPhone}
+                        </a>
                       </li>
                     )}
                     {listing.userPlaceWork && (

@@ -5,7 +5,7 @@ const adminSideProps = async (context, callback = null) => {
   const { props } = await userSideProps(context);
   const { sessionUser, authToken } = props;
 
-  if (!sessionUser || sessionUser.role !== "admin") {
+  if (!sessionUser || sessionUser?.role !== "admin") {
     return {
       notFound: true,
     };

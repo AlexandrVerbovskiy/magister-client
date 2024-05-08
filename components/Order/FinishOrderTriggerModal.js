@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 
-const CancelTriggerModal = ({ onCancel }) => {
+const FinishOrderTriggerModal = ({ onFinish }) => {
   const [modalActive, setModalActive] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { error } = useContext(IndiceContext);
@@ -13,7 +13,7 @@ const CancelTriggerModal = ({ onCancel }) => {
     }
 
     try {
-      await onCancel();
+      await onFinish();
       setDisabled(true);
       setModalActive(false);
     } catch (e) {
@@ -28,22 +28,22 @@ const CancelTriggerModal = ({ onCancel }) => {
       <YesNoModal
         active={modalActive}
         toggleActive={() => setModalActive(false)}
-        title="Cancel order"
-        body="To confirm the cancellation of the order, click the 'Cancel'"
+        title="Finish order"
+        body="To confirm the finalization of the order, click the 'Finish'"
         onAccept={handleAcceptCancelOrder}
-        acceptText="Cancel"
+        acceptText="Finish"
         closeModalText="Close"
       />
       <button
-        className="default-btn error-btn"
+        className="default-btn"
         type="button"
         onClick={() => setModalActive(true)}
         disabled={disabled}
       >
-        Cancel
+        Finish
       </button>
     </>
   );
 };
 
-export default CancelTriggerModal;
+export default FinishOrderTriggerModal;
