@@ -88,8 +88,10 @@ const OrderContent = ({
   blockedDates,
   conflictOrders = null,
   canAcceptTenantListing = false,
+  canAcceptOwnerListing = false,
   authToken,
   acceptListingTenantToken = null,
+  acceptListingOwnerToken = null,
   canFastCancelPayed = false,
   canFinalization = false,
 }) => {
@@ -270,10 +272,14 @@ const OrderContent = ({
 
   const onTenantGotListingApprove = async () => {
     try {
-      await approveClientGotListing(acceptListingTenantToken, authToken);
+      const res = await approveClientGotListing(
+        acceptListingTenantToken,
+        authToken
+      );
 
       setOrder((prev) => ({
         ...prev,
+        ownerAcceptListingQrcode: res.qrCode,
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
       }));
 
@@ -384,7 +390,7 @@ const OrderContent = ({
 
   const finishOrder = async () => {
     try {
-      await finishedByOwner(order.id, authToken);
+      await finishedByOwner(acceptListingOwnerToken, authToken);
 
       success.set(
         `Order finished successfully. Thank you for using the platform`
@@ -1068,6 +1074,21 @@ const OrderContent = ({
               </div>
             )}
 
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
+            isTenant && (
+              <div className="order_widget add-listings-box">
+                <h3>Owners QR code to confirm acceptance of the tool</h3>
+
+                <div className="booking-operations form-group">
+                  <img
+                    width="200px"
+                    height="200px"
+                    src={`${order.ownerAcceptListingQrcode}`}
+                  />
+                </div>
+              </div>
+            )}
+
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
             <>
               {isTenant && (
@@ -1140,7 +1161,7 @@ const OrderContent = ({
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
           <div className="booking-operations form-group">
-            {isOwner && canFinalization && (
+            {isOwner && canFinalization && canAcceptOwnerListing && (
               <FinishOrderTriggerModal onFinish={finishOrder} />
             )}
             <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />

@@ -1,18 +1,31 @@
-import React from "react"; 
+import React from "react";
+import {
+  fullTimeConverter,
+  getDaysDifference,
+  timeConverter,
+} from "../../../utils";
 
-const InvoiceTable = () => {
+const InvoiceTable = ({
+  billTo,
+  shipTo,
+  invoiceId,
+  invoiceDate,
+  purchaseOrder,
+  dueDate,
+  indiceAdmin,
+  offer,
+}) => {
+  const subTotalPrice =
+    offer.pricePerDay *
+    getDaysDifference(offer.startDate, offer.endDate);
+
   return (
     <>
       <div className="invoice-area">
         <div className="invoice-header d-flex justify-content-between">
           <div className="invoice-left-text">
             <h3 className="mb-0">Indice Admin</h3>
-            <p className="mt-2 mb-0">
-              M/2750, <br />
-              Quadra Street, <br />
-              Victoria, <br />
-              Canada.
-            </p>
+            <p className="mt-2 mb-0">{indiceAdmin ?? "-"}</p>
           </div>
           <div className="invoice-right-text">
             <h3 className="mb-0 text-uppercase">Invoice</h3>
@@ -24,34 +37,31 @@ const InvoiceTable = () => {
             <div className="col-lg-3">
               <div className="text">
                 <h4 className="mb-2">Bill To</h4>
-                <span className="d-block mb-1">Jessie M Home</span>
-                <span className="d-block mb-1">2019 Redbud Drive</span>
-                <span className="d-block">New York, NY 10011</span>
+                <span className="d-block mb-1">{billTo ?? "-"}</span>
               </div>
             </div>
 
             <div className="col-lg-3">
               <div className="text">
                 <h4 className="mb-2">Ship To</h4>
-                <span className="d-block mb-1">Jessie M Home</span>
-                <span className="d-block mb-1">2019 Redbud Drive</span>
-                <span className="d-block">New York, NY 10011</span>
+                <span className="d-block mb-1">{shipTo ?? "-"}</span>
               </div>
             </div>
 
             <div className="col-lg-6">
               <div className="text text-right">
                 <h5>
-                  Invoice # <sub>Int-001</sub>
+                  Invoice # <sub>{invoiceId}</sub>
                 </h5>
                 <h5>
-                  Invoice Date # <sub>11/12/2019</sub>
+                  Invoice Date #{" "}
+                  <sub>{invoiceDate ? timeConverter(invoiceDate) : "-"}</sub>
                 </h5>
                 <h5>
-                  P.O # <sub>2412/2019</sub>
+                  P.O # <sub>{purchaseOrder ?? "-"}</sub>
                 </h5>
                 <h5 className="mb-0">
-                  Due Date # <sub>26/12/2019</sub>
+                  Due Date # <sub>{dueDate ? timeConverter(dueDate) : "-"}</sub>
                 </h5>
               </div>
             </div>
@@ -64,53 +74,46 @@ const InvoiceTable = () => {
               <tr>
                 <th>#</th>
                 <th>Description</th>
-                <th>Unit Price</th>
+                <th>Price Per Day</th>
+                <th>Rental duration</th>
                 <th>Total</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>01</td>
-                <td>Apple iPhone XR (64GB)</td>
-                <td className="text-right">$100.00</td>
-                <td className="text-right">$100.00</td>
+                <td>{offer.listingName}</td>
+                <td className="text-right">${offer.pricePerDay}</td>
+                <td className="text-right">
+                  {offer.startDate == offer.endDate
+                    ? timeConverter(offer.startDate)
+                    : `${timeConverter(offer.startDate)} - ${timeConverter(
+                        offer.endDate
+                      )}`}
+                </td>
+                <td className="text-right">${subTotalPrice.toFixed(2)}</td>
               </tr>
+
               <tr>
-                <td>01</td>
-                <td>Apple iPhone XR Black</td>
-                <td className="text-right">$25.00</td>
-                <td className="text-right">$50.00</td>
-              </tr>
-              <tr>
-                <td>01</td>
-                <td>HeadPhone</td>
-                <td className="text-right">$15.00</td>
-                <td className="text-right">$45.00</td>
-              </tr>
-              <tr>
-                <td>01</td>
-                <td>HeadPhone</td>
-                <td className="text-right">$15.00</td>
-                <td className="text-right">$45.00</td>
-              </tr>
-              <tr>
-                <td className="text-right" colSpan="3">
+                <td className="text-right" colSpan="4">
                   <strong>Subtotal</strong>
                 </td>
-                <td className="text-right">$195.00</td>
+                <td className="text-right">${subTotalPrice.toFixed(2)}</td>
               </tr>
               <tr>
-                <td className="text-right" colSpan="3">
-                  <strong>Sales Tax 5.0%</strong>
+                <td className="text-right" colSpan="4">
+                  <strong>Sales Tax {offer.fee}%</strong>
                 </td>
-                <td className="text-right">$9.75</td>
+                <td className="text-right">
+                  ${((subTotalPrice * offer.fee) / 100).toFixed(2)}
+                </td>
               </tr>
               <tr>
-                <td className="text-right total" colSpan="3">
+                <td className="text-right total" colSpan="4">
                   <strong>Total</strong>
                 </td>
                 <td className="text-right total-price">
-                  <strong>$204.75</strong>
+                  <strong>${offer.factTotalPrice.toFixed(2)}</strong>
                 </td>
               </tr>
             </tbody>

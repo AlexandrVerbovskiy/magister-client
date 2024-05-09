@@ -93,7 +93,7 @@ export const deleteOrder = async (id, authToken) => {
   return data.body;
 };
 
-export const finishedByOwner = async (id, authToken) => {
-  const data = await post(`/finished-by-owner`, { id }, authToken);
+export const finishedByOwner = async (token, authToken) => {
+  const data = await post(`/finished-by-owner`, { token }, authToken);
   return data.body;
 };
