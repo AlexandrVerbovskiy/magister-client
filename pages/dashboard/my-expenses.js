@@ -58,10 +58,10 @@ const Tr = ({
       <td style={{ fontWeight: "700" }}>{timeConverter(createdAt)}</td>
       <td style={{ fontSize: "12px" }}>
         <a
-          href={`/dashboard/orders/${orderId}`}
+          href={`/dashboard/invoices/${id}`}
           className="btn default-table-btn btn-sm"
         >
-          View Order
+          View Details
         </a>
       </td>
     </tr>

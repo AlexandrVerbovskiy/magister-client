@@ -1,5 +1,6 @@
+import axios from "axios";
 import { initAxios } from "../utils";
-const { get, post } = initAxios("/sender-payments");
+const { get, post, generateFullUrl } = initAxios("/sender-payments");
 
 export const paypalCreateOrder = async (amount, orderId, authToken) => {
   const data = await post(
@@ -19,3 +20,20 @@ export const getAdminSenderPaymentList = async (body, authToken) => {
   const data = await post("/admin-list", body, authToken);
   return data.body;
 };
+
+export const generateInvoicePdf = async (id, authToken) => {
+  const url = generateFullUrl(`/invoice-pdf/${id}`);
+
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    responseType: "arraybuffer",
+  });
+
+  const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+  return pdfUrl;
+};
+
+//export const invoicePdfUrl = (id) => generateFullUrl(`/invoice-pdf/${id}`);

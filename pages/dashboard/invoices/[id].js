@@ -10,7 +10,6 @@ import { fullTimeConverter } from "../../../utils";
 
 const Invoice = ({ payment }) => {
   const { success, authToken, error } = useContext(IndiceContext);
-  console.log(payment);
 
   return (
     <>
@@ -39,18 +38,18 @@ const Invoice = ({ payment }) => {
         <InvoiceTable
           billTo={payment.listingAddress ?? payment.listingCity}
           shipTo={payment.listingAddress ?? payment.listingCity}
-          invoiceId={`Inv-${payment.id}`}
+          invoiceId={payment.id}
           invoiceDate={payment.createdAt}
-          purchaseOrder="?"
+          purchaseOrder={payment.orderId}
           dueDate={payment.createdAt}
-          indiceAdmin="?"
+          indiceAdmin="RentAbout"
           offer={{
             factTotalPrice: payment.orderFactTotalPrice,
             fee: payment.orderFee,
             listingName: payment.listingName,
             pricePerDay: payment.orderOfferPricePerDay,
-            startDate:payment.orderOfferStartDate,
-            endDate:payment.orderOfferEndDate,
+            startDate: payment.orderOfferStartDate,
+            endDate: payment.orderOfferEndDate,
           }}
         />
       </div>

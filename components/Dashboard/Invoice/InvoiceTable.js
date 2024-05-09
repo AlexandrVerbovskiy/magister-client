@@ -1,9 +1,8 @@
-import React from "react";
-import {
-  fullTimeConverter,
-  getDaysDifference,
-  timeConverter,
-} from "../../../utils";
+import React, { useContext, useState } from "react";
+import { getDaysDifference, timeConverter } from "../../../utils";
+import Link from "next/link";
+import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
+import { IndiceContext } from "../../../contexts";
 
 const InvoiceTable = ({
   billTo,
@@ -15,9 +14,35 @@ const InvoiceTable = ({
   indiceAdmin,
   offer,
 }) => {
+  const { authToken, error } = useContext(IndiceContext);
+  const [disabled, setDisabled] = useState(false);
+
   const subTotalPrice =
-    offer.pricePerDay *
-    getDaysDifference(offer.startDate, offer.endDate);
+    offer.pricePerDay * getDaysDifference(offer.startDate, offer.endDate);
+
+  const handlePdfDownload = async () => {
+    try {
+      if (disabled) {
+        return;
+      }
+
+      setDisabled(true);
+      const url = await generateInvoicePdf(invoiceId, authToken);
+      
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `inv-${invoiceId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setDisabled(false);
+    }
+  };
 
   return (
     <>
@@ -51,14 +76,22 @@ const InvoiceTable = ({
             <div className="col-lg-6">
               <div className="text text-right">
                 <h5>
-                  Invoice # <sub>{invoiceId}</sub>
+                  Invoice # <sub>Inv-{invoiceId}</sub>
                 </h5>
                 <h5>
                   Invoice Date #{" "}
                   <sub>{invoiceDate ? timeConverter(invoiceDate) : "-"}</sub>
                 </h5>
                 <h5>
-                  P.O # <sub>{purchaseOrder ?? "-"}</sub>
+                  P.O #{" "}
+                  <sub>
+                    <Link
+                      style={{ color: "inherit" }}
+                      href={`/dashboard/orders/${purchaseOrder}`}
+                    >
+                      {purchaseOrder ?? "-"}
+                    </Link>
+                  </sub>
                 </h5>
                 <h5 className="mb-0">
                   Due Date # <sub>{dueDate ? timeConverter(dueDate) : "-"}</sub>
@@ -120,9 +153,14 @@ const InvoiceTable = ({
           </table>
         </div>
         <div className="invoice-btn-box text-right">
-          <button type="submit" className="default-btn">
+          <a
+            type="button"
+            className="default-btn"
+            onClick={handlePdfDownload}
+            disabled={disabled}
+          >
             <i className="bx bx-printer"></i> Print
-          </button>
+          </a>
         </div>
       </div>
     </>
