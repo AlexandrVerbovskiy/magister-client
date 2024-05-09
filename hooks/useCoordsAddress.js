@@ -47,7 +47,7 @@ const useCoordsAddress = () => {
   };
 
   const getAddressByCoords = async ({ lat, lng }) => {
-    const res = await fromLatLng(lat, lng);
+    const res = await fromLatLng(lat, lng, null, "en");
 
     const addressArray = res.results[0].address_components;
 
