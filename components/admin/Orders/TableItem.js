@@ -38,9 +38,6 @@ const TableItem = ({
         )}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        ${factTotalPrice}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
           <div className="mr-2 flex items-center">
             <View href={`/admin/orders/${id}`} />

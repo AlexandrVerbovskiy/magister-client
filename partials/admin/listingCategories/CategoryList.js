@@ -3,13 +3,7 @@ import CategoryListItem from "./CategoryListItem";
 import Tooltip from "../../../components/admin/Tooltip";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import lodash from "lodash";
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
+import { reorderList } from "../../../utils";
 
 const CategoryList = ({
   name,
@@ -43,7 +37,7 @@ const CategoryList = ({
 
     const startIndex = result.source.index;
     const endIndex = result.destination.index;
-    const newItems = reorder(state.items, startIndex, endIndex);
+    const newItems = reorderList(state.items, startIndex, endIndex);
 
     const updatedItems = newItems.map((item, index) => {
       return {

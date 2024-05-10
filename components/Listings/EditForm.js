@@ -46,6 +46,7 @@ const EditForm = ({
   rejectDescription,
   clearRejectDescription,
   canChange,
+  defects,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
   categories = convertToSelectPopupCategories(categories);
@@ -94,6 +95,8 @@ const EditForm = ({
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
+
+  const [listingDefects, setListingDefects] = useState([]);
 
   const [category, setCategory] = useState(baseCategoryId);
   const [categoryError, setCategoryError] = useState(null);
@@ -238,6 +241,14 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const handleChangeListingDefectActive = (defectId) => {
+    if (listingDefects.includes(defectId)) {
+      setListingDefects((prev) => prev.filter((id) => id != defectId));
+    } else {
+      setListingDefects((prev) => [...prev, defectId]);
+    }
+  };
+
   useEffect(() => {
     if (listing.id) return;
 
@@ -265,6 +276,9 @@ const EditForm = ({
       id: elem.id,
     }));
 
+    const listingDefects = listing.defects ?? [];
+    const listingDefectIds = listingDefects.map((defect) => defect.defectId);
+
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
@@ -282,6 +296,7 @@ const EditForm = ({
       rentalRadius: listing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
+      defects: listingDefectIds,
     };
   };
 
@@ -309,6 +324,7 @@ const EditForm = ({
       rentalRadius: radius,
       listingImages,
       active,
+      defects: listingDefects,
     };
   };
 
@@ -329,6 +345,7 @@ const EditForm = ({
     setRadius(data.rentalRadius);
     setAddress(data.address);
     setActive(data.active);
+    setListingDefects(data.defects);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -363,6 +380,7 @@ const EditForm = ({
     }
     const info = objectToSave();
     info["listingImages"] = JSON.stringify(info["listingImages"]);
+    info["defects"] = JSON.stringify(info["defects"]);
     Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
     return formData;
@@ -544,7 +562,6 @@ const EditForm = ({
 
       <div className="main-content d-flex flex-column">
         <NavbarThree />
-
         <div className="breadcrumb-area">
           <h1>{listing.name ?? "Add Listings"}</h1>
           <ol className="breadcrumb">
@@ -560,7 +577,6 @@ const EditForm = ({
             <li className="item">{listing.name ?? "Add Listings"}</li>
           </ol>
         </div>
-
         {rejectDescription && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -569,7 +585,6 @@ const EditForm = ({
             <b>Rejected feedback: </b> {rejectDescription}
           </div>
         )}
-
         <div className="add-listings-box">
           <h3>Basic Informations</h3>
 
@@ -602,7 +617,6 @@ const EditForm = ({
             </div>
           </div>
         </div>
-
         <div className="add-listings-box">
           <h3>Pricing</h3>
 
@@ -655,7 +669,6 @@ const EditForm = ({
             </div>
           </div>
         </div>
-
         <div className="add-listings-box">
           <h3>Location</h3>
 
@@ -709,7 +722,6 @@ const EditForm = ({
             setRadius={setRadius}
           />
         </div>
-
         <EditPhotosSection
           files={files}
           linkFiles={linkFiles}
@@ -735,6 +747,29 @@ const EditForm = ({
           successLoadLinkPhoto={successLoadLinkPhoto}
         />
 
+        {defects.length > 0 && (
+          <div className="add-listings-box">
+            <h3>Defects</h3>
+
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                {defects
+                  .sort((a, b) => a.orderIndex - b.orderIndex)
+                  .map((defect) => (
+                    <Switch
+                      key={defect.id}
+                      title={defect.name}
+                      active={listingDefects.includes(defect.id)}
+                      onChange={() =>
+                        handleChangeListingDefectActive(defect.id)
+                      }
+                    />
+                  ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="add-listings-box">
           <h3>Details</h3>
 
@@ -752,7 +787,6 @@ const EditForm = ({
             </div>
           </div>
         </div>
-
         <div className="add-listings-box">
           <h3>Rental Terms</h3>
 
@@ -770,7 +804,6 @@ const EditForm = ({
             </div>
           </div>
         </div>
-
         <div className="add-listings-box">
           <h3>Main Options</h3>
           <div className="row">
@@ -779,7 +812,6 @@ const EditForm = ({
             </div>
           </div>
         </div>
-
         {mainError && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -788,7 +820,6 @@ const EditForm = ({
             {mainError}
           </div>
         )}
-
         <div className="add-listings-box footer-section">
           <div className="d-flex gap-2 justify-content-between">
             <button
@@ -810,7 +841,6 @@ const EditForm = ({
             )}
           </div>
         </div>
-
         <YesNoModal
           active={activeUpdatePopup}
           toggleActive={() => setActiveUpdatePopup(false)}
@@ -822,7 +852,6 @@ const EditForm = ({
           acceptText="Update"
           actionsParentClass="mt-4"
         />
-
         <YesNoModal
           active={activeSentRequestPopup}
           toggleActive={() => setActiveSentRequestPopup(false)}

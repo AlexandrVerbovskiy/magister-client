@@ -342,6 +342,26 @@ const Booking = (booking) => {
                         </div>
                       </section>
 
+                      {booking.defects.length > 0 && (
+                        <section>
+                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                            Defects
+                          </h2>
+
+                          <div className="flex flex-col gap-2">
+                            {booking.defects.map((defect) => (
+                              <div className="w-full" key={defect.defectId}>
+                                <InputView
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={defect.defectName}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </section>
+                      )}
+
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                           Photos

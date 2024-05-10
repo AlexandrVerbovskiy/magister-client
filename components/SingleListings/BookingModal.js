@@ -31,7 +31,7 @@ const BookingModal = ({
   const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
     useState(false);
 
-  const defaultCountDays = minRentalDays ? minRentalDays : 0;
+  const defaultCountDays = minRentalDays ? minRentalDays : 1;
   const firstAvailableDate = findFirstAvailableDate(
     blockedDates,
     defaultCountDays

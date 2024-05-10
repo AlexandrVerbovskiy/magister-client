@@ -1,4 +1,10 @@
-const Switch = ({ id, checked, changeChecked, onText, offText }) => {
+const Switch = ({
+  id,
+  checked,
+  changeChecked,
+  onText = null,
+  offText = null,
+}) => {
   return (
     <div className="flex items-center">
       <div className="form-switch">
@@ -15,9 +21,13 @@ const Switch = ({ id, checked, changeChecked, onText, offText }) => {
           <span className="sr-only">Enable smart sync</span>
         </label>
       </div>
-      <div className="text-sm text-slate-400 dark:text-slate-500 italic ml-2">
-        {checked ? onText : offText}
-      </div>
+      
+      {(checked && onText) ||
+        (!checked && offText && (
+          <div className="text-sm text-slate-400 dark:text-slate-500 italic ml-2">
+            {checked ? onText : offText}
+          </div>
+        ))}
     </div>
   );
 };

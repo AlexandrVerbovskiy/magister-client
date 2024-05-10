@@ -206,6 +206,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       title: "Approval Requests",
                     },
                     { href: "listing-categories", title: "Categories" },
+                    { href: "listing-defects", title: "Defects" },
                   ]}
                   SVG={({ current }) => (
                     <svg
@@ -240,6 +241,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   )}
                 />
               )}
+              
 
               <SidebarTypicalLink
                 title="Orders"

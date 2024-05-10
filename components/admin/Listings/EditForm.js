@@ -18,6 +18,7 @@ import {
 } from "../../../hooks";
 import {
   convertToSelectPopupCategories,
+  uniqueId,
   uniqueImageId,
   validateBigText,
   validateInteger,
@@ -36,7 +37,7 @@ const cityOptions = [
 
 const baseCity = cityOptions[0]["value"];
 
-const EditForm = ({ listing, categories, save }) => {
+const EditForm = ({ listing, categories, defects, save }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [prevListing, setPrevListing] = useState(listing);
@@ -92,6 +93,8 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
+
+  const [listingDefects, setListingDefects] = useState([]);
 
   const [category, setCategory] = useState(baseCategoryId);
   const [categoryError, setCategoryError] = useState(null);
@@ -163,6 +166,16 @@ const EditForm = ({ listing, categories, save }) => {
     }
   };
 
+  const handleChangeListingDefectActive = (defectId) => {
+    console.log(defectId);
+
+    if (listingDefects.includes(defectId)) {
+      setListingDefects((prev) => prev.filter((id) => id != defectId));
+    } else {
+      setListingDefects((prev) => [...prev, defectId]);
+    }
+  };
+
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
     try {
       setLat(newLat);
@@ -200,6 +213,7 @@ const EditForm = ({ listing, categories, save }) => {
     setOwnerName(prevListing.userName);
     setAddress(data.address);
     setActive(data.active);
+    setListingDefects(data.defects);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -227,6 +241,9 @@ const EditForm = ({ listing, categories, save }) => {
 
     const categoryId = prevListing.categoryId ?? baseCategoryId;
 
+    const listingDefects = prevListing.defects ?? [];
+    const listingDefectIds = listingDefects.map((defect) => defect.defectId);
+
     return {
       name: prevListing.name ?? "",
       categoryId: categoryId,
@@ -246,6 +263,7 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId: prevListing.ownerId,
       address: prevListing.address ?? "",
       active: prevListing.active ?? true,
+      defects: listingDefectIds,
     };
   };
 
@@ -275,6 +293,7 @@ const EditForm = ({ listing, categories, save }) => {
       approved,
       ownerId,
       active,
+      defects: listingDefects,
     };
   };
 
@@ -394,6 +413,7 @@ const EditForm = ({ listing, categories, save }) => {
 
         const info = objectToSave();
         info["listingImages"] = JSON.stringify(info["listingImages"]);
+        info["defects"] = JSON.stringify(info["defects"]);
         Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
         const res = await save(formData, authToken);
@@ -669,6 +689,47 @@ const EditForm = ({ listing, categories, save }) => {
                         linkSuccessPhoto={linkSuccessPhoto}
                         successLoadLinkPhoto={successLoadLinkPhoto}
                       />
+
+                      {defects.length > 0 && (
+                        <section>
+                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                            Defects
+                          </h2>
+
+                          <div className="w-full">
+                            {defects
+                              .sort((a, b) => a.orderIndex - b.orderIndex)
+                              .map((defect) => {
+                                return (
+                                  <div
+                                    key={defect.id}
+                                    className="form-input flex flex-wrap mt-2 justify-between"
+                                  >
+                                    <div className="mr-2">
+                                      <label
+                                        className="block text-sm font-medium mb-1"
+                                        htmlFor="suspicious"
+                                      >
+                                        {defect.name}
+                                      </label>
+                                    </div>
+                                    <Switch
+                                      id={uniqueId()}
+                                      checked={listingDefects.includes(
+                                        defect.id
+                                      )}
+                                      changeChecked={() =>
+                                        handleChangeListingDefectActive(
+                                          defect.id
+                                        )
+                                      }
+                                    />
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </section>
+                      )}
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">

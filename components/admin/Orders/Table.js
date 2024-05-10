@@ -15,8 +15,7 @@ const Table = ({
     { title: "Listing", value: "listings.name", width: "20%" },
     { title: "Rental", value: "tenants.name", width: "20%" },
     { title: "Owner", value: "owners.name", width: "20%" },
-    { title: "Status", value: "orders.status", width: "10%" },
-    { title: "Total Price", value: "fact_total_price", width: "10%" },
+    { title: "Status", value: "orders.status", width: "20%" },
     { title: "Actions", value: "actions", width: "10%", canOrder: false },
   ];
 

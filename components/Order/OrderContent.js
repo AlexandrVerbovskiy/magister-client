@@ -532,6 +532,18 @@ const OrderContent = ({
         </div>
       </div>
 
+      <div className="add-listings-box">
+        <h3>Defects</h3>
+
+        <div className="row">
+          {order.defects.map((defect) => (
+            <div className="col-12" key={defect.defectId}>
+              <InputView value={defect.defectName} />
+            </div>
+          ))}
+        </div>
+      </div>
+
       {isTenant && (
         <div className="add-listings-box">
           <h3>Listing Owner Details</h3>
@@ -1151,7 +1163,7 @@ const OrderContent = ({
             <div className="order_widget add-listings-box">
               <h3>Operations</h3>
               <div className="booking-operations form-group">
-                {isOwner && canFinalization && canAcceptOwnerListing && (
+                {isOwner && /*canFinalization &&*/ canAcceptOwnerListing && (
                   <FinishOrderTriggerModal onFinish={finishOrder} />
                 )}
                 <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
