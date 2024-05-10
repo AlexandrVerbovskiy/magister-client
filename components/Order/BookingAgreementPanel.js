@@ -72,7 +72,7 @@ const BookingAgreementPanel = ({
       await acceptOrder(orderId, authToken);
 
       setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
-      
+
       setTimeout(() => {
         setActualUpdateRequest(null);
         setPrevUpdateRequest(null);
