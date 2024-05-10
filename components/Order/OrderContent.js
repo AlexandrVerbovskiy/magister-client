@@ -714,20 +714,20 @@ const OrderContent = ({
                       {isOwner && (
                         <li style={{ fontWeight: 700 }}>
                           Price with listing price per day to get $
-                          {calculateCurrentTotalPrice(
+                          {moneyFormat(calculateCurrentTotalPrice(
                             order.listingPricePerDay,
                             order.duration
-                          )}
+                          ))}
                         </li>
                       )}
 
                       {isTenant && (
                         <li style={{ fontWeight: 700 }}>
                           Price with listing price per day to pay$
-                          {calculateCurrentTotalPrice(
+                          {moneyFormat(calculateCurrentTotalPrice(
                             order.listingPricePerDay,
                             order.duration
-                          )}
+                          ))}
                         </li>
                       )}
                     </>
@@ -736,20 +736,20 @@ const OrderContent = ({
                 {isOwner && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to get: $
-                    {calculateCurrentTotalPrice(
+                    {moneyFormat(calculateCurrentTotalPrice(
                       order.offerPricePerDay,
                       order.duration
-                    )}
+                    ))}
                   </li>
                 )}
 
                 {isTenant && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay: $
-                    {calculateCurrentTotalPrice(
+                    {moneyFormat(calculateCurrentTotalPrice(
                       order.offerPricePerDay,
                       order.duration
-                    )}
+                    ))}
                   </li>
                 )}
                 {checkErrorData(order.offerStartDate).blocked && (
@@ -796,25 +796,25 @@ const OrderContent = ({
                   prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
                     <li>
                       Price with listing price per day: $
-                      {calculateCurrentTotalPrice(
+                      {moneyFormat(calculateCurrentTotalPrice(
                         order.listingPricePerDay,
                         getDaysDifference(
                           prevUpdateRequest.startDate,
                           prevUpdateRequest.endDate
                         )
-                      )}
+                      ))}
                     </li>
                   )}
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
-                  {calculateCurrentTotalPrice(
+                  {moneyFormat(calculateCurrentTotalPrice(
                     prevUpdateRequest.pricePerDay,
                     getDaysDifference(
                       prevUpdateRequest.startDate,
                       prevUpdateRequest.endDate
                     )
-                  )}
+                  ))}
                 </li>
               </ul>
             </div>
@@ -850,11 +850,13 @@ const OrderContent = ({
                   <li>
                     Price {isOwner ? "to get" : "to pay"} with listing price per
                     day: $
-                    {calculateCurrentTotalPrice(
-                      order.listingPricePerDay,
-                      getDaysDifference(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newEndDate
+                    {moneyFormat(
+                      calculateCurrentTotalPrice(
+                        order.listingPricePerDay,
+                        getDaysDifference(
+                          actualUpdateRequest.newStartDate,
+                          actualUpdateRequest.newEndDate
+                        )
                       )
                     )}
                   </li>
@@ -862,11 +864,13 @@ const OrderContent = ({
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
-                  {calculateCurrentTotalPrice(
-                    actualUpdateRequest.newPricePerDay,
-                    getDaysDifference(
-                      actualUpdateRequest.newStartDate,
-                      actualUpdateRequest.newEndDate
+                  {moneyFormat(
+                    calculateCurrentTotalPrice(
+                      actualUpdateRequest.newPricePerDay,
+                      getDaysDifference(
+                        actualUpdateRequest.newStartDate,
+                        actualUpdateRequest.newEndDate
+                      )
                     )
                   )}
                 </li>
