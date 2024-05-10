@@ -18190,3 +18190,7 @@ input[type="number"] {
 .order-item-title-row>div:nth-of-type(2){
   width: fit-content!important;
 }
+
+.modal-padding-bottom-20 .modal-content{
+  padding-bottom: 20px!important;
+}
