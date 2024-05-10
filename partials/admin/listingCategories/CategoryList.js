@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CategoryListItem from "./CategoryListItem";
 import Tooltip from "../../../components/admin/Tooltip";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import lodash from "lodash";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -14,6 +15,7 @@ const CategoryList = ({
   name,
   categories,
   handleChangeField,
+  handleChangeFieldList,
   handleRemove,
   handleCreate,
   handleChangePhoto,
@@ -28,10 +30,12 @@ const CategoryList = ({
 }) => {
   const [state, setState] = useState({ items: [] });
 
-  useEffect(() => {
+  if (!lodash.isEqual(state.items, list)) {
     list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
+    console.log("35: ", list);
+
     setState({ items: list });
-  }, [list]);
+  }
 
   const onDragEnd = (result) => {
     if (!result.destination) {
@@ -57,7 +61,8 @@ const CategoryList = ({
 
     updatedItems.forEach(
       (updatedItem) =>
-        (orderIndexesToUpdate[updatedItem["id"]] = updatedItem["orderIndex"])
+        (orderIndexesToUpdate[updatedItem["localId"]] =
+          updatedItem["orderIndex"])
     );
 
     handleChangeOrderIndexes(orderIndexesToUpdate);
@@ -115,8 +120,8 @@ const CategoryList = ({
                       >
                         {state.items.map((elem, index) => (
                           <Draggable
-                            key={elem.id}
-                            draggableId={`${elem.id}`}
+                            key={elem.localId}
+                            draggableId={`${elem.localId}`}
                             index={index}
                           >
                             {(provided) => (
@@ -143,23 +148,21 @@ const CategoryList = ({
                                       });
                                     }
                                   }}
-                                  onChangeParent={(value) =>
+                                  onChangeParent={(value) => {
                                     handleChangeField({
                                       localId: elem.localId,
                                       value,
                                       field: "parentLocalId",
-                                    })
-                                  }
-                                  onChangeName={(value) => {
-                                    handleChangeField({
-                                      localId: elem.localId,
-                                      value,
-                                      field: "name",
                                     });
-                                    handleChangeField({
+                                  }}
+                                  onChangeName={(value) => {
+                                    console.log("test 1");
+                                    handleChangeFieldList({
                                       localId: elem.localId,
-                                      value: null,
-                                      field: "error",
+                                      data: [
+                                        { value, field: "name" },
+                                        { value: null, field: "error" },
+                                      ],
                                     });
                                   }}
                                   onPopularClick={() =>

@@ -317,17 +317,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   SVG={({ current }) => (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-brand-paypal"
                       height="20"
                       width="20"
                       viewBox="0 0 20 20"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                       className={`stroke-current ${
                         current ? "text-indigo-500" : "text-slate-600"
                       }`}
                       fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
                       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                       <path

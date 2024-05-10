@@ -116,38 +116,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
     setThirdLevelOptions(getParentOptions(categories["secondLevel"]));
   }, [categories]);
 
-  const handleChangeField = ({ localId, level, field, value }) => {
-    const newCategories = { ...categories };
-
-    for (let i = 0; i < newCategories[level].length; i++) {
-      if (newCategories[level][i]["localId"] === localId) {
-        newCategories[level][i][field] = value;
-      }
-    }
-
-    setCategories(newCategories);
-    checkCategoryListingDoubling(newCategories);
-  };
-
-  const handleChangePhoto = ({ localId, level, image }) => {
-    setCategories((prev) => {
-      const res = { ...prev };
-
-      for (let i = 0; i < res[level].length; i++) {
-        if (res[level][i]["localId"] === localId) {
-          const url = URL.createObjectURL(image);
-          res[level][i]["image"] = url;
-          res[level][i]["imageFile"] = image;
-        }
-      }
-
-      return res;
-    });
-  };
-
-  const checkCategoryListingDoubling = (newCategories = null) => {
-    if (!newCategories) newCategories = categories;
-
+  const getLocalIdErrors = (newCategories) => {
     let hasError = false;
 
     const names = {};
@@ -192,6 +161,77 @@ const ListingCategories = ({ categories: baseCategories }) => {
       });
     });
 
+    return { hasError, localIdErrors };
+  };
+
+  const handleChangeField = ({ localId, level, field, value }) => {
+    const newCategories = { ...categories };
+
+    for (let i = 0; i < newCategories[level].length; i++) {
+      if (newCategories[level][i]["localId"] === localId) {
+        newCategories[level][i][field] = value;
+      }
+    }
+
+    const { hasError, localIdErrors } = getLocalIdErrors(newCategories);
+
+    if (hasError) {
+      Object.keys(newCategories).forEach((level) => {
+        newCategories[level].forEach((category, i) => {
+          newCategories[level][i]["error"] = localIdErrors[category.localId];
+        });
+      });
+    }
+
+    setCategories(newCategories);
+  };
+
+  const handleChangeFieldList = ({ localId, level, data }) => {
+    const newCategories = { ...categories };
+
+    for (let i = 0; i < newCategories[level].length; i++) {
+      if (newCategories[level][i]["localId"] === localId) {
+        data.forEach(
+          (fieldInfo) =>
+            (newCategories[level][i][fieldInfo["field"]] = fieldInfo["value"])
+        );
+      }
+    }
+
+    const { hasError, localIdErrors } = getLocalIdErrors(newCategories);
+
+    if (hasError) {
+      Object.keys(newCategories).forEach((level) => {
+        newCategories[level].forEach((category, i) => {
+          newCategories[level][i]["error"] = localIdErrors[category.localId];
+        });
+      });
+    }
+
+    setCategories(newCategories);
+  };
+
+  const handleChangePhoto = ({ localId, level, image }) => {
+    setCategories((prev) => {
+      const res = { ...prev };
+
+      for (let i = 0; i < res[level].length; i++) {
+        if (res[level][i]["localId"] === localId) {
+          const url = URL.createObjectURL(image);
+          res[level][i]["image"] = url;
+          res[level][i]["imageFile"] = image;
+        }
+      }
+
+      return res;
+    });
+  };
+
+  const checkCategoryListingDoubling = (newCategories = null) => {
+    if (!newCategories) newCategories = categories;
+
+    const { hasError, localIdErrors } = getLocalIdErrors(newCategories);
+
     setCategories((prev) => {
       const res = { ...prev };
 
@@ -207,36 +247,34 @@ const ListingCategories = ({ categories: baseCategories }) => {
     return hasError;
   };
 
-  const autoUpdateOrderIndexes = () => {
-    setCategories((prev) => {
-      const res = { ...prev };
+  const autoUpdateOrderIndexes = (prev) => {
+    const res = { ...prev };
 
-      Object.keys(prev).forEach((level) => {
-        const allOrderIndexes = res[level].map((elem) => elem["orderIndex"]);
+    Object.keys(prev).forEach((level) => {
+      const allOrderIndexes = res[level].map((elem) => elem["orderIndex"]);
 
-        allOrderIndexes.sort((a, b) => a - b);
+      allOrderIndexes.sort((a, b) => a - b);
 
-        let deletedIndex;
-        for (let i = 0; i < allOrderIndexes.length - 1; i++) {
-          if (allOrderIndexes[i + 1] - allOrderIndexes[i] !== 1) {
-            deletedIndex = allOrderIndexes[i] + 1;
-            break;
-          }
+      let deletedIndex;
+      for (let i = 0; i < allOrderIndexes.length - 1; i++) {
+        if (allOrderIndexes[i + 1] - allOrderIndexes[i] !== 1) {
+          deletedIndex = allOrderIndexes[i] + 1;
+          break;
         }
+      }
 
-        if (!deletedIndex) {
-          deletedIndex = allOrderIndexes[allOrderIndexes.length - 1] + 1;
+      if (!deletedIndex) {
+        deletedIndex = allOrderIndexes[allOrderIndexes.length - 1] + 1;
+      }
+
+      for (let i = 0; i < res[level].length; i++) {
+        if (res[level][i]["orderIndex"] > deletedIndex) {
+          res[level][i]["orderIndex"]--;
         }
-
-        for (let i = 0; i < res[level].length; i++) {
-          if (res[level][i]["orderIndex"] > deletedIndex) {
-            res[level][i]["orderIndex"]--;
-          }
-        }
-      });
-
-      return res;
+      }
     });
+
+    return res;
   };
 
   const handleRemove = ({ localId, newChildCategory = null }) => {
@@ -315,10 +353,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
           });
       });
 
-      return res;
+      return autoUpdateOrderIndexes(res);
     });
-
-    autoUpdateOrderIndexes();
   };
 
   const handleCreate = (level) => {
@@ -360,7 +396,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
         ...res[level],
       ];
 
-      return res;
+      return autoUpdateOrderIndexes(res);
     });
   };
 
@@ -368,10 +404,10 @@ const ListingCategories = ({ categories: baseCategories }) => {
     setCategories((prev) => {
       const res = { ...prev };
 
-      Object.keys(info).forEach((id) => {
+      Object.keys(info).forEach((localId) => {
         for (let i = 0; i < res[level].length; i++) {
-          if (res[level][i]["id"] == id) {
-            res[level][i]["orderIndex"] = info[id];
+          if (res[level][i]["localId"] == localId) {
+            res[level][i]["orderIndex"] = info[localId];
           }
         }
       });
@@ -390,6 +426,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
       handleChangePhoto({ localId, level, image }),
     handleChangeOrderIndexes: (info) =>
       handleChangeOrderIndexes({ level, info }),
+    handleChangeFieldList: ({ localId, data }) =>
+      handleChangeFieldList({ level, localId, data }),
     list: categories[level],
     categories,
   });
