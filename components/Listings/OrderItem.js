@@ -12,101 +12,6 @@ import {
 } from "../../utils";
 import STATIC from "../../static";
 
-/*const OrderItem = (order) => {
-  const images = order.images ?? [];
-  const { sessionUser } = useContext(IndiceContext);
-
-  return (
-    <div
-      key={order.id}
-      className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
-    >
-      <div className="single-listings-box">
-        <div className="listings-image">
-          {images.length < 1 && (
-            <Link href={order.link} className="link-btn"></Link>
-          )}
-
-          {images.length == 1 && (
-            <>
-              <img
-                src={getListingImageByType(images[0].link, images[0].type)}
-                alt={order.listingName}
-              />
-              <Link href={order.link} className="link-btn"></Link>
-            </>
-          )}
-
-          {images.length > 1 && (
-            <Swiper
-              loop={true}
-              navigation={true}
-              modules={[Navigation]}
-              className="listings-image-slides"
-            >
-              {images.map((imageInfo) => (
-                <SwiperSlide key={imageInfo.link}>
-                  <div className="single-image">
-                    <img
-                      src={getListingImageByType(
-                        imageInfo.link,
-                        imageInfo.type
-                      )}
-                      alt={order.name}
-                    />
-                    <Link href={order.link} className="link-btn"></Link>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
-        </div>
-
-        <StatusBlock
-          status={order.status}
-          statusCancelled={order.cancelStatus}
-          userId={sessionUser?.id}
-          ownerId={order.ownerId}
-          tenantId={order.tenantId}
-          dopClass="listing-card-status"
-        />
-
-        <div className="listings-content">
-          <ul className="listings-meta">
-            <li>
-              <Link
-                href={`/listing-list/?categories=${order.listingCategoryName}`}
-              >
-                <i className="flaticon-furniture-and-household"></i>
-                <span>{order.listingCategoryName}</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={`/listing-list/?city=${order.listingCity}`}>
-                <i className="flaticon-pin"></i>
-                <span>{order.listingCity}</span>
-              </Link>
-            </li>
-          </ul>
-          <h3>
-            <Link href={`/listing/${order.listingId}`}>
-              {order.listingName}
-            </Link>
-          </h3>
-        </div>
-
-        <div className="listings-footer">
-          <div className="d-flex justify-content-between align-items-center">
-            <Link href={order.link} className="default-btn">
-              View
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};*/
-
 const OrderItem = ({ order, link, type }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -146,11 +51,12 @@ const OrderItem = ({ order, link, type }) => {
           <div>{order.listingName}</div>
           <StatusBlock
             status={order.status}
-            cancelStatus={order.statusCancelled}
+            statusCancelled={order.cancelStatus}
             ownerId={order.ownerId}
             tenantId={order.tenantId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
+            endDate={order.offerEndDate}
           />
         </h4>
 

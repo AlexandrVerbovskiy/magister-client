@@ -688,6 +688,7 @@ const OrderContent = ({
                       ownerId={order.ownerId}
                       tenantId={order.tenantId}
                       userId={sessionUser?.id}
+                      endDate={order.offerEndDate}
                     />
                   </li>
                 )}
@@ -936,6 +937,7 @@ const OrderContent = ({
                           tenantId={conflictOrder.tenantId}
                           userId={sessionUser?.id}
                           dopClass="order-status-small-span"
+                          endDate={order.offerEndDate}
                         />
                       </a>
                     </div>

@@ -51,7 +51,9 @@ export const initAxios = (path = null) => {
     return await serviceWrapper(axiosInstance.post(url, body, options));
   };
 
-  return { get, post };
+  const generateFullUrl = (url) => baseURL + url;
+
+  return { get, post, generateFullUrl };
 };
 
 export const getFilePath = (part) =>

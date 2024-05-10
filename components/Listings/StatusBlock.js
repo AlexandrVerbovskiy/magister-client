@@ -1,4 +1,5 @@
 import STATIC from "../../static";
+import { separateDate } from "../../utils";
 
 const StatusBlock = ({
   status,
@@ -6,6 +7,7 @@ const StatusBlock = ({
   ownerId,
   tenantId,
   userId,
+  endDate,
   dopClass = "",
 }) => {
   let orderStatus =
@@ -50,8 +52,13 @@ const StatusBlock = ({
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-    color = "status-background-base";
-    text = "Pending Item Back";
+    if (separateDate(new Date()) < endDate) {
+      color = "status-background-orange";
+      text = "In Process";
+    } else {
+      color = "status-background-base";
+      text = "Pending Item Back";
+    }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.FINISHED) {
