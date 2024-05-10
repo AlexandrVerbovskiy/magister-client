@@ -51,11 +51,12 @@ const OrderItem = ({ order, link, type }) => {
           <div>{order.listingName}</div>
           <StatusBlock
             status={order.status}
-            cancelStatus={order.statusCancelled}
+            statusCancelled={order.cancelStatus}
             ownerId={order.ownerId}
             tenantId={order.tenantId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
+            endDate={order.offerEndDate}
           />
         </h4>
 

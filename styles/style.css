@@ -18028,23 +18028,23 @@ input[type="number"] {
 }
 
 .status-background-red {
-  background-color: #f3103c;
+  background-color: #f3103c!important;
 }
 
 .status-background-gray{
-  background-color: var(--optionalColor);
+  background-color: var(--optionalColor)!important;
 }
 
 .status-background-green {
-  background-color: #64bc36;
+  background-color: #64bc36!important;
 }
 
 .status-background-orange {
-  background-color: #ffae00;
+  background-color: #ffae00!important;
 }
 
 .status-background-base {
-  background-color: var(--mainColor);
+  background-color: var(--mainColor)!important;
 }
 
 .status-background-red,
@@ -18053,7 +18053,7 @@ input[type="number"] {
 .status-background-base,
 .status-background-gray {
   padding: 5px 10px;
-  color: white;
+  color: white!important;
   border-radius: 5px;
 }
 

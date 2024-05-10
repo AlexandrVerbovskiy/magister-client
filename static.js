@@ -11,6 +11,7 @@ export default {
     PENDING_TENANT: "pending_tenant",
     PENDING_CLIENT_PAYMENT: "pending_client_payment",
     PENDING_ITEM_TO_CLIENT: "pending_item_to_client",
+    IN_PROCESS: "in_process",
     PENDING_ITEM_TO_OWNER: "pending_item_to_owner",
     FINISHED: "finished",
     REJECTED: "rejected",
