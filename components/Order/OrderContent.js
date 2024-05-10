@@ -716,7 +716,12 @@ const OrderContent = ({
                   order.offerPricePerDay != order.listingPricePerDay && (
                     <>
                       {isOwner && (
-                        <li style={{ fontWeight: 700, textDecoration: "line-through" }}>
+                        <li
+                          style={{
+                            fontWeight: 700,
+                            textDecoration: "line-through",
+                          }}
+                        >
                           Price with listing price per day to get $
                           {moneyFormat(
                             calculateCurrentTotalPrice(
@@ -728,7 +733,12 @@ const OrderContent = ({
                       )}
 
                       {isTenant && (
-                        <li style={{ fontWeight: 700, textDecoration: "line-through" }}>
+                        <li
+                          style={{
+                            fontWeight: 700,
+                            textDecoration: "line-through",
+                          }}
+                        >
                           Price with listing price per day to pay$
                           {moneyFormat(
                             calculateCurrentTotalPrice(
@@ -781,7 +791,14 @@ const OrderContent = ({
         <div className="row listings-sidebar" style={{ marginTop: 0 }}>
           <div className="col col-12 col-md-6 form-group">
             <div className="listings-widget order_widget order-proposal-info">
-              <h3>{isOwner ? "Rental" : "Owner"} Proposal Info</h3>
+              {(isOwner &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+              (isTenant &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ? (
+                <h3>Your Proposal Info</h3>
+              ) : (
+                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
+              )}
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
@@ -838,7 +855,14 @@ const OrderContent = ({
 
           <div className="col col-12 col-md-6 mt-4 mt-md-0 form-group">
             <div className="listings-widget order_widget order-proposal-info">
-              <h3>Your Proposal</h3>
+              {(isOwner &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+              (isTenant &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ? (
+                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
+              ) : (
+                <h3>Your Proposal Info</h3>
+              )}
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
