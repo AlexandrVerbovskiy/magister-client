@@ -22,7 +22,7 @@ const UnverifiedAlert = ({ statusCode }) => {
     >
       <div className="title">Not a verified user</div>
       <div>
-        You need to be verified to rent and rent tools. To verify, send the
+        You need to be verified to rent and rent out tools. To verify, send the
         necessary data via the{" "}
         <a href="/dashboard/documents-verification">page</a>
       </div>

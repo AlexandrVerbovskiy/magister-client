@@ -18,7 +18,7 @@ const DashboardNavbar = () => {
   const needVerifyAccount = (e) => {
     if (!sessionUser?.verified || !sessionUser?.paypalId) {
       e.preventDefault();
-      error.set(`You need to be verified to rent and rent tools. To verify, send the
+      error.set(`You need to be verified and have a PayPal ID linked to your profile to rent and rent out tools. To verify, send the
       necessary data via the "Documents Verification" page`);
     }
   };

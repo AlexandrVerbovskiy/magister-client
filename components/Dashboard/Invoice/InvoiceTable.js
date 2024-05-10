@@ -89,7 +89,7 @@ const InvoiceTable = ({
                       style={{ color: "inherit" }}
                       href={`/dashboard/orders/${purchaseOrder}`}
                     >
-                      {purchaseOrder ?? "-"}
+                      Ord-{purchaseOrder ?? "-"}
                     </Link>
                   </sub>
                 </h5>

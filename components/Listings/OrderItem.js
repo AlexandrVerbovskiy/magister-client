@@ -12,14 +12,13 @@ import {
 } from "../../utils";
 import STATIC from "../../static";
 
-const OrderItem = ({ order, link, type }) => {
+const OrderItem = ({ order, link, filterType }) => {
   const { sessionUser } = useContext(IndiceContext);
-
-  const userId = type == "tenant" ? order.ownerId : order.tenantId;
-  const userName = type == "tenant" ? order.ownerName : order.tenantName;
-  const userEmail = type == "tenant" ? order.ownerEmail : order.tenantEmail;
-  const userPhoto = type == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-  const userPhone = type == "tenant" ? order.ownerPhone : order.tenantPhone;
+  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
+  const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
+  const userEmail = filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
+  const userPhoto = filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
+  const userPhone = filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
   return (
     <tr>
