@@ -716,7 +716,7 @@ const OrderContent = ({
                   order.offerPricePerDay != order.listingPricePerDay && (
                     <>
                       {isOwner && (
-                        <li style={{ fontWeight: 700 }}>
+                        <li style={{ fontWeight: 700, textDecoration: "line-through" }}>
                           Price with listing price per day to get $
                           {moneyFormat(
                             calculateCurrentTotalPrice(
@@ -728,7 +728,7 @@ const OrderContent = ({
                       )}
 
                       {isTenant && (
-                        <li style={{ fontWeight: 700 }}>
+                        <li style={{ fontWeight: 700, textDecoration: "line-through" }}>
                           Price with listing price per day to pay$
                           {moneyFormat(
                             calculateCurrentTotalPrice(
