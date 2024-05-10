@@ -29,7 +29,7 @@ const CreateUpdateOrderRequestModal = ({
   minRentalDays,
   listingName,
   blockedDates,
-  commissionType
+  commissionType,
 }) => {
   const proposalCountDays = getDaysDifference(
     proposalStartDate,
@@ -62,7 +62,9 @@ const CreateUpdateOrderRequestModal = ({
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
     setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
-    setFullTotal(calculateFullTotalByDaysCount(countDays, price, fee, commissionType));
+    setFullTotal(
+      calculateFullTotalByDaysCount(countDays, price, fee, commissionType)
+    );
   };
 
   const handleChangeDates = (dates) => {
@@ -274,9 +276,9 @@ const CreateUpdateOrderRequestModal = ({
               {minRentalDays && (
                 <div>Minimal Count Rental Days: {minRentalDays}</div>
               )}
-              {fee && <div>Price: ${moneyFormat(totalPrice)}</div>}
-              {fee && <div>Total Fee: ${moneyFormat(totalFee)}</div>}
-              <div style={{ fontWeight: 700 }}>Total: ${moneyFormat(fullTotal)}</div>
+              {fee && <div>Price: ${totalPrice}</div>}
+              {fee && <div>Total Fee: ${totalFee}</div>}
+              <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
             </div>
 
             <button
@@ -302,8 +304,12 @@ const CreateUpdateOrderRequestModal = ({
               acceptText="Confirm"
               body={
                 fromDate.toDateString() == toDate.toDateString()
-                  ? `'${listingName}' rental during ${fromDate.toDateString()} for $${moneyFormat(price)} per day`
-                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${moneyFormat(price)} per day`
+                  ? `'${listingName}' rental during ${fromDate.toDateString()} for $${moneyFormat(
+                      price
+                    )} per day`
+                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${moneyFormat(
+                      price
+                    )} per day`
               }
             />
           </div>

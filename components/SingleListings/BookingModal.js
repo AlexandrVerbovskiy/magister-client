@@ -187,10 +187,10 @@ const BookingModal = ({
           {minRentalDays && (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
           )}
-          {fee && <div>Price: ${moneyFormat(totalPrice)}</div>}
-          {fee && <div>Total Fee: ${moneyFormat(totalFee)}</div>}
+          {fee && <div>Price: ${totalPrice}</div>}
+          {fee && <div>Total Fee: ${totalFee}</div>}
           <div style={{ fontWeight: 700 }}>
-            Total: ${moneyFormat(fullTotal)}
+            Total: ${fullTotal}
           </div>
         </div>
 
