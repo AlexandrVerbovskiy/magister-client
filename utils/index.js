@@ -13,6 +13,7 @@ export { default as uniqueImageId } from "./uniqueImageId";
 export { default as convertToSelectPopupCategories } from "./convertToSelectPopupCategories";
 export { default as isClickedOnVisualImagePart } from "./isClickedOnVisualImagePart";
 export { default as cloneObject } from "./cloneObject";
+export { default as reorderList } from "./reorderList";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";

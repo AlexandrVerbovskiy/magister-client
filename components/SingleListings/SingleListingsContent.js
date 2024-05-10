@@ -20,6 +20,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const router = useRouter();
+  console.log(listing.defects);
 
   const handleShareClick = () => {
     const clipboard = new ClipboardJS("#shareButton", {
@@ -223,10 +224,24 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                 <div id="pricing">
                   <ul className="pricing-list">
                     <li>
-                      Rental price per day <span>${moneyFormat(listing.pricePerDay)}</span>
+                      Rental price per day{" "}
+                      <span>${moneyFormat(listing.pricePerDay)}</span>
                     </li>
                   </ul>
                 </div>
+
+                {listing.defects && listing.defects.length > 0 && (
+                  <>
+                    <h3>Defects</h3>
+                    <div>
+                      <ul className="pricing-list">
+                        {listing.defects.map((defect) => (
+                          <li key={defect.defectId}>{defect.defectName}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                )}
 
                 <h3>Review</h3>
                 <div className="listings-review">

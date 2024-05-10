@@ -30,9 +30,6 @@ const TableItem = ({
         <Status status={status} baseClass="px-2 rounded shadow-2xl w-max"/>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        ${requestFactTotalPrice ?? factTotalPrice}
-      </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
           <div className="mr-2 flex items-center">
             <View href={`/admin/bookings/${id}`} />

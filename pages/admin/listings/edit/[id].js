@@ -6,7 +6,7 @@ import {
 import { adminSideProps } from "../../../../middlewares";
 import EditForm from "../../../../components/admin/Listings/EditForm";
 
-const ListingEdit = ({ categories, listing: baseListing, id }) => {
+const ListingEdit = ({ categories, listing: baseListing, id, defects }) => {
   const [listing, setListing] = useState(baseListing);
 
   const save = async (formData, authToken) => {
@@ -16,7 +16,14 @@ const ListingEdit = ({ categories, listing: baseListing, id }) => {
     return res;
   };
 
-  return <EditForm categories={categories} listing={listing} save={save} />;
+  return (
+    <EditForm
+      categories={categories}
+      listing={listing}
+      save={save}
+      defects={defects}
+    />
+  );
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {

@@ -357,6 +357,14 @@ const ListingCategories = ({ categories: baseCategories }) => {
     });
   };
 
+  const incrementAllIndex = (prev) => {
+    for (let i = 0; i < prev.length; i++) {
+      prev[i]["orderIndex"]++;
+    }
+
+    return prev;
+  };
+
   const handleCreate = (level) => {
     setCategories((prev) => {
       const res = { ...prev };
@@ -392,11 +400,12 @@ const ListingCategories = ({ categories: baseCategories }) => {
           popular: false,
           localId: uniqueId(),
           isNew: true,
+          orderIndex: 0,
         },
-        ...res[level],
+        ...incrementAllIndex(res[level]),
       ];
 
-      return autoUpdateOrderIndexes(res);
+      return res;
     });
   };
 
@@ -634,7 +643,6 @@ const ListingCategories = ({ categories: baseCategories }) => {
 
 const boostServerSideProps = async () => {
   const categories = await getListingCategoriesList();
-
   return { categories };
 };
 
