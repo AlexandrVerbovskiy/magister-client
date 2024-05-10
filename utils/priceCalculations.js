@@ -1,10 +1,12 @@
+export const moneyFormat = (money) => money.toFixed(2);
+
 export const calculateFeeByDaysCount = (count, price, fee) => {
   const totalFee = (fee * price * count) / 100;
-  return totalFee.toFixed(2);
+  return moneyFormat(totalFee);
 };
 
 export const calculateTotalPriceByDaysCount = (count, price, fee) =>
-  (price * count).toFixed(2);
+  moneyFormat(price * count);
 
 export const calculateFullTotalByDaysCount = (
   count,
@@ -26,5 +28,5 @@ export const calculateFullTotalByDaysCount = (
       +calculateFeeByDaysCount(count, price, fee);
   }
 
-  return total.toFixed(2);
+  return moneyFormat(total);
 };

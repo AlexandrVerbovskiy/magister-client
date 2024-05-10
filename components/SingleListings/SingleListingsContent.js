@@ -4,6 +4,7 @@ import { IndiceContext } from "../../contexts";
 import {
   getFilePath,
   getListingImageByType,
+  moneyFormat,
   shakeUnverifiedAlert,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
@@ -222,7 +223,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                 <div id="pricing">
                   <ul className="pricing-list">
                     <li>
-                      Rental price per day <span>${listing.pricePerDay}</span>
+                      Rental price per day <span>${moneyFormat(listing.pricePerDay)}</span>
                     </li>
                   </ul>
                 </div>
@@ -855,7 +856,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                       className="default-btn w-100"
                       onClick={handleMakeBookingTriggerClick}
                     >
-                      Book Now ${listing.pricePerDay}/day
+                      Book Now ${moneyFormat(listing.pricePerDay)}/day
                     </button>
 
                     <span>

@@ -5,6 +5,7 @@ import {
   getDaysDifference,
   getFilePath,
   getListingImageByType,
+  moneyFormat,
   timeNormalConverter,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
@@ -661,10 +662,10 @@ const OrderContent = ({
                           : {}
                       }
                     >
-                      Listing price per day: ${order.listingPricePerDay}
+                      Listing price per day: ${moneyFormat(order.listingPricePerDay)}
                     </li>
                   )}
-                <li>Offer price per day: ${order.offerPricePerDay}</li>
+                <li>Offer price per day: ${moneyFormat(order.offerPricePerDay)}</li>
                 <li>
                   <CanBeErrorBaseDateSpan
                     startDate={order.offerStartDate}
@@ -756,7 +757,7 @@ const OrderContent = ({
               <h3>{isOwner ? "Rental" : "Owner"} Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
-                <li>Offer price per day: ${prevUpdateRequest.pricePerDay}</li>
+                <li>Offer price per day: ${moneyFormat(prevUpdateRequest.pricePerDay)}</li>
 
                 <li>
                   <BaseDateSpan
@@ -807,7 +808,7 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day: ${actualUpdateRequest.newPricePerDay}
+                  Offer price per day: ${moneyFormat(actualUpdateRequest.newPricePerDay)}
                 </li>
 
                 <li>
@@ -952,12 +953,12 @@ const OrderContent = ({
                       <BaseDateSpan startDate={startDate} endDate={endDate} />
                     </div>
 
-                    <div>Price per day: ${pricePrice}</div>
+                    <div>Price per day: ${moneyFormat(pricePrice)}</div>
 
                     <div>
                       <b>
                         Total price {isOwner ? "to get" : "to pay"}: $
-                        {totalPrice}
+                        {moneyFormat(totalPrice)}
                       </b>
                     </div>
                   </li>

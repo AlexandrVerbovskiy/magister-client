@@ -18,7 +18,7 @@ const ListingsTable = ({
     { title: "Owner", value: "users.name", width: "14%" },
     { title: "Category", value: "listing_categories.name", width: "10%" },
     { title: "Count Stored", value: "count_stored_items", width: "9%" },
-    { title: "Price Per Day", value: "price_per_day", width: "9%" },
+    { title: "Per Day", value: "price_per_day", width: "9%" },
     { title: "Approved", value: "approved", width: "8%" },
     { title: "Active", value: "active", width: "8%" },
     { title: "Actions", value: "actions", canOrder: false, width: "10%" },
