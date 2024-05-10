@@ -9,6 +9,7 @@ import {
   getDateByCurrentAdd,
   getDaysDifference,
   groupDates,
+  moneyFormat,
   separateDate,
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
@@ -163,7 +164,7 @@ const BookingModal = ({
 
         <div className="popup-widget order-info-widget">
           <div className="d-flex align-items-center">
-            Listing Price Per Day: ${defaultPrice}{" "}
+            Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
             {!(price != defaultPrice) && (
               <i
                 className="bx bx-pencil ms-1"
@@ -174,7 +175,7 @@ const BookingModal = ({
           </div>
           {price != defaultPrice && (
             <div className="d-flex align-items-center">
-              Offered price: ${price}{" "}
+              Offered price: ${moneyFormat(price)}{" "}
               <i
                 className="bx bx-pencil ms-1"
                 onClick={handleOfferYourPrice}
@@ -186,9 +187,11 @@ const BookingModal = ({
           {minRentalDays && (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
           )}
-          {fee && <div>Price: ${totalPrice}</div>}
-          {fee && <div>Total Fee: ${totalFee}</div>}
-          <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
+          {fee && <div>Price: ${moneyFormat(totalPrice)}</div>}
+          {fee && <div>Total Fee: ${moneyFormat(totalFee)}</div>}
+          <div style={{ fontWeight: 700 }}>
+            Total: ${moneyFormat(fullTotal)}
+          </div>
         </div>
 
         {calendarError && (
@@ -225,8 +228,12 @@ const BookingModal = ({
           acceptText="Confirm"
           body={
             fromDate.toDateString() == toDate.toDateString()
-              ? `'${listingName}' rental during ${fromDate.toDateString()} for $${price} per day`
-              : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${price} per day`
+              ? `'${listingName}' rental during ${fromDate.toDateString()} for $${moneyFormat(
+                  price
+                )} per day`
+              : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${moneyFormat(
+                  price
+                )} per day`
           }
         />
       </div>

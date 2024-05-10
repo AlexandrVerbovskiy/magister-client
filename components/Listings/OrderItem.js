@@ -8,6 +8,7 @@ import {
   getDaysDifference,
   getFilePath,
   getListingImageByType,
+  moneyFormat,
   timeNormalConverter,
 } from "../../utils";
 import STATIC from "../../static";
@@ -16,9 +17,12 @@ const OrderItem = ({ order, link, filterType }) => {
   const { sessionUser } = useContext(IndiceContext);
   const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
-  const userEmail = filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
-  const userPhoto = filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-  const userPhone = filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
+  const userEmail =
+    filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
+  const userPhoto =
+    filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
+  const userPhone =
+    filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
   return (
     <tr>
@@ -90,10 +94,14 @@ const OrderItem = ({ order, link, filterType }) => {
             <i className="bx bx-purchase-tag"></i>
             <span>Price: </span>$
             {order.requestId
-              ? order.newPricePerDay *
-                getDaysDifference(order.newStartDate, order.newEndDate)
-              : order.offerPricePerDay *
-                getDaysDifference(order.offerStartDate, order.offerEndDate)}
+              ? moneyFormat(
+                  order.newPricePerDay *
+                    getDaysDifference(order.newStartDate, order.newEndDate)
+                )
+              : moneyFormat(
+                  order.offerPricePerDay *
+                    getDaysDifference(order.offerStartDate, order.offerEndDate)
+                )}
           </li>
           <li>
             <i className="bx bx-credit-card-front"></i>

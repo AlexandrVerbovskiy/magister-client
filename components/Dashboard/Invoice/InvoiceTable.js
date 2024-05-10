@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { getDaysDifference, timeConverter } from "../../../utils";
+import { getDaysDifference, moneyFormat, timeConverter } from "../../../utils";
 import Link from "next/link";
 import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
@@ -107,7 +107,7 @@ const InvoiceTable = ({
               <tr>
                 <th>#</th>
                 <th>Description</th>
-                <th>Price Per Day</th>
+                <th>Per Day</th>
                 <th>Rental duration</th>
                 <th>Total</th>
               </tr>
@@ -124,21 +124,21 @@ const InvoiceTable = ({
                         offer.endDate
                       )}`}
                 </td>
-                <td className="text-right">${subTotalPrice.toFixed(2)}</td>
+                <td className="text-right">${moneyFormat(subTotalPrice)}</td>
               </tr>
 
               <tr>
                 <td className="text-right" colSpan="4">
                   <strong>Subtotal</strong>
                 </td>
-                <td className="text-right">${subTotalPrice.toFixed(2)}</td>
+                <td className="text-right">${moneyFormat(subTotalPrice)}</td>
               </tr>
               <tr>
                 <td className="text-right" colSpan="4">
                   <strong>Sales Tax {offer.fee}%</strong>
                 </td>
                 <td className="text-right">
-                  ${((subTotalPrice * offer.fee) / 100).toFixed(2)}
+                  ${moneyFormat((subTotalPrice * offer.fee) / 100)}
                 </td>
               </tr>
               <tr>
@@ -146,7 +146,7 @@ const InvoiceTable = ({
                   <strong>Total</strong>
                 </td>
                 <td className="text-right total-price">
-                  <strong>${offer.factTotalPrice.toFixed(2)}</strong>
+                  <strong>${moneyFormat(offer.factTotalPrice)}</strong>
                 </td>
               </tr>
             </tbody>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getFilePath, getListingImageByType } from "../../utils";
+import { getFilePath, getListingImageByType, moneyFormat } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import STATIC from "../../static";
@@ -112,7 +112,7 @@ const ListingItem = ({ listing, hovered = false }) => {
             <span className="count">(10)</span>
           </div>
           <div className="price">
-            Start From <span>${listing.pricePerDay}</span>
+            Per Day <span>${moneyFormat(listing.pricePerDay)}</span>
           </div>
         </div>
       </div>
