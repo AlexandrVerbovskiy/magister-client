@@ -71,9 +71,12 @@ const BookingAgreementPanel = ({
 
       await acceptOrder(orderId, authToken);
 
-      setActualUpdateRequest(null);
-      setPrevUpdateRequest(null);
       setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
+      
+      setTimeout(() => {
+        setActualUpdateRequest(null);
+        setPrevUpdateRequest(null);
+      }, 0);
       success.set("Order accepted successfully");
     } catch (e) {
       error.set(e.message);
@@ -92,14 +95,16 @@ const BookingAgreementPanel = ({
 
       await rejectOrder(orderId, authToken);
 
-      setActualUpdateRequest(null);
-      setPrevUpdateRequest(null);
-
       if (sessionUser?.id == ownerId) {
         setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
       } else {
         setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELLED);
       }
+
+      setTimeout(() => {
+        setActualUpdateRequest(null);
+        setPrevUpdateRequest(null);
+      }, 0);
 
       success.set("Order cancelled successfully");
     } catch (e) {
