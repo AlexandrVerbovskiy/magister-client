@@ -29,7 +29,7 @@ const OfferOwnPrice = ({
       return;
     }
 
-    setPrice(offerPrice);
+    setPrice(Number(offerPrice));
     setOfferPriceActive(false);
   };
 
@@ -60,7 +60,11 @@ const OfferOwnPrice = ({
       />
 
       <div className="mt-3 offer-own-booking-price">
-        <button className="mt-4 default-modal-button" type="button" onClick={handleSubmit}>
+        <button
+          className="mt-4 default-modal-button"
+          type="button"
+          onClick={handleSubmit}
+        >
           Save Price
         </button>
       </div>
