@@ -20,6 +20,6 @@ export default {
     WAITING_OWNER_APPROVE: "waiting_owner_approve",
     WAITING_TENANT_APPROVE: "waiting_tenant_approve",
     WAITING_ADMIN_APPROVE: "waiting_admin_approve",
-    CANCELED: "canceled",
+    CANCELLED: "cancelled",
   },
 };

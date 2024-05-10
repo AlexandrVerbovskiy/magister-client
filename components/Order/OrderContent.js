@@ -321,11 +321,11 @@ const OrderContent = ({
     try {
       await orderAcceptCancelByOwner(order.id, authToken);
 
-      success.set("Order canceled successfully");
+      success.set("Order cancelled successfully");
 
       setOrder((prev) => ({
         ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
       }));
     } catch (e) {
       error.set(e.message);
@@ -336,11 +336,11 @@ const OrderContent = ({
     try {
       await orderAcceptCancelByTenant(order.id, authToken);
 
-      success.set("Order canceled successfully");
+      success.set("Order cancelled successfully");
 
       setOrder((prev) => ({
         ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
       }));
     } catch (e) {
       error.set(e.message);
@@ -356,16 +356,16 @@ const OrderContent = ({
         setPrevUpdateRequest(null);
         setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
 
-        success.set("Order rejected successfully");
+        success.set("Order cancelled successfully");
       } else {
         await orderFullCancel(order.id, authToken);
 
         setOrder((prev) => ({
           ...prev,
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
         }));
 
-        success.set("Order canceled successfully");
+        success.set("Order cancelled successfully");
       }
     } catch (e) {
       error.set(e.message);
@@ -377,12 +377,12 @@ const OrderContent = ({
       await orderFullCancelPayed(order.id, authToken);
 
       success.set(
-        `Order canceled successfully. The money was returned to your paypal`
+        `Order cancelled successfully. The money was returned to your paypal`
       );
 
       setOrder((prev) => ({
         ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELED,
+        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
       }));
     } catch (e) {
       error.set(e.message);

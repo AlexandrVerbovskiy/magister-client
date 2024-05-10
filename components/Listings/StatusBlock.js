@@ -71,7 +71,7 @@ const StatusBlock = ({
     text = "Declined";
   }
 
-  if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELED) {
+  if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELLED) {
     color = "status-background-red";
     text = "Cancelled";
   }
