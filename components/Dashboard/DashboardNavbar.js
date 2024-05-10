@@ -16,7 +16,7 @@ const DashboardNavbar = () => {
     useContext(IndiceContext);
 
   const needVerifyAccount = (e) => {
-    if (!sessionUser?.verified) {
+    if (!sessionUser?.verified || !sessionUser?.paypalId) {
       e.preventDefault();
       error.set(`You need to be verified to rent and rent tools. To verify, send the
       necessary data via the "Documents Verification" page`);
