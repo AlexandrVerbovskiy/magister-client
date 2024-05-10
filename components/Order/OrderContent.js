@@ -662,10 +662,13 @@ const OrderContent = ({
                           : {}
                       }
                     >
-                      Listing price per day: ${moneyFormat(order.listingPricePerDay)}
+                      Listing price per day: $
+                      {moneyFormat(order.listingPricePerDay)}
                     </li>
                   )}
-                <li>Offer price per day: ${moneyFormat(order.offerPricePerDay)}</li>
+                <li>
+                  Offer price per day: ${moneyFormat(order.offerPricePerDay)}
+                </li>
                 <li>
                   <CanBeErrorBaseDateSpan
                     startDate={order.offerStartDate}
@@ -757,7 +760,10 @@ const OrderContent = ({
               <h3>{isOwner ? "Rental" : "Owner"} Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
-                <li>Offer price per day: ${moneyFormat(prevUpdateRequest.pricePerDay)}</li>
+                <li>
+                  Offer price per day: $
+                  {moneyFormat(prevUpdateRequest.pricePerDay)}
+                </li>
 
                 <li>
                   <BaseDateSpan
@@ -808,7 +814,8 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day: ${moneyFormat(actualUpdateRequest.newPricePerDay)}
+                  Offer price per day: $
+                  {moneyFormat(actualUpdateRequest.newPricePerDay)}
                 </li>
 
                 <li>
@@ -1055,6 +1062,10 @@ const OrderContent = ({
                     orderId={order.id}
                     listingName={order.listingName}
                     onTenantPayed={onTenantPayed}
+                    offerFee={tenantBaseCommissionPercent}
+                    listingPricePerDay={order.listingPricePerDay}
+                    offerStartDate={order.offerStartDate}
+                    offerEndDate={order.offerEndDate}
                   />
 
                   <CancelTriggerModal onCancel={onCancel} />
