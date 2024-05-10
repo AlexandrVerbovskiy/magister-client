@@ -76,7 +76,11 @@ const DashboardNavbar = () => {
                 href="/dashboard/listings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/listings/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                }  ${
+                  !sessionUser?.verified || !sessionUser?.paypalId
+                    ? "disabled"
+                    : ""
+                }`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -91,7 +95,11 @@ const DashboardNavbar = () => {
                 href="/dashboard/bookings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/bookings/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                }  ${
+                  !sessionUser?.verified || !sessionUser?.paypalId
+                    ? "disabled"
+                    : ""
+                }`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -106,7 +114,11 @@ const DashboardNavbar = () => {
                 href="/dashboard/orders/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/orders/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                }  ${
+                  !sessionUser?.verified || !sessionUser?.paypalId
+                    ? "disabled"
+                    : ""
+                }`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -121,7 +133,11 @@ const DashboardNavbar = () => {
                 href="/dashboard/my-earnings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/my-earnings/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                }  ${
+                  !sessionUser?.verified || !sessionUser?.paypalId
+                    ? "disabled"
+                    : ""
+                }`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -136,7 +152,11 @@ const DashboardNavbar = () => {
                 href="/dashboard/my-expenses/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/my-expenses/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                }  ${
+                  !sessionUser?.verified || !sessionUser?.paypalId
+                    ? "disabled"
+                    : ""
+                }`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
