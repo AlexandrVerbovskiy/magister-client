@@ -13,6 +13,52 @@ const ListingDefects = ({ defects: baseDefects }) => {
   const initDefects = defectsToState(baseDefects);
   const [defects, setDefects] = useState(initDefects);
 
+  const getLocalIdErrors = (defects) => {
+    let hasError = false;
+
+    const names = {};
+    const localIdErrors = {};
+
+    defects.forEach((defect) => {
+      if (defect.name.length < 1) {
+        localIdErrors[defect.localId] = "Cannot save an empty category";
+        hasError = true;
+        return;
+      }
+
+      if (defect.name.length > 255) {
+        localIdErrors[defect.localId] =
+          "Name cannot be higher than 255 symbols";
+        hasError = true;
+        return;
+      }
+
+      if (defect.name.toLowerCase() === "all") {
+        localIdErrors[defect.localId] = "Name cannot be 'All'";
+        hasError = true;
+        return;
+      }
+
+      if (Object.values(names).includes(defect.name)) {
+        localIdErrors[defect.localId] =
+          "Cannot create two identical categories";
+        hasError = true;
+
+        Object.keys(names).forEach((localId) => {
+          if (names[localId] == defect.name)
+            localIdErrors[localId] = "Cannot create two identical categories";
+        });
+
+        return;
+      }
+
+      localIdErrors[defect.localId] = null;
+      names[defect.localId] = defect.name;
+    });
+
+    return { hasError, localIdErrors };
+  };
+
   const handleChangeName = (index, name) => {
     setPrevDefects((defects) => {
       const result = [];

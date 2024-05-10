@@ -6,7 +6,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
 
-const Listing = (props) => {
+const Listing = (props) => {  
   return (
     <>
       <DashboardNavbar />

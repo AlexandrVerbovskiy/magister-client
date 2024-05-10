@@ -7,7 +7,7 @@ const InputView = ({ label, value, icon = null, placeholder = "" }) => {
         </label>
       )}
       <div className={`form-control ${value.length > 0 ? "" : "view-placeholder"}`}>
-        <div>{value.length > 0 ? value.length : placeholder}</div>
+        <div>{value.length > 0 ? value : placeholder}</div>
       </div>
     </div>
   );
