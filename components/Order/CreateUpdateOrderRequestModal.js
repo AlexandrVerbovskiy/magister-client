@@ -122,7 +122,7 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, []);
+  }, [proposalStartDate, proposalEndDate]);
 
   useEffect(() => {
     recalculateTotalInfo({

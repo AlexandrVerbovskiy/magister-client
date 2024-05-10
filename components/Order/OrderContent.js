@@ -110,9 +110,6 @@ const OrderContent = ({
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
-  console.log(prevUpdateRequest);
-  console.log(actualUpdateRequest);
-
   const isBookingWithoutAgreement =
     (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
       order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
