@@ -1,4 +1,4 @@
-export const moneyFormat = (money) => money.toFixed(2);
+export const moneyFormat = (money) => +money.toFixed(2);
 
 export const calculateFeeByDaysCount = (count, price, fee) => {
   const totalFee = (fee * price * count) / 100;
