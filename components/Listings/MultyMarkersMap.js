@@ -21,10 +21,10 @@ const MultyMarkersMap = ({
   onMouseOver = () => {},
   onMouseOut = () => {},
   baseCenter = null,
-  userLocation,
-  setUserLocation,
+  userLocation = null,
+  setUserLocation = null,
   center,
-  setCenter,
+  setCenter = null,
   defaultLocation = null,
 }) => {
   const mapRef = useRef(null);
@@ -41,21 +41,33 @@ const MultyMarkersMap = ({
         lat: Number(defaultLocation.lat),
         lng: Number(defaultLocation.lng),
       };
-      
-      setUserLocation(defaultCoords);
 
-      if (!baseCenter) {
+      if (setUserLocation) {
+        setUserLocation(defaultCoords);
+      }
+
+      if (!baseCenter && setCenter) {
         setCenter(defaultCoords);
       }
     } else {
       onCurrentUserLocation(
         ({ lat, lng }) => {
-          setUserLocation({ lat, lng });
-          if (!baseCenter) setCenter({ lat, lng });
+          if (setUserLocation) {
+            setUserLocation({ lat, lng });
+          }
+
+          if (!baseCenter && setCenter) {
+            setCenter({ lat, lng });
+          }
         },
         () => {
-          setUserLocation(null);
-          setCenter(baseCenter);
+          if (setUserLocation) {
+            setUserLocation(null);
+          }
+
+          if (setCenter) {
+            setCenter(baseCenter);
+          }
         }
       );
     }

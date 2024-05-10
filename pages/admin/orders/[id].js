@@ -5,10 +5,19 @@ import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
+import InputView from "../../../components/admin/Form/InputView";
+import TextareaView from "../../../components/admin/Form/TextareaView";
+import Status from "../../../components/admin/Orders/Status";
+import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
+import STATIC from "../../../static";
+import { getListingImageByType } from "../../../utils";
+import { useState } from "react";
 
 const Order = (order) => {
   const { listingImages, categoryInfo } = order;
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
+  const [userLocation, setUserLocation] = useState(null);
+  const [mapCenter, setMapCenter] = useState(null);
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -207,8 +216,6 @@ const Order = (order) => {
                             style={{ height: "500px" }}
                           >
                             <MultyMarkersMap
-                              userLocation={userLocation}
-                              setUserLocation={setUserLocation}
                               markers={[
                                 {
                                   id: 1,
@@ -221,6 +228,8 @@ const Order = (order) => {
                                 lat: order.listingRentalLat,
                                 lng: order.listingRentalLng,
                               }}
+                              userLocation={userLocation}
+                              setUserLocation={setUserLocation}
                               center={mapCenter}
                               setCenter={setMapCenter}
                             />
