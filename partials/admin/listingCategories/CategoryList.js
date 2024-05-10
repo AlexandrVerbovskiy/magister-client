@@ -32,7 +32,6 @@ const CategoryList = ({
 
   if (!lodash.isEqual(state.items, list)) {
     list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
-    console.log("35: ", list);
 
     setState({ items: list });
   }
@@ -156,7 +155,6 @@ const CategoryList = ({
                                     });
                                   }}
                                   onChangeName={(value) => {
-                                    console.log("test 1");
                                     handleChangeFieldList({
                                       localId: elem.localId,
                                       data: [

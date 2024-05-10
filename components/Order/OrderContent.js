@@ -591,7 +591,7 @@ const OrderContent = ({
 
       {isOwner && (
         <div className="add-listings-box">
-          <h3>Rental Details</h3>
+          <h3>Renter Details</h3>
 
           <div className="order-info-main-opponent-info mb-4">
             <div className="d-flex align-items-center">
@@ -609,36 +609,36 @@ const OrderContent = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Rental Name:"
+                label="Renter Name:"
                 icon="bx bx-envelope"
-                placeholder="Rental Name"
+                placeholder="Renter Name"
                 value={order.tenantName}
               />
             </div>
 
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Rental Email:"
+                label="Renter Email:"
                 icon="bx bx-envelope"
-                placeholder="Rental Email"
+                placeholder="Renter Email"
                 value={order.tenantEmail}
               />
             </div>
 
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Rental Phone:"
+                label="Renter Phone:"
                 icon="bx bx-phone-call"
-                placeholder="Rental Phone"
+                placeholder="Renter Phone"
                 value={order.tenantPhone ? order.tenantPhone : "-"}
               />
             </div>
 
             <div className="col">
               <InputView
-                label="Rental Place Work:"
+                label="Renter Place Work:"
                 icon="bx bx-building"
-                placeholder="Rental Place Work"
+                placeholder="Renter Place Work"
                 value={order.tenantPlaceWork ? order.tenantPlaceWork : "-"}
               />
             </div>
