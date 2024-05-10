@@ -62,7 +62,7 @@ function TransactionsTable02({
       image: Image04,
       name: 'Google Limited UK',
       date: '22/01/2022',
-      status: 'Canceled',
+      status: 'Cancelled',
       amount: '-$1,029.77',
     },
     {

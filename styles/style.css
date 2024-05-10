@@ -13665,7 +13665,7 @@ Dashboard CSS
 .bookings-listings-box table tbody td.details h4 .bookings-status.approved {
   background-color: #64bc36;
 }
-.bookings-listings-box table tbody td.details h4 .bookings-status.canceled {
+.bookings-listings-box table tbody td.details h4 .bookings-status.cancelled {
   background-color: red;
 }
 .bookings-listings-box table tbody td.details ul {

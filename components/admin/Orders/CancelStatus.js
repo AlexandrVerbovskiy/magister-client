@@ -19,8 +19,8 @@ const CancelStatus = ({ status, baseClass = "" }) => {
     dopClassName = "bg-yellow-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.CANCELED) {
-    text = "Canceled";
+  if (status == STATIC.ORDER_STATUSES.CANCELLED) {
+    text = "Cancelled";
     dopClassName = "bg-rose-500";
   }
 

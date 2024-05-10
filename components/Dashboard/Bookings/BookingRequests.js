@@ -221,7 +221,7 @@ const BookingRequests = () => {
                 <td className="details">
                   <h4>
                     The Magician Restaurant{" "}
-                    <span className="bookings-status canceled">Canceled</span>
+                    <span className="bookings-status cancelled">Cancelled</span>
                   </h4>
 
                   <ul>

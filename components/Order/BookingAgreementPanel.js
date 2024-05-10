@@ -33,7 +33,7 @@ const BookingAgreementPanel = ({
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(false);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
-  const { sessionUser, authToken, error } = useContext(IndiceContext);
+  const { sessionUser, authToken, error, success } = useContext(IndiceContext);
   const handleCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
     if (disabled) {
       return;
@@ -74,6 +74,7 @@ const BookingAgreementPanel = ({
       setActualUpdateRequest(null);
       setPrevUpdateRequest(null);
       setUpdatedOffer(STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT);
+      success.set("Order accepted successfully");
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -97,8 +98,10 @@ const BookingAgreementPanel = ({
       if (sessionUser?.id == ownerId) {
         setUpdatedOffer(STATIC.ORDER_STATUSES.REJECTED);
       } else {
-        setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELED);
+        setUpdatedOffer(null, STATIC.ORDER_CANCELATION_STATUSES.CANCELLED);
       }
+
+      success.set("Order cancelled successfully");
     } catch (e) {
       error.set(e.message);
     } finally {
