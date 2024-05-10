@@ -110,8 +110,8 @@ const OrderContent = ({
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
-  console.log(prevUpdateRequest)
-  console.log(actualUpdateRequest)
+  console.log(prevUpdateRequest);
+  console.log(actualUpdateRequest);
 
   const isBookingWithoutAgreement =
     (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
@@ -249,6 +249,7 @@ const OrderContent = ({
       offerPricePerDay,
       offerStartDate,
       offerEndDate,
+      duration: getDaysDifference(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
     };
 
@@ -717,20 +718,24 @@ const OrderContent = ({
                       {isOwner && (
                         <li style={{ fontWeight: 700 }}>
                           Price with listing price per day to get $
-                          {moneyFormat(calculateCurrentTotalPrice(
-                            order.listingPricePerDay,
-                            order.duration
-                          ))}
+                          {moneyFormat(
+                            calculateCurrentTotalPrice(
+                              order.listingPricePerDay,
+                              order.duration
+                            )
+                          )}
                         </li>
                       )}
 
                       {isTenant && (
                         <li style={{ fontWeight: 700 }}>
                           Price with listing price per day to pay$
-                          {moneyFormat(calculateCurrentTotalPrice(
-                            order.listingPricePerDay,
-                            order.duration
-                          ))}
+                          {moneyFormat(
+                            calculateCurrentTotalPrice(
+                              order.listingPricePerDay,
+                              order.duration
+                            )
+                          )}
                         </li>
                       )}
                     </>
@@ -739,20 +744,24 @@ const OrderContent = ({
                 {isOwner && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to get: $
-                    {moneyFormat(calculateCurrentTotalPrice(
-                      order.offerPricePerDay,
-                      order.duration
-                    ))}
+                    {moneyFormat(
+                      calculateCurrentTotalPrice(
+                        order.offerPricePerDay,
+                        order.duration
+                      )
+                    )}
                   </li>
                 )}
 
                 {isTenant && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay: $
-                    {moneyFormat(calculateCurrentTotalPrice(
-                      order.offerPricePerDay,
-                      order.duration
-                    ))}
+                    {moneyFormat(
+                      calculateCurrentTotalPrice(
+                        order.offerPricePerDay,
+                        order.duration
+                      )
+                    )}
                   </li>
                 )}
                 {checkErrorData(order.offerStartDate).blocked && (
@@ -799,25 +808,29 @@ const OrderContent = ({
                   prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
                     <li>
                       Price with listing price per day: $
-                      {moneyFormat(calculateCurrentTotalPrice(
-                        order.listingPricePerDay,
-                        getDaysDifference(
-                          prevUpdateRequest.startDate,
-                          prevUpdateRequest.endDate
+                      {moneyFormat(
+                        calculateCurrentTotalPrice(
+                          order.listingPricePerDay,
+                          getDaysDifference(
+                            prevUpdateRequest.startDate,
+                            prevUpdateRequest.endDate
+                          )
                         )
-                      ))}
+                      )}
                     </li>
                   )}
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
-                  {moneyFormat(calculateCurrentTotalPrice(
-                    prevUpdateRequest.pricePerDay,
-                    getDaysDifference(
-                      prevUpdateRequest.startDate,
-                      prevUpdateRequest.endDate
+                  {moneyFormat(
+                    calculateCurrentTotalPrice(
+                      prevUpdateRequest.pricePerDay,
+                      getDaysDifference(
+                        prevUpdateRequest.startDate,
+                        prevUpdateRequest.endDate
+                      )
                     )
-                  ))}
+                  )}
                 </li>
               </ul>
             </div>
