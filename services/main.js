@@ -236,3 +236,8 @@ export const getOrderInvoiceOptions = async (id, authToken) => {
   const data = await get(`/get-order-invoice-options/${id}`, authToken);
   return data.body;
 };
+
+export const getAdminListingDefectsEditOptions = async (authToken) => {
+  const data = await get(`/admin-listing-defects-edit-options`, authToken);
+  return data.body.defects;
+};

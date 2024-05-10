@@ -1048,7 +1048,7 @@ const OrderContent = ({
           {order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
             isTenant && (
               <div className="order_widget add-listings-box">
-                <h3>Payment</h3>
+                <h3>Operations</h3>
 
                 <div className="booking-operations form-group">
                   <PaypalTriggerModal
@@ -1146,6 +1146,18 @@ const OrderContent = ({
               )}
             </>
           )}
+
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+            <div className="order_widget add-listings-box">
+              <h3>Operations</h3>
+              <div className="booking-operations form-group">
+                {isOwner && canFinalization && canAcceptOwnerListing && (
+                  <FinishOrderTriggerModal onFinish={finishOrder} />
+                )}
+                <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
+              </div>
+            </div>
+          )}
         </>
       )}
 
@@ -1170,18 +1182,6 @@ const OrderContent = ({
             </div>
           </div>
         )}
-
-      {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
-        <div className="order_widget add-listings-box">
-          <h3>Operations</h3>
-          <div className="booking-operations form-group">
-            {isOwner && canFinalization && canAcceptOwnerListing && (
-              <FinishOrderTriggerModal onFinish={finishOrder} />
-            )}
-            <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
-          </div>
-        </div>
-      )}
     </>
   );
 };
