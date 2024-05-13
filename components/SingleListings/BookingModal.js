@@ -189,9 +189,7 @@ const BookingModal = ({
           )}
           {fee && <div>Price: ${totalPrice}</div>}
           {fee && <div>Total Fee: ${totalFee}</div>}
-          <div style={{ fontWeight: 700 }}>
-            Total: ${fullTotal}
-          </div>
+          <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
         </div>
 
         {calendarError && (
