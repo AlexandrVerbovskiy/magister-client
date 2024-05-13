@@ -1,9 +1,9 @@
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { IndiceContext } from "../contexts";
 import { useContext, useState } from "react";
-import env from "../env";
 import BaseModal from "./_App/BaseModal";
 import { getDaysDifference, moneyFormat, timeNormalConverter } from "../utils";
+import PaypalButton from "./PaypalButton";
+import PaypalForm from "./PaypalForm";
 
 const PaypalTriggerModal = ({
   amount,
@@ -13,7 +13,7 @@ const PaypalTriggerModal = ({
   orderId,
   listingName,
   onTenantPayed,
-  listingPricePerDay,
+  pricePerDay,
   offerStartDate,
   offerEndDate,
   offerFee,
@@ -43,7 +43,7 @@ const PaypalTriggerModal = ({
         )}`;
 
   const subtotal =
-    listingPricePerDay * getDaysDifference(offerStartDate, offerEndDate);
+    pricePerDay * getDaysDifference(offerStartDate, offerEndDate);
 
   return (
     <>
@@ -59,7 +59,7 @@ const PaypalTriggerModal = ({
         <form method="get" onSubmit={(e) => e.preventDefault}>
           <div className="form-group">Listing: {listingName}</div>
           <div className="form-group">
-            Price per day: ${moneyFormat(listingPricePerDay)}
+            Price per day: ${moneyFormat(pricePerDay)}
           </div>
           <div className="form-group">Duration: {durationInfo}</div>
           <div className="form-group">Subtotal: ${moneyFormat(subtotal)}</div>
@@ -69,22 +69,13 @@ const PaypalTriggerModal = ({
               Total to pay: ${moneyFormat((subtotal * (100 + offerFee)) / 100)}
             </b>
           </div>
-          <PayPalScriptProvider
-            options={{
-              "client-id": env.PAYPAL_CLIENT_ID,
-              currency: "USD",
-              intent: "capture",
-              locale: "en_US",
-            }}
-          >
-            <PayPalButtons
-              className="paypal-payment-buttons"
-              createOrder={(data) => createOrder(data)}
-              forceReRender={[amount]}
-              onApprove={onApprove}
-              style={{ color: "blue", disableMaxWidth: true }}
-            />
-          </PayPalScriptProvider>
+          {/*<PaypalButton createOrder={createOrder} onApprove={onApprove} amount={amount}/>*/}
+
+          <PaypalForm
+            createOrder={createOrder}
+            onApprove={onApprove}
+            amount={amount}
+          />
         </form>
       </BaseModal>
 

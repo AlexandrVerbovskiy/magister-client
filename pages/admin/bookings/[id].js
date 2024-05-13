@@ -20,81 +20,85 @@ const PreviousProposalElem = ({
   prevTotalPrice,
   prevSenderName,
   prevGetterName,
+  needBottomMargin = false,
 }) => {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex w-full gap-2">
-        <div className="w-full sm:w-1/2">
-          <InputView
-            value={prevSenderName}
-            label="Request Sender"
-            name={`prev_sender_name_${index}`}
-            placeholder="Prev Sender"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
+    <>
+      <div className="flex flex-col gap-2 mb-2">
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevSenderName}
+              label="Request Sender"
+              name={`prev_sender_name_${index}`}
+              placeholder="Prev Sender"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevGetterName}
+              label="Request Recipient"
+              name={`prev_getter_name_${index}`}
+              placeholder="Prev Recipient"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
         </div>
 
-        <div className="w-1/2">
-          <InputView
-            value={prevGetterName}
-            label="Request Recipient"
-            name={`prev_getter_name_${index}`}
-            placeholder="Prev Recipient"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevStartDate}
+              label="Previous Start Date"
+              name={`prev_start_date_${index}`}
+              placeholder="Prev Start Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevEndDate}
+              label="Previous End Date"
+              name={`prev_end_date_${index}`}
+              placeholder="Prev End Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevPricePerDay}
+              label="Previous Price Per Day"
+              name={`prev_price_per_day_${index}`}
+              placeholder="Prev Price Per Day"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevTotalPrice}
+              label="Previous Total Price"
+              name={`prev_total_price_${index}`}
+              placeholder="Prev Total Price"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
         </div>
       </div>
-
-      <div className="flex w-full gap-2">
-        <div className="w-full sm:w-1/2">
-          <InputView
-            value={prevStartDate}
-            label="Previous Start Date"
-            name={`prev_start_date_${index}`}
-            placeholder="Prev Start Date"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
-        </div>
-
-        <div className="w-1/2">
-          <InputView
-            value={prevEndDate}
-            label="Previous End Date"
-            name={`prev_end_date_${index}`}
-            placeholder="Prev End Date"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
-        </div>
-      </div>
-
-      <div className="flex w-full gap-2">
-        <div className="w-full sm:w-1/2">
-          <InputView
-            value={prevPricePerDay}
-            label="Previous Price Per Day"
-            name={`prev_price_per_day_${index}`}
-            placeholder="Prev Price Per Day"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
-        </div>
-
-        <div className="w-1/2">
-          <InputView
-            value={prevTotalPrice}
-            label="Previous Total Price"
-            name={`prev_total_price_${index}`}
-            placeholder="Prev Total Price"
-            labelClassName="block text-sm font-medium mb-1"
-            inputClassName="form-input w-full"
-          />
-        </div>
-      </div>
-    </div>
+      {needBottomMargin && <hr className="my-8" />}
+    </>
   );
 };
 
@@ -419,12 +423,23 @@ const Booking = (booking) => {
 
                           <PreviousProposalElem
                             index={0}
-                            prevStartDate={request.offerStartDate}
-                            prevEndDate={request.offerEndDate}
-                            prevPricePerDay={request.offerPricePerDay}
-                            prevTotalPrice={request.factTotalPrice}
+                            prevStartDate={
+                              booking.prevStartDate ?? booking.offerStartDate
+                            }
+                            prevEndDate={
+                              booking.prevEndDate ?? booking.offerEndDate
+                            }
+                            prevPricePerDay={
+                              booking.prevPricePerDay ??
+                              booking.offerPricePerDay
+                            }
+                            prevTotalPrice={
+                              booking.prevFactTotalPrice ??
+                              booking.factTotalPrice
+                            }
                             prevSenderName={booking.tenantName}
                             prevGetterName={booking.ownerName}
+                            needBottomMargin={true}
                           />
 
                           {requestsToUpdate.map((request, index) => (
@@ -443,6 +458,9 @@ const Booking = (booking) => {
                                 request.senderId == booking.tenantId
                                   ? booking.ownerName
                                   : booking.tenantName
+                              }
+                              needBottomMargin={
+                                index != requestsToUpdate.length - 1
                               }
                             />
                           ))}

@@ -36,7 +36,7 @@ const MultyMarkersMap = ({
   }
 
   useEffect(() => {
-    if (defaultLocation) {
+    if (defaultLocation) {      
       const defaultCoords = {
         lat: Number(defaultLocation.lat),
         lng: Number(defaultLocation.lng),

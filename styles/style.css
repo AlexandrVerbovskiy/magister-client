@@ -18194,3 +18194,12 @@ input[type="number"] {
 .modal-padding-bottom-20 .modal-content{
   padding-bottom: 20px!important;
 }
+
+.paypal-payment-card{
+  display: flex;
+  width: 100%;
+}
+
+.paypal-payment-card>*{
+  width: 100%;
+}

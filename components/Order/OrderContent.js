@@ -6,6 +6,8 @@ import {
   getFilePath,
   getListingImageByType,
   moneyFormat,
+  ownerGetsCalculate,
+  tenantPaymentCalculate,
   timeNormalConverter,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
@@ -84,8 +86,6 @@ const BaseDateSpan = ({
 
 const OrderContent = ({
   order: baseOrder,
-  tenantBaseCommissionPercent,
-  ownerBaseCommissionPercent,
   blockedDates,
   conflictOrders = null,
   canAcceptTenantListing = false,
@@ -152,15 +152,22 @@ const OrderContent = ({
     );
   };
 
-  const calculateCurrentTotalPayPrice = (pricePerDay, duration) =>
-    (pricePerDay * duration * (100 + tenantBaseCommissionPercent)) / 100;
+  const calculateCurrentTotalPrice = (
+    startDate,
+    endDate,
+    pricePerDay,
+    type = null
+  ) => {
+    if (!type) {
+      type = isOwner ? "owner" : "tenant";
+    }
 
-  const calculateCurrentTotalGetPrice = (pricePerDay, duration) =>
-    (pricePerDay * duration * (100 - ownerBaseCommissionPercent)) / 100;
+    const fee = type == "owner" ? order.ownerFee : order.tenantFee;
+    const calculationFunc =
+      type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
 
-  const calculateCurrentTotalPrice = isOwner
-    ? calculateCurrentTotalGetPrice
-    : calculateCurrentTotalPayPrice;
+    return calculationFunc(startDate, endDate, fee, pricePerDay);
+  };
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
@@ -216,7 +223,7 @@ const OrderContent = ({
     } else {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        status: STATIC.ORDER_STATUSES.PENDING_OWNER,
       }));
     }
 
@@ -238,8 +245,9 @@ const OrderContent = ({
       : order.offerEndDate;
 
     const totalPrice = calculateCurrentTotalPrice(
-      offerPricePerDay,
-      getDaysDifference(offerStartDate, offerEndDate)
+      offerStartDate,
+      offerEndDate,
+      offerPricePerDay
     );
 
     const updatedFields = {
@@ -406,6 +414,12 @@ const OrderContent = ({
       error.set(e.message);
     }
   };
+
+  const tenantBaseCommissionPercent = order.tenantFee;
+  const ownerBaseCommissionPercent = order.ownerFee;
+  const currentFee = isOwner
+    ? ownerBaseCommissionPercent
+    : tenantBaseCommissionPercent;
 
   return (
     <>
@@ -688,13 +702,8 @@ const OrderContent = ({
                     endDate={order.offerEndDate}
                   />
                 </li>
-                <li>
-                  Fee:{" "}
-                  {isOwner
-                    ? ownerBaseCommissionPercent
-                    : tenantBaseCommissionPercent}
-                  %
-                </li>
+                <li>Fee: {currentFee}%</li>
+
                 {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
                   order.status != STATIC.ORDER_STATUSES.PENDING_TENANT) && (
                   <li className="order-status">
@@ -709,6 +718,49 @@ const OrderContent = ({
                     />
                   </li>
                 )}
+
+                {isBookingWithoutAgreement &&
+                  order.offerPricePerDay != order.listingPricePerDay && (
+                    <li
+                      style={{
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      Subtotal price with listing price per day $
+                      {moneyFormat(
+                        order.listingPricePerDay *
+                          getDaysDifference(
+                            order.offerStartDate,
+                            order.offerEndDate
+                          )
+                      )}
+                    </li>
+                  )}
+
+                <li>
+                  Fact offer subtotal price: $
+                  {moneyFormat(
+                    order.offerPricePerDay *
+                      getDaysDifference(
+                        order.offerStartDate,
+                        order.offerEndDate
+                      )
+                  )}
+                </li>
+
+                <li>
+                  Total fee price: $
+                  {moneyFormat(
+                    (order.offerPricePerDay *
+                      getDaysDifference(
+                        order.offerStartDate,
+                        order.offerEndDate
+                      ) *
+                      currentFee) /
+                      100
+                  )}
+                </li>
+
                 {isBookingWithoutAgreement &&
                   order.offerPricePerDay != order.listingPricePerDay && (
                     <>
@@ -722,8 +774,10 @@ const OrderContent = ({
                           Price with listing price per day to get $
                           {moneyFormat(
                             calculateCurrentTotalPrice(
+                              order.offerStartDate,
+                              order.offerEndDate,
                               order.listingPricePerDay,
-                              order.duration
+                              "owner"
                             )
                           )}
                         </li>
@@ -736,11 +790,13 @@ const OrderContent = ({
                             textDecoration: "line-through",
                           }}
                         >
-                          Price with listing price per day to pay$
+                          Price with listing price per day to pay $
                           {moneyFormat(
                             calculateCurrentTotalPrice(
+                              order.offerStartDate,
+                              order.offerEndDate,
                               order.listingPricePerDay,
-                              order.duration
+                              "tenant"
                             )
                           )}
                         </li>
@@ -753,8 +809,10 @@ const OrderContent = ({
                     Fact offer price to get: $
                     {moneyFormat(
                       calculateCurrentTotalPrice(
+                        order.offerStartDate,
+                        order.offerEndDate,
                         order.offerPricePerDay,
-                        order.duration
+                        "owner"
                       )
                     )}
                   </li>
@@ -765,8 +823,10 @@ const OrderContent = ({
                     Fact offer price to pay: $
                     {moneyFormat(
                       calculateCurrentTotalPrice(
+                        order.offerStartDate,
+                        order.offerEndDate,
                         order.offerPricePerDay,
-                        order.duration
+                        "tenant"
                       )
                     )}
                   </li>
@@ -810,25 +870,63 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>
-                  Fee:{" "}
-                  {isOwner
-                    ? ownerBaseCommissionPercent
-                    : tenantBaseCommissionPercent}
-                  %
-                </li>
+                <li>Fee: {currentFee}%</li>
 
                 {isBookingWithoutAgreement &&
                   prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
-                    <li>
-                      Price with listing price per day: $
+                    <li
+                      style={{
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      Subtotal price with listing price per day $
                       {moneyFormat(
-                        calculateCurrentTotalPrice(
-                          order.listingPricePerDay,
+                        prevUpdateRequest.pricePerDay *
                           getDaysDifference(
                             prevUpdateRequest.startDate,
                             prevUpdateRequest.endDate
                           )
+                      )}
+                    </li>
+                  )}
+
+                <li>
+                  Fact offer subtotal price: $
+                  {moneyFormat(
+                    prevUpdateRequest.pricePerDay *
+                      getDaysDifference(
+                        prevUpdateRequest.startDate,
+                        prevUpdateRequest.endDate
+                      )
+                  )}
+                </li>
+
+                <li>
+                  Total fee price: $
+                  {moneyFormat(
+                    (prevUpdateRequest.pricePerDay *
+                      getDaysDifference(
+                        prevUpdateRequest.startDate,
+                        prevUpdateRequest.endDate
+                      ) *
+                      currentFee) /
+                      100
+                  )}
+                </li>
+
+                {isBookingWithoutAgreement &&
+                  prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
+                    <li
+                      style={{
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      Price with listing price per day: $
+                      {moneyFormat(
+                        calculateCurrentTotalPrice(
+                          prevUpdateRequest.startDate,
+                          prevUpdateRequest.endDate,
+                          order.listingPricePerDay
                         )
                       )}
                     </li>
@@ -838,11 +936,9 @@ const OrderContent = ({
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {moneyFormat(
                     calculateCurrentTotalPrice(
-                      prevUpdateRequest.pricePerDay,
-                      getDaysDifference(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.endDate
-                      )
+                      prevUpdateRequest.startDate,
+                      prevUpdateRequest.endDate,
+                      prevUpdateRequest.pricePerDay
                     )
                   )}
                 </li>
@@ -874,26 +970,64 @@ const OrderContent = ({
                   />
                 </li>
 
-                <li>
-                  Fee:{" "}
-                  {isOwner
-                    ? ownerBaseCommissionPercent
-                    : tenantBaseCommissionPercent}
-                  %
-                </li>
+                <li>Fee: {currentFee}%</li>
 
                 {actualUpdateRequest.newPricePerDay !=
                   order.listingPricePerDay && (
-                  <li>
-                    Price {isOwner ? "to get" : "to pay"} with listing price per
-                    day: $
+                  <li
+                    style={{
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    Subtotal price with listing price per day $
                     {moneyFormat(
-                      calculateCurrentTotalPrice(
-                        order.listingPricePerDay,
+                      actualUpdateRequest.newPricePerDay *
                         getDaysDifference(
                           actualUpdateRequest.newStartDate,
                           actualUpdateRequest.newEndDate
                         )
+                    )}
+                  </li>
+                )}
+
+                <li>
+                  Fact offer subtotal price: $
+                  {moneyFormat(
+                    actualUpdateRequest.newPricePerDay *
+                      getDaysDifference(
+                        actualUpdateRequest.newStartDate,
+                        actualUpdateRequest.newEndDate
+                      )
+                  )}
+                </li>
+
+                <li>
+                  Total fee price: $
+                  {moneyFormat(
+                    (actualUpdateRequest.newPricePerDay *
+                      getDaysDifference(
+                        actualUpdateRequest.newStartDate,
+                        actualUpdateRequest.newEndDate
+                      ) *
+                      currentFee) /
+                      100
+                  )}
+                </li>
+
+                {actualUpdateRequest.newPricePerDay !=
+                  order.listingPricePerDay && (
+                  <li
+                    style={{
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    Price {isOwner ? "to get" : "to pay"} with listing price per
+                    day: $
+                    {moneyFormat(
+                      calculateCurrentTotalPrice(
+                        actualUpdateRequest.newStartDate,
+                        actualUpdateRequest.newEndDate,
+                        order.listingPricePerDay
                       )
                     )}
                   </li>
@@ -903,11 +1037,9 @@ const OrderContent = ({
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {moneyFormat(
                     calculateCurrentTotalPrice(
-                      actualUpdateRequest.newPricePerDay,
-                      getDaysDifference(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newEndDate
-                      )
+                      actualUpdateRequest.newStartDate,
+                      actualUpdateRequest.newEndDate,
+                      actualUpdateRequest.newPricePerDay
                     )
                   )}
                 </li>
@@ -957,8 +1089,9 @@ const OrderContent = ({
                   conflictOrder.offerPricePerDay;
 
                 const totalPrice = calculateCurrentTotalPrice(
-                  pricePrice,
-                  getDaysDifference(startDate, endDate)
+                  startDate,
+                  endDate,
+                  pricePrice
                 );
 
                 const isBooking = [
@@ -1065,11 +1198,7 @@ const OrderContent = ({
                   : order.offerEndDate
               }
               listingMinRentalDays={order.listingMinRentalDays}
-              fee={
-                order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
-                  ? ownerBaseCommissionPercent
-                  : tenantBaseCommissionPercent
-              }
+              fee={currentFee}
               commissionType={
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
                   ? "reject"
@@ -1106,8 +1235,10 @@ const OrderContent = ({
                 <div className="booking-operations form-group">
                   <PaypalTriggerModal
                     amount={calculateCurrentTotalPrice(
+                      order.offerStartDate,
+                      order.offerEndDate,
                       order.offerPricePerDay,
-                      order.duration
+                      "tenant"
                     )}
                     createOrderRequest={paypalCreateOrder}
                     approveOrderRequest={paypalOrderPayed}
@@ -1116,7 +1247,7 @@ const OrderContent = ({
                     listingName={order.listingName}
                     onTenantPayed={onTenantPayed}
                     offerFee={tenantBaseCommissionPercent}
-                    listingPricePerDay={order.listingPricePerDay}
+                    pricePerDay={order.offerPricePerDay}
                     offerStartDate={order.offerStartDate}
                     offerEndDate={order.offerEndDate}
                   />

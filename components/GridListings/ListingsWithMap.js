@@ -281,8 +281,9 @@ const ListingsWithMap = ({
   const changeUserLocation = (location) => {
     setUserLocation(location);
 
-    let center = STATIC.CITY_COORDS[selectedCities[0]] ?? defaultCenter;
-    if (location) center = location;
+    let center = location
+      ? location
+      : STATIC.CITY_COORDS[selectedCities[0]] ?? defaultCenter;
 
     setSearchLocation(center);
     setMapCenter(center);
@@ -448,10 +449,15 @@ const ListingsWithMap = ({
                     onMouseOut={setMarkerUnactive}
                     center={mapCenter}
                     setCenter={setMapCenter}
-                    defaultLocation={{
-                      lat: pageProps.options?.lat,
-                      lng: pageProps.options?.lng,
-                    }}
+                    defaultLocation={
+                      pageProps.options?.lat !== undefined &&
+                      pageProps.options?.lng !== undefined
+                        ? {
+                            lat: pageProps.options?.lat,
+                            lng: pageProps.options?.lng,
+                          }
+                        : null
+                    }
                   />
                 </div>
               </div>

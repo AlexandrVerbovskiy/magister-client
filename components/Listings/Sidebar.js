@@ -237,7 +237,9 @@ const Sidebar = ({
             title="Categories"
             open={categoriesOpen}
             setOpen={setCategoriesOpen}
-            items={categories}
+            items={categories.sort((a, b) =>
+              ("" + a.name).localeCompare(b.name)
+            )}
             selectedItems={selectedCategories}
             handleChangeChecked={handleChangeCheckedCategory}
             LiItemElement={FirstCategoryLevelLi}
