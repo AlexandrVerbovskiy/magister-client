@@ -12,7 +12,7 @@ import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
-import { cloneObject, getDateByCurrentAdd } from "../../utils";
+import { cloneObject, getDateByCurrentAdd, validatePrice } from "../../utils";
 import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 
@@ -25,11 +25,11 @@ const cities = [
 ];
 
 const distances = [
-  { name: "0.1km", value: "0.1km", title: "0.1km" },
-  { name: "1km", value: "1km", title: "1km" },
-  { name: "5km", value: "5km", title: "5km" },
-  { name: "25km", value: "25km", title: "25km" },
-  { name: "100km", value: "100km", title: "100km" },
+  { name: "0.1km", value: 100, title: "0.1km" },
+  { name: "1km", value: 1000, title: "1km" },
+  { name: "5km", value: 5000, title: "5km" },
+  { name: "25km", value: 25000, title: "25km" },
+  { name: "100km", value: 100000, title: "100km" },
 ];
 
 const orderOptions = [
@@ -72,11 +72,37 @@ const ListingsWithMap = ({
 
   const [hasListings, setHasListings] = useState(baseHasListings);
 
+  const minLimit = STATIC.MIN_PRICE_LIMIT;
+  const maxLimit = STATIC.MAX_PRICE_LIMIT;
+
+  const initMinPrice = () => {
+    const pagePropsMinPrice = pageProps.options?.minPrice;
+
+    if (pagePropsMinPrice) {
+      return pagePropsMinPrice;
+    }
+
+    return router.query.minPrice ?? minLimit;
+  };
+
+  const initMaxPrice = () => {
+    const pagePropsMaxPrice = pageProps.options?.maxPrice;
+
+    if (pagePropsMaxPrice) {
+      return pagePropsMaxPrice;
+    }
+
+    return router.query.maxPrice ?? maxLimit;
+  };
+
+  const [minPrice, setMinPrice] = useState(initMinPrice());
+  const [maxPrice, setMaxPrice] = useState(initMaxPrice());
+
   const updateListingListHeight = () => {
     if (listingListParentRef.current) {
       let childHeight = listingListParentRef.current.scrollHeight + 1;
 
-      if (filterFullRef) {
+      if (filterFullRef.current) {
         childHeight += filterFullRef.current.scrollHeight;
       }
 
@@ -128,21 +154,14 @@ const ListingsWithMap = ({
     return [];
   };
 
-  const initDistances = () => {
-    const pagePropsDistances = pageProps.options?.distances;
-    if (pagePropsDistances) return cloneObject(pagePropsDistances);
+  const initDistance = () => {
+    const pagePropsDistance = pageProps.options?.distance;
 
-    const routerDistances = router.query.distances;
-
-    if (routerDistances) {
-      if (typeof routerDistances === "string") {
-        return [routerDistances];
-      } else {
-        return [...routerDistances];
-      }
+    if (pagePropsDistance) {
+      return pagePropsDistance;
     }
 
-    return [];
+    return router.query.distance ?? null;
   };
 
   const [selectedCategories, setSelectedCategories] = useState(
@@ -150,7 +169,7 @@ const ListingsWithMap = ({
   );
 
   const [selectedCities, setSelectedCities] = useState(initCities());
-  const [selectedDistances, setSelectedDistances] = useState(initDistances());
+  const [selectedDistance, setSelectedDistance] = useState(initDistance());
 
   const [searchCategory, setSearchCategory] = useState(
     basePageProps.options.searchCategory
@@ -167,7 +186,7 @@ const ListingsWithMap = ({
 
     setSelectedCities(initCities());
     setSelectedCategories(initCategories());
-    setSelectedDistances(initDistances());
+    setSelectedDistance(initDistance());
   }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
@@ -219,6 +238,19 @@ const ListingsWithMap = ({
         name: "search-category",
       },
       ownerId: { value: ownerId, hidden: () => true },
+      minPrice: {
+        value: minPrice,
+        name: "min-price",
+        hidden: (value) => value === STATIC.MIN_PRICE_LIMIT || !value,
+      },
+      maxPrice: {
+        value: maxPrice,
+        name: "max-price",
+        hidden: (value) => value === STATIC.MAX_PRICE_LIMIT || !value,
+      },
+      distance: {
+        value: selectedDistance,
+      },
     }),
     defaultData: pageProps,
     needInit: false,
@@ -254,6 +286,41 @@ const ListingsWithMap = ({
     rebuild(rebuildProps);
   };
 
+  const handleChangeMinPrice = (value) => {
+    if (validatePrice(value) !== true) {
+      error.set("Invalid min price filter value");
+    } else {
+      setMinPrice(value);
+      rebuild({ minPrice: value });
+    }
+  };
+
+  const handleChangeMaxPrice = (value) => {
+    if (validatePrice(value) !== true) {
+      error.set("Invalid max price filter value");
+      return;
+    }
+
+    setMaxPrice(value);
+    rebuild({ maxPrice: value });
+  };
+
+  const handleChangePrices = (minValue, maxValue) => {
+    if (validatePrice(minValue) !== true) {
+      error.set("Invalid min price filter value");
+      return;
+    }
+
+    if (validatePrice(maxValue) !== true) {
+      error.set("Invalid max price filter value");
+      return;
+    }
+
+    setMinPrice(minValue);
+    setMaxPrice(maxValue);
+    rebuild({ minPrice: minValue, maxPrice: maxValue });
+  };
+
   const handleSelectedCities = (cities, needRemoveSearch = false) => {
     const searchCenter =
       userLocation ?? STATIC.CITY_COORDS[cities[0]] ?? defaultCenter;
@@ -269,10 +336,9 @@ const ListingsWithMap = ({
     setMapCenter(searchCenter);
   };
 
-  const handleSelectedDistances = (distances) => {
-    setSelectedDistances(cloneObject(distances));
-    const rebuildProps = { distances };
-    rebuild(rebuildProps);
+  const handleSelectedDistance = (distance) => {
+    setSelectedDistance(distance);
+    rebuild({ distance: distance });
   };
 
   const [markers, setMarkers] = useState([]);
@@ -350,7 +416,6 @@ const ListingsWithMap = ({
   });
 
   const cityNames = cities.map((city) => city.name);
-  const distanceNames = distances.map((distance) => distance.name);
 
   const dopListingCards = [];
 
@@ -367,7 +432,6 @@ const ListingsWithMap = ({
         cities={cityNames}
         searchCity={searchCity}
         searchCategory={searchCategory}
-        distances={distanceNames}
       />
 
       <div className="listings-area ptb-100">
@@ -382,9 +446,9 @@ const ListingsWithMap = ({
                     toDateFilter={toTime}
                     setToDateFilter={handleChangeToDate}
                     selectedCities={selectedCities}
-                    selectedDistances={selectedDistances}
+                    selectedDistance={selectedDistance}
                     setSelectedCities={handleSelectedCities}
-                    setSelectedDistances={handleSelectedDistances}
+                    setSelectedDistance={handleSelectedDistance}
                     selectedCategories={selectedCategories}
                     setSelectedCategories={handleSelectedCategories}
                     categories={categories}
@@ -392,6 +456,11 @@ const ListingsWithMap = ({
                     distances={distances}
                     searchCity={searchCity}
                     searchCategory={searchCategory}
+                    minPrice={minPrice}
+                    setMinPrice={handleChangeMinPrice}
+                    maxPrice={maxPrice}
+                    setMaxPrice={handleChangeMaxPrice}
+                    handleChangePrices={handleChangePrices}
                   />
                 </div>
 

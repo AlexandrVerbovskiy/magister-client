@@ -18249,14 +18249,11 @@ input[type="number"] {
 }
 
 #price-range .price-field input {
-  flex: 1;
-  height: 35px;
-  font-size: 15px;
-  border-radius: 9px;
-  text-align: center;
-  border: 0px;
-  background: #e4e4e4;
   width: 100%;
+  border: 1px solid #d5d5d5;
+  color: #666666;
+  padding: 2px 5px;
+  font-size: 15px;
 }
 
 #price-range .price-input {
@@ -18272,7 +18269,7 @@ input[type="number"] {
 }
 
 #price-range .slider-container {
-  height: 6px;
+  height: 4px;
   position: relative;
   background: #e4e4e4;
   border-radius: 5px;

@@ -1,10 +1,15 @@
 import React, { useRef, useState } from "react";
+import STATIC from "../../static";
 
-const PriceRangeSlider = () => {
-  const minLimit = 1;
-  const maxLimit = 100;
-  const [minPrice, setMinPrice] = useState(minLimit);
-  const [maxPrice, setMaxPrice] = useState(maxLimit);
+const PriceRangeSlider = ({
+  minPrice,
+  setMinPrice,
+  maxPrice,
+  setMaxPrice,
+  handleChangePrices,
+}) => {
+  const minLimit = STATIC.MIN_PRICE_LIMIT;
+  const maxLimit = STATIC.MAX_PRICE_LIMIT;
   const rangeSlideRef = useRef();
 
   const handleMinChange = (event) => {
@@ -15,8 +20,7 @@ const PriceRangeSlider = () => {
       [newMin, newMax] = [newMax, newMin];
     }
 
-    setMinPrice(newMin);
-    setMaxPrice(newMax);
+    handleChangePrices(newMin, newMax);
   };
 
   const handleMaxChange = (event) => {
@@ -27,8 +31,7 @@ const PriceRangeSlider = () => {
       [newMax, newMin] = [newMin, newMax];
     }
 
-    setMaxPrice(newMax);
-    setMinPrice(newMin);
+    handleChangePrices(newMin, newMax);
   };
 
   const handleMinSlide = (event) => {
@@ -39,8 +42,7 @@ const PriceRangeSlider = () => {
       [newMin, newMax] = [newMax, newMin];
     }
 
-    setMinPrice(newMin);
-    setMaxPrice(newMax);
+    handleChangePrices(newMin, newMax);
   };
 
   const handleMaxSlide = (event) => {
@@ -51,8 +53,7 @@ const PriceRangeSlider = () => {
       [newMax, newMin] = [newMin, newMax];
     }
 
-    setMaxPrice(newMax);
-    setMinPrice(newMin);
+    handleChangePrices(newMin, newMax);
   };
 
   return (

@@ -14,8 +14,8 @@ const Sidebar = ({
   setSelectedCities,
   selectedCategories,
   setSelectedCategories,
-  selectedDistances,
-  setSelectedDistances,
+  selectedDistance,
+  setSelectedDistance,
   fromDateFilter,
   setFromDateFilter,
   toDateFilter,
@@ -24,6 +24,11 @@ const Sidebar = ({
   searchCity,
   searchCategory,
   distances: baseDistances,
+  minPrice,
+  setMinPrice,
+  maxPrice,
+  setMaxPrice,
+  handleChangePrices
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -129,17 +134,11 @@ const Sidebar = ({
   };
 
   const handleChangeCheckedDistance = (value) => {
-    let newSelectedDistances = selectedDistances;
-
-    if (selectedDistances.includes(value)) {
-      newSelectedDistances = newSelectedDistances.filter(
-        (distance) => distance != value
-      );
+    if (selectedDistance != value) {
+      setSelectedDistance(value);
     } else {
-      newSelectedDistances = [...newSelectedDistances, value];
+      setSelectedDistance(null);
     }
-
-    setSelectedDistances(newSelectedDistances);
   };
 
   const handleFromDateFilterChange = (value) => {
@@ -208,7 +207,7 @@ const Sidebar = ({
         value={item.value}
         name={`distances[${item.name}]`}
         onChange={() => handleChangeCheckedDistance(item.value)}
-        checked={selectedDistances.includes(item.value.toLowerCase())}
+        checked={selectedDistance == item.value}
       />
       <label htmlFor={item.name}>{item.title} </label>
     </li>
@@ -286,7 +285,13 @@ const Sidebar = ({
           >
             <ul ref={priceFilterFullUlRef}>
               <li className="d-flex align-items-end date-filter-row">
-                <PriceRangeSlider />
+                <PriceRangeSlider
+                  minPrice={minPrice}
+                  setMinPrice={setMinPrice}
+                  maxPrice={maxPrice}
+                  setMaxPrice={setMaxPrice}
+                  handleChangePrices={handleChangePrices}
+                />
               </li>
             </ul>
           </div>
@@ -302,6 +307,16 @@ const Sidebar = ({
           LiItemElement={CityLi}
         />
 
+        <SidebarCheckboxesSection
+          title="Distances"
+          open={distanceOpen}
+          setOpen={setDistanceOpen}
+          items={baseDistances}
+          selectedItems={[selectedDistance]}
+          handleChangeChecked={handleChangeCheckedDistance}
+          LiItemElement={DistanceLi}
+        />
+
         {categories.length > 0 && (
           <SidebarCheckboxesSection
             title="Categories"
@@ -315,16 +330,6 @@ const Sidebar = ({
             LiItemElement={FirstCategoryLevelLi}
           />
         )}
-
-        <SidebarCheckboxesSection
-          title="Distances"
-          open={distanceOpen}
-          setOpen={setDistanceOpen}
-          items={baseDistances}
-          selectedItems={selectedDistances}
-          handleChangeChecked={handleChangeCheckedDistance}
-          LiItemElement={DistanceLi}
-        />
       </aside>
     </>
   );

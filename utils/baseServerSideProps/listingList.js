@@ -23,8 +23,11 @@ const listingList = (context) => {
     baseCities.forEach((city) => cities.push(city));
   }
 
+  const minPrice = context.query["min-price"];
+  const maxPrice = context.query["max-price"];
   const searchCity = context.query["search-city"];
   const searchCategory = context.query["search-category"];
+  const distance = context.query["distance"];
 
   return {
     ...baseTimeListPageParams(context.query),
@@ -33,6 +36,9 @@ const listingList = (context) => {
     clientIp,
     searchCity,
     searchCategory,
+    distance,
+    minPrice,
+    maxPrice,
   };
 };
 

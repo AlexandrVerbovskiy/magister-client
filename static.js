@@ -22,4 +22,6 @@ export default {
     WAITING_ADMIN_APPROVE: "waiting_admin_approve",
     CANCELLED: "cancelled",
   },
+  MIN_PRICE_LIMIT: 1,
+  MAX_PRICE_LIMIT: 1000000
 };
