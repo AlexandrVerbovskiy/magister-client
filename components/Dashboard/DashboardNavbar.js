@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
+import { signOut } from "next-auth/react";
 
 const DashboardNavbar = () => {
   // Add active class
@@ -12,7 +13,7 @@ const DashboardNavbar = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
-  const { displaySideMenu, toggleSideMenu, sessionUser, error } =
+  const { displaySideMenu, toggleSideMenu, sessionUser, error, isAuth } =
     useContext(IndiceContext);
 
   const needVerifyAccount = (e) => {
@@ -20,6 +21,14 @@ const DashboardNavbar = () => {
       e.preventDefault();
       error.set(`You need to be verified and have a PayPal ID linked to your profile to rent and rent out tools. To verify, send the
       necessary data via the "Documents Verification" page`);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut({ redirect: false });
+    } catch (e) {
+      error.set(e.message);
     }
   };
 
@@ -192,6 +201,22 @@ const DashboardNavbar = () => {
                   <i className="bx bx-file"></i>
                 </span>
                 <span className="menu-title">Documents Verification</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
+                href="#"
+                className={`nav-link`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSignOut();
+                }}
+              >
+                <span className="icon">
+                  <i className="bx bx-log-out"></i>{" "}
+                </span>
+                <span className="menu-title">Sign Out</span>
               </Link>
             </li>
           </ul>

@@ -15,11 +15,11 @@ const SidebarCheckboxesSection = ({
   const [showedMore, setShowedMore] = useState(false);
 
   useEffect(() => {
-    if (mainUlRef.current && dopUlRef.current && showMoreUlRef.current) {
+    if (mainUlRef.current && dopUlRef.current) {
       const childHeight =
         mainUlRef.current.scrollHeight +
         dopUlRef.current.scrollHeight +
-        showMoreUlRef.current.scrollHeight +
+        (showMoreUlRef.current ? showMoreUlRef.current.scrollHeight : 0) +
         1;
       setMaxHeight(childHeight);
     }

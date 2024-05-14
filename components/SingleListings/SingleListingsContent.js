@@ -20,7 +20,6 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const router = useRouter();
-  console.log(listing.defects);
 
   const handleShareClick = () => {
     const clipboard = new ClipboardJS("#shareButton", {

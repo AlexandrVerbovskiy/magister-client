@@ -26,7 +26,6 @@ const ListingDefects = ({ defects: baseDefects }) => {
 
   const stateDefectsToSave = () => {
     return defects.map((defect) => {
-      console.log(defect);
       const filteredElem = { ...defect };
       delete filteredElem["localId"];
       delete filteredElem["error"];
