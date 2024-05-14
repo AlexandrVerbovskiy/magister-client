@@ -27,7 +27,6 @@ export const generateInvoicePdf = async (id, authToken) => {
   const response = await axios.get(url, {
     headers: {
       Authorization: `Bearer ${authToken}`,
-      Connection: 'Keep-Alive',
       "Content-Type": "application/pdf",
     },
     responseType: "arraybuffer",
