@@ -11,11 +11,18 @@ const InputWithIcon = ({
   style = {},
   name = null,
   maxLength = null,
-  max=null,
+  max = null,
   minLength = null,
-  min=null
+  min = null,
+  dopInputClass = "",
+  dopGroupClass = "",
 }) => (
-  <ErrorIconWrapper label={label} icon={icon} error={error}>
+  <ErrorIconWrapper
+    dopGroupClass={dopGroupClass}
+    label={label}
+    icon={icon}
+    error={error}
+  >
     <input
       value={value}
       onInput={onInput}

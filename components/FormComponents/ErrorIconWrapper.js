@@ -5,9 +5,10 @@ const ErrorIconWrapper = ({
   icon = null,
   error = null,
   children,
+  dopGroupClass = "",
 }) => {
   return (
-    <div className="form-group">
+    <div className={`form-group ${dopGroupClass}`}>
       {label && (
         <label>
           {icon && <i className={icon}></i>} {label}
