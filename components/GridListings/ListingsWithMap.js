@@ -17,10 +17,19 @@ import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 
 const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
+const baseItemsPerPage = 6;
 
 const cities = [
   { name: "Warrington", value: "Warrington", title: "Warrington" },
   { name: "Manchester", value: "Manchester", title: "Manchester" },
+];
+
+const distances = [
+  { name: "0.1km", value: "0.1km", title: "0.1km" },
+  { name: "1km", value: "1km", title: "1km" },
+  { name: "5km", value: "5km", title: "5km" },
+  { name: "25km", value: "25km", title: "25km" },
+  { name: "100km", value: "100km", title: "100km" },
 ];
 
 const orderOptions = [
@@ -39,7 +48,11 @@ const ListingsWithMap = ({
   hasListings: baseHasListings,
   ownerId = null,
 }) => {
+  const listingListParentRef = useRef(null);
   const isFirstRefOptionsChange = useRef(true);
+  const filterFullRef = useRef(null);
+
+  const [listingListMaxHeight, setListingListMaxHeight] = useState(null);
 
   const router = useRouter();
 
@@ -58,6 +71,20 @@ const ListingsWithMap = ({
   );
 
   const [hasListings, setHasListings] = useState(baseHasListings);
+
+  const updateListingListHeight = () => {
+    if (listingListParentRef.current) {
+      let childHeight = listingListParentRef.current.scrollHeight + 1;
+
+      if (filterFullRef) {
+        childHeight += filterFullRef.current.scrollHeight;
+      }
+
+      setListingListMaxHeight(childHeight);
+    }
+  };
+
+  useEffect(() => updateListingListHeight(), [listingListParentRef.current]);
 
   useEffect(() => {
     setHasListings(baseHasListings);
@@ -101,11 +128,29 @@ const ListingsWithMap = ({
     return [];
   };
 
+  const initDistances = () => {
+    const pagePropsDistances = pageProps.options?.distances;
+    if (pagePropsDistances) return cloneObject(pagePropsDistances);
+
+    const routerDistances = router.query.distances;
+
+    if (routerDistances) {
+      if (typeof routerDistances === "string") {
+        return [routerDistances];
+      } else {
+        return [...routerDistances];
+      }
+    }
+
+    return [];
+  };
+
   const [selectedCategories, setSelectedCategories] = useState(
     initCategories()
   );
 
   const [selectedCities, setSelectedCities] = useState(initCities());
+  const [selectedDistances, setSelectedDistances] = useState(initDistances());
 
   const [searchCategory, setSearchCategory] = useState(
     basePageProps.options.searchCategory
@@ -122,6 +167,7 @@ const ListingsWithMap = ({
 
     setSelectedCities(initCities());
     setSelectedCategories(initCategories());
+    setSelectedDistances(initDistances());
   }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
@@ -179,6 +225,7 @@ const ListingsWithMap = ({
     onSendRequest: ({ items }) => {
       setHasListings(items.length > 0);
     },
+    baseItemsPerPage,
   });
 
   useEffect(() => {
@@ -220,6 +267,12 @@ const ListingsWithMap = ({
 
     rebuild(rebuildProps);
     setMapCenter(searchCenter);
+  };
+
+  const handleSelectedDistances = (distances) => {
+    setSelectedDistances(cloneObject(distances));
+    const rebuildProps = { distances };
+    rebuild(rebuildProps);
   };
 
   const [markers, setMarkers] = useState([]);
@@ -297,6 +350,13 @@ const ListingsWithMap = ({
   });
 
   const cityNames = cities.map((city) => city.name);
+  const distanceNames = distances.map((distance) => distance.name);
+
+  const dopListingCards = [];
+
+  while (listings.length + dopListingCards.length < baseItemsPerPage) {
+    dopListingCards.push(1);
+  }
 
   return (
     <>
@@ -307,6 +367,7 @@ const ListingsWithMap = ({
         cities={cityNames}
         searchCity={searchCity}
         searchCategory={searchCategory}
+        distances={distanceNames}
       />
 
       <div className="listings-area ptb-100">
@@ -321,11 +382,14 @@ const ListingsWithMap = ({
                     toDateFilter={toTime}
                     setToDateFilter={handleChangeToDate}
                     selectedCities={selectedCities}
+                    selectedDistances={selectedDistances}
                     setSelectedCities={handleSelectedCities}
+                    setSelectedDistances={handleSelectedDistances}
                     selectedCategories={selectedCategories}
                     setSelectedCategories={handleSelectedCategories}
                     categories={categories}
                     cities={cities}
+                    distances={distances}
                     searchCity={searchCity}
                     searchCategory={searchCategory}
                   />
@@ -334,7 +398,10 @@ const ListingsWithMap = ({
                 <div className="col-lg-8 col-md-12">
                   <div className="all-listings-list">
                     {listings.length > 0 && (
-                      <div className="listings-grid-sorting row align-items-center">
+                      <div
+                        className="listings-grid-sorting row align-items-center"
+                        ref={filterFullRef}
+                      >
                         <div className="col-lg-5 col-md-6 result-count">
                           <p>
                             <span className="count">{countItems}</span> Results
@@ -367,7 +434,7 @@ const ListingsWithMap = ({
                       </div>
                     )}
 
-                    <div className="row">
+                    <div ref={listingListParentRef} className="row">
                       {listings.map((listing) => (
                         <div
                           key={listing.id}
@@ -382,57 +449,65 @@ const ListingsWithMap = ({
                         </div>
                       ))}
 
-                      {!hasListings && canSendCreateNotifyRequest && (
-                        <div className="send-create-listing-category-notification">
-                          <div className="image-parent">
-                            <img src="/images/contact.png" alt="image" />
-                          </div>
-
-                          <div className="description">
-                            Unfortunately, the searched category was not found.
-                            <br />
-                            It will be added in the future. <br />
-                            Sign up for a notification so you don't miss this
-                            event!
-                          </div>
-
-                          <button
-                            onClick={
-                              handleSendSubscribeNotificationOnCreateCategory
-                            }
-                            className="default-btn"
-                            type="button"
-                          >
-                            Subscribe on update listing categories
-                          </button>
-                        </div>
-                      )}
-
-                      {!hasListings && !canSendCreateNotifyRequest && (
-                        <div className="no-listing-found">
-                          <div className="image-parent">
-                            <img src="/images/banner-img1.png" alt="image" />
-                          </div>
-
-                          <div className="description">
-                            Unfortunately, no listings were found for the
-                            specified parameters.
-                            <br /> Try searching for something similar
-                          </div>
-                        </div>
-                      )}
-
-                      {listings.length > 0 && (
-                        <Pagination
-                          page={page}
-                          countPages={countPages}
-                          move={moveToPage}
-                          canNext={canMoveNextPage}
-                          canPrev={canMovePrevPage}
-                          viewOnlyMoreOnePage={true}
-                        />
-                      )}
+                      {dopListingCards.map((card, index) => (
+                        <div
+                          key={index}
+                          className="col-xl-6 col-lg-6 col-md-6 d-flex"
+                          style={{ height: "420px" }}
+                        ></div>
+                      ))}
                     </div>
+
+                    {!hasListings && canSendCreateNotifyRequest && (
+                      <div className="send-create-listing-category-notification">
+                        <div className="image-parent">
+                          <img src="/images/contact.png" alt="image" />
+                        </div>
+
+                        <div className="description">
+                          Unfortunately, the searched category was not found.
+                          <br />
+                          It will be added in the future. <br />
+                          Sign up for a notification so you don't miss this
+                          event!
+                        </div>
+
+                        <button
+                          onClick={
+                            handleSendSubscribeNotificationOnCreateCategory
+                          }
+                          className="default-btn"
+                          type="button"
+                        >
+                          Subscribe on update listing categories
+                        </button>
+                      </div>
+                    )}
+
+                    {!hasListings && !canSendCreateNotifyRequest && (
+                      <div className="no-listing-found">
+                        <div className="image-parent">
+                          <img src="/images/banner-img1.png" alt="image" />
+                        </div>
+
+                        <div className="description">
+                          Unfortunately, no listings were found for the
+                          specified parameters.
+                          <br /> Try searching for something similar
+                        </div>
+                      </div>
+                    )}
+
+                    {listings.length > 0 && (
+                      <Pagination
+                        page={page}
+                        countPages={countPages}
+                        move={moveToPage}
+                        canNext={canMoveNextPage}
+                        canPrev={canMovePrevPage}
+                        viewOnlyMoreOnePage={true}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -440,7 +515,14 @@ const ListingsWithMap = ({
 
             <div className="col-xl-4 col-lg-12 col-md-12 p-0">
               <div className="map-container fw-map side-full-map">
-                <div id="main-full-map">
+                <div
+                  id="main-full-map"
+                  style={
+                    listingListMaxHeight
+                      ? { maxHeight: listingListMaxHeight + "px" }
+                      : null
+                  }
+                >
                   <MultyMarkersMap
                     userLocation={userLocation}
                     setUserLocation={changeUserLocation}

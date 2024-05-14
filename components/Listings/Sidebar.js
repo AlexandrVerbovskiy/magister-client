@@ -6,6 +6,7 @@ import {
   separateDate,
 } from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
+import PriceRangeSlider from "../FormComponents/PriceRangeSlider";
 
 const Sidebar = ({
   categories: baseCategories,
@@ -13,6 +14,8 @@ const Sidebar = ({
   setSelectedCities,
   selectedCategories,
   setSelectedCategories,
+  selectedDistances,
+  setSelectedDistances,
   fromDateFilter,
   setFromDateFilter,
   toDateFilter,
@@ -20,6 +23,7 @@ const Sidebar = ({
   cities: baseCities,
   searchCity,
   searchCategory,
+  distances: baseDistances,
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -49,12 +53,16 @@ const Sidebar = ({
   const categories = leveliseCategories(baseCategories);
 
   const [mainFilterOpen, setMainFilterOpen] = useState(true);
+  const [priceFilterOpen, setPriceFilterOpen] = useState(true);
   const [categoriesOpen, setCategoriesOpen] = useState(true);
   const [cityOpen, setCityOpen] = useState(true);
+  const [distanceOpen, setDistanceOpen] = useState(true);
 
   const mainFilterFullUlRef = useRef(null);
+  const priceFilterFullUlRef = useRef(null);
 
   const [mainFilterMaxHeight, setMainFilterMaxHeight] = useState(null);
+  const [priceFilterMaxHeight, setPriceFilterMaxHeight] = useState(null);
 
   const updateTimeFilterHeight = () => {
     if (mainFilterFullUlRef.current) {
@@ -64,6 +72,15 @@ const Sidebar = ({
   };
 
   useEffect(() => updateTimeFilterHeight(), [mainFilterFullUlRef.current]);
+
+  const updatePriceFilterHeight = () => {
+    if (priceFilterFullUlRef.current) {
+      const childHeight = priceFilterFullUlRef.current.scrollHeight + 1;
+      setPriceFilterMaxHeight(childHeight);
+    }
+  };
+
+  useEffect(() => updatePriceFilterHeight(), [priceFilterFullUlRef.current]);
 
   useEffect(() => {
     setInterval(updateTimeFilterHeight, 250);
@@ -109,6 +126,20 @@ const Sidebar = ({
     }
 
     setSelectedCities(newSelectedCities, needRemoveSearch);
+  };
+
+  const handleChangeCheckedDistance = (value) => {
+    let newSelectedDistances = selectedDistances;
+
+    if (selectedDistances.includes(value)) {
+      newSelectedDistances = newSelectedDistances.filter(
+        (distance) => distance != value
+      );
+    } else {
+      newSelectedDistances = [...newSelectedDistances, value];
+    }
+
+    setSelectedDistances(newSelectedDistances);
   };
 
   const handleFromDateFilterChange = (value) => {
@@ -169,6 +200,20 @@ const Sidebar = ({
     </li>
   );
 
+  const DistanceLi = ({ item }) => (
+    <li>
+      <input
+        id={item.name}
+        type="checkbox"
+        value={item.value}
+        name={`distances[${item.name}]`}
+        onChange={() => handleChangeCheckedDistance(item.value)}
+        checked={selectedDistances.includes(item.value.toLowerCase())}
+      />
+      <label htmlFor={item.name}>{item.title} </label>
+    </li>
+  );
+
   return (
     <>
       <aside className="listings-widget-area">
@@ -222,6 +267,31 @@ const Sidebar = ({
           </div>
         </section>
 
+        <section
+          className={`widget widget_filters ${priceFilterOpen ? "" : "close"}`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setPriceFilterOpen(!priceFilterOpen)}
+          >
+            Rental Price
+          </h3>
+          <div
+            className="widget-body"
+            style={
+              !priceFilterMaxHeight
+                ? null
+                : { maxHeight: `${priceFilterMaxHeight}px` }
+            }
+          >
+            <ul ref={priceFilterFullUlRef}>
+              <li className="d-flex align-items-end date-filter-row">
+                <PriceRangeSlider />
+              </li>
+            </ul>
+          </div>
+        </section>
+
         <SidebarCheckboxesSection
           title="City"
           open={cityOpen}
@@ -245,6 +315,16 @@ const Sidebar = ({
             LiItemElement={FirstCategoryLevelLi}
           />
         )}
+
+        <SidebarCheckboxesSection
+          title="Distances"
+          open={distanceOpen}
+          setOpen={setDistanceOpen}
+          items={baseDistances}
+          selectedItems={selectedDistances}
+          handleChangeChecked={handleChangeCheckedDistance}
+          LiItemElement={DistanceLi}
+        />
       </aside>
     </>
   );

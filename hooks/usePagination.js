@@ -8,6 +8,7 @@ const usePagination = ({
   defaultData = null,
   needInit = true,
   onSendRequest = null,
+  baseItemsPerPage = 20,
 }) => {
   const router = useRouter();
   const isFirstRef = useRef(true);
@@ -17,7 +18,7 @@ const usePagination = ({
   const countItemsRef = useRef(0);
 
   const [options, setOptions] = useState(defaultData?.options ?? {});
-  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [itemsPerPage, setItemsPerPage] = useState(baseItemsPerPage);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState(null);
   const [orderType, setOrderType] = useState(null);

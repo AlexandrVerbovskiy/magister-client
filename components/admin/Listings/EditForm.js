@@ -167,8 +167,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
   };
 
   const handleChangeListingDefectActive = (defectId) => {
-    console.log(defectId);
-
     if (listingDefects.includes(defectId)) {
       setListingDefects((prev) => prev.filter((id) => id != defectId));
     } else {
