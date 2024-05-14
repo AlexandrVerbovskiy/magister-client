@@ -19,6 +19,7 @@ import {
 } from "../../../utils";
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
+import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 
 const Order = (order) => {
   const { listingImages, categoryInfo } = order;
@@ -112,10 +113,17 @@ const Order = (order) => {
                               <label className="block text-sm font-medium mb-1">
                                 Order Status
                               </label>
-                              <Status
-                                status={order.status}
-                                baseClass="form-input w-full"
-                              />
+                              {order.cancelStatus ? (
+                                <CancelStatus
+                                  status={order.cancelStatus}
+                                  baseClass="form-input w-full"
+                                />
+                              ) : (
+                                <Status
+                                  status={order.status}
+                                  baseClass="form-input w-full"
+                                />
+                              )}
                             </div>
                           </div>
                         </div>

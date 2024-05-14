@@ -49,7 +49,7 @@ const PasswordSection = ({ formInfo }) => {
             </Input>
           </div>
 
-          <div className="col-lg-12 col-md-12">
+          <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="New Password"
               value={password}
@@ -68,7 +68,7 @@ const PasswordSection = ({ formInfo }) => {
             </Input>
           </div>
 
-          <div className="col-lg-12 col-md-12">
+          <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="Confirm New Password"
               value={confirmPassword}

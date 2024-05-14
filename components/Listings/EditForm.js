@@ -96,6 +96,9 @@ const EditForm = ({
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
+  const [defect, setDefect] = useState("");
+  const [defectError, setDefectError] = useState(null);
+
   const [listingDefects, setListingDefects] = useState([]);
 
   const [category, setCategory] = useState(baseCategoryId);
@@ -217,6 +220,12 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const handleChangeDopDefect = (e) => {
+    setDefect(e.target.value);
+    setDefectError(null);
+    setMainError(null);
+  };
+
   const handleChangeCompensationCost = (e) => {
     setCompensationCost(e.target.value);
     setCompensationCostError(null);
@@ -297,6 +306,7 @@ const EditForm = ({
       listingImages,
       active: listing.active ?? true,
       defects: listingDefectIds,
+      dopDefect: listing.dopDefect ?? "",
     };
   };
 
@@ -325,6 +335,7 @@ const EditForm = ({
       listingImages,
       active,
       defects: listingDefects,
+      dopDefect: defect,
     };
   };
 
@@ -346,6 +357,7 @@ const EditForm = ({
     setAddress(data.address);
     setActive(data.active);
     setListingDefects(data.defects);
+    setDefect(data.dopDefect);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -451,6 +463,11 @@ const EditForm = ({
 
     if (!compensationCost) {
       setCompensationCostError("Required field");
+      hasError = true;
+    }
+
+    if (defect.length && validateBigText(defect) !== true) {
+      setDefectError(validateBigText(defect));
       hasError = true;
     }
 
@@ -765,6 +782,21 @@ const EditForm = ({
                       }
                     />
                   ))}
+
+                <div className="form-group switch-form-group">
+                  <div className="sidebar-widgets">
+                    <div className="box">
+                      <InputWithIcon
+                        placeholder="Other defects..."
+                        value={defect}
+                        onInput={handleChangeDopDefect}
+                        error={defectError}
+                        name="dopDefect"
+                        dopGroupClass="mb-0"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

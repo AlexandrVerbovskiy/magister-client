@@ -125,6 +125,9 @@ const EditForm = ({ listing, categories, defects, save }) => {
   const [minRentalDays, setMinRentalDays] = useState("");
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
+  const [defect, setDefect] = useState("");
+  const [defectError, setDefectError] = useState(null);
+
   const [center, setCenter] = useState({
     lat: STATIC.CITY_COORDS[baseCity].lat,
     lng: STATIC.CITY_COORDS[baseCity].lng,
@@ -212,6 +215,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
     setAddress(data.address);
     setActive(data.active);
     setListingDefects(data.defects);
+    setDefect(data.dopDefect);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -262,6 +266,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
       address: prevListing.address ?? "",
       active: prevListing.active ?? true,
       defects: listingDefectIds,
+      dopDefect: prevListing.dopDefect ?? "",
     };
   };
 
@@ -292,6 +297,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
       ownerId,
       active,
       defects: listingDefects,
+      dopDefect: defect,
     };
   };
 
@@ -386,6 +392,11 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
       if (files.length + linkFiles.length < 1) {
         setFileError("At least one photo is required");
+        hasError = true;
+      }
+
+      if (defect.length && validateBigText(defect) !== true) {
+        setDefectError(validateBigText(defect));
         hasError = true;
       }
 
@@ -725,6 +736,21 @@ const EditForm = ({ listing, categories, defects, save }) => {
                                   </div>
                                 );
                               })}
+
+                            <div className="form-input flex flex-wrap mt-2 justify-between">
+                              <div className="w-full">
+                                <Input
+                                  name="dop_defect"
+                                  placeholder="Other defects..."
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={defect}
+                                  setValue={setDefect}
+                                  error={defectError}
+                                  setError={setDefectError}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            </div>
                           </div>
                         </section>
                       )}

@@ -4,22 +4,22 @@ const CancelStatus = ({ status, baseClass = "" }) => {
   let text = "Unknown Status";
   let dopClassName = "bg-slate-300";
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
-    text = "Pending Admin Cancel";
+  if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE) {
+    text = "Pending Admin Approve";
     dopClassName = "bg-orange-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
+  if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE) {
     text = "Pending Owner Cancel";
     dopClassName = "bg-amber-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
+  if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE) {
     text = "Pending Rental Cancel";
     dopClassName = "bg-yellow-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.CANCELLED) {
+  if (status == STATIC.ORDER_CANCELATION_STATUSES.CANCELLED) {
     text = "Cancelled";
     dopClassName = "bg-rose-500";
   }
