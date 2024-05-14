@@ -104,7 +104,7 @@ const TabHeaderSection = ({
       <DateFilter
         value={[fromTime, toTime]}
         onChange={handleChangeTimeFilter}
-        placeholder="Creation date"
+        placeholder="Payed at"
       />
     </li>
   </ul>

@@ -44,8 +44,7 @@ const Invoice = ({ payment }) => {
           dueDate={payment.createdAt}
           indiceAdmin="RentAbout"
           offer={{
-            factTotalPrice: payment.orderFactTotalPrice,
-            fee: payment.orderFee,
+            fee: payment.tenantFee,
             listingName: payment.listingName,
             pricePerDay: payment.orderOfferPricePerDay,
             startDate: payment.orderOfferStartDate,
