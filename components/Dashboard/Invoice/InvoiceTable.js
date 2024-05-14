@@ -1,5 +1,10 @@
 import React, { useContext, useState } from "react";
-import { getDaysDifference, moneyFormat, timeConverter } from "../../../utils";
+import {
+  getDaysDifference,
+  moneyFormat,
+  tenantPaymentCalculate,
+  timeConverter,
+} from "../../../utils";
 import Link from "next/link";
 import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
@@ -28,7 +33,7 @@ const InvoiceTable = ({
 
       setDisabled(true);
       const url = await generateInvoicePdf(invoiceId, authToken);
-      
+
       const a = document.createElement("a");
       a.href = url;
       a.download = `inv-${invoiceId}.pdf`;
@@ -146,7 +151,15 @@ const InvoiceTable = ({
                   <strong>Total</strong>
                 </td>
                 <td className="text-right total-price">
-                  <strong>${moneyFormat(offer.factTotalPrice)}</strong>
+                  <strong>
+                    $
+                    {tenantPaymentCalculate(
+                      offer.startDate,
+                      offer.endDate,
+                      offer.fee,
+                      offer.pricePerDay
+                    )}
+                  </strong>
                 </td>
               </tr>
             </tbody>

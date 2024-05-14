@@ -5,12 +5,19 @@ import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
-import { getListingImageByType } from "../../../utils";
-import { useState } from "react";
+import {
+  getDaysDifference,
+  getListingImageByType,
+  moneyFormat,
+  ownerGetsCalculate,
+  tenantPaymentCalculate,
+} from "../../../utils";
+import { useContext, useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Bookings/Status";
+import { IndiceContext } from "../../../contexts";
 
 const PreviousProposalElem = ({
   index,
@@ -249,7 +256,7 @@ const Booking = (booking) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="price_per_day"
-                                label="Price Per Day"
+                                label="Price Per Day, $"
                                 placeholder="Price Per Day"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -264,13 +271,164 @@ const Booking = (booking) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="total_price"
-                                label="Total Price"
+                                label="Total Price, $"
                                 placeholder="Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? activeRequestsToUpdate.newFactTotalPrice
-                                    : booking.factTotalPrice
+                                    ? moneyFormat(
+                                        getDaysDifference(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
+                                        ) *
+                                          activeRequestsToUpdate.newPricePerDay
+                                      )
+                                    : moneyFormat(
+                                        getDaysDifference(
+                                          booking.offerStartDate,
+                                          booking.offerEndDate
+                                        ) * booking.offerPricePerDay
+                                      )
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="owner_fee"
+                                label="Owner Fee, %"
+                                placeholder="Owner Fee"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={booking.ownerFee}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="tenant_fee"
+                                label="Tenant Fee, %"
+                                placeholder="Tenant Fee"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={booking.tenantFee}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="owner_total_fee"
+                                label="Owner Total Fee, $"
+                                placeholder="Owner Fee"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? (booking.ownerFee *
+                                        getDaysDifference(
+                                          booking.newStartDate,
+                                          booking.newEndDate
+                                        ) *
+                                        booking.newPricePerDay) /
+                                      100
+                                    : (booking.ownerFee *
+                                        getDaysDifference(
+                                          booking.offerStartDate,
+                                          booking.offerEndDate
+                                        ) *
+                                        booking.offerPricePerDay) /
+                                      100
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="tenant_total_fee"
+                                label="Tenant Total Fee, $"
+                                placeholder="Tenant Fee"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? (booking.tenantFee *
+                                        getDaysDifference(
+                                          booking.newStartDate,
+                                          booking.newEndDate
+                                        ) *
+                                        booking.newPricePerDay) /
+                                      100
+                                    : (booking.tenantFee *
+                                        getDaysDifference(
+                                          booking.offerStartDate,
+                                          booking.offerEndDate
+                                        ) *
+                                        booking.offerPricePerDay) /
+                                      100
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="owner_price"
+                                label="Owner Get Total Price, $"
+                                placeholder="Owner Get Total Price"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? moneyFormat(
+                                        ownerGetsCalculate(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate,
+                                          booking.ownerFee,
+                                          activeRequestsToUpdate.newPricePerDay
+                                        )
+                                      )
+                                    : moneyFormat(
+                                        ownerGetsCalculate(
+                                          booking.offerStartDate,
+                                          booking.offerEndDate,
+                                          booking.ownerFee,
+                                          booking.offerPricePerDay
+                                        )
+                                      )
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="tenant_price"
+                                label="Tenant Send Total Price, $"
+                                placeholder="Tenant Send Total Price"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? moneyFormat(
+                                        tenantPaymentCalculate(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate,
+                                          booking.tenantFee,
+                                          activeRequestsToUpdate.newPricePerDay
+                                        )
+                                      )
+                                    : moneyFormat(
+                                        tenantPaymentCalculate(
+                                          booking.offerStartDate,
+                                          booking.offerEndDate,
+                                          booking.tenantFee,
+                                          booking.offerPricePerDay
+                                        )
+                                      )
                                 }
                                 inputClassName="form-input w-full"
                               />

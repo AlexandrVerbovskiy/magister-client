@@ -8,7 +8,6 @@ const TableItem = ({
   listingName,
   tenantName,
   ownerName,
-  factTotalPrice,
   status,
   cancelStatus,
   onDeleteClick,
