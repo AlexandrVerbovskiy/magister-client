@@ -8,7 +8,7 @@ import SidebarGroupedLinks from "./SidebarGroupedLinks";
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const trigger = useRef(null);
   const sidebar = useRef(null);
-  const { isAdmin } = useContext(IndiceContext);
+  const { isAdmin, isSupport } = useContext(IndiceContext);
 
   const [currentPath, setCurrentPath] = useState("");
   const router = useRouter();

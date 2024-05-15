@@ -68,6 +68,12 @@ const PopularPlacesFilter = ({
     baseCategory: baseSearchCategory ?? notFoundCategory,
   });
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = () => {
     const link = getFullListingSearchLink(searchCity, searchCategory);
     router.push(link);
@@ -97,6 +103,7 @@ const PopularPlacesFilter = ({
                     value={searchCategory}
                     onInput={handleChangeCategory}
                     maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
                   />
 
                   <SearchTipsPopup
@@ -123,6 +130,7 @@ const PopularPlacesFilter = ({
                     value={searchCity}
                     onInput={handleChangeCity}
                     maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
                   />
 
                   <SearchTipsPopup

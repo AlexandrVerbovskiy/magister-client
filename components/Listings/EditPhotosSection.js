@@ -241,7 +241,7 @@ const EditPhotosSection = ({
         </div>
       </div>
 
-      <BaseModal active={photoPopupActive} toggleActive={handleClosePhotoPopup}>
+      <BaseModal active={photoPopupActive} closeModal={handleClosePhotoPopup}>
         <span className="sub-title mb-2">
           <span>Photo Popup</span>
         </span>

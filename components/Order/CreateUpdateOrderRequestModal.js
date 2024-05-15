@@ -6,6 +6,7 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
+  findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
   groupDates,
@@ -25,7 +26,7 @@ const CreateUpdateOrderRequestModal = ({
   proposalStartDate,
   proposalEndDate,
   updateRequestModalActive,
-  setUpdateRequestModalActive,
+  closeActiveUpdateRequest,
   minRentalDays,
   listingName,
   blockedDates,
@@ -48,6 +49,10 @@ const CreateUpdateOrderRequestModal = ({
 
   const calendarContainer = useRef(null);
   const prevCalendarContainer = useRef(null);
+  const calendarRef = useRef(null);
+  const prevCalendarRef = useRef(null);
+
+  useEffect(() => {}, [calendarRef.prevCalendarRef]);
 
   const [fromDate, setFromDate] = useState(baseFromDate);
   const [toDate, setToDate] = useState(baseToDate);
@@ -83,6 +88,29 @@ const CreateUpdateOrderRequestModal = ({
   };
 
   useEffect(() => {
+    const defaultCountDays = minRentalDays ? minRentalDays : 1;
+    const baseFromDate = findFirstAvailableDate(blockedDates, defaultCountDays);
+
+    const baseToDate = new Date();
+    baseToDate.setDate(baseFromDate.getDate() + defaultCountDays - 1);
+
+    setToDate(baseToDate);
+    setFromDate(baseFromDate);
+
+    setPrice(defaultPrice);
+  }, [
+    defaultPrice,
+    fee,
+    proposalPrice,
+    proposalStartDate,
+    proposalEndDate,
+    minRentalDays,
+    listingName,
+    blockedDates,
+    commissionType,
+  ]);
+
+  useEffect(() => {
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
@@ -102,6 +130,8 @@ const CreateUpdateOrderRequestModal = ({
       disableMobile: true,
     });
 
+    calendarRef.current = calendar;
+
     const prevCalendar = flatpickr(prevCalendarContainer.current, {
       inline: true,
       mode: "range",
@@ -113,6 +143,8 @@ const CreateUpdateOrderRequestModal = ({
       },
     });
 
+    prevCalendarRef.current = prevCalendar;
+
     return () => {
       if (calendar.destroy) {
         calendar.destroy();
@@ -122,7 +154,7 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, [proposalStartDate, proposalEndDate]);
+  }, [fromDate, toDate, proposalStartDate, proposalEndDate]);
 
   useEffect(() => {
     recalculateTotalInfo({
@@ -152,12 +184,6 @@ const CreateUpdateOrderRequestModal = ({
         "You cannot submit these changes as they are the same as proposed"
       );
       hasError = true;
-    } else {
-      handleCreateUpdateRequest({
-        price,
-        fromDate: separateDate(fromDate),
-        toDate: separateDate(toDate),
-      });
     }
 
     if (hasError) {
@@ -168,6 +194,12 @@ const CreateUpdateOrderRequestModal = ({
   };
 
   const handleSendBookingRequest = () => {
+    handleCreateUpdateRequest({
+      price,
+      fromDate: separateDate(fromDate),
+      toDate: separateDate(toDate),
+    });
+
     setActiveAcceptSendBookingRequest(false);
   };
 
@@ -180,7 +212,7 @@ const CreateUpdateOrderRequestModal = ({
     <BaseModal
       className="scrollable-modal make-order-modal modal-xxl"
       active={updateRequestModalActive}
-      toggleActive={() => setUpdateRequestModalActive(false)}
+      closeModal={closeActiveUpdateRequest}
     >
       <div className="row d-none d-md-flex">
         <div className="col col-6">
@@ -298,7 +330,7 @@ const CreateUpdateOrderRequestModal = ({
 
             <YesNoModal
               active={activeAcceptSendBookingRequest}
-              toggleActive={() => setActiveAcceptSendBookingRequest(false)}
+              closeModal={() => setActiveAcceptSendBookingRequest(false)}
               title="Please confirm new booking conditions"
               onAccept={handleSendBookingRequest}
               acceptText="Confirm"

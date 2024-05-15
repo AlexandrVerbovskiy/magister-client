@@ -13730,9 +13730,7 @@ Dashboard CSS
   transform: translateY(-50%);
   font-size: 15px;
 }
-.bookings-listings-box table tbody td.action .default-btn.danger {
-  margin-left: 10px;
-}
+
 .bookings-listings-box table tbody td.action .default-btn.danger:hover {
   background-color: red;
   color: var(--whiteColor);
@@ -17253,6 +17251,10 @@ button.button-danger:hover {
   min-height: 500px;
 }
 
+.listings-details-area .listings-details-image{
+  max-height: unset;
+}
+
 .listings-details-image .swiper {
   min-height: 500px;
   background-color: #373737;
@@ -17561,7 +17563,6 @@ button.button-danger:hover {
   overflow-x: hidden;
   overflow-y: auto;
 }
-
 
 .listing-list-elem-parent .single-listings-box {
   display: flex;
@@ -18010,14 +18011,8 @@ input[type="number"] {
   display: flex;
 }
 
-.order_widget .booking-operations > button:nth-of-type(1),
-.order_widget .booking-operations > button:nth-of-type(2) {
-  margin-right: 10px;
-}
-
-.order_widget .booking-operations > button:nth-of-type(2),
-.order_widget .booking-operations > button:nth-of-type(3) {
-  margin-left: 10px;
+.order_widget .booking-operations {
+  grid-column-gap: 20px;
 }
 
 .order-info-widget {
@@ -18234,7 +18229,7 @@ input[type="number"] {
   width: 100%;
 }
 
-#price-range .price-input .price-field:nth-of-type(2){
+#price-range .price-input .price-field:nth-of-type(2) {
   margin-left: 10px;
 }
 
@@ -18244,7 +18239,7 @@ input[type="number"] {
   font-size: 17px;
 }
 
-#price-range{
+#price-range {
   width: 100%;
 }
 
@@ -18286,7 +18281,7 @@ input[type="number"] {
   height: 18px;
   width: 18px;
   border-radius: 70%;
-  background: var(--mainColor)!important;
+  background: var(--mainColor) !important;
 }
 
 #price-range .range-input {
@@ -18328,4 +18323,73 @@ input[type="number"] {
   #price-range .price-field {
     margin-bottom: 10px;
   }
+}
+
+.order-list-item-date {
+  display: flex;
+}
+
+.order-list-item-date > div {
+  line-height: 15px;
+  font-size: 14px;
+  color: var(--blackColor) !important;
+  font-weight: 500 !important;
+}
+.order-list-item-date > div span {
+  color: var(--optionalColor) !important;
+  font-weight: 400 !important;
+}
+
+.order-list-item-date > div span.error-span {
+  color: red !important;
+}
+
+.order-list-item-error > div {
+  margin-bottom: 0;
+  padding: 0.25rem 0.5rem;
+  font-size: 12px;
+}
+
+.bookings-listings-box table tbody td.action {
+  grid-gap: 10px;
+  flex-wrap: wrap;
+  max-width: 20%;
+}
+
+.payment-form [id*="zoid-paypal-card-number-field-uid"] {
+  margin: -0.375rem;
+  width: calc(100% + 0.75rem - 0.125rem) !important;
+}
+
+.payment-form [id*="zoid-paypal-card-cvv-field"] {
+  margin: -0.375rem -0.375rem -0.375rem 0;
+  width: calc(100% + 0.375rem - 0.125rem) !important;
+}
+
+.payment-form [id*="zoid-paypal-card-expiry-field"] {
+  margin: -0.375rem 0 -0.375rem -0.375rem;
+  width: calc(100% + 0.375rem - 0.125rem) !important;
+}
+
+.flatpickr-date-filter > .flatpickr-wrapper input {
+  padding: 0 2.25rem 0 1rem;
+}
+
+.reset-date-filter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background-color: #f2f4f5;
+}
+
+.reset-date-filter svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-right: 0.75rem;
 }

@@ -9,7 +9,7 @@ const AuthTypeModal = ({
   return (
     <BaseModal
       active={typeModalActive}
-      toggleActive={handleClose}
+      closeModal={handleClose}
     >
       <span className="sub-title mb-2">
         <span>Choose where you will receive the code</span>

@@ -198,7 +198,7 @@ const ProfileEdit = () => {
     const resPaypalIdValidation = validateSmallText(paypalId);
 
     if (resPaypalIdValidation !== true) {
-      setPaypalId(resPaypalIdValidation);
+      setPaypalIdError(resPaypalIdValidation);
       hasError = true;
     }
 
@@ -520,13 +520,13 @@ const ProfileEdit = () => {
         entered in the form. Are you sure you want to leave the data
         as is?"
         active={activeVerifyPhoneModal}
-        toggleActive={toggleVerifyPhoneModal}
+        closeModal={toggleVerifyPhoneModal}
         onAccept={handleVerifyPhoneModalClick}
       />
 
       <BaseModal
         active={activeCodePhoneModal}
-        toggleActive={toggleCodePhoneModal}
+        closeModal={toggleCodePhoneModal}
       >
         <span className="sub-title mb-2">
           <span>Enter Verified Code</span>

@@ -45,7 +45,7 @@ const LoginTab = ({
   };
 
   useEffect(() => {
-    if (!activePopup) {
+    if (activePopup) {
       setFormError(null);
       setPasswordError(null);
       setEmailError(null);

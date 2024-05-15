@@ -1,38 +1,14 @@
-import { useContext, useState } from "react";
-import YesNoModal from "../_App/YesNoModal";
-import { IndiceContext } from "../../contexts";
+import { useState } from "react";
 
 const FinishOrderTriggerModal = ({ onFinish }) => {
   const [modalActive, setModalActive] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const { error } = useContext(IndiceContext);
-
-  const handleAcceptCancelOrder = async () => {
-    if (disabled) {
-      return;
-    }
-
-    try {
-      await onFinish();
-      setDisabled(true);
-      setModalActive(false);
-    } catch (e) {
-      error.set(e.message);
-    } finally {
-      setDisabled(false);
-    }
-  };
 
   return (
     <>
-      <YesNoModal
-        active={modalActive}
-        toggleActive={() => setModalActive(false)}
-        title="Finish order"
-        body="To confirm the finalization of the order, click the 'Finish'"
-        onAccept={handleAcceptCancelOrder}
-        acceptText="Finish"
-        closeModalText="Close"
+      <FinishOrderModal
+        modalActive={modalActive}
+        setModalActive={setModalActive}
+        onFinish={onFinish}
       />
       <button
         className="default-btn"

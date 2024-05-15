@@ -503,7 +503,15 @@ const ListingsWithMap = ({
                       </div>
                     )}
 
-                    <div ref={listingListParentRef} className="row">
+                    <div
+                      ref={listingListParentRef}
+                      className="row"
+                      style={
+                        !hasListings && canSendCreateNotifyRequest
+                          ? { position: "absolute", top: 0, left: 0 }
+                          : {}
+                      }
+                    >
                       {listings.map((listing) => (
                         <div
                           key={listing.id}

@@ -437,7 +437,7 @@ const ListingList = (pageProps) => {
 
       <YesNoModal
         active={listingIdToDelete}
-        toggleActive={() => setListingIdToDelete(null)}
+        closeModal={() => setListingIdToDelete(null)}
         onAccept={handleAcceptDelete}
         title="Confirm Action"
         body={`Confirmation is required to continue. Are you sure you want to delete listing "${

@@ -875,7 +875,7 @@ const EditForm = ({
         </div>
         <YesNoModal
           active={activeUpdatePopup}
-          toggleActive={() => setActiveUpdatePopup(false)}
+          closeModal={() => setActiveUpdatePopup(false)}
           onAccept={handleAcceptUpdate}
           title="Are you sure you want update listing?"
           body={
@@ -886,7 +886,7 @@ const EditForm = ({
         />
         <YesNoModal
           active={activeSentRequestPopup}
-          toggleActive={() => setActiveSentRequestPopup(false)}
+          closeModal={() => setActiveSentRequestPopup(false)}
           onAccept={handleSendRequestToApprove}
           title="Confirm Action"
           body={"Confirmation is required to send a listing approval request"}

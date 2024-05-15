@@ -10,11 +10,13 @@ import { useRouter } from "next/router";
 import {
   useChangeTimeFilter,
   useInitPaginationTimeFilter,
+  useOrderFastActions,
   usePagination,
 } from "../../../hooks";
 import OrderItem from "../../../components/Listings/OrderItem";
 import ListFilter from "../../../components/Order/ListFilter";
 import Pagination from "../../../components/Pagination";
+import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 
 const TabHeaderSection = ({
   type,
@@ -71,6 +73,7 @@ const Orders = (pageProps) => {
     rebuild,
     options,
     isFirstBookingCall,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -97,6 +100,55 @@ const Orders = (pageProps) => {
     setType(value);
     rebuild({ type: value });
   };
+
+  const {
+    handleAcceptCancel,
+    handleClickCancel,
+    activeCancel,
+    closeActiveCancel,
+
+    handleClickPayedFastCancel,
+    handleAcceptPayedFastCancel,
+    activeFastCancel,
+    closeActiveFastCancel,
+
+    handleClickCreateDispute,
+    handleAcceptCreateDispute,
+    activeCreateDispute,
+    closeActiveCreateDispute,
+
+    handleOrderClickAcceptCancelByTenant,
+    handleOrderAcceptAcceptCancelByTenant,
+    activeOrderAcceptCancelByTenant,
+    closeActiveOrderAcceptCancelByTenant,
+
+    handleOrderClickAcceptCancelByOwner,
+    handleOrderAcceptAcceptCancelByOwner,
+    activeOrderAcceptCancelByOwner,
+    closeActiveOrderAcceptCancelByOwner,
+
+    handleClickUpdateRequest,
+    handleAcceptUpdateRequest,
+    activeUpdateRequest,
+    closeActiveUpdateRequest,
+    updateRequestModalActiveOrder,
+
+    handleClickReject,
+    handleAcceptReject,
+    rejectOrderModalActive,
+    closeRejectOrderModal,
+
+    handleClickAccept,
+    handleAcceptAccept,
+    acceptOrderModalActive,
+    closeAcceptOrderModal,
+
+    handleClickPay,
+    activePay,
+    handleClosePay,
+    onTenantPayed,
+    activePayOrder,
+  } = useOrderFastActions({ orders: orders, setItemFields });
 
   return (
     <>
@@ -160,9 +212,9 @@ const Orders = (pageProps) => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>Customer</th>
-                      <th>Details</th>
-                      <th>Action</th>
+                      <th style={{ width: "40%" }}>Customer</th>
+                      <th style={{ width: "40%" }}>Details</th>
+                      <th style={{ width: "20%" }}>Action</th>
                     </tr>
                   </thead>
 
@@ -173,6 +225,19 @@ const Orders = (pageProps) => {
                         key={order.id}
                         order={order}
                         link={`/dashboard/orders/${order.id}`}
+                        handleClickCancel={handleClickCancel}
+                        handleClickPayedFastCancel={handleClickPayedFastCancel}
+                        handleClickCreateDispute={handleClickCreateDispute}
+                        handleOrderClickAcceptCancelByTenant={
+                          handleOrderClickAcceptCancelByTenant
+                        }
+                        handleOrderClickAcceptCancelByOwner={
+                          handleOrderClickAcceptCancelByOwner
+                        }
+                        handleClickUpdateRequest={handleClickUpdateRequest}
+                        handleClickReject={handleClickReject}
+                        handleClickAccept={handleClickAccept}
+                        handleClickPay={handleClickPay}
                       />
                     ))}
                   </tbody>
@@ -187,6 +252,45 @@ const Orders = (pageProps) => {
               move={moveToPage}
               canNext={canMoveNextPage}
               canPrev={canMovePrevPage}
+            />
+            <OrdersListFastActinsModals
+              activeCancel={activeCancel}
+              closeActiveCancel={closeActiveCancel}
+              handleAcceptCancel={handleAcceptCancel}
+              activeFastCancel={activeFastCancel}
+              closeActiveFastCancel={closeActiveFastCancel}
+              handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
+              activeCreateDispute={activeCreateDispute}
+              closeActiveCreateDispute={closeActiveCreateDispute}
+              handleAcceptCreateDispute={handleAcceptCreateDispute}
+              activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
+              closeActiveOrderAcceptCancelByTenant={
+                closeActiveOrderAcceptCancelByTenant
+              }
+              handleOrderAcceptAcceptCancelByTenant={
+                handleOrderAcceptAcceptCancelByTenant
+              }
+              activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
+              closeActiveOrderAcceptCancelByOwner={
+                closeActiveOrderAcceptCancelByOwner
+              }
+              handleOrderAcceptAcceptCancelByOwner={
+                handleOrderAcceptAcceptCancelByOwner
+              }
+              handleAcceptUpdateRequest={handleAcceptUpdateRequest}
+              activeUpdateRequest={activeUpdateRequest}
+              closeActiveUpdateRequest={closeActiveUpdateRequest}
+              handleAcceptReject={handleAcceptReject}
+              rejectOrderModalActive={rejectOrderModalActive}
+              closeRejectOrderModal={closeRejectOrderModal}
+              handleAcceptAccept={handleAcceptAccept}
+              acceptOrderModalActive={acceptOrderModalActive}
+              closeAcceptOrderModal={closeAcceptOrderModal}
+              updateRequestModalActiveOrder={updateRequestModalActiveOrder}
+              activePay={activePay}
+              handleClosePay={handleClosePay}
+              onTenantPayed={onTenantPayed}
+              activePayOrder={activePayOrder}
             />
           </>
         )}

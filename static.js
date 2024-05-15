@@ -23,5 +23,18 @@ export default {
     CANCELLED: "cancelled",
   },
   MIN_PRICE_LIMIT: 1,
-  MAX_PRICE_LIMIT: 1000000
+  MAX_PRICE_LIMIT: 1000000,
+  ORDER_ACTION_BUTTONS: {
+    BOOKING_AGREEMENT_SECTION: "booking-agreement-section",
+    PAY_BUTTON: "pay-button",
+    CANCEL_BUTTON: "cancel-button",
+    FOR_TENANT_QRCODE: "for-tenant-qrcode",
+    FOR_OWNER_QRCODE: "for-owner-qrcode",
+    TENANT_GOT_LISTING_APPROVE_BUTTON: "tenant-got-listing-approve-button",
+    CREATE_DISPUTE_BUTTON: "create-dispute-button",
+    FAST_CANCEL_BUTTON: "fast-cancel-button",
+    ACCEPT_FINISH_BUTTON: "accept-finish-button",
+    ACCEPT_OWNER_CANCEL_BUTTON: "accept-owner-cancel-button",
+    ACCEPT_TENANT_CANCEL_BUTTON: "accept-tenant-cancel-button",
+  },
 };

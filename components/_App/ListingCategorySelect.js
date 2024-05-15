@@ -158,7 +158,7 @@ const ListingCategorySelect = ({
     <BaseModal
       className="category-select-modal"
       active={active}
-      toggleActive={() => setActive(false)}
+      closeModal={() => setActive(false)}
     >
       <div className="d-flex w-100 h-100">
         <div className="categories-select-level-column sidebar-left">

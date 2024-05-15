@@ -1,6 +1,6 @@
 const YesNoModal = ({
   active,
-  toggleActive,
+  closeModal,
   title,
   body = null,
   onAccept,
@@ -9,8 +9,8 @@ const YesNoModal = ({
   closeModalText = "Cancel",
 }) => {
   const handleAccept = () => {
-    toggleActive();
     onAccept();
+    closeModal();
   };
   return (
     <>
@@ -24,7 +24,7 @@ const YesNoModal = ({
       >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
-            <button type="button" className="close" onClick={toggleActive}>
+            <button type="button" className="close" onClick={closeModal}>
               <i className="bx bx-x"></i>
             </button>
 
@@ -44,7 +44,7 @@ const YesNoModal = ({
                     <button
                       type="button"
                       className="button-danger"
-                      onClick={toggleActive}
+                      onClick={closeModal}
                     >
                       {closeModalText}
                     </button>
