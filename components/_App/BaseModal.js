@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 const BaseModal = ({
   active,
-  toggleActive,
+  closeModal,
   children,
   className = "",
   needCloseBtn = true,
@@ -18,7 +18,7 @@ const BaseModal = ({
     )
       return;
 
-    toggleActive();
+      closeModal();
   };
 
   return (
@@ -28,7 +28,7 @@ const BaseModal = ({
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {needCloseBtn && (
-              <button type="button" className="close" onClick={toggleActive}>
+              <button type="button" className="close" onClick={closeModal}>
                 <i className="bx bx-x"></i>
               </button>
             )}

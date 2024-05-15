@@ -43,7 +43,7 @@ const OfferOwnPrice = ({
     <BaseModal
       className="make-order-modal"
       active={offerPriceActive}
-      toggleActive={() => setOfferPriceActive(false)}
+      closeModal={() => setOfferPriceActive(false)}
     >
       <span className="sub-title mb-2">
         <span>Offer Your Price</span>

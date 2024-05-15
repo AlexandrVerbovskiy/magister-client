@@ -1,19 +1,25 @@
 import { useContext } from "react";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "./StatusBlock";
-import {
-  getDaysDifference,
-  getFilePath,
-  getListingImageByType,
-  moneyFormat,
-  timeNormalConverter,
-} from "../../utils";
+import { getDaysDifference, getFilePath, moneyFormat } from "../../utils";
 import STATIC from "../../static";
+import { useOrderActions, useOrderDateError } from "../../hooks";
+import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 
-const OrderItem = ({ order, link, filterType }) => {
+const OrderItem = ({
+  order,
+  link,
+  filterType,
+  handleClickCancel,
+  handleClickPayedFastCancel,
+  handleClickCreateDispute,
+  handleOrderClickAcceptCancelByTenant,
+  handleOrderClickAcceptCancelByOwner,
+  handleClickUpdateRequest,
+  handleClickReject,
+  handleClickAccept,
+  handleClickPay,
+}) => {
   const { sessionUser } = useContext(IndiceContext);
   const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
@@ -23,6 +29,14 @@ const OrderItem = ({ order, link, filterType }) => {
     filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
   const userPhone =
     filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
+
+  const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
+    order,
+  });
+
+  const currentActionButtons = useOrderActions({
+    order,
+  });
 
   return (
     <tr>
@@ -69,26 +83,14 @@ const OrderItem = ({ order, link, filterType }) => {
             <span>Address: </span>
             {order.listingCity}
           </li>
-          <li>
+          <li className="order-list-item-date">
             <i className="bx bx-calendar"></i>
-            <span>Date: </span>
-            {order.requestId ? (
-              <>
-                {order.newStartDate == order.newEndDate
-                  ? timeNormalConverter(order.newStartDate)
-                  : `${timeNormalConverter(
-                      order.newStartDate
-                    )} - ${timeNormalConverter(order.newEndDate)}`}
-              </>
-            ) : (
-              <>
-                {order.offerStartDate == order.offerEndDate
-                  ? timeNormalConverter(order.offerStartDate)
-                  : `${timeNormalConverter(
-                      order.offerStartDate
-                    )} - ${timeNormalConverter(order.offerEndDate)}`}
-              </>
-            )}
+            <CanBeErrorBaseDateSpan
+              startDate={
+                order.requestId ? order.newStartDate : order.offerStartDate
+              }
+              endDate={order.requestId ? order.newEndDate : order.offerEndDate}
+            />
           </li>
           <li>
             <i className="bx bx-purchase-tag"></i>
@@ -118,13 +120,155 @@ const OrderItem = ({ order, link, filterType }) => {
               <strong className="unpaid">Unpaid</strong>
             )}
           </li>
+          {checkErrorData(
+            order.requestId ? order.newStartDate : order.offerStartDate
+          ).blocked && (
+            <li className="order-list-item-error">
+              <ErrorBlockMessage>
+                {
+                  checkErrorData(
+                    order.requestId ? order.newStartDate : order.offerStartDate
+                  ).tooltipErrorMessage
+                }
+              </ErrorBlockMessage>
+            </li>
+          )}
         </ul>
       </td>
 
-      <td className="action">
+      <td className="action d-flex">
         <a href={link} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </a>
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+        ) && (
+          <>
+            {!checkErrorData(
+              order.requestId ? order.newStartDate : order.offerStartDate
+            ).blocked && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClickAccept(order.id);
+                }}
+                className="default-btn"
+              >
+                <i className="bx bx-check-circle"></i> Accept
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickUpdateRequest(order.id);
+              }}
+              className="default-btn"
+            >
+              <i className="bx bx-pencil"></i> Edit
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickReject(order.id);
+              }}
+              className="default-btn danger"
+            >
+              <i className="bx bx-x-circle"></i> Reject
+            </button>
+          </>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickPay(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-money"></i> Pay
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickPayedFastCancel(order.id);
+            }}
+            className="default-btn danger"
+          >
+            <i className="bx bx-x-circle"></i> Cancel
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickCancel(order.id);
+            }}
+            className="default-btn danger"
+          >
+            <i className="bx bx-x-circle"></i> Cancel
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickCreateDispute(order.id);
+            }}
+            className="default-btn danger"
+          >
+            <i className="bx bx-x-circle"></i> Create Dispute
+          </button>
+        )}
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_TENANT_CANCEL_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOrderClickAcceptCancelByTenant(order.id);
+            }}
+            className="default-btn danger"
+          >
+            <i className="bx bx-x-circle"></i> Accept Cancel
+          </button>
+        )}
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_CANCEL_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOrderClickAcceptCancelByOwner(order.id);
+            }}
+            className="default-btn danger"
+          >
+            <i className="bx bx-x-circle"></i> Accept Cancel
+          </button>
+        )}
       </td>
     </tr>
   );

@@ -1,27 +1,8 @@
-import { useContext, useState } from "react";
-import { IndiceContext } from "../../contexts";
-import YesNoModal from "../_App/YesNoModal";
+import { useState } from "react";
+import TenantGotListingApproveModal from "./TenantGotListingApproveModal";
 
 const TenantGotListingApproveTriggerModal = ({ onApprove }) => {
   const [modalActive, setModalActive] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const {error} = useContext(IndiceContext)
-
-  const handleTenantGotListingApproveClick = async () => {
-    if (disabled) {
-      return;
-    }
-
-    try {
-      setDisabled(true);
-      setModalActive(false);
-      onApprove();
-    } catch (e) {
-      error.set(e.message);
-    } finally {
-      setDisabled(false);
-    }
-  };
 
   return (
     <>
@@ -34,13 +15,10 @@ const TenantGotListingApproveTriggerModal = ({ onApprove }) => {
         Approve
       </button>
 
-      <YesNoModal
-        active={modalActive}
-        toggleActive={() => setModalActive(false)}
-        title="Did you actually get the tool?"
-        onAccept={handleTenantGotListingApproveClick}
-        acceptText="Yes"
-        closeModalText="No"
+      <TenantGotListingApproveModal
+        onApprove={onApprove}
+        modalActive={modalActive}
+        closeModal={() => setModalActive(false)}
       />
     </>
   );

@@ -151,7 +151,7 @@ const BookingModal = ({
     <BaseModal
       className="scrollable-modal make-order-modal"
       active={createOrderModalActive}
-      toggleActive={() => setCreateOrderModalActive(false)}
+      closeModal={() => setCreateOrderModalActive(false)}
     >
       <span className="sub-title mb-2">
         <span>Book Now</span>
@@ -220,7 +220,7 @@ const BookingModal = ({
 
         <YesNoModal
           active={activeAcceptSendBookingRequest}
-          toggleActive={() => setActiveAcceptSendBookingRequest(false)}
+          closeModal={() => setActiveAcceptSendBookingRequest(false)}
           title="Please confirm the booking"
           onAccept={handleSendBookingRequest}
           acceptText="Confirm"

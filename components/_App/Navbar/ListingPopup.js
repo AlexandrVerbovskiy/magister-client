@@ -160,7 +160,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
     <BaseModal
       className="category-select-modal category-navbar-popup"
       active={active}
-      toggleActive={() => setActive(false)}
+      closeModal={() => setActive(false)}
       needCloseBtn={false}
     >
       <div className="d-flex w-100" style={{height: "max-content"}}>
