@@ -17251,6 +17251,10 @@ button.button-danger:hover {
   min-height: 500px;
 }
 
+.listings-details-area .listings-details-image{
+  max-height: unset;
+}
+
 .listings-details-image .swiper {
   min-height: 500px;
   background-color: #373737;
@@ -18352,17 +18356,40 @@ input[type="number"] {
   max-width: 20%;
 }
 
-.payment-form [id*="zoid-paypal-card-number-field-uid"]{
+.payment-form [id*="zoid-paypal-card-number-field-uid"] {
   margin: -0.375rem;
-  width: calc(100% + 0.75rem - 0.125rem)!important;
+  width: calc(100% + 0.75rem - 0.125rem) !important;
 }
 
-.payment-form [id*="zoid-paypal-card-cvv-field"]{
+.payment-form [id*="zoid-paypal-card-cvv-field"] {
   margin: -0.375rem -0.375rem -0.375rem 0;
-  width: calc(100% + 0.375rem - 0.125rem)!important;
+  width: calc(100% + 0.375rem - 0.125rem) !important;
 }
 
-.payment-form [id*="zoid-paypal-card-expiry-field"]{
+.payment-form [id*="zoid-paypal-card-expiry-field"] {
   margin: -0.375rem 0 -0.375rem -0.375rem;
-  width: calc(100% + 0.375rem - 0.125rem)!important;
+  width: calc(100% + 0.375rem - 0.125rem) !important;
+}
+
+.flatpickr-date-filter > .flatpickr-wrapper input {
+  padding: 0 2.25rem 0 1rem;
+}
+
+.reset-date-filter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  background-color: #f2f4f5;
+}
+
+.reset-date-filter svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+  opacity: 0.5;
+  flex-shrink: 0;
+  margin-right: 0.75rem;
 }

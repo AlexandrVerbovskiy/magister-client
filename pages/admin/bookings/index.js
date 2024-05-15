@@ -5,7 +5,7 @@ import {
   useInitPaginationTimeFilter,
   usePagination,
 } from "../../../hooks";
-import { adminSideProps } from "../../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 import {
   baseTimeListPageParams,
   getDateByCurrentAdd,
@@ -164,6 +164,6 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  supportSideProps(context, boostServerSideProps);
 
 export default Bookings;

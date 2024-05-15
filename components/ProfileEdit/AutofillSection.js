@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import Input from "../DashboardComponents/Input";
-import { validateInteger } from "../../utils";
+import { validateInteger, validateSmallText } from "../../utils";
 import { autofillSaveUserData } from "../../services";
 
 const AutofillSection = () => {
@@ -20,7 +20,7 @@ const AutofillSection = () => {
 
     let hasError = false;
 
-    const resPaypalIdValidation = validateInteger(paypalId);
+    const resPaypalIdValidation = validateSmallText(paypalId);
 
     if (resPaypalIdValidation !== true) {
       setPaypalIdError(resPaypalIdValidation);

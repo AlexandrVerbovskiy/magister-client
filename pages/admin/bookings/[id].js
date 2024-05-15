@@ -330,10 +330,10 @@ const Booking = (booking) => {
                                   activeRequestsToUpdate
                                     ? (booking.ownerFee *
                                         getDaysDifference(
-                                          booking.newStartDate,
-                                          booking.newEndDate
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
                                         ) *
-                                        booking.newPricePerDay) /
+                                        activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (booking.ownerFee *
                                         getDaysDifference(
@@ -357,10 +357,10 @@ const Booking = (booking) => {
                                   activeRequestsToUpdate
                                     ? (booking.tenantFee *
                                         getDaysDifference(
-                                          booking.newStartDate,
-                                          booking.newEndDate
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
                                         ) *
-                                        booking.newPricePerDay) /
+                                        activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (booking.tenantFee *
                                         getDaysDifference(
@@ -602,6 +602,7 @@ const Booking = (booking) => {
 
                           {requestsToUpdate.map((request, index) => (
                             <PreviousProposalElem
+                              key={request.id}
                               index={index + 1}
                               prevStartDate={request.newStartDate}
                               prevEndDate={request.newEndDate}

@@ -58,11 +58,6 @@ const PaypalForm = ({ createOrder, onApprove }) => {
     "input:focus": {},
   };
 
-  const onError = (err) => {
-    const newIngp = JSON.parse(err);
-    console.log("PayPal Error:", newIngp);
-  };
-
   return (
     <PayPalScriptProvider
       options={{
@@ -76,7 +71,6 @@ const PaypalForm = ({ createOrder, onApprove }) => {
       <PayPalCardFieldsProvider
         createOrder={createOrder}
         onApprove={onApprove}
-        onError={onError}
       >
         <PayPalNumberField style={paypalFieldStyle} />
 

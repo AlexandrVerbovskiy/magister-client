@@ -27,6 +27,12 @@ const Banner = ({ popularCategories }) => {
     cityFilterRef,
   } = useCategoryCity();
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      document.querySelector("#filter-search-btn a").click();
+    }
+  };
+
   const backgroundImages = [
     "/images/main-banner-bg1.jpg",
     "/images/main-banner-bg3.jpg",
@@ -107,6 +113,7 @@ const Banner = ({ popularCategories }) => {
                     value={searchCategory}
                     onInput={handleChangeCategory}
                     maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
                   />
 
                   <SearchTipsPopup
@@ -133,6 +140,7 @@ const Banner = ({ popularCategories }) => {
                     value={searchCity}
                     onInput={handleChangeCity}
                     maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
                   />
 
                   <SearchTipsPopup
@@ -144,7 +152,10 @@ const Banner = ({ popularCategories }) => {
               </div>
 
               <div className="col-lg-3 col-md-12 p-0">
-                <div className="submit-btn">
+                <div
+                  id="filter-search-btn"
+                  className="submit-btn"
+                >
                   <Link
                     href={getFullListingSearchLink(searchCity, searchCategory)}
                   >

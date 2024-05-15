@@ -264,7 +264,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       hasError = true;
     }
 
-    const resPaypalIdValidation = validateInteger(paypalId);
+    const resPaypalIdValidation = validateSmallText(paypalId);
 
     if (resPaypalIdValidation !== true) {
       setPaypalIdError(resPaypalIdValidation);

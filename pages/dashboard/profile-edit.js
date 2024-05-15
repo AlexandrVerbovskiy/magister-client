@@ -198,7 +198,7 @@ const ProfileEdit = () => {
     const resPaypalIdValidation = validateSmallText(paypalId);
 
     if (resPaypalIdValidation !== true) {
-      setPaypalId(resPaypalIdValidation);
+      setPaypalIdError(resPaypalIdValidation);
       hasError = true;
     }
 

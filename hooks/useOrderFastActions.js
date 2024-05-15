@@ -160,7 +160,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleOrderAcceptAcceptCancelByTenant = async () => {
     try {
-      await orderAcceptCancelByOwner(orderId, authToken);
+      await orderAcceptCancelByOwner(activeOrderAcceptCancelByTenantId, authToken);
 
       setItemFields(
         {
@@ -184,7 +184,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleOrderAcceptAcceptCancelByOwner = async () => {
     try {
-      await orderAcceptCancelByTenant(orderId, authToken);
+      await orderAcceptCancelByOwner(activeOrderAcceptCancelByOwnerId, authToken);
 
       setItemFields(
         {

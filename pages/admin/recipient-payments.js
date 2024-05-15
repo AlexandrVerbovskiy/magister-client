@@ -104,7 +104,7 @@ const RecipientPayments = (pageProps) => {
                   <Datepicker
                     value={[fromTime, toTime]}
                     onChange={handleChangeTimeFilter}
-                    placeholder="Filter by created time"
+                    placeholder="Filter by payed time"
                   />
 
                   <DropdownFilter align="right">

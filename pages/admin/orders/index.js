@@ -5,11 +5,9 @@ import {
   useInitPaginationTimeFilter,
   usePagination,
 } from "../../../hooks";
-import { adminSideProps } from "../../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 import {
   baseTimeListPageParams,
-  getDateByCurrentAdd,
-  getDateByCurrentReject,
 } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
@@ -163,6 +161,6 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  supportSideProps(context, boostServerSideProps);
 
 export default Orders;
