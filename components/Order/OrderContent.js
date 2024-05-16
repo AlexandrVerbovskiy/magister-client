@@ -217,14 +217,14 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
   const onCreateDispute = async (description) => {
     try {
       if (isTenant) {
-        await orderCancelByTenant(order.id, authToken);
+        await orderCancelByTenant({ id: order.id, description }, authToken);
 
         setOrder((prev) => ({
           ...prev,
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE,
         }));
       } else {
-        await orderCancelByOwner(order.id, authToken);
+        await orderCancelByOwner({ id: order.id, description }, authToken);
 
         setOrder((prev) => ({
           ...prev,
