@@ -22,6 +22,7 @@ export const timeConverter = (time) => {
 
 export const fullTimeConverter = (time) => {
   const dateObject = new Date(time);
+  console.log(dateObject)
 
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
