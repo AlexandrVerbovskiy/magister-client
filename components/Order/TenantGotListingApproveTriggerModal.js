@@ -10,7 +10,6 @@ const TenantGotListingApproveTriggerModal = ({ onApprove }) => {
         className="default-btn"
         type="button"
         onClick={() => setModalActive(true)}
-        disabled={disabled}
       >
         Approve
       </button>
