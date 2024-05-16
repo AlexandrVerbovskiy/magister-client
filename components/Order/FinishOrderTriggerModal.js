@@ -14,7 +14,6 @@ const FinishOrderTriggerModal = ({ onFinish }) => {
         className="default-btn"
         type="button"
         onClick={() => setModalActive(true)}
-        disabled={disabled}
       >
         Finish
       </button>
