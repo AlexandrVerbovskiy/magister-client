@@ -1,3 +1,5 @@
+import moment from "moment-timezone";
+
 export const dateToInputString = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -7,36 +9,14 @@ export const dateToInputString = (date) => {
 
 export const timeConverter = (time) => {
   const dateObject = new Date(time);
-
-  const formattedDate = dateObject.toLocaleDateString("en-US");
-
-  const formattedDateParts = formattedDate.split("/");
-
-  const fullFormattedDate =
-    `${formattedDateParts[0].length < 2 ? "0" : ""}${formattedDateParts[0]}/` +
-    `${formattedDateParts[1].length < 2 ? "0" : ""}${formattedDateParts[1]}/` +
-    `${formattedDateParts[2]}`;
-
-  return `${fullFormattedDate}`;
+  const userTimeZone = moment.tz.guess();
+  return moment.utc(dateObject).tz(userTimeZone).format("MM/DD/YYYY");
 };
 
 export const fullTimeConverter = (time) => {
   const dateObject = new Date(time);
-  console.log(dateObject)
-
-  const formattedDate = dateObject.toLocaleDateString("en-US");
-  const formattedTime = dateObject.toLocaleTimeString("en-US", {
-    hour12: false,
-  });
-
-  const formattedDateParts = formattedDate.split("/");
-
-  const fullFormattedDate =
-    `${formattedDateParts[0].length < 2 ? "0" : ""}${formattedDateParts[0]}/` +
-    `${formattedDateParts[1].length < 2 ? "0" : ""}${formattedDateParts[1]}/` +
-    `${formattedDateParts[2]}`;
-
-  return `${fullFormattedDate} ${formattedTime}`;
+  const userTimeZone = moment.tz.guess();
+  return moment.utc(dateObject).tz(userTimeZone).format("MM/DD/YYYY HH:mm:ss");
 };
 
 export const timeNormalConverter = (time) => {
