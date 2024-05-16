@@ -29,6 +29,7 @@ import {
   ProfileSection,
   SecuritySection,
   AutofillSection,
+  DocumentVerificationSection,
 } from "../../components/ProfileEdit";
 
 const ProfileEdit = () => {
@@ -512,6 +513,8 @@ const ProfileEdit = () => {
     />
   );
 
+  const verifyDocumentsSection = <DocumentVerificationSection />;
+
   return (
     <>
       <YesNoModal
@@ -578,22 +581,19 @@ const ProfileEdit = () => {
           </ol>
         </div>
 
-        {sessionUser?.hasPasswordAccess && (
-          <div className="row">
-            <div className="col-lg-6 col-md-12">{profileFormSection}</div>
+        <div className="row">
+          <div className="col-lg-6 col-md-12">{profileFormSection}</div>
 
-            <div className="col-lg-6 col-md-12">
-              {securityFormSection}
-              {passwordFormSection}
-            </div>
+          <div className="col-lg-6 col-md-12">
+            {sessionUser?.hasPasswordAccess && (
+              <>
+                {securityFormSection}
+                {passwordFormSection}
+              </>
+            )}
+            {verifyDocumentsSection}
           </div>
-        )}
-
-        {!sessionUser?.hasPasswordAccess && (
-          <div className="row">
-            <div className="col-12">{profileFormSection}</div>
-          </div>
-        )}
+        </div>
       </div>
     </>
   );

@@ -179,28 +179,16 @@ const DashboardNavbar = () => {
               <Link
                 href="/dashboard/profile-edit/"
                 className={`nav-link ${
-                  currentPath == "/dashboard/profile-edit/" && "active"
+                  [
+                    "/dashboard/profile-edit/",
+                    "/dashboard/documents-verification/",
+                  ].includes(currentPath) && "active"
                 }`}
               >
                 <span className="icon">
                   <i className="bx bxs-user-circle"></i>
                 </span>
                 <span className="menu-title">Profile Edit</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link
-                href="/dashboard/documents-verification/"
-                className={`nav-link ${
-                  currentPath == "/dashboard/documents-verification/" &&
-                  "active"
-                }`}
-              >
-                <span className="icon">
-                  <i className="bx bx-file"></i>
-                </span>
-                <span className="menu-title">Documents Verification</span>
               </Link>
             </li>
 

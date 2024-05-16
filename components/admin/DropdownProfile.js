@@ -14,6 +14,7 @@ function DropdownProfile({ align }) {
     success: mainSuccess,
     sessionUser,
     error: mainError,
+    isAdmin,
   } = useContext(IndiceContext);
   const name = sessionUser?.name ?? "";
   const photo =
@@ -110,7 +111,7 @@ function DropdownProfile({ align }) {
               {name}
             </div>
             <div className="text-xs text-slate-500 dark:text-slate-400 italic">
-              Administrator
+              {isAdmin ? "Administrator" : "Support"}
             </div>
           </div>
           <ul>

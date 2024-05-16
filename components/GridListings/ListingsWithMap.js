@@ -33,7 +33,7 @@ const distances = [
 ];
 
 const orderOptions = [
-  { label: "Default", value: "default" },
+  { label: "By distance", value: "default" },
   { label: "Latest", value: "latest" },
   { label: "Price: low to high", value: "price_to_high" },
   { label: "Price: high to low", value: "price_to_low" },
@@ -507,7 +507,7 @@ const ListingsWithMap = ({
                       ref={listingListParentRef}
                       className="row"
                       style={
-                        !hasListings && canSendCreateNotifyRequest
+                        !hasListings
                           ? { position: "absolute", top: 0, left: 0 }
                           : {}
                       }

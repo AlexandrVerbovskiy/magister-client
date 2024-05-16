@@ -63,7 +63,7 @@ const ProfileSection = ({ formInfo }) => {
             <ImageInput photoUrl={photoUrl} onChange={handlePhotoChange} />
           </div>
 
-          <div className="col-lg-6 col-md-12">
+          <div className="col-xl-6 col-lg-12 col-md-12">
             <Input
               label="Your Name"
               value={name}
@@ -92,6 +92,7 @@ const ProfileSection = ({ formInfo }) => {
             <div className="order-1 order-xl-1 col-xl-6 col-lg-12 col-md-12 p-0 phone-input">
               <Input
                 label="Phone"
+                placeholder="Phone Number"
                 value={phone}
                 type="text"
                 setValue={setPhone}
