@@ -37,14 +37,14 @@ const ListingArea = ({ listings }) => {
             modules={[Pagination]}
             className="listings-slides"
           >
-            {listings.map((listing) => (
-              <SwiperSlide
-                key={listing.id}
-                style={{ display: "flex", height: "auto" }}
-              >
-                <ListingItem listing={listing} />
-              </SwiperSlide>
-            ))}
+            {listings.map((listing, index) => {
+              const styles = { display: "flex", height: "auto" };
+              return (
+                <SwiperSlide key={listing.id} style={styles}>
+                  <ListingItem listing={listing} />
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
 
