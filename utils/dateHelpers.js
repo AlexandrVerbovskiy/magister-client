@@ -5,6 +5,12 @@ export const dateToInputString = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+export const getCurrentUserUtc = () => {
+  const date = new Date();
+  const offsetMinutes = date.getTimezoneOffset();
+  return -1 * (offsetMinutes / 60);
+};
+
 export const timeConverter = (time) => {
   const dateObject = new Date(time);
 
