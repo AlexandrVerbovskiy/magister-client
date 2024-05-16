@@ -5,6 +5,12 @@ export const dateToInputString = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+export const getCurrentUserUtc = () => {
+  const date = new Date();
+  const offsetMinutes = date.getTimezoneOffset();
+  return -1 * (offsetMinutes / 60);
+};
+
 export const timeConverter = (time) => {
   const dateObject = new Date(time);
 
@@ -22,8 +28,6 @@ export const timeConverter = (time) => {
 
 export const fullTimeConverter = (time) => {
   const dateObject = new Date(time);
-  console.log(dateObject)
-
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
     hour12: false,

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import { getCurrentUserUtc } from "../utils";
 
 const usePagination = ({
   getItemsFunc,
@@ -122,7 +123,7 @@ const usePagination = ({
 
   const getFullProps = (dopBody = {}) => {
     let props = {
-      clientTime: Date.now(),
+      clientHoursUtc: getCurrentUserUtc(),
       order,
       orderType,
       itemsPerPage,
