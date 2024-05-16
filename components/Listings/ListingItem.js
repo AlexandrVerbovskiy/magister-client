@@ -9,7 +9,7 @@ const ListingItem = ({ listing, hovered = false }) => {
 
   return (
     <div
-      className={`single-listings-box w-100 ${hovered ? "hovered" : ""}`}
+      className={`single-listings-box ${hovered ? "hovered" : ""}`}
       style={{
         display: "flex",
         flexDirection: "column",

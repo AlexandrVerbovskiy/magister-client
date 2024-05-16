@@ -53,13 +53,13 @@ export const approveClientGotListing = async (token, authToken) => {
   return data.body;
 };
 
-export const orderCancelByTenant = async (id, authToken) => {
-  const data = await post(`/cancel-by-tenant`, { id }, authToken);
+export const orderCancelByTenant = async ({ id, description }, authToken) => {
+  const data = await post(`/cancel-by-tenant`, { id, description }, authToken);
   return data.body;
 };
 
-export const orderCancelByOwner = async (id, authToken) => {
-  const data = await post(`/cancel-by-owner`, { id }, authToken);
+export const orderCancelByOwner = async ({ id, description }, authToken) => {
+  const data = await post(`/cancel-by-owner`, { id, description }, authToken);
   return data.body;
 };
 
