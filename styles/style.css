@@ -64,6 +64,8 @@ Default CSS
   --mainColorBorder: #594FBF;
   --mainColorShadow: #ABA5EA;
   --mainColor2: #D0CCF6;
+  --mainColorBorder2:#D8DCF2;
+  --mainColorShadow2:#D8DCF2;
   --optionalColor: #666666;
   --whiteColor: #ffffff;
   --blackColor: #221638;
@@ -287,6 +289,7 @@ p:last-child {
 textarea.form-control {
   padding-top: 15px;
   height: auto;
+  resize: none;
 }
 
 /*================================================
@@ -3348,14 +3351,20 @@ Listings Area CSS
 
 .single-listings-box {
   position: relative;
-  box-shadow: 5px 5px var(--mainColorShadow);
+  box-shadow: 5px 5px var(--mainColorShadow2);
   transition: var(--transition);
   background-color: var(--whiteColor);
-  border: 1px solid var(--mainColorBorder);
+  border: 1px solid var(--mainColorBorder2);
   border-radius: 5px;
   margin-bottom: 35px;
   margin-right: 5px;
 }
+
+.main-listings-area .single-listings-box {
+  box-shadow: 5px 5px var(--mainColorShadow);
+  border: 1px solid var(--mainColorBorder);
+}
+
 .single-listings-box .listings-image {
   border-radius: 5px 5px 0 0;
   position: relative;
@@ -8481,7 +8490,7 @@ Page Title Area CSS
 }
 .page-title-bg form {
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847BDD;
+  box-shadow: 5px 5px var(--mainColor);
   border-radius: 5px;
   max-width: 900px;
   z-index: 2;
@@ -8494,9 +8503,18 @@ Page Title Area CSS
 .page-title-bg form .form-group {
   margin: 0;
   position: relative;
-  border-right: 1px solid #847BDD;
+  border-right: 1px solid var(--mainColor);
   margin-left: 12px;
 }
+
+.page-title-bg.map-home-area form{
+  box-shadow: 5px 5px #847BDD;
+}
+
+.page-title-bg.map-home-area form .form-group{
+  border-right: 1px solid #847BDD;
+}
+
 .page-title-bg form .form-group label {
   margin-bottom: 0;
   position: absolute;
@@ -13897,7 +13915,9 @@ Dashboard CSS
   font-weight: 500;
 }
 .my-profile-box form .form-group .form-control {
-  color: #808080;
+  /*color: #808080;*/
+  color: #221638;
+  border: 1px solid #CCCCCC!important;
 }
 .my-profile-box form .form-group .form-control::-moz-placeholder {
   -moz-transition: var(--transition);
@@ -13919,7 +13939,7 @@ Dashboard CSS
 .my-profile-box form button {
   display: block;
   width: 100%;
-  background-color: var(--mainColor);
+  background-color: #847BDD;
   color: var(--whiteColor);
   padding: 13px 30px 12.5px;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -13932,7 +13952,7 @@ Dashboard CSS
 
 .add-listings-box.footer-section button:hover,
 .my-profile-box form button:hover {
-  background-color: #3b99ca;
+  background-color: var(--mainColor);
   color: var(--whiteColor);
 }
 .my-profile-box .profile-box {
@@ -15250,7 +15270,7 @@ Dashboard CSS
 .switch-form-group .sidebar-widgets .box,
 .add-listings-box .form-group .sidebar-widgets .box {
   background: #f6f6f6;
-  border: 1px solid #eeeeee;
+  border: 1px solid #CCCCCC;
   border-radius: 5px;
   padding: 20px;
   position: relative;
@@ -18268,7 +18288,7 @@ input[type="number"] {
 #price-range .slider-container {
   height: 4px;
   position: relative;
-  background: #e4e4e4;
+  background: var(--mainColorShadow2);
   border-radius: 5px;
 }
 
@@ -18355,7 +18375,6 @@ input[type="number"] {
 .bookings-listings-box table tbody td.action {
   grid-gap: 10px;
   flex-wrap: wrap;
-  max-width: 20%;
 }
 
 .payment-form [id*="zoid-paypal-card-number-field-uid"] {
@@ -18409,4 +18428,22 @@ input[type="number"] {
 .all-listings-list .single-listings-box,
 .listings-area .single-listings-box{
   width: calc(100% - 5px);
+}
+
+.icon-danger{
+  color: #FF5F5F;
+}
+
+.icon-success{
+  color: var(--mainColor)
+}
+
+.edit-profile-document-section-title{
+  display: flex;
+  align-items: center;
+}
+
+.edit-profile-document-section-title i{
+  font-size: 35px;
+  margin-left: 5px;
 }

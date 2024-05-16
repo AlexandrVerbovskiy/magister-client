@@ -28,7 +28,7 @@ const Sidebar = ({
   setMinPrice,
   maxPrice,
   setMaxPrice,
-  handleChangePrices
+  handleChangePrices,
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -217,63 +217,13 @@ const Sidebar = ({
     <>
       <aside className="listings-widget-area">
         <section
-          className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
-        >
-          <h3
-            className="widget-title"
-            onClick={() => setMainFilterOpen(!mainFilterOpen)}
-          >
-            Filters
-          </h3>
-
-          <div
-            className="widget-body"
-            style={
-              !mainFilterMaxHeight
-                ? null
-                : { maxHeight: `${mainFilterMaxHeight}px` }
-            }
-          >
-            <ul ref={mainFilterFullUlRef}>
-              <li className="d-flex align-items-end date-filter-row">
-                <div className="d-flex flex-column date-filter">
-                  <label htmlFor="from_date">From</label>
-                  <DateInput
-                    min={separateDate(new Date())}
-                    name="from_date"
-                    value={
-                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
-                    }
-                    onInput={(value) => handleFromDateFilterChange(value)}
-                  />
-                </div>
-
-                <div style={{ marginLeft: "10px", marginRight: "10px" }}>-</div>
-
-                <div className="d-flex flex-column date-filter">
-                  <label htmlFor="to_date">To</label>
-                  <DateInput
-                    min={
-                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
-                    }
-                    name="to_date"
-                    value={toDateFilter ? dateToInputString(toDateFilter) : ""}
-                    onInput={(value) => handleToDateFilterChange(value)}
-                  />
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section
           className={`widget widget_filters ${priceFilterOpen ? "" : "close"}`}
         >
           <h3
             className="widget-title"
             onClick={() => setPriceFilterOpen(!priceFilterOpen)}
           >
-            Rental Price
+            Price
           </h3>
           <div
             className="widget-body"
@@ -316,6 +266,56 @@ const Sidebar = ({
           handleChangeChecked={handleChangeCheckedDistance}
           LiItemElement={DistanceLi}
         />
+
+        <section
+          className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
+        >
+          <h3
+            className="widget-title"
+            onClick={() => setMainFilterOpen(!mainFilterOpen)}
+          >
+            Rental Period
+          </h3>
+
+          <div
+            className="widget-body"
+            style={
+              !mainFilterMaxHeight
+                ? null
+                : { maxHeight: `${mainFilterMaxHeight}px` }
+            }
+          >
+            <ul ref={mainFilterFullUlRef}>
+              <li className="d-flex align-items-end date-filter-row">
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="from_date">From</label>
+                  <DateInput
+                    min={separateDate(new Date())}
+                    name="from_date"
+                    value={
+                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
+                    }
+                    onInput={(value) => handleFromDateFilterChange(value)}
+                  />
+                </div>
+
+                <div style={{ marginLeft: "10px", marginRight: "10px" }}>-</div>
+
+                <div className="d-flex flex-column date-filter">
+                  <label htmlFor="to_date">To</label>
+                  <DateInput
+                    min={
+                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
+                    }
+                    name="to_date"
+                    value={toDateFilter ? dateToInputString(toDateFilter) : ""}
+                    onInput={(value) => handleToDateFilterChange(value)}
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
+        </section>
 
         {categories.length > 0 && (
           <SidebarCheckboxesSection

@@ -299,6 +299,9 @@ const DocumentsVerification = ({
             <li className="item">
               <Link href="/dashboard/">Dashboard</Link>
             </li>
+            <li className="item">
+              <Link href="/profile-edit/">Profile Edit</Link>
+            </li>
             <li className="item">Documents Verification</li>
           </ol>
         </div>

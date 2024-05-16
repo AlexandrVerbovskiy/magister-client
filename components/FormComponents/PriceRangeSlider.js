@@ -94,26 +94,7 @@ const PriceRangeSlider = ({
         </div>
 
         <div className="price-input-container mt-4">
-          <div className="price-input">
-            <div className="price-field">
-              <input
-                type="number"
-                className="min-input"
-                value={minPrice}
-                step="1"
-                onChange={handleMinChange}
-              />
-            </div>
-            <div className="price-field">
-              <input
-                type="number"
-                className="max-input"
-                value={maxPrice}
-                step="1"
-                onChange={handleMaxChange}
-              />
-            </div>
-          </div>
+          From ${minPrice} to ${maxPrice}
         </div>
       </div>
     </div>

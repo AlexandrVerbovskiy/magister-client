@@ -7,7 +7,7 @@ import ListingItem from "../Listings/ListingItem";
 const ListingArea = ({ listings }) => {
   return (
     <>
-      <section className="listings-area ptb-100 bg-f9f9f9">
+      <section className="main-listings-area listings-area ptb-100 bg-f9f9f9">
         <div className="container">
           <div className="section-title">
             <h2>Trending Listings Right Now</h2>

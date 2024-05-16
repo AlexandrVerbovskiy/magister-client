@@ -33,6 +33,7 @@ const PasswordSection = ({ formInfo }) => {
           <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="Current Password"
+              placeholder="Current Password"
               value={currentPassword}
               type={currentPasswordType}
               setValue={setCurrentPassword}
@@ -52,6 +53,7 @@ const PasswordSection = ({ formInfo }) => {
           <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="New Password"
+              placeholder="New Password"
               value={password}
               type={passwordType}
               setValue={setPassword}
@@ -71,6 +73,7 @@ const PasswordSection = ({ formInfo }) => {
           <div className="col-lg-12 col-md-12 left-input-icon">
             <Input
               label="Confirm New Password"
+              placeholder="Confirm New Password"
               value={confirmPassword}
               type={confirmPasswordType}
               setValue={setConfirmPassword}
