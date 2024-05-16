@@ -229,18 +229,42 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                   </ul>
                 </div>
 
-                {listing.defects && listing.defects.length > 0 && (
-                  <>
-                    <h3>Defects</h3>
-                    <div>
-                      <ul className="pricing-list">
-                        {listing.defects.map((defect) => (
-                          <li key={defect.defectId}>{defect.defectName}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </>
-                )}
+                <h3>Location</h3>
+                <div style={{ height: "500px" }}>
+                  <MultyMarkersMap
+                    markers={[
+                      {
+                        id: 1,
+                        lat: listing.rentalLat,
+                        lng: listing.rentalLng,
+                        radius: listing.rentalRadius,
+                      },
+                    ]}
+                    baseCenter={{
+                      lat: listing.rentalLat,
+                      lng: listing.rentalLng,
+                    }}
+                    userLocation={userLocation}
+                    setUserLocation={setUserLocation}
+                    center={mapCenter}
+                    setCenter={setMapCenter}
+                  />
+                </div>
+
+                {listing.defects &&
+                  (listing.defects.length > 0 || listing.dopDefect) && (
+                    <>
+                      <h3>Defects</h3>
+                      <div>
+                        <ul className="pricing-list">
+                          {listing.defects.map((defect) => (
+                            <li key={defect.defectId}>{defect.defectName}</li>
+                          ))}
+                          {listing.dopDefect && <li>{listing.dopDefect}</li>}
+                        </ul>
+                      </div>
+                    </>
+                  )}
 
                 <h3>Review</h3>
                 <div className="listings-review">
@@ -924,26 +948,6 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                         {listing.address}
                       </li>
                     )}
-                    <li style={{ height: "400px", paddingLeft: "0" }}>
-                      <MultyMarkersMap
-                        markers={[
-                          {
-                            id: 1,
-                            lat: listing.rentalLat,
-                            lng: listing.rentalLng,
-                            radius: listing.rentalRadius,
-                          },
-                        ]}
-                        baseCenter={{
-                          lat: listing.rentalLat,
-                          lng: listing.rentalLng,
-                        }}
-                        userLocation={userLocation}
-                        setUserLocation={setUserLocation}
-                        center={mapCenter}
-                        setCenter={setMapCenter}
-                      />
-                    </li>
                   </ul>
                 </div>
 

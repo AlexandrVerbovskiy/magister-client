@@ -359,7 +359,7 @@ const Order = (order) => {
                         </div>
                       </section>
 
-                      {order.defects.length > 0 && (
+                      {(order.defects.length > 0 || order.listingDopDefect) && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
@@ -375,6 +375,16 @@ const Order = (order) => {
                                 />
                               </div>
                             ))}
+
+                            {order.listingDopDefect && (
+                              <div className="w-full">
+                                <InputView
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={order.listingDopDefect}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            )}
                           </div>
                         </section>
                       )}
