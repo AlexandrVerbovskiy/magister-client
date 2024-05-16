@@ -460,7 +460,7 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
         </div>
       </div>
 
-      {order.defects.length > 0 && (
+      {(order.defects.length > 0 || order.listingDopDefect) && (
         <div className="add-listings-box">
           <h3>Defects</h3>
 
@@ -470,6 +470,12 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
                 <InputView value={defect.defectName} />
               </div>
             ))}
+
+            {order.listingDopDefect && (
+              <div className="col-12">
+                <InputView value={order.listingDopDefect} />
+              </div>
+            )}
           </div>
         </div>
       )}

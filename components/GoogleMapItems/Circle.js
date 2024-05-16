@@ -8,7 +8,7 @@ const Circle = forwardRef(
       lat,
       lng,
       onClick,
-      color = "#FF0000",
+      color = "#594FBF",
       onRadiusChanged = () => {},
       onCenterChanged = () => {},
       onDrag = () => {},

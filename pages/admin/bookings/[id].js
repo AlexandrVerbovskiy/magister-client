@@ -504,7 +504,8 @@ const Booking = (booking) => {
                         </div>
                       </section>
 
-                      {booking.defects.length > 0 && (
+                      {(booking.defects.length > 0 ||
+                        order.listingDopDefect) && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
@@ -520,6 +521,16 @@ const Booking = (booking) => {
                                 />
                               </div>
                             ))}
+
+                            {booking.listingDopDefect && (
+                              <div className="col-12">
+                                <InputView
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={booking.listingDopDefect}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            )}
                           </div>
                         </section>
                       )}

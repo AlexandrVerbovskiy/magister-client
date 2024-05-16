@@ -103,9 +103,9 @@ const MultyMarkersMap = ({
             radius={marker.radius}
             onMouseOver={() => onMouseOver(marker.id)}
             onMouseOut={() => onMouseOut(marker.id)}
-            color="#FF0000"
-            strokeOpacity={marker.active ? 1 : 0.8}
-            fillOpacity={marker.active ? 0.5 : 0.35}
+            color="#594FBF"
+            strokeOpacity={marker.active ? 0.35 : 0.35}
+            fillOpacity={marker.active ? 0.25 : 0.15}
           />
         </React.Fragment>
       ))}
