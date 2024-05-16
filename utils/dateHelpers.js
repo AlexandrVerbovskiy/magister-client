@@ -28,8 +28,6 @@ export const fullTimeConverter = (time) => {
     hour12: false,
   });
 
-  console.log(formattedDate, formattedTime, timeNormalConverter(time), new Date(time))
-
   const formattedDateParts = formattedDate.split("/");
 
   const fullFormattedDate =
