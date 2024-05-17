@@ -14,10 +14,11 @@ export { default as convertToSelectPopupCategories } from "./convertToSelectPopu
 export { default as isClickedOnVisualImagePart } from "./isClickedOnVisualImagePart";
 export { default as cloneObject } from "./cloneObject";
 export { default as reorderList } from "./reorderList";
+export { default as autoMultiEnding } from "./autoMultiEnding";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";
 export * from "./dateHelpers";
 export * from "./elementEvent";
 export * from "./priceCalculations";
-export * from "./baseServerSideProps"
+export * from "./baseServerSideProps";

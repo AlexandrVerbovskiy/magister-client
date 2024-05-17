@@ -737,20 +737,16 @@ const EditForm = ({ listing, categories, defects, save }) => {
                                 );
                               })}
 
-                            <div className="form-input flex flex-wrap mt-2 justify-between">
-                              <div className="w-full">
-                                <Input
-                                  name="dop_defect"
-                                  placeholder="Other defects..."
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={defect}
-                                  setValue={setDefect}
-                                  error={defectError}
-                                  setError={setDefectError}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            </div>
+                            <Input
+                              name="dop_defect"
+                              placeholder="Other defects..."
+                              labelClassName="block text-sm font-medium mb-1"
+                              value={defect}
+                              setValue={setDefect}
+                              error={defectError}
+                              setError={setDefectError}
+                              inputClassName="form-input w-full mt-2"
+                            />
                           </div>
                         </section>
                       )}

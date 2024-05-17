@@ -1,15 +1,16 @@
 import { useState } from "react";
-import CancelModal from "./CancelModal";
+import CancelFastModal from "./CancelFastModal";
 
-const CancelTriggerModal = ({ onCancel, text = "Cancel" }) => {
+const CancelFastTriggerModal = ({ order, onCancel, text = "Cancel" }) => {
   const [modalActive, setModalActive] = useState(false);
 
   return (
     <>
-      <CancelModal
+      <CancelFastModal
         onCancel={onCancel}
         modalActive={modalActive}
         closeModal={() => setModalActive(false)}
+        order={order}
       />
       <button
         className="default-btn error-btn"
@@ -22,4 +23,4 @@ const CancelTriggerModal = ({ onCancel, text = "Cancel" }) => {
   );
 };
 
-export default CancelTriggerModal;
+export default CancelFastTriggerModal;

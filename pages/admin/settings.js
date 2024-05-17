@@ -22,6 +22,7 @@ const Settings = ({
   ownerBaseCommissionPercent: baseOwnerBaseCommissionPercent,
   ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
   tenantBaseCommissionPercent: baseTenantBaseCommissionPercent,
+  tenantCancelFeePercent: baseTenantCancelFeePercent,
 }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [baseProps, setBaseProps] = useState({
@@ -29,29 +30,37 @@ const Settings = ({
     ownerBaseCommissionPercent: baseOwnerBaseCommissionPercent,
     ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
     tenantBaseCommissionPercent: baseTenantBaseCommissionPercent,
+    tenantCancelFeePercent: baseTenantCancelFeePercent,
   });
+
   const [userLogActive, setUserLogActive] = useState(baseUserLogActive);
   const [submitDisabled, setSubmitDisabled] = useState(false);
 
   const [ownerBaseCommissionPercent, setOwnerBaseCommissionPercent] = useState(
-    baseOwnerBaseCommissionPercent
+    baseOwnerBaseCommissionPercent ?? 0
   );
   const [ownerBaseCommissionPercentError, setOwnerBaseCommissionPercentError] =
     useState(null);
 
   const [ownerBoostCommissionPercent, setOwnerBoostCommissionPercent] =
-    useState(baseOwnerBoostCommissionPercent);
+    useState(baseOwnerBoostCommissionPercent ?? 0);
   const [
     ownerBoostCommissionPercentError,
     setOwnerBoostCommissionPercentError,
   ] = useState(null);
 
   const [tenantBaseCommissionPercent, setTenantBaseCommissionPercent] =
-    useState(baseTenantBaseCommissionPercent);
+    useState(baseTenantBaseCommissionPercent ?? 0);
   const [
     tenantBaseCommissionPercentError,
     setTenantBaseCommissionPercentError,
   ] = useState(null);
+
+  const [tenantCancelFeePercent, setTenantCancelFeePercent] = useState(
+    baseTenantCancelFeePercent ?? 0
+  );
+  const [tenantCancelFeePercentError, setTenantCancelFeePercentError] =
+    useState(null);
 
   const { authToken, success, error } = useContext(IndiceContext);
 
@@ -62,6 +71,7 @@ const Settings = ({
     ownerBaseCommissionPercent,
     ownerBoostCommissionPercent,
     tenantBaseCommissionPercent,
+    tenantCancelFeePercent,
   });
 
   const propsToState = (props) => {
@@ -69,6 +79,7 @@ const Settings = ({
     setOwnerBaseCommissionPercent(props.ownerBaseCommissionPercent);
     setOwnerBoostCommissionPercent(props.ownerBoostCommissionPercent);
     setTenantBaseCommissionPercent(props.tenantBaseCommissionPercent);
+    setTenantCancelFeePercent(props.tenantCancelFeePercent);
   };
 
   const hasChanges = () => {
@@ -109,6 +120,21 @@ const Settings = ({
         Number(ownerBoostCommissionPercent) > 99)
     ) {
       setOwnerBoostCommissionPercentError("Invalid field");
+      hasError = true;
+    }
+
+    if (!tenantCancelFeePercent) {
+      setTenantCancelFeePercentError("Requested field");
+      hasError = true;
+    }
+
+    if (
+      tenantCancelFeePercent &&
+      (isNaN(Number(tenantCancelFeePercent)) ||
+        Number(tenantCancelFeePercent) < 0 ||
+        Number(tenantCancelFeePercent) > 99)
+    ) {
+      setTenantCancelFeePercentError("Invalid field");
       hasError = true;
     }
 
@@ -243,6 +269,21 @@ const Settings = ({
                             />
                           </div>
                         </div>
+
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-1/3">
+                            <Input
+                              name="tenantCancelCommission"
+                              value={tenantCancelFeePercent}
+                              setValue={setTenantCancelFeePercent}
+                              error={tenantCancelFeePercentError}
+                              setError={setTenantCancelFeePercentError}
+                              label="Tenant Cancel Commission"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
                       </section>
                     </div>
 
@@ -277,19 +318,7 @@ const Settings = ({
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  const {
-    userLogActive,
-    ownerBaseCommissionPercent,
-    ownerBoostCommissionPercent,
-    tenantBaseCommissionPercent,
-  } = await getSystemOptionsRequest(baseSideProps.authToken);
-
-  return {
-    userLogActive,
-    ownerBaseCommissionPercent,
-    ownerBoostCommissionPercent,
-    tenantBaseCommissionPercent,
-  };
+  return await getSystemOptionsRequest(baseSideProps.authToken);
 };
 
 export const getServerSideProps = (context) =>

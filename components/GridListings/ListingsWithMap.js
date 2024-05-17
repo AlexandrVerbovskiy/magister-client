@@ -381,13 +381,31 @@ const ListingsWithMap = ({
     }
   };
 
-  const setMarkerActive = (id) =>
+  const setMarkerActive = (id) => {
     setMarkers((prev) =>
       prev.map((marker) => {
         if (marker.id == id) marker.active = true;
         return marker;
       })
     );
+  };
+
+  const setListingMarkerActive = (id) => {
+    const currentActiveMarker = markers.find((marker) => {
+      if (marker.id == id) {
+        return marker;
+      }
+    });
+
+    setMarkerActive(id);
+
+    if (currentActiveMarker) {
+      setMapCenter({
+        lat: currentActiveMarker.lat,
+        lng: currentActiveMarker.lng,
+      });
+    }
+  };
 
   const setMarkerUnactive = (id) =>
     setMarkers((prev) =>
@@ -516,7 +534,7 @@ const ListingsWithMap = ({
                         <div
                           key={listing.id}
                           className="col-xl-6 col-lg-6 col-md-6 d-flex"
-                          onMouseOver={() => setMarkerActive(listing.id)}
+                          onMouseOver={() => setListingMarkerActive(listing.id)}
                           onMouseLeave={() => setMarkerUnactive(listing.id)}
                         >
                           <ListingItem

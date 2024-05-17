@@ -60,12 +60,12 @@ Default CSS
 =================================================*/
 :root {
   --fontFamily: "Work Sans", sans-serif;
-  --mainColor: #594FBF;
-  --mainColorBorder: #594FBF;
-  --mainColorShadow: #ABA5EA;
-  --mainColor2: #D0CCF6;
-  --mainColorBorder2:#D8DCF2;
-  --mainColorShadow2:#D8DCF2;
+  --mainColor: #594fbf;
+  --mainColorBorder: #594fbf;
+  --mainColorShadow: #aba5ea;
+  --mainColor2: #d0ccf6;
+  --mainColorBorder2: #d8dcf2;
+  --mainColorShadow2: #d8dcf2;
   --optionalColor: #666666;
   --whiteColor: #ffffff;
   --blackColor: #221638;
@@ -2229,7 +2229,7 @@ Main Banner Area CSS
 .main-banner-content form {
   margin-top: 40px;
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847BDD;
+  box-shadow: 5px 5px #847bdd;
   border-radius: 100px;
   padding-left: 20px;
   padding-right: 12px;
@@ -2237,7 +2237,7 @@ Main Banner Area CSS
 .main-banner-content form .form-group {
   margin: 0;
   position: relative;
-  border-right: 1px solid #847BDD;
+  border-right: 1px solid #847bdd;
   margin-left: 12px;
 }
 .main-banner-content form .form-group label {
@@ -2492,7 +2492,7 @@ Main Banner Area CSS
 .banner-content form {
   margin-top: 40px;
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847BDD;
+  box-shadow: 5px 5px #847bdd;
   border-radius: 5px;
   padding-left: 20px;
   padding-right: 12px;
@@ -2500,7 +2500,7 @@ Main Banner Area CSS
 .banner-content form .form-group {
   margin: 0;
   position: relative;
-  border-right: 1px solid #847BDD;
+  border-right: 1px solid #847bdd;
   margin-left: 12px;
 }
 .banner-content form .form-group label {
@@ -2724,7 +2724,7 @@ Main Banner Area CSS
 .banner-wrapper-content form {
   margin-top: 40px;
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847BDD;
+  box-shadow: 5px 5px #847bdd;
   border-radius: 5px;
   padding-left: 20px;
   padding-right: 12px;
@@ -2732,7 +2732,7 @@ Main Banner Area CSS
 .banner-wrapper-content form .form-group {
   margin: 0;
   position: relative;
-  border-right: 1px solid #847BDD;
+  border-right: 1px solid #847bdd;
   margin-left: 12px;
 }
 .banner-wrapper-content form .form-group label {
@@ -3023,7 +3023,7 @@ Main Banner Area CSS
 }
 .map-home-area form {
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847BDD;
+  box-shadow: 5px 5px #847bdd;
   border-radius: 5px;
   position: absolute;
   left: 0;
@@ -3039,7 +3039,7 @@ Main Banner Area CSS
 .map-home-area form .form-group {
   margin: 0;
   position: relative;
-  border-right: 1px solid #847BDD;
+  border-right: 1px solid #847bdd;
   margin-left: 12px;
 }
 .map-home-area form .form-group label {
@@ -5317,17 +5317,32 @@ Listings Details Area CSS
   display: inline-block;
   text-align: center;
   overflow: hidden;
-  color: var(--whiteColor);
-  background-color: var(--mainColor);
   transition: var(--transition);
   padding: 12px 50px;
   font-weight: 600;
   font-size: var(--fontSize);
 }
-.listings-details-desc .review-form-wrapper form button:hover {
-  background-color: var(--mainColor2);
+
+.listings-details-desc .review-form-wrapper form button[type="submit"]{
   color: var(--whiteColor);
+  background-color: #847BDD;
 }
+
+.listings-details-desc .review-form-wrapper form button[type="button"]{
+  background-color: #EDE7F6;
+  color: #666666;
+}
+
+.listings-details-desc .review-form-wrapper form button[type="submit"]:hover{
+  background-color: #EDE7F6;
+  color: #666666;
+}
+
+.listings-details-desc .review-form-wrapper form button[type="button"]:hover{
+  color: var(--whiteColor);
+  background-color: #847BDD;
+}
+
 .listings-details-desc .review-form-wrapper form .form-control {
   background-color: var(--whiteColor) !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
@@ -5410,19 +5425,46 @@ Listings Details Area CSS
   color: var(--blackColor);
 }
 
-.listings-sidebar .listings_contact_details ul li:nth-child(1),
-.listings-sidebar .listings_contact_details ul li:nth-child(3) {
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(1),
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(3) {
   color: var(--mainColor);
 }
-.listings-sidebar .listings_contact_details ul li:nth-child(1) a,
-.listings-sidebar .listings_contact_details ul li:nth-child(3) a {
+
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(1)
+  a,
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(3)
+  a {
   color: var(--mainColor);
 }
-.listings-sidebar .listings_contact_details ul li:nth-child(1) a:hover,
-.listings-sidebar .listings_contact_details ul li:nth-child(3) a:hover {
+
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(1)
+  a:hover,
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:nth-child(3)
+  a:hover {
   color: var(--blackColor);
 }
-.listings-sidebar .listings_contact_details ul li:last-child {
+.listings-sidebar
+  .listings_contact_details:not(.ignore_colors)
+  ul
+  li:last-child {
   padding-bottom: 0;
 }
 .listings-sidebar .listings_author .author img {
@@ -8507,12 +8549,12 @@ Page Title Area CSS
   margin-left: 12px;
 }
 
-.page-title-bg.map-home-area form{
-  box-shadow: 5px 5px #847BDD;
+.page-title-bg.map-home-area form {
+  box-shadow: 5px 5px #847bdd;
 }
 
-.page-title-bg.map-home-area form .form-group{
-  border-right: 1px solid #847BDD;
+.page-title-bg.map-home-area form .form-group {
+  border-right: 1px solid #847bdd;
 }
 
 .page-title-bg form .form-group label {
@@ -10197,18 +10239,17 @@ Checkout Area CSS
   color: var(--blackColor);
   font-weight: 700;
 }
-.order-details .payment-box {
+.payment-box {
   background-color: var(--whiteColor);
   box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.06);
   margin-top: 30px;
   padding: 30px;
 }
-.order-details .payment-box .payment-method p [type="radio"]:checked,
-.order-details .payment-box .payment-method p [type="radio"]:not(:checked) {
+.payment-box .payment-method p [type="radio"]:checked,
+.payment-box .payment-method p [type="radio"]:not(:checked) {
   display: none;
 }
-.order-details .payment-box .payment-method p [type="radio"]:checked + label,
-.order-details
+.payment-box .payment-method p [type="radio"]:checked + label,
   .payment-box
   .payment-method
   p
@@ -10222,13 +10263,11 @@ Checkout Area CSS
   margin-bottom: 8px;
   font-weight: 700;
 }
-.order-details
   .payment-box
   .payment-method
   p
   [type="radio"]:checked
   + label::before,
-.order-details
   .payment-box
   .payment-method
   p
@@ -10244,13 +10283,11 @@ Checkout Area CSS
   border-radius: 50%;
   background: var(--whiteColor);
 }
-.order-details
   .payment-box
   .payment-method
   p
   [type="radio"]:checked
   + label::after,
-.order-details
   .payment-box
   .payment-method
   p
@@ -10266,7 +10303,6 @@ Checkout Area CSS
   border-radius: 50%;
   transition: var(--transition);
 }
-.order-details
   .payment-box
   .payment-method
   p
@@ -10276,7 +10312,6 @@ Checkout Area CSS
   visibility: hidden;
   transform: scale(0);
 }
-.order-details
   .payment-box
   .payment-method
   p
@@ -13677,7 +13712,6 @@ Dashboard CSS
   padding: 3px 10px 3.5px;
   position: relative;
   background-color: var(--mainColor);
-  top: -2px;
   margin-left: 2px;
   font-weight: 500;
   font-size: 12px;
@@ -13917,7 +13951,7 @@ Dashboard CSS
 .my-profile-box form .form-group .form-control {
   /*color: #808080;*/
   color: #221638;
-  border: 1px solid #CCCCCC!important;
+  border: 1px solid #cccccc !important;
 }
 .my-profile-box form .form-group .form-control::-moz-placeholder {
   -moz-transition: var(--transition);
@@ -13939,7 +13973,7 @@ Dashboard CSS
 .my-profile-box form button {
   display: block;
   width: 100%;
-  background-color: #847BDD;
+  background-color: #847bdd;
   color: var(--whiteColor);
   padding: 13px 30px 12.5px;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -15270,7 +15304,7 @@ Dashboard CSS
 .switch-form-group .sidebar-widgets .box,
 .add-listings-box .form-group .sidebar-widgets .box {
   background: #f6f6f6;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #cccccc;
   border-radius: 5px;
   padding: 20px;
   position: relative;
@@ -16998,7 +17032,7 @@ button.button-danger:hover {
 .tips-popup {
   max-height: 200px;
   overflow: auto;
-  border-top: 1px solid #847BDD;
+  border-top: 1px solid #847bdd;
 }
 
 .navbar-search-box .tips-popup {
@@ -17273,7 +17307,7 @@ button.button-danger:hover {
   min-height: 500px;
 }
 
-.listings-details-area .listings-details-image{
+.listings-details-area .listings-details-image {
   max-height: unset;
 }
 
@@ -18042,19 +18076,19 @@ input[type="number"] {
 }
 
 .status-background-red {
-  background-color: #f3103c !important;
+  background-color: #AB0000 !important;
 }
 
 .status-background-gray {
-  background-color: var(--optionalColor) !important;
+  background-color: #626262 !important;
 }
 
 .status-background-green {
-  background-color: #64bc36 !important;
+  background-color: #139A31 !important;
 }
 
 .status-background-orange {
-  background-color: #ffae00 !important;
+  background-color: #D98232 !important;
 }
 
 .status-background-base {
@@ -18190,8 +18224,8 @@ input[type="number"] {
 }
 
 .order-item-title-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
@@ -18199,6 +18233,7 @@ input[type="number"] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 16px;
 }
 
 .order-item-title-row > div:nth-of-type(2) {
@@ -18416,34 +18451,237 @@ input[type="number"] {
 }
 
 .all-listings-list .swiper-wrapper,
-.listings-area .swiper-wrapper{
-  grid-column-gap: 25px!important;
+.listings-area .swiper-wrapper {
+  grid-column-gap: 25px !important;
 }
 
 .all-listings-list .swiper-wrapper .swiper-slide,
-.listings-area .swiper-wrapper .swiper-slide{
-  margin-right: 0!important;
+.listings-area .swiper-wrapper .swiper-slide {
+  margin-right: 0 !important;
 }
 
 .all-listings-list .single-listings-box,
-.listings-area .single-listings-box{
+.listings-area .single-listings-box {
   width: calc(100% - 5px);
 }
 
-.icon-danger{
-  color: #FF5F5F;
+.icon-danger {
+  color: #ff5f5f;
 }
 
-.icon-success{
-  color: var(--mainColor)
+.icon-success {
+  color: var(--mainColor);
 }
 
-.edit-profile-document-section-title{
+.edit-profile-document-section-title {
   display: flex;
   align-items: center;
 }
 
-.edit-profile-document-section-title i{
+.edit-profile-document-section-title i {
   font-size: 35px;
   margin-left: 5px;
+}
+
+.flatpickr-day {
+  border-radius: 0 !important;
+  border-color: #d5d4df !important;
+  font-size: 14px !important;
+  /*max-width: 64px!important;
+  height: 64px!important;
+  line-height: 64px!important;*/
+  max-width: 45px !important;
+  height: 45px !important;
+  line-height: 45px !important;
+}
+
+.span.flatpickr-weekday {
+  max-width: 45px !important;
+}
+
+.rangeMode .flatpickr-day {
+  margin-top: 0px !important;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay,
+.flatpickr-day.notAllowed,
+.flatpickr-day.notAllowed.prevMonthDay,
+.flatpickr-day.notAllowed.nextMonthDay {
+  background-color: #f2f3f7 !important;
+  color: #666666 !important;
+}
+
+/*.flatpickr-calendar{
+  width: 448px!important;
+  min-width: 448px!important;
+  max-width: 448px!important;
+}
+
+.flatpickr-rContainer{
+  width: 100%!important;
+}
+
+.dayContainer,
+.flatpickr-days{
+  width: 100%!important;
+  min-width: 100%!important;
+  max-width: 100%!important; 
+}*/
+
+span.flatpickr-weekday {
+  font-size: 14px !important;
+  color: #212529 !important;
+}
+
+.flatpickr-months {
+  margin-top: 0 !important;
+}
+
+.flatpickr-month {
+  padding: 10px 0 !important;
+}
+
+.flatpickr-current-month {
+  /*font-size: 24px!important;*/
+  font-size: 20px !important;
+}
+
+.flatpickr-day.inRange,
+.flatpickr-day.selected.startRange,
+.flatpickr-day.startRange.startRange,
+.flatpickr-day.endRange.startRange,
+.flatpickr-day.selected.endRange,
+.flatpickr-day.startRange.endRange,
+.flatpickr-day.endRange.endRange {
+  border-radius: 0 !important;
+  background-color: #ede7f6 !important;
+  color: #212529 !important;
+}
+
+.flatpickr-day.selected.today,
+.flatpickr-day.today {
+  background-color: #594fbf !important;
+  color: var(--whiteColor) !important;
+}
+
+.flatpickr-parent-wrapper.flatpickr-date-filter {
+  position: relative !important;
+}
+
+.listings-sidebar .listings_contact_details.owner_info li:nth-of-type(2) {
+  grid-column-gap: 5px;
+  display: flex;
+}
+
+.listings-sidebar .listings_contact_details.item_info li {
+  border-top: 0 !important;
+}
+
+.listings-sidebar .listings_contact_details.item_info li {
+}
+
+.listings-sidebar .listings_contact_details.item_info li .rating-section {
+  grid-column-gap: 5px;
+  display: flex;
+}
+
+.listings_author .rating-section {
+  grid-column-gap: 5px;
+  display: flex;
+  margin-top: 25px;
+  font-size: 16px;
+}
+
+.item_info .rating-count {
+  color: #666666;
+  font-weight: 600;
+}
+
+.item_info .single-image-bpx {
+  height: 200px;
+  border: 0;
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.listings_author .rating-section .bx {
+  color: #efc02f;
+}
+
+.listings_author .rating-section a {
+  color: var(--mainColor);
+}
+
+.listings_author .rating-section a:hover {
+  color: var(--blackColor);
+}
+
+.listings_contact_details .date-info {
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  padding: 7px;
+  background-color: #FFFFFF;
+}
+
+.listings_contact_details .date-info-label {
+  color: #808080;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.listings_contact_details .date-info-value {
+  color: #4D4D4D;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.date-fee-switch{
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+
+.date-fee-switch .box{
+  padding: 0!important;
+  border: 0!important;
+  background: transparent!important;
+  width: 100%!important;
+}
+
+.date-fee-switch .switch{
+  right: 0!important;
+}
+
+.bookings-listings-box table{
+  display: flex;
+  flex-direction: column;
+}
+
+.bookings-listings-box tr{
+  display: flex!important;
+  width: 100%;
+}
+
+.bookings-listings-box td{
+  display: block!important;
+}
+
+.bookings-listings-box td:nth-of-type(1),
+.bookings-listings-box td:nth-of-type(2){
+  width: 40%;
+}
+
+.bookings-listings-box td:nth-of-type(3){
+  width: 20%;
+  display: flex!important;
+  align-content: flex-start!important;
+}
+
+.bookings-listings-box td:nth-of-type(3) a,
+.bookings-listings-box td:nth-of-type(3) button{
+height: 36px;
 }

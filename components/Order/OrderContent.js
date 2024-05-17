@@ -34,6 +34,7 @@ import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
 import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
 import { useOrderActions, useOrderDateError } from "../../hooks";
+import CancelFastTriggerModal from "./CancelFastTriggerModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -1202,16 +1203,27 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON
-            ) && <CancelTriggerModal onCancel={onCancel} />}
+            ) && (
+              <CancelTriggerModal onCancel={onCancel} text="Cancel Request" />
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
-            ) && <CancelTriggerModal onCancel={onPayedFastCancel} />}
+            ) && (
+              <CancelFastTriggerModal
+                onCancel={onPayedFastCancel}
+                text="Cancel Request"
+                order={order}
+              />
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
             ) && (
-              <CreateDisputeTriggerModal onCreateDispute={onCreateDispute} />
+              <CreateDisputeTriggerModal
+                onCreateDispute={onCreateDispute}
+                text="Create Dispute"
+              />
             )}
 
             {currentActionButtons.includes(

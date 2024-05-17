@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 import CancelModal from "./CancelModal";
+import CancelFastModal from "./CancelFastModal";
 import CreateDisputeModal from "./CreateDisputeModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
@@ -16,6 +17,7 @@ const OrdersListFastActinsModals = ({
   handleAcceptPayedFastCancel,
   activeFastCancel,
   closeActiveFastCancel,
+  activeFastCancelOrder,
 
   handleAcceptCreateDispute,
   activeCreateDispute,
@@ -46,6 +48,7 @@ const OrdersListFastActinsModals = ({
   handleClosePay,
   onTenantPayed,
   activePayOrder,
+  tenantCancelFee,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -138,11 +141,14 @@ const OrdersListFastActinsModals = ({
         closeModal={closeActiveCancel}
         onCancel={handleAcceptCancel}
       />
-      <CancelModal
-        modalActive={activeFastCancel}
-        closeModal={closeActiveFastCancel}
-        onCancel={handleAcceptPayedFastCancel}
-      />
+      {
+        <CancelFastModal
+          modalActive={activeFastCancel}
+          closeModal={closeActiveFastCancel}
+          onCancel={handleAcceptPayedFastCancel}
+          order={{ ...activeFastCancelOrder, tenantCancelFee }}
+        />
+      }
 
       <CreateDisputeModal
         modalActive={activeCreateDispute}

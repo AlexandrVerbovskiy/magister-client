@@ -5,18 +5,23 @@ const Status = ({ status, baseClass = "" }) => {
   let dopClassName = "bg-slate-300";
 
   if (status == STATIC.ORDER_STATUSES.PENDING_OWNER) {
-    text = "Pending Owner Approvement";
+    text = "Waiting for confirmation";
     dopClassName = "bg-purple-500";
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_TENANT) {
-    text = "Pending Rental Approvement";
-    dopClassName = "bg-amber-500";
+    text = "Waiting for confirmation";
+    dopClassName = "bg-purple-500";
   }
 
   if (status == STATIC.ORDER_STATUSES.REJECTED) {
-    text = "Declined";
+    text = "Denied";
     dopClassName = "bg-rose-500";
+  }
+
+  if (status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
+    text = "Waiting for payment";
+    dopClassName = "bg-sky-500";
   }
 
   return (

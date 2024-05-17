@@ -7,7 +7,7 @@ export const calculateFeeByDaysCount = (count, price, fee) => {
   return moneyFormat(totalFee);
 };
 
-export const calculateTotalPriceByDaysCount = (count, price, fee) =>
+export const calculateTotalPriceByDaysCount = (count, price) =>
   moneyFormat(price * count);
 
 export const calculateFullTotalByDaysCount = (

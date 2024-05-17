@@ -39,6 +39,10 @@ const SubmitPayment = () => {
             info = description;
           }
         }
+
+        if (info.toLowerCase() == "INVALID_NUMBER") {
+          info = "Invalid card number";
+        }
       }
 
       error.set(info);
@@ -68,10 +72,7 @@ const PaypalForm = ({ createOrder, onApprove }) => {
         components: "card-fields",
       }}
     >
-      <PayPalCardFieldsProvider
-        createOrder={createOrder}
-        onApprove={onApprove}
-      >
+      <PayPalCardFieldsProvider createOrder={createOrder} onApprove={onApprove}>
         <PayPalNumberField style={paypalFieldStyle} />
 
         <div className="paypal-payment-card">
