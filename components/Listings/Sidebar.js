@@ -267,7 +267,7 @@ const Sidebar = ({
           LiItemElement={DistanceLi}
         />
 
-        <section
+        {/*<section
           className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
         >
           <h3
@@ -315,7 +315,7 @@ const Sidebar = ({
               </li>
             </ul>
           </div>
-        </section>
+        </section>*/}
 
         {categories.length > 0 && (
           <SidebarCheckboxesSection

@@ -785,7 +785,7 @@ const EditForm = ({
 
                 <div className="form-group switch-form-group">
                   <div className="sidebar-widgets">
-                    <div className="box">
+                    <div className="box" style={{ padding: "0" }}>
                       <InputWithIcon
                         placeholder="Other defects..."
                         value={defect}

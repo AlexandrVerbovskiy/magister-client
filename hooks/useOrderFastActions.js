@@ -19,7 +19,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [activeCancelId, setActiveCancelId] = useState(null);
 
   const [activeFastCancel, setActiveFastCancel] = useState(false);
-  const [activeFastCancelId, setActiveFastCancelId] = useState(null);
+  const [activeFastCancelOrder, setActiveFastCancelOrder] = useState(null);
 
   const [activeCreateDispute, setActiveCreateDispute] = useState(false);
   const [activeCreateDisputeId, setActiveCreateDisputeId] = useState(null);
@@ -94,19 +94,19 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleAcceptPayedFastCancel = async () => {
     try {
-      await orderFullCancelPayed(activeFastCancelId, authToken);
+      await orderFullCancelPayed(activeFastCancelOrder.id, authToken);
 
       setItemFields(
         {
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
         },
-        activeFastCancelId
+        activeFastCancelOrder.id
       );
 
       success.set(
         `Order cancelled successfully. The money was returned to your paypal`
       );
-      setActiveFastCancelId(null);
+      setActiveFastCancelOrder(null);
       setActiveFastCancel(false);
     } catch (e) {
       error.set(e.message);
@@ -114,7 +114,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const handleClickPayedFastCancel = (orderId) => {
-    setActiveFastCancelId(orderId);
+    const order = findCurrentOrderById(orderId);
+    setActiveFastCancelOrder(order);
     setActiveFastCancel(true);
   };
 
@@ -359,6 +360,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     handleClickPayedFastCancel,
     handleAcceptPayedFastCancel,
     activeFastCancel,
+    activeFastCancelOrder,
     closeActiveFastCancel,
 
     handleClickCreateDispute,

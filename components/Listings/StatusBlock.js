@@ -19,9 +19,9 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (ownerId == userId) {
-      text = "Pending Your Approval";
+      text = "Request received";
     } else {
-      text = "Pending Owner Approval";
+      text = "Waiting for confirmation";
     }
   }
 
@@ -29,35 +29,29 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (tenantId == userId) {
-      text = "Pending Your Approval";
+      text = "Waiting for confirmation";
     } else {
-      text = "Pending Renter Approval";
+      text = "Request received";
     }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     color = "status-background-green";
-    text = "Pending Payment";
-
-    if (tenantId == userId) {
-      text = "Pending Payment";
-    } else {
-      text = "Pending Payment";
-    }
+    text = "Waiting for payment";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
     color = "status-background-green";
-    text = "Pending Handover";
+    text = "Approved";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
     if (separateDate(new Date()) < endDate) {
       color = "status-background-orange";
-      text = "In Process";
+      text = "Rental in progress";
     } else {
       color = "status-background-base";
-      text = "Pending Item Back";
+      text = "Rental in progress";
     }
   }
 
@@ -68,7 +62,7 @@ const StatusBlock = ({
 
   if (orderStatus == STATIC.ORDER_STATUSES.REJECTED) {
     color = "status-background-red";
-    text = "Declined";
+    text = "Denied";
   }
 
   if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELLED) {
@@ -80,21 +74,21 @@ const StatusBlock = ({
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE
   ) {
     color = "status-background-red";
-    text = "Waiting Cancelled";
+    text = "In dispute";
   }
 
   if (
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
   ) {
     color = "status-background-red";
-    text = "Waiting Cancelled";
+    text = "In dispute";
   }
 
   if (
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE
   ) {
     color = "status-background-red";
-    text = "Waiting Cancelled";
+    text = "In dispute";
   }
 
   return <div className={`${dopClass} ${color}`}>{text}</div>;

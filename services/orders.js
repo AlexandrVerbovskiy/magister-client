@@ -2,12 +2,12 @@ import { initAxios } from "../utils";
 const { get, post } = initAxios("/orders");
 
 export const createOrder = async (
-  { pricePerDay, startDate, endDate, listingId },
+  { pricePerDay, startDate, endDate, listingId, feeActive, message },
   authToken
 ) => {
   const data = await post(
     `/create`,
-    { pricePerDay, startDate, endDate, listingId },
+    { pricePerDay, startDate, endDate, listingId, feeActive, message },
     authToken
   );
   return data.body.id;

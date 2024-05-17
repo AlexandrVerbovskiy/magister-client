@@ -23,14 +23,10 @@ const BookingModal = ({
   createOrderModalActive,
   setCreateOrderModalActive,
   minRentalDays,
-  listingName,
   blockedDates,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
-  const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
-    useState(false);
-
   const defaultCountDays = minRentalDays ? minRentalDays : 1;
   const firstAvailableDate = findFirstAvailableDate(
     blockedDates,
@@ -130,11 +126,6 @@ const BookingModal = ({
       return;
     }
 
-    setActiveAcceptSendBookingRequest(true);
-  };
-
-  const handleSendBookingRequest = () => {
-    setActiveAcceptSendBookingRequest(false);
     handleMakeBooking({
       price,
       fromDate: separateDate(fromDate),
@@ -216,23 +207,6 @@ const BookingModal = ({
           setOfferPriceActive={setOfferPriceActive}
           price={price}
           setPrice={setPrice}
-        />
-
-        <YesNoModal
-          active={activeAcceptSendBookingRequest}
-          closeModal={() => setActiveAcceptSendBookingRequest(false)}
-          title="Please confirm the booking"
-          onAccept={handleSendBookingRequest}
-          acceptText="Confirm"
-          body={
-            fromDate.toDateString() == toDate.toDateString()
-              ? `'${listingName}' rental during ${fromDate.toDateString()} for $${moneyFormat(
-                  price
-                )} per day`
-              : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${moneyFormat(
-                  price
-                )} per day`
-          }
         />
       </div>
     </BaseModal>

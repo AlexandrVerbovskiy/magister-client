@@ -14,41 +14,50 @@ import {
   usePagination,
 } from "../../../hooks";
 import OrderItem from "../../../components/Listings/OrderItem";
-import ListFilter from "../../../components/Order/ListFilter";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 
 const TabHeaderSection = ({
+  countForTenant,
+  countForOwner,
   type,
   changeType,
-  filter,
-  changeFilter,
-  countItems,
   style = {},
-  handleChangeTimeFilter,
-  fromTime,
-  toTime,
 }) => (
   <ul
-    className="nav nav-tabs d-flex align-items-center justify-content-between"
+    className="nav nav-tabs d-flex align-items-center"
     id="myTab"
     style={style}
   >
-    <li className="nav-item">
-      <a className="nav-link active" id="all-listing-tab">
-        <span className="menu-title">All Bookings ({countItems})</span>
+    <li
+      className="nav-item"
+      style={{ marginBottom: "21px" }}
+      onClick={(e) => {
+        e.preventDefault();
+        changeType("tenant");
+      }}
+    >
+      <a className={`nav-link ${type == "tenant" ? "active" : ""}`}>
+        <span className="menu-title">
+          My rental requests ({countForTenant})
+        </span>
       </a>
     </li>
 
-    <ListFilter
-      type={type}
-      changeType={changeType}
-      filter={filter}
-      changeFilter={changeFilter}
-      handleChangeTimeFilter={handleChangeTimeFilter}
-      fromTime={fromTime}
-      toTime={toTime}
-    />
+    <li
+      className="nav-item"
+      style={{ marginBottom: "21px" }}
+      onClick={(e) => {
+        e.preventDefault();
+        changeType("owner");
+      }}
+    >
+      <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
+        <span className="menu-title">
+          Requests for my items ({countForOwner})
+        </span>
+      </a>
+    </li>
   </ul>
 );
 
@@ -59,6 +68,7 @@ const Orders = (pageProps) => {
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
     useInitPaginationTimeFilter();
+  const tenantCancelFee = pageProps.tenantCancelFee;
 
   const {
     page,
@@ -110,6 +120,7 @@ const Orders = (pageProps) => {
     handleClickPayedFastCancel,
     handleAcceptPayedFastCancel,
     activeFastCancel,
+    activeFastCancelOrder,
     closeActiveFastCancel,
 
     handleClickCreateDispute,
@@ -177,14 +188,10 @@ const Orders = (pageProps) => {
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
-              filter={filter}
-              changeFilter={changeFilter}
-              countItems={countItems}
               type={type}
               changeType={changeType}
-              handleChangeTimeFilter={handleChangeTimeFilter}
-              fromTime={fromTime}
-              toTime={toTime}
+              countForTenant={pageProps.countForTenant}
+              countForOwner={pageProps.countForOwner}
             />
 
             <div className="no-listing">
@@ -198,14 +205,11 @@ const Orders = (pageProps) => {
           <>
             <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
               <TabHeaderSection
-                filter={filter}
-                changeFilter={changeFilter}
-                countItems={countItems}
+                style={{ marginBottom: "0" }}
                 type={type}
                 changeType={changeType}
-                handleChangeTimeFilter={handleChangeTimeFilter}
-                fromTime={fromTime}
-                toTime={toTime}
+                countForTenant={pageProps.countForTenant}
+                countForOwner={pageProps.countForOwner}
               />
 
               <div className="table-responsive">
@@ -260,6 +264,7 @@ const Orders = (pageProps) => {
               activeFastCancel={activeFastCancel}
               closeActiveFastCancel={closeActiveFastCancel}
               handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
+              activeFastCancelOrder={activeFastCancelOrder}
               activeCreateDispute={activeCreateDispute}
               closeActiveCreateDispute={closeActiveCreateDispute}
               handleAcceptCreateDispute={handleAcceptCreateDispute}
@@ -291,6 +296,7 @@ const Orders = (pageProps) => {
               handleClosePay={handleClosePay}
               onTenantPayed={onTenantPayed}
               activePayOrder={activePayOrder}
+              tenantCancelFee={tenantCancelFee}
             />
           </>
         )}

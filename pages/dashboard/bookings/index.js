@@ -13,44 +13,51 @@ import { IndiceContext } from "../../../contexts";
 import { getBookingListOptions } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import { baseTimeListPageParams } from "../../../utils";
-import STATIC from "../../../static";
 import OrderItem from "../../../components/Listings/OrderItem";
-import ListFilter from "../../../components/Order/ListFilter";
 import Pagination from "../../../components/Pagination";
-import CancelModal from "../../../components/Order/CancelModal";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 
 const TabHeaderSection = ({
+  countForTenant,
+  countForOwner,
   type,
   changeType,
-  filter,
-  changeFilter,
-  countItems,
   style = {},
-  handleChangeTimeFilter,
-  fromTime,
-  toTime,
 }) => (
   <ul
-    className="nav nav-tabs d-flex align-items-center justify-content-between"
+    className="nav nav-tabs d-flex align-items-center"
     id="myTab"
     style={style}
   >
-    <li className="nav-item" style={{ marginBottom: "21px" }}>
-      <a className="nav-link active" id="all-listing-tab">
-        <span className="menu-title">All Bookings ({countItems})</span>
+    <li
+      className="nav-item"
+      style={{ marginBottom: "21px" }}
+      onClick={(e) => {
+        e.preventDefault();
+        changeType("tenant");
+      }}
+    >
+      <a className={`nav-link ${type == "tenant" ? "active" : ""}`}>
+        <span className="menu-title">
+          My rental requests ({countForTenant})
+        </span>
       </a>
     </li>
 
-    <ListFilter
-      type={type}
-      changeType={changeType}
-      filter={filter}
-      changeFilter={changeFilter}
-      handleChangeTimeFilter={handleChangeTimeFilter}
-      fromTime={fromTime}
-      toTime={toTime}
-    />
+    <li
+      className="nav-item"
+      style={{ marginBottom: "21px" }}
+      onClick={(e) => {
+        e.preventDefault();
+        changeType("owner");
+      }}
+    >
+      <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
+        <span className="menu-title">
+          Requests for my items ({countForOwner})
+        </span>
+      </a>
+    </li>
   </ul>
 );
 
@@ -180,14 +187,10 @@ const MyBookings = (pageProps) => {
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
-              filter={filter}
-              changeFilter={changeFilter}
-              countItems={countItems}
               type={type}
               changeType={changeType}
-              handleChangeTimeFilter={handleChangeTimeFilter}
-              fromTime={fromTime}
-              toTime={toTime}
+              countForTenant={pageProps.countForTenant}
+              countForOwner={pageProps.countForOwner}
             />
 
             <div className="no-listing">
@@ -201,14 +204,11 @@ const MyBookings = (pageProps) => {
           <>
             <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
               <TabHeaderSection
-                filter={filter}
-                changeFilter={changeFilter}
-                countItems={countItems}
+                style={{ marginBottom: "0" }}
                 type={type}
                 changeType={changeType}
-                handleChangeTimeFilter={handleChangeTimeFilter}
-                fromTime={fromTime}
-                toTime={toTime}
+                countForTenant={pageProps.countForTenant}
+                countForOwner={pageProps.countForOwner}
               />
 
               <div className="table-responsive">

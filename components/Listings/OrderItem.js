@@ -5,6 +5,8 @@ import { getDaysDifference, getFilePath, moneyFormat } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const OrderItem = ({
   order,
@@ -21,6 +23,8 @@ const OrderItem = ({
   handleClickPay,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
+  const router = useRouter();
+
   const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
@@ -37,6 +41,10 @@ const OrderItem = ({
   const currentActionButtons = useOrderActions({
     order,
   });
+
+  const goToOrderPage = () => {
+    router.push(link);
+  };
 
   return (
     <tr>
@@ -137,9 +145,9 @@ const OrderItem = ({
       </td>
 
       <td className="action d-flex">
-        <a href={link} className="default-btn">
+        <Link href={link} className="default-btn">
           <i className="bx bx-detail"></i> View details
-        </a>
+        </Link>
 
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
@@ -193,7 +201,7 @@ const OrderItem = ({
             }}
             className="default-btn"
           >
-            <i className="bx bx-money"></i> Pay
+            <i className="bx bx-wallet"></i> Pay
           </button>
         )}
 
