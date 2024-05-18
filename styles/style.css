@@ -5323,24 +5323,24 @@ Listings Details Area CSS
   font-size: var(--fontSize);
 }
 
-.listings-details-desc .review-form-wrapper form button[type="submit"]{
+.listings-details-desc .review-form-wrapper form button[type="submit"] {
   color: var(--whiteColor);
-  background-color: #847BDD;
+  background-color: #847bdd;
 }
 
-.listings-details-desc .review-form-wrapper form button[type="button"]{
-  background-color: #EDE7F6;
+.listings-details-desc .review-form-wrapper form button[type="button"] {
+  background-color: #ede7f6;
   color: #666666;
 }
 
-.listings-details-desc .review-form-wrapper form button[type="submit"]:hover{
-  background-color: #EDE7F6;
+.listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
+  background-color: #ede7f6;
   color: #666666;
 }
 
-.listings-details-desc .review-form-wrapper form button[type="button"]:hover{
+.listings-details-desc .review-form-wrapper form button[type="button"]:hover {
   color: var(--whiteColor);
-  background-color: #847BDD;
+  background-color: #847bdd;
 }
 
 .listings-details-desc .review-form-wrapper form .form-control {
@@ -10250,11 +10250,7 @@ Checkout Area CSS
   display: none;
 }
 .payment-box .payment-method p [type="radio"]:checked + label,
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:not(:checked)
-  + label {
+.payment-box .payment-method p [type="radio"]:not(:checked) + label {
   padding-left: 27px;
   cursor: pointer;
   display: block;
@@ -10263,16 +10259,8 @@ Checkout Area CSS
   margin-bottom: 8px;
   font-weight: 700;
 }
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:checked
-  + label::before,
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:not(:checked)
-  + label::before {
+.payment-box .payment-method p [type="radio"]:checked + label::before,
+.payment-box .payment-method p [type="radio"]:not(:checked) + label::before {
   content: "";
   position: absolute;
   left: 0;
@@ -10283,16 +10271,8 @@ Checkout Area CSS
   border-radius: 50%;
   background: var(--whiteColor);
 }
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:checked
-  + label::after,
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:not(:checked)
-  + label::after {
+.payment-box .payment-method p [type="radio"]:checked + label::after,
+.payment-box .payment-method p [type="radio"]:not(:checked) + label::after {
   content: "";
   width: 12px;
   height: 12px;
@@ -10303,20 +10283,12 @@ Checkout Area CSS
   border-radius: 50%;
   transition: var(--transition);
 }
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:not(:checked)
-  + label::after {
+.payment-box .payment-method p [type="radio"]:not(:checked) + label::after {
   opacity: 0;
   visibility: hidden;
   transform: scale(0);
 }
-  .payment-box
-  .payment-method
-  p
-  [type="radio"]:checked
-  + label::after {
+.payment-box .payment-method p [type="radio"]:checked + label::after {
   opacity: 1;
   visibility: visible;
   transform: scale(1);
@@ -18076,7 +18048,7 @@ input[type="number"] {
 }
 
 .status-background-red {
-  background-color: #AB0000 !important;
+  background-color: #ab0000 !important;
 }
 
 .status-background-gray {
@@ -18084,11 +18056,11 @@ input[type="number"] {
 }
 
 .status-background-green {
-  background-color: #139A31 !important;
+  background-color: #139a31 !important;
 }
 
 .status-background-orange {
-  background-color: #D98232 !important;
+  background-color: #d98232 !important;
 }
 
 .status-background-base {
@@ -18623,7 +18595,7 @@ span.flatpickr-weekday {
   width: 100%;
   border: 1px solid #e5e5e5;
   padding: 7px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .listings_contact_details .date-info-label {
@@ -18634,54 +18606,120 @@ span.flatpickr-weekday {
 }
 
 .listings_contact_details .date-info-value {
-  color: #4D4D4D;
+  color: #4d4d4d;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
 }
 
-.date-fee-switch{
+.date-fee-switch {
   margin-bottom: 25px;
   margin-top: 25px;
 }
 
-.date-fee-switch .box{
-  padding: 0!important;
-  border: 0!important;
-  background: transparent!important;
-  width: 100%!important;
+.date-fee-switch .box {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  width: 100% !important;
 }
 
-.date-fee-switch .switch{
-  right: 0!important;
+.date-fee-switch .switch {
+  right: 0 !important;
 }
 
-.bookings-listings-box table{
+.bookings-listings-box table {
   display: flex;
   flex-direction: column;
 }
 
-.bookings-listings-box tr{
-  display: flex!important;
+.bookings-listings-box tr {
+  display: flex !important;
   width: 100%;
 }
 
-.bookings-listings-box td{
-  display: block!important;
+.bookings-listings-box td {
+  display: block !important;
 }
 
 .bookings-listings-box td:nth-of-type(1),
-.bookings-listings-box td:nth-of-type(2){
+.bookings-listings-box td:nth-of-type(2) {
   width: 40%;
 }
 
-.bookings-listings-box td:nth-of-type(3){
+.bookings-listings-box td:nth-of-type(3) {
   width: 20%;
-  display: flex!important;
-  align-content: flex-start!important;
+  display: flex !important;
+  align-content: flex-start !important;
 }
 
 .bookings-listings-box td:nth-of-type(3) a,
-.bookings-listings-box td:nth-of-type(3) button{
-height: 36px;
+.bookings-listings-box td:nth-of-type(3) button {
+  height: 36px;
+}
+
+.notification-alert.alert-info {
+  color: var(--mainColor) !important;
+  background-color: var(--mainColor2) !important;
+  border: 0;
+}
+
+.status-bar-indexes {
+  display: flex;
+  align-items: center;
+}
+
+.status-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar-titles {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.status-bar-completed,
+.status-bar-step {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 15px;
+  text-align: center;
+  width: 32px;
+  height: 32px;
+}
+
+.status-bar-step{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #666666;
+  border-radius: 50%;
+}
+
+.status-bar-title {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 17.5px;
+  display: flex;
+    justify-content: center;
+  width:32px;
+  text-wrap: nowrap;
+}
+
+.status-bar-title.completed {
+  color: var(--mainColor);
+}
+
+.status-bar-line {
+  height: 2px;
+  width: 100%;
+  background-color: var(--mainColor);
+  margin: 0 10px;
+}
+
+.status-bar-wrapper{
+  padding: 0 100px;
+  margin-bottom: 30px;
 }

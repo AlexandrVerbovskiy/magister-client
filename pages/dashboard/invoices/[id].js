@@ -27,9 +27,7 @@ const Invoice = ({ payment }) => {
               <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href={`/dashboard/orders/${payment.orderId}`}>
-                Order #{payment.orderId}
-              </Link>
+              <Link href={`/dashboard/wallet`}>Wallet</Link>
             </li>
             <li className="item">Invoice #Inv-{payment.id}</li>
           </ol>

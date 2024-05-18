@@ -13,3 +13,6 @@ export * from "./orders";
 export * from "./orderUpdateRequestRequests";
 export * from "./senderPaymentRequests";
 export * from "./recipientPaymentRequests";
+export * from "./listingDefects";
+export * from "./listingDefectQuestions";
+

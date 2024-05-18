@@ -4,29 +4,33 @@ import { adminSideProps } from "../../middlewares";
 import Header from "../../partials/admin/Header";
 import Sidebar from "../../partials/admin/Sidebar";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import { getAdminListingDefectsEditOptions } from "../../services";
+import { getAdminListingDefectQuestionsEditOptions } from "../../services";
 import { reorderList, uniqueId } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import DefectListItem from "../../partials/admin/listingDefects/DefectListItem";
+import QuestionListItem from "../../partials/admin/listingDefectQuestions/QuestionListItem";
 import lodash from "lodash";
-import { saveListingDefects } from "../../services";
+import { saveListingDefectQuestions } from "../../services";
 
-const ListingDefects = ({ defects: baseDefects }) => {
+const ListingDefectQuestions = ({ questions: baseQuestions }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
-  const [prevDefects, setPrevDefects] = useState(baseDefects);
+  const [prevQuestions, setPrevQuestions] = useState(baseQuestions);
 
-  const defectsToState = (defects) =>
-    defects.map((defect) => ({ ...defect, localId: uniqueId(), error: null }));
+  const questionsToState = (questions) =>
+    questions.map((question) => ({
+      ...question,
+      localId: uniqueId(),
+      error: null,
+    }));
 
-  const initDefects = defectsToState(baseDefects);
-  const [defects, setDefects] = useState(initDefects);
+  const initQuestions = questionsToState(baseQuestions);
+  const [questions, setQuestions] = useState(initQuestions);
 
-  const stateDefectsToSave = () => {
-    return defects.map((defect) => {
-      const filteredElem = { ...defect };
+  const stateQuestionsToSave = () => {
+    return questions.map((question) => {
+      const filteredElem = { ...question };
       delete filteredElem["localId"];
       delete filteredElem["error"];
 
@@ -36,63 +40,56 @@ const ListingDefects = ({ defects: baseDefects }) => {
     });
   };
 
-  const getLocalIdErrors = (defects) => {
+  const getLocalIdErrors = (questions) => {
     let hasError = false;
 
     const names = {};
     const localIdErrors = {};
 
-    defects.forEach((defect) => {
-      if (defect.name.length < 1) {
-        localIdErrors[defect.localId] = "Cannot save an empty defect";
+    questions.forEach((question) => {
+      if (question.name.length < 1) {
+        localIdErrors[question.localId] = "Cannot save an empty question";
         hasError = true;
         return;
       }
 
-      if (defect.name.length > 255) {
-        localIdErrors[defect.localId] =
-          "Name cannot be higher than 255 symbols";
-        hasError = true;
-        return;
-      }
-
-      if (Object.values(names).includes(defect.name)) {
-        localIdErrors[defect.localId] =
-          "Cannot create two identical defects";
+      if (Object.values(names).includes(question.name)) {
+        localIdErrors[question.localId] =
+          "Cannot create two identical questions";
         hasError = true;
 
         Object.keys(names).forEach((localId) => {
-          if (names[localId] == defect.name)
-            localIdErrors[localId] = "Cannot create two identical defects";
+          if (names[localId] == question.name)
+            localIdErrors[localId] = "Cannot create two identical questions";
         });
 
         return;
       }
 
-      localIdErrors[defect.localId] = null;
-      names[defect.localId] = defect.name;
+      localIdErrors[question.localId] = null;
+      names[question.localId] = question.name;
     });
 
     return { hasError, localIdErrors };
   };
 
   const handleChangeName = (localId, name) => {
-    setDefects((defects) => {
+    setQuestions((questions) => {
       const result = [];
 
-      defects.map((defect) => {
-        if (defect.localId == localId) {
-          result.push({ ...defect, name, error: null });
+      questions.map((question) => {
+        if (question.localId == localId) {
+          result.push({ ...question, name, error: null });
         } else {
-          result.push({ ...defect, error: null });
+          result.push({ ...question, error: null });
         }
       });
 
       const { hasError, localIdErrors } = getLocalIdErrors(result);
 
       if (hasError) {
-        result.forEach((defect, i) => {
-          result[i]["error"] = localIdErrors[defect.localId];
+        result.forEach((question, i) => {
+          result[i]["error"] = localIdErrors[question.localId];
         });
       }
 
@@ -101,11 +98,11 @@ const ListingDefects = ({ defects: baseDefects }) => {
   };
 
   const handleChangeOrderIndexes = (info) => {
-    setDefects((defects) => {
-      const res = [...defects];
+    setQuestions((questions) => {
+      const res = [...questions];
 
       Object.keys(info).forEach((localId) => {
-        for (let i = 0; i < defects.length; i++) {
+        for (let i = 0; i < questions.length; i++) {
           if (res[i]["localId"] == localId) {
             res[i]["orderIndex"] = info[localId];
           }
@@ -151,31 +148,33 @@ const ListingDefects = ({ defects: baseDefects }) => {
   };
 
   const handleClickRemove = (localId) => {
-    setDefects((defects) => {
-      const result = defects.filter((defect) => defect.localId != localId);
+    setQuestions((questions) => {
+      const result = questions.filter(
+        (question) => question.localId != localId
+      );
       return autoUpdateOrderIndexes(result);
     });
   };
 
   const handleClickCreate = () => {
-    setDefects((defects) => {
+    setQuestions((questions) => {
       const result = [
         { name: "", localId: uniqueId(), id: null, error: null, orderIndex: 0 },
-        ...incrementAllIndex(defects),
+        ...incrementAllIndex(questions),
       ];
       return result;
     });
   };
 
-  const checkDefectListingDoubling = (newDefects = null) => {
-    if (!newDefects) newDefects = defects;
+  const checkQuestionListingDoubling = (newQuestions = null) => {
+    if (!newQuestions) newQuestions = questions;
 
-    const { hasError, localIdErrors } = getLocalIdErrors(newDefects);
+    const { hasError, localIdErrors } = getLocalIdErrors(newQuestions);
 
-    setDefects((prev) => {
+    setQuestions((prev) => {
       const res = [...prev];
       res.forEach(
-        (defect, i) => (res[i]["error"] = localIdErrors[defect.localId])
+        (question, i) => (res[i]["error"] = localIdErrors[question.localId])
       );
       return res;
     });
@@ -188,7 +187,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
 
     setSubmitting(true);
 
-    const hasError = checkDefectListingDoubling();
+    const hasError = checkQuestionListingDoubling();
 
     if (hasError) {
       setSubmitting(false);
@@ -196,19 +195,19 @@ const ListingDefects = ({ defects: baseDefects }) => {
     }
 
     try {
-      const defectsToSave = stateDefectsToSave();
+      const questionsToSave = stateQuestionsToSave();
 
-      if (!lodash.isEqual(defectsToSave, prevDefects)) {
-        const createdDefects = await saveListingDefects(
-          { defects: defectsToSave },
+      if (!lodash.isEqual(questionsToSave, prevQuestions)) {
+        const createdQuestions = await saveListingDefectQuestions(
+          { questions: questionsToSave },
           authToken
         );
-        
-        setPrevDefects(createdDefects);
-        setDefects(defectsToState(createdDefects));
+
+        setPrevQuestions(createdQuestions);
+        setQuestions(questionsToState(createdQuestions));
       }
 
-      success.set("Defects saved successfully");
+      success.set("Questions saved successfully");
     } catch (err) {
       error.set(err.message);
     } finally {
@@ -223,7 +222,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
 
     const startIndex = result.source.index;
     const endIndex = result.destination.index;
-    const newItems = reorderList(defects, startIndex, endIndex);
+    const newItems = reorderList(questions, startIndex, endIndex);
 
     const updatedItems = newItems.map((item, index) => {
       return {
@@ -232,7 +231,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
       };
     });
 
-    setDefects(updatedItems);
+    setQuestions(updatedItems);
 
     const orderIndexesToUpdate = {};
 
@@ -255,7 +254,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <div className="mb-8">
-              <BreadCrumbs links={[{ title: "Listing Defects" }]} />
+              <BreadCrumbs links={[{ title: "Listing Questions" }]} />
             </div>
 
             <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
@@ -263,7 +262,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
                 <div className="grow">
                   <div className="p-6">
                     <h2 className="flex items-center justify-between text-2xl text-slate-800 dark:text-slate-100 font-bold">
-                      Defect options
+                      Questions about listing defects
                       <button
                         className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
                         onClick={handleClickCreate}
@@ -289,10 +288,10 @@ const ListingDefects = ({ defects: baseDefects }) => {
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                               style={{
-                                height: 71.56 * defects.length + "px",
+                                height: 71.56 * questions.length + "px",
                               }}
                             >
-                              {defects.map((elem, index) => (
+                              {questions.map((elem, index) => (
                                 <Draggable
                                   key={elem.localId}
                                   draggableId={`${elem.localId}`}
@@ -304,7 +303,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
                                     >
-                                      <DefectListItem
+                                      <QuestionListItem
                                         name={elem.name}
                                         error={elem.error}
                                         onChangeName={(name) =>
@@ -331,7 +330,9 @@ const ListingDefects = ({ defects: baseDefects }) => {
                           disabled={submitting}
                           className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
                         >
-                          <span className="hidden xs:block">Save Defects</span>
+                          <span className="hidden xs:block">
+                            Save Questions
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -347,13 +348,13 @@ const ListingDefects = ({ defects: baseDefects }) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  const defects = await getAdminListingDefectsEditOptions(
+  const questions = await getAdminListingDefectQuestionsEditOptions(
     baseSideProps.authToken
   );
-  return { defects };
+  return { questions };
 };
 
 export const getServerSideProps = (context) =>
   adminSideProps(context, boostServerSideProps);
 
-export default ListingDefects;
+export default ListingDefectQuestions;

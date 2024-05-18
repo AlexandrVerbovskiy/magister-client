@@ -139,9 +139,9 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/dashboard/my-earnings/"
+                href="/dashboard/wallet/"
                 className={`nav-link ${
-                  currentPath.includes("/dashboard/my-earnings/") && "active"
+                  currentPath.includes("/dashboard/wallet/") && "active"
                 }  ${
                   !sessionUser?.verified || !sessionUser?.paypalId
                     ? "disabled"
@@ -150,28 +150,9 @@ const DashboardNavbar = () => {
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
-                  <i className="bx bx-dollar-circle"></i>
+                  <i className="bx bx-wallet"></i>
                 </span>
-                <span className="menu-title">My earnings</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link
-                href="/dashboard/my-expenses/"
-                className={`nav-link ${
-                  currentPath.includes("/dashboard/my-expenses/") && "active"
-                }  ${
-                  !sessionUser?.verified || !sessionUser?.paypalId
-                    ? "disabled"
-                    : ""
-                }`}
-                onClick={needVerifyAccount}
-              >
-                <span className="icon">
-                  <i className="bx bxl-paypal"></i>
-                </span>
-                <span className="menu-title">My expenses</span>
+                <span className="menu-title">Wallet</span>
               </Link>
             </li>
 
