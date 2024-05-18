@@ -29,7 +29,7 @@ const Dashboard = () => {
         </div>
 
         <div
-          className="notification-alert alert alert-success alert-dismissible fade show"
+          className="notification-alert alert alert-info alert-dismissible fade show"
           role="alert"
         >
           Welcome, <b>{sessionUser?.name}</b>!

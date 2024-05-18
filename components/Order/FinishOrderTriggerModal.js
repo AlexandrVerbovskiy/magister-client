@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FinishOrderModal from "./FinishOrderModal";
 
 const FinishOrderTriggerModal = ({ onFinish }) => {
   const [modalActive, setModalActive] = useState(false);

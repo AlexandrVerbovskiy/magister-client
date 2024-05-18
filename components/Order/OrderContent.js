@@ -35,6 +35,8 @@ import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTrigge
 import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import CancelFastTriggerModal from "./CancelFastTriggerModal";
+import InputWithIcon from "../FormComponents/InputWithIcon";
+import StatusBar from "../StatusBar";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -43,7 +45,7 @@ const bookingStatuses = [
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
 
-const OrderContent = ({ order: baseOrder, authToken }) => {
+const OrderContent = ({ order: baseOrder, authToken, questions }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
@@ -57,6 +59,7 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
+  const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
 
   const isBookingWithoutAgreement =
     (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
@@ -83,6 +86,47 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
       type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
 
     return calculationFunc(startDate, endDate, fee, pricePerDay);
+  };
+
+  useEffect(() => {
+    if (questions) {
+      const convertedQuestions = questions.map((question) => ({
+        ...question,
+        answer: false,
+        description: "",
+        question: question.name,
+        error: null,
+      }));
+
+      setQuestionAnswerInfos(convertedQuestions);
+    } else {
+      setQuestionAnswerInfos([]);
+    }
+  }, [questions]);
+
+  const handleUpdateQuestionDescription = (e, id) => {
+    setQuestionAnswerInfos((questions) => {
+      return questions.map((question) => {
+        if (question.id == id) {
+          question["description"] = e.target.value;
+          question["error"] = null;
+        }
+
+        return question;
+      });
+    });
+  };
+
+  const handleUpdateQuestionAnswer = (e, id) => {
+    setQuestionAnswerInfos((questions) => {
+      return questions.map((question) => {
+        if (question.id == id) {
+          question["answer"] = e.target.value == "yes";
+        }
+
+        return question;
+      });
+    });
   };
 
   useEffect(() => {
@@ -196,10 +240,36 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
     }));
   };
 
+  const validateQUestions = () => {
+    let hasError = true;
+
+    const updateQuestions = [];
+
+    for (let i = 0; i < questionAnswerInfos.length; i++) {
+      const updateQuestion = { ...questionAnswerInfos[i] };
+
+      if (updateQuestion.answer && !updateQuestion.description) {
+        hasError = false;
+        updateQuestion["error"] = "Required for damaged";
+      }
+
+      updateQuestions.push(updateQuestion);
+    }
+
+    setQuestionAnswerInfos(updateQuestions);
+
+    return hasError;
+  };
+
   const onTenantGotListingApprove = async () => {
     try {
+      if (!validateQUestions()) {
+        return;
+      }
+
       const res = await approveClientGotListing(
         order.acceptListingTenantToken,
+        questionAnswerInfos,
         authToken
       );
 
@@ -314,7 +384,15 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
 
   const finishOrder = async () => {
     try {
-      await finishedByOwner(order.acceptListingOwnerToken, authToken);
+      if (!validateQUestions()) {
+        return;
+      }
+
+      await finishedByOwner(
+        order.acceptListingOwnerToken,
+        questionAnswerInfos,
+        authToken
+      );
 
       success.set(
         `Order finished successfully. Thank you for using the platform`
@@ -335,8 +413,39 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
     order,
   });
 
+  const statusBarStatuses = bookingStatuses.includes(order.status)
+    ? [
+        { title: "Make Booking", finished: true },
+        {
+          title: "Accepted",
+          finished:
+            order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+        },
+        { title: "Payed" },
+      ]
+    : [
+        { title: "Make Order", finished: true },
+        {
+          title: "Pending to Client",
+          finished: [
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+            STATIC.ORDER_STATUSES.FINISHED,
+          ].includes(order.status),
+        },
+        {
+          title: "In Progress",
+          finished: [STATIC.ORDER_STATUSES.FINISHED].includes(order.status),
+        },
+        {
+          title: "Completed",
+          finished: order.status == STATIC.ORDER_STATUSES.FINISHED,
+        },
+      ];
+
   return (
     <>
+      <StatusBar statuses={statusBarStatuses} />
+
       <div className="add-listings-box">
         <h3>Basic Informations</h3>
 
@@ -981,6 +1090,70 @@ const OrderContent = ({ order: baseOrder, authToken }) => {
           </div>
         </div>
       )}
+
+      {questions &&
+        questions.length > 0 &&
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
+          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
+          <div className="order_widget add-listings-box">
+            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+              <h3>Rental checklist</h3>
+            )}
+            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+              <h3>Owner checklist</h3>
+            )}
+
+            {questionAnswerInfos.map((question) => {
+              return (
+                <>
+                  <p>{question.question}</p>
+
+                  <div class="form-group">
+                    <ul class="facilities-list">
+                      <li>
+                        <label class="checkbox">
+                          <input
+                            type="checkbox"
+                            name={`question[${question.id}]["yes"]`}
+                            value="yes"
+                            checked={question.answer}
+                            onChange={(e) =>
+                              handleUpdateQuestionAnswer(e, question.id)
+                            }
+                          />
+                          <span>Yes</span>
+                        </label>
+                      </li>
+                      <li>
+                        <label class="checkbox">
+                          <input
+                            type="checkbox"
+                            name={`question[${question.id}]["no"]`}
+                            value="no"
+                            checked={!question.answer}
+                            onChange={(e) =>
+                              handleUpdateQuestionAnswer(e, question.id)
+                            }
+                          />
+                          <span>No</span>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <InputWithIcon
+                    placeholder="Describe the damage"
+                    value={question.description}
+                    onInput={(e) =>
+                      handleUpdateQuestionDescription(e, question.id)
+                    }
+                    error={question.error}
+                  />
+                </>
+              );
+            })}
+          </div>
+        )}
 
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE

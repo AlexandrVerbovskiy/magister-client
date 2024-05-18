@@ -207,6 +207,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     },
                     { href: "listing-categories", title: "Categories" },
                     { href: "listing-defects", title: "Defects" },
+                    { href: "listing-defect-questions", title: "Defect Questions" },
                   ]}
                   SVG={({ current }) => (
                     <svg

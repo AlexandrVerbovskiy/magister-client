@@ -44,6 +44,7 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     token,
     baseSideProps.authToken
   );
+
   return { ...options, token };
 };
 
