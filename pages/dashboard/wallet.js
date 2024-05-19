@@ -88,10 +88,9 @@ const Wallet = ({
                 <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">
-                Withdrawable Balance{" "}
-                <strong className="wallet-currency">USD</strong>
+                Total Orders <strong className="wallet-currency">USD</strong>
               </span>
-              <h3>{moneyFormat(totalPayed)}</h3>
+              <h3>{totalOrders < 10 ? "0" + totalOrders : totalOrders}</h3>
             </div>
           </div>
           <div className="col-lg-4 col-md-6 col-sm-6">
@@ -110,8 +109,8 @@ const Wallet = ({
               <div className="icon-box">
                 <i className="bx bx-cart"></i>
               </div>
-              <span className="sub-title">Total Orders</span>
-              <h3>{totalOrders < 10 ? "0" + totalOrders : totalOrders}</h3>
+              <span className="sub-title">Total Payed</span>
+              <h3>{moneyFormat(totalPayed)}</h3>
             </div>
           </div>
         </div>
