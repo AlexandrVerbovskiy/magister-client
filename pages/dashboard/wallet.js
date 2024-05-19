@@ -85,7 +85,7 @@ const Wallet = ({
           <div className="col-lg-4 col-md-6 col-sm-6">
             <div className="stats-card-box">
               <div className="icon-box">
-                <i className="bx bxs-badge-dollar"></i>
+                <i className="bx bx-cart"></i>
               </div>
               <span className="sub-title">
                 Total Orders <strong className="wallet-currency">USD</strong>
@@ -107,7 +107,7 @@ const Wallet = ({
           <div className="col-lg-4 col-md-6 col-sm-6">
             <div className="stats-card-box">
               <div className="icon-box">
-                <i className="bx bx-cart"></i>
+                <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">Total Payed</span>
               <h3>{moneyFormat(totalPayed)}</h3>
