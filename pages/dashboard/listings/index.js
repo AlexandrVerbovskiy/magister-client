@@ -181,6 +181,16 @@ const ListingList = (pageProps) => {
 
   const handleDeleteItem = (e, id) => {
     e.preventDefault();
+    const listing = listings.find((listing) => listing.id === id);
+    console.log(listing.ordersCount, listing);
+
+    if (Number(listing.ordersCount) > 0) {
+      error.set(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+      return;
+    }
+
     setListingIdToDelete(id);
   };
 
@@ -190,7 +200,7 @@ const ListingList = (pageProps) => {
       const { active } = await changeActiveListing(id, authToken);
       setItemFields({ active }, id);
       success.set(
-        `${name} ${active ? "activated" : "deactivated"} successfully`
+        `${name} ${active ? "restored" : "deleted"} successfully`
       );
     } catch (e) {
       error.set(e.message);
@@ -291,6 +301,7 @@ const ListingList = (pageProps) => {
                       <div
                         key={listing.id}
                         className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
+                        style={listing.active ? {} : { opacity: 0.5 }}
                       >
                         <div className="single-listings-box">
                           <div className="listings-image">
@@ -400,6 +411,15 @@ const ListingList = (pageProps) => {
                               >
                                 Edit
                               </Link>
+
+                              {/*<button
+                                onClick={(e) => handleDeleteItem(e, listing.id)}
+                                type="button"
+                                className="default-btn"
+                              >
+                                Delete
+                              </button>*/}
+
                               <Link
                                 onClick={(e) =>
                                   handleChangeActiveItem(
@@ -411,7 +431,7 @@ const ListingList = (pageProps) => {
                                 href="/"
                                 className="default-btn"
                               >
-                                {listing.active ? "Deactivate" : "Activate"}
+                                {listing.active ? "Delete" : "Restore"}
                               </Link>
                             </div>
                           </div>
