@@ -6,9 +6,17 @@ export const getSystemOptions = async (authToken) => {
   return data.body;
 };
 
-export const setSystemOptions = async (
+export const setSystemMainOptions = async ({ userLogActive }, authToken) => {
+  const data = await post(
+    `/set-system-main-options`,
+    { userLogActive },
+    authToken
+  );
+  return data.body;
+};
+
+export const setSystemCommissionOptions = async (
   {
-    userLogActive,
     ownerBaseCommissionPercent,
     ownerBoostCommissionPercent,
     tenantBaseCommissionPercent,
@@ -17,13 +25,34 @@ export const setSystemOptions = async (
   authToken
 ) => {
   const data = await post(
-    "/set-system-options",
+    "/set-system-commission-options",
     {
-      userLogActive,
       ownerBaseCommissionPercent,
       ownerBoostCommissionPercent,
       tenantBaseCommissionPercent,
       tenantCancelFeePercent,
+    },
+    authToken
+  );
+  return data.body;
+};
+
+export const setSystemBankAccountOptions = async (
+  {
+    bankAccountIban,
+    bankAccountSwiftBic,
+    bankAccountBeneficiary,
+    bankAccountReferenceConceptCode,
+  },
+  authToken
+) => {
+  const data = await post(
+    "/set-system-bank-account-options",
+    {
+      bankAccountIban,
+      bankAccountSwiftBic,
+      bankAccountBeneficiary,
+      bankAccountReferenceConceptCode,
     },
     authToken
   );

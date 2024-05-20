@@ -7,9 +7,6 @@ import STATIC from "../../static";
 import {
   convertToSelectPopupCategories,
   onCurrentUserLocation,
-} from "../../utils";
-
-import {
   uniqueImageId,
   validateBigText,
   validateInteger,
@@ -26,8 +23,13 @@ import { IndiceContext } from "../../contexts";
 import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
-import { createListingApprovalRequest } from "../../services";
+import {
+  createListingApprovalRequest,
+  deleteListing,
+  changeActiveListing,
+} from "../../services";
 import Switch from "../FormComponents/Switch";
+import { useRouter } from "next/router";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -49,6 +51,7 @@ const EditForm = ({
   defects,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
+  const router = useRouter();
   categories = convertToSelectPopupCategories(categories);
 
   let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
@@ -90,6 +93,9 @@ const EditForm = ({
 
   const [disabled, setDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
+  const [deleteDisabled, setDeleteDisabled] = useState(false);
+  const [changeActiveDisabled, setChangeActiveDisabled] = useState(false);
+  const [activeDeletePopup, setActiveDeletePopup] = useState(false);
   const [activeSentRequestPopup, setActiveSentRequestPopup] = useState(false);
   const [activeUpdatePopup, setActiveUpdatePopup] = useState(false);
 
@@ -144,6 +150,14 @@ const EditForm = ({
 
   const [mainError, setMainError] = useState(null);
 
+  useEffect(() => {
+    if (!canChange) {
+      setMainError(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+    }
+  }, [canChange]);
+
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
   const handleChangeName = (e) => {
@@ -180,6 +194,26 @@ const EditForm = ({
       setAddress(newAddress);
     } catch (e) {
       error.set(e.message);
+    }
+  };
+
+  const handleChangeActive = async () => {
+    try {
+      if (!canChange) {
+        error.set(
+          "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+        );
+        return;
+      }
+
+      setChangeActiveDisabled(true);
+      const { active } = await changeActiveListing(listing.id, authToken);
+      setActive(active);
+      success.set(`${name} ${active ? "restored" : "deleted"} successfully`);
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setChangeActiveDisabled(false);
     }
   };
 
@@ -486,7 +520,7 @@ const EditForm = ({
 
   const handleSubmit = async (needShowMessage = true) => {
     if (!canChange) {
-      setMainError(
+      error.set(
         "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
       );
       return;
@@ -544,6 +578,33 @@ const EditForm = ({
   const activateSendRequestPopup = (e) => {
     e.preventDefault();
     setActiveSentRequestPopup(true);
+  };
+
+  const activateDeletePopup = (e) => {
+    e.preventDefault();
+
+    if (!canChange) {
+      error.set(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+      return;
+    }
+
+    setActiveDeletePopup(true);
+  };
+
+  const handleAcceptDelete = async () => {
+    try {
+      setDeleteDisabled(true);
+      await deleteListing(listing.id, authToken);
+      setActiveDeletePopup(false);
+      router.push("/dashboard/listings");
+      success.set("Deleted successfully");
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setDeleteDisabled(false);
+    }
   };
 
   const activateUpdatePopup = (e) => {
@@ -763,7 +824,6 @@ const EditForm = ({
           linkSuccessPhoto={linkSuccessPhoto}
           successLoadLinkPhoto={successLoadLinkPhoto}
         />
-
         {defects.length > 0 && (
           <div className="add-listings-box">
             <h3>Defects</h3>
@@ -801,7 +861,6 @@ const EditForm = ({
             </div>
           </div>
         )}
-
         <div className="add-listings-box">
           <h3>Details</h3>
 
@@ -836,14 +895,7 @@ const EditForm = ({
             </div>
           </div>
         </div>
-        <div className="add-listings-box">
-          <h3>Main Options</h3>
-          <div className="row">
-            <div className="col-lg-12 col-md-12">
-              <Switch title="Active" active={active} onChange={setActive} />
-            </div>
-          </div>
-        </div>
+
         {mainError && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -852,27 +904,53 @@ const EditForm = ({
             {mainError}
           </div>
         )}
-        <div className="add-listings-box footer-section">
-          <div className="d-flex gap-2 justify-content-between">
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={handleBaseUpdateClick}
-            >
-              {listing.id ? "Update Listing" : "Create Listing"}
-            </button>
 
-            {canSendRequest && listing.id && (
+        {canChange ? (
+          <div className="add-listings-box footer-section">
+            <div className="d-flex gap-2 justify-content-between">
               <button
                 type="button"
-                onClick={activateSendRequestPopup}
-                disabled={sendRequestDisabled}
+                disabled={disabled}
+                onClick={handleBaseUpdateClick}
               >
-                Send Request To Approve
+                {listing.id ? "Update Listing" : "Create Listing"}
               </button>
-            )}
+
+              {canSendRequest && listing.id && (
+                <button
+                  type="button"
+                  onClick={activateSendRequestPopup}
+                  disabled={sendRequestDisabled}
+                >
+                  Send Request To Approve
+                </button>
+              )}
+
+              {listing.id && (
+                <button
+                  type="button"
+                  onClick={handleChangeActive}
+                  disabled={changeActiveDisabled}
+                >
+                  {listing.active ? "Delete" : "Restore"}
+                </button>
+              )}
+
+              {/*listing.approved && listing.id && (
+              <button
+                type="button"
+                onClick={activateDeletePopup}
+                disabled={deleteDisabled}
+              >
+                Delete
+              </button>
+            )*/}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mt-4"></div>
+        )}
+
         <YesNoModal
           active={activeUpdatePopup}
           closeModal={() => setActiveUpdatePopup(false)}
@@ -892,6 +970,14 @@ const EditForm = ({
           body={"Confirmation is required to send a listing approval request"}
           acceptText="Send"
         />
+        {/*<YesNoModal
+          active={activeDeletePopup}
+          closeModal={() => setActiveDeletePopup(false)}
+          onAccept={handleAcceptDelete}
+          title="Confirm Action"
+          body={`Confirmation is required to continue. Are you sure you want to delete listing "${listing.name}"?`}
+          acceptText="Send"
+        />*/}
       </div>
     </>
   );

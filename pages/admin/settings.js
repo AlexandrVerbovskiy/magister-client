@@ -9,11 +9,14 @@ import { adminSideProps } from "../../middlewares";
 import { useAdminPage } from "../../hooks";
 import {
   getSystemOptions as getSystemOptionsRequest,
-  setSystemOptions as setSystemOptionsRequest,
+  setSystemMainOptions as setSystemMainOptionsRequest,
+  setSystemCommissionOptions as setSystemCommissionOptionsRequest,
+  setSystemBankAccountOptions as setSystemBankAccountOptionsRequest,
 } from "../../services";
 import { IndiceContext } from "../../contexts";
 import LeaveBtn from "../../components/admin/LeaveBtn";
 import Input from "../../components/admin/Form/Input";
+import { validateSmallText } from "../../utils";
 
 const goBackLink = "/admin";
 
@@ -23,6 +26,10 @@ const Settings = ({
   ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
   tenantBaseCommissionPercent: baseTenantBaseCommissionPercent,
   tenantCancelFeePercent: baseTenantCancelFeePercent,
+  bankAccountIban: baseBankAccountIban,
+  bankAccountSwiftBic: baseBankAccountSwiftBic,
+  bankAccountBeneficiary: baseBankAccountBeneficiary,
+  bankAccountReferenceConceptCode: baseBankAccountReferenceConceptCode,
 }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [baseProps, setBaseProps] = useState({
@@ -31,6 +38,10 @@ const Settings = ({
     ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
     tenantBaseCommissionPercent: baseTenantBaseCommissionPercent,
     tenantCancelFeePercent: baseTenantCancelFeePercent,
+    bankAccountIban: baseBankAccountIban,
+    bankAccountSwiftBic: baseBankAccountSwiftBic,
+    bankAccountBeneficiary: baseBankAccountBeneficiary,
+    bankAccountReferenceConceptCode: baseBankAccountReferenceConceptCode,
   });
 
   const [userLogActive, setUserLogActive] = useState(baseUserLogActive);
@@ -62,16 +73,56 @@ const Settings = ({
   const [tenantCancelFeePercentError, setTenantCancelFeePercentError] =
     useState(null);
 
+  const [bankAccountIban, setBankAccountIban] = useState(
+    baseBankAccountIban ?? ""
+  );
+  const [bankAccountIbanError, setBankAccountIbanError] = useState(null);
+
+  const [bankAccountSwiftBic, setBankAccountSwiftBic] = useState(
+    baseBankAccountSwiftBic ?? ""
+  );
+  const [bankAccountSwiftBicError, setBankAccountSwiftBicError] =
+    useState(null);
+
+  const [bankAccountBeneficiary, setBankAccountBeneficiary] = useState(
+    baseBankAccountBeneficiary ?? ""
+  );
+  const [bankAccountBeneficiaryError, setBankAccountBeneficiaryError] =
+    useState(null);
+
+  const [bankAccountReferenceConceptCode, setBankAccountReferenceConceptCode] =
+    useState(baseBankAccountReferenceConceptCode ?? "");
+  const [
+    bankAccountReferenceConceptCodeError,
+    setBankAccountReferenceConceptCodeError,
+  ] = useState(null);
+
   const { authToken, success, error } = useContext(IndiceContext);
 
-  const handleChange = async (value) => setUserLogActive(value);
+  const handleChange = async (value) => {
+    try {
+      setUserLogActive(value);
+      await setSystemMainOptionsRequest({ userLogActive: value }, authToken);
+      success.set(
+        value ? "Activated successfully" : "Deactivated successfully"
+      );
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
 
-  const stateToOptions = () => ({
-    userLogActive,
+  const commissionStateToOptions = () => ({
     ownerBaseCommissionPercent,
     ownerBoostCommissionPercent,
     tenantBaseCommissionPercent,
     tenantCancelFeePercent,
+  });
+
+  const bankAccountStateToOptions = () => ({
+    bankAccountIban,
+    bankAccountSwiftBic,
+    bankAccountBeneficiary,
+    bankAccountReferenceConceptCode,
   });
 
   const propsToState = (props) => {
@@ -82,11 +133,26 @@ const Settings = ({
     setTenantCancelFeePercent(props.tenantCancelFeePercent);
   };
 
-  const hasChanges = () => {
-    return !lodash.isEqual(stateToOptions(), baseProps);
+  const commissionHasChanges = () => {
+    return !lodash.isEqual(commissionStateToOptions(), {
+      ownerBaseCommissionPercent: baseProps.ownerBaseCommissionPercent,
+      ownerBoostCommissionPercent: baseProps.ownerBoostCommissionPercent,
+      tenantBaseCommissionPercent: baseProps.tenantBaseCommissionPercent,
+      tenantCancelFeePercent: baseProps.tenantCancelFeePercent,
+    });
   };
 
-  const handleSaveClick = async () => {
+  const bankAccountHasChanges = () => {
+    return !lodash.isEqual(bankAccountStateToOptions(), {
+      bankAccountIban: baseProps.bankAccountIban,
+      bankAccountSwiftBic: baseProps.bankAccountSwiftBic,
+      bankAccountBeneficiary: baseProps.bankAccountBeneficiary,
+      bankAccountReferenceConceptCode:
+        baseProps.bankAccountReferenceConceptCode,
+    });
+  };
+
+  const handleSaveCommissionClick = async () => {
     if (submitDisabled) {
       return;
     }
@@ -158,15 +224,86 @@ const Settings = ({
     }
 
     try {
-      if (hasChanges()) {
+      if (commissionHasChanges()) {
         setSubmitDisabled(true);
-        const newProps = await setSystemOptionsRequest(
-          stateToOptions(),
+        const newProps = await setSystemCommissionOptionsRequest(
+          commissionStateToOptions(),
           authToken
         );
 
-        setBaseProps(newProps);
-        propsToState(newProps);
+        setBaseProps((prev) => ({ ...prev, ...newProps }));
+        propsToState((prev) => ({ ...prev, ...newProps }));
+      }
+
+      success.set("Operation done success");
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setSubmitDisabled(false);
+    }
+  };
+
+  const handleSaveBankAccountClick = async () => {
+    if (submitDisabled) {
+      return;
+    }
+
+    let hasError = false;
+
+    if (bankAccountBeneficiary.length < 1) {
+      setBankAccountBeneficiaryError("Required field");
+      hasError = true;
+    } else {
+      if (validateSmallText(bankAccountBeneficiary) !== true) {
+        setBankAccountBeneficiaryError("Invalid field");
+        hasError = true;
+      }
+    }
+
+    if (bankAccountIban.length < 1) {
+      setBankAccountIbanError("Required field");
+      hasError = true;
+    } else {
+      if (validateSmallText(bankAccountIban) !== true) {
+        setBankAccountIbanError("Invalid field");
+        hasError = true;
+      }
+    }
+
+    if (bankAccountReferenceConceptCode.length < 1) {
+      setBankAccountReferenceConceptCodeError("Required field");
+      hasError = true;
+    } else {
+      if (validateSmallText(bankAccountReferenceConceptCode) !== true) {
+        setBankAccountReferenceConceptCodeError("Invalid field");
+        hasError = true;
+      }
+    }
+
+    if (bankAccountSwiftBic.length < 1) {
+      setBankAccountSwiftBicError("Required field");
+      hasError = true;
+    } else {
+      if (validateSmallText(bankAccountSwiftBic) !== true) {
+        setBankAccountSwiftBicError("Invalid field");
+        hasError = true;
+      }
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    try {
+      if (bankAccountHasChanges()) {
+        setSubmitDisabled(true);
+        const newProps = await setSystemBankAccountOptionsRequest(
+          bankAccountStateToOptions(),
+          authToken
+        );
+
+        setBaseProps((prev) => ({ ...prev, ...newProps }));
+        propsToState((prev) => ({ ...prev, ...newProps }));
       }
 
       success.set("Operation done success");
@@ -290,15 +427,99 @@ const Settings = ({
                     <footer>
                       <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                         <div className="flex self-end">
-                          <LeaveBtn
-                            hasChanges={hasChanges}
-                            goBackLink={goBackLink}
-                          />
-
                           <button
                             disabled={submitDisabled}
                             type="button"
-                            onClick={handleSaveClick}
+                            onClick={handleSaveCommissionClick}
+                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                          >
+                            Save Changes
+                          </button>
+                        </div>
+                      </div>
+                    </footer>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                <div className="flex flex-col md:flex-row md:-mr-px">
+                  <div className="grow">
+                    <div className="p-6 space-y-6">
+                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                        Bank Account Settings
+                      </h2>
+
+                      <section style={{ marginTop: "0" }}>
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-1/3">
+                            <Input
+                              name="bankAccountIban"
+                              value={bankAccountIban}
+                              setValue={setBankAccountIban}
+                              error={bankAccountIbanError}
+                              setError={setBankAccountIbanError}
+                              label="IBAN"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-1/3">
+                            <Input
+                              name="bankAccountSwiftBic"
+                              value={bankAccountSwiftBic}
+                              setValue={setBankAccountSwiftBic}
+                              error={bankAccountSwiftBicError}
+                              setError={setBankAccountSwiftBicError}
+                              label="SWIFT/BIC"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-1/3">
+                            <Input
+                              name="boostOwnerCommission"
+                              value={bankAccountBeneficiary}
+                              setValue={setBankAccountBeneficiary}
+                              error={bankAccountBeneficiaryError}
+                              setError={setBankAccountBeneficiaryError}
+                              label="Beneficiary Name and Address"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-1/3">
+                            <Input
+                              name="tenantCancelCommission"
+                              value={bankAccountReferenceConceptCode}
+                              setValue={setBankAccountReferenceConceptCode}
+                              error={bankAccountReferenceConceptCodeError}
+                              setError={setBankAccountReferenceConceptCodeError}
+                              label="Reference/Concept Code"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+
+                    <footer>
+                      <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                        <div className="flex self-end">
+                          <button
+                            disabled={submitDisabled}
+                            type="button"
+                            onClick={handleSaveBankAccountClick}
                             className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
                           >
                             Save Changes

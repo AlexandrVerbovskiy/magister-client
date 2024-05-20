@@ -5,6 +5,7 @@ import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
 import env from "../../../env";
+import STATIC from "../../../static";
 
 const linkTypeOptions = [
   { value: "storage", title: "Storage" },
@@ -44,11 +45,6 @@ const ImageView = ({
   );
 };
 
-const acceptImageOptions = {
-  "image/png": [".png"],
-  "image/jpeg": [".jpg", ".jpeg"],
-};
-
 const EditPhotosSection = ({
   files,
   removeFile,
@@ -76,7 +72,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       maxSize: env.MAX_FILE_SIZE,
-      accept: acceptImageOptions,
+      accept: STATIC.ACCEPT_IMAGE_FORMAT,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
           0,
@@ -104,7 +100,7 @@ const EditPhotosSection = ({
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
-      accept: acceptImageOptions,
+      accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: env.MAX_FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);

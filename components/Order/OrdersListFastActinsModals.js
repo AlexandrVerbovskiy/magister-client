@@ -6,7 +6,7 @@ import CancelFastModal from "./CancelFastModal";
 import CreateDisputeModal from "./CreateDisputeModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
-import PaypalModal from "../PaypalModal";
+import PayModal from "../PayModal";
 import { tenantPaymentCalculate } from "../../utils";
 
 const OrdersListFastActinsModals = ({
@@ -194,7 +194,7 @@ const OrdersListFastActinsModals = ({
         blockedDates={updateRequestBlockedDates}
       />
 
-      <PaypalModal
+      <PayModal
         amount={payAmount}
         orderId={payOrderId}
         listingName={payListingName}
