@@ -21,6 +21,11 @@ export const getListingFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
+export const getBookingInfoForPayByCreditCardOptions = async (id, authToken = null) => {
+  const data = await get(`/get-booking-for-card-pay-options/${id}`, authToken);
+  return data.body;
+};
+
 export const getOrderFullByIdOptions = async (id, authToken = null) => {
   const data = await get(`/order-full-by-id-options/${id}`, authToken);
   return data.body;

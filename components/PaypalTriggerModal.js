@@ -1,5 +1,5 @@
 import { useState } from "react";
-import PaypalModal from "./PaypalModal";
+import PayModal from "./PayModal";
 
 const PaypalTriggerModal = ({
   amount,
@@ -15,7 +15,7 @@ const PaypalTriggerModal = ({
   const [modalActive, setModalActive] = useState(false);
   return (
     <>
-      <PaypalModal
+      <PayModal
         modalActive={modalActive}
         closeModal={() => setModalActive(false)}
         amount={amount}

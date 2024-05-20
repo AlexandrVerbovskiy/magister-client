@@ -5,6 +5,7 @@ import InputWithIcon from "../FormComponents/InputWithIcon";
 import { getListingImageByType, uniqueImageId } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import env from "../../env";
+import STATIC from "../../../static";
 
 const linkTypeOptions = [
   { value: "storage", label: "Storage" },
@@ -47,11 +48,6 @@ const ImageView = ({
   );
 };
 
-const acceptImageOptions = {
-  "image/png": [".png"],
-  "image/jpeg": [".jpg", ".jpeg"],
-};
-
 const EditPhotosSection = ({
   files,
   removeFile,
@@ -78,7 +74,7 @@ const EditPhotosSection = ({
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
-      accept: acceptImageOptions,
+      accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: env.MAX_FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
@@ -106,7 +102,7 @@ const EditPhotosSection = ({
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
-      accept: acceptImageOptions,
+      accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: env.MAX_FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);

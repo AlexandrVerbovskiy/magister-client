@@ -105,3 +105,12 @@ export const finishedByOwner = async (token, questions, authToken) => {
   );
   return data.body;
 };
+
+export const createUnpaidTransactionByCreditCard = async (body, authToken) => {
+  const data = await post(
+    "/credit-card-unpaid-order-transaction-create",
+    body,
+    authToken
+  );
+  return data.body;
+};
