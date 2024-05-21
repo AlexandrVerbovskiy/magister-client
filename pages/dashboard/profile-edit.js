@@ -28,7 +28,6 @@ import {
   PasswordSection,
   ProfileSection,
   SecuritySection,
-  AutofillSection,
   DocumentVerificationSection,
 } from "../../components/ProfileEdit";
 
@@ -193,6 +192,11 @@ const ProfileEdit = () => {
 
     if (resNameValidation !== true) {
       setNameError(resNameValidation);
+      hasError = true;
+    }
+
+    if (paypalId.length < 1) {
+      setPaypalIdError("Required field");
       hasError = true;
     }
 

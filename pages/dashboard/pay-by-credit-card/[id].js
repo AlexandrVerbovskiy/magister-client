@@ -172,7 +172,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                     color: "black",
                   }}
                 >
-                  <b>Reference/Concept Code:</b>
+                  <b>Reference/Concept Code: </b>
                   {bankAccount?.bankAccountReferenceConceptCode?.value ?? ""}
                 </li>
                 <li
@@ -188,7 +188,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                     borderTop: "1px solid #CCCCCC",
                   }}
                 >
-                  <b>Total Amount to Transfer:</b>
+                  <b>Total Amount to Transfer: </b>
                   <span className="pay-by-card-price">${totalPrice}</span>
                 </li>
               </ul>
@@ -220,7 +220,10 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                         {...getRootPropsPopup()}
                       >
                         {proof ? (
-                          <div className="invoice-btn-box gallery-flex form-group">
+                          <div
+                            className="invoice-btn-box gallery-flex form-group"
+                            style={{ marginBottom: "0" }}
+                          >
                             <img
                               src={proof.preview}
                               style={{ maxHeight: "200px", marginBottom: "0" }}

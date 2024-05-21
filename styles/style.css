@@ -13858,6 +13858,7 @@ Dashboard CSS
 
 .error-span,
 .earnings-box ul li ul li.unpaid,
+.earnings-box ul li ul li.unapproved,
 .earnings-box ul li ul li.fee-price {
   color: red;
 }
@@ -18731,7 +18732,6 @@ span.flatpickr-weekday {
 
 .pay-by-card-btn,
 .pay-by-credit-card-link{
-  margin-top: 22px;
   border: none;
   text-align: center;
   overflow: hidden;
@@ -18748,6 +18748,10 @@ span.flatpickr-weekday {
   justify-content: center;
   margin-bottom: 5.8px;
   width: 100%;
+}
+
+.pay-by-card-btn{
+  margin-top: 22px;
 }
 
 .pay-by-card-btn:hover,

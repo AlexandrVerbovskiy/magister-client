@@ -18,6 +18,9 @@ const InvoiceTable = ({
   dueDate,
   indiceAdmin,
   offer,
+  waitingApproved,
+  adminApproved,
+  failedDescription,
 }) => {
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
@@ -165,16 +168,48 @@ const InvoiceTable = ({
             </tbody>
           </table>
         </div>
-        <div className="invoice-btn-box text-right">
-          <a
-            type="button"
-            className="default-btn"
-            onClick={handlePdfDownload}
-            disabled={disabled}
+
+        {!waitingApproved && !adminApproved && (
+          <div
+            className="mt-4 alert-dismissible fade show alert alert-danger"
+            role="alert"
           >
-            <i className="bx bx-printer"></i> Print
-          </a>
-        </div>
+            {failedDescription}
+          </div>
+        )}
+
+        {!waitingApproved && !adminApproved ? (
+          <div className="invoice-btn-box d-flex justify-content-between">
+            <a
+              type="button"
+              className="default-btn"
+              href={`/dashboard/pay-by-credit-card/${purchaseOrder}`}
+              disabled={disabled}
+            >
+              <i className="bx bx-upload" style={{fontSize: "16px"}}></i> Update
+            </a>
+
+            <a
+              type="button"
+              className="default-btn"
+              onClick={handlePdfDownload}
+              disabled={disabled}
+            >
+              <i className="bx bx-printer"></i> Print
+            </a>
+          </div>
+        ) : (
+          <div className="invoice-btn-box text-right">
+            <a
+              type="button"
+              className="default-btn"
+              onClick={handlePdfDownload}
+              disabled={disabled}
+            >
+              <i className="bx bx-printer"></i> Print
+            </a>
+          </div>
+        )}
       </div>
     </>
   );
