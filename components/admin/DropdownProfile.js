@@ -115,15 +115,17 @@ function DropdownProfile({ align }) {
             </div>
           </div>
           <ul>
-            <li>
-              <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
-                href="/admin/settings"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                Settings
-              </Link>
-            </li>
+            {isAdmin && (
+              <li>
+                <Link
+                  className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
+                  href="/admin/settings"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Settings
+                </Link>
+              </li>
+            )}
             <li>
               <button
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
