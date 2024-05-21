@@ -512,6 +512,14 @@ div.add-listings-box.dropzone > .gallery-flex {
   left: auto!important;
 }
 
+.order-form-title{
+  display: block!important;
+  max-width: 100%!important;
+  text-overflow: ellipsis!important;
+  overflow: hidden!important;
+  text-wrap: nowrap!important;
+}
+
 @media only screen and (max-width: 767px) {
   .main-site-alert {
     max-width: 80%;

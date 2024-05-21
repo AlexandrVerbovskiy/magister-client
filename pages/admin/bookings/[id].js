@@ -142,8 +142,12 @@ const Booking = (booking) => {
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
-                        Booking a {booking.listingName} by {booking.tenantName}
+                      <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
+                        <div className="order-form-title">{`Booking a ${booking.listingName} by ${booking.tenantName}`}</div>
+                        <Status
+                          status={booking.status}
+                          baseClass="form-input w-max ml-2"
+                        />
                       </h2>
 
                       <section>
@@ -196,18 +200,6 @@ const Booking = (booking) => {
                                 name="rental"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <label className="block text-sm font-medium mb-1">
-                                Booking Status
-                              </label>
-                              <Status
-                                status={booking.status}
-                                baseClass="form-input w-full"
                               />
                             </div>
                           </div>
