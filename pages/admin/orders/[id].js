@@ -50,8 +50,19 @@ const Order = (order) => {
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
-                        Rent a {order.listingName} by {order.tenantName}
+                      <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
+                        <div className="order-form-title">{`Rent a ${order.listingName} by ${order.tenantName}`}</div>
+                        {order.cancelStatus ? (
+                          <CancelStatus
+                            status={order.cancelStatus}
+                            baseClass="form-input w-max ml-2"
+                          />
+                        ) : (
+                          <Status
+                            status={order.status}
+                            baseClass="form-input w-max ml-2"
+                          />
+                        )}
                       </h2>
 
                       <section>
@@ -105,25 +116,6 @@ const Order = (order) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
-                            </div>
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <label className="block text-sm font-medium mb-1">
-                                Order Status
-                              </label>
-                              {order.cancelStatus ? (
-                                <CancelStatus
-                                  status={order.cancelStatus}
-                                  baseClass="form-input w-full"
-                                />
-                              ) : (
-                                <Status
-                                  status={order.status}
-                                  baseClass="form-input w-full"
-                                />
-                              )}
                             </div>
                           </div>
                         </div>
