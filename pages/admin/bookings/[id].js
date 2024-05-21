@@ -505,7 +505,7 @@ const Booking = (booking) => {
                       </section>
 
                       {(booking.defects.length > 0 ||
-                        order.listingDopDefect) && (
+                        booking.listingDopDefect) && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
