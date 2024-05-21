@@ -15,12 +15,6 @@ const ListingCreate = ({ categories, defects }) => {
   const router = useRouter();
 
   const save = async (formData, authToken) => {
-    if (!sessionUser?.paypalId) {
-      error.set(
-        "You cannot create listing if your profile do not have a linked card for payment"
-      );
-    }
-
     if (listing.id) {
       formData.append("id", listing.id);
       const res = await updateListingByAdmin(formData, authToken);

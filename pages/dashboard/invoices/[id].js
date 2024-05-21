@@ -48,6 +48,9 @@ const Invoice = ({ payment }) => {
             startDate: payment.orderOfferStartDate,
             endDate: payment.orderOfferEndDate,
           }}
+          waitingApproved={payment.waitingApproved}
+          adminApproved={payment.adminApproved}
+          failedDescription={payment.failedDescription}
         />
       </div>
     </>

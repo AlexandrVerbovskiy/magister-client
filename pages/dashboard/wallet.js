@@ -19,6 +19,7 @@ import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
 import Pagination from "../../components/Pagination";
 import { usePagination } from "../../hooks";
+import EmptyTable from "../../components/DashboardComponents/Table/EmptyTable";
 import { useRouter } from "next/router";
 
 const Wallet = ({
@@ -124,49 +125,55 @@ const Wallet = ({
                   Fee: {feeInfo.ownerBaseCommissionPercent}%
                 </span>
               </h3>
-              <ul>
-                {earnings.map((earning) => {
-                  const pricePerDuration = calculateTotalPriceByDaysCount(
-                    getDaysDifference(
-                      earning.offerStartDate,
-                      earning.offerEndDate
-                    ),
-                    earning.offerPricePerDay
-                  );
+              {earnings.length > 0 ? (
+                <ul>
+                  {earnings.map((earning) => {
+                    const pricePerDuration = calculateTotalPriceByDaysCount(
+                      getDaysDifference(
+                        earning.offerStartDate,
+                        earning.offerEndDate
+                      ),
+                      earning.offerPricePerDay
+                    );
 
-                  const feePerDuration = calculateFeeByDaysCount(
-                    getDaysDifference(
-                      earning.offerStartDate,
-                      earning.offerEndDate
-                    ),
-                    earning.offerPricePerDay,
-                    earning.ownerFee
-                  );
+                    const feePerDuration = calculateFeeByDaysCount(
+                      getDaysDifference(
+                        earning.offerStartDate,
+                        earning.offerEndDate
+                      ),
+                      earning.offerPricePerDay,
+                      earning.ownerFee
+                    );
 
-                  return (
-                    <li key={earning.id}>
-                      <div className="icon">
-                        <i className="bx bx-wallet"></i>
-                      </div>
-                      <ul>
-                        <li>Date: {timeConverter(earning.createdAt)}</li>
-                        <li>Order: #{earning.orderId}</li>
-                        <li className="price">
-                          ${moneyFormat(pricePerDuration)}
-                        </li>
-                        <li className="fee-price">
-                          Fee: ${moneyFormat(feePerDuration)}
-                        </li>
-                        <li className="price">
-                          Net Earning:{" "}
-                          <strong>${moneyFormat(earning.money)}</strong>
-                        </li>
-                      </ul>
-                      <span>{earning.listingName}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+                    return (
+                      <li key={earning.id}>
+                        <div className="icon">
+                          <i className="bx bx-wallet"></i>
+                        </div>
+                        <ul>
+                          <li>Date: {timeConverter(earning.createdAt)}</li>
+                          <li>Order: #{earning.orderId}</li>
+                          <li className="price">
+                            ${moneyFormat(pricePerDuration)}
+                          </li>
+                          <li className="fee-price">
+                            Fee: ${moneyFormat(feePerDuration)}
+                          </li>
+                          <li className="price">
+                            Net Earning:{" "}
+                            <strong>${moneyFormat(earning.money)}</strong>
+                          </li>
+                        </ul>
+                        <span>{earning.listingName}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <div style={{ paddingBottom: "50px" }}>
+                  <EmptyTable entityName="earnings" />
+                </div>
+              )}
             </div>
             <Pagination
               viewOnlyMoreOnePage={true}
@@ -185,53 +192,68 @@ const Wallet = ({
                   Fee: {feeInfo.tenantBaseCommissionPercent}%
                 </span>
               </h3>
-              <ul>
-                {sendings.map((sending) => {
-                  const pricePerDuration = calculateTotalPriceByDaysCount(
-                    getDaysDifference(
-                      sending.offerStartDate,
-                      sending.offerEndDate
-                    ),
-                    sending.offerPricePerDay
-                  );
+              {sendings.length > 0 ? (
+                <ul>
+                  {sendings.map((sending) => {
+                    const pricePerDuration = calculateTotalPriceByDaysCount(
+                      getDaysDifference(
+                        sending.offerStartDate,
+                        sending.offerEndDate
+                      ),
+                      sending.offerPricePerDay
+                    );
 
-                  const feePerDuration = calculateFeeByDaysCount(
-                    getDaysDifference(
-                      sending.offerStartDate,
-                      sending.offerEndDate
-                    ),
-                    sending.offerPricePerDay,
-                    sending.tenantFee
-                  );
+                    const feePerDuration = calculateFeeByDaysCount(
+                      getDaysDifference(
+                        sending.offerStartDate,
+                        sending.offerEndDate
+                      ),
+                      sending.offerPricePerDay,
+                      sending.tenantFee
+                    );
 
-                  return (
-                    <li
-                      key={sending.id}
-                      style={{ cursor: "pointer" }}
-                      onClick={() => onSendingCLick(sending.id)}
-                    >
-                      <div className="icon">
-                        <i className="bx bx-cart"></i>
-                      </div>
-                      <ul>
-                        <li>Date: {timeConverter(sending.createdAt)}</li>
-                        <li>Order: #{sending.orderId}</li>
-                        <li className="price">
-                          ${moneyFormat(pricePerDuration)}
-                        </li>
-                        <li className="fee-price">
-                          Fee: ${moneyFormat(feePerDuration)}
-                        </li>
-                        <li className="price">
-                          Net Payed:{" "}
-                          <strong>${moneyFormat(sending.money)}</strong>
-                        </li>
-                      </ul>
-                      <span>{sending.listingName}</span>
-                    </li>
-                  );
-                })}
-              </ul>
+                    return (
+                      <li
+                        key={sending.id}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => onSendingCLick(sending.id)}
+                      >
+                        <div className="icon">
+                          <i className="bx bx-cart"></i>
+                        </div>
+                        <ul>
+                          <li>Date: {timeConverter(sending.createdAt)}</li>
+                          <li>Order: #{sending.orderId}</li>
+                          <li className="price">
+                            ${moneyFormat(pricePerDuration)}
+                          </li>
+                          <li className="fee-price">
+                            Fee: ${moneyFormat(feePerDuration)}
+                          </li>
+                          <li className="price">
+                            Net Payed:{" "}
+                            <strong>${moneyFormat(sending.money)}</strong>
+                          </li>
+                          {!sending.adminApproved && (
+                            <li className="unapproved">
+                              <strong>
+                                {sending.waitingApproved
+                                  ? "Unapproved"
+                                  : "Rejected"}
+                              </strong>
+                            </li>
+                          )}
+                        </ul>
+                        <span>{sending.listingName}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <div style={{ paddingBottom: "50px" }}>
+                  <EmptyTable entityName="payouts" />
+                </div>
+              )}
             </div>
             <Pagination
               viewOnlyMoreOnePage={true}

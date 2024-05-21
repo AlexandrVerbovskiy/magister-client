@@ -108,8 +108,3 @@ export const authByProvider = async (body) => {
   const data = await post("/auth-by-provider", body);
   return data.body;
 };
-
-export const autofillSaveUserData = async ({ paypalId }, authToken) => {
-  const data = await post("/autofill-save", { paypalId }, authToken);
-  return data.body;
-};
