@@ -11,8 +11,10 @@ const PaypalTriggerModal = ({
   offerEndDate,
   offerFee,
   authToken,
+  needAutoClose = false,
 }) => {
   const [modalActive, setModalActive] = useState(false);
+
   return (
     <>
       <PayModal
@@ -27,6 +29,7 @@ const PaypalTriggerModal = ({
         offerEndDate={offerEndDate}
         offerFee={offerFee}
         authToken={authToken}
+        needAutoClose={needAutoClose}
       />
 
       <button

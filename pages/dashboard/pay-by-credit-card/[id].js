@@ -3,7 +3,7 @@ import Link from "next/link";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import {
-  createUnpaidTransactionByCreditCard,
+  unpaidOrderTransactionByCreditCard,
   getBookingInfoForPayByCreditCardOptions,
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
@@ -16,12 +16,16 @@ import STATIC from "../../../static";
 import env from "../../../env";
 import { IndiceContext } from "../../../contexts";
 import ErrorSpan from "../../../components/ErrorSpan";
+import OrderIconPopup from "../../../components/IconPopups/OrderIconPopup";
+import { useRouter } from "next/router";
 
 function PayByCreditCard({ bookingId, booking, bankAccount }) {
   const [proof, setProof] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [proofError, setProofError] = useState(null);
   const { authToken, error, success } = useContext(IndiceContext);
+  const [orderIconPopupState, setOrderIconPopupState] = useState({});
+  const router = useRouter();
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
@@ -78,11 +82,19 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
 
     try {
       setDisabled(true);
-      await createUnpaidTransactionByCreditCard(formData, authToken);
-      success.set("Request sent successfully");
+      await unpaidOrderTransactionByCreditCard(formData, authToken);
+
+      setOrderIconPopupState({
+        active: true,
+        text: "Request sent successfully",
+        closeButtonText: "Go to bookings page",
+        onClose: () => {
+          router.push(`/dashboard/bookings/${bookingId}`);
+        },
+        textWeight: 600,
+      });
     } catch (e) {
       error.set(e.message);
-    } finally {
       setDisabled(false);
     }
   };
@@ -207,8 +219,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                     color: "black",
                   }}
                 >
-                  <div className="form-group">
-                    <label className="mb-2">Receipt</label>
+                  <div className="form-group" style={{ marginTop: "5px" }}>
                     <div className="gallery-flex-parent">
                       <div
                         className="dropzone add-listings-box"
@@ -285,6 +296,14 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
               </ul>
             </div>
           </div>
+
+          <OrderIconPopup
+            modalActive={orderIconPopupState.active}
+            closeModal={orderIconPopupState.onClose}
+            textWeight={orderIconPopupState.textWeight}
+            text={orderIconPopupState.text}
+            mainCloseButtonText={orderIconPopupState.closeButtonText}
+          />
         </div>
       </div>
     </>

@@ -63,7 +63,7 @@ const TabHeaderSection = ({
 
 const MyBookings = (pageProps) => {
   const router = useRouter();
-  const { error, success, sessionUser, authToken } = useContext(IndiceContext);
+  const { error, sessionUser, authToken } = useContext(IndiceContext);
 
   const [type, setType] = useState(router.query.type ?? "tenant");
 
@@ -144,6 +144,8 @@ const MyBookings = (pageProps) => {
     handleClosePay,
     onTenantPayed,
     activePayOrder,
+
+    successIconPopupState,
   } = useOrderFastActions({ orders: bookings, setItemFields });
 
   const { handleChangeTimeFilter } = useChangeTimeFilter({
@@ -293,6 +295,8 @@ const MyBookings = (pageProps) => {
               handleClosePay={handleClosePay}
               onTenantPayed={onTenantPayed}
               activePayOrder={activePayOrder}
+
+              successIconPopupState={successIconPopupState}
             />
           </>
         )}

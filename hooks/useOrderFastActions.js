@@ -11,9 +11,38 @@ import {
 } from "../services";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
+import { useRouter } from "next/router";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
+  const router = useRouter();
+
+  const [successIconPopupState, setSuccessIconPopupState] = useState({});
+  const activateSuccessOrderPopup = ({
+    closeButtonText = null,
+    onClose = null,
+    text = null,
+    textWeight = null,
+  }) => {
+    const handleClose = () => {
+      setSuccessIconPopupState({});
+      if (onClose) {
+        onClose();
+      }
+    };
+
+    if (!closeButtonText) {
+      closeButtonText = "Close Popup";
+    }
+
+    setSuccessIconPopupState({
+      active: true,
+      text,
+      closeButtonText: closeButtonText,
+      onClose: handleClose,
+      textWeight: textWeight ?? 600,
+    });
+  };
 
   const [activeCancel, setActiveCancel] = useState(false);
   const [activeCancelId, setActiveCancelId] = useState(null);
@@ -51,7 +80,11 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     setActivePay(false);
     setActivePayOrder(null);
-    success.set("Operation successful");
+    activateSuccessOrderPopup({
+      text: "Operation successful",
+      onClose: () => router.push("/dashboard/orders/" + activePayOrder.id),
+      closeButtonText: "Move to Order",
+    });
   };
 
   const [updateRequestModalActiveOrder, setUpdateRequestModalActiveOrder] =
@@ -81,7 +114,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
       setActiveCancelId(null);
       setActiveCancel(false);
-      success.set("Booking cancelled successfully");
+      activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
     } catch (e) {
       error.set(e.message);
     }
@@ -103,9 +136,9 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         activeFastCancelOrder.id
       );
 
-      success.set(
-        `Order cancelled successfully. The money was returned to your paypal`
-      );
+      activateSuccessOrderPopup({
+        text: `Order cancelled successfully. The money was returned to your paypal`,
+      });
       setActiveFastCancelOrder(null);
       setActiveFastCancel(false);
     } catch (e) {
@@ -152,9 +185,9 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       setActiveCreateDisputeId(null);
       setActiveCreateDispute(false);
 
-      success.set(
-        "Dispute created successfully. Wait for the administrator to contact you"
-      );
+      activateSuccessOrderPopup({
+        text: "Dispute created successfully. Wait for the administrator to contact you",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -181,7 +214,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
       setActiveOrderAcceptCancelByTenantId(null);
       setActiveOrderAcceptCancelByTenant(false);
-      success.set("Order cancelled successfully");
+      activateSuccessOrderPopup({ text: "Order cancelled successfully" });
     } catch (e) {
       error.set(e.message);
     }
@@ -208,7 +241,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
       setActiveOrderAcceptCancelByOwnerId(null);
       setActiveOrderAcceptCancelByOwner(false);
-      success.set("Order cancelled successfully");
+      activateSuccessOrderPopup({ text: "Order cancelled successfully" });
     } catch (e) {
       error.set(e.message);
     }
@@ -399,6 +432,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     handleClosePay,
     onTenantPayed,
     activePayOrder,
+
+    successIconPopupState,
   };
 };
 

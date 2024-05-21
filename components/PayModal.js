@@ -19,15 +19,20 @@ const PayModal = ({
   modalActive,
   closeModal,
   authToken,
+  needAutoClose = true,
 }) => {
   const { error } = useContext(IndiceContext);
   const [type, setType] = useState("paypal");
+  const [disabled, setDisabled] = useState(false);
 
   const onApprove = async (data) => {
     try {
       await paypalOrderPayed(data.orderID, authToken);
-      closeModal();
       onTenantPayed();
+
+      if (needAutoClose) {
+        setTimeout(closeModal(), 100);
+      }
     } catch (e) {
       error.set(e.message);
     }
@@ -51,14 +56,26 @@ const PayModal = ({
   const subtotal =
     pricePerDay * getDaysDifference(offerStartDate, offerEndDate);
 
+  const handleClose = () => {
+    if (disabled) {
+      return;
+    }
+
+    closeModal();
+  };
+
   const handleChangeType = (type) => {
+    if (disabled) {
+      return;
+    }
+
     setType(type);
   };
 
   return (
     <BaseModal
       active={modalActive}
-      closeModal={closeModal}
+      closeModal={handleClose}
       needCloseBtn={true}
       className="modal-padding-bottom-20"
     >
@@ -106,7 +123,7 @@ const PayModal = ({
                   type="radio"
                   id="paypal-radio"
                   name="radio-group"
-                  onChange={() => setType("paypal")}
+                  onChange={() => handleChangeType("paypal")}
                   checked={type === "paypal"}
                 />
                 <label
@@ -129,10 +146,35 @@ const PayModal = ({
               >
                 <input
                   type="radio"
+                  id="bank-card-radio"
+                  name="radio-group"
+                  onChange={() => handleChangeType("card")}
+                  checked={type === "card"}
+                />
+                <label
+                  style={{
+                    marginBottom: 0,
+                    display: "inline",
+                  }}
+                  htmlFor="bank-card-radio"
+                >
+                  Bank Card
+                </label>
+              </p>
+
+              <p
+                style={{
+                  marginBottom: 0,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="radio"
                   id="direct-bank-transfer-radio"
                   name="radio-group"
-                  onChange={() => setType("card")}
-                  checked={type === "card"}
+                  onChange={() => handleChangeType("bank-transfer")}
+                  checked={type === "bank-transfer"}
                 />
                 <label
                   style={{
@@ -147,7 +189,13 @@ const PayModal = ({
             </div>
           </div>
 
-          <div style={{ height: "50px" }}>
+          <div
+            style={
+              type == "card"
+                ? { height: "120px", overflow: "hidden" }
+                : { height: "50px" }
+            }
+          >
             {type == "paypal" && amount && orderId && authToken && (
               <PaypalButton
                 createOrder={createOrder}
@@ -157,14 +205,23 @@ const PayModal = ({
               />
             )}
 
-            {type == "card" && (
+            {type == "card" && amount && orderId && authToken && (
+              <PaypalForm
+                disabled={disabled}
+                setDisabled={setDisabled}
+                createOrder={createOrder}
+                onApprove={onApprove}
+              />
+            )}
+
+            {type == "bank-transfer" && (
               <div className="payment-form">
                 <Link
                   className="pay-by-credit-card-link"
                   href={"/dashboard/pay-by-credit-card/" + orderId}
                   type="button"
                 >
-                  View Invoice
+                  Attach Confirmation
                 </Link>
               </div>
             )}

@@ -37,6 +37,8 @@ import { useOrderActions, useOrderDateError } from "../../hooks";
 import CancelFastTriggerModal from "./CancelFastTriggerModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
+import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
+import { useRouter } from "next/router";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -50,6 +52,47 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const [successIconPopupState, setSuccessIconPopupState] = useState({});
+
+  const router = useRouter();
+
+  const activateSuccessOrderPopup = ({
+    closeButtonText = null,
+    onClose = null,
+    text = null,
+    textWeight = null,
+  }) => {
+    const handleClose = () => {
+      if (!onClose) {
+        onClose = () => {
+          if (bookingStatuses.includes(order.status)) {
+            router.push("/dashboard/bookings");
+          } else {
+            router.push("/dashboard/orders");
+          }
+        };
+      }
+
+      setSuccessIconPopupState({});
+      onClose();
+    };
+
+    if (!closeButtonText) {
+      if (bookingStatuses.includes(order.status)) {
+        closeButtonText = "Move to Bookings";
+      } else {
+        closeButtonText = "Move to Orders";
+      }
+    }
+
+    setSuccessIconPopupState({
+      active: true,
+      text,
+      closeButtonText: closeButtonText,
+      onClose: handleClose,
+      textWeight: textWeight ?? 600,
+    });
+  };
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -187,10 +230,11 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
       }));
     }
 
-    success.set(
-      "Booking updates successfully. Wait for a response from the " +
-        (isOwner ? "tenant" : "owner")
-    );
+    activateSuccessOrderPopup({
+      text:
+        "Booking updates successfully. Wait for a response from the " +
+        (isOwner ? "tenant" : "owner"),
+    });
   };
 
   const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
@@ -233,7 +277,12 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
   };
 
   const onTenantPayed = () => {
-    success.set("Operation successful");
+    activateSuccessOrderPopup({
+      text: "The rental starts!",
+      onClose: () => {},
+      closeButtonText: "Return to Order",
+    });
+
     setOrder((prev) => ({
       ...prev,
       status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
@@ -279,7 +328,9 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
       }));
 
-      success.set("Approved successfully");
+      activateSuccessOrderPopup({
+        text: "Approved successfully",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -304,9 +355,9 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
         }));
       }
 
-      success.set(
-        "Dispute created successfully. Wait for the administrator to contact you"
-      );
+      activateSuccessOrderPopup({
+        text: "Dispute created successfully. Wait for the administrator to contact you",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -316,7 +367,10 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
     try {
       await orderAcceptCancelByOwner(order.id, authToken);
 
-      success.set("Order cancelled successfully");
+      activateSuccessOrderPopup({
+        text: "Order cancelled successfully",
+        textWeight: 600,
+      });
 
       setOrder((prev) => ({
         ...prev,
@@ -331,7 +385,10 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
     try {
       await orderAcceptCancelByTenant(order.id, authToken);
 
-      success.set("Order cancelled successfully");
+      activateSuccessOrderPopup({
+        text: "Order cancelled successfully",
+        textWeight: 600,
+      });
 
       setOrder((prev) => ({
         ...prev,
@@ -359,7 +416,9 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
         }));
       }
 
-      success.set("Booking cancelled successfully");
+      activateSuccessOrderPopup({
+        text: "Booking cancelled successfully",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -369,9 +428,9 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
     try {
       await orderFullCancelPayed(order.id, authToken);
 
-      success.set(
-        `Order cancelled successfully. The money was returned to your paypal`
-      );
+      activateSuccessOrderPopup({
+        text: `Order cancelled successfully. The money was returned to your paypal`,
+      });
 
       setOrder((prev) => ({
         ...prev,
@@ -1091,6 +1150,14 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
         </div>
       )}
 
+      <SuccessIconPopup
+        modalActive={successIconPopupState.active}
+        closeModal={successIconPopupState.onClose}
+        textWeight={successIconPopupState.textWeight}
+        text={successIconPopupState.text}
+        mainCloseButtonText={successIconPopupState.closeButtonText}
+      />
+
       {questions &&
         questions.length > 0 &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
@@ -1221,13 +1288,6 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
                   pricePrice
                 );
 
-                const isBooking = [
-                  STATIC.ORDER_STATUSES.FINISHED,
-                  STATIC.ORDER_STATUSES.PENDING_TENANT,
-                  STATIC.ORDER_STATUSES.PENDING_OWNER,
-                  STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-                ].includes(conflictOrder.status);
-
                 return (
                   <li className="form-group">
                     <div className="d-flex justify-content-between">
@@ -1263,7 +1323,12 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
                       </a>
                     </div>
 
-                    <div>Type: {isBooking ? "Booking" : "Order"}</div>
+                    <div>
+                      Type:{" "}
+                      {bookingStatuses.includes(conflictOrder.status)
+                        ? "Booking"
+                        : "Order"}
+                    </div>
 
                     <div>
                       Rental: <a href={`/users/${tenantId}`}>{tenantName}</a>
