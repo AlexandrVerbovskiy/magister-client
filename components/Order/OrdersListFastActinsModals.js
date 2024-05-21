@@ -8,6 +8,7 @@ import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
 import { tenantPaymentCalculate } from "../../utils";
+import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -49,6 +50,8 @@ const OrdersListFastActinsModals = ({
   onTenantPayed,
   activePayOrder,
   tenantCancelFee,
+
+  successIconPopupState
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -206,6 +209,14 @@ const OrdersListFastActinsModals = ({
         modalActive={activePay}
         closeModal={handleClosePay}
         authToken={authToken}
+      />
+
+      <SuccessIconPopup
+        modalActive={successIconPopupState.active}
+        closeModal={successIconPopupState.onClose}
+        textWeight={successIconPopupState.textWeight}
+        text={successIconPopupState.text}
+        mainCloseButtonText={successIconPopupState.closeButtonText}
       />
     </>
   );

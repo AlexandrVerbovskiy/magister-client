@@ -159,6 +159,8 @@ const Orders = (pageProps) => {
     handleClosePay,
     onTenantPayed,
     activePayOrder,
+
+    successIconPopupState,
   } = useOrderFastActions({ orders: orders, setItemFields });
 
   return (
@@ -297,6 +299,7 @@ const Orders = (pageProps) => {
               onTenantPayed={onTenantPayed}
               activePayOrder={activePayOrder}
               tenantCancelFee={tenantCancelFee}
+              successIconPopupState={successIconPopupState}
             />
           </>
         )}

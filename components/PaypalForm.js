@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   PayPalScriptProvider,
   PayPalCardFieldsProvider,
@@ -10,15 +10,17 @@ import {
 import env from "../env";
 import { IndiceContext } from "../contexts";
 
-const SubmitPayment = () => {
+const SubmitPayment = ({ disabled, setDisabled }) => {
   const data = usePayPalCardFields();
   const { cardFieldsForm, fields } = data;
   const { error } = useContext(IndiceContext);
 
   async function submitHandler() {
     try {
-      if (!cardFieldsForm || typeof cardFieldsForm.submit !== "function")
+      if (!cardFieldsForm || typeof cardFieldsForm.submit !== "function") {
         return;
+      }
+      setDisabled(true);
       await cardFieldsForm.submit();
     } catch (e) {
       const message = e.message;
@@ -46,19 +48,29 @@ const SubmitPayment = () => {
       }
 
       error.set(info);
+    } finally {
+      setDisabled(false);
     }
   }
 
   return (
-    <button type="button" onClick={submitHandler}>
+    <button
+      type="button"
+      className="pay-by-credit-card-paypal-form"
+      onClick={submitHandler}
+      disabled={disabled}
+    >
       Pay
     </button>
   );
 };
 
-const PaypalForm = ({ createOrder, onApprove }) => {
+const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
   const paypalFieldStyle = {
-    input: { fontSize: "14px", padding: "2px 15px 2px 15px" },
+    input: {
+      fontSize: "14px",
+      padding: "2px 15px 2px 15px",
+    },
     "input:focus": {},
   };
 
@@ -80,7 +92,7 @@ const PaypalForm = ({ createOrder, onApprove }) => {
           <PayPalCVVField style={paypalFieldStyle} />
         </div>
 
-        <SubmitPayment />
+        <SubmitPayment disabled={disabled} setDisabled={setDisabled} />
       </PayPalCardFieldsProvider>
     </PayPalScriptProvider>
   );
