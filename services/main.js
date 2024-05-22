@@ -21,7 +21,10 @@ export const getListingFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
-export const getBookingInfoForPayByCreditCardOptions = async (id, authToken = null) => {
+export const getBookingInfoForPayByCreditCardOptions = async (
+  id,
+  authToken = null
+) => {
   const data = await get(`/get-booking-for-card-pay-options/${id}`, authToken);
   return data.body;
 };
@@ -154,6 +157,18 @@ export const getAdminRecipientPaymentListOptions = async (
   return data.body;
 };
 
+export const getAdminWaitingRefundsRecipientPaymentListOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-waiting-refunds-recipient-payment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
 export const getAdminListingApprovalRequestListPageOptions = async (
   params,
   authToken
@@ -247,5 +262,15 @@ export const getAdminListingDefectQuestionsEditOptions = async (authToken) => {
 
 export const getWalletInfoOptions = async (authToken) => {
   const data = await get(`/get-wallet-info-options`, authToken);
+  return data.body;
+};
+
+export const getAdminWaitingRefundOptions = async (id, authToken) => {
+  const data = await get(`/admin-waiting-refund-options/${id}`, authToken);
+  return data.body;
+};
+
+export const getWaitingRefundOptions = async (id, authToken) => {
+  const data = await get(`/get-waiting-refund-options/${id}`, authToken);
   return data.body;
 };

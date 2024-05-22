@@ -182,7 +182,6 @@ const ListingList = (pageProps) => {
   const handleDeleteItem = (e, id) => {
     e.preventDefault();
     const listing = listings.find((listing) => listing.id === id);
-    console.log(listing.ordersCount, listing);
 
     if (Number(listing.ordersCount) > 0) {
       error.set(

@@ -77,8 +77,15 @@ export const orderAcceptCancelByOwner = async (id, authToken) => {
   return data.body;
 };
 
-export const orderFullCancelPayed = async (id, authToken) => {
-  const data = await post(`/full-cancel-payed`, { id }, authToken);
+export const orderFullCancelPayed = async (
+  { id, type, paypalId, cardNumber },
+  authToken
+) => {
+  const data = await post(
+    `/full-cancel-payed`,
+    { id, type, paypalId, cardNumber },
+    authToken
+  );
   return data.body;
 };
 

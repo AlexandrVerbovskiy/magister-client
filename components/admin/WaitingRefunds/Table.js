@@ -11,12 +11,17 @@ const RecipientPaymentsTable = ({
 }) => {
   const ths = [
     { title: "Id", value: "recipient_payments.id", width: "10%" },
-    { title: "Payer", value: "tenants.name", width: "20%" },
-    { title: "Recipient", value: "users.name", width: "20%" },
+    { title: "Recipient", value: "users.name", width: "25%" },
     { title: "Price", value: "recipient_payments.money", width: "15%" },
-    { title: "Type", value: "recipient_payments.received_type", width: "10%" },
-    { title: "Status", value: "recipient_payments.status", width: "10%" },
-    { title: "Payed at", value: "recipient_payments.planned_time", width: "15%" },
+    { title: "Type", value: "recipient_payments.type", width: "10%" },
+    {
+      title: "Payment Number",
+      value: "payment_number",
+      canOrder: false,
+      width: "15%",
+    },
+    { title: "Created At", value: "created_at", width: "15%" },
+    { title: "Actions", value: "actions", width: "10%", canOrder: false },
   ];
 
   return (

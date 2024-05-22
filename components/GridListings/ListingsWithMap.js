@@ -526,7 +526,7 @@ const ListingsWithMap = ({
                       className="row"
                       style={
                         !hasListings
-                          ? { position: "absolute", top: 0, left: 0 }
+                          ? { position: "absolute", top: 0, left: 0, width: 0 }
                           : {}
                       }
                     >

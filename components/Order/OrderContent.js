@@ -34,7 +34,7 @@ import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
 import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
 import { useOrderActions, useOrderDateError } from "../../hooks";
-import CancelFastTriggerModal from "./CancelFastTriggerModal";
+import PayedCancelTriggerModal from "./PayedCancelTriggerModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
@@ -424,9 +424,12 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
     }
   };
 
-  const onPayedFastCancel = async () => {
+  const onPayedFastCancel = async ({ type, paypalId, cardNumber }) => {
     try {
-      await orderFullCancelPayed(order.id, authToken);
+      await orderFullCancelPayed(
+        { id: order.id, type, paypalId, cardNumber },
+        authToken
+      );
 
       activateSuccessOrderPopup({
         text: `Order cancelled successfully. The money was returned to your paypal`,
@@ -1448,7 +1451,7 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
             ) && (
-              <CancelFastTriggerModal
+              <PayedCancelTriggerModal
                 onCancel={onPayedFastCancel}
                 text="Cancel Request"
                 order={order}

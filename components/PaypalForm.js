@@ -34,7 +34,7 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
           const extractedData = message
             .substring(startIndex, endIndex + 1)
             .trim();
-          const obj = JSON.parse(extractedData);
+          const obj = extractedData;
           const description = obj?.details[0]?.description ?? obj.message;
 
           if (description) {

@@ -207,7 +207,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     },
                     { href: "listing-categories", title: "Categories" },
                     { href: "listing-defects", title: "Defects" },
-                    { href: "listing-defect-questions", title: "Defect Questions" },
+                    {
+                      href: "listing-defect-questions",
+                      title: "Defect Questions",
+                    },
                   ]}
                   SVG={({ current }) => (
                     <svg
@@ -242,7 +245,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   )}
                 />
               )}
-              
 
               <SidebarTypicalLink
                 title="Orders"
@@ -314,8 +316,15 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   setSidebarExpanded={setSidebarExpanded}
                   title="Payments"
                   sublinks={[
-                    { href: "sender-payments", title: "Sender Payments" },
-                    { href: "recipient-payments", title: "Recipient Payments" },
+                    { href: "payments/senders", title: "Sender Payments" },
+                    {
+                      href: "payments/recipients",
+                      title: "Recipient Payments",
+                    },
+                    {
+                      href: "payments/waiting-refunds",
+                      title: "Waiting Refunds",
+                    },
                   ]}
                   SVG={({ current }) => (
                     <svg

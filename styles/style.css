@@ -13858,10 +13858,20 @@ Dashboard CSS
 
 .error-span,
 .earnings-box ul li ul li.unpaid,
-.earnings-box ul li ul li.unapproved,
+.earnings-box ul li ul li.rejected,
 .earnings-box ul li ul li.fee-price {
   color: red;
 }
+
+.earnings-box ul li ul li.waiting{
+  color: #d98232 !important;
+}
+
+.earnings-box ul li ul li.cancelled{
+  color: #626262 !important;
+}
+
+.earnings-box ul li ul li.completed,
 .earnings-box ul li ul li.paid,
 .earnings-box ul li ul li.price {
   color: #64bc36;
@@ -18789,4 +18799,8 @@ margin-top: 30px;
 
 .pay-by-credit-card-paypal-form:disabled{
   background-color: var(--mainColor2);
+}
+
+.default-btn{
+  cursor: pointer!important;
 }

@@ -1,16 +1,18 @@
 import { useState } from "react";
-import CancelFastModal from "./CancelFastModal";
+import PayedCancelModal from "./PayedCancelModal";
 
-const CancelFastTriggerModal = ({ order, onCancel, text = "Cancel" }) => {
+const PayedCancelTriggerModal = ({ order, onCancel, text = "Cancel" }) => {
   const [modalActive, setModalActive] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   return (
     <>
-      <CancelFastModal
+      <PayedCancelModal
         onCancel={onCancel}
         modalActive={modalActive}
-        closeModal={() => setModalActive(false)}
-        order={order}
+        disabled={disabled}
+        setDisabled={setDisabled}
+        handleClose={() => setModalActive(false)}
       />
       <button
         className="default-btn error-btn"
@@ -23,4 +25,4 @@ const CancelFastTriggerModal = ({ order, onCancel, text = "Cancel" }) => {
   );
 };
 
-export default CancelFastTriggerModal;
+export default PayedCancelTriggerModal;

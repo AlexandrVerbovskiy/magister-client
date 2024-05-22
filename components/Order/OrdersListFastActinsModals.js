@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 import CancelModal from "./CancelModal";
-import CancelFastModal from "./CancelFastModal";
 import CreateDisputeModal from "./CreateDisputeModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
 import { tenantPaymentCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
+import PayedCancelModal from "./PayedCancelModal";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -51,7 +51,7 @@ const OrdersListFastActinsModals = ({
   activePayOrder,
   tenantCancelFee,
 
-  successIconPopupState
+  successIconPopupState,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -78,6 +78,7 @@ const OrdersListFastActinsModals = ({
   const [payOfferStartDate, setPayOfferStartDate] = useState(Date.now());
   const [payOfferEndDate, setPayOfferEndDate] = useState(Date.now());
   const [payOfferFee, setPayOfferFee] = useState(0);
+  const [payedFastCancelDisabled, setPayedFastCancelDisabled] = useState(false);
 
   useEffect(() => {
     if (updateRequestModalActiveOrder) {
@@ -145,11 +146,12 @@ const OrdersListFastActinsModals = ({
         onCancel={handleAcceptCancel}
       />
       {
-        <CancelFastModal
+        <PayedCancelModal
           modalActive={activeFastCancel}
-          closeModal={closeActiveFastCancel}
+          handleClose={closeActiveFastCancel}
           onCancel={handleAcceptPayedFastCancel}
-          order={{ ...activeFastCancelOrder, tenantCancelFee }}
+          disabled={payedFastCancelDisabled}
+          setDisabled={setPayedFastCancelDisabled}
         />
       }
 

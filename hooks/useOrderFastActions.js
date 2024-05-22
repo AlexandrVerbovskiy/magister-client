@@ -125,9 +125,16 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActiveCancel(true);
   };
 
-  const handleAcceptPayedFastCancel = async () => {
+  const handleAcceptPayedFastCancel = async ({
+    type,
+    paypalId,
+    cardNumber,
+  }) => {
     try {
-      await orderFullCancelPayed(activeFastCancelOrder.id, authToken);
+      await orderFullCancelPayed(
+        { id: activeFastCancelOrder.id, type, paypalId, cardNumber },
+        authToken
+      );
 
       setItemFields(
         {
