@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { IndiceContext } from "../contexts";
 import {
   checkStringDateLowerOrEqualCurrentDate,
-  timeNormalConverter,
+  timeConverter,
 } from "../utils";
 import STATIC from "../static";
 
@@ -24,11 +24,11 @@ const BaseDateSpan = ({
   className = "",
   tooltipText = null,
 }) => {
-  if (timeNormalConverter(startDate) === timeNormalConverter(endDate)) {
+  if (timeConverter(startDate) === timeConverter(endDate)) {
     return (
       <Parent tooltipText={tooltipText}>
         Rental date:{" "}
-        <span className={className}>{timeNormalConverter(startDate)}</span>
+        <span className={className}>{timeConverter(startDate)}</span>
       </Parent>
     );
   }
@@ -36,8 +36,8 @@ const BaseDateSpan = ({
   return (
     <Parent tooltipText={tooltipText}>
       Rental duration:{" "}
-      <span className={className}>{timeNormalConverter(startDate)}</span> -{" "}
-      <span className={className}>{timeNormalConverter(endDate)}</span>
+      <span className={className}>{timeConverter(startDate)}</span> -{" "}
+      <span className={className}>{timeConverter(endDate)}</span>
     </Parent>
   );
 };

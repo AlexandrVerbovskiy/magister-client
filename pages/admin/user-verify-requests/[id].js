@@ -10,9 +10,9 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Header from "../../../partials/admin/Header";
 import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
-import ModalBlank from "../../../components/admin/ModalBlank";
 import { supportSideProps } from "../../../middlewares";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
+import ModalWithDescription from "../../../components/admin/Form/ModalWithDescription";
 
 const UserVerifyRequest = ({ info: baseInfo }) => {
   const [info, setInfo] = useState(baseInfo);
@@ -166,52 +166,17 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
           </div>
         </main>
 
-        <ModalBlank
-          id="access-decline"
-          modalOpen={accessDeclineModalOpen}
-          setModalOpen={setAccessDeclineModalOpen}
-        >
-          <div className="p-5 flex space-x-4">
-            <div style={{ width: "100%" }}>
-              <div className="mb-2">
-                <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                  Are you sure you want decline this request?
-                </div>
-              </div>
-              <div className="text-sm mb-2">
-                <div className="space-y-2">
-                  <p>Enter the reason for the rejection</p>
-                </div>
-              </div>
-
-              <div className="mb-2">
-                <textarea
-                  name="declineDescription"
-                  className="form-input w-full"
-                  rows="6"
-                  value={declineDescription}
-                  onChange={handleInputDeclineDescription}
-                />
-                <ErrorSpan error={declineDescriptionError} />
-              </div>
-
-              <div className="flex flex-wrap justify-end space-x-2">
-                <button
-                  onClick={() => setAccessDeclineModalOpen(false)}
-                  className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAcceptDeclineClick}
-                  className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
-                >
-                  Decline
-                </button>
-              </div>
-            </div>
-          </div>
-        </ModalBlank>
+        <ModalWithDescription
+          accessModalOpen={accessDeclineModalOpen}
+          setAccessModalOpen={setAccessDeclineModalOpen}
+          question="Are you sure you want decline this request?"
+          descriptionLabel="Enter the reason for the rejection"
+          description={declineDescription}
+          handleInputDescription={handleInputDeclineDescription}
+          descriptionError={declineDescriptionError}
+          handleAcceptClick={handleAcceptDeclineClick}
+          acceptButtonText="Decline"
+        />
       </div>
     </div>
   );

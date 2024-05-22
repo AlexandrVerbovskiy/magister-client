@@ -1,27 +1,27 @@
 import { useContext, useState } from "react";
-import { IndiceContext } from "../../contexts";
+import { IndiceContext } from "../../../contexts";
 import {
   useAdminPage,
   useChangeTimeFilter,
   useInitPaginationTimeFilter,
   usePagination,
-} from "../../hooks";
+} from "../../../hooks";
 import {
   getAdminRecipientPaymentList,
   getAdminRecipientPaymentListOptions,
-} from "../../services";
-import SearchForm from "../../partials/admin/actions/SearchForm";
-import Sidebar from "../../partials/admin/Sidebar";
-import Header from "../../partials/admin/Header";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import Datepicker from "../../components/admin/Datepicker";
-import DropdownFilter from "../../components/admin/DropdownFilter";
-import { baseTimeListPageParams } from "../../utils";
-import { adminSideProps } from "../../middlewares";
+} from "../../../services";
+import SearchForm from "../../../partials/admin/actions/SearchForm";
+import Sidebar from "../../../partials/admin/Sidebar";
+import Header from "../../../partials/admin/Header";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import PaginationNumeric from "../../../components/admin/PaginationNumeric";
+import Datepicker from "../../../components/admin/Datepicker";
+import DropdownFilter from "../../../components/admin/DropdownFilter";
+import { baseTimeListPageParams } from "../../../utils";
+import { adminSideProps } from "../../../middlewares";
 import { useRouter } from "next/router";
-import FilterRadioOption from "../../components/admin/Form/FilterRadioOption";
-import RecipientPaymentsTable from "../../components/admin/RecipientPayments/Table";
+import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
+import RecipientPaymentsTable from "../../../components/admin/RecipientPayments/Table";
 
 const RecipientPayments = (pageProps) => {
   const router = useRouter();

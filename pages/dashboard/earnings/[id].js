@@ -1,0 +1,51 @@
+import { useContext } from "react";
+import { IndiceContext } from "../../../contexts";
+import { authSideProps } from "../../../middlewares";
+import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
+import NavbarThree from "../../../components/_App/NavbarThree";
+import Link from "next/link";
+import { getWaitingRefundOptions } from "../../../services";
+import EarningTable from "../../../components/Dashboard/Earning/EarningTable";
+
+const Earning = ({ recipient, refundCommission }) => {
+  const { success, authToken, error } = useContext(IndiceContext);
+
+  return (
+    <>
+      <DashboardNavbar />
+      <div className="main-content d-flex flex-column">
+        <NavbarThree />
+
+        <div className="breadcrumb-area">
+          <h1>Earning #{recipient.id}</h1>
+          <ol className="breadcrumb">
+            <li className="item">
+              <Link href="/">Home</Link>
+            </li>
+            <li className="item">
+              <Link href="/dashboard/">Dashboard</Link>
+            </li>
+            <li className="item">
+              <Link href={`/dashboard/wallet`}>Wallet</Link>
+            </li>
+            <li className="item">Earning #{recipient.id}</li>
+          </ol>
+        </div>
+
+        <EarningTable {...recipient} refundCommission={refundCommission}/>
+      </div>
+    </>
+  );
+};
+
+const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const id = context.params.id;
+  const options = await getWaitingRefundOptions(id, baseSideProps.authToken);
+
+  return { ...options, id };
+};
+
+export const getServerSideProps = (context) =>
+  authSideProps(context, boostServerSideProps);
+
+export default Earning;

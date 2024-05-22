@@ -31,7 +31,6 @@ const Wallet = ({
   recipientPaymentInfo,
 }) => {
   const { error, authToken } = useContext(IndiceContext);
-  const router = useRouter();
 
   const {
     page: earningsPage,
@@ -58,10 +57,6 @@ const Wallet = ({
     onError: (e) => error.set(e.message),
     defaultData: senderPaymentInfo,
   });
-
-  const onSendingCLick = (id) => {
-    router.push("/dashboard/invoices/" + id);
-  };
 
   return (
     <>
@@ -147,24 +142,49 @@ const Wallet = ({
 
                     return (
                       <li key={earning.id}>
-                        <div className="icon">
-                          <i className="bx bx-wallet"></i>
-                        </div>
-                        <ul>
-                          <li>Date: {timeConverter(earning.createdAt)}</li>
-                          <li>Order: #{earning.orderId}</li>
-                          <li className="price">
-                            ${moneyFormat(pricePerDuration)}
-                          </li>
-                          <li className="fee-price">
-                            Fee: ${moneyFormat(feePerDuration)}
-                          </li>
-                          <li className="price">
-                            Net Earning:{" "}
-                            <strong>${moneyFormat(earning.money)}</strong>
-                          </li>
-                        </ul>
-                        <span>{earning.listingName}</span>
+                        <a href={"/dashboard/earnings/" + earning.id}>
+                          <div className="icon">
+                            <i className="bx bx-wallet"></i>
+                          </div>
+                          <ul>
+                            <li>Date: {timeConverter(earning.createdAt)}</li>
+                            <li>Order: #{earning.orderId}</li>
+                            <li className="price">
+                              ${moneyFormat(pricePerDuration)}
+                            </li>
+                            <li className="fee-price">
+                              Fee: ${moneyFormat(feePerDuration)}
+                            </li>
+                            <li className="price">
+                              Net Earning:{" "}
+                              <strong>${moneyFormat(earning.money)}</strong>
+                            </li>
+                            {earning.receivedType == "refund" &&
+                              earning.status == "failed" && (
+                                <li className="rejected">
+                                  <strong>Failed</strong>
+                                </li>
+                              )}
+                            {(earning.status == "waiting" ||
+                              (earning.receivedType != "refund" &&
+                                earning.status == "failed")) && (
+                              <li className="waiting">
+                                <strong>Waiting</strong>
+                              </li>
+                            )}
+                            {earning.status == "completed" && (
+                              <li className="completed">
+                                <strong>Completed</strong>
+                              </li>
+                            )}
+                            {earning.status == "cancelled" && (
+                              <li className="cancelled">
+                                <strong>Cancelled</strong>
+                              </li>
+                            )}
+                          </ul>
+                          <span>{earning.listingName}</span>
+                        </a>
                       </li>
                     );
                   })}
@@ -213,38 +233,44 @@ const Wallet = ({
                     );
 
                     return (
-                      <li
-                        key={sending.id}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => onSendingCLick(sending.id)}
-                      >
-                        <div className="icon">
-                          <i className="bx bx-cart"></i>
-                        </div>
-                        <ul>
-                          <li>Date: {timeConverter(sending.createdAt)}</li>
-                          <li>Order: #{sending.orderId}</li>
-                          <li className="price">
-                            ${moneyFormat(pricePerDuration)}
-                          </li>
-                          <li className="fee-price">
-                            Fee: ${moneyFormat(feePerDuration)}
-                          </li>
-                          <li className="price">
-                            Net Payed:{" "}
-                            <strong>${moneyFormat(sending.money)}</strong>
-                          </li>
-                          {!sending.adminApproved && (
-                            <li className="unapproved">
-                              <strong>
-                                {sending.waitingApproved
-                                  ? "Unapproved"
-                                  : "Rejected"}
-                              </strong>
+                      <li key={sending.id} style={{ cursor: "pointer" }}>
+                        <a href={"/dashboard/invoices/" + sending.id}>
+                          <div className="icon">
+                            <i className="bx bx-cart"></i>
+                          </div>
+                          <ul>
+                            <li>Date: {timeConverter(sending.createdAt)}</li>
+                            <li>Order: #{sending.orderId}</li>
+                            <li className="price">
+                              ${moneyFormat(pricePerDuration)}
                             </li>
-                          )}
-                        </ul>
-                        <span>{sending.listingName}</span>
+                            <li className="fee-price">
+                              Fee: ${moneyFormat(feePerDuration)}
+                            </li>
+                            <li className="price">
+                              Net Payed:{" "}
+                              <strong>${moneyFormat(sending.money)}</strong>
+                            </li>
+                            {!sending.adminApproved &&
+                              sending.waitingApproved && (
+                                <li className="waiting">
+                                  <strong>Unapproved</strong>
+                                </li>
+                              )}
+                            {!sending.adminApproved &&
+                              !sending.waitingApproved && (
+                                <li className="rejected">
+                                  <strong>Rejected</strong>
+                                </li>
+                              )}
+                            {sending.adminApproved && (
+                              <li className="completed">
+                                <strong>Completed</strong>
+                              </li>
+                            )}
+                          </ul>
+                          <span>{sending.listingName}</span>
+                        </a>
                       </li>
                     );
                   })}

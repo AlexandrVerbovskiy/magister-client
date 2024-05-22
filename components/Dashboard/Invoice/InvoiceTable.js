@@ -9,6 +9,27 @@ import Link from "next/link";
 import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
 
+const Status = ({ adminApproved, waitingApproved }) => {
+  let statusName = "Completed";
+  let className = "status-background-green";
+
+  if (!adminApproved) {
+    statusName = waitingApproved ? "Unapproved" : "Rejected";
+    className = waitingApproved
+      ? "status-background-orange"
+      : "status-background-red";
+  }
+
+  return (
+    <div
+      className={`bookings-status order-item-status ${className}`}
+      style={{ fontSize: "14px", marginLeft: "10px" }}
+    >
+      {statusName}
+    </div>
+  );
+};
+
 const InvoiceTable = ({
   billTo,
   shipTo,
@@ -52,12 +73,24 @@ const InvoiceTable = ({
     }
   };
 
+  const PdfDownloadButton = () => (
+    <a className="default-btn" onClick={handlePdfDownload} disabled={disabled}>
+      <i className="bx bx-printer"></i> Print
+    </a>
+  );
+
   return (
     <>
       <div className="invoice-area">
         <div className="invoice-header d-flex justify-content-between">
           <div className="invoice-left-text">
-            <h3 className="mb-0">Indice Admin</h3>
+            <h3 className="mb-0" style={{ display: "flex" }}>
+              Indice Admin{" "}
+              <Status
+                adminApproved={adminApproved}
+                waitingApproved={waitingApproved}
+              />
+            </h3>
             <p className="mt-2 mb-0">{indiceAdmin ?? "-"}</p>
           </div>
           <div className="invoice-right-text">
@@ -165,6 +198,24 @@ const InvoiceTable = ({
                   </strong>
                 </td>
               </tr>
+              <tr>
+                <td className="text-right total" colSpan="4">
+                  <strong>Payed</strong>
+                </td>
+                <td className="text-right total-price">
+                  <strong>
+                    $
+                    {adminApproved
+                      ? tenantPaymentCalculate(
+                          offer.startDate,
+                          offer.endDate,
+                          offer.fee,
+                          offer.pricePerDay
+                        )
+                      : 0}
+                  </strong>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -181,33 +232,18 @@ const InvoiceTable = ({
         {!waitingApproved && !adminApproved ? (
           <div className="invoice-btn-box d-flex justify-content-between">
             <a
-              type="button"
               className="default-btn"
               href={`/dashboard/pay-by-credit-card/${purchaseOrder}`}
               disabled={disabled}
             >
-              <i className="bx bx-upload" style={{fontSize: "16px"}}></i> Update
+              <i className="bx bx-upload" style={{ fontSize: "16px" }}></i>{" "}
+              Update
             </a>
-
-            <a
-              type="button"
-              className="default-btn"
-              onClick={handlePdfDownload}
-              disabled={disabled}
-            >
-              <i className="bx bx-printer"></i> Print
-            </a>
+            <PdfDownloadButton />
           </div>
         ) : (
           <div className="invoice-btn-box text-right">
-            <a
-              type="button"
-              className="default-btn"
-              onClick={handlePdfDownload}
-              disabled={disabled}
-            >
-              <i className="bx bx-printer"></i> Print
-            </a>
+            <PdfDownloadButton />
           </div>
         )}
       </div>

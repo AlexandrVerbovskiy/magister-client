@@ -53,7 +53,6 @@ const OrderApprovementSection = ({
       return;
     }
 
-    console.log(validateBigText(sendingMessage));
     setActiveAcceptSendBookingRequest(true);
   };
 

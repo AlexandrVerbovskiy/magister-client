@@ -1,6 +1,7 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
 import STATIC from "../../../static";
+import { moneyFormat } from "../../../utils";
 
 const TableItem = ({
   id,
@@ -29,7 +30,7 @@ const TableItem = ({
         <Link href={`/admin/users/edit/${payerId}`}>{payerName}</Link>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium">${money}</div>
+        <div className="font-medium">${moneyFormat(money)}</div>
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <TableDateView date={createdAt} />
