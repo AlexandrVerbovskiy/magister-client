@@ -11,6 +11,7 @@ import {
 } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 import YesNoModal from "../../_App/YesNoModal";
+import STATIC from "../../../static"
 
 const OrderApprovementSection = ({
   handleApprove,
