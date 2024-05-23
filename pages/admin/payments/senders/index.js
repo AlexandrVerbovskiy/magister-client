@@ -4,21 +4,21 @@ import {
   useChangeTimeFilter,
   useInitPaginationTimeFilter,
   usePagination,
-} from "../../../hooks";
-import { IndiceContext } from "../../../contexts";
+} from "../../../../hooks";
+import { IndiceContext } from "../../../../contexts";
 import {
   getAdminSenderPaymentList,
   getAdminSenderPaymentListOptions,
-} from "../../../services";
-import { adminSideProps } from "../../../middlewares";
-import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import Header from "../../../partials/admin/Header";
-import Sidebar from "../../../partials/admin/Sidebar";
-import { baseTimeListPageParams } from "../../../utils";
-import Datepicker from "../../../components/admin/Datepicker";
-import SenderPaymentsTable from "../../../components/admin/SenderPayments/Table";
+} from "../../../../services";
+import { adminSideProps } from "../../../../middlewares";
+import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
+import SearchForm from "../../../../partials/admin/actions/SearchForm";
+import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
+import Header from "../../../../partials/admin/Header";
+import Sidebar from "../../../../partials/admin/Sidebar";
+import { baseTimeListPageParams } from "../../../../utils";
+import Datepicker from "../../../../components/admin/Datepicker";
+import SenderPaymentsTable from "../../../../components/admin/SenderPayments/Table";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -88,6 +88,7 @@ const SenderPayments = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                viewPath="/payments/senders"
               />
 
               <div className="mt-8">

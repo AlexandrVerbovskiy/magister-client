@@ -1,27 +1,21 @@
 import { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
-import {
-  useAdminPage,
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
-  usePagination,
-} from "../../../hooks";
+import { IndiceContext } from "../../../../contexts";
+import { useAdminPage, usePagination } from "../../../../hooks";
 import {
   getAdminRecipientPaymentList,
   getAdminRecipientPaymentListOptions,
-} from "../../../services";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
-import Sidebar from "../../../partials/admin/Sidebar";
-import Header from "../../../partials/admin/Header";
-import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import Datepicker from "../../../components/admin/Datepicker";
-import DropdownFilter from "../../../components/admin/DropdownFilter";
-import { baseTimeListPageParams } from "../../../utils";
-import { adminSideProps } from "../../../middlewares";
+} from "../../../../services";
+import SearchForm from "../../../../partials/admin/actions/SearchForm";
+import Sidebar from "../../../../partials/admin/Sidebar";
+import Header from "../../../../partials/admin/Header";
+import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
+import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
+import DropdownFilter from "../../../../components/admin/DropdownFilter";
+import { baseTimeListPageParams } from "../../../../utils";
+import { adminSideProps } from "../../../../middlewares";
 import { useRouter } from "next/router";
-import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
-import RecipientPaymentsTable from "../../../components/admin/RecipientPayments/Table";
+import FilterRadioOption from "../../../../components/admin/Form/FilterRadioOption";
+import RecipientPaymentsTable from "../../../../components/admin/RecipientPayments/Table";
 
 const RecipientPayments = (pageProps) => {
   const router = useRouter();
@@ -30,9 +24,6 @@ const RecipientPayments = (pageProps) => {
 
   const [type, setType] = useState(router.query.type ?? "all");
   const [status, setStatus] = useState(router.query.status ?? "all");
-
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
 
   const {
     page,
@@ -50,12 +41,10 @@ const RecipientPayments = (pageProps) => {
     canMovePrevPage,
     items: payments,
     rebuild,
-    options,
   } = usePagination({
     getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
-      ...getTimeFilterProps(),
       type: {
         value: type,
         hidden: (value) => value == "all",
@@ -66,15 +55,6 @@ const RecipientPayments = (pageProps) => {
       },
     }),
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   const handleChangeTypeFilter = (value) => {
@@ -101,11 +81,6 @@ const RecipientPayments = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by payed time"
-                  />
 
                   <DropdownFilter align="right">
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
@@ -158,6 +133,7 @@ const RecipientPayments = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                viewPath="/payments/recipients"
               />
 
               <div className="mt-8">

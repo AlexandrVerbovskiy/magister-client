@@ -21,6 +21,21 @@ export const getAdminSenderPaymentList = async (body, authToken) => {
   return data.body;
 };
 
+export const getAdminSenderWaitingApprovalList = async (body, authToken) => {
+  const data = await post("/waiting-approval-list", body, authToken);
+  return data.body;
+};
+
+export const approveSenderPaymentTransaction = async({orderId}, authToken)=>{
+  const data = await post("/approve-credit-card-transaction", {orderId}, authToken);
+  return data.body;
+}
+
+export const rejectSenderPaymentTransaction = async({orderId, description}, authToken)=>{
+  const data = await post("/reject-credit-card-transaction", {orderId, description}, authToken);
+  return data.body;
+}
+
 export const generateInvoicePdf = async (id, authToken) => {
   const url = generateFullUrl(`/invoice-pdf/${id}`);
 
@@ -36,5 +51,3 @@ export const generateInvoicePdf = async (id, authToken) => {
   const pdfUrl = URL.createObjectURL(pdfBlob);
   return pdfUrl;
 };
-
-//export const invoicePdfUrl = (id) => generateFullUrl(`/invoice-pdf/${id}`);

@@ -33,3 +33,11 @@ export const waitingRefundMarkAsRejected = async (
   const data = await post("/rejected", { id, description }, authToken);
   return data.body;
 };
+
+export const failedRecipientMarkAsDone = async (
+  { id, paymentNumber },
+  authToken
+) => {
+  const data = await post(`/failed-recipient-mark-done`, { id, paymentNumber }, authToken);
+  return data.body;
+};

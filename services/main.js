@@ -145,6 +145,28 @@ export const getAdminSenderPaymentListOptions = async (params, authToken) => {
   return data.body;
 };
 
+export const getAdminSenderWaitingApprovalListOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/waiting-admin-approval-sender-payment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminSenderPaymentOptions = async (id, authToken) => {
+  const data = await get(`/admin-sender-payment-options/${id}`, authToken);
+  return data.body;
+};
+
+export const getAdminRecipientPaymentOptions = async (id, authToken) => {
+  const data = await get(`/admin-recipient-payment-options/${id}`, authToken);
+  return data.body;
+};
+
 export const getAdminRecipientPaymentListOptions = async (
   params,
   authToken

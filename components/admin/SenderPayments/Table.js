@@ -8,6 +8,7 @@ const SenderPaymentsTable = ({
   orderType,
   onClickTh,
   totalCount,
+  viewPath
 }) => {
   const ths = [
     { title: "Id", value: "sender_payments.id", width: "10%" },
@@ -16,7 +17,7 @@ const SenderPaymentsTable = ({
     { title: "Payer", value: "users.name", width: "20%" },
     { title: "Price", value: "sender_payments.money", width: "10%" },
     { title: "Payed at", value: "sender_payments.created_at", width: "10%" },
-    { title: "Order Id", canOrder: false, width: "10%" },
+    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
   ];
 
   return (
@@ -47,10 +48,7 @@ const SenderPaymentsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {payments.map((payment) => (
-                <TableItem
-                  key={payment.id}
-                  {...payment}
-                />
+                <TableItem key={payment.id} {...payment} viewPath={viewPath}/>
               ))}
             </tbody>
           </table>
