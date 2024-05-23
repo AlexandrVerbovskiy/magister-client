@@ -322,8 +322,16 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       title: "Recipient Payments",
                     },
                     {
+                      href: "payments/senders-waiting-approval",
+                      title: "Waiting Payment Approval",
+                    },
+                    {
                       href: "payments/waiting-refunds",
                       title: "Waiting Refunds",
+                    },
+                    {
+                      href: "payments/failed-recipients-paypal",
+                      title: "Failed Paypal Recipients",
                     },
                   ]}
                   SVG={({ current }) => (

@@ -161,7 +161,9 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleAcceptCreateDispute = async (description) => {
     try {
-      if (findCurrentOrderById(activeCancelId).ownerId === sessionUser?.id) {
+      if (
+        findCurrentOrderById(activeCreateDisputeId).ownerId === sessionUser?.id
+      ) {
         await orderCancelByOwner(
           { id: activeCreateDisputeId, description },
           authToken
@@ -201,8 +203,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const handleClickCreateDispute = (orderId) => {
-    setActiveCancelId(orderId);
-    setActiveCancel(true);
+    setActiveCreateDisputeId(orderId);
+    setActiveCreateDispute(true);
   };
 
   const handleOrderAcceptAcceptCancelByTenant = async () => {

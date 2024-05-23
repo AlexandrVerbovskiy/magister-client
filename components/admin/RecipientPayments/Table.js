@@ -8,15 +8,20 @@ const RecipientPaymentsTable = ({
   orderType,
   onClickTh,
   totalCount,
+  viewPath,
 }) => {
   const ths = [
     { title: "Id", value: "recipient_payments.id", width: "10%" },
     { title: "Payer", value: "tenants.name", width: "20%" },
     { title: "Recipient", value: "users.name", width: "20%" },
     { title: "Price", value: "recipient_payments.money", width: "15%" },
-    { title: "Type", value: "recipient_payments.received_type", width: "10%" },
-    { title: "Status", value: "recipient_payments.status", width: "10%" },
-    { title: "Payed at", value: "recipient_payments.planned_time", width: "15%" },
+    {
+      title: "Type",
+      value: "recipient_payments.received_type",
+      width: "12.5%",
+    },
+    { title: "Status", value: "recipient_payments.status", width: "12.5%" },
+    { title: "Action", value: "action", canOrder: false, width: "10%" },
   ];
 
   return (
@@ -47,7 +52,7 @@ const RecipientPaymentsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {payments.map((payment) => (
-                <TableItem key={payment.id} {...payment} />
+                <TableItem key={payment.id} {...payment} viewPath={viewPath} />
               ))}
             </tbody>
           </table>

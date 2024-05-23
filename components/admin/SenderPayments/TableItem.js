@@ -2,6 +2,7 @@ import Link from "next/link";
 import TableDateView from "../TableDateView";
 import STATIC from "../../../static";
 import { moneyFormat } from "../../../utils";
+import View from "../FastActions/View";
 
 const TableItem = ({
   id,
@@ -14,6 +15,7 @@ const TableItem = ({
   payerName,
   money,
   createdAt,
+  viewPath,
 }) => {
   return (
     <tr>
@@ -36,7 +38,7 @@ const TableItem = ({
         <TableDateView date={createdAt} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <Link href={`/admin/orders/${orderId}`}>#{orderId}</Link>
+        <View href={`/admin${viewPath}/${id}`} />
       </td>
     </tr>
   );

@@ -39,6 +39,7 @@ const ModalWithDescription = ({
               rows="6"
               value={description}
               onChange={handleInputDescription}
+              style={{ resize: "none" }}
             />
             <ErrorSpan error={descriptionError} />
           </div>

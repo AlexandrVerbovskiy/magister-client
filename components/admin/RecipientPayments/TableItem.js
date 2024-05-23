@@ -1,6 +1,5 @@
 import Link from "next/link";
-import TableDateView from "../TableDateView";
-import STATIC from "../../../static";
+import View from "../FastActions/View";
 import { moneyFormat } from "../../../utils";
 
 const TypeSpan = ({ type }) => {
@@ -65,6 +64,7 @@ const TableItem = ({
   plannedTime,
   recipientId,
   recipientName,
+  viewPath,
 }) => {
   return (
     <tr>
@@ -87,7 +87,7 @@ const TableItem = ({
         <StatusSpan status={status} />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-        <TableDateView date={plannedTime} />
+        <View href={`/admin${viewPath}/${id}`} />
       </td>
     </tr>
   );

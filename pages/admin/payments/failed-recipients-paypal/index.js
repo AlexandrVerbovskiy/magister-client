@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../../../contexts";
 import { useAdminPage, usePagination } from "../../../../hooks";
 import {
-  getAdminWaitingRefundsList,
-  getAdminWaitingRefundsRecipientPaymentListOptions,
+  getAdminFailedRecipientPaymentListOptions,
+  getAdminFailedRecipientPaymentList,
 } from "../../../../services";
 import SearchForm from "../../../../partials/admin/actions/SearchForm";
 import Sidebar from "../../../../partials/admin/Sidebar";
@@ -12,9 +12,9 @@ import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
 import { baseTimeListPageParams } from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
-import WaitingRefundsTable from "../../../../components/admin/WaitingRefunds/Table";
+import RecipientPaymentsTable from "../../../../components/admin/RecipientPayments/Table";
 
-const WaitingRefunds = (pageProps) => {
+const RecipientPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
@@ -33,10 +33,8 @@ const WaitingRefunds = (pageProps) => {
     canMoveNextPage,
     canMovePrevPage,
     items: payments,
-    rebuild,
-    options,
   } = usePagination({
-    getItemsFunc: (data) => getAdminWaitingRefundsList(data, authToken),
+    getItemsFunc: (data) => getAdminFailedRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
   });
@@ -58,12 +56,13 @@ const WaitingRefunds = (pageProps) => {
                 </div>
               </div>
 
-              <WaitingRefundsTable
+              <RecipientPaymentsTable
                 payments={payments}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                viewPath="/payments/failed-recipients-paypal"
               />
 
               <div className="mt-8">
@@ -92,7 +91,7 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 
   const params = { ...baseTimeListPageParams(context.query), status, type };
 
-  const options = await getAdminWaitingRefundsRecipientPaymentListOptions(
+  const options = await getAdminFailedRecipientPaymentListOptions(
     params,
     baseSideProps.authToken
   );
@@ -103,4 +102,4 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 export const getServerSideProps = (context) =>
   adminSideProps(context, boostServerSideProps);
 
-export default WaitingRefunds;
+export default RecipientPayments;
