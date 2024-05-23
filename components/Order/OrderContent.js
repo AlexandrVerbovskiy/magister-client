@@ -39,6 +39,8 @@ import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
+import BookingModal from "../SingleListings/BookingModal";
+import OrderExtendApprovementSection from "../admin/Listings/OrderExtendApprovementSection";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -47,12 +49,20 @@ const bookingStatuses = [
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
 
-const OrderContent = ({ order: baseOrder, authToken, questions }) => {
+const OrderContent = ({
+  order: baseOrder,
+  authToken,
+  questions,
+  ownerBaseCommission,
+  tenantBaseCommission,
+}) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
+  const [extendPopupActive, setExtendPopupActive] = useState(false);
+  const [extendApproveData, setExtendApproveData] = useState(null);
 
   const router = useRouter();
 
@@ -503,6 +513,44 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
           finished: order.status == STATIC.ORDER_STATUSES.FINISHED,
         },
       ];
+
+  const handleBeforeMakeExtend = ({ price, fromDate, toDate }) => {
+    setExtendPopupActive(false);
+    setExtendApproveData({
+      price,
+      fromDate,
+      toDate,
+    });
+  };
+
+  const handleMakeBooking = () => {
+    console.log(
+      extendApproveData.price,
+      extendApproveData.fromDate,
+      extendApproveData.toDate
+    );
+  };
+
+  if (extendApproveData) {
+    return (
+      <OrderExtendApprovementSection
+        handleApprove={handleMakeBooking}
+        setCurrentOpenImg={setCurrentOpenImg}
+        listing={{
+          listingImages: order.listingImages,
+          name: order.listingName,
+          userName: order.ownerName,
+          userPhoto: order.ownerPhoto,
+          userCountItems: order.listingCountStoredItems,
+        }}
+        handleGoBack={() => setExtendApproveData(null)}
+        fromDate={extendApproveData.fromDate}
+        toDate={extendApproveData.toDate}
+        price={extendApproveData.price}
+        fee={tenantBaseCommission}
+      />
+    );
+  }
 
   return (
     <>
@@ -1355,6 +1403,25 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
             </ul>
           </div>
         )}
+
+      <button
+        className="default-btn error-btn"
+        type="button"
+        onClick={() => setExtendPopupActive(true)}
+      >
+        Extend Offer
+      </button>
+
+      <BookingModal
+        handleMakeBooking={handleBeforeMakeExtend}
+        price={order.offerPricePerDay}
+        minRentalDays={order.listingMinRentalDays}
+        fee={tenantBaseCommission}
+        createOrderModalActive={extendPopupActive}
+        setCreateOrderModalActive={setExtendPopupActive}
+        listingName={order.listingName}
+        blockedDates={order.blockedDates}
+      />
 
       {currentActionButtons.length > 0 && (
         <div className="order_widget add-listings-box">

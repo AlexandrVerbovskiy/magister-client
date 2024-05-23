@@ -13,6 +13,34 @@ export const createOrder = async (
   return data.body.id;
 };
 
+export const extendOrder = async (
+  {
+    pricePerDay,
+    startDate,
+    endDate,
+    listingId,
+    feeActive,
+    message,
+    parentOrderId,
+  },
+  authToken
+) => {
+  const data = await post(
+    `/extend`,
+    {
+      pricePerDay,
+      startDate,
+      endDate,
+      listingId,
+      feeActive,
+      message,
+      parentOrderId,
+    },
+    authToken
+  );
+  return data.body.id;
+};
+
 export const getOrderFullInfo = async (id, authToken) => {
   const data = await get(`/get-full-by-id/${id}`, authToken);
   return data.body;
