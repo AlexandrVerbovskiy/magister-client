@@ -6,6 +6,7 @@ const InputView = ({
   labelClassName = "sr-only",
   inputClassName = "form-input",
   name = null,
+  defaultValue = null,
 }) => {
   return (
     <>
@@ -14,7 +15,7 @@ const InputView = ({
         name={name}
         className={inputClassName}
         type={type}
-        value={value}
+        value={value ?? defaultValue ?? "-"}
         placeholder={placeholder}
         readOnly={true}
       />

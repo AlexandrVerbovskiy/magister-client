@@ -179,6 +179,18 @@ export const getAdminRecipientPaymentListOptions = async (
   return data.body;
 };
 
+export const getAdminFailedRecipientPaymentListOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-failed-recipient-payment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
 export const getAdminWaitingRefundsRecipientPaymentListOptions = async (
   params,
   authToken

@@ -22,6 +22,7 @@ const ListingApprovalRequest = ({
   request: baseRequest,
   listing: baseListing,
 }) => {
+  console.log(baseListing)
   const [listing, setListing] = useState(baseListing);
   const [request, setRequest] = useState(baseRequest);
   const [mapCenter, setMapCenter] = useState(null);
@@ -308,6 +309,37 @@ const ListingApprovalRequest = ({
                         </div>
                       </div>
                     </section>
+
+                    {(listing.defects.length > 0 ||
+                        listing.dopDefect) && (
+                        <section>
+                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                            Defects
+                          </h2>
+
+                          <div className="flex flex-col gap-2">
+                            {listing.defects.map((defect) => (
+                              <div className="w-full" key={defect.defectId}>
+                                <InputView
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={defect.defectName}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            ))}
+
+                            {listing.dopDefect && (
+                              <div className="col-12">
+                                <InputView
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  value={listing.dopDefect}
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </section>
+                      )}
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">

@@ -2,8 +2,8 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../../../contexts";
 import { useAdminPage, usePagination } from "../../../../hooks";
 import {
-  getAdminRecipientPaymentList,
-  getAdminRecipientPaymentListOptions,
+  getAdminFailedRecipientPaymentListOptions,
+  getAdminFailedRecipientPaymentList,
 } from "../../../../services";
 import SearchForm from "../../../../partials/admin/actions/SearchForm";
 import Sidebar from "../../../../partials/admin/Sidebar";
@@ -34,7 +34,7 @@ const RecipientPayments = (pageProps) => {
     canMovePrevPage,
     items: payments,
   } = usePagination({
-    getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
+    getItemsFunc: (data) => getAdminFailedRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
   });
@@ -91,7 +91,7 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 
   const params = { ...baseTimeListPageParams(context.query), status, type };
 
-  const options = await getAdminRecipientPaymentListOptions(
+  const options = await getAdminFailedRecipientPaymentListOptions(
     params,
     baseSideProps.authToken
   );

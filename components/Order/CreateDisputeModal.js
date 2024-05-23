@@ -4,7 +4,7 @@ import BaseModal from "../_App/BaseModal";
 import { IndiceContext } from "../../contexts";
 import { validateBigText } from "../../utils";
 
-const CreateDisputeModal = ({ modalActive, setModalActive, onCreateDispute }) => {
+const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
   const [disabled, setDisabled] = useState(false);
@@ -36,19 +36,18 @@ const CreateDisputeModal = ({ modalActive, setModalActive, onCreateDispute }) =>
     try {
       await onCreateDispute(description);
       setDisabled(true);
-      setModalActive(false);
       setDescription("");
     } catch (e) {
       error.set(e.message);
     } finally {
-      setDisabled(false);
+      closeModal();
     }
   };
 
   return (
       <BaseModal
         active={modalActive}
-        closeModal={() => setModalActive(false)}
+        closeModal={closeModal}
         needCloseBtn={true}
       >
         <span className="sub-title mb-2">
