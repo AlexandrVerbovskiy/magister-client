@@ -1,12 +1,13 @@
 import React, { useContext, useState } from "react";
 import {
+  downloadFileUrl,
   getDaysDifference,
   moneyFormat,
   tenantPaymentCalculate,
   timeConverter,
 } from "../../../utils";
 import Link from "next/link";
-import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
+import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
 
 const Status = ({ adminApproved, waitingApproved }) => {
@@ -35,7 +36,7 @@ const InvoiceTable = ({
   shipTo,
   invoiceId,
   invoiceDate,
-  purchaseOrder,
+  purchaseOrderId,
   dueDate,
   indiceAdmin,
   offer,
@@ -56,16 +57,8 @@ const InvoiceTable = ({
       }
 
       setDisabled(true);
-      const url = await generateInvoicePdf(invoiceId, authToken);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `inv-${invoiceId}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      URL.revokeObjectURL(url);
+      const fileUrl = await generateSenderInvoicePdf(invoiceId, authToken);
+      downloadFileUrl(fileUrl, purchaseOrderId);
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -117,7 +110,7 @@ const InvoiceTable = ({
             <div className="col-lg-6">
               <div className="text text-right">
                 <h5>
-                  Invoice # <sub>Inv-{invoiceId}</sub>
+                  Invoice # <sub>Inv-{purchaseOrderId}</sub>
                 </h5>
                 <h5>
                   Invoice Date #{" "}
@@ -128,9 +121,9 @@ const InvoiceTable = ({
                   <sub>
                     <Link
                       style={{ color: "inherit" }}
-                      href={`/dashboard/orders/${purchaseOrder}`}
+                      href={`/dashboard/orders/${purchaseOrderId}`}
                     >
-                      Ord-{purchaseOrder ?? "-"}
+                      Ord-{purchaseOrderId ?? "-"}
                     </Link>
                   </sub>
                 </h5>
@@ -233,7 +226,7 @@ const InvoiceTable = ({
           <div className="invoice-btn-box d-flex justify-content-between">
             <a
               className="default-btn"
-              href={`/dashboard/pay-by-credit-card/${purchaseOrder}`}
+              href={`/dashboard/pay-by-credit-card/${purchaseOrderId}`}
               disabled={disabled}
             >
               <i className="bx bx-upload" style={{ fontSize: "16px" }}></i>{" "}

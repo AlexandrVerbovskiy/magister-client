@@ -5,10 +5,12 @@ import NavbarThree from "../../../components/_App/NavbarThree";
 import {
   unpaidOrderTransactionByCreditCard,
   getBookingInfoForPayByCreditCardOptions,
+  generateOrderInvoicePdf,
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByDaysCount,
+  downloadFileUrl,
   getDaysDifference,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
@@ -59,6 +61,24 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
     booking.tenantFee,
     "sum"
   );
+
+  const handlePdfDownload = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (disabled) {
+        return;
+      }
+
+      setDisabled(true);
+      const fileUrl = await generateOrderInvoicePdf(bookingId, authToken);
+      downloadFileUrl(fileUrl, bookingId);
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setDisabled(false);
+    }
+  };
 
   const handleSubmit = async () => {
     if (disabled) {
@@ -127,7 +147,20 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
         <div className="row">
           <div className="col-lg-6 col-md-12">
             <div className="earnings-box">
-              <h3>Bank Details</h3>
+              <h3 className="d-flex align-items-center justify-content-between">
+                Bank Details{" "}
+                <div>
+                  <button
+                    disabled={disabled}
+                    className="pay-download-invoice"
+                    type="button"
+                    style={{ fontSize: "14px" }}
+                    onClick={handlePdfDownload}
+                  >
+                    Download Invoice
+                  </button>
+                </div>
+              </h3>
               <ul>
                 <li
                   style={{
@@ -285,7 +318,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                   <div>
                     <button
                       disabled={disabled}
-                      className="pay-by-card-btn mb-4"
+                      className="pay-by-card-btn"
                       type="button"
                       onClick={handleSubmit}
                     >

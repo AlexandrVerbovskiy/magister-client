@@ -5,6 +5,7 @@ import {
   getDaysDifference,
   getFilePath,
   getListingImageByType,
+  increaseDateByOneDay,
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -22,6 +23,7 @@ import {
   rejectOrder,
   orderAcceptCancelByTenant,
   orderAcceptCancelByOwner,
+  extendOrder,
 } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
@@ -40,7 +42,7 @@ import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import BookingModal from "../SingleListings/BookingModal";
-import OrderExtendApprovementSection from "../admin/Listings/OrderExtendApprovementSection";
+import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -299,7 +301,7 @@ const OrderContent = ({
     }));
   };
 
-  const validateQUestions = () => {
+  const validateQuestions = () => {
     let hasError = true;
 
     const updateQuestions = [];
@@ -322,7 +324,7 @@ const OrderContent = ({
 
   const onTenantGotListingApprove = async () => {
     try {
-      if (!validateQUestions()) {
+      if (!validateQuestions()) {
         return;
       }
 
@@ -456,7 +458,7 @@ const OrderContent = ({
 
   const finishOrder = async () => {
     try {
-      if (!validateQUestions()) {
+      if (!validateQuestions()) {
         return;
       }
 
@@ -523,12 +525,32 @@ const OrderContent = ({
     });
   };
 
-  const handleMakeBooking = () => {
-    console.log(
-      extendApproveData.price,
-      extendApproveData.fromDate,
-      extendApproveData.toDate
+  const handleMakeBooking = async ({ feeActive, sendingMessage }) => {
+    const dayDiff = getDaysDifference(
+      order.offerEndDate,
+      extendApproveData.fromDate
     );
+
+    await extendOrder(
+      {
+        pricePerDay: extendApproveData.price,
+        startDate: extendApproveData.fromDate,
+        endDate: extendApproveData.toDate,
+        listingId: order.listingId,
+        feeActive,
+        message: sendingMessage,
+        parentOrderId: order.id,
+      },
+      authToken
+    );
+
+    if (dayDiff == 1) {
+      success.set("Order extended successfully");
+      router.push("/dashboard/orders");
+    } else {
+      success.set("New booking created successfully");
+      router.push("/dashboard/bookings");
+    }
   };
 
   if (extendApproveData) {
@@ -1404,25 +1426,6 @@ const OrderContent = ({
           </div>
         )}
 
-      <button
-        className="default-btn error-btn"
-        type="button"
-        onClick={() => setExtendPopupActive(true)}
-      >
-        Extend Offer
-      </button>
-
-      <BookingModal
-        handleMakeBooking={handleBeforeMakeExtend}
-        price={order.offerPricePerDay}
-        minRentalDays={order.listingMinRentalDays}
-        fee={tenantBaseCommission}
-        createOrderModalActive={extendPopupActive}
-        setCreateOrderModalActive={setExtendPopupActive}
-        listingName={order.listingName}
-        blockedDates={order.blockedDates}
-      />
-
       {currentActionButtons.length > 0 && (
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
@@ -1508,6 +1511,36 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
             ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
+            ) && (
+              <>
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={() => setExtendPopupActive(true)}
+                >
+                  Extend Offer
+                </button>
+                <BookingModal
+                  handleMakeBooking={handleBeforeMakeExtend}
+                  price={order.offerPricePerDay}
+                  minRentalDays={order.listingMinRentalDays}
+                  fee={tenantBaseCommission}
+                  createOrderModalActive={extendPopupActive}
+                  closeModal={() => setExtendPopupActive(false)}
+                  listingName={order.listingName}
+                  blockedDates={order.blockedForRentalDates}
+                  title="Extend Now"
+                  startDate={
+                    order.offerEndDate
+                      ? increaseDateByOneDay(order.offerEndDate)
+                      : null
+                  }
+                />
+              </>
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON

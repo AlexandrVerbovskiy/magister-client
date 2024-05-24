@@ -21,26 +21,19 @@ const BookingModal = ({
   price: defaultPrice,
   fee,
   createOrderModalActive,
-  setCreateOrderModalActive,
+  closeModal,
   minRentalDays,
   blockedDates,
+  title = "Book Now",
+  startDate = null,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
-  const defaultCountDays = minRentalDays ? minRentalDays : 1;
-  const firstAvailableDate = findFirstAvailableDate(
-    blockedDates,
-    defaultCountDays
-  );
-
-  const lastAvailableDate = new Date();
-  lastAvailableDate.setDate(
-    firstAvailableDate.getDate() + defaultCountDays - 1
-  );
 
   const calendarContainer = useRef(null);
-  const [fromDate, setFromDate] = useState(firstAvailableDate);
-  const [toDate, setToDate] = useState(lastAvailableDate);
+  const calendarRef = useRef(null);
+  const [fromDate, setFromDate] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
 
   /*const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
   const [toDate, setToDate] = useState(
@@ -77,7 +70,9 @@ const BookingModal = ({
   };
 
   useEffect(() => {
-    const calendar = flatpickr(calendarContainer.current, {
+    const datesToDisable = groupDates(blockedDates);
+
+    calendarRef.current = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
       dateFormat: "Y-m-d",
@@ -86,7 +81,7 @@ const BookingModal = ({
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
       yearSelectorType: "static",
-      disable: groupDates(blockedDates),
+      disable: datesToDisable,
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
       },
@@ -97,8 +92,8 @@ const BookingModal = ({
     });
 
     return () => {
-      if (calendar.destroy) {
-        calendar.destroy();
+      if (calendarRef.current.destroy) {
+        calendarRef.current.destroy();
       }
     };
   }, []);
@@ -111,6 +106,36 @@ const BookingModal = ({
       fee,
     });
   }, [fromDate, toDate, price, fee]);
+
+  useEffect(() => {
+    setOfferPriceActive(false);
+    setPrice(defaultPrice);
+  }, [defaultPrice]);
+
+  useEffect(() => {
+    const defaultCountDays = minRentalDays ? minRentalDays : 1;
+    const firstAvailableDate = findFirstAvailableDate(
+      blockedDates,
+      defaultCountDays,
+      startDate
+    );
+
+    const lastAvailableDate = new Date(
+      firstAvailableDate.getTime() +
+        (defaultCountDays - 1) * 24 * 60 * 60 * 1000
+    );
+
+    const datesToDisable = groupDates(blockedDates);
+
+    if (calendarRef.current) {
+      calendarRef.current.set("disable", datesToDisable);
+      calendarRef.current.setDate([firstAvailableDate, lastAvailableDate]);
+      calendarRef.current.jumpToDate(firstAvailableDate);
+    }
+
+    setFromDate(firstAvailableDate);
+    setToDate(lastAvailableDate);
+  }, [blockedDates, minRentalDays, startDate]);
 
   const handleSubmit = () => {
     let hasError = false;
@@ -142,10 +167,10 @@ const BookingModal = ({
     <BaseModal
       className="scrollable-modal make-order-modal"
       active={createOrderModalActive}
-      closeModal={() => setCreateOrderModalActive(false)}
+      closeModal={closeModal}
     >
       <span className="sub-title mb-2">
-        <span>Book Now</span>
+        <span>{title}</span>
       </span>
 
       <div className="mt-3 booking-form left-scrollable">
@@ -175,7 +200,7 @@ const BookingModal = ({
             </div>
           )}
           {fee && <div>Fee: {fee}%</div>}
-          {minRentalDays && (
+          {minRentalDays > 0 && (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
           )}
           {fee && <div>Price: ${totalPrice}</div>}

@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../contexts";
 import {
+  extendOrder,
   orderAcceptCancelByOwner,
   orderAcceptCancelByTenant,
   orderCancelByOwner,
@@ -12,6 +13,7 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
+import { getDaysDifference } from "../utils";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
@@ -70,8 +72,58 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [activePay, setActivePay] = useState(false);
   const [activePayOrder, setActivePayOrder] = useState(null);
 
+  const [updateRequestModalActiveOrder, setUpdateRequestModalActiveOrder] =
+    useState({});
+  const [acceptOrderModalActiveId, setAcceptOrderModalActiveId] =
+    useState(null);
+  const [rejectOrderModalActiveId, setRejectOrderModalActiveId] =
+    useState(null);
+
+  const [extendModalActive, setExtendModalActive] = useState(false);
+  const [extendModalActiveOrder, setExtendModalActiveOrder] = useState({});
+  const [extendModalApproveActive, setExtendModalApproveActive] =
+    useState(false);
+  const [extendModalApproveData, setExtendModalApproveData] = useState(null);
+
+  const findCurrentOrderById = (id) => {
+    let foundOrder = orders.find((order) => order.id === id);
+
+    if (!foundOrder) {
+      for (let i = 0; i < orders.length; i++) {
+        for (let j = 0; j < orders[i].extendOrders.length; i++) {
+          if (orders[i].extendOrders[i].id === id) {
+            foundOrder = orders[i].extendOrders[i];
+          }
+        }
+      }
+    }
+
+    return foundOrder;
+  };
+
+  const autoParentOrderSetItemField = (data, orderId) => {
+    const foundOrder = findCurrentOrderById(orderId);
+    const parentId = foundOrder.orderParentId;
+
+    if (parentId) {
+      const parentOrder = findCurrentOrderById(foundOrder.orderParentId);
+      const extendOrders = parentOrder.extendOrders;
+      const newExtendOrders = extendOrders.map((order) => {
+        if (order.id === foundOrder.id) {
+          return { ...order, ...data };
+        } else {
+          return { ...order };
+        }
+      });
+
+      setItemFields({ extendOrders: newExtendOrders }, parentId);
+    } else {
+      setItemFields(data, foundOrder.id);
+    }
+  };
+
   const onTenantPayed = () => {
-    setItemFields(
+    autoParentOrderSetItemField(
       {
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
       },
@@ -87,26 +139,21 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     });
   };
 
-  const [updateRequestModalActiveOrder, setUpdateRequestModalActiveOrder] =
-    useState({});
-  const [acceptOrderModalActiveId, setAcceptOrderModalActiveId] =
-    useState(null);
-  const [rejectOrderModalActiveId, setRejectOrderModalActiveId] =
-    useState(null);
-
-  const findCurrentOrderById = (id) => orders.find((order) => order.id === id);
-
   const handleAcceptCancel = async () => {
     try {
-      if (findCurrentOrderById(activeCancelId).ownerId === sessionUser?.id) {
+      const foundOrder = findCurrentOrderById(activeCancelId);
+
+      if (foundOrder.ownerId === sessionUser?.id) {
         await rejectOrder(activeCancelId, authToken);
-        setItemFields(
+
+        autoParentOrderSetItemField(
           { status: STATIC.ORDER_STATUSES.REJECTED },
           activeCancelId
         );
       } else {
         await orderFullCancel(activeCancelId, authToken);
-        setItemFields(
+
+        autoParentOrderSetItemField(
           { cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED },
           activeCancelId
         );
@@ -125,6 +172,66 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActiveCancel(true);
   };
 
+  const closeExtendOrder = () => {
+    setExtendModalActiveOrder({});
+    setExtendModalActive(false);
+  };
+
+  const closeApproveExtendOrder = () => {
+    setExtendModalApproveData(null);
+    setExtendModalApproveActive(false);
+  };
+
+  const handleClickExtendOrder = (orderId) => {
+    setExtendModalActiveOrder(findCurrentOrderById(orderId));
+    setExtendModalActive(true);
+  };
+
+  const handleClickApproveExtendOrder = ({ price, fromDate, toDate }) => {
+    setExtendModalActive(false);
+    setExtendModalApproveActive(true);
+    setExtendModalApproveData({
+      price,
+      fromDate,
+      toDate,
+      order: extendModalActiveOrder,
+    });
+    setExtendModalActiveOrder({});
+  };
+
+  const acceptApproveExtendOrder = async ({ feeActive, sendingMessage }) => {
+    const dayDiff = getDaysDifference(
+      extendModalApproveData.order.offerEndDate,
+      extendModalApproveData.fromDate
+    );
+
+    await extendOrder(
+      {
+        pricePerDay: extendModalApproveData.price,
+        startDate: extendModalApproveData.fromDate,
+        endDate: extendModalApproveData.toDate,
+        listingId: extendModalApproveData.order.listingId,
+        feeActive,
+        message: sendingMessage,
+        parentOrderId: extendModalApproveData.order.id,
+      },
+      authToken
+    );
+
+    setExtendModalApproveData(null);
+    setExtendModalApproveActive(false);
+
+    if (dayDiff == 1) {
+      success.set("Order extended successfully");
+      router.push("/dashboard/orders", undefined, {
+        unstable_skipClientCache: true,
+      });
+    } else {
+      success.set("New booking created successfully");
+      router.push("/dashboard/bookings");
+    }
+  };
+
   const handleAcceptPayedFastCancel = async ({
     type,
     paypalId,
@@ -136,7 +243,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      setItemFields(
+      autoParentOrderSetItemField(
         {
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
         },
@@ -169,7 +276,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           authToken
         );
 
-        setItemFields(
+        autoParentOrderSetItemField(
           {
             cancelStatus:
               STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE,
@@ -182,7 +289,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           authToken
         );
 
-        setItemFields(
+        autoParentOrderSetItemField(
           {
             cancelStatus:
               STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE,
@@ -214,7 +321,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      setItemFields(
+      autoParentOrderSetItemField(
         {
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
         },
@@ -225,7 +332,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       setActiveOrderAcceptCancelByTenant(false);
       activateSuccessOrderPopup({ text: "Order cancelled successfully" });
     } catch (e) {
-      error.set(e.message);
+      console.log(e);
     }
   };
 
@@ -241,7 +348,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      setItemFields(
+      autoParentOrderSetItemField(
         {
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
         },
@@ -261,7 +368,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActiveOrderAcceptCancelByOwner(true);
   };
 
-  const handleClosePay = () => {
+  const closePay = () => {
     setActivePayOrder(null);
     setActivePay(false);
   };
@@ -287,7 +394,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
 
-    setItemFields(
+    autoParentOrderSetItemField(
       {
         newPricePerDay: price,
         newStartDate: fromDate,
@@ -312,7 +419,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     handleAcceptAcceptOrder,
   } = useBookingAgreementPanel({
     setUpdatedOffer: (data, orderId) => {
-      setItemFields({ ...data }, orderId);
+      autoParentOrderSetItemField({ ...data }, orderId);
       setRejectOrderModalActiveId(null);
       setAcceptOrderModalActiveId(null);
     },
@@ -438,9 +545,19 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     handleClickPay,
     activePay,
-    handleClosePay,
+    closePay,
     onTenantPayed,
     activePayOrder,
+
+    handleClickExtendOrder,
+    handleClickApproveExtendOrder,
+    extendModalActive,
+    extendModalActiveOrder,
+    extendModalApproveActive,
+    extendModalApproveData,
+    closeExtendOrder,
+    closeApproveExtendOrder,
+    acceptApproveExtendOrder,
 
     successIconPopupState,
   };

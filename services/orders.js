@@ -1,5 +1,5 @@
 import { initAxios } from "../utils";
-const { get, post } = initAxios("/orders");
+const { get, post, getPdfByPath } = initAxios("/orders");
 
 export const createOrder = async (
   { pricePerDay, startDate, endDate, listingId, feeActive, message },
@@ -148,4 +148,8 @@ export const unpaidOrderTransactionByCreditCard = async (body, authToken) => {
     authToken
   );
   return data.body;
+};
+
+export const generateOrderInvoicePdf = async (id, authToken) => {
+  return getPdfByPath(`/invoice-pdf/${id}`, authToken);
 };

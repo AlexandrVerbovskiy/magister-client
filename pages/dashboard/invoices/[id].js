@@ -18,7 +18,7 @@ const Invoice = ({ payment }) => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Invoice #Inv-{payment.id}</h1>
+          <h1>Invoice #Inv-{payment.orderId}</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/">Home</Link>
@@ -29,7 +29,7 @@ const Invoice = ({ payment }) => {
             <li className="item">
               <Link href={`/dashboard/wallet`}>Wallet</Link>
             </li>
-            <li className="item">Invoice #Inv-{payment.id}</li>
+            <li className="item">Invoice #Inv-{payment.orderId}</li>
           </ol>
         </div>
 
@@ -38,7 +38,7 @@ const Invoice = ({ payment }) => {
           shipTo={payment.listingAddress ?? payment.listingCity}
           invoiceId={payment.id}
           invoiceDate={payment.createdAt}
-          purchaseOrder={payment.orderId}
+          purchaseOrderId={payment.orderId}
           dueDate={payment.createdAt}
           indiceAdmin="RentAbout"
           offer={{

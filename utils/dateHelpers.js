@@ -150,14 +150,21 @@ const isDateBlocked = (startDate, blockedDates, numOfDays) => {
   return false;
 };
 
-export const findFirstAvailableDate = (blockedDates, numOfDays) => {
-  let today = new Date();
+export const findFirstAvailableDate = (
+  blockedDates,
+  numOfDays,
+  startDate = null
+) => {
+  if (!startDate || startDate < new Date()) {
+    startDate = new Date();
+  }
+
   let firstAvailableDate = null;
   let daysToCheck = 0;
 
   while (!firstAvailableDate) {
-    let currentDate = new Date(today);
-    currentDate.setDate(today.getDate() + daysToCheck);
+    let currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + daysToCheck);
 
     if (!numOfDays) {
       numOfDays = 1;
@@ -171,4 +178,11 @@ export const findFirstAvailableDate = (blockedDates, numOfDays) => {
   }
 
   return firstAvailableDate;
+};
+
+export const increaseDateByOneDay = (dateString) => {
+  const date = new Date(dateString);
+  const newDate = new Date(date);
+  newDate.setDate(newDate.getDate() + 1);
+  return newDate;
 };

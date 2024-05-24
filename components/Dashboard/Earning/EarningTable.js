@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 
 import Link from "next/link";
-import { generateInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
 import InputView from "../../FormComponents/InputView";
 import {

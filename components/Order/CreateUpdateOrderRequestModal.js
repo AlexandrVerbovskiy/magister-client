@@ -91,8 +91,7 @@ const CreateUpdateOrderRequestModal = ({
     const defaultCountDays = minRentalDays ? minRentalDays : 1;
     const baseFromDate = findFirstAvailableDate(blockedDates, defaultCountDays);
 
-    const baseToDate = new Date();
-    baseToDate.setDate(baseFromDate.getDate() + defaultCountDays - 1);
+    const baseToDate = new Date(baseFromDate.getDate() + defaultCountDays - 1);
 
     setToDate(baseToDate);
     setFromDate(baseFromDate);
