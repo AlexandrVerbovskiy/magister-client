@@ -13863,11 +13863,11 @@ Dashboard CSS
   color: red;
 }
 
-.earnings-box ul li ul li.waiting{
+.earnings-box ul li ul li.waiting {
   color: #d98232 !important;
 }
 
-.earnings-box ul li ul li.cancelled{
+.earnings-box ul li ul li.cancelled {
   color: #626262 !important;
 }
 
@@ -17851,10 +17851,6 @@ input:-internal-autofill-selected {
   background-color: var(--blackColor) !important;
 }*/
 
-.flatpickr-day.flatpickr-disabled {
-  color: rgba(57, 57, 57, 0.2) !important;
-}
-
 .flatpickr-parent-wrapper {
   display: flex;
   width: 100% !important;
@@ -18742,8 +18738,9 @@ span.flatpickr-weekday {
 
 .icon-popup-body-button,
 .pay-by-credit-card-paypal-form,
+.pay-download-invoice,
 .pay-by-card-btn,
-.pay-by-credit-card-link{
+.pay-by-credit-card-link {
   border: none;
   text-align: center;
   overflow: hidden;
@@ -18762,10 +18759,12 @@ span.flatpickr-weekday {
   width: 100%;
 }
 
-.pay-by-card-btn{
+.pay-by-card-btn {
   margin-top: 22px;
 }
 
+.pay-by-credit-card-paypal-form:hover,
+.pay-download-invoice:hover,
 .pay-by-card-btn:hover,
 .pay-by-credit-card-link:hover {
   border-radius: 5px;
@@ -18773,34 +18772,47 @@ span.flatpickr-weekday {
   color: var(--whiteColor);
 }
 
-.pay-by-card-price{
+.pay-by-card-price {
   font-weight: 600;
-  color: var(--mainColor)!important;
-  margin-top: 0!important;
-  font-size: 30px!important;
+  color: var(--mainColor) !important;
+  margin-top: 0 !important;
+  font-size: 30px !important;
 }
 
-.icon-popup-body{
+.icon-popup-body {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.icon-popup-body-text{
-font-size: 16px;
-text-align: center;
-margin-top: 30px;
+.icon-popup-body-text {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 30px;
 }
 
-.icon-popup-body-button{
-border-radius: 100px;
-margin-top: 30px;
+.icon-popup-body-button {
+  border-radius: 100px;
+  margin-top: 30px;
 }
 
-.pay-by-credit-card-paypal-form:disabled{
+.pay-by-credit-card-paypal-form:disabled {
   background-color: var(--mainColor2);
 }
 
-.default-btn{
-  cursor: pointer!important;
+.default-btn {
+  cursor: pointer !important;
+}
+
+.pay-download-invoice {
+  width: max-content !important;
+  padding: 0 15px !important;
+  height: 35px;
+  margin-bottom: 0 !important;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+  color: rgba(57, 57, 57, 0.5) !important;
+  background-color: #f2f3f761 !important;
 }

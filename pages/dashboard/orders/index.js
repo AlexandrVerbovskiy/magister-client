@@ -16,6 +16,37 @@ import {
 import OrderItem from "../../../components/Listings/OrderItem";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
+import ImagePopup from "../../../components/_App/ImagePopup";
+import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
+
+const Wrapper = ({ children }) => {
+  return (
+    <>
+      <DashboardNavbar />
+
+      <div className="main-content d-flex flex-column">
+        <NavbarThree />
+
+        <div className="header-section">
+          <div className="breadcrumb-area">
+            <h1>Orders</h1>
+            <ol className="breadcrumb">
+              <li className="item">
+                <Link href="/">Home</Link>
+              </li>
+              <li className="item">
+                <Link href="/dashboard/">Dashboard</Link>
+              </li>
+              <li className="item">Orders</li>
+            </ol>
+          </div>
+        </div>
+
+        {children}
+      </div>
+    </>
+  );
+};
 
 const TabHeaderSection = ({
   countForTenant,
@@ -65,9 +96,8 @@ const Orders = (pageProps) => {
   const router = useRouter();
   const { error, success, authToken } = useContext(IndiceContext);
   const [type, setType] = useState(router.query.type ?? "tenant");
+  const [currentOpenImg, setCurrentOpenImg] = useState(null);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
   const tenantCancelFee = pageProps.tenantCancelFee;
 
   const {
@@ -89,21 +119,11 @@ const Orders = (pageProps) => {
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
     getDopProps: () => ({
-      ...getTimeFilterProps(),
       type: {
         value: type,
         hidden: (value) => value == "tenant",
       },
     }),
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   const changeType = (value) => {
@@ -156,38 +176,76 @@ const Orders = (pageProps) => {
 
     handleClickPay,
     activePay,
-    handleClosePay,
+    closePay,
     onTenantPayed,
     activePayOrder,
+
+    handleClickExtendOrder,
+    handleClickApproveExtendOrder,
+    extendModalActive,
+    extendModalActiveOrder,
+    extendModalApproveActive,
+    extendModalApproveData,
+    closeExtendOrder,
+    closeApproveExtendOrder,
+    acceptApproveExtendOrder,
 
     successIconPopupState,
   } = useOrderFastActions({ orders: orders, setItemFields });
 
+  if (extendModalApproveActive && extendModalApproveData.order) {
+    return (
+      <Wrapper>
+        <OrderExtendApprovementSection
+          handleApprove={acceptApproveExtendOrder}
+          setCurrentOpenImg={setCurrentOpenImg}
+          listing={{
+            listingImages: extendModalApproveData.order.images,
+            name: extendModalApproveData.order.listingName,
+            userName: extendModalApproveData.order.ownerName,
+            userPhoto: extendModalApproveData.order.ownerPhoto,
+            userCountItems:
+              extendModalApproveData.order.listingCountStoredItems,
+          }}
+          handleGoBack={closeApproveExtendOrder}
+          fromDate={extendModalApproveData.fromDate}
+          toDate={extendModalApproveData.toDate}
+          price={extendModalApproveData.price}
+          fee={pageProps.tenantBaseFee}
+        />
+
+        <ImagePopup
+          photoUrl={currentOpenImg}
+          open={currentOpenImg}
+          close={() => setCurrentOpenImg(null)}
+        />
+      </Wrapper>
+    );
+  }
+
   return (
-    <>
-      <DashboardNavbar />
+    <Wrapper>
+      {((!isFirstBookingCall && orders.length < 1) ||
+        (isFirstBookingCall && pageProps.items.length < 1)) && (
+        <section className="listing-area">
+          <TabHeaderSection
+            style={{ marginBottom: "0" }}
+            type={type}
+            changeType={changeType}
+            countForTenant={pageProps.countForTenant}
+            countForOwner={pageProps.countForOwner}
+          />
 
-      <div className="main-content d-flex flex-column">
-        <NavbarThree />
-
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Orders</h1>
-            <ol className="breadcrumb">
-              <li className="item">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="item">
-                <Link href="/dashboard/">Dashboard</Link>
-              </li>
-              <li className="item">Orders</li>
-            </ol>
+          <div className="no-listing">
+            <div className="no-listing-img"></div>
+            <div className="no-listing-text">You have no orders yet</div>
           </div>
-        </div>
+        </section>
+      )}
 
-        {((!isFirstBookingCall && orders.length < 1) ||
-          (isFirstBookingCall && pageProps.items.length < 1)) && (
-          <section className="listing-area">
+      {orders.length > 0 && (
+        <>
+          <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
               type={type}
@@ -196,115 +254,107 @@ const Orders = (pageProps) => {
               countForOwner={pageProps.countForOwner}
             />
 
-            <div className="no-listing">
-              <div className="no-listing-img"></div>
-              <div className="no-listing-text">You have no orders yet</div>
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th style={{ width: "40%" }}>Customer</th>
+                    <th style={{ width: "40%" }}>Details</th>
+                    <th style={{ width: "20%" }}>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {orders.map((order) => (
+                    <OrderItem
+                      filterType={type}
+                      key={order.id}
+                      order={order}
+                      link={`/dashboard/orders`}
+                      handleClickCancel={handleClickCancel}
+                      handleClickPayedFastCancel={handleClickPayedFastCancel}
+                      handleClickCreateDispute={handleClickCreateDispute}
+                      handleOrderClickAcceptCancelByTenant={
+                        handleOrderClickAcceptCancelByTenant
+                      }
+                      handleOrderClickAcceptCancelByOwner={
+                        handleOrderClickAcceptCancelByOwner
+                      }
+                      handleClickUpdateRequest={handleClickUpdateRequest}
+                      handleClickReject={handleClickReject}
+                      handleClickAccept={handleClickAccept}
+                      handleClickPay={handleClickPay}
+                      handleClickExtend={handleClickExtendOrder}
+                    />
+                  ))}
+                </tbody>
+              </table>
             </div>
           </section>
-        )}
 
-        {orders.length > 0 && (
-          <>
-            <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
-              <TabHeaderSection
-                style={{ marginBottom: "0" }}
-                type={type}
-                changeType={changeType}
-                countForTenant={pageProps.countForTenant}
-                countForOwner={pageProps.countForOwner}
-              />
+          <Pagination
+            viewOnlyMoreOnePage={true}
+            page={page}
+            countPages={countPages}
+            move={moveToPage}
+            canNext={canMoveNextPage}
+            canPrev={canMovePrevPage}
+          />
 
-              <div className="table-responsive">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: "40%" }}>Customer</th>
-                      <th style={{ width: "40%" }}>Details</th>
-                      <th style={{ width: "20%" }}>Action</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {orders.map((order) => (
-                      <OrderItem
-                        filterType={type}
-                        key={order.id}
-                        order={order}
-                        link={`/dashboard/orders/${order.id}`}
-                        handleClickCancel={handleClickCancel}
-                        handleClickPayedFastCancel={handleClickPayedFastCancel}
-                        handleClickCreateDispute={handleClickCreateDispute}
-                        handleOrderClickAcceptCancelByTenant={
-                          handleOrderClickAcceptCancelByTenant
-                        }
-                        handleOrderClickAcceptCancelByOwner={
-                          handleOrderClickAcceptCancelByOwner
-                        }
-                        handleClickUpdateRequest={handleClickUpdateRequest}
-                        handleClickReject={handleClickReject}
-                        handleClickAccept={handleClickAccept}
-                        handleClickPay={handleClickPay}
-                      />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <Pagination
-              viewOnlyMoreOnePage={true}
-              page={page}
-              countPages={countPages}
-              move={moveToPage}
-              canNext={canMoveNextPage}
-              canPrev={canMovePrevPage}
-            />
-            <OrdersListFastActinsModals
-              activeCancel={activeCancel}
-              closeActiveCancel={closeActiveCancel}
-              handleAcceptCancel={handleAcceptCancel}
-              activeFastCancel={activeFastCancel}
-              closeActiveFastCancel={closeActiveFastCancel}
-              handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
-              activeFastCancelOrder={activeFastCancelOrder}
-              activeCreateDispute={activeCreateDispute}
-              closeActiveCreateDispute={closeActiveCreateDispute}
-              handleAcceptCreateDispute={handleAcceptCreateDispute}
-              activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
-              closeActiveOrderAcceptCancelByTenant={
-                closeActiveOrderAcceptCancelByTenant
-              }
-              handleOrderAcceptAcceptCancelByTenant={
-                handleOrderAcceptAcceptCancelByTenant
-              }
-              activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
-              closeActiveOrderAcceptCancelByOwner={
-                closeActiveOrderAcceptCancelByOwner
-              }
-              handleOrderAcceptAcceptCancelByOwner={
-                handleOrderAcceptAcceptCancelByOwner
-              }
-              handleAcceptUpdateRequest={handleAcceptUpdateRequest}
-              activeUpdateRequest={activeUpdateRequest}
-              closeActiveUpdateRequest={closeActiveUpdateRequest}
-              handleAcceptReject={handleAcceptReject}
-              rejectOrderModalActive={rejectOrderModalActive}
-              closeRejectOrderModal={closeRejectOrderModal}
-              handleAcceptAccept={handleAcceptAccept}
-              acceptOrderModalActive={acceptOrderModalActive}
-              closeAcceptOrderModal={closeAcceptOrderModal}
-              updateRequestModalActiveOrder={updateRequestModalActiveOrder}
-              activePay={activePay}
-              handleClosePay={handleClosePay}
-              onTenantPayed={onTenantPayed}
-              activePayOrder={activePayOrder}
-              tenantCancelFee={tenantCancelFee}
-              successIconPopupState={successIconPopupState}
-            />
-          </>
-        )}
-      </div>
-    </>
+          <OrdersListFastActinsModals
+            tenantBaseCommission={pageProps.tenantBaseFee}
+            activeCancel={activeCancel}
+            closeActiveCancel={closeActiveCancel}
+            handleAcceptCancel={handleAcceptCancel}
+            activeFastCancel={activeFastCancel}
+            closeActiveFastCancel={closeActiveFastCancel}
+            handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
+            activeFastCancelOrder={activeFastCancelOrder}
+            activeCreateDispute={activeCreateDispute}
+            closeActiveCreateDispute={closeActiveCreateDispute}
+            handleAcceptCreateDispute={handleAcceptCreateDispute}
+            activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
+            closeActiveOrderAcceptCancelByTenant={
+              closeActiveOrderAcceptCancelByTenant
+            }
+            handleOrderAcceptAcceptCancelByTenant={
+              handleOrderAcceptAcceptCancelByTenant
+            }
+            activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
+            closeActiveOrderAcceptCancelByOwner={
+              closeActiveOrderAcceptCancelByOwner
+            }
+            handleOrderAcceptAcceptCancelByOwner={
+              handleOrderAcceptAcceptCancelByOwner
+            }
+            handleAcceptUpdateRequest={handleAcceptUpdateRequest}
+            activeUpdateRequest={activeUpdateRequest}
+            closeActiveUpdateRequest={closeActiveUpdateRequest}
+            handleAcceptReject={handleAcceptReject}
+            rejectOrderModalActive={rejectOrderModalActive}
+            closeRejectOrderModal={closeRejectOrderModal}
+            handleAcceptAccept={handleAcceptAccept}
+            acceptOrderModalActive={acceptOrderModalActive}
+            closeAcceptOrderModal={closeAcceptOrderModal}
+            updateRequestModalActiveOrder={updateRequestModalActiveOrder}
+            activePay={activePay}
+            closePay={closePay}
+            onTenantPayed={onTenantPayed}
+            activePayOrder={activePayOrder}
+            tenantCancelFee={tenantCancelFee}
+            handleClickExtendOrder={handleClickExtendOrder}
+            handleClickApproveExtendOrder={handleClickApproveExtendOrder}
+            extendModalActive={extendModalActive}
+            extendModalActiveOrder={extendModalActiveOrder}
+            extendModalApproveActive={extendModalApproveActive}
+            extendModalApproveData={extendModalApproveData}
+            closeExtendOrder={closeExtendOrder}
+            closeApproveExtendOrder={closeApproveExtendOrder}
+            successIconPopupState={successIconPopupState}
+          />
+        </>
+      )}
+    </Wrapper>
   );
 };
 

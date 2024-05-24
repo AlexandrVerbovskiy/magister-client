@@ -36,6 +36,7 @@ export default {
     ACCEPT_FINISH_BUTTON: "accept-finish-button",
     ACCEPT_OWNER_CANCEL_BUTTON: "accept-owner-cancel-button",
     ACCEPT_TENANT_CANCEL_BUTTON: "accept-tenant-cancel-button",
+    EXTEND_BUTTON: "extend-button",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],

@@ -53,7 +53,21 @@ export const initAxios = (path = null) => {
 
   const generateFullUrl = (url) => baseURL + url;
 
-  return { get, post, generateFullUrl };
+  const getPdfByPath = async (url, authToken) => {
+    const response = await axios.get(generateFullUrl(url), {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/pdf",
+      },
+      responseType: "arraybuffer",
+    });
+
+    const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    return pdfUrl;
+  };
+
+  return { get, post, generateFullUrl, getPdfByPath };
 };
 
 export const getFilePath = (part) =>

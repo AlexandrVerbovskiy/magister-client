@@ -15,6 +15,7 @@ export { default as isClickedOnVisualImagePart } from "./isClickedOnVisualImageP
 export { default as cloneObject } from "./cloneObject";
 export { default as reorderList } from "./reorderList";
 export { default as autoMultiEnding } from "./autoMultiEnding";
+export { default as downloadFileUrl } from "./downloadFileUrl";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";

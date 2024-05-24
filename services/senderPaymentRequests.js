@@ -1,6 +1,7 @@
 import axios from "axios";
 import { initAxios } from "../utils";
-const { get, post, generateFullUrl } = initAxios("/sender-payments");
+const { get, post, getPdfByPath } =
+  initAxios("/sender-payments");
 
 export const paypalCreateOrder = async (amount, orderId, authToken) => {
   const data = await post(
@@ -26,28 +27,30 @@ export const getAdminSenderWaitingApprovalList = async (body, authToken) => {
   return data.body;
 };
 
-export const approveSenderPaymentTransaction = async({orderId}, authToken)=>{
-  const data = await post("/approve-credit-card-transaction", {orderId}, authToken);
+export const approveSenderPaymentTransaction = async (
+  { orderId },
+  authToken
+) => {
+  const data = await post(
+    "/approve-credit-card-transaction",
+    { orderId },
+    authToken
+  );
   return data.body;
-}
+};
 
-export const rejectSenderPaymentTransaction = async({orderId, description}, authToken)=>{
-  const data = await post("/reject-credit-card-transaction", {orderId, description}, authToken);
+export const rejectSenderPaymentTransaction = async (
+  { orderId, description },
+  authToken
+) => {
+  const data = await post(
+    "/reject-credit-card-transaction",
+    { orderId, description },
+    authToken
+  );
   return data.body;
-}
+};
 
-export const generateInvoicePdf = async (id, authToken) => {
-  const url = generateFullUrl(`/invoice-pdf/${id}`);
-
-  const response = await axios.get(url, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-      "Content-Type": "application/pdf",
-    },
-    responseType: "arraybuffer",
-  });
-
-  const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-  return pdfUrl;
+export const generateSenderInvoicePdf = async (id, authToken) => {
+  return getPdfByPath(`/invoice-pdf/${id}`, authToken);
 };

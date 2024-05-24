@@ -8,10 +8,9 @@ import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-const OrderItem = ({
+const OrderInfo = ({
   order,
   link,
-  filterType,
   handleClickCancel,
   handleClickPayedFastCancel,
   handleClickCreateDispute,
@@ -21,18 +20,10 @@ const OrderItem = ({
   handleClickReject,
   handleClickAccept,
   handleClickPay,
+  handleClickExtend,
+  extension = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
-  const router = useRouter();
-
-  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
-  const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
-  const userEmail =
-    filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
-  const userPhoto =
-    filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-  const userPhone =
-    filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
   const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
     order,
@@ -42,38 +33,11 @@ const OrderItem = ({
     order,
   });
 
-  const goToOrderPage = () => {
-    router.push(link);
-  };
-
   return (
-    <tr>
-      <td className="name">
-        <img
-          src={userPhoto ? getFilePath(userPhoto) : STATIC.DEFAULT_PHOTO_LINK}
-          alt="image"
-        />
-        <div className="info">
-          <span>{userName}</span>
-          <ul>
-            {userPhone && (
-              <li>
-                <a href={`tel:${userPhone}`}>{userPhone}</a>
-              </li>
-            )}
-            <li>
-              <a href={`mailto:${userEmail}`}>{userEmail}</a>
-            </li>
-          </ul>
-          <a href={`/chat/${userId}`} className="default-btn">
-            <i className="bx bx-envelope"></i> Send Message
-          </a>
-        </div>
-      </td>
-
+    <>
       <td className="details">
         <h4 className="order-item-title-row">
-          <div>{order.listingName}</div>
+          <div>{extension ? "Extension" : order.listingName}</div>
           <StatusBlock
             status={order.status}
             statusCancelled={order.cancelStatus}
@@ -145,7 +109,7 @@ const OrderItem = ({
       </td>
 
       <td className="action d-flex">
-        <Link href={link} className="default-btn">
+        <Link href={link + "/" + order.id} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
 
@@ -202,6 +166,21 @@ const OrderItem = ({
             className="default-btn"
           >
             <i className="bx bx-wallet"></i> Pay
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickExtend(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-calendar"></i> Extend
           </button>
         )}
 
@@ -278,7 +257,118 @@ const OrderItem = ({
           </button>
         )}
       </td>
-    </tr>
+    </>
+  );
+};
+
+const OrderItem = ({
+  order,
+  link,
+  filterType,
+  handleClickCancel,
+  handleClickPayedFastCancel,
+  handleClickCreateDispute,
+  handleOrderClickAcceptCancelByTenant,
+  handleOrderClickAcceptCancelByOwner,
+  handleClickUpdateRequest,
+  handleClickReject,
+  handleClickAccept,
+  handleClickPay,
+  handleClickExtend,
+}) => {
+  const router = useRouter();
+
+  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
+  const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
+  const userEmail =
+    filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
+  const userPhoto =
+    filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
+  const userPhone =
+    filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
+
+  return (
+    <>
+      <tr>
+        <td
+          className="name"
+          style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
+        >
+          <img
+            src={userPhoto ? getFilePath(userPhoto) : STATIC.DEFAULT_PHOTO_LINK}
+            alt="image"
+          />
+          <div className="info">
+            <span>{userName}</span>
+            <ul>
+              {userPhone && (
+                <li>
+                  <a href={`tel:${userPhone}`}>{userPhone}</a>
+                </li>
+              )}
+              <li>
+                <a href={`mailto:${userEmail}`}>{userEmail}</a>
+              </li>
+            </ul>
+            <a href={`/chat/${userId}`} className="default-btn">
+              <i className="bx bx-envelope"></i> Send Message
+            </a>
+          </div>
+        </td>
+
+        <OrderInfo
+          order={order}
+          handleClickCancel={handleClickCancel}
+          handleClickPayedFastCancel={handleClickPayedFastCancel}
+          handleClickCreateDispute={handleClickCreateDispute}
+          handleOrderClickAcceptCancelByTenant={
+            handleOrderClickAcceptCancelByTenant
+          }
+          handleOrderClickAcceptCancelByOwner={
+            handleOrderClickAcceptCancelByOwner
+          }
+          handleClickUpdateRequest={handleClickUpdateRequest}
+          handleClickReject={handleClickReject}
+          handleClickAccept={handleClickAccept}
+          handleClickPay={handleClickPay}
+          handleClickExtend={handleClickExtend}
+          link={link}
+        />
+      </tr>
+
+      {order.extendOrders.map((extendOrder, index) => (
+        <tr key={extendOrder.id}>
+          <td
+            className="name"
+            style={
+              order.extendOrders.length != index + 1
+                ? { borderBottom: 0, borderTop: 0 }
+                : { borderTop: 0 }
+            }
+          ></td>
+
+          <OrderInfo
+            order={extendOrder}
+            handleClickCancel={handleClickCancel}
+            handleClickPayedFastCancel={handleClickPayedFastCancel}
+            handleClickCreateDispute={handleClickCreateDispute}
+            handleOrderClickAcceptCancelByTenant={
+              handleOrderClickAcceptCancelByTenant
+            }
+            handleOrderClickAcceptCancelByOwner={
+              handleOrderClickAcceptCancelByOwner
+            }
+            handleClickUpdateRequest={handleClickUpdateRequest}
+            handleClickReject={handleClickReject}
+            handleClickAccept={handleClickAccept}
+            handleClickPay={handleClickPay}
+            handleClickExtend={handleClickExtend}
+            link={link}
+            extension={true}
+          />
+        </tr>
+      ))}
+    </>
   );
 };
 

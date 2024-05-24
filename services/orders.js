@@ -1,5 +1,5 @@
 import { initAxios } from "../utils";
-const { get, post } = initAxios("/orders");
+const { get, post, getPdfByPath } = initAxios("/orders");
 
 export const createOrder = async (
   { pricePerDay, startDate, endDate, listingId, feeActive, message },
@@ -8,6 +8,34 @@ export const createOrder = async (
   const data = await post(
     `/create`,
     { pricePerDay, startDate, endDate, listingId, feeActive, message },
+    authToken
+  );
+  return data.body.id;
+};
+
+export const extendOrder = async (
+  {
+    pricePerDay,
+    startDate,
+    endDate,
+    listingId,
+    feeActive,
+    message,
+    parentOrderId,
+  },
+  authToken
+) => {
+  const data = await post(
+    `/extend`,
+    {
+      pricePerDay,
+      startDate,
+      endDate,
+      listingId,
+      feeActive,
+      message,
+      parentOrderId,
+    },
     authToken
   );
   return data.body.id;
@@ -120,4 +148,8 @@ export const unpaidOrderTransactionByCreditCard = async (body, authToken) => {
     authToken
   );
   return data.body;
+};
+
+export const generateOrderInvoicePdf = async (id, authToken) => {
+  return getPdfByPath(`/invoice-pdf/${id}`, authToken);
 };

@@ -88,6 +88,23 @@ const useOrderActions = ({ order }) => {
           STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
         );
       }
+
+      const hasProcessedExtends = order.extendOrders.find(
+        (extendOrder) =>
+          [
+            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_OWNER,
+            STATIC.ORDER_STATUSES.PENDING_TENANT,
+          ].includes(extendOrder.status) || extendOrder.cancelStatus
+      );
+
+      if (
+        isTenant &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
+        !hasProcessedExtends
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
+      }
     } else {
       if (
         isOwner &&

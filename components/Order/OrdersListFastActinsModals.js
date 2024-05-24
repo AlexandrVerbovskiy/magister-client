@@ -6,9 +6,10 @@ import CreateDisputeModal from "./CreateDisputeModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { tenantPaymentCalculate } from "../../utils";
+import { increaseDateByOneDay, tenantPaymentCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
+import BookingModal from "../SingleListings/BookingModal";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -46,11 +47,17 @@ const OrdersListFastActinsModals = ({
   closeAcceptOrderModal,
 
   activePay,
-  handleClosePay,
+  closePay,
   onTenantPayed,
   activePayOrder,
   tenantCancelFee,
 
+  handleClickApproveExtendOrder,
+  extendModalActive,
+  extendModalActiveOrder,
+  closeExtendOrder,
+
+  tenantBaseCommission,
   successIconPopupState,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
@@ -145,15 +152,13 @@ const OrdersListFastActinsModals = ({
         closeModal={closeActiveCancel}
         onCancel={handleAcceptCancel}
       />
-      {
-        <PayedCancelModal
-          modalActive={activeFastCancel}
-          handleClose={closeActiveFastCancel}
-          onCancel={handleAcceptPayedFastCancel}
-          disabled={payedFastCancelDisabled}
-          setDisabled={setPayedFastCancelDisabled}
-        />
-      }
+      <PayedCancelModal
+        modalActive={activeFastCancel}
+        handleClose={closeActiveFastCancel}
+        onCancel={handleAcceptPayedFastCancel}
+        disabled={payedFastCancelDisabled}
+        setDisabled={setPayedFastCancelDisabled}
+      />
 
       <CreateDisputeModal
         modalActive={activeCreateDispute}
@@ -209,7 +214,7 @@ const OrdersListFastActinsModals = ({
         offerEndDate={payOfferEndDate}
         offerFee={payOfferFee}
         modalActive={activePay}
-        closeModal={handleClosePay}
+        closeModal={closePay}
         authToken={authToken}
       />
 
@@ -219,6 +224,23 @@ const OrdersListFastActinsModals = ({
         textWeight={successIconPopupState.textWeight}
         text={successIconPopupState.text}
         mainCloseButtonText={successIconPopupState.closeButtonText}
+      />
+
+      <BookingModal
+        handleMakeBooking={handleClickApproveExtendOrder}
+        price={extendModalActiveOrder.offerPricePerDay ?? 0}
+        minRentalDays={extendModalActiveOrder.listingMinRentalDays ?? 0}
+        fee={tenantBaseCommission}
+        createOrderModalActive={extendModalActive}
+        closeModal={closeExtendOrder}
+        listingName={extendModalActiveOrder.listingName ?? ""}
+        blockedDates={extendModalActiveOrder.blockedForRentalDates ?? []}
+        title="Extend Now"
+        startDate={
+          extendModalActiveOrder.offerEndDate
+            ? increaseDateByOneDay(extendModalActiveOrder.offerEndDate)
+            : null
+        }
       />
     </>
   );

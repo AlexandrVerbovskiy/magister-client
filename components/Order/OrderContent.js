@@ -5,6 +5,7 @@ import {
   getDaysDifference,
   getFilePath,
   getListingImageByType,
+  increaseDateByOneDay,
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -22,6 +23,7 @@ import {
   rejectOrder,
   orderAcceptCancelByTenant,
   orderAcceptCancelByOwner,
+  extendOrder,
 } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
@@ -39,6 +41,8 @@ import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
+import BookingModal from "../SingleListings/BookingModal";
+import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -47,12 +51,20 @@ const bookingStatuses = [
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
 
-const OrderContent = ({ order: baseOrder, authToken, questions }) => {
+const OrderContent = ({
+  order: baseOrder,
+  authToken,
+  questions,
+  ownerBaseCommission,
+  tenantBaseCommission,
+}) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
+  const [extendPopupActive, setExtendPopupActive] = useState(false);
+  const [extendApproveData, setExtendApproveData] = useState(null);
 
   const router = useRouter();
 
@@ -289,7 +301,7 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
     }));
   };
 
-  const validateQUestions = () => {
+  const validateQuestions = () => {
     let hasError = true;
 
     const updateQuestions = [];
@@ -312,7 +324,7 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
 
   const onTenantGotListingApprove = async () => {
     try {
-      if (!validateQUestions()) {
+      if (!validateQuestions()) {
         return;
       }
 
@@ -446,7 +458,7 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
 
   const finishOrder = async () => {
     try {
-      if (!validateQUestions()) {
+      if (!validateQuestions()) {
         return;
       }
 
@@ -503,6 +515,64 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
           finished: order.status == STATIC.ORDER_STATUSES.FINISHED,
         },
       ];
+
+  const handleBeforeMakeExtend = ({ price, fromDate, toDate }) => {
+    setExtendPopupActive(false);
+    setExtendApproveData({
+      price,
+      fromDate,
+      toDate,
+    });
+  };
+
+  const handleMakeBooking = async ({ feeActive, sendingMessage }) => {
+    const dayDiff = getDaysDifference(
+      order.offerEndDate,
+      extendApproveData.fromDate
+    );
+
+    await extendOrder(
+      {
+        pricePerDay: extendApproveData.price,
+        startDate: extendApproveData.fromDate,
+        endDate: extendApproveData.toDate,
+        listingId: order.listingId,
+        feeActive,
+        message: sendingMessage,
+        parentOrderId: order.id,
+      },
+      authToken
+    );
+
+    if (dayDiff == 1) {
+      success.set("Order extended successfully");
+      router.push("/dashboard/orders");
+    } else {
+      success.set("New booking created successfully");
+      router.push("/dashboard/bookings");
+    }
+  };
+
+  if (extendApproveData) {
+    return (
+      <OrderExtendApprovementSection
+        handleApprove={handleMakeBooking}
+        setCurrentOpenImg={setCurrentOpenImg}
+        listing={{
+          listingImages: order.listingImages,
+          name: order.listingName,
+          userName: order.ownerName,
+          userPhoto: order.ownerPhoto,
+          userCountItems: order.listingCountStoredItems,
+        }}
+        handleGoBack={() => setExtendApproveData(null)}
+        fromDate={extendApproveData.fromDate}
+        toDate={extendApproveData.toDate}
+        price={extendApproveData.price}
+        fee={tenantBaseCommission}
+      />
+    );
+  }
 
   return (
     <>
@@ -1441,6 +1511,36 @@ const OrderContent = ({ order: baseOrder, authToken, questions }) => {
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
             ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
+            ) && (
+              <>
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={() => setExtendPopupActive(true)}
+                >
+                  Extend Offer
+                </button>
+                <BookingModal
+                  handleMakeBooking={handleBeforeMakeExtend}
+                  price={order.offerPricePerDay}
+                  minRentalDays={order.listingMinRentalDays}
+                  fee={tenantBaseCommission}
+                  createOrderModalActive={extendPopupActive}
+                  closeModal={() => setExtendPopupActive(false)}
+                  listingName={order.listingName}
+                  blockedDates={order.blockedForRentalDates}
+                  title="Extend Now"
+                  startDate={
+                    order.offerEndDate
+                      ? increaseDateByOneDay(order.offerEndDate)
+                      : null
+                  }
+                />
+              </>
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON

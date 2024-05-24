@@ -16,7 +16,7 @@ import BookingModal from "./BookingModal";
 import { createOrder } from "../../services";
 import { useRouter } from "next/router";
 
-import OrderApprovementSection from "../admin/Listings/OrderApprovementSection";
+import OrderApprovementSection from "../Order/OrderApprovementSection";
 
 const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
@@ -1068,9 +1068,10 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
           minRentalDays={listing.minRentalDays}
           fee={tenantBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
-          setCreateOrderModalActive={setCreateOrderModalActive}
+          closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
           blockedDates={listing.blockedDates}
+          title="Book Now"
         />
       )}
     </>

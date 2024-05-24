@@ -22,7 +22,6 @@ const ListingApprovalRequest = ({
   request: baseRequest,
   listing: baseListing,
 }) => {
-  console.log(baseListing)
   const [listing, setListing] = useState(baseListing);
   const [request, setRequest] = useState(baseRequest);
   const [mapCenter, setMapCenter] = useState(null);
