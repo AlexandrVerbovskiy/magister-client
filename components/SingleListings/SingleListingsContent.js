@@ -256,6 +256,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                           lat: listing.rentalLat,
                           lng: listing.rentalLng,
                           radius: listing.rentalRadius,
+                          active: true,
                         },
                       ]}
                       baseCenter={{
