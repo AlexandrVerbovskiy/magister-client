@@ -34,6 +34,7 @@ const PayModal = ({
         setTimeout(closeModal(), 100);
       }
     } catch (e) {
+      console.log("Form error: ", e);
       error.set(e.message);
     }
   };
