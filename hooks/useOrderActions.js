@@ -27,7 +27,10 @@ const useOrderActions = ({ order }) => {
         isTenant
       ) {
         if (order.paymentInfo) {
-          if (!order.paymentInfo.adminApproved && !order.paymentInfo.waitingApproved) {
+          if (
+            !order.paymentInfo.adminApproved &&
+            !order.paymentInfo.waitingApproved
+          ) {
             newActionButtons.push(
               STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
             );
@@ -97,14 +100,16 @@ const useOrderActions = ({ order }) => {
         );
       }
 
-      const hasProcessedExtends = order.extendOrders.find(
-        (extendOrder) =>
-          [
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-            STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_TENANT,
-          ].includes(extendOrder.status) || extendOrder.cancelStatus
-      );
+      const hasProcessedExtends = order.orderParentId;
+      /*order.extendOrders &&
+        order.extendOrders.find(
+          (extendOrder) =>
+            [
+              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_OWNER,
+              STATIC.ORDER_STATUSES.PENDING_TENANT,
+            ].includes(extendOrder.status) || extendOrder.cancelStatus
+        );*/
 
       if (
         isTenant &&

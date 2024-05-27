@@ -193,6 +193,8 @@ const Orders = (pageProps) => {
     successIconPopupState,
   } = useOrderFastActions({ orders: orders, setItemFields });
 
+  console.log(orders);
+
   if (extendModalApproveActive && extendModalApproveData.order) {
     return (
       <Wrapper>
