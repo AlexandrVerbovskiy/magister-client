@@ -546,7 +546,7 @@ const OrderContent = ({
       authToken
     );
 
-    if (dayDiff == 1) {
+    if (dayDiff == 2) {
       success.set("Order extended successfully");
       router.push("/dashboard/orders");
     } else {

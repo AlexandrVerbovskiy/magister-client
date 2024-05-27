@@ -221,7 +221,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setExtendModalApproveData(null);
     setExtendModalApproveActive(false);
 
-    if (dayDiff == 1) {
+    if (dayDiff == 2) {
       success.set("Order extended successfully");
       router.push("/dashboard/orders", undefined, {
         unstable_skipClientCache: true,
