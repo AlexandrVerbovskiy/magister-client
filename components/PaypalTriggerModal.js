@@ -12,6 +12,7 @@ const PaypalTriggerModal = ({
   offerFee,
   authToken,
   needAutoClose = false,
+  text = "Pay",
 }) => {
   const [modalActive, setModalActive] = useState(false);
 
@@ -37,7 +38,7 @@ const PaypalTriggerModal = ({
         type="button"
         onClick={() => setModalActive(true)}
       >
-        Pay by Paypal
+        {text}
       </button>
     </>
   );

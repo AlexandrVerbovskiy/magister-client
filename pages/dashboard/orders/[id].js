@@ -6,7 +6,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
 
-const Listing = (props) => {
+const Order = (props) => {
   return (
     <>
       <DashboardNavbar />
@@ -47,4 +47,4 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 export const getServerSideProps = (context) =>
   authSideProps(context, boostServerSideProps);
 
-export default Listing;
+export default Order;

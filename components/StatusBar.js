@@ -1,6 +1,15 @@
 import React from "react";
 
-const StatusBar = ({ statuses }) => {
+const StatusBar = ({ statuses, hasCancelStatus = false }) => {
+  if (hasCancelStatus) {
+    for (let i = 0; i < statuses.length; i++) {
+      if (!statuses[i].finished) {
+        statuses[i]["failed"] = true;
+        break;
+      }
+    }
+  }
+
   return (
     <div className="status-bar-wrapper">
       <div className="status-bar">
@@ -34,9 +43,39 @@ const StatusBar = ({ statuses }) => {
                     </svg>
                   </div>
                 ) : (
-                  <div className="status-bar-step">
-                    {index + 1 < 10 ? "0" + (index + 1) : index + 1}
-                  </div>
+                  <React.Fragment>
+                    {status.failed ? (
+                      <div className="status-bar-failed">
+                        <svg
+                          width="33"
+                          height="32"
+                          viewBox="0 0 33 32"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g>
+                            <circle
+                              cx="16.5"
+                              cy="16"
+                              r="15"
+                              fill="#ee3535"
+                              stroke="#ee3535"
+                              stroke-width="2"
+                            />
+                          </g>
+                          <path
+                            d="M11 11 L22 22 M22 11 L11 22"
+                            stroke="white"
+                            stroke-width="2"
+                          />
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="status-bar-step">
+                        {index + 1 < 10 ? "0" + (index + 1) : index + 1}
+                      </div>
+                    )}
+                  </React.Fragment>
                 )}
               </div>
               {index != statuses.length - 1 ? (
