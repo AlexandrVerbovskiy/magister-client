@@ -1,11 +1,7 @@
 import { IndiceContext } from "../contexts";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import {
-  getDaysDifference,
-  moneyFormat,
-  timeConverter,
-} from "../utils";
+import { getDaysDifference, moneyFormat, timeConverter } from "../utils";
 import PaypalButton from "./PaypalButton";
 import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
@@ -125,14 +121,15 @@ const PayModal = ({
                   type="radio"
                   id="paypal-radio"
                   name="radio-group"
-                  onChange={() => handleChangeType("paypal")}
                   checked={type === "paypal"}
+                  readOnly={true}
                 />
                 <label
                   style={{
                     marginBottom: 0,
                     display: "inline",
                   }}
+                  onClick={() => handleChangeType("paypal")}
                   htmlFor="paypal-radio"
                 >
                   PayPal
@@ -150,14 +147,15 @@ const PayModal = ({
                   type="radio"
                   id="bank-card-radio"
                   name="radio-group"
-                  onChange={() => handleChangeType("card")}
                   checked={type === "card"}
+                  readOnly={true}
                 />
                 <label
                   style={{
                     marginBottom: 0,
                     display: "inline",
                   }}
+                  onClick={() => handleChangeType("card")}
                   htmlFor="bank-card-radio"
                 >
                   Bank Card
@@ -175,14 +173,15 @@ const PayModal = ({
                   type="radio"
                   id="direct-bank-transfer-radio"
                   name="radio-group"
-                  onChange={() => handleChangeType("bank-transfer")}
                   checked={type === "bank-transfer"}
+                  readOnly={true}
                 />
                 <label
                   style={{
                     marginBottom: 0,
                     display: "inline",
                   }}
+                  onClick={() => handleChangeType("bank-transfer")}
                   htmlFor="direct-bank-transfer-radio"
                 >
                   Direct Bank Transfer

@@ -352,7 +352,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex self-end">
                             <button
                               onClick={handleRejectActivate}
-                              className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
+                              className="btn bg-rose-500 hover:bg-rose-600 text-white"
                             >
                               Reject
                             </button>

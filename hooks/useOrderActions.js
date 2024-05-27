@@ -5,7 +5,6 @@ import STATIC from "../static";
 const useOrderActions = ({ order }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
-  console.log(order);
 
   useEffect(() => {
     const isOwner = order.ownerId == sessionUser?.id;
@@ -138,8 +137,6 @@ const useOrderActions = ({ order }) => {
 
     setCurrentActionButtons(newActionButtons);
   }, [order, sessionUser]);
-
-  console.log(currentActionButtons);
 
   return currentActionButtons;
 };

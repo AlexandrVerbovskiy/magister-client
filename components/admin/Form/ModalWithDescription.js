@@ -48,14 +48,14 @@ const ModalWithDescription = ({
             <button
               disabled={disabled}
               onClick={() => setAccessModalOpen(false)}
-              className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+              className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
             >
               Cancel
             </button>
             <button
               disabled={disabled}
               onClick={handleAcceptClick}
-              className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
+              className="btn bg-rose-500 hover:bg-rose-600 text-white"
             >
               {acceptButtonText}
             </button>

@@ -106,7 +106,7 @@ function FeedRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
               </div>
             </div>
             
@@ -176,7 +176,7 @@ function FeedRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
               </div>
             </div>
             
@@ -226,7 +226,7 @@ function FeedRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn-sm w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
               </div>
             </div>
 

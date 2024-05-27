@@ -70,7 +70,7 @@ const LeaveBtn = ({ hasChanges, goBackLink }) => {
             {/* Modal footer */}
             <div className="flex flex-wrap justify-end space-x-2">
               <button
-                className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+                className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCloseAccessLeaveModal();
@@ -80,7 +80,7 @@ const LeaveBtn = ({ hasChanges, goBackLink }) => {
               </button>
               <button
                 onClick={handleClickAccessLeaveModal}
-                className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
+                className="btn bg-rose-500 hover:bg-rose-600 text-white"
               >
                 Yes, Leave it
               </button>
