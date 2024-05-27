@@ -27,7 +27,7 @@ const SearchedWordTable = ({
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Searches not founds{" "}
+          Searches{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>
