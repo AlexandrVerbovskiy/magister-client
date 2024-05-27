@@ -295,10 +295,12 @@ const OrderContent = ({
       closeButtonText: "Return to Order",
     });
 
-    setOrder((prev) => ({
-      ...prev,
-      status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-    }));
+    setTimeout(() => {
+      setOrder((prev) => ({
+        ...prev,
+        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+      }));
+    }, 100);
   };
 
   const validateQuestions = () => {
