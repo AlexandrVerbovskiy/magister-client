@@ -23,6 +23,8 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
       setDisabled(true);
       await cardFieldsForm.submit();
     } catch (e) {
+      console.log("Form error: ", e.message);
+
       const message = e.message;
       let info = message;
 
@@ -34,8 +36,21 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
           const extractedData = message
             .substring(startIndex, endIndex + 1)
             .trim();
-          const obj = extractedData;
-          const description = obj?.details[0]?.description ?? obj.message;
+
+          let description = "Unpredictable error";
+          const obj = JSON.parse(extractedData);
+
+          if (obj) {
+            if (
+              obj.details &&
+              obj.details[0] &&
+              obj.details[0].description
+            ) {
+              description = obj.details[0].description;
+            } else {
+              description = obj.message;
+            }
+          }
 
           if (description) {
             info = description;
