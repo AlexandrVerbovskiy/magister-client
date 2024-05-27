@@ -40,9 +40,9 @@ const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
   };
 
   const handleCategoryTipClick = (value) => {
-    categoryFilterRef.current.blur();
     setSearchCategory(value);
     updateCategoryTips(value);
+    categoryFilterRef.current.blur();
   };
 
   const handleChangeCity = (e) => {
@@ -52,9 +52,9 @@ const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
   };
 
   const handleCityTipClick = (value) => {
-    cityFilterRef.current.blur();
     setSearchCity(value);
     updateCityTips(value);
+    cityFilterRef.current.blur();
   };
 
   return {
