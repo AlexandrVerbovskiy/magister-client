@@ -6,6 +6,7 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
+  dateToSeconds,
   findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
@@ -91,7 +92,9 @@ const CreateUpdateOrderRequestModal = ({
     const defaultCountDays = minRentalDays ? minRentalDays : 1;
     const baseFromDate = findFirstAvailableDate(blockedDates, defaultCountDays);
 
-    const baseToDate = new Date(baseFromDate.getDate() + defaultCountDays - 1);
+    const baseToDate = new Date(
+      baseFromDate.getTime() + dateToSeconds(defaultCountDays - 1)
+    );
 
     setToDate(baseToDate);
     setFromDate(baseFromDate);

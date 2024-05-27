@@ -186,3 +186,5 @@ export const increaseDateByOneDay = (dateString) => {
   newDate.setDate(newDate.getDate() + 1);
   return newDate;
 };
+
+export const dateToSeconds = (days) => days * 24 * 60 * 60 * 1000;
