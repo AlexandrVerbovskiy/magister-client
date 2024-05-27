@@ -23,8 +23,6 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
       setDisabled(true);
       await cardFieldsForm.submit();
     } catch (e) {
-      console.log("Form error: ", e.message);
-
       const message = e.message;
       let info = message;
 
