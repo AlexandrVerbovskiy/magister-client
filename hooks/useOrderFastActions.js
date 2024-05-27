@@ -90,9 +90,9 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     if (!foundOrder) {
       for (let i = 0; i < orders.length; i++) {
-        for (let j = 0; j < orders[i].extendOrders.length; i++) {
-          if (orders[i].extendOrders[i].id === id) {
-            foundOrder = orders[i].extendOrders[i];
+        for (let j = 0; j < orders[i].extendOrders.length; j++) {
+          if (orders[i].extendOrders[j].id === id) {
+            foundOrder = orders[i].extendOrders[j];
           }
         }
       }
