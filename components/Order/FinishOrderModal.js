@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 
-const FinishOrderModal = ({ onFinish, modalActive, setModalActive }) => {
+const FinishOrderModal = ({ onFinish, modalActive, closeModal }) => {
   const [disabled, setDisabled] = useState(false);
   const { error } = useContext(IndiceContext);
 
@@ -14,7 +14,7 @@ const FinishOrderModal = ({ onFinish, modalActive, setModalActive }) => {
     try {
       await onFinish();
       setDisabled(true);
-      setModalActive(false);
+      closeModal();
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -25,7 +25,7 @@ const FinishOrderModal = ({ onFinish, modalActive, setModalActive }) => {
   return (
     <YesNoModal
       active={modalActive}
-      closeModal={() => setModalActive(false)}
+      closeModal={closeModal}
       title="Finish order"
       body="To confirm the finalization of the order, click the 'Finish'"
       onAccept={handleAcceptCancelOrder}

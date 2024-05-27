@@ -8,7 +8,7 @@ const FinishOrderTriggerModal = ({ onFinish }) => {
     <>
       <FinishOrderModal
         modalActive={modalActive}
-        setModalActive={setModalActive}
+        closeModal={()=>setModalActive(false)}
         onFinish={onFinish}
       />
       <button

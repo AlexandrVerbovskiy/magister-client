@@ -8,8 +8,8 @@ const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
     <>
       <CreateDisputeModal
         modalActive={modalActive}
-        setModalActive={setModalActive}
         onCreateDispute={onCreateDispute}
+        closeModal={() => setModalActive(false)}
       />
 
       <button
