@@ -277,7 +277,10 @@ const Wallet = ({
                 </ul>
               ) : (
                 <div style={{ paddingBottom: "50px" }}>
-                  <EmptyTable entityName="payouts" />
+                  <EmptyTable
+                    imgSrc="/images/claim-your-business.png"
+                    entityName="payouts"
+                  />
                 </div>
               )}
             </div>
