@@ -576,7 +576,12 @@ const OrderContent = ({
 
   return (
     <>
-      <StatusBar statuses={statusBarStatuses} />
+      <StatusBar
+        statuses={statusBarStatuses}
+        hasCancelStatus={
+          !!order.cancelStatus || order.status == STATIC.ORDER_STATUSES.REJECTED
+        }
+      />
 
       <div className="add-listings-box">
         <h3>Basic Informations</h3>
@@ -1429,6 +1434,19 @@ const OrderContent = ({
       {currentActionButtons.length > 0 && (
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
+
+          {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+          ) &&
+            order.paymentInfo && (
+              <div className="booking-operations form-group">
+                <ErrorBlockMessage dopClassName="w-100">
+                  <b>Payment failed description:</b>{" "}
+                  {order.paymentInfo.failedDescription}
+                </ErrorBlockMessage>
+              </div>
+            )}
+
           <div className="booking-operations form-group">
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
@@ -1497,7 +1515,19 @@ const OrderContent = ({
                 offerStartDate={order.offerStartDate}
                 offerEndDate={order.offerEndDate}
                 authToken={authToken}
+                text="Pay"
               />
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+            ) && (
+              <a
+                className="default-btn"
+                href={`/dashboard/pay-by-credit-card/` + order.id}
+              >
+                Update payment
+              </a>
             )}
 
             {currentActionButtons.includes(

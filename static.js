@@ -27,6 +27,7 @@ export default {
   ORDER_ACTION_BUTTONS: {
     BOOKING_AGREEMENT_SECTION: "booking-agreement-section",
     PAY_BUTTON: "pay-button",
+    PAY_UPDATE_BUTTON: "pay-update-button",
     CANCEL_BUTTON: "cancel-button",
     FOR_TENANT_QRCODE: "for-tenant-qrcode",
     FOR_OWNER_QRCODE: "for-owner-qrcode",

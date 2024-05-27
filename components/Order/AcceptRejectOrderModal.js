@@ -12,7 +12,7 @@ const AcceptRejectOrderModal = ({
       title="Operation confirmation"
       body="Confirm that you really want to cancel the booking"
       onAccept={handleAcceptRejectOrder}
-      acceptText="Deny"
+      acceptText="Confirm"
     />
   );
 };

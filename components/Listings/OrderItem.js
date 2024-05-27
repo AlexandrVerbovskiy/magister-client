@@ -105,6 +105,17 @@ const OrderInfo = ({
               </ErrorBlockMessage>
             </li>
           )}
+          {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+          ) &&
+            order.paymentInfo && (
+              <li className="order-list-item-error">
+                <ErrorBlockMessage>
+                  <b>Payment failed description:</b>{" "}
+                  {order.paymentInfo.failedDescription}
+                </ErrorBlockMessage>
+              </li>
+            )}
         </ul>
       </td>
 
@@ -167,6 +178,17 @@ const OrderInfo = ({
           >
             <i className="bx bx-wallet"></i> Pay
           </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+        ) && (
+          <a
+            className="default-btn"
+            href={`/dashboard/pay-by-credit-card/` + order.id}
+          >
+            <i className="bx bx-wallet"></i> Update payment
+          </a>
         )}
 
         {currentActionButtons.includes(

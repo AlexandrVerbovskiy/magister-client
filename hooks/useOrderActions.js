@@ -5,6 +5,7 @@ import STATIC from "../static";
 const useOrderActions = ({ order }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
+  console.log(order);
 
   useEffect(() => {
     const isOwner = order.ownerId == sessionUser?.id;
@@ -26,7 +27,15 @@ const useOrderActions = ({ order }) => {
         order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
         isTenant
       ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON);
+        if (order.paymentInfo) {
+          if (!order.paymentInfo.adminApproved && !order.paymentInfo.waitingApproved) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+            );
+          }
+        } else {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON);
+        }
       }
 
       if (
@@ -129,6 +138,8 @@ const useOrderActions = ({ order }) => {
 
     setCurrentActionButtons(newActionButtons);
   }, [order, sessionUser]);
+
+  console.log(currentActionButtons);
 
   return currentActionButtons;
 };
