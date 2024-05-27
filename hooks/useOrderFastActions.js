@@ -316,7 +316,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleOrderAcceptAcceptCancelByTenant = async () => {
     try {
-      await orderAcceptCancelByOwner(
+      await orderAcceptCancelByTenant(
         activeOrderAcceptCancelByTenantId,
         authToken
       );
