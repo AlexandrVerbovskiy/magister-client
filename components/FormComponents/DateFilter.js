@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { dateToSeconds } from "../../utils";
 
 const DateFilter = ({ value, onChange, placeholder = "Filter date" }) => {
   const [pickerValue, setPickerValue] = useState(value);
@@ -14,7 +15,7 @@ const DateFilter = ({ value, onChange, placeholder = "Filter date" }) => {
     static: true,
     monthSelectorType: "static",
     dateFormat: "M j, Y",
-    defaultDate: [new Date().setDate(new Date().getDate() - 6), new Date()],
+    defaultDate: [new Date(new Date().getTime() - dateToSeconds(6)), new Date()],
     onReady: (selectedDates, dateStr, instance) => {
       instance.element.value = dateStr.replace("to", "-");
     },

@@ -5,6 +5,7 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
+  dateToSeconds,
   findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
@@ -121,8 +122,7 @@ const BookingModal = ({
     );
 
     const lastAvailableDate = new Date(
-      firstAvailableDate.getTime() +
-        (defaultCountDays - 1) * 24 * 60 * 60 * 1000
+      firstAvailableDate.getTime() + dateToSeconds(defaultCountDays - 1)
     );
 
     const datesToDisable = groupDates(blockedDates);

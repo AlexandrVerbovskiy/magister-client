@@ -72,7 +72,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         },
         authToken
       );
-      router.push(`/dashboard/bookings/${id}`);
+      await router.push(`/dashboard/bookings/${id}`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );
