@@ -498,13 +498,13 @@ const ListingApprovalRequest = ({
               <div className="flex flex-wrap justify-end space-x-2">
                 <button
                   onClick={() => setRejectModalOpen(false)}
-                  className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+                  className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleRejectAcceptClick}
-                  className="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
+                  className="btn bg-rose-500 hover:bg-rose-600 text-white"
                 >
                   Reject
                 </button>
@@ -538,13 +538,13 @@ const ListingApprovalRequest = ({
               <div className="flex flex-wrap justify-end space-x-2">
                 <button
                   onClick={() => setApproveModalOpen(false)}
-                  className="btn-sm border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+                  className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleApproveAcceptClick}
-                  className="btn-sm bg-emerald-500 hover:bg-emerald-600 text-white"
+                  className="btn bg-emerald-500 hover:bg-emerald-600 text-white"
                 >
                   Approve
                 </button>

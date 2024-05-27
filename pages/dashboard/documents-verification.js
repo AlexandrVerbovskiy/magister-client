@@ -20,8 +20,6 @@ const DocumentsVerification = ({
   lastAnswerDescription,
   canChange,
 }) => {
-  console.log(lastAnswerDescription);
-
   const [formError, setFormError] = useState(null);
   const { success, setLoading, sessionUser, authToken, setVerified, error } =
     useContext(IndiceContext);

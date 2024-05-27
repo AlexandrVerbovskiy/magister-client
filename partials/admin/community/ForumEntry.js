@@ -112,7 +112,7 @@ function ForumEntry() {
         <div className="text-right">
           <button
             type="submit"
-            className="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap"
+            className="btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap"
           >
             Reply -&gt;
           </button>
