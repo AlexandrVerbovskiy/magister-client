@@ -13,7 +13,7 @@ const StatusBar = ({ statuses, hasCancelStatus = false }) => {
   return (
     <div className="status-bar-wrapper">
       <div className="status-bar">
-        <div className="status-bar-indexes">
+        <div className="status-bar-indexes flex-column flex-md-row">
           {statuses.map((status, index) => (
             <React.Fragment key={status.title}>
               <div className="status-bar-item">
@@ -78,6 +78,9 @@ const StatusBar = ({ statuses, hasCancelStatus = false }) => {
                   </React.Fragment>
                 )}
               </div>
+              <div className="status-bar-title mt-1 d-md-none" key={status.title}>
+                {status.title}
+              </div>
               {index != statuses.length - 1 ? (
                 <div className="status-bar-line"></div>
               ) : (
@@ -86,7 +89,7 @@ const StatusBar = ({ statuses, hasCancelStatus = false }) => {
             </React.Fragment>
           ))}
         </div>
-        <div className="status-bar-titles">
+        <div className="status-bar-titles d-none d-md-flex">
           {statuses.map((status, index) => (
             <div className="status-bar-title" key={status.title}>
               {status.title}
