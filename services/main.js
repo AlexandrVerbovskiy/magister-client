@@ -308,3 +308,8 @@ export const getWaitingRefundOptions = async (id, authToken) => {
   const data = await get(`/get-waiting-refund-options/${id}`, authToken);
   return data.body;
 };
+
+export const getAdminIndexPageOptions = async (authToken) => {
+  const data = await get(`/get-admin-index-page-option`, authToken);
+  return data.body;
+};
