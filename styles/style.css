@@ -6137,6 +6137,11 @@ Category Area CSS
   border-color: var(--mainColor);
   color: var(--whiteColor);
   box-shadow: 5px 5px var(--mainColor);
+  height: calc(100% - 35px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .single-category-box.more-categories .icon {
   margin-top: 14px;
