@@ -147,7 +147,7 @@ const Wallet = ({
                             <i className="bx bx-wallet"></i>
                           </div>
                           <ul>
-                            <li>Date: {timeConverter(earning.createdAt)}</li>
+                            <li>Date: {timeConverter(earning.plannedTime)}</li>
                             <li>Order: #{earning.orderId}</li>
                             <li className="price">
                               ${moneyFormat(pricePerDuration)}

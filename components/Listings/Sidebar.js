@@ -29,6 +29,8 @@ const Sidebar = ({
   maxPrice,
   setMaxPrice,
   handleChangePrices,
+  minLimitPrice,
+  maxLimitPrice,
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -241,6 +243,8 @@ const Sidebar = ({
                   maxPrice={maxPrice}
                   setMaxPrice={setMaxPrice}
                   handleChangePrices={handleChangePrices}
+                  minLimit={minLimitPrice}
+                  maxLimit={maxLimitPrice}
                 />
               </li>
             </ul>

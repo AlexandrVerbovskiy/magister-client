@@ -47,6 +47,7 @@ const ListingsWithMap = ({
   needSubscriptionNewCategory = false,
   hasListings: baseHasListings,
   ownerId = null,
+  priceLimits,
 }) => {
   const listingListParentRef = useRef(null);
   const isFirstRefOptionsChange = useRef(true);
@@ -72,8 +73,8 @@ const ListingsWithMap = ({
 
   const [hasListings, setHasListings] = useState(baseHasListings);
 
-  const minLimit = STATIC.MIN_PRICE_LIMIT;
-  const maxLimit = STATIC.MAX_PRICE_LIMIT;
+  const minLimitPrice = priceLimits.minPrice;
+  const maxLimitPrice = priceLimits.maxPrice;
 
   const initMinPrice = () => {
     const pagePropsMinPrice = pageProps.options?.minPrice;
@@ -82,7 +83,7 @@ const ListingsWithMap = ({
       return pagePropsMinPrice;
     }
 
-    return router.query.minPrice ?? minLimit;
+    return router.query.minPrice ?? minLimitPrice;
   };
 
   const initMaxPrice = () => {
@@ -92,7 +93,7 @@ const ListingsWithMap = ({
       return pagePropsMaxPrice;
     }
 
-    return router.query.maxPrice ?? maxLimit;
+    return router.query.maxPrice ?? maxLimitPrice;
   };
 
   const [minPrice, setMinPrice] = useState(initMinPrice());
@@ -241,12 +242,12 @@ const ListingsWithMap = ({
       minPrice: {
         value: minPrice,
         name: "min-price",
-        hidden: (value) => value === STATIC.MIN_PRICE_LIMIT || !value,
+        hidden: (value) => value === minLimitPrice || !value,
       },
       maxPrice: {
         value: maxPrice,
         name: "max-price",
-        hidden: (value) => value === STATIC.MAX_PRICE_LIMIT || !value,
+        hidden: (value) => value === maxLimitPrice || !value,
       },
       distance: {
         value: selectedDistance,
@@ -479,6 +480,8 @@ const ListingsWithMap = ({
                     maxPrice={maxPrice}
                     setMaxPrice={handleChangeMaxPrice}
                     handleChangePrices={handleChangePrices}
+                    minLimitPrice={minLimitPrice}
+                    maxLimitPrice={maxLimitPrice}
                   />
                 </div>
 

@@ -15,6 +15,7 @@ const GridListingsFullMap = ({
   authToken: baseAuthToken,
   needSubscriptionNewCategory,
   hasListings,
+  priceLimits,
 }) => {
   const [authToken, setAuthToken] = useState(baseAuthToken);
   const { authToken: sessionAuthToken } = useContext(IndiceContext);
@@ -34,6 +35,7 @@ const GridListingsFullMap = ({
         needSubscriptionNewCategory={needSubscriptionNewCategory}
         hasListings={hasListings}
         getListingListRequest={getListingList}
+        priceLimits={priceLimits}
       />
 
       <Footer bgColor="bg-f5f5f5" />

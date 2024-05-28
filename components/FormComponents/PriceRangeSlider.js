@@ -7,9 +7,9 @@ const PriceRangeSlider = ({
   maxPrice,
   setMaxPrice,
   handleChangePrices,
+  minLimit,
+  maxLimit
 }) => {
-  const minLimit = STATIC.MIN_PRICE_LIMIT;
-  const maxLimit = STATIC.MAX_PRICE_LIMIT;
   const rangeSlideRef = useRef();
 
   const handleMinChange = (event) => {

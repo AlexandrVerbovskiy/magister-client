@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Footer from "../../components/_App/Footer";
 import ListingsWithMap from "../../components/GridListings/ListingsWithMap";
 import NavbarTwo from "../../components/_App/NavbarTwo";
@@ -17,6 +17,7 @@ const GridListingsFullMap = ({
   countItems,
   authToken: baseAuthToken,
   hasListings,
+  priceLimits,
 }) => {
   const [authToken, setAuthToken] = useState(baseAuthToken);
   const { authToken: sessionAuthToken } = useContext(IndiceContext);
@@ -37,6 +38,7 @@ const GridListingsFullMap = ({
         hasListings={hasListings}
         ownerId={options.userId}
         getListingListRequest={getOwnerListingList}
+        priceLimits={priceLimits}
       />
 
       <Footer bgColor="bg-f5f5f5" />
