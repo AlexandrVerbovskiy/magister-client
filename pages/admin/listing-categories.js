@@ -366,6 +366,8 @@ const ListingCategories = ({ categories: baseCategories }) => {
   };
 
   const handleCreate = (level) => {
+    const localId= uniqueId();
+
     setCategories((prev) => {
       const res = { ...prev };
 
@@ -398,7 +400,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
           error: null,
           parentId: null,
           popular: false,
-          localId: uniqueId(),
+          localId,
           isNew: true,
           orderIndex: 0,
         },

@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useAdminPage } from "../../hooks";
+import { useContext, useEffect, useState } from "react";
+import { useAdminPage, useWindowSizeUpdate } from "../../hooks";
 import { adminSideProps } from "../../middlewares";
 import Header from "../../partials/admin/Header";
 import Sidebar from "../../partials/admin/Sidebar";
@@ -17,6 +17,7 @@ const ListingDefectQuestions = ({ questions: baseQuestions }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
   const [prevQuestions, setPrevQuestions] = useState(baseQuestions);
+  const [listHeight, setListHeight] = useState(71.56);
 
   const questionsToState = (questions) =>
     questions.map((question) => ({
@@ -244,6 +245,22 @@ const ListingDefectQuestions = ({ questions: baseQuestions }) => {
     handleChangeOrderIndexes(orderIndexesToUpdate);
   };
 
+  const updateListHeight = () => {
+    let height = 0;
+
+    document
+      .querySelectorAll(".question-list-item")
+      .forEach((elem) => (height += elem.scrollHeight));
+
+    setListHeight(height + 1);
+  };
+
+  useWindowSizeUpdate(updateListHeight);
+
+  useEffect(() => {
+    updateListHeight();
+  }, [JSON.stringify(questions)]);
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -288,7 +305,7 @@ const ListingDefectQuestions = ({ questions: baseQuestions }) => {
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                               style={{
-                                height: 71.56 * questions.length + "px",
+                                height: listHeight + "px",
                               }}
                             >
                               {questions.map((elem, index) => (
@@ -302,6 +319,7 @@ const ListingDefectQuestions = ({ questions: baseQuestions }) => {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
+                                      className="question-list-item"
                                     >
                                       <QuestionListItem
                                         name={elem.name}
