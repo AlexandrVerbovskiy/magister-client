@@ -542,6 +542,14 @@ const ListingsWithMap = ({
                           />
                         </div>
                       ))}
+
+                      {dopListingCards.map((card, index) => (
+                        <div
+                          key={index}
+                          className="col-xl-6 col-lg-6 col-md-6 d-none d-xl-flex p-0"
+                          style={{ height: "420px" }}
+                        ></div>
+                      ))}
                     </div>
 
                     {!hasListings && canSendCreateNotifyRequest && (
@@ -602,36 +610,8 @@ const ListingsWithMap = ({
             <div className="col-xl-4 col-lg-12 col-md-12 p-0">
               <div
                 className="map-container fw-map side-full-map d-flex"
-                style={{ height: "fit-content" }}
+                style={{ height: listingListMaxHeight + 20 + "px" }}
               >
-                <div
-                  ref={listingListParentRef}
-                  className="row"
-                  style={{ width: "1px", height: "fit-content" }}
-                >
-                  {listings.map((listing) => (
-                    <div
-                      key={listing.id}
-                      className="col-xl-6 col-lg-6 col-md-6 d-flex"
-                      onMouseOver={() => setListingMarkerActive(listing.id)}
-                      onMouseLeave={() => setMarkerUnactive(listing.id)}
-                    >
-                      <ListingItem
-                        listing={listing}
-                        hovered={activeListingIds.includes(listing.id)}
-                      />
-                    </div>
-                  ))}
-
-                  {dopListingCards.map((card, index) => (
-                    <div
-                      key={index}
-                      className="col-xl-6 col-lg-6 col-md-6 d-flex p-0"
-                      style={{ height: "420px" }}
-                    ></div>
-                  ))}
-                </div>
-
                 <div id="main-full-map">
                   <MultyMarkersMap
                     userLocation={userLocation}
