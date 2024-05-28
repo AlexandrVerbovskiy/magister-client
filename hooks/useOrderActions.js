@@ -108,6 +108,7 @@ const useOrderActions = ({ order }) => {
               STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
               STATIC.ORDER_STATUSES.PENDING_OWNER,
               STATIC.ORDER_STATUSES.PENDING_TENANT,
+              STATIC.ORDER_STATUSES.REJECTED,
             ].includes(extendOrder.status) || extendOrder.cancelStatus
         );
 
