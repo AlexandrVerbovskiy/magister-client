@@ -110,87 +110,89 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
   return (
     <>
       <section className="listings-details-area pb-70">
-        <div className="listings-details-image">
-          <div className="swiper"></div>
+        {!currentApprove && (
+          <div className="listings-details-image">
+            <div className="swiper"></div>
 
-          <div className="container">
             <div className="container">
-              <div className="listings-details-content">
-                {listing.categoryInfo.map((category, index) => (
-                  <span
-                    className="meta"
-                    key={category.name}
-                    style={index > 0 ? { marginLeft: "10px" } : {}}
-                  >
-                    <i className="flaticon-furniture-and-household"></i>
-                    {category.name}
-                  </span>
-                ))}
+              <div className="container">
+                <div className="listings-details-content">
+                  {listing.categoryInfo.map((category, index) => (
+                    <span
+                      className="meta"
+                      key={category.name}
+                      style={index > 0 ? { marginLeft: "10px" } : {}}
+                    >
+                      <i className="flaticon-furniture-and-household"></i>
+                      {category.name}
+                    </span>
+                  ))}
 
-                <h3>{listing.name}</h3>
+                  <h3>{listing.name}</h3>
 
-                <div className="rating d-flex align-items-center">
-                  <span className="bx bxs-star checked"></span>
-                  <span className="bx bxs-star checked"></span>
-                  <span className="bx bxs-star checked"></span>
-                  <span className="bx bxs-star checked"></span>
-                  <span className="bx bxs-star checked"></span>
-                  <span className="rating-count">(45)</span>
-                </div>
+                  <div className="rating d-flex align-items-center">
+                    <span className="bx bxs-star checked"></span>
+                    <span className="bx bxs-star checked"></span>
+                    <span className="bx bxs-star checked"></span>
+                    <span className="bx bxs-star checked"></span>
+                    <span className="bx bxs-star checked"></span>
+                    <span className="rating-count">(45)</span>
+                  </div>
 
-                <ul className="d-flex align-items-center">
-                  {listing.userPhone && (
-                    <li className="phone-number">
-                      <a href={`tel:+${listing.userPhone}`}>
-                        <i className="bx bx-phone-call"></i>
-                        {listing.userPhone}
-                      </a>
+                  <ul className="d-flex align-items-center">
+                    {listing.userPhone && (
+                      <li className="phone-number">
+                        <a href={`tel:+${listing.userPhone}`}>
+                          <i className="bx bx-phone-call"></i>
+                          {listing.userPhone}
+                        </a>
+                      </li>
+                    )}
+                    <li className="location">
+                      <i className="bx bx-map"></i>
+                      <span>City</span>
+                      {listing.city}
                     </li>
-                  )}
-                  <li className="location">
-                    <i className="bx bx-map"></i>
-                    <span>City</span>
-                    {listing.city}
-                  </li>
-                </ul>
+                  </ul>
+                </div>
               </div>
             </div>
+
+            <div className="container-fluid">
+              <ul className="share-save">
+                <li>
+                  <div className="share" onClick={handleShareClick}>
+                    <i className="bx bx-share-alt"></i> Share
+                  </div>
+
+                  <div className="social">
+                    <a href="#" target="_blank">
+                      <i className="bx bxl-facebook"></i>
+                    </a>
+                    <a href="#" target="_blank">
+                      <i className="bx bxl-pinterest"></i>
+                    </a>
+                    <a href="#" target="_blank">
+                      <i className="bx bxl-twitter"></i>
+                    </a>
+                    <a href="#" target="_blank">
+                      <i className="bx bxl-linkedin"></i>
+                    </a>
+                    <a href="#" target="_blank">
+                      <i className="bx bxl-whatsapp"></i>
+                    </a>
+                  </div>
+                </li>
+
+                <li>
+                  <a href="#">
+                    <i className="bx bx-heart"></i> Save
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-
-          <div className="container-fluid">
-            <ul className="share-save">
-              <li>
-                <div className="share" onClick={handleShareClick}>
-                  <i className="bx bx-share-alt"></i> Share
-                </div>
-
-                <div className="social">
-                  <a href="#" target="_blank">
-                    <i className="bx bxl-facebook"></i>
-                  </a>
-                  <a href="#" target="_blank">
-                    <i className="bx bxl-pinterest"></i>
-                  </a>
-                  <a href="#" target="_blank">
-                    <i className="bx bxl-twitter"></i>
-                  </a>
-                  <a href="#" target="_blank">
-                    <i className="bx bxl-linkedin"></i>
-                  </a>
-                  <a href="#" target="_blank">
-                    <i className="bx bxl-whatsapp"></i>
-                  </a>
-                </div>
-              </li>
-
-              <li>
-                <a href="#">
-                  <i className="bx bx-heart"></i> Save
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
+        )}
 
         <div className="container">
           {!currentApprove && (

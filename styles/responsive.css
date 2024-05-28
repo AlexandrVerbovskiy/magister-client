@@ -667,7 +667,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto;
+    height: auto!important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -3331,7 +3331,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto;
+    height: auto!important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -3922,7 +3922,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-bottom: 40px;
-    height: auto;
+    height: auto!important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {

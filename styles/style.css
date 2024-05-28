@@ -16923,6 +16923,10 @@ button.button-danger:hover {
   text-align: start;
 }
 
+.map-container{
+  height: 400px;
+}
+
 @media only screen and (min-width: 1140px) {
   .edit-profile-phone-row .phone-input {
     padding-right: 5px !important;
@@ -16930,6 +16934,10 @@ button.button-danger:hover {
 
   .edit-profile-phone-row .phone-verify {
     padding-left: 5px !important;
+  }
+
+  .map-container{
+    height: fit-content;
   }
 }
 
