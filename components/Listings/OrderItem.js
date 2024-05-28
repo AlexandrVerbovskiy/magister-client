@@ -358,38 +358,40 @@ const OrderItem = ({
         />
       </tr>
 
-      {order.extendOrders.map((extendOrder, index) => (
-        <tr key={extendOrder.id}>
-          <td
-            className="name"
-            style={
-              order.extendOrders.length != index + 1
-                ? { borderBottom: 0, borderTop: 0 }
-                : { borderTop: 0 }
-            }
-          ></td>
+      {order.extendOrders
+        .sort((a, b) => new Date(a.offerStartDate) - new Date(b.offerStartDate))
+        .map((extendOrder, index) => (
+          <tr key={extendOrder.id}>
+            <td
+              className="name"
+              style={
+                order.extendOrders.length != index + 1
+                  ? { borderBottom: 0, borderTop: 0 }
+                  : { borderTop: 0 }
+              }
+            ></td>
 
-          <OrderInfo
-            order={extendOrder}
-            handleClickCancel={handleClickCancel}
-            handleClickPayedFastCancel={handleClickPayedFastCancel}
-            handleClickCreateDispute={handleClickCreateDispute}
-            handleOrderClickAcceptCancelByTenant={
-              handleOrderClickAcceptCancelByTenant
-            }
-            handleOrderClickAcceptCancelByOwner={
-              handleOrderClickAcceptCancelByOwner
-            }
-            handleClickUpdateRequest={handleClickUpdateRequest}
-            handleClickReject={handleClickReject}
-            handleClickAccept={handleClickAccept}
-            handleClickPay={handleClickPay}
-            handleClickExtend={handleClickExtend}
-            link={link}
-            extension={true}
-          />
-        </tr>
-      ))}
+            <OrderInfo
+              order={extendOrder}
+              handleClickCancel={handleClickCancel}
+              handleClickPayedFastCancel={handleClickPayedFastCancel}
+              handleClickCreateDispute={handleClickCreateDispute}
+              handleOrderClickAcceptCancelByTenant={
+                handleOrderClickAcceptCancelByTenant
+              }
+              handleOrderClickAcceptCancelByOwner={
+                handleOrderClickAcceptCancelByOwner
+              }
+              handleClickUpdateRequest={handleClickUpdateRequest}
+              handleClickReject={handleClickReject}
+              handleClickAccept={handleClickAccept}
+              handleClickPay={handleClickPay}
+              handleClickExtend={handleClickExtend}
+              link={link}
+              extension={true}
+            />
+          </tr>
+        ))}
     </>
   );
 };

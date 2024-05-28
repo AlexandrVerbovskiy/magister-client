@@ -250,7 +250,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={moneyFormat(subtotalPrice - totalFee)}
+                                value={moneyFormat(subtotalPrice + totalFee)}
                                 label="Total To Pay, $"
                                 placeholder="Total To Pay"
                                 name="total-to-pay"

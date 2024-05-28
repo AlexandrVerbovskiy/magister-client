@@ -100,8 +100,8 @@ const useOrderActions = ({ order }) => {
         );
       }
 
-      const hasProcessedExtends = order.orderParentId;
-      /*order.extendOrders &&
+      const hasProcessedExtends =
+        order.extendOrders &&
         order.extendOrders.find(
           (extendOrder) =>
             [
@@ -109,12 +109,13 @@ const useOrderActions = ({ order }) => {
               STATIC.ORDER_STATUSES.PENDING_OWNER,
               STATIC.ORDER_STATUSES.PENDING_TENANT,
             ].includes(extendOrder.status) || extendOrder.cancelStatus
-        );*/
+        );
 
       if (
-        isTenant &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
-        !hasProcessedExtends
+        !order.orderParentId &&
+        ((isTenant &&
+          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) ||
+          !hasProcessedExtends)
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
       }
