@@ -3993,11 +3993,11 @@ Listings Area CSS
 .map-container.fw-map.side-full-map {
   width: 100%;
   height: 100%;
-  padding-bottom: 82px;
+  /*padding-bottom: 82px;*/
 }
 .map-container.fw-map.side-full-map #main-full-map {
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
 }
 .map-container .mapzoom-in {
   width: 30px;

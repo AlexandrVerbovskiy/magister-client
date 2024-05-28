@@ -486,7 +486,11 @@ const ListingsWithMap = ({
                 </div>
 
                 <div className="col-lg-8 col-md-12">
-                  <div className="all-listings-list">
+                  <div
+                    className={`all-listings-list ${
+                      listings.length < 1 ? "d-flex justify-content-center" : ""
+                    }`}
+                  >
                     {listings.length > 0 && (
                       <div
                         className="listings-grid-sorting row align-items-center"
@@ -524,15 +528,7 @@ const ListingsWithMap = ({
                       </div>
                     )}
 
-                    <div
-                      ref={listingListParentRef}
-                      className="row"
-                      style={
-                        !hasListings
-                          ? { position: "absolute", top: 0, left: 0, width: 0 }
-                          : {}
-                      }
-                    >
+                    <div ref={listingListParentRef} className="row">
                       {listings.map((listing) => (
                         <div
                           key={listing.id}
@@ -545,14 +541,6 @@ const ListingsWithMap = ({
                             hovered={activeListingIds.includes(listing.id)}
                           />
                         </div>
-                      ))}
-
-                      {dopListingCards.map((card, index) => (
-                        <div
-                          key={index}
-                          className="col-xl-6 col-lg-6 col-md-6 d-flex"
-                          style={{ height: "420px" }}
-                        ></div>
                       ))}
                     </div>
 
@@ -612,15 +600,39 @@ const ListingsWithMap = ({
             </div>
 
             <div className="col-xl-4 col-lg-12 col-md-12 p-0">
-              <div className="map-container fw-map side-full-map">
+              <div
+                className="map-container fw-map side-full-map d-flex"
+                style={{ height: "fit-content" }}
+              >
                 <div
-                  id="main-full-map"
-                  style={
-                    listingListMaxHeight
-                      ? { maxHeight: listingListMaxHeight + "px" }
-                      : null
-                  }
+                  ref={listingListParentRef}
+                  className="row"
+                  style={{ width: "1px", height: "fit-content" }}
                 >
+                  {listings.map((listing) => (
+                    <div
+                      key={listing.id}
+                      className="col-xl-6 col-lg-6 col-md-6 d-flex"
+                      onMouseOver={() => setListingMarkerActive(listing.id)}
+                      onMouseLeave={() => setMarkerUnactive(listing.id)}
+                    >
+                      <ListingItem
+                        listing={listing}
+                        hovered={activeListingIds.includes(listing.id)}
+                      />
+                    </div>
+                  ))}
+
+                  {dopListingCards.map((card, index) => (
+                    <div
+                      key={index}
+                      className="col-xl-6 col-lg-6 col-md-6 d-flex p-0"
+                      style={{ height: "420px" }}
+                    ></div>
+                  ))}
+                </div>
+
+                <div id="main-full-map">
                   <MultyMarkersMap
                     userLocation={userLocation}
                     setUserLocation={changeUserLocation}
