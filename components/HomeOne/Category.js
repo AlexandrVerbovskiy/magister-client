@@ -30,7 +30,7 @@ const Category = ({ topCategories, needShowMore }) => {
               >
                 <div
                   className="single-category-box d-flex flex-column align-items-center"
-                  style={{ width: "100%", justifyContent: "space-between" }}
+                  style={{ width: "100%", justifyContent: "center" }}
                 >
                   <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
