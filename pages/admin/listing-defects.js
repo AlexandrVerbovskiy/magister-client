@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useAdminPage } from "../../hooks";
+import { useContext, useEffect, useState } from "react";
+import { useAdminPage, useWindowSizeUpdate } from "../../hooks";
 import { adminSideProps } from "../../middlewares";
 import Header from "../../partials/admin/Header";
 import Sidebar from "../../partials/admin/Sidebar";
@@ -17,6 +17,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [submitting, setSubmitting] = useState(false);
   const [prevDefects, setPrevDefects] = useState(baseDefects);
+  const [listHeight, setListHeight] = useState(71.56);
 
   const defectsToState = (defects) =>
     defects.map((defect) => ({ ...defect, localId: uniqueId(), error: null }));
@@ -57,8 +58,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
       }
 
       if (Object.values(names).includes(defect.name)) {
-        localIdErrors[defect.localId] =
-          "Cannot create two identical defects";
+        localIdErrors[defect.localId] = "Cannot create two identical defects";
         hasError = true;
 
         Object.keys(names).forEach((localId) => {
@@ -203,7 +203,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
           { defects: defectsToSave },
           authToken
         );
-        
+
         setPrevDefects(createdDefects);
         setDefects(defectsToState(createdDefects));
       }
@@ -244,6 +244,22 @@ const ListingDefects = ({ defects: baseDefects }) => {
 
     handleChangeOrderIndexes(orderIndexesToUpdate);
   };
+
+  const updateListHeight = () => {
+    let height = 0;
+
+    document
+      .querySelectorAll(".defect-list-item")
+      .forEach((elem) => (height += elem.scrollHeight));
+
+    setListHeight(height + 1);
+  };
+
+  useWindowSizeUpdate(updateListHeight);
+
+  useEffect(() => {
+    updateListHeight();
+  }, [JSON.stringify(defects)]);
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -289,7 +305,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
                               {...provided.droppableProps}
                               ref={provided.innerRef}
                               style={{
-                                height: 71.56 * defects.length + "px",
+                                height: listHeight + "px",
                               }}
                             >
                               {defects.map((elem, index) => (
@@ -303,6 +319,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
                                       ref={provided.innerRef}
                                       {...provided.draggableProps}
                                       {...provided.dragHandleProps}
+                                      className="defect-list-item"
                                     >
                                       <DefectListItem
                                         name={elem.name}

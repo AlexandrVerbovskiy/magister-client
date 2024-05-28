@@ -74,6 +74,7 @@ const CategoryListItem = ({
             value: category.name,
             title: category.name,
             default: options.length == 0,
+            key: category.localId,
           });
         }
       });

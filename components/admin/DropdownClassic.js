@@ -32,7 +32,6 @@ function DropdownClassic({
     return () => document.removeEventListener("click", clickHandler);
   });
 
-  // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -103,9 +102,7 @@ function DropdownClassic({
             />
           )}
 
-          <div
-            className="select-options-list"
-          >
+          <div className="select-options-list">
             {filteredOptions.map((option) => {
               const disabled = option["active"] === false;
 
@@ -113,7 +110,7 @@ function DropdownClassic({
                 <DropdownClassicOptionWrapper
                   tooltipText={disabledText}
                   disabled={disabled}
-                  key={option.value}
+                  key={option.key ?? option.value}
                 >
                   <button
                     tabIndex="0"

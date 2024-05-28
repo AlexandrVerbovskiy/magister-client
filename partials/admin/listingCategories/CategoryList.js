@@ -24,7 +24,8 @@ const CategoryList = ({
   handleChangeOrderIndexes,
 }) => {
   const [state, setState] = useState({ items: [] });
-  const [elementHeight, setElementHeight] = useState(71.56);
+  const [listHeight, setListHeight] = useState(0);
+  const categoryListRef = useRef(null);
 
   if (!lodash.isEqual(state.items, list)) {
     list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
@@ -63,11 +64,21 @@ const CategoryList = ({
     handleChangeOrderIndexes(orderIndexesToUpdate);
   };
 
-  useWindowSizeUpdate(() => {
-    setElementHeight(
-      document.querySelector(".category-list-item").scrollHeight + 1
-    );
-  });
+  const updateListHeight = () => {
+    let height = 0;
+
+    categoryListRef.current
+      .querySelectorAll(".category-list-item")
+      .forEach((elem) => (height += elem.scrollHeight));
+
+    setListHeight(height + 1);
+  };
+
+  useWindowSizeUpdate(updateListHeight);
+
+  useEffect(() => {
+    updateListHeight();
+  }, [JSON.stringify(list)]);
 
   if (canCreate === null) canCreate = parentOptions.length > 0;
 
@@ -89,7 +100,10 @@ const CategoryList = ({
   );
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+    <div
+      ref={categoryListRef}
+      className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8"
+    >
       <div className="flex flex-col md:-mr-px">
         <div className="grow">
           <div className="p-6">
@@ -118,7 +132,7 @@ const CategoryList = ({
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
-                          height: elementHeight * state.items.length + "px",
+                          height: listHeight + "px",
                         }}
                       >
                         {state.items.map((elem, index) => (
