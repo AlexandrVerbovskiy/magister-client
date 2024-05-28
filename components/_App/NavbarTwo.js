@@ -272,7 +272,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     <input
                       type="text"
                       className="input-search"
-                      placeholder="What are you looking for?"
+                      placeholder="Search by category"
                       ref={categoryFilterRef}
                       value={searchCategory}
                       name="listingCategorySearch"
@@ -374,7 +374,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                         <input
                           type="text"
                           className="input-search"
-                          placeholder="What are you looking for?"
+                          placeholder="Search by category"
                           maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
                           name="listingCategorySearch"
                           ref={smallCategoryFilterRef}

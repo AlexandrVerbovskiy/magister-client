@@ -96,7 +96,7 @@ const PopularPlacesFilter = ({
                     type="text"
                     name="category"
                     className="form-control"
-                    placeholder="What are you looking for?"
+                    placeholder="Search by category"
                     ref={categoryFilterRef}
                     onFocus={() => openCategoryTipsPopup(searchCategory)}
                     onBlur={closeCategoryTipsPopup}

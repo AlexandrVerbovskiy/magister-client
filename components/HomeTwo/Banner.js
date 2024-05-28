@@ -56,7 +56,7 @@ const Banner = () => {
                           name="category"
                           type="text"
                           className="form-control"
-                          placeholder="What are you looking for?"
+                          placeholder="Search by category"
                         />
                       </div>
                     </div>

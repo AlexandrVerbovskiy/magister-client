@@ -272,7 +272,7 @@ const Navbar = ({ canShowSearch = true }) => {
                     <input
                       type="text"
                       className="input-search"
-                      placeholder="What are you looking for?"
+                      placeholder="Search by category"
                       name="listingCategorySearch"
                       ref={categoryFilterRef}
                       value={searchCategory}
@@ -376,7 +376,7 @@ const Navbar = ({ canShowSearch = true }) => {
                         <input
                           type="text"
                           className="input-search"
-                          placeholder="What are you looking for?"
+                          placeholder="Search by category"
                           name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}
