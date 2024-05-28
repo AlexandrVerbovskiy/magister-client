@@ -13687,6 +13687,7 @@ Dashboard CSS
   margin-left: 2px;
   font-weight: 500;
   font-size: 12px;
+  line-height: 13px!important;
 }
 .bookings-listings-box table tbody td.details h4 .bookings-status.approved {
   background-color: #64bc36;
