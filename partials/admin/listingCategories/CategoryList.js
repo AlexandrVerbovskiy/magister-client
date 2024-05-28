@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CategoryListItem from "./CategoryListItem";
 import Tooltip from "../../../components/admin/Tooltip";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import lodash from "lodash";
 import { reorderList } from "../../../utils";
+import { useWindowSizeUpdate } from "../../../hooks";
 
 const CategoryList = ({
   name,
@@ -23,6 +24,7 @@ const CategoryList = ({
   handleChangeOrderIndexes,
 }) => {
   const [state, setState] = useState({ items: [] });
+  const [elementHeight, setElementHeight] = useState(71.56);
 
   if (!lodash.isEqual(state.items, list)) {
     list = list.sort((a, b) => Number(a.orderIndex) - Number(b.orderIndex));
@@ -60,6 +62,12 @@ const CategoryList = ({
 
     handleChangeOrderIndexes(orderIndexesToUpdate);
   };
+
+  useWindowSizeUpdate(() => {
+    setElementHeight(
+      document.querySelector(".category-list-item").scrollHeight + 1
+    );
+  });
 
   if (canCreate === null) canCreate = parentOptions.length > 0;
 
@@ -109,7 +117,9 @@ const CategoryList = ({
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        style={{ height: 71.56 * state.items.length + "px" }}
+                        style={{
+                          height: elementHeight * state.items.length + "px",
+                        }}
                       >
                         {state.items.map((elem, index) => (
                           <Draggable
