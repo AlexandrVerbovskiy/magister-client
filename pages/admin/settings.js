@@ -127,10 +127,16 @@ const Settings = ({
 
   const propsToState = (props) => {
     setUserLogActive(props.userLogActive);
+
     setOwnerBaseCommissionPercent(props.ownerBaseCommissionPercent);
     setOwnerBoostCommissionPercent(props.ownerBoostCommissionPercent);
     setTenantBaseCommissionPercent(props.tenantBaseCommissionPercent);
     setTenantCancelFeePercent(props.tenantCancelFeePercent);
+
+    setBankAccountIban(props.bankAccountIban);
+    setBankAccountSwiftBic(props.bankAccountSwiftBic);
+    setBankAccountBeneficiary(props.bankAccountBeneficiary);
+    setBankAccountReferenceConceptCode(props.bankAccountReferenceConceptCode);
   };
 
   const commissionHasChanges = () => {
@@ -232,7 +238,7 @@ const Settings = ({
         );
 
         setBaseProps((prev) => ({ ...prev, ...newProps }));
-        propsToState((prev) => ({ ...prev, ...newProps }));
+        propsToState({ ...baseProps, ...newProps });
       }
 
       success.set("Operation done success");
@@ -303,7 +309,7 @@ const Settings = ({
         );
 
         setBaseProps((prev) => ({ ...prev, ...newProps }));
-        propsToState((prev) => ({ ...prev, ...newProps }));
+        propsToState({ ...baseProps, ...newProps });
       }
 
       success.set("Operation done success");
@@ -484,7 +490,7 @@ const Settings = ({
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                           <div className="sm:w-5/12">
                             <Input
-                              name="boostOwnerCommission"
+                              name="bankAccountBeneficiary"
                               value={bankAccountBeneficiary}
                               setValue={setBankAccountBeneficiary}
                               error={bankAccountBeneficiaryError}
@@ -499,7 +505,7 @@ const Settings = ({
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                           <div className="sm:w-5/12">
                             <Input
-                              name="tenantCancelCommission"
+                              name="bankAccountReferenceConceptCode"
                               value={bankAccountReferenceConceptCode}
                               setValue={setBankAccountReferenceConceptCode}
                               error={bankAccountReferenceConceptCodeError}
