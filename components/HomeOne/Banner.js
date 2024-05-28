@@ -105,7 +105,7 @@ const Banner = ({ popularCategories }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="What are you looking for?"
+                    placeholder="Search by category"
                     name="category"
                     ref={categoryFilterRef}
                     onFocus={() => openCategoryTipsPopup(searchCategory)}
