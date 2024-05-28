@@ -1,6 +1,7 @@
 import Delete from "../FastActions/Delete";
 import View from "../FastActions/View";
 import Status from "./Status";
+import CancelStatus from "./CancelStatus";
 
 const TableItem = ({
   id,
@@ -8,7 +9,8 @@ const TableItem = ({
   tenantName,
   ownerName,
   status,
-  onDeleteClick
+  cancelStatus,
+  onDeleteClick,
 }) => {
   return (
     <tr>
@@ -25,7 +27,14 @@ const TableItem = ({
         {ownerName}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <Status status={status} baseClass="px-2 rounded shadow-2xl w-max"/>
+        {cancelStatus ? (
+          <CancelStatus
+            status={cancelStatus}
+            baseClass="px-2 rounded shadow-2xl w-max"
+          />
+        ) : (
+          <Status status={status} baseClass="px-2 rounded shadow-2xl w-max" />
+        )}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="flex text-left">
