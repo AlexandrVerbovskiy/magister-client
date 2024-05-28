@@ -363,14 +363,14 @@ const Settings = ({
 
                       <section style={{ marginTop: "0" }}>
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="ownerCommission"
                               value={ownerBaseCommissionPercent}
                               setValue={setOwnerBaseCommissionPercent}
                               error={ownerBaseCommissionPercentError}
                               setError={setOwnerBaseCommissionPercentError}
-                              label="Listing Owner Commission"
+                              label="Listing Owner Commission, %"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -378,14 +378,14 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="boostOwnerCommission"
                               value={ownerBoostCommissionPercent}
                               setValue={setOwnerBoostCommissionPercent}
                               error={ownerBoostCommissionPercentError}
                               setError={setOwnerBoostCommissionPercentError}
-                              label="Listing Owner Commission For Boost Position"
+                              label="Listing Owner Commission For Boost Position, %"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -393,14 +393,14 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="boostOwnerCommission"
                               value={tenantBaseCommissionPercent}
                               setValue={setTenantBaseCommissionPercent}
                               error={tenantBaseCommissionPercentError}
                               setError={setTenantBaseCommissionPercentError}
-                              label="Rental Rent Commission"
+                              label="Rental Rent Commission, %"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -408,14 +408,14 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="tenantCancelCommission"
                               value={tenantCancelFeePercent}
                               setValue={setTenantCancelFeePercent}
                               error={tenantCancelFeePercentError}
                               setError={setTenantCancelFeePercentError}
-                              label="Tenant Cancel Commission"
+                              label="Tenant Cancel Commission, %"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -452,7 +452,7 @@ const Settings = ({
 
                       <section style={{ marginTop: "0" }}>
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="bankAccountIban"
                               value={bankAccountIban}
@@ -467,7 +467,7 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="bankAccountSwiftBic"
                               value={bankAccountSwiftBic}
@@ -482,7 +482,7 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="boostOwnerCommission"
                               value={bankAccountBeneficiary}
@@ -497,7 +497,7 @@ const Settings = ({
                         </div>
 
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-1/3">
+                          <div className="sm:w-5/12">
                             <Input
                               name="tenantCancelCommission"
                               value={bankAccountReferenceConceptCode}
