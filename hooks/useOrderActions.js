@@ -102,7 +102,8 @@ const useOrderActions = ({ order }) => {
 
       const hasProcessedExtends =
         order.extendOrders &&
-        order.extendOrders.find(
+        order.extendOrders.length > 0 &&
+        !order.extendOrders.find(
           (extendOrder) =>
             [
               STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
@@ -112,11 +113,16 @@ const useOrderActions = ({ order }) => {
             ].includes(extendOrder.status) || extendOrder.cancelStatus
         );
 
+      console.log(
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        hasProcessedExtends
+      );
+
       if (
         !order.orderParentId &&
-        ((isTenant &&
-          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) ||
-          !hasProcessedExtends)
+        isTenant &&
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER ||
+          hasProcessedExtends)
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
       }
