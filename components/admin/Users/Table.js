@@ -19,9 +19,9 @@ const UsersTable = ({
   const ths = [
     { title: "Id", value: "id", width: "10%" },
     { title: "Name", value: "name", width: isAdmin ? "20%" : "25%" },
-    { title: "Email", value: "email", width: isAdmin ? "15%" : "20%" },
-    { title: "Phone", value: "phone", width: "10%" },
-    { title: "Verified", value: "verified", canOrder: false, width: "10%" },
+    { title: "Email", value: "email", width: isAdmin ? "18%" : "23%" },
+    { title: "Phone", value: "phone", width: "13%" },
+    { title: "Verified", value: "verified", canOrder: false, width: "4%" },
   ];
 
   if (isAdmin) {

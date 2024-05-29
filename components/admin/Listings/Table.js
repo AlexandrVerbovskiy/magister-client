@@ -17,11 +17,11 @@ const ListingsTable = ({
     { title: "City", value: "city", width: "10%" },
     { title: "Owner", value: "users.name", width: "14%" },
     { title: "Category", value: "listing_categories.name", width: "10%" },
-    { title: "Count Stored", value: "count_stored_items", width: "9%" },
-    { title: "Per Day", value: "price_per_day", width: "9%" },
-    { title: "Approved", value: "approved", canOrder: false, width: "8%" },
-    { title: "Active", value: "active", canOrder: false, width: "8%" },
-    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
+    { title: "Count Stored", value: "count_stored_items", width: "10%" },
+    { title: "Per Day", value: "price_per_day", width: "10%" },
+    { title: "Approved", value: "approved", canOrder: false, width: "10%" },
+    { title: "Active", value: "active", canOrder: false, width: "10%" },
+    { title: "", value: "actions", width: "4%", canOrder: false },
   ];
 
   return (
