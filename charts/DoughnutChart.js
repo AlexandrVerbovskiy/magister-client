@@ -37,7 +37,7 @@ function DoughnutChart({ data, width, height }) {
       type: "doughnut",
       data: data,
       options: {
-        cutout: "80%",
+        cutout: "65%",
         layout: {
           padding: 24,
         },
@@ -130,7 +130,7 @@ function DoughnutChart({ data, width, height }) {
     setChart(newChart);
     return () => newChart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [JSON.stringify(data)]);
 
   useEffect(() => {
     if (!chart) return;

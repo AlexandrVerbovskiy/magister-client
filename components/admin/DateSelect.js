@@ -3,20 +3,20 @@ import Transition from "../../utils/transition";
 
 function DateSelect({ value, setValue }) {
   const options = {
-    last_year: {
-      value: "last_year",
+    "last-year": {
+      value: "last-year",
       period: "Last Year",
     },
-    last_month: {
-      value: "last_month",
+    "last-month": {
+      value: "last-month",
       period: "Last Month",
     },
-    last_week: {
-      value: "last_week",
+    "last-week": {
+      value: "last-week",
       period: "Last Week",
     },
-    last_day: {
-      value: "last_day",
+    "last-day": {
+      value: "last-day",
       period: "Last Day",
     },
   };

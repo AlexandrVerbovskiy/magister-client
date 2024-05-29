@@ -41,7 +41,6 @@ function BarChart01({ data, width, height }) {
 
   useEffect(() => {
     const ctx = canvas.current;
-    // eslint-disable-next-line no-unused-vars
     const newChart = new Chart(ctx, {
       type: "bar",
       data: data,
@@ -94,7 +93,7 @@ function BarChart01({ data, width, height }) {
           },
           tooltip: {
             callbacks: {
-              title: () => false, // Disable tooltip title
+              title: () => false,
               label: (context) => formatValue(context.parsed.y),
             },
             bodyColor: darkMode
@@ -123,17 +122,19 @@ function BarChart01({ data, width, height }) {
           id: "htmlLegend",
           afterUpdate(c, args, options) {
             const ul = legend.current;
-            if (!ul) return;
-            // Remove old legend items
+            if (!ul) {
+              return;
+            }
+
             while (ul.firstChild) {
               ul.firstChild.remove();
             }
-            // Reuse the built-in legendItems generator
+
             const items = c.options.plugins.legend.labels.generateLabels(c);
             items.forEach((item) => {
               const li = document.createElement("li");
               li.style.marginRight = tailwindConfig().theme.margin[4];
-              // Button element
+
               const button = document.createElement("button");
               button.style.display = "inline-flex";
               button.style.alignItems = "center";
@@ -145,7 +146,7 @@ function BarChart01({ data, width, height }) {
                 );
                 c.update();
               };
-              // Color box
+
               const box = document.createElement("span");
               box.style.display = "block";
               box.style.width = tailwindConfig().theme.width[3];
@@ -155,7 +156,7 @@ function BarChart01({ data, width, height }) {
               box.style.borderWidth = "3px";
               box.style.borderColor = item.fillStyle;
               box.style.pointerEvents = "none";
-              // Label
+
               const labelContainer = document.createElement("span");
               labelContainer.style.display = "flex";
               labelContainer.style.alignItems = "center";
@@ -193,7 +194,6 @@ function BarChart01({ data, width, height }) {
     });
     setChart(newChart);
     return () => newChart.destroy();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

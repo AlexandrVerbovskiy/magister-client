@@ -309,7 +309,7 @@ export const getWaitingRefundOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminIndexPageOptions = async (authToken) => {
-  const data = await get(`/get-admin-index-page-option`, authToken);
+export const getAdminIndexPageOptions = async (body, authToken) => {
+  const data = await post(`/get-admin-index-page-option`, body, authToken);
   return data.body;
 };

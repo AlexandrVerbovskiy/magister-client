@@ -26,13 +26,29 @@ Chart.register(
   Tooltip
 );
 
-function LineChart01({ data, width, height }) {
+function LineChart01({
+  data,
+  width,
+  height,
+  valueType = "number",
+  timeType = "days",
+}) {
   const [chart, setChart] = useState(null);
   const canvas = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === "dark";
   const { tooltipBodyColor, tooltipBgColor, tooltipBorderColor, chartAreaBg } =
     chartColors;
+
+  let timeParser = "MM-DD-YYYY";
+
+  if ((timeType = "months")) {
+    timeParser = "MM-YYYY";
+  }
+
+  if ((timeType = "hours")) {
+    timeParser = "MM-DD-YYYY HH:mm:ss";
+  }
 
   useEffect(() => {
     const ctx = canvas.current;
@@ -55,7 +71,7 @@ function LineChart01({ data, width, height }) {
           x: {
             type: "time",
             time: {
-              parser: "MM-DD-YYYY",
+              parser: timeParser,
               unit: "month",
             },
             display: false,
@@ -65,7 +81,10 @@ function LineChart01({ data, width, height }) {
           tooltip: {
             callbacks: {
               title: () => false, // Disable tooltip title
-              label: (context) => formatValue(context.parsed.y),
+              label: (context) =>
+                valueType == "money"
+                  ? formatValue(context.parsed.y)
+                  : `${context.parsed.y}`,
             },
             bodyColor: darkMode
               ? tooltipBodyColor.dark
@@ -92,7 +111,7 @@ function LineChart01({ data, width, height }) {
     setChart(newChart);
     return () => newChart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [JSON.stringify(data)]);
 
   useEffect(() => {
     if (!chart) return;

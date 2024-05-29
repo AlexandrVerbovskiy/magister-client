@@ -1,7 +1,12 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "./StatusBlock";
-import { getDaysDifference, getFilePath, moneyFormat } from "../../utils";
+import {
+  getDaysDifference,
+  getFilePath,
+  moneyFormat,
+  objDateSort,
+} from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
@@ -358,9 +363,8 @@ const OrderItem = ({
         />
       </tr>
 
-      {order.extendOrders
-        .sort((a, b) => new Date(a.offerStartDate) - new Date(b.offerStartDate))
-        .map((extendOrder, index) => (
+      {objDateSort(order.extendOrders, "offerStartDate").map(
+        (extendOrder, index) => (
           <tr key={extendOrder.id}>
             <td
               className="name"
@@ -391,7 +395,8 @@ const OrderItem = ({
               extension={true}
             />
           </tr>
-        ))}
+        )
+      )}
     </>
   );
 };

@@ -31,3 +31,28 @@ export const formatThousands = (value) => Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 3,
   notation: 'compact',
 }).format(value);
+
+export const fixedColors = [
+  "indigo",
+  "pink",
+  "blue",
+  "gray",
+  "sky",
+  "orange",
+  "violet",
+  "rose",
+  "emerald",
+  "amber",
+  "purple",
+  "teal",
+  "red",
+  "green",
+  "cyan",
+  "neutral",
+  "fuchsia",
+  "zinc",
+  "yellow",
+  "slate",
+  "lime",
+  "stone",
+];

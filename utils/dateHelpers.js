@@ -1,3 +1,5 @@
+import { dateSort } from "./sort";
+
 export const dateToInputString = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -97,9 +99,7 @@ export const groupDates = (dates) => {
 
   const groupedDates = [];
 
-  const sortedDates = dates
-    .map((dateStr) => dateStr)
-    .sort((a, b) => new Date(a) - new Date(b));
+  const sortedDates = dateSort(dates);
 
   let currentStartDate = sortedDates[0];
 

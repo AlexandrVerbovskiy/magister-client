@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import WelcomeBanner from "../../partials/admin/dashboard/WelcomeBanner";
@@ -6,20 +6,110 @@ import { useAdminPage } from "../../hooks";
 import { supportSideProps } from "../../middlewares";
 import { getAdminIndexPageOptions } from "../../services";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import DropdownFilter from "../../components/admin/DropdownFilter";
-import FilterRadioOption from "../../components/admin/Form/FilterRadioOption";
 import DateSelect from "../../components/admin/DateSelect";
-import DashboardLineChart from "../../components/admin/DashboardLineChart";
-import AnalyticsTable from "../../components/admin/AnalyticsTable";
-import DashboardDoughnutChart from "../../components/admin/DashboardDoughnutChart";
+import DashboardLineChart from "../../components/admin/Charts/DashboardLineChart";
+import TransactionAnalyticsTable from "../../components/admin/Charts/TransactionAnalyticsTable";
+import DashboardDoughnutChart from "../../components/admin/Charts/DashboardDoughnutChart";
+import { useRouter } from "next/router";
+import { IndiceContext } from "../../contexts";
 
-const AdminIndex = () => {
+const AdminIndex = (props) => {
+  const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const [filterType, setFilterType] = useState("last_month");
+  const [disabled, setDisabled] = useState(false);
+  const { authToken, error } = useContext(IndiceContext);
 
-  const handleChangeFilterType = (value) => {
-    setFilterType(value);
+  const [filterType, setFilterType] = useState(
+    props.timeFilterType ?? "last-month"
+  );
+
+  const [statistic, setStatistic] = useState({
+    userInactiveRegisterDatesCount: props.userInactiveRegisterDatesCount,
+    userRegisterDatesCount: props.userRegisterDatesCount,
+    transactionsDetailInfo: props.transactionsDetailInfo,
+    transactionDatesCount: props.transactionDatesCount,
+    transactionDatesSum: props.transactionDatesSum,
+    userTotalDatesCount: props.userTotalDatesCount,
+    rentListingCounts: props.rentListingCounts,
+    totalNewInactiveUsers: 0,
+    totalNewUsers: 0,
+  });
+
+  const calculableInfos = (
+    userInactiveRegisterDatesCount,
+    userRegisterDatesCount
+  ) => {
+    const totalNewInactiveUsers = Object.keys(
+      userInactiveRegisterDatesCount
+    ).reduce((prev, date) => (prev += userInactiveRegisterDatesCount[date]), 0);
+
+    const totalNewUsers = Object.keys(userRegisterDatesCount).reduce(
+      (prev, date) => (prev += userRegisterDatesCount[date]),
+      0
+    );
+
+    return { totalNewInactiveUsers, totalNewUsers };
   };
+
+  const handleChangeFilterType = async (value) => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setFilterType(value);
+      setDisabled(true);
+
+      const res = await getAdminIndexPageOptions(
+        {
+          clientTime: Date.now(),
+          timeFilterType: value,
+        },
+        authToken
+      );
+
+      const currentLink = window.location.href;
+
+      const newLinkPart =
+        window.location.origin +
+        window.location.pathname +
+        (value != "last-month" ? `?time-filter-type=${value}` : "");
+
+      if (currentLink !== newLinkPart) {
+        router.replace(newLinkPart, undefined, { shallow: true });
+      }
+
+      const resultCalculation = calculableInfos(
+        res.userInactiveRegisterDatesCount,
+        res.userRegisterDatesCount
+      );
+
+      setStatistic((prev) => ({ ...res, ...resultCalculation }));
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  useEffect(() => {
+    const res = calculableInfos(
+      props.userInactiveRegisterDatesCount,
+      props.userRegisterDatesCount
+    );
+
+    setStatistic((prev) => ({ ...prev, ...res }));
+  }, [props]);
+
+  let timeType = "days";
+
+  if (filterType == "last-day") {
+    timeType = "hours";
+  }
+
+  if (filterType == "last-year") {
+    timeType = "months";
+  }
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -30,7 +120,6 @@ const AdminIndex = () => {
 
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            {/*<WelcomeBanner />*/}
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               <BreadCrumbs links={[{ title: "Dashboard" }]} />
 
@@ -50,14 +139,27 @@ const AdminIndex = () => {
 
             <div className="grid grid-cols-12 gap-6">
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Total transactions" />
+                <DashboardLineChart
+                  title="Total transactions"
+                  data={[statistic.transactionDatesCount]}
+                  timeType={filterType}
+                />
               </div>
 
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Total items listed" />
+                <DashboardLineChart
+                  title="Total items listed"
+                  data={[statistic.rentListingCounts]}
+                  timeType={filterType}
+                />
               </div>
-              <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Total number of users" />
+              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+                <DashboardLineChart
+                  title="Total number of users"
+                  data={[statistic.userTotalDatesCount]}
+                  timeType={filterType}
+                  getTotalType="last"
+                />
               </div>
             </div>
 
@@ -68,11 +170,19 @@ const AdminIndex = () => {
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Amount of total transactions" />
+              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+                <DashboardLineChart
+                  title="Amount of total transactions"
+                  data={[statistic.transactionDatesSum]}
+                  timeType={filterType}
+                  valueType="money"
+                />
               </div>
               <div className="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <AnalyticsTable title="Total amount ($) by type of payment" />
+                <TransactionAnalyticsTable
+                  title="Total amount ($) by type of payment"
+                  data={statistic.transactionsDetailInfo}
+                />
               </div>
             </div>
 
@@ -84,13 +194,28 @@ const AdminIndex = () => {
 
             <div className="grid grid-cols-12 gap-6">
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardDoughnutChart title="Total Users" />
+                <DashboardDoughnutChart
+                  title="Total Users"
+                  data={{
+                    "Active Users":
+                      statistic.totalNewUsers - statistic.totalNewInactiveUsers,
+                    "Inactive Users": statistic.totalNewInactiveUsers,
+                  }}
+                />
               </div>
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="New Users" />
+                <DashboardLineChart
+                  title="New Users"
+                  data={[statistic.userRegisterDatesCount]}
+                  timeType={filterType}
+                />
               </div>
-              <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Inactive Users" />
+              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+                <DashboardLineChart
+                  title="Inactive Users"
+                  data={[statistic.userInactiveRegisterDatesCount]}
+                  timeType={filterType}
+                />
               </div>
             </div>
 
@@ -102,10 +227,17 @@ const AdminIndex = () => {
 
             <div className="grid grid-cols-12 gap-6">
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-5 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardDoughnutChart title="Total Disputes" />
+                <DashboardDoughnutChart
+                  title="Total Disputes"
+                  data={{ "12-01-2020": 12, "01-01-2021": 8 }}
+                />
               </div>
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-7 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart title="Active Disputes" />
+                <DashboardLineChart
+                  title="Active Disputes"
+                  data={[{ "12-01-2020": 12, "01-01-2021": 8 }]}
+                  timeType={filterType}
+                />
               </div>
             </div>
           </div>
@@ -115,8 +247,14 @@ const AdminIndex = () => {
   );
 };
 
-const boostServerSideProps = async ({ baseSideProps }) => {
-  const data = await getAdminIndexPageOptions(baseSideProps.authToken);
+const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const data = await getAdminIndexPageOptions(
+    {
+      clientTime: Date.now(),
+      timeFilterType: context.query["time-filter-type"],
+    },
+    baseSideProps.authToken
+  );
   return { ...data };
 };
 
