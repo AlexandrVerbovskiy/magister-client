@@ -40,7 +40,7 @@ const Order = (order) => {
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs
                   links={[
-                    { title: "Orders", href: "/admin/orders" },
+                    { title: "Rentals", href: "/admin/orders" },
                     { title: "#" + order.id },
                   ]}
                 />

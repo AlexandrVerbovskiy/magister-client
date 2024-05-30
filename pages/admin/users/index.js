@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import { useAdminPage, usePagination } from "../../../hooks";
+import { useAdminPage, usePagination, useTimeTypeFilter } from "../../../hooks";
 import UsersTable from "../../../components/admin/Users/Table";
 import SearchForm from "../../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
@@ -18,13 +18,17 @@ import {
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../../middlewares";
-import { baseListPageParams } from "../../../utils";
+import { baseAdminTimeListPageParams, baseListPageParams } from "../../../utils";
+import DateSelect from "../../../components/admin/DateSelect";
 
 const Users = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
   const { error, success, authToken, isAdmin } = useContext(IndiceContext);
+
+  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
+    useTimeTypeFilter(pageProps);
 
   const {
     page,
@@ -47,6 +51,7 @@ const Users = (pageProps) => {
     getItemsFunc: (data) => getUserList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
+    getDopProps: geTimeTypeDopProps,
   });
 
   const handleCloseDeleteModal = () => {
@@ -121,6 +126,13 @@ const Users = (pageProps) => {
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
 
+                  <DateSelect
+                    value={timeFilterType}
+                    setValue={(value) =>
+                      handleChangeTimeFilterType(value, rebuild)
+                    }
+                  />
+
                   <Link
                     href="/admin/users/create"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
@@ -181,7 +193,7 @@ const Users = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserListPageOptions(
-    baseListPageParams(context.query),
+    {...baseAdminTimeListPageParams(context.query)},
     baseSideProps.authToken
   );
 

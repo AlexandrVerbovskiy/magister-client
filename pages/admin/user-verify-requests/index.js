@@ -13,20 +13,22 @@ import {
   usePagination,
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
+  useTimeTypeFilter,
 } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import {
   getAdminUserUserVerifyRequestListPageOptions,
   getUserVerifyRequestList,
 } from "../../../services";
-import { baseTimeListPageParams } from "../../../utils";
+import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../utils";
+import DateSelect from "../../../components/admin/DateSelect";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
+    useTimeTypeFilter(pageProps);
 
   const {
     page,
@@ -48,17 +50,8 @@ const UserVerifyRequests = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: geTimeTypeDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   return (
@@ -76,10 +69,11 @@ const UserVerifyRequests = (pageProps) => {
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by sent time"
+                  <DateSelect
+                    value={timeFilterType}
+                    setValue={(value) =>
+                      handleChangeTimeFilterType(value, rebuild)
+                    }
                   />
                 </div>
               </div>
@@ -114,7 +108,7 @@ const UserVerifyRequests = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserUserVerifyRequestListPageOptions(
-    baseTimeListPageParams(context.query),
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

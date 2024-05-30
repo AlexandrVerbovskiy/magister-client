@@ -1,19 +1,14 @@
 import { useContext, useState } from "react";
 import {
   useAdminPage,
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
+  useBaseAdminFilter,
   usePagination,
 } from "../../../hooks";
 import { supportSideProps } from "../../../middlewares";
-import {
-  baseTimeListPageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams, baseTimeTypePageParams } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import OrdersTable from "../../../components/admin/Orders/Table";
-import Datepicker from "../../../components/admin/Datepicker";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
@@ -23,6 +18,7 @@ import {
   getAdminOrderListPageOptions,
 } from "../../../services";
 import DeleteAccept from "../../../components/admin/DeleteAccept";
+import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Orders = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -30,8 +26,13 @@ const Orders = (pageProps) => {
   const [toDeleteOrderInfo, setToDeleteOrderInfo] = useState({});
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const {
+    timeFilterType,
+    getBaseAdminFilterDopProps,
+    handleChangeTimeFilterType,
+    type,
+    handleChangeType,
+  } = useBaseAdminFilter(pageProps);
 
   const {
     page,
@@ -49,21 +50,11 @@ const Orders = (pageProps) => {
     canMovePrevPage,
     items: orders,
     rebuild,
-    options,
   } = usePagination({
     getItemsFunc: (data) => getAdminOrderList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   const handleCloseDeleteModal = () => {
@@ -99,17 +90,25 @@ const Orders = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Orders" }]} />
-
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="From start to end date"
-                  />
-                </div>
+                <BreadCrumbs links={[{ title: "Rentals" }]} />
               </div>
+
+              <BaseListSubHeader
+                type={type}
+                handleChangeType={handleChangeType}
+                typeOptions={[
+                  { value: "all", title: "All", count: 67 },
+                  { value: "finished", title: "Finished", count: 34 },
+                  { value: "canceled", title: "Canceled", count: 14 },
+                  { value: "in-dispute", title: "In dispute", count: 19 },
+                ]}
+                filter={filter}
+                filterPlaceholder="Search by Rental Id"
+                handleChangeFilter={changeFilter}
+                timeFilterType={timeFilterType}
+                handleChangeTimeFilterType={handleChangeTimeFilterType}
+                rebuild={rebuild}
+              />
 
               <OrdersTable
                 orders={orders}
@@ -153,7 +152,7 @@ const Orders = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminOrderListPageOptions(
-    baseTimeListPageParams(context.query),
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

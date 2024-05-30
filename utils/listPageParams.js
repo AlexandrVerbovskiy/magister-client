@@ -5,10 +5,19 @@ export const baseListPageParams = (params) => ({
   orderType: params["order-type"],
 });
 
-
 export const baseTimeListPageParams = (params) => ({
   ...baseListPageParams(params),
   fromTime: params["from-time"],
   toTime: params["to-time"],
-  clientTime: Date.now()
+  clientTime: Date.now(),
+});
+
+export const baseTimeTypePageParams = (params) => ({
+  clientTime: Date.now(),
+  timeFilterType: params["time-filter-type"],
+});
+
+export const baseAdminTimeListPageParams = (params) => ({
+  ...baseListPageParams(params),
+  ...baseTimeTypePageParams(params),
 });

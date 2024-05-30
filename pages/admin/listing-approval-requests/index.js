@@ -14,6 +14,7 @@ import {
   usePagination,
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
+  useTimeTypeFilter,
 } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import {
@@ -22,7 +23,11 @@ import {
 } from "../../../services";
 import { useRouter } from "next/router";
 import DropdownFilter from "../../../components/admin/DropdownFilter";
-import { baseTimeListPageParams } from "../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseTimeListPageParams,
+} from "../../../utils";
+import DateSelect from "../../../components/admin/DateSelect";
 
 const UserVerifyRequests = (pageProps) => {
   const router = useRouter();
@@ -32,8 +37,8 @@ const UserVerifyRequests = (pageProps) => {
   /*const baseStatusFilter = router.query.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);*/
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
+    useTimeTypeFilter(pageProps);
 
   const {
     page,
@@ -56,17 +61,8 @@ const UserVerifyRequests = (pageProps) => {
     getItemsFunc: (data) =>
       getAdminListingApprovalRequestsList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: geTimeTypeDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   const handleChangeStatusFilter = (status) => {
@@ -89,10 +85,11 @@ const UserVerifyRequests = (pageProps) => {
 
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by create time"
+                  <DateSelect
+                    value={timeFilterType}
+                    setValue={(value) =>
+                      handleChangeTimeFilterType(value, rebuild)
+                    }
                   />
                 </div>
               </div>
@@ -127,7 +124,7 @@ const UserVerifyRequests = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminListingApprovalRequestListPageOptions(
-    baseTimeListPageParams(context.query),
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

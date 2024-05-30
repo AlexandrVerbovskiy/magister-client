@@ -1,6 +1,10 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../../../contexts";
-import { useAdminPage, usePagination } from "../../../../hooks";
+import {
+  useAdminPage,
+  usePagination,
+  useTimeTypeFilter,
+} from "../../../../hooks";
 import {
   getAdminRecipientPaymentList,
   getAdminRecipientPaymentListOptions,
@@ -11,11 +15,12 @@ import Header from "../../../../partials/admin/Header";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
 import DropdownFilter from "../../../../components/admin/DropdownFilter";
-import { baseTimeListPageParams } from "../../../../utils";
+import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
 import { useRouter } from "next/router";
 import FilterRadioOption from "../../../../components/admin/Form/FilterRadioOption";
 import RecipientPaymentsTable from "../../../../components/admin/RecipientPayments/Table";
+import DateSelect from "../../../../components/admin/DateSelect";
 
 const RecipientPayments = (pageProps) => {
   const router = useRouter();
@@ -24,6 +29,9 @@ const RecipientPayments = (pageProps) => {
 
   const [type, setType] = useState(router.query.type ?? "all");
   const [status, setStatus] = useState(router.query.status ?? "all");
+
+  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
+    useTimeTypeFilter(pageProps);
 
   const {
     page,
@@ -45,6 +53,7 @@ const RecipientPayments = (pageProps) => {
     getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
+      ...geTimeTypeDopProps,
       type: {
         value: type,
         hidden: (value) => value == "all",
@@ -81,6 +90,13 @@ const RecipientPayments = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
+
+                  <DateSelect
+                    value={timeFilterType}
+                    setValue={(value) =>
+                      handleChangeTimeFilterType(value, rebuild)
+                    }
+                  />
 
                   <DropdownFilter align="right">
                     <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
@@ -160,7 +176,7 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
   const type = context.query.type ?? "all";
   const status = context.query.status ?? "all";
 
-  const params = { ...baseTimeListPageParams(context.query), status, type };
+  const params = { ...baseAdminTimeListPageParams(context.query), status, type };
 
   const options = await getAdminRecipientPaymentListOptions(
     params,

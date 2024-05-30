@@ -247,7 +247,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               )}
 
               <SidebarTypicalLink
-                title="Orders"
+                title="Rentals"
                 link="orders"
                 SVG={({ current }) => (
                   <svg
