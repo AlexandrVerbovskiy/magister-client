@@ -12,6 +12,7 @@ import TransactionAnalyticsTable from "../../components/admin/Charts/Transaction
 import DashboardDoughnutChart from "../../components/admin/Charts/DashboardDoughnutChart";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
+import { baseTimeTypePageParams } from "../../utils";
 
 const AdminIndex = (props) => {
   const router = useRouter();
@@ -19,9 +20,7 @@ const AdminIndex = (props) => {
   const [disabled, setDisabled] = useState(false);
   const { authToken, error } = useContext(IndiceContext);
 
-  const [filterType, setFilterType] = useState(
-    props.timeFilterType ?? "last-month"
-  );
+  const [filterType, setFilterType] = useState(props.timeFilterType);
 
   const [statistic, setStatistic] = useState({
     userInactiveRegisterDatesCount: props.userInactiveRegisterDatesCount,
@@ -142,7 +141,7 @@ const AdminIndex = (props) => {
                 <DashboardLineChart
                   title="Total transactions"
                   data={[statistic.transactionDatesCount]}
-                  timeType={filterType}
+                  timeType={timeType}
                 />
               </div>
 
@@ -150,14 +149,14 @@ const AdminIndex = (props) => {
                 <DashboardLineChart
                   title="Total items listed"
                   data={[statistic.rentListingCounts]}
-                  timeType={filterType}
+                  timeType={timeType}
                 />
               </div>
               <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardLineChart
                   title="Total number of users"
                   data={[statistic.userTotalDatesCount]}
-                  timeType={filterType}
+                  timeType={timeType}
                   getTotalType="last"
                 />
               </div>
@@ -174,7 +173,7 @@ const AdminIndex = (props) => {
                 <DashboardLineChart
                   title="Amount of total transactions"
                   data={[statistic.transactionDatesSum]}
-                  timeType={filterType}
+                  timeType={timeType}
                   valueType="money"
                 />
               </div>
@@ -207,14 +206,14 @@ const AdminIndex = (props) => {
                 <DashboardLineChart
                   title="New Users"
                   data={[statistic.userRegisterDatesCount]}
-                  timeType={filterType}
+                  timeType={timeType}
                 />
               </div>
               <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardLineChart
                   title="Inactive Users"
                   data={[statistic.userInactiveRegisterDatesCount]}
-                  timeType={filterType}
+                  timeType={timeType}
                 />
               </div>
             </div>
@@ -236,7 +235,7 @@ const AdminIndex = (props) => {
                 <DashboardLineChart
                   title="Active Disputes"
                   data={[{ "12-01-2020": 12, "01-01-2021": 8 }]}
-                  timeType={filterType}
+                  timeType={timeType}
                 />
               </div>
             </div>
@@ -249,10 +248,7 @@ const AdminIndex = (props) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const data = await getAdminIndexPageOptions(
-    {
-      clientTime: Date.now(),
-      timeFilterType: context.query["time-filter-type"],
-    },
+    baseTimeTypePageParams(context.query),
     baseSideProps.authToken
   );
   return { ...data };

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../../../contexts";
-import { useAdminPage, usePagination } from "../../../../hooks";
+import { useAdminPage, usePagination, useTimeTypeFilter } from "../../../../hooks";
 import {
   getAdminFailedRecipientPaymentListOptions,
   getAdminFailedRecipientPaymentList,
@@ -10,13 +10,17 @@ import Sidebar from "../../../../partials/admin/Sidebar";
 import Header from "../../../../partials/admin/Header";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
-import { baseTimeListPageParams } from "../../../../utils";
+import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
 import RecipientPaymentsTable from "../../../../components/admin/RecipientPayments/Table";
+import DateSelect from "../../../../components/admin/DateSelect";
 
 const RecipientPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+
+  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
+    useTimeTypeFilter(pageProps);
 
   const {
     page,
@@ -37,6 +41,7 @@ const RecipientPayments = (pageProps) => {
     getItemsFunc: (data) => getAdminFailedRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
+    getDopProps: geTimeTypeDopProps,
   });
 
   return (
@@ -53,6 +58,13 @@ const RecipientPayments = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
+
+                  <DateSelect
+                    value={timeFilterType}
+                    setValue={(value) =>
+                      handleChangeTimeFilterType(value, rebuild)
+                    }
+                  />
                 </div>
               </div>
 
@@ -89,7 +101,7 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
   const type = context.query.type ?? "all";
   const status = context.query.status ?? "all";
 
-  const params = { ...baseTimeListPageParams(context.query), status, type };
+  const params = { ...baseAdminTimeListPageParams(context.query), status, type };
 
   const options = await getAdminFailedRecipientPaymentListOptions(
     params,

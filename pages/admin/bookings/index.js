@@ -1,20 +1,16 @@
 import { useContext, useState } from "react";
 import {
   useAdminPage,
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
+  useBaseAdminFilter,
   usePagination,
 } from "../../../hooks";
 import { supportSideProps } from "../../../middlewares";
 import {
+  baseAdminTimeListPageParams,
   baseTimeListPageParams,
-  getDateByCurrentAdd,
-  getDateByCurrentReject,
 } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import Datepicker from "../../../components/admin/Datepicker";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
@@ -26,6 +22,7 @@ import {
   getAdminBookingsListPageOptions,
 } from "../../../services";
 import DeleteAccept from "../../../components/admin/DeleteAccept";
+import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Bookings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -33,8 +30,13 @@ const Bookings = (pageProps) => {
   const [toDeleteBookingInfo, setToDeleteBookingInfo] = useState({});
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const {
+    timeFilterType,
+    getBaseAdminFilterDopProps,
+    handleChangeTimeFilterType,
+    type,
+    handleChangeType,
+  } = useBaseAdminFilter(pageProps);
 
   const {
     page,
@@ -52,21 +54,11 @@ const Bookings = (pageProps) => {
     canMovePrevPage,
     items: bookings,
     rebuild,
-    options,
   } = usePagination({
     getItemsFunc: (data) => getAdminBookingList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   const handleCloseDeleteModal = () => {
@@ -103,16 +95,24 @@ const Bookings = (pageProps) => {
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Bookings" }]} />
-
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="From start to end date"
-                  />
-                </div>
               </div>
+
+              <BaseListSubHeader
+                type={type}
+                handleChangeType={handleChangeType}
+                typeOptions={[
+                  { value: "all", title: "All", count: 67 },
+                  { value: "accepted", title: "Accepted", count: 19 },
+                  { value: "canceled", title: "Canceled", count: 14 },
+                  { value: "rejected", title: "Rejected", count: 34 },
+                ]}
+                filter={filter}
+                filterPlaceholder="Search by Booking Id"
+                handleChangeFilter={changeFilter}
+                timeFilterType={timeFilterType}
+                handleChangeTimeFilterType={handleChangeTimeFilterType}
+                rebuild={rebuild}
+              />
 
               <BookingsTable
                 bookings={bookings}
@@ -156,7 +156,7 @@ const Bookings = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminBookingsListPageOptions(
-    baseTimeListPageParams(context.query),
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

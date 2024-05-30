@@ -13,6 +13,7 @@ import {
   usePagination,
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
+  useBaseAdminFilter,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import {
@@ -20,13 +21,19 @@ import {
   getUserEventLogList,
 } from "../../services";
 import { baseTimeListPageParams } from "../../utils";
+import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const {
+    timeFilterType,
+    getBaseAdminFilterDopProps,
+    handleChangeTimeFilterType,
+    type,
+    handleChangeType,
+  } = useBaseAdminFilter(pageProps);
 
   const {
     page,
@@ -48,17 +55,8 @@ const Logs = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getUserEventLogList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   return (
@@ -73,16 +71,23 @@ const Logs = (pageProps) => {
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Logs" }]} />
-
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by create time"
-                  />
-                </div>
               </div>
+
+              <BaseListSubHeader
+                type={type}
+                handleChangeType={handleChangeType}
+                typeOptions={[
+                  { value: "all", title: "All", count: 67 },
+                  { value: "User Actions", title: "user", count: 19 },
+                  { value: "Admin Actions", title: "admin", count: 19 },
+                ]}
+                filter={filter}
+                filterPlaceholder="Search by Log Id"
+                handleChangeFilter={changeFilter}
+                timeFilterType={timeFilterType}
+                handleChangeTimeFilterType={handleChangeTimeFilterType}
+                rebuild={rebuild}
+              />
 
               <LogsTable
                 logs={logs}

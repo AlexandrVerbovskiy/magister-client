@@ -16,7 +16,7 @@ import ListingsTable from "../../../components/admin/Listings/Table";
 import { IndiceContext } from "../../../contexts";
 import DeleteAccept from "../../../components/admin/DeleteAccept";
 import Link from "next/link";
-import { baseListPageParams } from "../../../utils";
+import { baseAdminTimeListPageParams, baseListPageParams } from "../../../utils";
 
 const Listings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -155,7 +155,7 @@ const Listings = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminListingListPageOptions(
-    baseListPageParams(context.query),
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 

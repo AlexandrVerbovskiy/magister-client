@@ -16,7 +16,7 @@ import {
 import { IndiceContext } from "../../contexts";
 import LeaveBtn from "../../components/admin/LeaveBtn";
 import Input from "../../components/admin/Form/Input";
-import { validateSmallText } from "../../utils";
+import { baseAdminTimeListPageParams, validateSmallText } from "../../utils";
 
 const goBackLink = "/admin";
 
@@ -545,7 +545,7 @@ const Settings = ({
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  return await getSystemOptionsRequest(baseSideProps.authToken);
+  return await baseAdminTimeListPageParams(baseSideProps.authToken);
 };
 
 export const getServerSideProps = (context) =>

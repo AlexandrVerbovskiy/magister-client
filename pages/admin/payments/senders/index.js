@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import {
   useAdminPage,
+  useBaseAdminFilter,
   useChangeTimeFilter,
   useInitPaginationTimeFilter,
   usePagination,
@@ -19,13 +20,19 @@ import Sidebar from "../../../../partials/admin/Sidebar";
 import { baseTimeListPageParams } from "../../../../utils";
 import Datepicker from "../../../../components/admin/Datepicker";
 import SenderPaymentsTable from "../../../../components/admin/SenderPayments/Table";
+import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
-    useInitPaginationTimeFilter();
+  const {
+    timeFilterType,
+    getBaseAdminFilterDopProps,
+    handleChangeTimeFilterType,
+    type,
+    handleChangeType,
+  } = useBaseAdminFilter(pageProps);
 
   const {
     page,
@@ -47,17 +54,8 @@ const SenderPayments = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getTimeFilterProps,
+    getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
-  });
-
-  const { handleChangeTimeFilter } = useChangeTimeFilter({
-    options,
-    fromTime,
-    setFromTime,
-    toTime,
-    setToTime,
-    rebuild,
   });
 
   return (
@@ -72,15 +70,23 @@ const SenderPayments = (pageProps) => {
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Sender Payments" }]} />
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by payment time"
-                  />
-                </div>
               </div>
+
+              <BaseListSubHeader
+                type={type}
+                handleChangeType={handleChangeType}
+                typeOptions={[
+                  { value: "all", title: "All", count: 67 },
+                  { value: "paypal", title: "Paypal", count: 19 },
+                  { value: "bank-transfer", title: "Bank Transfer", count: 14 },
+                ]}
+                filter={filter}
+                filterPlaceholder="Search by Transfer Id"
+                handleChangeFilter={changeFilter}
+                timeFilterType={timeFilterType}
+                handleChangeTimeFilterType={handleChangeTimeFilterType}
+                rebuild={rebuild}
+              />
 
               <SenderPaymentsTable
                 payments={payments}
