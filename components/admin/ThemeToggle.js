@@ -1,5 +1,5 @@
 import React from "react";
-import { useThemeProvider } from "../../contexts/themeContext";
+import { useThemeProvider } from '../utils/tailwindCharts/ThemeContext';
 
 export default function ThemeToggle() {
   const { currentTheme, changeCurrentTheme } = useThemeProvider();

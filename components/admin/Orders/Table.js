@@ -13,10 +13,10 @@ const Table = ({
   const ths = [
     { title: "Id", value: "id", width: "10%" },
     { title: "Listing", value: "listings.name", width: "20%" },
-    { title: "Rental", value: "tenants.name", width: "20%" },
-    { title: "Owner", value: "owners.name", width: "20%" },
+    { title: "Rental", value: "tenants.name", width: "23%" },
+    { title: "Owner", value: "owners.name", width: "23%" },
     { title: "Status", value: "orders.status", width: "20%" },
-    { title: "Actions", value: "actions", width: "10%", canOrder: false },
+    { title: "", value: "actions", width: "4%", canOrder: false },
   ];
 
   return (
