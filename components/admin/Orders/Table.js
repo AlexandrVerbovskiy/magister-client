@@ -11,12 +11,18 @@ const Table = ({
   openDeleteModal,
 }) => {
   const ths = [
-    { title: "Id", value: "id", width: "10%" },
-    { title: "Listing", value: "listings.name", width: "20%" },
-    { title: "Rental", value: "tenants.name", width: "23%" },
-    { title: "Owner", value: "owners.name", width: "23%" },
-    { title: "Status", value: "orders.status", width: "20%" },
-    { title: "", value: "actions", width: "4%", canOrder: false },
+    { title: "Rental Id", value: "id", width: "15%" },
+    { title: "Item", value: "listings.name", width: "20%" },
+    { title: "Rental Start", value: "tenants.start_date", width: "15%" },
+    { title: "Rental End", value: "owners.end_date", width: "15%" },
+    {
+      title: "Total Amount",
+      value: "owners.total_amount",
+      canOrder: false,
+      width: "15%",
+    },
+    { title: "Status", value: "orders.status", width: "15%" },
+    { title: "", canOrder: false, value: "orders.actions", width: "5%" },
   ];
 
   return (

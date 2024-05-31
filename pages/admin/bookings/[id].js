@@ -16,8 +16,7 @@ import { useContext, useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
-import Status from "../../../components/admin/Bookings/Status";
-import { IndiceContext } from "../../../contexts";
+import Status from "../../../components/admin/Orders/Status";
 
 const PreviousProposalElem = ({
   index,

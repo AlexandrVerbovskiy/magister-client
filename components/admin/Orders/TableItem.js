@@ -1,19 +1,71 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Delete from "../FastActions/Delete";
 import View from "../FastActions/View";
 import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
+import TableDateView from "../../admin/TableDateView";
+import { getDaysDifference } from "../../../utils";
+import Link from "next/link";
+import { IndiceContext } from "../../../contexts";
+import SubInfoRow from "../SubInfoRow";
 
-const TableItem = ({
-  id,
-  listingName,
-  tenantName,
-  ownerName,
-  status,
-  cancelStatus,
-  onDeleteClick,
-}) => {
+const ItemTitle = ({ title, href, canMove = true }) => {
+  return (
+    <Link
+      href={href}
+      className="font-semibold flex items-center"
+      onClick={(e) => (canMove ? {} : e.preventDefault())}
+      style={canMove ? {} : { cursor: "auto" }}
+    >
+      {title}
+      <svg
+        width="19"
+        height="18"
+        viewBox="0 0 19 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="ml-1"
+      >
+        <path
+          d="M10.6875 7.875L16.625 2.25M16.625 2.25H12.6667M16.625 2.25V6M16.625 10.5V14.25C16.625 14.6478 16.4582 15.0294 16.1613 15.3107C15.8643 15.592 15.4616 15.75 15.0417 15.75H3.95833C3.53841 15.75 3.13568 15.592 2.83875 15.3107C2.54181 15.0294 2.375 14.6478 2.375 14.25V3.75C2.375 3.35218 2.54181 2.97064 2.83875 2.68934C3.13568 2.40804 3.53841 2.25 3.95833 2.25H7.91667"
+          stroke="#1E293B"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </Link>
+  );
+};
+
+const TableItem = (props) => {
+  const {
+    id,
+    listingName,
+    tenantName,
+    tenantEmail,
+    tenantPhone,
+    ownerName,
+    ownerEmail,
+    ownerPhone,
+    listingId,
+    tenantId,
+    ownerId,
+    status,
+    cancelStatus,
+    onDeleteClick,
+    offerStartDate,
+    offerEndDate,
+    offerPricePerDay,
+    listingAddress,
+    listingCategoryName,
+    payedType,
+    payedAdminApproved,
+  } = props;
+
+  const { sessionUser } = useContext(IndiceContext);
+
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   return (
@@ -25,20 +77,29 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           {listingName}
         </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {tenantName}
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <TableDateView date={offerStartDate} />
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <TableDateView date={offerEndDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {ownerName}
+          <div className="font-medium text-green-600">
+            $
+            {getDaysDifference(offerStartDate, offerEndDate) * offerPricePerDay}
+          </div>
         </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+        <td>
           {cancelStatus ? (
             <CancelStatus
               status={cancelStatus}
-              baseClass="px-2 rounded shadow-2xl w-max"
+              baseClass="px-3 rounded-full shadow-2xl w-max"
             />
           ) : (
-            <Status status={status} baseClass="px-2 rounded shadow-2xl w-max" />
+            <Status
+              status={status}
+              baseClass="px-3 rounded-full shadow-2xl w-max"
+            />
           )}
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
@@ -54,20 +115,104 @@ const TableItem = ({
       <tr
         id={`order-${id}`}
         role="region"
-        className={`${!descriptionOpen && "hidden"}`}
+        className={`${
+          !descriptionOpen && "hidden"
+        }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td colSpan="6" className="px-2 first:pl-5 last:pr-5 py-3">
-          <div className="flex items-center bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400 p-3 -mt-3">
-            <svg className="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-slate-500 mr-2">
-              <path d="M1 16h3c.3 0 .5-.1.7-.3l11-11c.4-.4.4-1 0-1.4l-3-3c-.4-.4-1-.4-1.4 0l-11 11c-.2.2-.3.4-.3.7v3c0 .6.4 1 1 1zm1-3.6l10-10L13.6 4l-10 10H2v-1.6z" />
-            </svg>
-            <div className="italic">Test</div>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r">
+          <div>
+            <ItemTitle
+              title="Item Details"
+              href={"/admin/listings/edit/" + listingId}
+            />
+            <SubInfoRow label="Name" value={listingName} />
+            <SubInfoRow label="Category" value={listingCategoryName} />
+            <SubInfoRow label="Location" value={listingAddress} />
+            <SubInfoRow label="Times rented" value={0} />
+            <SubInfoRow label="Rating" value={0} />
           </div>
-          {/*<div className="mr-2 flex items-center">
-              <View href={`/admin/orders/${id}`} />
-            </div>
+        </td>
 
-            <Delete onDeleteClick={onDeleteClick} />*/}
+        <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
+          <div>
+            <ItemTitle
+              title="Owner"
+              href={"/admin/users/edit/" + ownerId}
+              canMove={sessionUser.id != ownerId}
+            />
+            <SubInfoRow label="Name" value={ownerName} />
+            <SubInfoRow label="Email" value={ownerEmail} />
+            <SubInfoRow
+              label="Phone"
+              value={ownerPhone.length ? ownerPhone.length : "-"}
+            />
+            <SubInfoRow label="Rating" value={0} />
+          </div>
+        </td>
+
+        <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
+          <div>
+            <ItemTitle
+              title="Renter"
+              href={"/admin/users/edit/" + tenantId}
+              canMove={sessionUser.id != tenantId}
+            />
+            <SubInfoRow label="Name" value={tenantName} />
+            <SubInfoRow label="Email" value={tenantEmail} />
+            <SubInfoRow
+              label="Phone"
+              value={tenantPhone.length ? tenantPhone : "-"}
+            />
+            <SubInfoRow label="Rating" value={0} />
+          </div>
+        </td>
+
+        <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
+          <div>
+            <div className="font-semibold">Item checklist</div>
+          </div>
+        </td>
+
+        <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
+          <div>
+            <div className="font-semibold">Payment</div>
+            <SubInfoRow
+              label="Method"
+              value={
+                payedType == "paypal"
+                  ? "Paypal"
+                  : payedType == "credit-card"
+                  ? "Transfer"
+                  : "-"
+              }
+            />
+            <div className="mt-1 flex">
+              <span className="text-black">Status: </span>{" "}
+              {payedAdminApproved ? (
+                <div
+                  className={`ml-1 px-3 rounded-full shadow-2xl bg-emerald-100 text-emerald-500`}
+                >
+                  Yes
+                </div>
+              ) : (
+                <div
+                  className={`ml-1 px-3 rounded-full shadow-2xl bg-rose-100 text-rose-500`}
+                >
+                  No
+                </div>
+              )}
+            </div>
+          </div>
+        </td>
+
+        <td
+          colSpan={2}
+          className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
+        >
+          <div className="flex items-center justify-start gap-2 flex-wrap">
+            <View href={`/admin/orders/${id}`} />
+            <Delete onDeleteClick={onDeleteClick} />
+          </div>
         </td>
       </tr>
     </>

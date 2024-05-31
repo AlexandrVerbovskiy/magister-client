@@ -14,7 +14,7 @@ import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
-import BookingsTable from "../../../components/admin/Bookings/Table";
+import BookingsTable from "../../../components/admin/Orders/Table";
 
 import {
   deleteOrder,
@@ -138,7 +138,7 @@ const Bookings = (pageProps) => {
               />
 
               <BookingsTable
-                bookings={bookings}
+                orders={bookings}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}

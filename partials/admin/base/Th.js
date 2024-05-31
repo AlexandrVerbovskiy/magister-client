@@ -5,6 +5,7 @@ const Th = ({
   canOrder = true,
   onClick,
   width = null,
+  align = "left",
 }) => {
   const handleClick = () => {
     if (!canOrder || !onClick) return;
@@ -29,9 +30,13 @@ const Th = ({
         canOrder && onClick ? "cursor-pointer" : ""
       }`}
     >
-      <div className="font-semibold text-left flex">
-        <div className="mr-1">{title}</div>
-        {canOrder && <div style={arrowStyle}>-&gt;</div>}
+      <div className={`font-semibold text-${align} flex`}>
+        <div className="mr-1 text-wrap" style={{ width: "calc(100% - 10px)" }}>
+          {title}
+        </div>
+        <div style={{ width: "10px" }}>
+          {canOrder && <div style={arrowStyle}>-&gt;</div>}
+        </div>
       </div>
     </th>
   );
