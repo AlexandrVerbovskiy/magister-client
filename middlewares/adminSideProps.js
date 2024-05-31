@@ -11,6 +11,7 @@ const adminSideProps = async (context, callback = null) => {
     };
   }
 
+
   const res = { sessionUser, pageType: "admin", authToken };
 
   return await middlewareCallbackWrapper({
