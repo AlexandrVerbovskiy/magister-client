@@ -9,5 +9,5 @@ export const dateSort = (array) => array.sort(dateCompare);
 export const objStringSort = (array, key) =>
   array.sort((a, b) => stringCompare(a[key], b[key]()));
 
-export const objDateSort = (array) =>
+export const objDateSort = (array, key) =>
   array.sort((a, b) => dateCompare(a[key], b[key]));

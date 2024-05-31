@@ -13,10 +13,10 @@ const useBaseAdminFilter = (props) => {
 
   const getBaseAdminFilterDopProps = () => ({
     ...geTimeTypeDopProps(),
-    type: (value) => ({
+    type: {
       value: type,
-      hidden: value == "all",
-    }),
+      hidden: (value) => value == "all",
+    },
   });
 
   return {

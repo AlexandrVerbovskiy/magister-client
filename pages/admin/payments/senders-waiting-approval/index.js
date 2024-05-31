@@ -1,9 +1,7 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   useAdminPage,
   useBaseAdminFilter,
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
   usePagination,
 } from "../../../../hooks";
 import { IndiceContext } from "../../../../contexts";
@@ -17,7 +15,9 @@ import SearchForm from "../../../../partials/admin/actions/SearchForm";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import Header from "../../../../partials/admin/Header";
 import Sidebar from "../../../../partials/admin/Sidebar";
-import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../../utils";
+import {
+  baseAdminTimeListPageParams,
+} from "../../../../utils";
 import Datepicker from "../../../../components/admin/Datepicker";
 import SenderPaymentsTable from "../../../../components/admin/SenderPayments/Table";
 import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
@@ -25,6 +25,7 @@ import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+  const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
     timeFilterType,
@@ -33,6 +34,10 @@ const SenderPayments = (pageProps) => {
     type,
     handleChangeType,
   } = useBaseAdminFilter(pageProps);
+
+  const onRebuild = (data) => {
+    setStatusCount(data.statusCount);
+  };
 
   const {
     page,
@@ -56,6 +61,7 @@ const SenderPayments = (pageProps) => {
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
+    onRebuild,
   });
 
   return (
@@ -69,17 +75,33 @@ const SenderPayments = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Sender Payments" }]} />
+                <BreadCrumbs links={[{ title: "Sender Waiting Payments" }]} />
               </div>
 
               <BaseListSubHeader
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: 67 },
-                  { value: "Waiting", title: "waiting", count: 19 },
-                  { value: "Approved", title: "approved", count: 19 },
-                  { value: "Rejected", title: "rejected", count: 14 },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
+                  },
+                  {
+                    value: "waiting",
+                    title: "Waiting",
+                    count: statusCount["waitingCount"],
+                  },
+                  {
+                    value: "approved",
+                    title: "Approved",
+                    count: statusCount["approvedCount"],
+                  },
+                  {
+                    value: "rejected",
+                    title: "Rejected",
+                    count: statusCount["rejectedCount"],
+                  },
                 ]}
                 filter={filter}
                 filterPlaceholder="Search by Transfer Id"
@@ -120,7 +142,10 @@ const SenderPayments = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminSenderWaitingApprovalListOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      type: context.query["type"],
+    },
     baseSideProps.authToken
   );
 

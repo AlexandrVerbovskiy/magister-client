@@ -17,7 +17,7 @@ const HeaderTypeFilter = ({ options, selected, onChange }) => {
     <div className="mb-4 sm:mb-0">
       <ul className="flex flex-wrap -m-1">
         {options.map((option) => (
-          <li className="m-1">
+          <li className="m-1" key={option.value}>
             <button
               type="button"
               className={

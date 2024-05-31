@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   useAdminPage,
   useBaseAdminFilter,
@@ -29,6 +29,7 @@ const Bookings = (pageProps) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [toDeleteBookingInfo, setToDeleteBookingInfo] = useState({});
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
+  const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
     timeFilterType,
@@ -37,6 +38,10 @@ const Bookings = (pageProps) => {
     type,
     handleChangeType,
   } = useBaseAdminFilter(pageProps);
+
+  const onRebuild = (data) => {
+    setStatusCount(data.statusCount);
+  };
 
   const {
     page,
@@ -54,11 +59,13 @@ const Bookings = (pageProps) => {
     canMovePrevPage,
     items: bookings,
     rebuild,
+    options,
   } = usePagination({
     getItemsFunc: (data) => getAdminBookingList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
+    onRebuild,
   });
 
   const handleCloseDeleteModal = () => {
@@ -101,10 +108,26 @@ const Bookings = (pageProps) => {
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: 67 },
-                  { value: "accepted", title: "Accepted", count: 19 },
-                  { value: "canceled", title: "Canceled", count: 14 },
-                  { value: "rejected", title: "Rejected", count: 34 },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
+                  },
+                  {
+                    value: "accepted",
+                    title: "Accepted",
+                    count: statusCount["acceptedCount"],
+                  },
+                  {
+                    value: "canceled",
+                    title: "Canceled",
+                    count: statusCount["canceledCount"],
+                  },
+                  {
+                    value: "rejected",
+                    title: "Rejected",
+                    count: statusCount["rejectedCount"],
+                  },
                 ]}
                 filter={filter}
                 filterPlaceholder="Search by Booking Id"
@@ -156,7 +179,10 @@ const Bookings = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminBookingsListPageOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      type: context.query["type"],
+    },
     baseSideProps.authToken
   );
 

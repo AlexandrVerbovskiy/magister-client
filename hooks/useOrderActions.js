@@ -113,11 +113,6 @@ const useOrderActions = ({ order }) => {
             ].includes(extendOrder.status) || extendOrder.cancelStatus
         );
 
-      console.log(
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-        hasProcessedExtends
-      );
-
       if (
         !order.orderParentId &&
         isTenant &&

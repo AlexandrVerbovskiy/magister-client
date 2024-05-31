@@ -84,7 +84,7 @@ const Wallet = ({
                 <i className="bx bx-cart"></i>
               </div>
               <span className="sub-title">Total Owner Orders</span>
-              <h3>{totalOrders < 10 ? "0" + totalOrders : totalOrders}</h3>
+              <h3>{totalOrders}</h3>
             </div>
           </div>
           <div className="col-lg-4 col-md-6 col-sm-6">
