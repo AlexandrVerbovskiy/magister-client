@@ -9,6 +9,7 @@ const usePagination = ({
   needInit = true,
   onSendRequest = null,
   baseItemsPerPage = 20,
+  onRebuild = null,
 }) => {
   const router = useRouter();
   const isFirstRef = useRef(true);
@@ -158,6 +159,10 @@ const usePagination = ({
       countItemsRef.current = gotCountItems;
       updateStateByOption(gotOptions);
       setItems(gotItems);
+
+      if (onRebuild) {
+        onRebuild(res);
+      }
 
       if (onSendRequest) {
         onSendRequest({ items: gotItems });

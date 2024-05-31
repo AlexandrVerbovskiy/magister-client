@@ -5,7 +5,10 @@ import {
   usePagination,
 } from "../../../hooks";
 import { supportSideProps } from "../../../middlewares";
-import { baseAdminTimeListPageParams, baseTimeTypePageParams } from "../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseTimeTypePageParams,
+} from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import OrdersTable from "../../../components/admin/Orders/Table";
@@ -25,6 +28,7 @@ const Orders = (pageProps) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [toDeleteOrderInfo, setToDeleteOrderInfo] = useState({});
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
+  const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
     timeFilterType,
@@ -33,6 +37,10 @@ const Orders = (pageProps) => {
     type,
     handleChangeType,
   } = useBaseAdminFilter(pageProps);
+
+  const onRebuild = (data) => {
+    setStatusCount(data.statusCount);
+  };
 
   const {
     page,
@@ -55,6 +63,7 @@ const Orders = (pageProps) => {
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
+    onRebuild,
   });
 
   const handleCloseDeleteModal = () => {
@@ -97,10 +106,31 @@ const Orders = (pageProps) => {
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: 67 },
-                  { value: "finished", title: "Finished", count: 34 },
-                  { value: "canceled", title: "Canceled", count: 14 },
-                  { value: "in-dispute", title: "In dispute", count: 19 },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
+                  },
+                  {
+                    value: "active",
+                    title: "Active",
+                    count: statusCount["activeCount"],
+                  },
+                  {
+                    value: "finished",
+                    title: "Finished",
+                    count: statusCount["finishedCount"],
+                  },
+                  {
+                    value: "canceled",
+                    title: "Canceled",
+                    count: statusCount["canceledCount"],
+                  },
+                  {
+                    value: "in-dispute",
+                    title: "In dispute",
+                    count: statusCount["disputeCount"],
+                  },
                 ]}
                 filter={filter}
                 filterPlaceholder="Search by Rental Id"
@@ -152,7 +182,10 @@ const Orders = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminOrderListPageOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      type: context.query["type"],
+    },
     baseSideProps.authToken
   );
 

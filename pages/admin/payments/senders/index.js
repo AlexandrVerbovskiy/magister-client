@@ -1,9 +1,7 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   useAdminPage,
   useBaseAdminFilter,
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
   usePagination,
 } from "../../../../hooks";
 import { IndiceContext } from "../../../../contexts";
@@ -13,18 +11,17 @@ import {
 } from "../../../../services";
 import { adminSideProps } from "../../../../middlewares";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
-import SearchForm from "../../../../partials/admin/actions/SearchForm";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import Header from "../../../../partials/admin/Header";
 import Sidebar from "../../../../partials/admin/Sidebar";
-import { baseTimeListPageParams } from "../../../../utils";
-import Datepicker from "../../../../components/admin/Datepicker";
+import { baseAdminTimeListPageParams } from "../../../../utils";
 import SenderPaymentsTable from "../../../../components/admin/SenderPayments/Table";
 import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+  const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
     timeFilterType,
@@ -33,6 +30,10 @@ const SenderPayments = (pageProps) => {
     type,
     handleChangeType,
   } = useBaseAdminFilter(pageProps);
+
+  const onRebuild = (data) => {
+    setStatusCount(data.statusCount);
+  };
 
   const {
     page,
@@ -56,6 +57,7 @@ const SenderPayments = (pageProps) => {
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
+    onRebuild,
   });
 
   return (
@@ -76,9 +78,21 @@ const SenderPayments = (pageProps) => {
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: 67 },
-                  { value: "paypal", title: "Paypal", count: 19 },
-                  { value: "bank-transfer", title: "Bank Transfer", count: 14 },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
+                  },
+                  {
+                    value: "paypal",
+                    title: "Paypal",
+                    count: statusCount["paypalCount"],
+                  },
+                  {
+                    value: "bank-transfer",
+                    title: "Bank Transfer",
+                    count: statusCount["bankTransferCount"],
+                  },
                 ]}
                 filter={filter}
                 filterPlaceholder="Search by Transfer Id"
@@ -119,7 +133,10 @@ const SenderPayments = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminSenderPaymentListOptions(
-    baseTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      type: context.query["type"],
+    },
     baseSideProps.authToken
   );
 

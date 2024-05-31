@@ -193,7 +193,7 @@ const Users = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserListPageOptions(
-    {...baseAdminTimeListPageParams(context.query)},
+    baseAdminTimeListPageParams(context.query),
     baseSideProps.authToken
   );
 
