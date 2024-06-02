@@ -9,6 +9,7 @@ import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
+import PaypalCheck from "../PaypalCheck";
 
 const TableItem = (props) => {
   const {
@@ -28,7 +29,8 @@ const TableItem = (props) => {
     orderId,
     listingName,
     listingId,
-    openPopup,
+    openPopupImage,
+    openPopupPaypal,
   } = props;
 
   const fullPayerPhotoPath = payerPhoto
@@ -167,22 +169,54 @@ const TableItem = (props) => {
                     Receipt Uploaded:
                   </div>
 
-                  <div
-                    className="mt-2 p-1 outline-gray-200 outline-dashed"
-                    style={{ width: "150px", height: "200px" }}
-                  >
+                  {type == "paypal" && (
                     <div
-                      className="image-box cursor-zoom-in"
-                      onClick={() => openPopup(proofPath)}
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px" }}
                     >
-                      <img
-                        src={proofPath}
-                        alt="image"
-                        width="200px"
-                        height="200px"
-                      />
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() =>
+                          openPopupPaypal({
+                            rentalPrice: money,
+                            listingName: listingName,
+                            listingId: listingId,
+                            payerEmail: payerEmail,
+                            payerName: payerName,
+                            payerId: payerId,
+                          })
+                        }
+                      >
+                        <PaypalCheck
+                          rentalPrice={money}
+                          listingName={listingName}
+                          listingId={listingId}
+                          payerEmail={payerEmail}
+                          payerName={payerName}
+                          payerId={payerId}
+                          sizeType="small-size"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {type != "paypal" && (
+                    <div
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px", height: "200px" }}
+                    >
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() => openPopupImage(proofPath)}
+                      >
+                        <img
+                          src={proofPath}
+                          alt="image"
+                          width="200px"
+                          height="200px"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             </tbody>

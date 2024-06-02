@@ -60,13 +60,13 @@ const StatusBar = ({ statuses, hasCancelStatus = false }) => {
                               r="15"
                               fill="#ee3535"
                               stroke="#ee3535"
-                              stroke-width="2"
+                              strokeWidth="2"
                             />
                           </g>
                           <path
                             d="M11 11 L22 22 M22 11 L11 22"
                             stroke="white"
-                            stroke-width="2"
+                            strokeWidth="2"
                           />
                         </svg>
                       </div>
