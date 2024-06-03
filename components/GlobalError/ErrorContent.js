@@ -10,7 +10,7 @@ const ErrorContent = ({ status = null, message }) => {
       <div className="container">
         <div className="error-content">
           <div className="global-error-title">{status ?? "SERVER ERROR"}</div>
-          <h3>Inner Page Error</h3>
+          <h3>Page Error</h3>
           <p>{message}</p>
           <Link href="/" className="default-btn">
             Back to Homepage

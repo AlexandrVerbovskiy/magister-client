@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { fullTimeConverter } from "../../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../../contexts";
 import TableDateView from "../TableDateView";

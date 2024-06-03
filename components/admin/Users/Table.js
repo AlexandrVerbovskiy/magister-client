@@ -17,29 +17,25 @@ const UsersTable = ({
   const { isAdmin } = useContext(IndiceContext);
 
   const ths = [
-    { title: "Id", value: "id", width: "10%" },
-    { title: "Name", value: "name", width: isAdmin ? "20%" : "25%" },
-    { title: "Email", value: "email", width: isAdmin ? "18%" : "23%" },
-    { title: "Phone", value: "phone", width: "13%" },
-    { title: "Verified", value: "verified", canOrder: false, width: "4%" },
-  ];
-
-  if (isAdmin) {
-    ths.push({
-      title: "Active",
-      value: "active",
+    { title: "User", value: "name", width: "25%" },
+    { title: "Email", value: "email", width: "20%" },
+    { title: "Registration", value: "users.created_at", width: "10%" },
+    { title: "Rentals", value: "rentals", width: "10%", canOrder: false },
+    {
+      title: "Total Spent",
       canOrder: false,
+      value: "total-spent",
       width: "10%",
-    });
-  }
-
-  ths.push({ title: "Role", value: "role", width: "10%" });
-  ths.push({
-    title: "Actions",
-    value: "actions",
-    canOrder: false,
-    width: "15%",
-  });
+    },
+    { title: "Role", value: "role", width: "10%" },
+    { title: "Status", canOrder: false, value: "status", width: "10%" },
+    {
+      title: "",
+      value: "actions",
+      canOrder: false,
+      width: "5%",
+    },
+  ];
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">

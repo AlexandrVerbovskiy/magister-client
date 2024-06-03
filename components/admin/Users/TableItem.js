@@ -6,9 +6,13 @@ import Delete from "../FastActions/Delete";
 import Edit from "../FastActions/Edit";
 import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
+import STATIC from "../../../static";
+import TableDateView from "../TableDateView";
+import { getFilePath, moneyFormat, timeConverter } from "../../../utils";
+import SubInfoRow from "../SubInfoRow";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
-  const text = active ? "YES" : "NO";
+  const text = active ? "Active" : "Suspended";
   let dopClass = active
     ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
     : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
@@ -72,31 +76,6 @@ const EmailSpan = ({ email, verified }) => {
   );
 };
 
-const PhoneSpan = ({ phone, verified }) => {
-  if (!phone) {
-    return <div className="text-left">-</div>;
-  }
-
-  let className = "text-left cursor-pointer overflow-separate";
-  let tooltipText = "";
-
-  if (phone) {
-    if (verified) {
-      className += " text-emerald-500";
-      tooltipText = "The user's phone is verified";
-    } else {
-      className += " text-rose-500";
-      tooltipText = "The user's phone has not been verified";
-    }
-  }
-
-  return (
-    <Tooltip title={tooltipText}>
-      <div className={className}>{phone}</div>
-    </Tooltip>
-  );
-};
-
 const TableItem = ({
   id,
   name,
@@ -104,13 +83,24 @@ const TableItem = ({
   phoneVerified,
   email,
   phone,
+  photo,
   active,
   verified,
-  role,
   onDeleteClick,
   onChangeRole,
   onChangeActive,
   onChangeVerified,
+  createdAt,
+  role,
+  totalRents,
+  totalSpent,
+  briefBio,
+  lastRenterDate,
+  contactDetails,
+  facebookUrl,
+  instagramUrl,
+  linkedinUrl,
+  twitterUrl,
 }) => {
   const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
@@ -144,51 +134,47 @@ const TableItem = ({
     onChangeVerified();
   };
 
+  const fullPhotoPath = photo ? getFilePath(photo) : STATIC.DEFAULT_PHOTO_LINK;
+
+  const canMoveToUser = sessionUser.id != id && isAdmin;
+
   return (
     <>
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div className="font-medium text-sky-500">#{id}</div>
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {!isCurrent && role !== "admin" && isAdmin && (
-            <Link href={`/admin/users/edit/${id}`}>
-              <div className="text-left">{name}</div>
-            </Link>
-          )}
-
-          {(isCurrent || role === "admin" || !isAdmin) && (
-            <div className="text-left">{name}</div>
-          )}
+          <Link
+            href={`/admin/users/edit/${id}`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
+            style={canMoveToUser ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullPhotoPath}
+              width="32"
+              height="32"
+              alt="Payer"
+            />
+            {name}
+          </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <EmailSpan email={email} verified={emailVerified} />
         </td>
+
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <PhoneSpan phone={phone} verified={phoneVerified} />
+          <TableDateView date={createdAt} />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <div className="text-left">
-            <ActiveSpan
-              active={verified}
-              onClick={handleChangeVerified}
-              clickable={!isCurrent && role !== "admin"}
-            />
+          {totalRents}
+        </td>
+
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <div className="font-medium text-green-600">
+            ${moneyFormat(totalSpent ?? 0)}
           </div>
         </td>
-
-        {isAdmin && (
-          <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-            <div className="text-left">
-              <ActiveSpan
-                active={active}
-                onClick={handleChangeActive}
-                clickable={!isCurrent && role !== "admin"}
-              />
-            </div>
-          </td>
-        )}
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <div className="text-left">
@@ -217,6 +203,19 @@ const TableItem = ({
             )}
           </div>
         </td>
+
+        {isAdmin && (
+          <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+            <div className="text-left">
+              <ActiveSpan
+                active={active}
+                onClick={handleChangeActive}
+                clickable={!isCurrent && role !== "admin"}
+              />
+            </div>
+          </td>
+        )}
+
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="flex text-left">
             <ShowMore
@@ -230,26 +229,84 @@ const TableItem = ({
       <tr
         id={`user-${id}`}
         role="region"
-        className={`${!descriptionOpen && "hidden"}`}
+        className={`${
+          !descriptionOpen && "hidden"
+        }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td colSpan="6" className="px-2 first:pl-5 last:pr-5 py-3">
-          <div className="flex items-center bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400 p-3 -mt-3">
-            <svg className="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-slate-500 mr-2">
-              <path d="M1 16h3c.3 0 .5-.1.7-.3l11-11c.4-.4.4-1 0-1.4l-3-3c-.4-.4-1-.4-1.4 0l-11 11c-.2.2-.3.4-.3.7v3c0 .6.4 1 1 1zm1-3.6l10-10L13.6 4l-10 10H2v-1.6z" />
-            </svg>
-            <div className="italic">Test</div>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
+          <div>
+            <div className="font-semibold flex items-center">Details</div>
+            <SubInfoRow label="Name" value={name} />
+            <SubInfoRow label="Email" value={email} />
+            <SubInfoRow
+              label="Phone"
+              value={phone && phone.length ? phone : "-"}
+            />
           </div>
-          {/*{!isCurrent && role !== "admin" && (
-              <div className="mr-2 flex items-center">
-                <Documents href={`/admin/users/documents/${id}`} />
-              </div>
-            )}
-
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
+          <div>
+            <div className="font-semibold flex items-center">Biography</div>
+            {briefBio && briefBio.length ? briefBio : "-"}
+          </div>
+        </td>
+        <td
+          colSpan={2}
+          className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
+        >
+          <div>
+            <div className="font-semibold flex items-center">Contact</div>
+            <SubInfoRow
+              label="Details"
+              value={
+                contactDetails && contactDetails.length ? contactDetails : "-"
+              }
+            />
+            <SubInfoRow
+              label="Facebook"
+              value={facebookUrl && facebookUrl.length ? facebookUrl : "-"}
+            />
+            <SubInfoRow
+              label="Instagram"
+              value={instagramUrl && instagramUrl.length ? instagramUrl : "-"}
+            />
+            <SubInfoRow
+              label="Linkedin"
+              value={linkedinUrl && linkedinUrl.length ? linkedinUrl : "-"}
+            />
+            <SubInfoRow
+              label="Twitter"
+              value={twitterUrl && twitterUrl.length ? twitterUrl : "-"}
+            />
+          </div>
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
+          <div>
+            <div className="font-semibold flex items-center">Activity</div>
+            <SubInfoRow
+              label="Last rental"
+              value={lastRenterDate ? timeConverter(lastRenterDate) : "-"}
+            />
+            <SubInfoRow label="Disputes" value={0} />
+            <SubInfoRow label="Rating" value={0} />
+          </div>
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 border-r">
+          <ActiveSpan
+            active={verified}
+            onClick={handleChangeVerified}
+            clickable={!isCurrent && role !== "admin"}
+          />
+        </td>
+        <td colSpan={2} className="px-2 first:pl-5 last:pr-5 py-3">
+          <div className="flex items-center justify-start gap-2 flex-wrap">
             {!isCurrent && role !== "admin" && isAdmin && (
-              <div className="mr-2 flex items-center">
-                <Edit href={`/admin/users/edit/${id}`} />
-              </div>
-            )}*/}
+              <Edit href={`/admin/users/edit/${id}`} />
+            )}
+            {!isCurrent && role !== "admin" && (
+              <Documents href={`/admin/users/documents/${id}`} />
+            )}
+          </div>
         </td>
       </tr>
     </>

@@ -1,15 +1,14 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
-import STATIC from "../../../static";
 import { fullTimeConverter, getFilePath, moneyFormat } from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
-import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
 import PaypalCheck from "../PaypalCheck";
+import STATIC from "../../../static";
 
 const TableItem = (props) => {
   const {
@@ -33,11 +32,11 @@ const TableItem = (props) => {
     openPopupPaypal,
   } = props;
 
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+
   const fullPayerPhotoPath = payerPhoto
     ? getFilePath(payerPhoto)
     : STATIC.DEFAULT_PHOTO_LINK;
-
-  const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const proofPath = payedProof
     ? getFilePath(payedProof)
@@ -62,7 +61,7 @@ const TableItem = (props) => {
               src={fullPayerPhotoPath}
               width="32"
               height="32"
-              alt="User"
+              alt="Payer"
             />
             {payerName}
           </Link>
@@ -125,7 +124,7 @@ const TableItem = (props) => {
             <SubInfoRow label="Email" value={payerEmail} />
             <SubInfoRow
               label="Phone"
-              value={payerPhone.length ? payerPhone : "-"}
+              value={payerPhone && payerPhone.length ? payerPhone : "-"}
             />
           </div>
         </td>

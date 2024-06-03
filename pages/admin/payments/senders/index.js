@@ -21,7 +21,8 @@ import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
-  const [statusCount, setStatusCount] = useState(pageProps.statusCount);
+  const [typeCount, setTypeCount] = useState(pageProps.typesCount);
+  const [status, setStatus] = useState(pageProps.status ?? "all");
 
   const {
     timeFilterType,
@@ -32,7 +33,7 @@ const SenderPayments = (pageProps) => {
   } = useBaseAdminFilter(pageProps);
 
   const onRebuild = (data) => {
-    setStatusCount(data.statusCount);
+    setTypeCount(data.typesCount);
   };
 
   const {
@@ -55,10 +56,21 @@ const SenderPayments = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: getBaseAdminFilterDopProps,
+    getDopProps: () => ({
+      ...getBaseAdminFilterDopProps,
+      status: {
+        value: status,
+        hidden: (value) => value == "all",
+      },
+    }),
     defaultData: pageProps,
     onRebuild,
   });
+
+  const handleChangeStatus = (value) => {
+    setStatus(value);
+    rebuild({ status: value });
+  };
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -81,17 +93,17 @@ const SenderPayments = (pageProps) => {
                   {
                     value: "all",
                     title: "All",
-                    count: statusCount["allCount"],
+                    count: typeCount["allCount"],
                   },
                   {
                     value: "paypal",
                     title: "Paypal",
-                    count: statusCount["paypalCount"],
+                    count: typeCount["paypalCount"],
                   },
                   {
                     value: "bank-transfer",
                     title: "Bank Transfer",
-                    count: statusCount["bankTransferCount"],
+                    count: typeCount["bankTransferCount"],
                   },
                 ]}
                 filter={filter}
@@ -100,6 +112,29 @@ const SenderPayments = (pageProps) => {
                 timeFilterType={timeFilterType}
                 handleChangeTimeFilterType={handleChangeTimeFilterType}
                 rebuild={rebuild}
+                listFilters={[
+                  {
+                    name: "status",
+                    label: "Status",
+                    options: [
+                      {
+                        value: "waiting",
+                        title: "Waiting",
+                      },
+                      {
+                        value: "approved",
+                        title: "Approved",
+                      },
+                      {
+                        value: "rejected",
+                        title: "Rejected",
+                      },
+                      { value: "all", title: "All" },
+                    ],
+                    value: status,
+                    onChange: handleChangeStatus,
+                  },
+                ]}
               />
 
               <SenderPaymentsTable
@@ -136,6 +171,7 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     {
       ...baseAdminTimeListPageParams(context.query),
       type: context.query["type"],
+      status: context.query["status"],
     },
     baseSideProps.authToken
   );

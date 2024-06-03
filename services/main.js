@@ -145,18 +145,6 @@ export const getAdminSenderPaymentListOptions = async (params, authToken) => {
   return data.body;
 };
 
-export const getAdminSenderWaitingApprovalListOptions = async (
-  params,
-  authToken
-) => {
-  const data = await post(
-    `/waiting-admin-approval-sender-payment-list-options`,
-    params,
-    authToken
-  );
-  return data.body;
-};
-
 export const getAdminSenderPaymentOptions = async (id, authToken) => {
   const data = await get(`/admin-sender-payment-options/${id}`, authToken);
   return data.body;
@@ -173,30 +161,6 @@ export const getAdminRecipientPaymentListOptions = async (
 ) => {
   const data = await post(
     `/admin-recipient-payment-list-options`,
-    params,
-    authToken
-  );
-  return data.body;
-};
-
-export const getAdminFailedRecipientPaymentListOptions = async (
-  params,
-  authToken
-) => {
-  const data = await post(
-    `/admin-failed-recipient-payment-list-options`,
-    params,
-    authToken
-  );
-  return data.body;
-};
-
-export const getAdminWaitingRefundsRecipientPaymentListOptions = async (
-  params,
-  authToken
-) => {
-  const data = await post(
-    `/admin-waiting-refunds-recipient-payment-list-options`,
     params,
     authToken
   );

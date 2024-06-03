@@ -4,7 +4,8 @@ export default {
     Manchester: { lat: 53.48095, lng: -2.23743 },
   },
   BASE_LISTING_MAP_CIRCLE_RADIUS: 500,
-  DEFAULT_PHOTO_LINK: "/images/admin/user-avatar-80.png",
+  DEFAULT_PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
+  DEFAULT_PHOTO_LINK: "/images/admin/default-photo.png",
   MAX_SEARCH_INPUT_LENGTH: 255,
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",

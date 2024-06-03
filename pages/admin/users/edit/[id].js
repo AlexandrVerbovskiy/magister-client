@@ -3,6 +3,7 @@ import { getFullUserById, updateUser } from "../../../../services";
 import EditUserForm from "../../../../components/admin/EditUserForm";
 import { adminSideProps } from "../../../../middlewares";
 import { IndiceContext } from "../../../../contexts";
+import { HttpError } from "../../../../utils";
 
 const UserEdit = ({ editableUser }) => {
   const { authToken } = useContext(IndiceContext);
@@ -22,12 +23,13 @@ const UserEdit = ({ editableUser }) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
+  const res = context.res;
   const id = context.params.id;
   const editableUser = await getFullUserById(id, baseSideProps.authToken);
   const currentUser = baseSideProps.sessionUser;
 
   if (currentUser.id === editableUser.id) {
-    throw new Error("Permission denied");
+    throw new HttpError(403, "Permission denied");
   }
 
   return { editableUser };

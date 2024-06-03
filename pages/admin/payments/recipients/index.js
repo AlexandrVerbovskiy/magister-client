@@ -15,7 +15,10 @@ import Header from "../../../../partials/admin/Header";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
 import DropdownFilter from "../../../../components/admin/DropdownFilter";
-import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseTimeListPageParams,
+} from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
 import { useRouter } from "next/router";
 import FilterRadioOption from "../../../../components/admin/Form/FilterRadioOption";
@@ -89,7 +92,11 @@ const RecipientPayments = (pageProps) => {
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
+                  <SearchForm
+                    placeholder="Search by Transfer Id"
+                    value={filter}
+                    onInput={changeFilter}
+                  />
 
                   <DateSelect
                     value={timeFilterType}
@@ -176,7 +183,11 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
   const type = context.query.type ?? "all";
   const status = context.query.status ?? "all";
 
-  const params = { ...baseAdminTimeListPageParams(context.query), status, type };
+  const params = {
+    ...baseAdminTimeListPageParams(context.query),
+    status,
+    type,
+  };
 
   const options = await getAdminRecipientPaymentListOptions(
     params,

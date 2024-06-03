@@ -11,11 +11,6 @@ export const getAdminRecipientPaymentList = async (body, authToken) => {
   return data.body;
 };
 
-export const getAdminWaitingRefundsList = async (body, authToken) => {
-  const data = await post("/get-waiting-refunds-list", body, authToken);
-  return data.body;
-};
-
 export const updateRecipientPaymentData = async (body, authToken) => {
   const data = await post("/update-failed", body, authToken);
   return data.body;
@@ -39,10 +34,5 @@ export const failedRecipientMarkAsDone = async (
   authToken
 ) => {
   const data = await post(`/failed-recipient-mark-done`, { id, paymentNumber }, authToken);
-  return data.body;
-};
-
-export const getAdminFailedRecipientPaymentList = async (body, authToken) => {
-  const data = await post("/admin-failed-recipient-payment-list", body, authToken);
   return data.body;
 };

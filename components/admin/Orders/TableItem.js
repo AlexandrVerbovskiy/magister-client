@@ -6,38 +6,9 @@ import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
 import { getDaysDifference } from "../../../utils";
-import Link from "next/link";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
-
-const ItemTitle = ({ title, href, canMove = true }) => {
-  return (
-    <Link
-      href={href}
-      className="font-semibold flex items-center"
-      onClick={(e) => (canMove ? {} : e.preventDefault())}
-      style={canMove ? {} : { cursor: "auto" }}
-    >
-      {title}
-      <svg
-        width="19"
-        height="18"
-        viewBox="0 0 19 18"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="ml-1"
-      >
-        <path
-          d="M10.6875 7.875L16.625 2.25M16.625 2.25H12.6667M16.625 2.25V6M16.625 10.5V14.25C16.625 14.6478 16.4582 15.0294 16.1613 15.3107C15.8643 15.592 15.4616 15.75 15.0417 15.75H3.95833C3.53841 15.75 3.13568 15.592 2.83875 15.3107C2.54181 15.0294 2.375 14.6478 2.375 14.25V3.75C2.375 3.35218 2.54181 2.97064 2.83875 2.68934C3.13568 2.40804 3.53841 2.25 3.95833 2.25H7.91667"
-          stroke="#1E293B"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </Link>
-  );
-};
+import SubInfoTitle from "../SubInfoTitle";
 
 const TableItem = (props) => {
   const {
@@ -62,6 +33,8 @@ const TableItem = (props) => {
     listingCategoryName,
     payedType,
     payedAdminApproved,
+    listingRentalCount,
+    orderCheckLists,
   } = props;
 
   const { sessionUser } = useContext(IndiceContext);
@@ -121,21 +94,21 @@ const TableItem = (props) => {
       >
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r">
           <div>
-            <ItemTitle
+            <SubInfoTitle
               title="Item Details"
               href={"/admin/listings/edit/" + listingId}
             />
             <SubInfoRow label="Name" value={listingName} />
             <SubInfoRow label="Category" value={listingCategoryName} />
             <SubInfoRow label="Location" value={listingAddress} />
-            <SubInfoRow label="Times rented" value={0} />
+            <SubInfoRow label="Times rented" value={listingRentalCount} />
             <SubInfoRow label="Rating" value={0} />
           </div>
         </td>
 
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
-            <ItemTitle
+            <SubInfoTitle
               title="Owner"
               href={"/admin/users/edit/" + ownerId}
               canMove={sessionUser.id != ownerId}
@@ -144,7 +117,7 @@ const TableItem = (props) => {
             <SubInfoRow label="Email" value={ownerEmail} />
             <SubInfoRow
               label="Phone"
-              value={ownerPhone.length ? ownerPhone.length : "-"}
+              value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
             <SubInfoRow label="Rating" value={0} />
           </div>
@@ -152,7 +125,7 @@ const TableItem = (props) => {
 
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
-            <ItemTitle
+            <SubInfoTitle
               title="Renter"
               href={"/admin/users/edit/" + tenantId}
               canMove={sessionUser.id != tenantId}
@@ -161,7 +134,7 @@ const TableItem = (props) => {
             <SubInfoRow label="Email" value={tenantEmail} />
             <SubInfoRow
               label="Phone"
-              value={tenantPhone.length ? tenantPhone : "-"}
+              value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
             />
             <SubInfoRow label="Rating" value={0} />
           </div>
@@ -170,6 +143,17 @@ const TableItem = (props) => {
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
             <div className="font-semibold">Item checklist</div>
+
+            <div
+              className="mt-1"
+              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            >
+              <span className="text-gray-400" style={{ textWrap: "wrap" }}>
+                {orderCheckLists.length
+                  ? orderCheckLists.map((check) => check).join(", ")
+                  : "-"}
+              </span>
+            </div>
           </div>
         </td>
 

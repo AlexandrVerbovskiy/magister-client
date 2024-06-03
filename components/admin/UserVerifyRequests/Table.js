@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import ImageView from "../Form/ImageView";
 
 const RequestsTable = ({
   userVerifyRequests,
@@ -11,15 +12,18 @@ const RequestsTable = ({
 }) => {
   const ths = [
     { title: "Id", value: "user_verify_requests.id", width: "10%" },
-    { title: "User Name", value: "users.name", width: "30%" },
-    { title: "User Email", value: "users.email", width: "30%" },
+    { title: "User Name", value: "users.name", width: "22.5%" },
+    { title: "User Email", value: "users.email", width: "22.5%" },
+    { title: "Status", canOrder: false, value: "status", width: "10%" },
     {
       title: "Created At",
       value: "user_verify_requests.created_at",
       width: "20%",
     },
-    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
+    { title: "", value: "actions", canOrder: false, width: "5%" },
   ];
+
+  const [popupImage, setPopupImage] = useState(null);
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -49,12 +53,22 @@ const RequestsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {userVerifyRequests.map((request) => (
-                <TableItem key={request.id} {...request} />
+                <TableItem
+                  key={request.id}
+                  {...request}
+                  openPopupImage={(image) => setPopupImage(image)}
+                />
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      <ImageView
+        open={popupImage}
+        imgSrc={popupImage}
+        close={() => setPopupImage(null)}
+      />
     </div>
   );
 };

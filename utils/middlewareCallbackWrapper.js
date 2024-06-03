@@ -1,3 +1,5 @@
+import HttpError from "./HttpError";
+
 const middlewareCallbackWrapper = async ({ callback, res, context }) => {
   if (callback) {
     try {
@@ -12,7 +14,16 @@ const middlewareCallbackWrapper = async ({ callback, res, context }) => {
       res = { ...res, ...callbackRes };
     } catch (e) {
       console.error("Middleware error: " + e.message);
-      const status = e.status;
+
+      let status = e.status ?? null;
+
+      if (e instanceof HttpError) {
+        status = e.statusCode;
+      } else {
+        status = e.status ?? null;
+      }
+
+      console.log("status: ", status);
 
       if (status === 404) {
         return {

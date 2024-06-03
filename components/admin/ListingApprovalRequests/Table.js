@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import ImageView from "../Form/ImageView";
 
 const RequestsTable = ({
   listingApprovalRequests,
@@ -9,12 +10,13 @@ const RequestsTable = ({
   onClickTh,
   totalCount,
 }) => {
+  const [popupImage, setPopupImage] = useState(null);
+
   const ths = [
     { title: "Id", value: "listing_approval_requests.id", width: "10%" },
-    { title: "Name", value: "listings.name", width: "15%" },
-    { title: "City", value: "listings.city", width: "15%" },
-    { title: "User", value: "users.name", width: "15%" },
-    { title: "Category", value: "listing_categories.name", width: "15%" },
+    { title: "Name", value: "listings.name", width: "25%" },
+    { title: "User", value: "users.name", width: "20%" },
+    { title: "Category", value: "listing_categories.name", width: "20%" },
     {
       title: "Approved",
       value: "listing_approval_requests.approved",
@@ -26,7 +28,7 @@ const RequestsTable = ({
       value: "listing_approval_requests.created_at",
       width: "10%",
     },
-    { title: "Actions", value: "actions", canOrder: false, width: "10%" },
+    { title: "", value: "actions", canOrder: false, width: "5%" },
   ];
 
   return (
@@ -57,12 +59,22 @@ const RequestsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {listingApprovalRequests.map((request) => (
-                <TableItem key={request.id} {...request} />
+                <TableItem
+                  key={request.id}
+                  {...request}
+                  openPopupImage={(image) => setPopupImage(image)}
+                />
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      <ImageView
+        open={popupImage}
+        imgSrc={popupImage}
+        close={() => setPopupImage(null)}
+      />
     </div>
   );
 };

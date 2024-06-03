@@ -18,11 +18,13 @@ const RecipientPaymentsTable = ({
     {
       title: "Type",
       value: "recipient_payments.received_type",
-      width: "12.5%",
+      width: "15%",
     },
-    { title: "Status", value: "recipient_payments.status", width: "12.5%" },
-    { title: "Action", value: "action", canOrder: false, width: "10%" },
+    { title: "Status", value: "recipient_payments.status", width: "15%" },
+    { title: "", value: "action", canOrder: false, width: "5%" },
   ];
+
+  console.log(payments);
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
