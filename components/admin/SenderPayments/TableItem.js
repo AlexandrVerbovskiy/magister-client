@@ -44,7 +44,7 @@ const TableItem = (props) => {
 
   const { sessionUser } = useContext(IndiceContext);
 
-  const canMoveToUser = sessionUser.id != payerId;
+  const canMoveToUser = sessionUser?.id != payerId;
 
   return (
     <>

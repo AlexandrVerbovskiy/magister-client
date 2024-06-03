@@ -111,7 +111,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Owner"
               href={"/admin/users/edit/" + ownerId}
-              canMove={sessionUser.id != ownerId}
+              canMove={sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
             <SubInfoRow label="Email" value={ownerEmail} />
@@ -128,7 +128,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Renter"
               href={"/admin/users/edit/" + tenantId}
-              canMove={sessionUser.id != tenantId}
+              canMove={sessionUser?.id != tenantId}
             />
             <SubInfoRow label="Name" value={tenantName} />
             <SubInfoRow label="Email" value={tenantEmail} />

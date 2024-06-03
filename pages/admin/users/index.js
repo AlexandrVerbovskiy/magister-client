@@ -18,14 +18,23 @@ import {
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../../middlewares";
-import { baseAdminTimeListPageParams, baseListPageParams } from "../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseListPageParams,
+} from "../../../utils";
 import DateSelect from "../../../components/admin/DateSelect";
+import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHeaderDropdown";
 
 const Users = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
   const { error, success, authToken, isAdmin } = useContext(IndiceContext);
+  const [activeFilter, setActiveFilter] = useState(pageProps.active ?? "all");
+  const [roleFilter, setRoleFilter] = useState(pageProps.role ?? "all");
+  const [verifiedFilter, setVerifiedFilter] = useState(
+    pageProps.verified ?? "all"
+  );
 
   const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
     useTimeTypeFilter(pageProps);
@@ -51,7 +60,21 @@ const Users = (pageProps) => {
     getItemsFunc: (data) => getUserList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
-    getDopProps: geTimeTypeDopProps,
+    getDopProps: () => ({
+      ...geTimeTypeDopProps(),
+      verified: {
+        value: verifiedFilter,
+        hidden: (value) => value == "all",
+      },
+      active: {
+        value: activeFilter,
+        hidden: (value) => value == "all",
+      },
+      role: {
+        value: roleFilter,
+        hidden: (value) => value == "all",
+      },
+    }),
   });
 
   const handleCloseDeleteModal = () => {
@@ -110,6 +133,21 @@ const Users = (pageProps) => {
     }
   };
 
+  const handleChangeActiveFilter = (newActive) => {
+    setActiveFilter(newActive);
+    rebuild({ active: newActive });
+  };
+
+  const handleChangeVerifiedFilter = (newVerified) => {
+    setVerifiedFilter(newVerified);
+    rebuild({ verified: newVerified });
+  };
+
+  const handleChangeRoleFilter = (newRole) => {
+    setRoleFilter(newRole);
+    rebuild({ role: newRole });
+  };
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -122,17 +160,77 @@ const Users = (pageProps) => {
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               <BreadCrumbs links={[{ title: "Users" }]} />
 
-              {isAdmin && (
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
+              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                <SearchForm value={filter} onInput={changeFilter} />
 
-                  <DateSelect
-                    value={timeFilterType}
-                    setValue={(value) =>
-                      handleChangeTimeFilterType(value, rebuild)
-                    }
-                  />
+                <DateSelect
+                  value={timeFilterType}
+                  setValue={(value) =>
+                    handleChangeTimeFilterType(value, rebuild)
+                  }
+                />
 
+                <BaseListSubHeaderDropdown
+                  listFilters={[
+                    {
+                      name: "active",
+                      label: "Active",
+                      options: [
+                        {
+                          value: "active",
+                          title: "Active",
+                        },
+                        {
+                          value: "inactive",
+                          title: "Inactive",
+                        },
+                        { value: "all", title: "All" },
+                      ],
+                      value: activeFilter,
+                      onChange: handleChangeActiveFilter,
+                    },
+                    {
+                      name: "verified",
+                      label: "Verified",
+                      options: [
+                        {
+                          value: "verified",
+                          title: "Verified",
+                        },
+                        {
+                          value: "unverified",
+                          title: "Unverified",
+                        },
+                        { value: "all", title: "All" },
+                      ],
+                      value: verifiedFilter,
+                      onChange: handleChangeVerifiedFilter,
+                    },
+                    {
+                      name: "role",
+                      label: "Role",
+                      options: [
+                        {
+                          value: "user",
+                          title: "User",
+                        },
+                        {
+                          value: "support",
+                          title: "Support",
+                        },
+                        {
+                          value: "admin",
+                          title: "Admin",
+                        },
+                        { value: "all", title: "All" },
+                      ],
+                      value: roleFilter,
+                      onChange: handleChangeRoleFilter,
+                    },
+                  ]}
+                />
+
+                {isAdmin && (
                   <Link
                     href="/admin/users/create"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
@@ -145,8 +243,8 @@ const Users = (pageProps) => {
                     </svg>
                     <span className="hidden xs:block ml-2">Add Member</span>
                   </Link>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             <UsersTable
@@ -193,7 +291,12 @@ const Users = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserListPageOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      active: context.query["active"],
+      verified: context.query["verified"],
+      role: context.query["role"],
+    },
     baseSideProps.authToken
   );
 

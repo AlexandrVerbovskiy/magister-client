@@ -16,7 +16,11 @@ import ListingsTable from "../../../components/admin/Listings/Table";
 import { IndiceContext } from "../../../contexts";
 import DeleteAccept from "../../../components/admin/DeleteAccept";
 import Link from "next/link";
-import { baseAdminTimeListPageParams, baseListPageParams } from "../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseListPageParams,
+} from "../../../utils";
+import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHeaderDropdown";
 
 const Listings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -24,6 +28,11 @@ const Listings = (pageProps) => {
 
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});
+
+  const [activeFilter, setActiveFilter] = useState(pageProps.active ?? "all");
+  const [approvedFilter, setApprovedFilter] = useState(
+    pageProps.approved ?? "all"
+  );
 
   const {
     page,
@@ -46,6 +55,16 @@ const Listings = (pageProps) => {
     getItemsFunc: (data) => getAdminListingList(data, authToken),
     onError: (e) => error.set(e.message),
     defaultData: pageProps,
+    getDopProps: () => ({
+      approved: {
+        value: approvedFilter,
+        hidden: (value) => value == "all",
+      },
+      active: {
+        value: activeFilter,
+        hidden: (value) => value == "all",
+      },
+    }),
   });
 
   const handleCloseDeleteModal = () => {
@@ -56,6 +75,16 @@ const Listings = (pageProps) => {
   const handleOpenDeleteModal = (id, name) => {
     setToDeleteUserInfo({ name, id });
     setDangerModalOpen(true);
+  };
+
+  const handleChangeActiveFilter = (newActive) => {
+    setActiveFilter(newActive);
+    rebuild({ active: newActive });
+  };
+
+  const handleChangeApprovedFilter = (newApproved) => {
+    setApprovedFilter(newApproved);
+    rebuild({ approved: newApproved });
   };
 
   const onDeleteAccept = async () => {
@@ -96,6 +125,45 @@ const Listings = (pageProps) => {
                 <BreadCrumbs links={[{ title: "Listings" }]} />
                 <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                   <SearchForm value={filter} onInput={changeFilter} />
+
+                  <BaseListSubHeaderDropdown
+                    listFilters={[
+                      {
+                        name: "active",
+                        label: "Active",
+                        options: [
+                          {
+                            value: "active",
+                            title: "Active",
+                          },
+                          {
+                            value: "inactive",
+                            title: "Inactive",
+                          },
+                          { value: "all", title: "All" },
+                        ],
+                        value: activeFilter,
+                        onChange: handleChangeActiveFilter,
+                      },
+                      {
+                        name: "approved",
+                        label: "Approved",
+                        options: [
+                          {
+                            value: "approved",
+                            title: "Approved",
+                          },
+                          {
+                            value: "unapproved",
+                            title: "Unapproved",
+                          },
+                          { value: "all", title: "All" },
+                        ],
+                        value: approvedFilter,
+                        onChange: handleChangeApprovedFilter,
+                      },
+                    ]}
+                  />
 
                   <Link
                     href="/admin/listings/create"
@@ -155,7 +223,11 @@ const Listings = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminListingListPageOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      active: context.query["active"],
+      approved: context.query["approved"],
+    },
     baseSideProps.authToken
   );
 
