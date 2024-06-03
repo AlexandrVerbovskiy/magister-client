@@ -89,8 +89,8 @@ const TableItem = ({
 
   const { sessionUser } = useContext(IndiceContext);
 
-  const canMoveToTenant = sessionUser.id != tenantId;
-  const canMoveToRecipient = sessionUser.id != recipientId;
+  const canMoveToTenant = sessionUser?.id != tenantId;
+  const canMoveToRecipient = sessionUser?.id != recipientId;
 
   const fullRecipientPhotoPath = recipientPhoto
     ? getFilePath(recipientPhoto)

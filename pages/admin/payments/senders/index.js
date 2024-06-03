@@ -57,7 +57,7 @@ const SenderPayments = (pageProps) => {
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
-      ...getBaseAdminFilterDopProps,
+      ...getBaseAdminFilterDopProps(),
       status: {
         value: status,
         hidden: (value) => value == "all",

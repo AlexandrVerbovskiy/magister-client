@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -14,21 +14,33 @@ import {
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
   useTimeTypeFilter,
+  useBaseAdminFilter,
 } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import {
   getAdminUserUserVerifyRequestListPageOptions,
   getUserVerifyRequestList,
 } from "../../../services";
-import { baseAdminTimeListPageParams, baseTimeListPageParams } from "../../../utils";
+import {
+  baseAdminTimeListPageParams,
+  baseTimeListPageParams,
+} from "../../../utils";
 import DateSelect from "../../../components/admin/DateSelect";
+import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
 
-  const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
-    useTimeTypeFilter(pageProps);
+  const [status, setStatus] = useState(pageProps.status ?? "suspended");
+
+  const {
+    timeFilterType,
+    getBaseAdminFilterDopProps,
+    handleChangeTimeFilterType,
+    type,
+    handleChangeType,
+  } = useBaseAdminFilter(pageProps);
 
   const {
     page,
@@ -50,9 +62,20 @@ const UserVerifyRequests = (pageProps) => {
   } = usePagination({
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
-    getDopProps: geTimeTypeDopProps,
+    getDopProps: () => ({
+      ...getBaseAdminFilterDopProps(),
+      status: {
+        value: status,
+        hidden: (value) => value == "suspended",
+      },
+    }),
     defaultData: pageProps,
   });
+
+  const handleChangeStatus = (status) => {
+    setStatus(status);
+    rebuild({ status: status });
+  };
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -67,15 +90,39 @@ const UserVerifyRequests = (pageProps) => {
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs links={[{ title: "User Verify Requests" }]} />
 
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <DateSelect
-                    value={timeFilterType}
-                    setValue={(value) =>
-                      handleChangeTimeFilterType(value, rebuild)
-                    }
-                  />
-                </div>
+                <BaseListSubHeader
+                  type={type}
+                  handleChangeType={handleChangeType}
+                  filter={filter}
+                  filterPlaceholder="Search by Request Id"
+                  handleChangeFilter={changeFilter}
+                  timeFilterType={timeFilterType}
+                  handleChangeTimeFilterType={handleChangeTimeFilterType}
+                  rebuild={rebuild}
+                  listFilters={[
+                    {
+                      name: "status",
+                      label: "Status",
+                      options: [
+                        {
+                          value: "suspended",
+                          title: "Suspended",
+                        },
+                        {
+                          value: "approved",
+                          title: "Approved",
+                        },
+                        {
+                          value: "rejected",
+                          title: "Rejected",
+                        },
+                        { value: "all", title: "All" },
+                      ],
+                      value: status,
+                      onChange: handleChangeStatus,
+                    },
+                  ]}
+                />
               </div>
 
               <UserVerifyRequestsTable
@@ -108,7 +155,10 @@ const UserVerifyRequests = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserUserVerifyRequestListPageOptions(
-    baseAdminTimeListPageParams(context.query),
+    {
+      ...baseAdminTimeListPageParams(context.query),
+      status: context.query["status"],
+    },
     baseSideProps.authToken
   );
 

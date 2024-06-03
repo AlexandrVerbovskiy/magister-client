@@ -136,7 +136,7 @@ const TableItem = ({
 
   const fullPhotoPath = photo ? getFilePath(photo) : STATIC.DEFAULT_PHOTO_LINK;
 
-  const canMoveToUser = sessionUser.id != id && isAdmin;
+  const canMoveToUser = sessionUser?.id != id && isAdmin;
 
   return (
     <>

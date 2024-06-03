@@ -22,11 +22,8 @@ import {
   getAdminListingApprovalRequestListPageOptions,
   getAdminListingApprovalRequestsList,
 } from "../../../services";
-import { useRouter } from "next/router";
-import DropdownFilter from "../../../components/admin/DropdownFilter";
 import {
   baseAdminTimeListPageParams,
-  baseTimeListPageParams,
 } from "../../../utils";
 import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
@@ -65,7 +62,7 @@ const UserVerifyRequests = (pageProps) => {
       getAdminListingApprovalRequestsList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
-      ...getBaseAdminFilterDopProps,
+      ...getBaseAdminFilterDopProps(),
       status: {
         value: status,
         hidden: (value) => value == "waiting",

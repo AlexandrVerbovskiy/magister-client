@@ -59,7 +59,7 @@ const TableItem = ({
 
   const { sessionUser } = useContext(IndiceContext);
 
-  const canMoveToOwner = sessionUser.id != ownerId;
+  const canMoveToOwner = sessionUser?.id != ownerId;
 
   const fullOwnerPhotoPath = ownerPhoto
     ? getFilePath(ownerPhoto)
@@ -188,7 +188,7 @@ const TableItem = ({
             <SubInfoTitle
               title="Owner"
               href={"/admin/users/edit/" + ownerId}
-              canMove={sessionUser.id != ownerId}
+              canMove={sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
             <SubInfoRow label="Email" value={ownerEmail} />

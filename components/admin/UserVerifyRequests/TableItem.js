@@ -31,10 +31,10 @@ const TableItem = ({
     "bg-gray-200 dark:bg-gray-400/30 text-gray-600 dark:text-gray-400";
 
   if (hasResponse) {
-    verifiedSpanText = failedDescription ? "Verified" : "Rejected";
+    verifiedSpanText = failedDescription ? "Rejected" : "Verified";
     verifiedSpanClass = failedDescription
-      ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
-      : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+      ? "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400"
+      : "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
   }
 
   const { sessionUser } = useContext(IndiceContext);
@@ -44,7 +44,7 @@ const TableItem = ({
     ? getFilePath(userPhoto)
     : STATIC.DEFAULT_PHOTO_LINK;
 
-  const canMoveToUser = sessionUser.id != id;
+  const canMoveToUser = sessionUser?.id != id;
 
   let approvementPhoto = null;
 
@@ -186,7 +186,7 @@ const TableItem = ({
               <tbody>
                 <tr>
                   <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
-                    <div class="h-full">
+                    <div className="h-full">
                       <div className="font-semibold flex items-center">
                         Picture
                       </div>
@@ -210,7 +210,7 @@ const TableItem = ({
                     </div>
                   </td>
                   <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
-                    <div class="h-full">
+                    <div className="h-full">
                       <div className="font-semibold flex items-center">
                         Document Uploaded
                       </div>

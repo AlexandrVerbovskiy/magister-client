@@ -65,7 +65,7 @@ const TableItem = ({
 
   const { sessionUser } = useContext(IndiceContext);
 
-  const canMoveToUser = sessionUser.id != userId;
+  const canMoveToUser = sessionUser?.id != userId;
 
   const fullOwnerPhotoPath = userPhoto
     ? getFilePath(userPhoto)
