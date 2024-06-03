@@ -1,14 +1,14 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
-import STATIC from "../../../static";
 import { fullTimeConverter, getFilePath, moneyFormat } from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
-import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
+import PaypalCheck from "../PaypalCheck";
+import STATIC from "../../../static";
 
 const TableItem = (props) => {
   const {
@@ -28,14 +28,15 @@ const TableItem = (props) => {
     orderId,
     listingName,
     listingId,
-    openPopup,
+    openPopupImage,
+    openPopupPaypal,
   } = props;
+
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const fullPayerPhotoPath = payerPhoto
     ? getFilePath(payerPhoto)
     : STATIC.DEFAULT_PHOTO_LINK;
-
-  const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const proofPath = payedProof
     ? getFilePath(payedProof)
@@ -60,7 +61,7 @@ const TableItem = (props) => {
               src={fullPayerPhotoPath}
               width="32"
               height="32"
-              alt="User"
+              alt="Payer"
             />
             {payerName}
           </Link>
@@ -123,7 +124,7 @@ const TableItem = (props) => {
             <SubInfoRow label="Email" value={payerEmail} />
             <SubInfoRow
               label="Phone"
-              value={payerPhone.length ? payerPhone : "-"}
+              value={payerPhone && payerPhone.length ? payerPhone : "-"}
             />
           </div>
         </td>
@@ -167,22 +168,54 @@ const TableItem = (props) => {
                     Receipt Uploaded:
                   </div>
 
-                  <div
-                    className="mt-2 p-1 outline-gray-200 outline-dashed"
-                    style={{ width: "150px", height: "200px" }}
-                  >
+                  {type == "paypal" && (
                     <div
-                      className="image-box cursor-zoom-in"
-                      onClick={() => openPopup(proofPath)}
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px" }}
                     >
-                      <img
-                        src={proofPath}
-                        alt="image"
-                        width="200px"
-                        height="200px"
-                      />
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() =>
+                          openPopupPaypal({
+                            rentalPrice: money,
+                            listingName: listingName,
+                            listingId: listingId,
+                            payerEmail: payerEmail,
+                            payerName: payerName,
+                            payerId: payerId,
+                          })
+                        }
+                      >
+                        <PaypalCheck
+                          rentalPrice={money}
+                          listingName={listingName}
+                          listingId={listingId}
+                          payerEmail={payerEmail}
+                          payerName={payerName}
+                          payerId={payerId}
+                          sizeType="small-size"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {type != "paypal" && (
+                    <div
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px", height: "200px" }}
+                    >
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() => openPopupImage(proofPath)}
+                      >
+                        <img
+                          src={proofPath}
+                          alt="image"
+                          width="200px"
+                          height="200px"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             </tbody>

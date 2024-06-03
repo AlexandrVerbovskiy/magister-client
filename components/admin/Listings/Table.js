@@ -12,16 +12,13 @@ const ListingsTable = ({
   onClickChangeActive,
 }) => {
   const ths = [
-    { title: "Id", value: "id", width: "8%" },
-    { title: "Name", value: "name", width: "14%" },
-    { title: "City", value: "city", width: "10%" },
-    { title: "Owner", value: "users.name", width: "14%" },
-    { title: "Category", value: "listing_categories.name", width: "10%" },
-    { title: "Count Stored", value: "count_stored_items", width: "10%" },
-    { title: "Per Day", value: "price_per_day", width: "10%" },
-    { title: "Approved", value: "approved", canOrder: false, width: "10%" },
-    { title: "Active", value: "active", canOrder: false, width: "10%" },
-    { title: "", value: "actions", width: "4%", canOrder: false },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Name", value: "name", width: "20%" },
+    { title: "Owner", value: "users.name", width: "20%" },
+    { title: "Category", value: "listing_categories.name", width: "20%" },
+    { title: "Approved", value: "approved", canOrder: false, width: "12.5%" },
+    { title: "Active", value: "active", canOrder: false, width: "12.5%" },
+    { title: "", value: "actions", width: "5%", canOrder: false },
   ];
 
   return (

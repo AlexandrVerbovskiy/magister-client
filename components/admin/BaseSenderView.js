@@ -41,11 +41,6 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   let parentName = "Senders";
   let parentLink = "/admin/payments/senders";
 
-  if (parentType == "waiting-approval-senders") {
-    parentName = "Waiting Payment Approval";
-    parentLink = "/admin/payments/senders-waiting-approval";
-  }
-
   if(parentType == "failed-senders"){
     parentName = "Failed Paypal Payments";
     parentLink = "/admin/payments/failed-senders-paypal";

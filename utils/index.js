@@ -16,6 +16,7 @@ export { default as cloneObject } from "./cloneObject";
 export { default as reorderList } from "./reorderList";
 export { default as autoMultiEnding } from "./autoMultiEnding";
 export { default as downloadFileUrl } from "./downloadFileUrl";
+export { default as HttpError } from "./HttpError";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";

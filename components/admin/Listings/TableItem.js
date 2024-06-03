@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Tooltip from "../../../components/admin/Tooltip";
 import View from "../FastActions/View";
 import Edit from "../FastActions/Edit";
 import Delete from "../FastActions/Delete";
 import ShowMore from "../FastActions/ShowMore";
+import { IndiceContext } from "../../../contexts";
+import Link from "next/link";
+import STATIC from "../../../static";
+import { getFilePath } from "../../../utils";
+import SubInfoTitle from "../SubInfoTitle";
+import SubInfoRow from "../SubInfoRow";
 
 const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
@@ -33,7 +39,11 @@ const TableItem = ({
   id,
   name,
   city,
-  userName,
+  ownerId,
+  ownerName,
+  ownerEmail,
+  ownerPhoto,
+  ownerPhone,
   categoryName,
   countStoredItems,
   pricePerDay,
@@ -41,8 +51,23 @@ const TableItem = ({
   active,
   onClickDelete,
   onChangeActive,
+  images,
+  address,
+  minRentalDays,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
+
+  const { sessionUser } = useContext(IndiceContext);
+
+  const canMoveToOwner = sessionUser.id != ownerId;
+
+  const fullOwnerPhotoPath = ownerPhoto
+    ? getFilePath(ownerPhoto)
+    : STATIC.DEFAULT_PHOTO_LINK;
+
+  const fullListingPhotoPath = images[0]
+    ? getFilePath(images[0].link)
+    : STATIC.DEFAULT_PHOTO_LINK;
 
   return (
     <>
@@ -51,22 +76,32 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {name}
+          <Link
+            href={`/admin/listings/edit/${id}`}
+            className="flex items-center"
+          >
+            {name}
+          </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {city}
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {userName}
+          <Link
+            href={`/admin/users/edit/${ownerId}`}
+            onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
+            style={canMoveToOwner ? {} : { cursor: "auto" }}
+            className="flex items-center"
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullOwnerPhotoPath}
+              width="32"
+              height="32"
+              alt="Payer"
+            />
+            {ownerName}
+          </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           {categoryName}
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {countStoredItems}
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {pricePerDay}
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -98,24 +133,81 @@ const TableItem = ({
       </tr>
 
       <tr
-        id={`listing-${id}`}
+        id={`request-${id}`}
         role="region"
-        className={`${!descriptionOpen && "hidden"}`}
+        className={`${
+          !descriptionOpen && "hidden"
+        }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td colSpan="6" className="px-2 first:pl-5 last:pr-5 py-3">
-          <div className="flex items-center bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400 p-3 -mt-3">
-            <svg className="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-slate-500 mr-2">
-              <path d="M1 16h3c.3 0 .5-.1.7-.3l11-11c.4-.4.4-1 0-1.4l-3-3c-.4-.4-1-.4-1.4 0l-11 11c-.2.2-.3.4-.3.7v3c0 .6.4 1 1 1zm1-3.6l10-10L13.6 4l-10 10H2v-1.6z" />
-            </svg>
-            <div className="italic">Test</div>
+        <td
+          colSpan={2}
+          className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
+        >
+          <div>
+            <SubInfoTitle
+              title="Item Details"
+              href={"/admin/listings/edit/" + id}
+            />
+            <SubInfoRow label="Name" value={name} />
+            <SubInfoRow label="Category" value={categoryName} />
+            <SubInfoRow label="Location" value={address} />
+            <SubInfoRow label="Price Per Day" value={pricePerDay} />
+            <SubInfoRow label="Count Stored" value={countStoredItems} />
+            <SubInfoRow label="Min Rental Days" value={minRentalDays} />
           </div>
-          {/*<div className="mr-2 flex items-center">
-        <View href={`/listing/${id}`} />
-      </div>
+        </td>
 
-      <div className="mr-2 flex items-center">
-        <Edit href={`/admin/listings/edit/${id}`} />
-      </div>*/}
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap align-top overflow-separate border-r">
+          <div>
+            <span className="font-semibold flex items-center">Item Photo</span>
+
+            <div
+              className="mt-2 p-1 outline-gray-200 outline-dashed"
+              style={{ width: "150px", height: "200px" }}
+            >
+              <div
+                className="image-box cursor-zoom-in"
+                onClick={() => openPopupImage(fullListingPhotoPath)}
+              >
+                <img
+                  src={fullListingPhotoPath}
+                  alt="image"
+                  width="200px"
+                  height="200px"
+                />
+              </div>
+            </div>
+          </div>
+        </td>
+
+        <td
+          colSpan={2}
+          className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r"
+        >
+          <div>
+            <SubInfoTitle
+              title="Owner"
+              href={"/admin/users/edit/" + ownerId}
+              canMove={sessionUser.id != ownerId}
+            />
+            <SubInfoRow label="Name" value={ownerName} />
+            <SubInfoRow label="Email" value={ownerEmail} />
+            <SubInfoRow
+              label="Phone"
+              value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
+            />
+            <SubInfoRow label="Rating" value={0} />
+          </div>
+        </td>
+
+        <td
+          colSpan={2}
+          className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
+        >
+          <div className="flex items-center justify-start gap-2 flex-wrap">
+            <View href={`/listing/${id}`} />
+            <Edit href={`/admin/listings/edit/${id}`} />
+          </div>
         </td>
       </tr>
     </>

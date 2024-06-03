@@ -23,7 +23,7 @@ const ImageView = ({ open, imgSrc, close }) => {
         className="modal-container mx-auto rounded z-50 overflow-y-auto"
       >
         <div className="w-full h-full modal-content text-left">
-          <div className="w-full h-full d-flex justify-center">
+          <div className="w-full h-full flex justify-center">
             <img
               onClick={handleImageClick}
               src={imgSrc ?? STATIC.DEFAULT_PHOTO_LINK}
