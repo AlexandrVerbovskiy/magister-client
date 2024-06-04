@@ -1,7 +1,6 @@
 import React from "react";
 import Tooltip from "../../../components/admin/Tooltip";
 import View from "../FastActions/View";
-import Moderate from "../FastActions/Moderate";
 
 const ActiveSpan = ({ active, tooltipTextActive, tooltipTextInactive }) => {
   const text = active ? "YES" : "NO";
@@ -53,11 +52,9 @@ const TableItem = ({
         />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        {listingCategoriesId ? (
+        <div className="flex items-center justify-start gap-2 flex-wrap">
           <View href={`/admin/searched-words/create-category/${id}`} />
-        ) : (
-          <Moderate href={`/admin/searched-words/create-category/${id}`} />
-        )}
+        </div>
       </td>
     </tr>
   );

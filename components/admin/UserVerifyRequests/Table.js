@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import ImageView from "../Form/ImageView";
+import DeclineModal from "./DeclineModal";
+import ApproveModal from "./ApproveModal";
+import { IndiceContext } from "../../../contexts";
+import { userVerifyRequestUpdate } from "../../../services";
 
 const RequestsTable = ({
   userVerifyRequests,
@@ -9,7 +13,13 @@ const RequestsTable = ({
   orderType,
   onClickTh,
   totalCount,
+  setItemFields,
 }) => {
+  const [popupImage, setPopupImage] = useState(null);
+  const [popupApproveId, setPopupApproveId] = useState(null);
+  const [popupDeclineId, setPopupDeclineId] = useState(null);
+  const { authToken } = useContext(IndiceContext);
+
   const ths = [
     { title: "Id", value: "user_verify_requests.id", width: "10%" },
     { title: "User Name", value: "users.name", width: "22.5%" },
@@ -23,7 +33,29 @@ const RequestsTable = ({
     { title: "", value: "actions", canOrder: false, width: "5%" },
   ];
 
-  const [popupImage, setPopupImage] = useState(null);
+  const handleAcceptDeclineClick = async (description) => {
+    await userVerifyRequestUpdate(
+      { id: popupDeclineId, verified: false, description },
+      authToken
+    );
+
+    setItemFields(
+      { hasResponse: true, failedDescription: description },
+      popupDeclineId
+    );
+  };
+
+  const handleApproveAcceptClick = async () => {
+    await userVerifyRequestUpdate(
+      { id: popupApproveId, verified: true, description: null },
+      authToken
+    );
+
+    setItemFields(
+      { hasResponse: true, failedDescription: null },
+      popupApproveId
+    );
+  };
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -57,6 +89,8 @@ const RequestsTable = ({
                   key={request.id}
                   {...request}
                   openPopupImage={(image) => setPopupImage(image)}
+                  handleApproveClick={(id) => setPopupApproveId(id)}
+                  handleDeclineClick={(id) => setPopupDeclineId(id)}
                 />
               ))}
             </tbody>
@@ -68,6 +102,18 @@ const RequestsTable = ({
         open={popupImage}
         imgSrc={popupImage}
         close={() => setPopupImage(null)}
+      />
+
+      <DeclineModal
+        active={!!popupDeclineId}
+        close={() => setPopupDeclineId(false)}
+        onAcceptClick={handleAcceptDeclineClick}
+      />
+
+      <ApproveModal
+        active={!!popupApproveId}
+        close={() => setPopupApproveId(false)}
+        onAcceptClick={handleApproveAcceptClick}
       />
     </div>
   );

@@ -1,47 +1,38 @@
 import { useContext, useState } from "react";
-import { useAdminPage } from "../../hooks";
-import Header from "../../partials/admin/Header";
-import Sidebar from "../../partials/admin/Sidebar";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
+import { useAdminPage } from "../../../hooks";
+import Header from "../../../partials/admin/Header";
+import Sidebar from "../../../partials/admin/Sidebar";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import {
   approveSenderPaymentTransaction,
   rejectSenderPaymentTransaction,
-} from "../../services";
+} from "../../../services";
 import {
   calculateTotalPriceByDaysCount,
   getDaysDifference,
   getFilePath,
   moneyFormat,
   timeConverter,
-} from "../../utils";
-import InputView from "./Form/InputView";
-import { IndiceContext } from "../../contexts";
+} from "../../../utils";
+import InputView from "../Form/InputView";
+import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
-import ImageView from "./Form/ImageView";
-import ModalWithDescription from "./Form/ModalWithDescription";
-import YesNoModal from "./YesNoModal";
+import ImageView from "../Form/ImageView";
+import RejectModal from "./RejectModal";
+import AcceptModal from "./AcceptModal";
 
 const BaseSenderView = ({ parentType = "senders", payment }) => {
   const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const [disabled, setDisabled] = useState(false);
   const { authToken, error, success } = useContext(IndiceContext);
   const [rejectedPopupActive, setRejectedPopupActive] = useState(false);
   const [approvedPopupActive, setApprovedPopupActive] = useState(false);
   const [openProofImage, setOpenProofImage] = useState(false);
 
-  const [declineDescription, setDeclineDescription] = useState("");
-  const [declineDescriptionError, setDeclineDescriptionError] = useState(null);
-
-  const handleInputDeclineDescription = (e) => {
-    setDeclineDescription(e.target.value);
-    setDeclineDescriptionError(null);
-  };
-
   let parentName = "Senders";
   let parentLink = "/admin/payments/senders";
 
-  if(parentType == "failed-senders"){
+  if (parentType == "failed-senders") {
     parentName = "Failed Paypal Payments";
     parentLink = "/admin/payments/failed-senders-paypal";
   }
@@ -54,17 +45,11 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   const totalFee = (subtotalPrice * payment.tenantFee) / 100;
 
   const handleAccept = async () => {
-    try {
-      await approveSenderPaymentTransaction(
-        { orderId: payment.orderId },
-        authToken
-      );
-      success.set("Payment approved successfully");
-      router.push(parentLink);
-      setApprovedPopupActive(false);
-    } catch (e) {
-      error.set(e.message);
-    }
+    await approveSenderPaymentTransaction(
+      { orderId: payment.orderId },
+      authToken
+    );
+    router.push(parentLink);
   };
 
   const handleRejectActivate = (e) => {
@@ -77,18 +62,12 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
     setApprovedPopupActive(true);
   };
 
-  const handleReject = async () => {
-    try {
+  const handleReject = async (description) => {
       await rejectSenderPaymentTransaction(
-        { orderId: payment.orderId, description: declineDescription },
+        { orderId: payment.orderId, description },
         authToken
       );
-      success.set("Payment rejected successfully");
       router.push(parentLink);
-      setRejectedPopupActive(false);
-    } catch (e) {
-      error.set(e.message);
-    }
   };
 
   return (
@@ -353,7 +332,6 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             </button>
 
                             <button
-                              disabled={disabled}
                               type="button"
                               onClick={handleAcceptActivate}
                               className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
@@ -370,27 +348,16 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
             </div>
           </div>
 
-          <ModalWithDescription
-            accessModalOpen={rejectedPopupActive}
-            setAccessModalOpen={setRejectedPopupActive}
-            question="Are you sure you want mark this payment as failed?"
-            descriptionLabel="Enter the reason for the reject"
-            description={declineDescription}
-            handleInputDescription={handleInputDeclineDescription}
-            descriptionError={declineDescriptionError}
-            handleAcceptClick={handleReject}
-            acceptButtonText="Reject"
-            disabled={disabled}
+          <RejectModal
+            active={rejectedPopupActive}
+            close={() => setRejectedPopupActive(false)}
+            onRejectClick={handleReject}
           />
 
-          <YesNoModal
-            title="Accept action"
-            body="Are you sure you want to mark the payment as approved?"
-            handleCloseModal={() => setApprovedPopupActive(false)}
-            onAccept={handleAccept}
-            modalOpen={approvedPopupActive}
-            setModalOpen={setApprovedPopupActive}
-            disabled={disabled}
+          <AcceptModal
+            active={approvedPopupActive}
+            close={() => setApprovedPopupActive(false)}
+            onRejectClick={handleAccept}
           />
         </main>
       </div>

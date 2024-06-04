@@ -6,24 +6,44 @@ const YesNoModal = ({
   handleCloseModal,
   onAccept,
   modalOpen,
-  setModalOpen,
   disabled = false,
+  type = "danger",
 }) => {
+  const Svg = () =>
+    type == "success" ? (
+      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-green-100 dark:bg-green-500/30">
+        <svg
+          className="w-4 h-4 shrink-0 fill-current text-green-500"
+          viewBox="0 0 16 16"
+        >
+          <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+        </svg>
+      </div>
+    ) : (
+      <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-rose-100 dark:bg-rose-500/30">
+        <svg
+          className="w-4 h-4 shrink-0 fill-current text-rose-500"
+          viewBox="0 0 16 16"
+        >
+          <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+        </svg>
+      </div>
+    );
+
+  const acceptButtonClasses =
+    type == "success"
+      ? "btn bg-green-500 hover:bg-green-600 text-white"
+      : "btn bg-rose-500 hover:bg-rose-600 text-white";
+
   return (
     <ModalBlank
       id="danger-modal"
       modalOpen={modalOpen}
-      setModalOpen={setModalOpen}
+      setModalOpen={handleCloseModal}
     >
       <div className="p-5 flex space-x-4">
-        <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-rose-100 dark:bg-rose-500/30">
-          <svg
-            className="w-4 h-4 shrink-0 fill-current text-rose-500"
-            viewBox="0 0 16 16"
-          >
-            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-          </svg>
-        </div>
+        <Svg />
+
         <div>
           <div className="mb-2">
             <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
@@ -49,7 +69,7 @@ const YesNoModal = ({
             <button
               disabled={disabled}
               onClick={onAccept}
-              className="btn bg-rose-500 hover:bg-rose-600 text-white"
+              className={acceptButtonClasses}
             >
               Yes
             </button>

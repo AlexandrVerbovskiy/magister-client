@@ -1,4 +1,4 @@
-import BaseSenderView from "../../../../components/admin/BaseSenderView";
+import BaseSenderView from "../../../../components/admin/SenderPayments/BaseSenderView";
 import { adminSideProps } from "../../../../middlewares";
 import { getAdminSenderPaymentOptions } from "../../../../services";
 

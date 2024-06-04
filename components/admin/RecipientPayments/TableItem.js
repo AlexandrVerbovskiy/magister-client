@@ -84,6 +84,7 @@ const TableItem = ({
   listingPricePerDay,
   listingMinRentalDays,
   listingCountStoredItems,
+  handleApproveClick,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -139,7 +140,9 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div className="font-medium text-green-600">${moneyFormat(money)}</div>
+          <div className="font-medium text-green-600">
+            ${moneyFormat(money)}
+          </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TypeSpan type={recipientType} />
@@ -246,7 +249,20 @@ const TableItem = ({
           colSpan={2}
           className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate"
         >
-          <div className="w-max">
+          <div className="flex text-left gap-2 flex-wrap">
+            {status != "completed" && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleApproveClick(id);
+                }}
+                className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+              >
+                Accept
+              </button>
+            )}
+
             <View href={`/admin${viewPath}/${id}`} />
           </div>
         </td>

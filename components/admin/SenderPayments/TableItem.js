@@ -30,6 +30,8 @@ const TableItem = (props) => {
     listingId,
     openPopupImage,
     openPopupPaypal,
+    handleApproveClick,
+    handleRejectClick,
   } = props;
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -226,7 +228,32 @@ const TableItem = (props) => {
           colSpan={2}
           className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate"
         >
-          <div className="w-max">
+          <div className="flex text-left gap-2 flex-wrap">
+            {waitingApproved && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleApproveClick(orderId);
+                  }}
+                  className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+                >
+                  Accept
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRejectClick(orderId);
+                  }}
+                  className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
+                >
+                  Decline
+                </button>
+              </>
+            )}
+
             <View href={`/admin${viewPath}/${id}`} />
           </div>
         </td>

@@ -11,9 +11,6 @@ import { supportSideProps } from "../../../middlewares";
 import {
   useAdminPage,
   usePagination,
-  useInitPaginationTimeFilter,
-  useChangeTimeFilter,
-  useTimeTypeFilter,
   useBaseAdminFilter,
 } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
@@ -21,11 +18,7 @@ import {
   getAdminUserUserVerifyRequestListPageOptions,
   getUserVerifyRequestList,
 } from "../../../services";
-import {
-  baseAdminTimeListPageParams,
-  baseTimeListPageParams,
-} from "../../../utils";
-import DateSelect from "../../../components/admin/DateSelect";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const UserVerifyRequests = (pageProps) => {
@@ -59,6 +52,7 @@ const UserVerifyRequests = (pageProps) => {
     items: userVerifyRequests,
     rebuild,
     options,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -122,6 +116,7 @@ const UserVerifyRequests = (pageProps) => {
                       onChange: handleChangeStatus,
                     },
                   ]}
+                  dopClass=""
                 />
               </div>
 
@@ -131,6 +126,7 @@ const UserVerifyRequests = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                setItemFields={setItemFields}
               />
 
               <div className="mt-8">

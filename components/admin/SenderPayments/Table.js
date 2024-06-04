@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import ImageView from "../Form/ImageView";
 import PaypalCheck from "../PaypalCheck";
+import { IndiceContext } from "../../../contexts";
+import {
+  approveSenderPaymentTransaction,
+  rejectSenderPaymentTransaction,
+} from "../../../services";
+import RejectModal from "./RejectModal";
+import AcceptModal from "./AcceptModal";
 
 const SenderPaymentsTable = ({
   payments,
@@ -11,6 +18,7 @@ const SenderPaymentsTable = ({
   onClickTh,
   totalCount,
   viewPath,
+  setItemFields,
 }) => {
   const ths = [
     { title: "User", value: "users.name", width: "20%" },
@@ -30,6 +38,42 @@ const SenderPaymentsTable = ({
 
   const [popupImage, setPopupImage] = useState(null);
   const [popupPaypalData, setPopupPaypalData] = useState(null);
+
+  const [popupApproveId, setPopupApproveId] = useState(null);
+  const [popupRejectId, setPopupRejectId] = useState(null);
+  const { authToken } = useContext(IndiceContext);
+
+  const handleAccept = async () => {
+    await approveSenderPaymentTransaction(
+      { orderId: popupApproveId },
+      authToken
+    );
+
+    const paymentId = payments.find(
+      (payment) => payment.orderId === popupApproveId
+    );
+
+    setItemFields(
+      { adminApproved: true, waitingApproved: false },
+      paymentId.id
+    );
+  };
+
+  const handleReject = async (description) => {
+    await rejectSenderPaymentTransaction(
+      { orderId: popupRejectId, description },
+      authToken
+    );
+
+    const paymentId = payments.find(
+      (payment) => payment.orderId === popupRejectId
+    );
+
+    setItemFields(
+      { adminApproved: false, waitingApproved: false },
+      paymentId.id
+    );
+  };
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -72,6 +116,8 @@ const SenderPaymentsTable = ({
                   viewPath={viewPath}
                   openPopupImage={(image) => setPopupImage(image)}
                   openPopupPaypal={(data) => setPopupPaypalData(data)}
+                  handleApproveClick={(id) => setPopupApproveId(id)}
+                  handleRejectClick={(id) => setPopupRejectId(id)}
                 />
               ))}
             </tbody>
@@ -83,6 +129,18 @@ const SenderPaymentsTable = ({
         open={popupImage}
         imgSrc={popupImage}
         close={() => setPopupImage(null)}
+      />
+
+      <RejectModal
+        active={popupRejectId}
+        close={() => setPopupRejectId(false)}
+        onRejectClick={handleReject}
+      />
+
+      <AcceptModal
+        active={popupApproveId}
+        close={() => setPopupApproveId(null)}
+        onAcceptClick={handleAccept}
       />
 
       {popupPaypalData && (

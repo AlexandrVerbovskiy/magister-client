@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import { failedRecipientMarkAsDone } from "../../../services";
+import AcceptModal from "../SenderPayments/AcceptModal";
+import { IndiceContext } from "../../../contexts";
 
 const RecipientPaymentsTable = ({
   payments,
@@ -9,6 +12,7 @@ const RecipientPaymentsTable = ({
   onClickTh,
   totalCount,
   viewPath,
+  setItemFields,
 }) => {
   const ths = [
     { title: "Id", value: "recipient_payments.id", width: "10%" },
@@ -24,7 +28,27 @@ const RecipientPaymentsTable = ({
     { title: "", value: "action", canOrder: false, width: "5%" },
   ];
 
-  console.log(payments);
+  const [popupApproveId, setPopupApproveId] = useState(null);
+  const { authToken } = useContext(IndiceContext);
+
+  const handleAccept = async () => {
+    const payment = payments.find((payment) => payment.id === popupApproveId);
+
+    const paymentNumber =
+      payment.type == "paypal"
+        ? payment.data?.paypalId ?? "-"
+        : payment.data?.cardNumber ?? "-";
+
+    await failedRecipientMarkAsDone(
+      { id: payment.id, paymentNumber },
+      authToken
+    );
+
+    setItemFields(
+      { adminApproved: true, waitingApproved: false, status: "completed" },
+      payment.id
+    );
+  };
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -54,12 +78,23 @@ const RecipientPaymentsTable = ({
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
               {payments.map((payment) => (
-                <TableItem key={payment.id} {...payment} viewPath={viewPath} />
+                <TableItem
+                  key={payment.id}
+                  {...payment}
+                  viewPath={viewPath}
+                  handleApproveClick={(id) => setPopupApproveId(id)}
+                />
               ))}
             </tbody>
           </table>
         </div>
       </div>
+
+      <AcceptModal
+        active={popupApproveId}
+        close={() => setPopupApproveId(null)}
+        onAcceptClick={handleAccept}
+      />
     </div>
   );
 };

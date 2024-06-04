@@ -1,6 +1,5 @@
 import Link from "next/link";
 import View from "../FastActions/View";
-import Moderate from "../FastActions/Moderate";
 import Tooltip from "../Tooltip";
 import TableDateView from "../../admin/TableDateView";
 import ShowMore from "../FastActions/ShowMore";
@@ -12,7 +11,7 @@ import STATIC from "../../../static";
 import { getFilePath } from "../../../utils";
 
 const ActiveSpan = ({ active }) => {
-  const text = active === null ? "WAITING" : active ? "YES" : "NO";
+  const text = active === null ? "WAITING" : active ? "APPROVED" : "REJECTED";
 
   let dopClass =
     active === null
@@ -60,6 +59,8 @@ const TableItem = ({
   countStoredItems,
   minRentalDays,
   openPopupImage,
+  handleApproveClick,
+  handleRejectClick,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -173,35 +174,70 @@ const TableItem = ({
         </td>
 
         <td
-          colSpan={2}
-          className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r"
+          colSpan={4}
+          className="last:pr-5 whitespace-nowrap align-top overflow-separate border-r"
+          style={{ height: 0 }}
         >
-          <div>
-            <SubInfoTitle
-              title="Owner"
-              href={"/admin/users/edit/" + userId}
-              canMove={canMoveToUser}
-            />
-            <SubInfoRow label="Name" value={userName} />
-            <SubInfoRow label="Email" value={userEmail} />
-            <SubInfoRow
-              label="Phone"
-              value={userPhone && userPhone.length ? userPhone.length : "-"}
-            />
-            <SubInfoRow label="Rating" value={0} />
-          </div>
-        </td>
-        <td
-          colSpan={2}
-          className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate"
-        >
-          <div className="flex text-left">
-            {approved === null ? (
-              <Moderate href={`/admin/listing-approval-requests/${id}`} />
-            ) : (
-              <View href={`/admin/listing-approval-requests/${id}`} />
-            )}
-          </div>
+          <table className="w-full h-full table-fixed">
+            <thead>
+              <tr>
+                <th style={{ width: "60%", padding: 0 }}></th>
+                <th style={{ width: "40%", padding: 0 }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
+                  <div>
+                    <SubInfoTitle
+                      title="Owner"
+                      href={"/admin/users/edit/" + userId}
+                      canMove={canMoveToUser}
+                    />
+                    <SubInfoRow label="Name" value={userName} />
+                    <SubInfoRow label="Email" value={userEmail} />
+                    <SubInfoRow
+                      label="Phone"
+                      value={
+                        userPhone && userPhone.length ? userPhone.length : "-"
+                      }
+                    />
+                    <SubInfoRow label="Rating" value={0} />
+                  </div>
+                </td>
+                <td className="px-2 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+                  <div className="flex text-left gap-2 flex-wrap">
+                    {approved === null && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleApproveClick(id);
+                          }}
+                          className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRejectClick(id);
+                          }}
+                          className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
+
+                    <View href={`/admin/listing-approval-requests/${id}`} />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </td>
       </tr>
     </>

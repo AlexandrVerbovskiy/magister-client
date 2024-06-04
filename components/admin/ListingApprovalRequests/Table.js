@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import ImageView from "../Form/ImageView";
+import { IndiceContext } from "../../../contexts";
+import RejectModal from "./RejectModal";
+import ApproveModal from "./ApproveModal";
+import {
+  approveListingApprovalRequest,
+  rejectListingApproveRequest,
+} from "../../../services";
 
 const RequestsTable = ({
   listingApprovalRequests,
@@ -9,8 +16,12 @@ const RequestsTable = ({
   orderType,
   onClickTh,
   totalCount,
+  setItemFields,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
+  const [popupApproveId, setPopupApproveId] = useState(null);
+  const [popupRejectId, setPopupRejectId] = useState(null);
+  const { authToken } = useContext(IndiceContext);
 
   const ths = [
     { title: "Id", value: "listing_approval_requests.id", width: "10%" },
@@ -30,6 +41,22 @@ const RequestsTable = ({
     },
     { title: "", value: "actions", canOrder: false, width: "5%" },
   ];
+
+  const handleRejectAcceptClick = async (description) => {
+    await rejectListingApproveRequest(
+      { listingId: popupRejectId, description },
+      authToken
+    );
+    setItemFields({ approved: false }, popupRejectId);
+  };
+
+  const handleApproveAcceptClick = async () => {
+    await approveListingApprovalRequest(
+      { listingId: popupApproveId },
+      authToken
+    );
+    setItemFields({ approved: true }, popupApproveId);
+  };
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -63,6 +90,8 @@ const RequestsTable = ({
                   key={request.id}
                   {...request}
                   openPopupImage={(image) => setPopupImage(image)}
+                  handleApproveClick={(id) => setPopupApproveId(id)}
+                  handleRejectClick={(id) => setPopupRejectId(id)}
                 />
               ))}
             </tbody>
@@ -74,6 +103,18 @@ const RequestsTable = ({
         open={popupImage}
         imgSrc={popupImage}
         close={() => setPopupImage(null)}
+      />
+
+      <RejectModal
+        active={!!popupRejectId}
+        close={() => setPopupRejectId(null)}
+        onAcceptClick={handleRejectAcceptClick}
+      />
+
+      <ApproveModal
+        active={!!popupApproveId}
+        close={() => setPopupApproveId(null)}
+        onAcceptClick={handleApproveAcceptClick}
       />
     </div>
   );
