@@ -17,6 +17,8 @@ import ErrorSpan from "../../../components/admin/ErrorSpan";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import { getListingImageByType } from "../../../utils";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
+import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
+import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
 
 const ListingApprovalRequest = ({
   request: baseRequest,
@@ -27,13 +29,10 @@ const ListingApprovalRequest = ({
   const [mapCenter, setMapCenter] = useState(null);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { authToken } = useContext(IndiceContext);
 
-  const [disabled, setDisabled] = useState(false);
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [approveModalOpen, setApproveModalOpen] = useState(false);
-  const [declineDescription, setDeclineDescription] = useState("");
-  const [declineDescriptionError, setDeclineDescriptionError] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
 
   let categoryLevelLabel = "Third Level";
@@ -56,50 +55,23 @@ const ListingApprovalRequest = ({
     setApproveModalOpen(true);
   };
 
-  const handleInputDeclineDescription = (e) => {
-    setDeclineDescription(e.target.value);
-    setDeclineDescriptionError(null);
-  };
+  const handleRejectAcceptClick = async (description) => {
+    await rejectListingApproveRequest(
+      { listingId: listing.id, description },
+      authToken
+    );
 
-  const handleRejectAcceptClick = async () => {
-    setDeclineDescriptionError(null);
-
-    if (declineDescription.length < 1) {
-      setDeclineDescriptionError(
-        "You must enter the reason for the rejection of the verification"
-      );
-      return;
-    }
-
-    try {
-      await rejectListingApproveRequest(
-        { listingId: listing.id, description: declineDescription },
-        authToken
-      );
-
-      setRejectModalOpen(false);
-
-      setRequest((prev) => ({
-        ...prev,
-        approved: false,
-        rejectDescription: declineDescription,
-      }));
-      success.set("Rejected successfully");
-    } catch (e) {
-      error.set(e.message);
-    }
+    setRequest((prev) => ({
+      ...prev,
+      approved: false,
+      rejectDescription: description,
+    }));
   };
 
   const handleApproveAcceptClick = async () => {
-    try {
-      await approveListingApprovalRequest({ listingId: listing.id }, authToken);
-      setApproveModalOpen(false);
-      setListing((prev) => ({ ...prev, approved: true }));
-      setRequest((prev) => ({ ...prev, approved: true }));
-      success.set("Approved successfully");
-    } catch (e) {
-      error.set(e.message);
-    }
+    await approveListingApprovalRequest({ listingId: listing.id }, authToken);
+    setListing((prev) => ({ ...prev, approved: true }));
+    setRequest((prev) => ({ ...prev, approved: true }));
   };
 
   return (
@@ -309,36 +281,35 @@ const ListingApprovalRequest = ({
                       </div>
                     </section>
 
-                    {(listing.defects.length > 0 ||
-                        listing.dopDefect) && (
-                        <section>
-                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                            Defects
-                          </h2>
+                    {(listing.defects.length > 0 || listing.dopDefect) && (
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Defects
+                        </h2>
 
-                          <div className="flex flex-col gap-2">
-                            {listing.defects.map((defect) => (
-                              <div className="w-full" key={defect.defectId}>
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={defect.defectName}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            ))}
+                        <div className="flex flex-col gap-2">
+                          {listing.defects.map((defect) => (
+                            <div className="w-full" key={defect.defectId}>
+                              <InputView
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={defect.defectName}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          ))}
 
-                            {listing.dopDefect && (
-                              <div className="col-12">
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={listing.dopDefect}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </section>
-                      )}
+                          {listing.dopDefect && (
+                            <div className="col-12">
+                              <InputView
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={listing.dopDefect}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </section>
+                    )}
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
@@ -445,7 +416,7 @@ const ListingApprovalRequest = ({
                           <button
                             type="button"
                             onClick={handleRejectClick}
-                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                            className="btn bg-rose-500 hover:bg-rose-600 text-white ml-3"
                           >
                             Reject
                           </button>
@@ -466,92 +437,17 @@ const ListingApprovalRequest = ({
           </div>
         </main>
 
-        <ModalBlank
-          id="access-decline"
-          modalOpen={rejectModalOpen}
-          setModalOpen={setRejectModalOpen}
-        >
-          <div className="p-5 flex space-x-4">
-            <div style={{ width: "100%" }}>
-              <div className="mb-2">
-                <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                  Are you sure you want reject this request?
-                </div>
-              </div>
-              <div className="text-sm mb-2">
-                <div className="space-y-2">
-                  <p>Enter the reason for the rejection</p>
-                </div>
-              </div>
+        <RejectModal
+          active={rejectModalOpen}
+          close={() => setRejectModalOpen(false)}
+          onAcceptClick={handleRejectAcceptClick}
+        />
 
-              <div className="mb-2">
-                <textarea
-                  name="declineDescription"
-                  className="form-input w-full"
-                  rows="6"
-                  value={declineDescription}
-                  onChange={handleInputDeclineDescription}
-                />
-                <ErrorSpan error={declineDescriptionError} />
-              </div>
-
-              <div className="flex flex-wrap justify-end space-x-2">
-                <button
-                  onClick={() => setRejectModalOpen(false)}
-                  className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleRejectAcceptClick}
-                  className="btn bg-rose-500 hover:bg-rose-600 text-white"
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          </div>
-        </ModalBlank>
-
-        <ModalBlank
-          id="access-accept"
-          modalOpen={approveModalOpen}
-          setModalOpen={setApproveModalOpen}
-        >
-          <div className="p-5 flex space-x-4">
-            <div style={{ width: "100%" }}>
-              <div className="mb-2">
-                <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                  Are you sure you want accept this request?
-                </div>
-              </div>
-
-              <div className="text-sm mb-2">
-                <div className="space-y-2">
-                  <p>
-                    Once you approve this product, other users will be able to
-                    rent it
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap justify-end space-x-2">
-                <button
-                  onClick={() => setApproveModalOpen(false)}
-                  className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleApproveAcceptClick}
-                  className="btn bg-emerald-500 hover:bg-emerald-600 text-white"
-                >
-                  Approve
-                </button>
-              </div>
-            </div>
-          </div>
-        </ModalBlank>
+        <ApproveModal
+          active={approveModalOpen}
+          close={() => setApproveModalOpen(false)}
+          onAcceptClick={handleApproveAcceptClick}
+        />
       </div>
     </div>
   );

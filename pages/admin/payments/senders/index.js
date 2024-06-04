@@ -22,8 +22,7 @@ const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [typeCount, setTypeCount] = useState(pageProps.typesCount);
-  const [status, setStatus] = useState(pageProps.status ?? "all");
-
+  const [status, setStatus] = useState(pageProps.options.status ?? "all");
   const {
     timeFilterType,
     getBaseAdminFilterDopProps,
@@ -53,6 +52,7 @@ const SenderPayments = (pageProps) => {
     items: payments,
     rebuild,
     options,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -144,6 +144,7 @@ const SenderPayments = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 viewPath="/payments/senders"
+                setItemFields={setItemFields}
               />
 
               <div className="mt-8">

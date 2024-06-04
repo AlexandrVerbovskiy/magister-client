@@ -16,8 +16,8 @@ function ModalBlank({
       if (!modalOpen || modalContent.current.contains(target)) return
       setModalOpen(false);
     };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
+    document.addEventListener('mousedown', clickHandler);
+    return () => document.removeEventListener('mousedown', clickHandler);
   });
 
   // close if the esc key is pressed

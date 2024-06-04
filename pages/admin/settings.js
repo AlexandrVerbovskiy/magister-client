@@ -14,7 +14,6 @@ import {
   setSystemBankAccountOptions as setSystemBankAccountOptionsRequest,
 } from "../../services";
 import { IndiceContext } from "../../contexts";
-import LeaveBtn from "../../components/admin/LeaveBtn";
 import Input from "../../components/admin/Form/Input";
 import { baseAdminTimeListPageParams, validateSmallText } from "../../utils";
 
@@ -545,7 +544,7 @@ const Settings = ({
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
-  return await baseAdminTimeListPageParams(baseSideProps.authToken);
+  return await getSystemOptionsRequest(baseSideProps.authToken);
 };
 
 export const getServerSideProps = (context) =>

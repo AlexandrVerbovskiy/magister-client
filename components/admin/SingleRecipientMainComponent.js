@@ -3,16 +3,21 @@ import { failedRecipientMarkAsDone } from "../../services";
 import { useAdminPage } from "../../hooks";
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
-import { moneyFormat, tenantPaymentCalculate, timeConverter } from "../../utils";
+import {
+  moneyFormat,
+  tenantPaymentCalculate,
+  timeConverter,
+} from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
 import Input from "./Form/Input";
 import YesNoModal from "./YesNoModal";
+import AcceptModal from "./RecipientPayments/AcceptModal";
 
 const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { authToken } = useContext(IndiceContext);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [disabled, setDisabled] = useState(false);
@@ -26,19 +31,12 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const [doneAcceptModalOpen, setDoneAcceptModalOpen] = useState(false);
 
   const handleDoneAcceptClick = async () => {
-    try {
-      await failedRecipientMarkAsDone(
-        { id: recipient.id, paymentNumber },
-        authToken
-      );
-      setDisabled(true);
+    await failedRecipientMarkAsDone(
+      { id: recipient.id, paymentNumber },
+      authToken
+    );
 
-      router.push("/admin/payments/recipients");
-      success.set("Marking as completed finished successfully");
-    } catch (e) {
-      error.set(e.message);
-      setDisabled(false);
-    }
+    router.push("/admin/payments/recipients");
   };
 
   const totalPayed = tenantPaymentCalculate(
@@ -347,9 +345,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                       )}
                     </div>
 
-                    {recipient.status == "failed" &&
-                      recipient.receivedType == "rental" &&
-                      recipient.type == "paypal" && (
+                    {recipient.status != "completed" && (
                         <footer>
                           <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                             <div className="flex self-end">
@@ -374,14 +370,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
             </div>
           </div>
 
-          <YesNoModal
-            title="Accept action"
-            body="Are you sure you want to mark the payment as completed?"
-            handleCloseModal={() => setDoneAcceptModalOpen(false)}
-            onAccept={handleDoneAcceptClick}
-            modalOpen={doneAcceptModalOpen}
-            setModalOpen={setDoneAcceptModalOpen}
-            disabled={disabled}
+          <AcceptModal
+            active={doneAcceptModalOpen}
+            close={() => setDoneAcceptModalOpen(false)}
+            onAcceptClick={handleDoneAcceptClick}
           />
         </main>
       </div>

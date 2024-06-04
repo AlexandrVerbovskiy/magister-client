@@ -57,6 +57,7 @@ const UserVerifyRequests = (pageProps) => {
     items: listingApprovalRequests,
     rebuild,
     options,
+    setItemFields
   } = usePagination({
     getItemsFunc: (data) =>
       getAdminListingApprovalRequestsList(data, authToken),
@@ -121,6 +122,7 @@ const UserVerifyRequests = (pageProps) => {
                       onChange: handleChangeStatus,
                     },
                   ]}
+                  dopClass=""
                 />
               </div>
 
@@ -130,6 +132,7 @@ const UserVerifyRequests = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                setItemFields={setItemFields}
               />
 
               <div className="mt-8">

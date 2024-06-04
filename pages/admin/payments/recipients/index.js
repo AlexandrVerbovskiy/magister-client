@@ -52,11 +52,12 @@ const RecipientPayments = (pageProps) => {
     canMovePrevPage,
     items: payments,
     rebuild,
+    setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
-      ...geTimeTypeDopProps,
+      ...geTimeTypeDopProps(),
       type: {
         value: type,
         hidden: (value) => value == "all",
@@ -157,6 +158,7 @@ const RecipientPayments = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 viewPath="/payments/recipients"
+                setItemFields={setItemFields}
               />
 
               <div className="mt-8">

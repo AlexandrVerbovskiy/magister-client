@@ -14,9 +14,10 @@ const BaseListSubHeader = ({
   handleChangeTimeFilterType,
   rebuild,
   listFilters = null,
+  dopClass = "mb-5",
 }) => {
   return (
-    <div className="sm:flex sm:justify-between sm:items-center mb-5">
+    <div className={`sm:flex sm:justify-between sm:items-center ${dopClass}`}>
       {typeOptions && (
         <HeaderTypeFilter
           selected={type}

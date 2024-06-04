@@ -11,51 +11,37 @@ import Header from "../../../partials/admin/Header";
 import { useAdminPage } from "../../../hooks";
 import DocumentList from "../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../middlewares";
-import ErrorSpan from "../../../components/admin/ErrorSpan";
-import ModalWithDescription from "../../../components/admin/Form/ModalWithDescription";
+import DeclineModal from "../../../components/admin/UserVerifyRequests/DeclineModal";
+import ApproveModal from "../../../components/admin/UserVerifyRequests/ApproveModal";
 
 const UserVerifyRequest = ({ info: baseInfo }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const [info, setInfo] = useState(baseInfo);
 
   const { error, success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   const [accessDeclineModalOpen, setAccessDeclineModalOpen] = useState(false);
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [declineDescription, setDeclineDescription] = useState("");
-  const [declineDescriptionError, setDeclineDescriptionError] = useState(null);
-
-  const handleInputDeclineDescription = (e) => {
-    setDeclineDescription(e.target.value);
-    setDeclineDescriptionError(null);
-  };
+  const [approveModalOpen, setApproveModalOpen] = useState(false);
 
   const handleBaseVerifyChangeClick = async (verified, description = null) => {
-    try {
-      await userVerifyRequestUpdate({ id, verified, description }, authToken);
-      const message = verified
-        ? "Verified successfully"
-        : "Declined successfully";
-      success.set(message);
+    await userVerifyRequestUpdate({ id, verified, description }, authToken);
+    const message = verified
+      ? "Verified successfully"
+      : "Declined successfully";
+    success.set(message);
 
-      setInfo((prev) => ({
-        ...prev,
-        hasResponse: true,
-        failedDescription: description,
-      }));
-    } catch (e) {
-      error.set(e.message);
-    }
+    setInfo((prev) => ({
+      ...prev,
+      hasResponse: true,
+      failedDescription: description,
+    }));
   };
 
-  const handleAcceptClick = async () => {
-    try {
-      await handleBaseVerifyChangeClick(true);
-    } catch (e) {
-      error.set(e.message);
-    }
+  const handleApproveAcceptClick = async () => {
+    await handleBaseVerifyChangeClick(true);
   };
 
   const handleDeclineClick = (e) => {
@@ -63,22 +49,14 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
     setAccessDeclineModalOpen(true);
   };
 
-  const handleAcceptDeclineClick = async () => {
-    setDeclineDescriptionError(null);
+  const handleAcceptClick = (e) => {
+    e.stopPropagation();
+    setApproveModalOpen(true);
+  };
 
-    if (declineDescription.length < 1) {
-      setDeclineDescriptionError(
-        "You must enter the reason for the rejection of the verification"
-      );
-      return;
-    }
-
-    try {
-      await handleBaseVerifyChangeClick(false, declineDescription);
-      setAccessDeclineModalOpen(false);
-    } catch (e) {
-      error.set(e.message);
-    }
+  const handleAcceptDeclineClick = async (description) => {
+    await handleBaseVerifyChangeClick(false, description);
+    setAccessDeclineModalOpen(false);
   };
 
   return (
@@ -166,16 +144,16 @@ const UserVerifyRequest = ({ info: baseInfo }) => {
           </div>
         </main>
 
-        <ModalWithDescription
-          accessModalOpen={accessDeclineModalOpen}
-          setAccessModalOpen={setAccessDeclineModalOpen}
-          question="Are you sure you want decline this request?"
-          descriptionLabel="Enter the reason for the rejection"
-          description={declineDescription}
-          handleInputDescription={handleInputDeclineDescription}
-          descriptionError={declineDescriptionError}
-          handleAcceptClick={handleAcceptDeclineClick}
-          acceptButtonText="Decline"
+        <DeclineModal
+          active={accessDeclineModalOpen}
+          close={() => setAccessDeclineModalOpen(false)}
+          onAcceptClick={handleAcceptDeclineClick}
+        />
+
+        <ApproveModal
+          active={approveModalOpen}
+          close={() => setApproveModalOpen(false)}
+          onAcceptClick={handleApproveAcceptClick}
         />
       </div>
     </div>
