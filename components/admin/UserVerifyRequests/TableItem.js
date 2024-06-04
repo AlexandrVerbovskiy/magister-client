@@ -6,6 +6,7 @@ import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import { IndiceContext } from "../../../contexts";
 import { getFilePath } from "../../../utils";
+import STATIC from "../../../static";
 
 const TableItem = ({
   id,
