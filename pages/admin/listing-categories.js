@@ -10,8 +10,9 @@ import {
   saveListingCategories,
 } from "../../services/listingCategories";
 import CategoryList from "../../partials/admin/listingCategories/CategoryList";
-import { uniqueId } from "../../utils";
+import { byteConverter, uniqueId } from "../../utils";
 import lodash from "lodash";
+import env from "../../env";
 
 const ListingCategories = ({ categories: baseCategories }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -366,7 +367,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
   };
 
   const handleCreate = (level) => {
-    const localId= uniqueId();
+    const localId = uniqueId();
 
     setCategories((prev) => {
       const res = { ...prev };
@@ -469,81 +470,99 @@ const ListingCategories = ({ categories: baseCategories }) => {
       return;
     }
 
-    const dataToSave = new FormData();
-    const dataToCompare = { firstLevel: [], secondLevel: [], thirdLevel: [] };
+    try {
+      const dataToSave = new FormData();
+      const dataToCompare = { firstLevel: [], secondLevel: [], thirdLevel: [] };
 
-    Object.keys(categories).forEach((level) => {
-      categories[level].forEach((category, index) => {
-        const categoryToSave = { ...category };
+      let totalSize = 0;
 
-        delete categoryToSave["parentLocalId"];
-        delete categoryToSave["localId"];
-        delete categoryToSave["parentName"];
+      Object.keys(categories).forEach((level) => {
+        categories[level].forEach((category, index) => {
+          const categoryToSave = { ...category };
 
-        const parent = findCategoryByLocalId(category.parentLocalId);
+          delete categoryToSave["parentLocalId"];
+          delete categoryToSave["localId"];
+          delete categoryToSave["parentName"];
 
-        if (category.id) {
+          const parent = findCategoryByLocalId(category.parentLocalId);
+
+          if (category.id) {
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][id]`,
+              category.id
+            );
+          }
+
           dataToSave.append(
-            `categoriesToSave[${level}][${index}][id]`,
-            category.id
+            `categoriesToSave[${level}][${index}][orderIndex]`,
+            category.orderIndex
           );
-        }
 
-        dataToSave.append(
-          `categoriesToSave[${level}][${index}][orderIndex]`,
-          category.orderIndex
-        );
+          if (category.level) {
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][level]`,
+              category.level
+            );
+          }
 
-        if (category.level) {
           dataToSave.append(
-            `categoriesToSave[${level}][${index}][level]`,
-            category.level
+            `categoriesToSave[${level}][${index}][name]`,
+            category.name
           );
-        }
 
-        dataToSave.append(
-          `categoriesToSave[${level}][${index}][name]`,
-          category.name
-        );
+          if (category.popular) {
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][popular]`,
+              1
+            );
+          }
 
-        if (category.popular) {
-          dataToSave.append(`categoriesToSave[${level}][${index}][popular]`, 1);
-        }
+          if (parent?.id) {
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][parentId]`,
+              parent.id
+            );
+          }
 
-        if (parent?.id) {
-          dataToSave.append(
-            `categoriesToSave[${level}][${index}][parentId]`,
-            parent.id
-          );
-        }
+          if (parent?.name) {
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][parentName]`,
+              parent.name
+            );
+          }
 
-        if (parent?.name) {
-          dataToSave.append(
-            `categoriesToSave[${level}][${index}][parentName]`,
-            parent.name
-          );
-        }
+          if (category.imageFile ?? category.image) {
+            if (category.imageFile) {
+              totalSize += category.imageFile.size;
+            }
 
-        if (category.imageFile ?? category.image) {
-          dataToSave.append(
-            `categoriesToSave[${level}][${index}][image]`,
-            category.imageFile ?? category.image
-          );
-        }
+            dataToSave.append(
+              `categoriesToSave[${level}][${index}][image]`,
+              category.imageFile ?? category.image
+            );
+          }
 
-        dataToCompare[level].push({
-          id: category.id,
-          level: category.level,
-          name: category.name,
-          popular: category.popular,
-          parentId: parent?.id ?? null,
-          image: category.imageFile ?? category.image,
-          orderIndex: dataToCompare[level].length,
+          dataToCompare[level].push({
+            id: category.id,
+            level: category.level,
+            name: category.name,
+            popular: category.popular,
+            parentId: parent?.id ?? null,
+            image: category.imageFile ?? category.image,
+            orderIndex: dataToCompare[level].length,
+          });
         });
       });
-    });
 
-    try {
+      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
+
+      if (totalSize > maxFileSize) {
+        throw new Error(
+          "The total size of the files cannot be larger than " +
+            byteConverter(maxFileSize)
+        );
+      }
+
       if (!lodash.isEqual(prevCategories, dataToCompare)) {
         replaceDeleteInfosCategories.forEach((info, index) => {
           const newId = info["newChildCategory"]["id"] ?? null;

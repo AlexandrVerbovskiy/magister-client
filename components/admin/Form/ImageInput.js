@@ -3,6 +3,7 @@ import env from "../../../env";
 import ErrorSpan from "../ErrorSpan";
 
 import STATIC from "../../../static";
+import { byteConverter } from "../../../utils";
 
 const ImageInput = ({
   label = null,
@@ -28,7 +29,9 @@ const ImageInput = ({
     const img = e.target.files[0];
 
     if (img.size > fileSizeLimit) {
-      setError("File can't be larger than " + fileSizeLimit + " bytes");
+      setError(
+        "File can't be larger than " + byteConverter(Number(fileSizeLimit))
+      );
     } else {
       onChange(e);
     }

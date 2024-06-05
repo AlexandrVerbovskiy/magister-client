@@ -97,6 +97,10 @@ const DeclineModal = ({ active, close, onAcceptClick }) => {
   };
 
   const handleCheckClick = (value) => {
+    if (disabled) {
+      return;
+    }
+
     setCheckedListError(null);
     const includes = checkedList.includes(value);
 
