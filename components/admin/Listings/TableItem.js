@@ -57,9 +57,9 @@ const TableItem = ({
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToOwner = sessionUser?.id != ownerId;
+  const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
 
   const fullOwnerPhotoPath = ownerPhoto
     ? getFilePath(ownerPhoto)

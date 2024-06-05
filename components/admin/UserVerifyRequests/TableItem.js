@@ -40,10 +40,10 @@ const TableItem = ({
       : "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
   }
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const fullPhotoPath = userPhoto
+  const fullPhotoPath = isAdmin && userPhoto
     ? getFilePath(userPhoto)
     : STATIC.DEFAULT_PHOTO_LINK;
 

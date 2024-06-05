@@ -61,7 +61,10 @@ const ListingItem = ({ listing, hovered = false }) => {
       </div>
 
       <div className="listings-content">
-        <div className="author">
+        <div
+          className="author row-dots-end"
+          style={{ maxWidth: "calc(100% - 40px)" }}
+        >
           <Link href={`/owner-listing-list/${listing.userId}`}>
             <div className="d-flex align-items-center">
               <img
@@ -72,7 +75,7 @@ const ListingItem = ({ listing, hovered = false }) => {
                 }
                 alt="image"
               />
-              <span>{listing.userName}</span>
+              <span className="row-dots-end">{listing.userName}</span>
             </div>
           </Link>
         </div>

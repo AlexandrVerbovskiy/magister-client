@@ -54,7 +54,7 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
       title="Cancel order"
       body={message}
       onAccept={handleAcceptCancelOrder}
-      acceptText="Cancel"
+      acceptText="Confirm"
       closeModalText="Close"
     />
   );

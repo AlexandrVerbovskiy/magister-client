@@ -55,10 +55,10 @@ const OrderInfo = ({
         </h4>
 
         <ul>
-          <li>
+          <li className="row-dots-end">
             <i className="bx bx-map"></i>
             <span>Address: </span>
-            {order.listingCity}
+            <span>{order.listingCity}</span>
           </li>
           <li className="order-list-item-date">
             <i className="bx bx-calendar"></i>
@@ -69,33 +69,40 @@ const OrderInfo = ({
               endDate={order.requestId ? order.newEndDate : order.offerEndDate}
             />
           </li>
-          <li>
+          <li className="row-dots-end">
             <i className="bx bx-purchase-tag"></i>
             <span>Price: </span>$
-            {order.requestId
-              ? moneyFormat(
-                  order.newPricePerDay *
-                    getDaysDifference(order.newStartDate, order.newEndDate)
-                )
-              : moneyFormat(
-                  order.offerPricePerDay *
-                    getDaysDifference(order.offerStartDate, order.offerEndDate)
-                )}
+            <span>
+              {order.requestId
+                ? moneyFormat(
+                    order.newPricePerDay *
+                      getDaysDifference(order.newStartDate, order.newEndDate)
+                  )
+                : moneyFormat(
+                    order.offerPricePerDay *
+                      getDaysDifference(
+                        order.offerStartDate,
+                        order.offerEndDate
+                      )
+                  )}
+            </span>
           </li>
           <li>
             <i className="bx bx-credit-card-front"></i>
             <span>Payment: </span>
-            {[
-              STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-              STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-              STATIC.ORDER_STATUSES.FINISHED,
-            ].includes(order.status) ? (
-              <>
-                <strong className="paid">Paid</strong> using Paypal
-              </>
-            ) : (
-              <strong className="unpaid">Unpaid</strong>
-            )}
+            <span className="row-dots-end">
+              {[
+                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+                STATIC.ORDER_STATUSES.FINISHED,
+              ].includes(order.status) ? (
+                <>
+                  <strong className="paid">Paid</strong> using Paypal
+                </>
+              ) : (
+                <strong className="unpaid">Unpaid</strong>
+              )}
+            </span>
           </li>
           {checkErrorData(
             order.requestId ? order.newStartDate : order.offerStartDate
@@ -326,15 +333,19 @@ const OrderItem = ({
             alt="image"
           />
           <div className="info">
-            <span>{userName}</span>
+            <span className="row-dots-end">{userName}</span>
             <ul>
               {userPhone && (
                 <li>
-                  <a href={`tel:${userPhone}`}>{userPhone}</a>
+                  <a className="row-dots-end" href={`tel:${userPhone}`}>
+                    {userPhone}
+                  </a>
                 </li>
               )}
               <li>
-                <a href={`mailto:${userEmail}`}>{userEmail}</a>
+                <a className="row-dots-end" href={`mailto:${userEmail}`}>
+                  {userEmail}
+                </a>
               </li>
             </ul>
             <a href={`/chat/${userId}`} className="default-btn">
