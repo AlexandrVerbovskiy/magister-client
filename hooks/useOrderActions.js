@@ -46,9 +46,11 @@ const useOrderActions = ({ order }) => {
             STATIC.ORDER_STATUSES.PENDING_TENANT,
             STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
           ].includes(order.status)) ||
-        (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        (order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
-          isTenant)
+        (isTenant &&
+          [
+            STATIC.ORDER_STATUSES.PENDING_OWNER,
+            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+          ].includes(order.status))
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
       }

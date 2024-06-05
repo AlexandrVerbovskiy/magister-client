@@ -245,7 +245,7 @@ const TableItem = ({
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div>
+          <div style={{ textWrap: "wrap" }}>
             <div className="font-semibold flex items-center">Biography</div>
             {briefBio && briefBio.length ? briefBio : "-"}
           </div>

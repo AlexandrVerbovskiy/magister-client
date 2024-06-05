@@ -195,7 +195,7 @@ const TableItem = (props) => {
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
             <View href={`/admin/orders/${id}`} />
-            <Delete onDeleteClick={onDeleteClick} />
+            {/*<Delete onDeleteClick={onDeleteClick} />*/}
           </div>
         </td>
       </tr>

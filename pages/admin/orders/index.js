@@ -166,16 +166,16 @@ const Orders = (pageProps) => {
         </main>
       </div>
 
-      <DeleteAccept
+      {/*<DeleteAccept
         title="Delete order?"
         body={`Are you sure you want to remove order ${
           toDeleteOrderInfo?.id ?? ""
-        } from the system? All information about him will be lost`}
+        } from the system? All information about him (including payment information) will be lost`}
         modalOpen={dangerModalOpen}
         setModalOpen={setDangerModalOpen}
         handleCloseDeleteModal={handleCloseDeleteModal}
         onDeleteAccept={onDeleteAccept}
-      />
+      />*/}
     </div>
   );
 };

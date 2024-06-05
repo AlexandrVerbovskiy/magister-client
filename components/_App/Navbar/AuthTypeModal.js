@@ -16,7 +16,7 @@ const AuthTypeModal = ({
       </span>
       <form method="get">
         {typeModalError && (
-          <div className="col-lg-12 col-md-12">
+          <div className="col-12">
             <div
               className="alert-dismissible fade show alert alert-danger"
               role="alert"

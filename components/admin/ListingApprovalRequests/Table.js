@@ -47,7 +47,12 @@ const RequestsTable = ({
       { listingId: popupRejectId, description },
       authToken
     );
-    setItemFields({ approved: false }, popupRejectId);
+
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == popupRejectId
+    );
+
+    setItemFields({ approved: false }, request.id);
   };
 
   const handleApproveAcceptClick = async () => {
@@ -55,7 +60,12 @@ const RequestsTable = ({
       { listingId: popupApproveId },
       authToken
     );
-    setItemFields({ approved: true }, popupApproveId);
+
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == popupApproveId
+    );
+
+    setItemFields({ approved: true }, request.id);
   };
 
   return (
@@ -90,8 +100,10 @@ const RequestsTable = ({
                   key={request.id}
                   {...request}
                   openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleRejectClick={(id) => setPopupRejectId(id)}
+                  handleApproveClick={(listingId) =>
+                    setPopupApproveId(listingId)
+                  }
+                  handleRejectClick={(listingId) => setPopupRejectId(listingId)}
                 />
               ))}
             </tbody>
