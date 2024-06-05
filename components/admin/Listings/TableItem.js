@@ -7,7 +7,7 @@ import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import { getFilePath } from "../../../utils";
+import { getFilePath, getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
 
@@ -66,7 +66,7 @@ const TableItem = ({
     : STATIC.DEFAULT_PHOTO_LINK;
 
   const fullListingPhotoPath = images[0]
-    ? getFilePath(images[0].link)
+    ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULT_PHOTO_LINK;
 
   return (
@@ -115,8 +115,8 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <ActiveSpan
             active={active}
-            activeText="Users can rent it"
-            inactiveText="Users can't rent it"
+            activeText="Users can view it"
+            inactiveText="Users can't view it"
             onClick={onChangeActive}
           />
         </td>

@@ -18149,10 +18149,6 @@ input[type="number"] {
   line-height: 2;
 }
 
-.flatpickr-day.nextMonthDay:not(.notAllowed):not(.flatpickr-disabled) {
-  color: rgba(57, 57, 57, 1) !important;
-}
-
 .form-group-view .form-control.view-placeholder {
   color: #999999 !important;
 }

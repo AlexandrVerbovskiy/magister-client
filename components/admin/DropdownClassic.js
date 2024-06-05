@@ -119,8 +119,8 @@ function DropdownClassic({
                     }${option.value === selected && "text-indigo-500"}`}
                     onClick={() => {
                       if (disabled) return;
-                      setSelected(option.value);
                       setDropdownOpen(false);
+                      setSelected(option.value);
                     }}
                   >
                     <svg

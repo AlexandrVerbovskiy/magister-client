@@ -250,7 +250,7 @@ const ListingDefects = ({ defects: baseDefects }) => {
 
     document
       .querySelectorAll(".defect-list-item")
-      .forEach((elem) => (height += elem.scrollHeight));
+      .forEach((elem) => (height += elem.offsetHeight));
 
     setListHeight(height + 1);
   };

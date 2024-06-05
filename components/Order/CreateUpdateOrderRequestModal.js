@@ -86,6 +86,8 @@ const CreateUpdateOrderRequestModal = ({
       setFromDate(fromDate);
       setToDate(toDate);
     }
+
+    setCalendarError(null);
   };
 
   useEffect(() => {
@@ -280,9 +282,16 @@ const CreateUpdateOrderRequestModal = ({
               <span>Your offer</span>
             </span>
 
-            <div className="flatpickr-parent-wrapper popup-widget">
+            <div
+              className="flatpickr-parent-wrapper popup-widget"
+              style={{ flexDirection: "column", alignItems: "center" }}
+            >
               <div ref={calendarContainer}></div>
-              <ErrorSpan error={calendarError} />
+              {calendarError && (
+                <div className="is-invalid">
+                  <ErrorSpan error={calendarError} />
+                </div>
+              )}
             </div>
 
             <div className="popup-widget order-info-widget">
