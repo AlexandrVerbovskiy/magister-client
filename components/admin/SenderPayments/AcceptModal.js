@@ -7,6 +7,10 @@ const AcceptModal = ({ active, close, onAcceptClick }) => {
   const { error, success } = useContext(IndiceContext);
 
   const handleAccept = async () => {
+    if (disabled) {
+      return;
+    }
+    
     try {
       setDisabled(true);
       await onAcceptClick();

@@ -7,6 +7,10 @@ const ApproveModal = ({ active, close, onAcceptClick }) => {
   const [disabled, setDisabled] = useState(false);
 
   const handleApproveAcceptClick = async () => {
+    if (disabled) {
+      return;
+    }
+    
     try {
       await onAcceptClick();
       success.set("Approved successfully");

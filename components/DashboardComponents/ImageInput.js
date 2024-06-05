@@ -4,6 +4,7 @@ import ErrorSpan from "../ErrorSpan";
 import ImagePopup from "../_App/ImagePopup";
 
 import STATIC from "../../static";
+import { byteConverter } from "../../utils";
 
 const ImageInput = ({
   label = null,
@@ -28,7 +29,9 @@ const ImageInput = ({
     if (!img) return;
 
     if (img.size > fileSizeLimit) {
-      setError("File can't be larger than " + fileSizeLimit + " bytes");
+      setError(
+        "File can't be larger than " + byteConverter(Number(fileSizeLimit))
+      );
     } else {
       onChange(e);
     }
