@@ -37,7 +37,7 @@ const TableItem = (props) => {
     orderCheckLists,
   } = props;
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -92,11 +92,12 @@ const TableItem = (props) => {
           !descriptionOpen && "hidden"
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r">
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap align-top overflow-separate border-r">
           <div>
             <SubInfoTitle
               title="Item Details"
               href={"/admin/listings/edit/" + listingId}
+              canMove={isAdmin}
             />
             <SubInfoRow label="Name" value={listingName} />
             <SubInfoRow label="Category" value={listingCategoryName} />
@@ -111,7 +112,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Owner"
               href={"/admin/users/edit/" + ownerId}
-              canMove={sessionUser?.id != ownerId}
+              canMove={isAdmin && sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
             <SubInfoRow label="Email" value={ownerEmail} />
@@ -128,7 +129,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Renter"
               href={"/admin/users/edit/" + tenantId}
-              canMove={sessionUser?.id != tenantId}
+              canMove={isAdmin && sessionUser?.id != tenantId}
             />
             <SubInfoRow label="Name" value={tenantName} />
             <SubInfoRow label="Email" value={tenantEmail} />

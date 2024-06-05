@@ -24,7 +24,7 @@ import {
   validateInteger,
   validatePrice,
   validateSmallText,
-  byteConverter
+  byteConverter,
 } from "../../../utils";
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
@@ -354,6 +354,15 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
       if (countStoredItems && validateInteger(countStoredItems) !== true) {
         setCountStoredItemsError(validateInteger(countStoredItems));
+        hasError = true;
+      }
+
+      if (
+        countStoredItems &&
+        validateInteger(countStoredItems) === true &&
+        Number(countStoredItems) == 0
+      ) {
+        setCountStoredItemsError("Field must be higher than zero");
         hasError = true;
       }
 

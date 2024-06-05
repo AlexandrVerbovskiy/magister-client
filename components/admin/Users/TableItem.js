@@ -58,7 +58,7 @@ const RoleSpan = ({ role, onClick = () => {} }) => {
 
 const EmailSpan = ({ email, verified }) => {
   let className =
-    "text-left cursor-pointer overflow-separate overflow-separate";
+    "text-left overflow-separate overflow-separate";
   let tooltipText = "";
 
   if (verified) {

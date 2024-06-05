@@ -88,10 +88,10 @@ const TableItem = ({
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToTenant = sessionUser?.id != tenantId;
-  const canMoveToRecipient = sessionUser?.id != recipientId;
+  const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
+  const canMoveToRecipient = isAdmin && sessionUser?.id != recipientId;
 
   const fullRecipientPhotoPath = recipientPhoto
     ? getFilePath(recipientPhoto)
