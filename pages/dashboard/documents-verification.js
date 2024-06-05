@@ -11,8 +11,9 @@ import {
   getCurrentUserDocumentsPageOptions,
 } from "../../services";
 import { authSideProps } from "../../middlewares";
-import { getFilePath } from "../../utils";
+import { byteConverter, getFilePath } from "../../utils";
 import YesNoModal from "../../components/_App/YesNoModal";
+import env from "../../env";
 
 const DocumentsVerification = ({
   documents,
@@ -167,15 +168,29 @@ const DocumentsVerification = ({
     const formData = new FormData();
 
     let hasUpdates = false;
+    let totalSize = 0;
+
+    const addFileToFormData = (key, file) => {
+      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
+
+      if (totalSize + file.size > maxFileSize) {
+        throw new Error(
+          "The total size of the files cannot be larger than " +
+            byteConverter(maxFileSize)
+        );
+      }
+
+      formData.append(key, file);
+      totalSize += file.size;
+      hasUpdates = true;
+    };
 
     if (newProofOfAddress) {
-      formData.append("proofOfAddress", newProofOfAddress);
-      hasUpdates = true;
+      addFileToFormData("proofOfAddress", newProofOfAddress);
     }
 
     if (newReputableBankId) {
-      formData.append("reputableBankId", newReputableBankId);
-      hasUpdates = true;
+      addFileToFormData("reputableBankId", newReputableBankId);
     }
 
     if (newUtility) {
@@ -184,26 +199,22 @@ const DocumentsVerification = ({
     }
 
     if (newHmrc) {
-      formData.append("hmrc", newHmrc);
-      hasUpdates = true;
+      addFileToFormData("hmrc", newHmrc);
     }
 
     if (newCouncilTaxBill) {
-      formData.append("councilTaxBill", newCouncilTaxBill);
-      hasUpdates = true;
+      addFileToFormData("councilTaxBill", newCouncilTaxBill);
     }
 
     if (newPassportOrDrivingId) {
-      formData.append("passportOrDrivingId", newPassportOrDrivingId);
-      hasUpdates = true;
+      addFileToFormData("passportOrDrivingId", newPassportOrDrivingId);
     }
 
     if (newConfirmMoneyLaunderingChecksAndCompliance) {
-      formData.append(
+      addFileToFormData(
         "confirmMoneyLaunderingChecksAndCompliance",
         newConfirmMoneyLaunderingChecksAndCompliance
       );
-      hasUpdates = true;
     }
 
     return hasUpdates ? formData : null;
@@ -217,36 +228,43 @@ const DocumentsVerification = ({
       return;
     }
 
-    if (saveDocumentsDisabled) return;
+    if (saveDocumentsDisabled) {
+      return;
+    }
 
-    setFormError(null);
-    const formData = dataToSave();
+    try {
+      setFormError(null);
+      const formData = dataToSave();
 
-    if (formData) {
-      setSaveDocumentsDisabled(true);
+      if (formData) {
+        setSaveDocumentsDisabled(true);
 
-      try {
         await saveMyDocuments(formData, authToken);
         setUserVerified(false);
         setVerified(false);
-      } catch (e) {
-        setFormError(e.message);
-      } finally {
-        setSaveDocumentsDisabled(false);
       }
-    }
 
-    success.set("Documents updated successfully");
+      success.set("Documents updated successfully");
+    } catch (e) {
+      setFormError(e.message);
+    } finally {
+      setSaveDocumentsDisabled(false);
+    }
   };
 
   const handleBeforeSaveClick = async (e) => {
     e.preventDefault();
-    const formData = dataToSave();
 
-    if (formData) {
-      setActiveReverifiedModal(true);
-    } else {
-      handleSaveClick();
+    try {
+      const formData = dataToSave();
+
+      if (formData) {
+        setActiveReverifiedModal(true);
+      } else {
+        handleSaveClick();
+      }
+    } catch (error) {
+      setFormError(error);
     }
   };
 

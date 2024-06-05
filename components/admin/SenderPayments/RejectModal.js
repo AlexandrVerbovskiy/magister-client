@@ -39,6 +39,10 @@ const RejectModal = ({ active, close, onRejectClick }) => {
   }, [active]);
 
   const handleAcceptClick = async () => {
+    if (disabled) {
+      return;
+    }
+
     setCheckedListError(null);
 
     if (checkedList.length < 1) {

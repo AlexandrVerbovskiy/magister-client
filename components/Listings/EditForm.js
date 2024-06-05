@@ -5,6 +5,7 @@ import DashboardNavbar from "../Dashboard/DashboardNavbar";
 import lodash from "lodash";
 import STATIC from "../../static";
 import {
+  byteConverter,
   convertToSelectPopupCategories,
   onCurrentUserLocation,
   uniqueImageId,
@@ -30,6 +31,7 @@ import {
 } from "../../services";
 import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
+import env from "../../env";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -412,8 +414,9 @@ const EditForm = ({
   const formDataToSave = () => {
     const formData = new FormData();
 
-    if (files) {
+    if (files && files.length > 0) {
       let indexCount = 0;
+      let totalSize = 0;
 
       files.forEach((file) => {
         if (file.id) {
@@ -422,8 +425,20 @@ const EditForm = ({
           formData.append(`files[index][${indexCount}]`, file);
           indexCount++;
         }
+
+        totalSize += file.size;
       });
+
+      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
+
+      if (totalSize > maxFileSize) {
+        throw new Error(
+          "The total size of the files cannot be larger than " +
+            byteConverter(maxFileSize)
+        );
+      }
     }
+
     const info = objectToSave();
     info["listingImages"] = JSON.stringify(info["listingImages"]);
     info["defects"] = JSON.stringify(info["defects"]);
