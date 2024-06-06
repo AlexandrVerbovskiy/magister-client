@@ -2,19 +2,9 @@ import {
   autoMultiEnding,
   getDaysDifference,
   moneyFormat,
-  timeConverter,
 } from "../../../utils";
-import Switch from "../../FormComponents/Switch";
 
-const ContractDetails = ({
-  fromDate,
-  toDate,
-  price,
-  fee,
-  needFeeSwitch = false,
-  feeActive = null,
-  setFeeActive = null,
-}) => {
+const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
   const duration = getDaysDifference(fromDate, toDate);
   const subtotalPrice = price * duration;
   const totalFee = (subtotalPrice * fee) / 100;
@@ -25,30 +15,19 @@ const ContractDetails = ({
       <h3>Rental Details</h3>
 
       <div>
-        {needFeeSwitch && (
-          <div className="date-fee-switch">
-            <Switch
-              title="Fee-free option"
-              active={feeActive}
-              onChange={setFeeActive}
-            />
+        <div
+          className="d-flex justify-content-between"
+          style={{ marginTop: "10px", marginBottom: "10px" }}
+        >
+          <div>
+            Rental period
           </div>
-        )}
-        <div>
-          <div
-            className="d-flex"
-            style={{ marginTop: "20px", marginBottom: "20px" }}
-          >
-            <div className="date-info">
-              <div className="date-info-label">Withdrawal</div>
-              <div className="date-info-value">{timeConverter(fromDate)}</div>
-            </div>
-            <div className="date-info">
-              <div className="date-info-label">Devolution</div>
-              <div className="date-info-value">{timeConverter(toDate)}</div>
-            </div>
+
+          <div>
+            {duration} {autoMultiEnding(duration, "day")}
           </div>
         </div>
+
         <div
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
@@ -77,4 +56,4 @@ const ContractDetails = ({
   );
 };
 
-export default ContractDetails;
+export default ContractDetailsLight;

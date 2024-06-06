@@ -1,7 +1,7 @@
 import { autoMultiEnding, getFilePath } from "../../../utils";
 import STATIC from "../../../static";
 
-const OwnerInfo = ({ listing }) => {
+const OwnerInfo = ({ data }) => {
   return (
     <div className="listings-widget listings_author">
       <h3>Owner</h3>
@@ -10,19 +10,19 @@ const OwnerInfo = ({ listing }) => {
         <div className="d-flex align-items-center">
           <img
             src={
-              listing.userPhoto
-                ? getFilePath(listing.userPhoto)
+              data.userPhoto
+                ? getFilePath(data.userPhoto)
                 : STATIC.DEFAULT_PHOTO_LINK
             }
-            alt={listing.userName}
+            alt={data.userName}
           />
           <div className="title">
             <h4>
-              <a href="#">{listing.userName}</a>
+              <a href="#">{data.userName}</a>
             </h4>
             <span style={{ color: "#666666" }}>
-              {listing.userCountItems}{" "}
-              {autoMultiEnding(listing.userCountItems, "item")} for rental
+              {data.userCountItems}{" "}
+              {autoMultiEnding(data.userCountItems, "item")} for rental
             </span>
           </div>
         </div>

@@ -249,8 +249,6 @@ const OrderContent = ({
     });
   };
 
-  console.log(order.listingMinRentalDays)
-
   const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
     const offerPricePerDay = actualUpdateRequest
       ? actualUpdateRequest.newPricePerDay

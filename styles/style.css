@@ -5323,6 +5323,7 @@ Listings Details Area CSS
   font-size: var(--fontSize);
 }
 
+.listings-details-desc .review-form-wrapper form button[type="button"].submit,
 .listings-details-desc .review-form-wrapper form button[type="submit"] {
   color: var(--whiteColor);
   background-color: #847bdd;
@@ -5333,6 +5334,7 @@ Listings Details Area CSS
   color: #666666;
 }
 
+.listings-details-desc .review-form-wrapper form button[type="button"].submit:hover ,
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   background-color: #ede7f6;
   color: #666666;

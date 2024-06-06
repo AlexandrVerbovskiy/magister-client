@@ -277,3 +277,13 @@ export const getAdminIndexPageOptions = async (body, authToken) => {
   const data = await post(`/get-admin-index-page-option`, body, authToken);
   return data.body;
 };
+
+export const getOrderReviewByTenantOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-tenant/${id}`, authToken);
+  return data.body;
+};
+
+export const getOrderReviewByOwnerOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-owner/${id}`, authToken);
+  return data.body;
+};
