@@ -82,7 +82,7 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
   const paypalFieldStyle = {
     input: {
       fontSize: "14px",
-      padding: "2px 15px 2px 15px",
+      padding: "6px 15px 6px 15px",
     },
     "input:focus": {},
   };

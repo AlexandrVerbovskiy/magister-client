@@ -29,7 +29,7 @@ const CancelModal = ({ onCancel, modalActive, closeModal }) => {
       title="Cancel order"
       body="To confirm the cancellation of the order, click the 'Cancel'"
       onAccept={handleAcceptCancelOrder}
-      acceptText="Cancel"
+      acceptText="Confirm"
       closeModalText="Close"
     />
   );

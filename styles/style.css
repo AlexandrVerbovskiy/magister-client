@@ -18835,3 +18835,12 @@ span.flatpickr-weekday {
   color: rgba(57, 57, 57, 0.5) !important;
   background-color: #f2f3f761 !important;
 }
+
+.row-dots-end{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+}

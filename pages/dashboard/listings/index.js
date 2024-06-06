@@ -78,7 +78,7 @@ const TabHeaderSection = ({
             {[
               { value: "approved", label: "Approved" },
               { value: "unapproved", label: "Unapproved" },
-              { value: "not_processed", label: "Not Processed" },
+              { value: "not-processed", label: "Not Processed" },
               { value: "all", label: "All" },
             ].map((option) => (
               <div className="py-1" key={option.value}>
@@ -139,8 +139,9 @@ const ListingList = (pageProps) => {
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);
 
-  const baseStatusFilter = router.query.status ?? "all";
+  const baseStatusFilter = pageProps.options.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
+  const [hasMore, setHasMore] = useState(pageProps.items.length > 0);
 
   const {
     page,
@@ -164,6 +165,7 @@ const ListingList = (pageProps) => {
         hidden: (value) => value == "all",
       },
     }),
+    onRebuild: (data) => setHasMore(data.items.length > 0),
   });
 
   const handleAcceptDelete = async () => {
@@ -198,9 +200,7 @@ const ListingList = (pageProps) => {
     try {
       const { active } = await changeActiveListing(id, authToken);
       setItemFields({ active }, id);
-      success.set(
-        `${name} ${active ? "restored" : "deleted"} successfully`
-      );
+      success.set(`${name} ${active ? "restored" : "deleted"} successfully`);
     } catch (e) {
       error.set(e.message);
     }
@@ -253,7 +253,7 @@ const ListingList = (pageProps) => {
           </Link>
         </div>
 
-        {listings.length < 1 && pageProps.items.length < 1 ? (
+        {!hasMore ? (
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}

@@ -906,7 +906,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                               }}
                               className="bx bx-envelope"
                             ></i>
-                            Min rental:{listing.minRentalDays} days
+                            <span className="row-dots-end">Min rental:{listing.minRentalDays} days</span>
                           </li>
                         </ul>
                       )}
@@ -929,12 +929,17 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     <ul>
                       <li>
                         <i className="bx bx-envelope"></i>
-                        <a href="#">{listing.userEmail}</a>
+                        <a className="row-dots-end" href="#">
+                          {listing.userEmail}
+                        </a>
                       </li>
                       {listing.userPhone && (
                         <li>
                           <i className="bx bx-phone-call"></i>
-                          <a href={`tel:+${listing.userPhone}`}>
+                          <a
+                            className="row-dots-end"
+                            href={`tel:+${listing.userPhone}`}
+                          >
                             {listing.userPhone}
                           </a>
                         </li>
@@ -942,7 +947,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                       {listing.userPlaceWork && (
                         <li>
                           <i className="bx bx-building"></i>
-                          <a href="#">{listing.userPlaceWork}</a>
+                          <a className="row-dots-end" href="#">
+                            {listing.userPlaceWork}
+                          </a>
                         </li>
                       )}
                       <li>
@@ -950,7 +957,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                           className="bx bx-map"
                           style={{ marginTop: "7px" }}
                         ></i>{" "}
-                        {listing.city}
+                        <span className="row-dots-end">{listing.city}</span>
                       </li>
                     </ul>
                   </div>
@@ -963,7 +970,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                           className="bx bx-directions"
                           style={{ marginTop: "0px" }}
                         ></i>{" "}
-                        {listing.city}
+                        <span className="row-dots-end">{listing.city}</span>
                       </li>
 
                       {listing.address && (
@@ -972,7 +979,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                             className="bx bx-map"
                             style={{ marginTop: "7px" }}
                           ></i>{" "}
-                          {listing.address}
+                          <span className="row-dots-end">{listing.address}</span>
                         </li>
                       )}
                     </ul>
@@ -990,9 +997,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                           }
                           alt={listing.userName}
                         />
-                        <div className="title">
-                          <h4>
-                            <a href="#">{listing.userName}</a>
+                        <div className="title row-dots-end">
+                          <h4 className="row-dots-end">
+                            <a href="#" >{listing.userName}</a>
                           </h4>
                         </div>
                       </div>

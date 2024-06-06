@@ -490,6 +490,15 @@ const EditForm = ({
       hasError = true;
     }
 
+    if (
+      countStoredItems &&
+      validateInteger(countStoredItems) === true &&
+      Number(countStoredItems) == 0
+    ) {
+      setCountStoredItemsError("Field must be higher than zero");
+      hasError = true;
+    }
+
     if (description && validateBigText(description) !== true) {
       setDescriptionError(validateBigText(description));
       hasError = true;
@@ -947,7 +956,7 @@ const EditForm = ({
                   onClick={handleChangeActive}
                   disabled={changeActiveDisabled}
                 >
-                  {listing.active ? "Delete" : "Restore"}
+                  {active ? "Delete" : "Restore"}
                 </button>
               )}
 
