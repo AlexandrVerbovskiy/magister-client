@@ -77,7 +77,7 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
             <button
               type="button"
               className="button-danger"
-              onClick={() => setModalActive(false)}
+              onClick={closeModal}
             >
               Cancel
             </button>
