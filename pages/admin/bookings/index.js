@@ -37,7 +37,7 @@ const Bookings = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({props: pageProps});
 
   const onRebuild = (data) => {
     setStatusCount(data.statusCount);

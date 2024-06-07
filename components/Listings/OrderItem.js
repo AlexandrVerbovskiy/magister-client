@@ -195,12 +195,34 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
         ) && (
-          <a
+          <Link
             className="default-btn"
             href={`/dashboard/pay-by-credit-card/` + order.id}
           >
             <i className="bx bx-wallet"></i> Update payment
-          </a>
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/creating-renter-review/` + order.id}
+          >
+            <i className="bx bx-comment-detail"></i> Leave a review
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/creating-owner-review/` + order.id}
+          >
+            <i className="bx bx-comment-detail"></i> Leave a review
+          </Link>
         )}
 
         {currentActionButtons.includes(
@@ -337,20 +359,20 @@ const OrderItem = ({
             <ul>
               {userPhone && (
                 <li>
-                  <a className="row-dots-end" href={`tel:${userPhone}`}>
+                  <Link className="row-dots-end" href={`tel:${userPhone}`}>
                     {userPhone}
-                  </a>
+                  </Link>
                 </li>
               )}
               <li>
-                <a className="row-dots-end" href={`mailto:${userEmail}`}>
+                <Link className="row-dots-end" href={`mailto:${userEmail}`}>
                   {userEmail}
-                </a>
+                </Link>
               </li>
             </ul>
-            <a href={`/chat/${userId}`} className="default-btn">
+            <Link href={`/chat/${userId}`} className="default-btn">
               <i className="bx bx-envelope"></i> Send Message
-            </a>
+            </Link>
           </div>
         </td>
 

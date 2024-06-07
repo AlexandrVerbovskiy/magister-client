@@ -287,3 +287,54 @@ export const getOrderReviewByOwnerOptions = async (id, authToken) => {
   const data = await get(`/get-order-review-by-owner/${id}`, authToken);
   return data.body;
 };
+
+export const getAdminTenantCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-tenant-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminOwnerCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-owner-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminListingCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-listing-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const createRenterReview = async (
+  { tenantCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-tenant-review`,
+    { tenantCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};
+
+export const createOwnerReview = async (
+  { ownerCommentInfo, listingCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-owner-review`,
+    { ownerCommentInfo, listingCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};

@@ -118,7 +118,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 Pages
               </span>
             </h3>
-            <ul className="mt-3">
+            <ul className="mt-3 p-0">
               {/* Main */}
               <SidebarTypicalLink
                 title="Main"
@@ -191,6 +191,50 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         }`}
                       ></path>
                     </g>
+                  </svg>
+                )}
+              />
+
+              <SidebarGroupedLinks
+                setSidebarExpanded={setSidebarExpanded}
+                title="Reviews"
+                sublinks={[
+                  { href: "owner-reviews", title: "Owner Reviews" },
+                  { href: "tenant-reviews", title: "Tenant Reviews" },
+                  { href: "listing-reviews", title: "Listing Reviews" },
+                ]}
+                SVG={({ current }) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-message"
+                    height="24"
+                    width="24"
+                    viewBox="0 0 22 22"
+                    strokeWidth="1.5"
+                    stroke="#2c3e50"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M8 9h8"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
+                    <path
+                      d="M8 13h6"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
+                    <path
+                      d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
                   </svg>
                 )}
               />

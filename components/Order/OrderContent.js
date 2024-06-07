@@ -43,6 +43,7 @@ import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import BookingModal from "../SingleListings/BookingModal";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
+import Link from "next/link";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -1373,7 +1374,7 @@ const OrderContent = ({
                     <div className="d-flex justify-content-between">
                       <div>
                         Id:{" "}
-                        <a
+                        <Link
                           href={
                             bookingStatuses.includes(conflictOrder.status)
                               ? `/dashboard/bookings/${conflictOrder.id}`
@@ -1381,10 +1382,10 @@ const OrderContent = ({
                           }
                         >
                           #{conflictOrder.id}
-                        </a>
+                        </Link>
                       </div>
 
-                      <a
+                      <Link
                         href={
                           bookingStatuses.includes(conflictOrder.status)
                             ? `/dashboard/bookings/${conflictOrder.id}`
@@ -1400,7 +1401,7 @@ const OrderContent = ({
                           dopClass="order-status-small-span"
                           endDate={order.offerEndDate}
                         />
-                      </a>
+                      </Link>
                     </div>
 
                     <div>
@@ -1411,7 +1412,8 @@ const OrderContent = ({
                     </div>
 
                     <div>
-                      Rental: <a href={`/users/${tenantId}`}>{tenantName}</a>
+                      Rental:{" "}
+                      <Link href={`/users/${tenantId}`}>{tenantName}</Link>
                     </div>
 
                     <div>
@@ -1524,12 +1526,34 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
             ) && (
-              <a
+              <Link
                 className="default-btn"
                 href={`/dashboard/pay-by-credit-card/` + order.id}
               >
                 Update payment
-              </a>
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/creating-renter-review/` + order.id}
+              >
+                Leave a review
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/creating-owner-review/` + order.id}
+              >
+                Leave a review
+              </Link>
             )}
 
             {currentActionButtons.includes(

@@ -111,7 +111,7 @@ const MyBookings = (pageProps) => {
     items: bookings,
     rebuild,
     options,
-    isFirstBookingCall,
+    isFirstCall: isFirstBookingCall,
     setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getBookingListOptions(data, authToken),

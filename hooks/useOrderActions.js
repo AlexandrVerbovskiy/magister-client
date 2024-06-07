@@ -102,6 +102,16 @@ const useOrderActions = ({ order }) => {
         );
       }
 
+      if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
+        if (isOwner && !order.tenantCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW);
+        }
+
+        if (isTenant && !order.ownerCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+        }
+      }
+
       const hasProcessedExtends =
         order.extendOrders &&
         order.extendOrders.length > 0 &&

@@ -33,7 +33,7 @@ const UserVerifyRequests = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({ props: pageProps });
 
   const {
     page,

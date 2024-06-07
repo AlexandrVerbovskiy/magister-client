@@ -1,36 +1,25 @@
-import React, { useContext, useState } from "react";
+import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../partials/admin/actions/SearchForm";
-import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import LogsTable from "../../components/admin/UserLogs/Table";
-import Datepicker from "../../components/admin/Datepicker";
-import { adminSideProps } from "../../middlewares";
-
+import { supportSideProps } from "../../middlewares";
 import {
-  useAdminPage,
-  usePagination,
-  useInitPaginationTimeFilter,
-  useChangeTimeFilter,
-  useBaseAdminFilter,
-} from "../../hooks";
-import { IndiceContext } from "../../contexts";
-import {
-  getAdminUserEventLogListPageOptions,
-  getUserEventLogList,
+  getAdminTenantCommentListOptions,
+  getTenantCommentList,
+  tenantCommentApprove,
+  tenantCommentReject,
 } from "../../services";
-import { baseTimeListPageParams, baseTimeTypePageParams } from "../../utils";
+import { baseAdminTimeListPageParams } from "../../utils";
+import { useContext, useState } from "react";
+import { IndiceContext } from "../../contexts";
+import { useAdminPage, useBaseAdminFilter, usePagination } from "../../hooks";
+import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
+import UserCommentsTable from "../../components/admin/UserComments/Table";
 
-const Logs = (pageProps) => {
+const TenantReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
-  const [typeCount, setTypeCount] = useState(pageProps.typeCount);
-
-  const onRebuild = (data) => {
-    setTypeCount(data.typeCount);
-  };
+  const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
     timeFilterType,
@@ -38,7 +27,11 @@ const Logs = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps, defaultTypeValue: "suspended" });
+
+  const onRebuild = (data) => {
+    setTypesCount(data.typesCount);
+  };
 
   const {
     page,
@@ -54,11 +47,11 @@ const Logs = (pageProps) => {
     handleChangeOrder,
     canMoveNextPage,
     canMovePrevPage,
-    items: logs,
+    items: reviews,
     rebuild,
-    options,
+    setItemFields,
   } = usePagination({
-    getItemsFunc: (data) => getUserEventLogList(data, authToken),
+    getItemsFunc: (data) => getTenantCommentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
@@ -76,39 +69,51 @@ const Logs = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Logs" }]} />
+                <BreadCrumbs links={[{ title: "Owner Reviews" }]} />
               </div>
 
               <BaseListSubHeader
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: typeCount["allCount"] },
                   {
-                    title: "User Actions",
-                    value: "user",
-                    count: typeCount["userCount"],
+                    value: "suspended",
+                    title: "Suspended",
+                    count: typesCount["suspendedCount"],
                   },
                   {
-                    title: "Admin Actions",
-                    value: "admin",
-                    count: typeCount["adminCount"],
+                    value: "approved",
+                    title: "Approved",
+                    count: typesCount["approvedCount"],
+                  },
+                  {
+                    value: "rejected",
+                    title: "Rejected",
+                    count: typesCount["rejectedCount"],
+                  },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: typesCount["allCount"],
                   },
                 ]}
                 filter={filter}
-                filterPlaceholder="Search by Log Id"
                 handleChangeFilter={changeFilter}
                 timeFilterType={timeFilterType}
                 handleChangeTimeFilterType={handleChangeTimeFilterType}
                 rebuild={rebuild}
               />
 
-              <LogsTable
-                logs={logs}
+              <UserCommentsTable
+                reviews={reviews}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                setItemFields={setItemFields}
+                userColumnTitle="Tenant"
+                rejectReview={tenantCommentReject}
+                approveReview={tenantCommentApprove}
               />
 
               <div className="mt-8">
@@ -131,16 +136,17 @@ const Logs = (pageProps) => {
   );
 };
 
-const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const options = await getAdminUserEventLogListPageOptions(
-    { ...baseTimeTypePageParams(context.query), type: context.query["type"] },
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const type = context.query.type ?? null;
+  const params = { ...baseAdminTimeListPageParams(context.query), type };
+  const options = await getAdminTenantCommentListOptions(
+    params,
     baseSideProps.authToken
   );
-
   return { ...options };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  supportSideProps(context, boostServerSideProps);
 
-export default Logs;
+export default TenantReviews;

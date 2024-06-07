@@ -39,6 +39,8 @@ export default {
     ACCEPT_OWNER_CANCEL_BUTTON: "accept-owner-cancel-button",
     ACCEPT_TENANT_CANCEL_BUTTON: "accept-tenant-cancel-button",
     EXTEND_BUTTON: "extend-button",
+    TENANT_REVIEW: "renter-review",
+    OWNER_REVIEW: "owner-review",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],

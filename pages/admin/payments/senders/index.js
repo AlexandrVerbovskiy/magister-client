@@ -29,7 +29,7 @@ const SenderPayments = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({props: pageProps});
 
   const onRebuild = (data) => {
     setTypeCount(data.typesCount);

@@ -5,26 +5,20 @@ import { validateBigText } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 import OwnerInfo from "../../Order/OrderApprovementParts/OwnerInfo";
 
-const options = [
-  { title: "Quality", key: "quality" },
-  { title: "Listing accuracy", key: "listingAccuracy" },
-  { title: "Utility", key: "utility" },
-  { title: "Condition", key: "condition" },
-  { title: "Performance", key: "performance" },
-  { title: "Location", key: "location" },
-];
-
-const UserReviewForm = ({ data, onSubmit, goBack = null }) => {
-  const baseOptions = options.map((option) => ({
-    ...option,
-    value: 0,
-  }));
-  const [starOptions, setStarOptions] = useState(baseOptions);
-  const [description, setDescription] = useState("");
-  const [leaveFeedback, setLeaveFeedback] = useState("");
+const UserReviewForm = ({
+  data,
+  onSubmit,
+  goBack = null,
+  starOptions,
+  setStarOptions,
+  description,
+  setDescription,
+  leaveFeedback,
+  setLeaveFeedback,
+  submitButtonText = "Submit",
+  disabled,
+}) => {
   const [error, setError] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const { error: mainError } = useContext(IndiceContext);
 
   const handleChangeValue = (newValue, key) => {
     setError(null);
@@ -49,15 +43,14 @@ const UserReviewForm = ({ data, onSubmit, goBack = null }) => {
     if (disabled) {
       return;
     }
-    
-    const values = {};
-    starOptions.forEach((element) => {
+
+    for (let i = 0; i < starOptions.length; i++) {
+      const element = starOptions[i];
       if (!element.value) {
         setError(element.title + " is required");
+        return;
       }
-
-      values[element.key] = element.value;
-    });
+    }
 
     if (description.trim().length < 1) {
       setError("Description is required");
@@ -69,18 +62,9 @@ const UserReviewForm = ({ data, onSubmit, goBack = null }) => {
       return;
     }
 
-    try {
-      setDisabled(true);
-      await onSubmit({
-        values,
-        description,
-        leaveFeedback: leaveFeedback.trim(),
-      });
-    } catch (e) {
-      mainError.set(e.message);
-    } finally {
-      setDisabled(false);
-    }
+    console.log("test");
+
+    await onSubmit();
   };
 
   const handleGoBackClick = () => {
@@ -181,7 +165,7 @@ const UserReviewForm = ({ data, onSubmit, goBack = null }) => {
                       onClick={handleSubmit}
                       className="submit"
                     >
-                      Submit
+                      {submitButtonText}
                     </button>
                   </div>
                 </div>

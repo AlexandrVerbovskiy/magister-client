@@ -18,7 +18,11 @@ import { useRouter } from "next/router";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 
-const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
+const SingleListingsContent = ({
+  comments,
+  listing,
+  tenantBaseCommissionPercent,
+}) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -383,185 +387,80 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     </div>
                   </div>
 
-                  <div className="write-a-review">
-                    <h4>Tell people what you think.</h4>
-                    <p>
-                      Help others by sharing your experience with this business.
-                    </p>
-                    <a href="#" className="default-btn">
-                      Write A Review
-                    </a>
-                  </div>
-
                   <div id="review">
                     <div className="listings-review-comments">
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user1.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>James Andy</h4>
-                                  <span>New York, USA</span>
+                      {comments.map((comment) => {
+                        const average = (
+                          (comment.flexibility +
+                            comment.generalExperience +
+                            comment.communication +
+                            comment.kindness +
+                            comment.punctuality +
+                            comment.reliability) /
+                          6
+                        ).toFixed(0);
+                        return (
+                          <div className="user-review">
+                            <div className="row m-0">
+                              <div className="col-lg-4 col-md-4 p-0">
+                                <div className="user">
+                                  <div className="d-flex">
+                                    <img
+                                      src={
+                                        comment.reviewerPhoto
+                                          ? getFilePath(comment.reviewerPhoto)
+                                          : STATIC.DEFAULT_PHOTO_LINK
+                                      }
+                                      alt="image"
+                                    />
+                                    <div className="title">
+                                      <h4>{comment.reviewerName}</h4>
+                                      <span>
+                                        {comment.reviewerPhone.length > 0
+                                          ? comment.reviewerPhone
+                                          : "-"}
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </div>
 
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
+                              <div className="col-lg-8 col-md-8 p-0">
+                                <div className="comments">
+                                  <div className="rating">
+                                    <span
+                                      className={`bx bxs-star ${
+                                        average > 0 ? "checked" : ""
+                                      }`}
+                                    ></span>
+                                    <span
+                                      className={`bx bxs-star ${
+                                        average > 1 ? "checked" : ""
+                                      }`}
+                                    ></span>
+                                    <span
+                                      className={`bx bxs-star ${
+                                        average > 2 ? "checked" : ""
+                                      }`}
+                                    ></span>
+                                    <span
+                                      className={`bx bxs-star ${
+                                        average > 3 ? "checked" : ""
+                                      }`}
+                                    ></span>
+                                    <span
+                                      className={`bx bxs-star ${
+                                        average > 4 ? "checked" : ""
+                                      }`}
+                                    ></span>
+                                  </div>
+                                  <p>{comment.description}</p>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user2.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>Sarah Taylor</h4>
-                                  <span>New York, USA</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user3.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>Jason Smith</h4>
-                                  <span>New York, USA</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -583,7 +482,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                               }}
                               className="bx bx-envelope"
                             ></i>
-                            <span className="row-dots-end">Min rental:{listing.minRentalDays} days</span>
+                            <span className="row-dots-end">
+                              Min rental:{listing.minRentalDays} days
+                            </span>
                           </li>
                         </ul>
                       )}
@@ -656,7 +557,9 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                             className="bx bx-map"
                             style={{ marginTop: "7px" }}
                           ></i>{" "}
-                          <span className="row-dots-end">{listing.address}</span>
+                          <span className="row-dots-end">
+                            {listing.address}
+                          </span>
                         </li>
                       )}
                     </ul>
@@ -676,7 +579,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                         />
                         <div className="title row-dots-end">
                           <h4 className="row-dots-end">
-                            <a href="#" >{listing.userName}</a>
+                            <a href="#">{listing.userName}</a>
                           </h4>
                         </div>
                       </div>

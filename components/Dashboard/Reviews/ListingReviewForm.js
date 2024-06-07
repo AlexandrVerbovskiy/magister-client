@@ -6,30 +6,19 @@ import ErrorSpan from "../../ErrorSpan";
 import ContractDetailsLight from "../../Order/OrderApprovementParts/ContractDetailsLight";
 import ItemInfo from "../../Order/OrderApprovementParts/ItemInfo";
 
-const options = [
-  { title: "Punctuality", key: "punctuality" },
-  { title: "Communication", key: "communication" },
-  { title: "Flexibility", key: "flexibility" },
-  { title: "Reliability", key: "reliability" },
-  { title: "Kindness", key: "kindness" },
-  { title: "General Experience", key: "generalExperience" },
-];
-
 const ListingReviewForm = ({
   order,
   onSubmit,
   setCurrentOpenImg,
+  starOptions,
+  setStarOptions,
+  description,
+  setDescription,
   goBack = null,
+  submitButtonText = "Submit",
+  disabled,
 }) => {
-  const baseOptions = options.map((option) => ({
-    ...option,
-    value: 0,
-  }));
-  const [starOptions, setStarOptions] = useState(baseOptions);
-  const [description, setDescription] = useState("");
   const [error, setError] = useState(null);
-  const [disabled, setDisabled] = useState(false);
-  const { error: mainError } = useContext(IndiceContext);
 
   const handleChangeValue = (newValue, key) => {
     setError(null);
@@ -50,14 +39,13 @@ const ListingReviewForm = ({
       return;
     }
 
-    const values = {};
-    starOptions.forEach((element) => {
+    for (let i = 0; i < starOptions.length; i++) {
+      const element = starOptions[i];
       if (!element.value) {
         setError(element.title + " is required");
+        return;
       }
-
-      values[element.key] = element.value;
-    });
+    }
 
     if (description.trim().length < 1) {
       setError("Description is required");
@@ -69,14 +57,7 @@ const ListingReviewForm = ({
       return;
     }
 
-    try {
-      setDisabled(true);
-      await onSubmit({ values, description });
-    } catch (e) {
-      mainError.set(e.message);
-    } finally {
-      setDisabled(false);
-    }
+    await onSubmit();
   };
 
   const handleGoBackClick = () => {
@@ -161,7 +142,7 @@ const ListingReviewForm = ({
                       onClick={handleSubmit}
                       className="submit"
                     >
-                      Submit
+                      {submitButtonText}
                     </button>
                   </div>
                 </div>

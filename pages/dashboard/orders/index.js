@@ -112,7 +112,7 @@ const Orders = (pageProps) => {
     items: orders,
     rebuild,
     options,
-    isFirstBookingCall,
+    isFirstCall: isFirstBookingCall,
     setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),

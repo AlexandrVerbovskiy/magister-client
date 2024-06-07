@@ -20,7 +20,6 @@ import {
   getAdminOrderList,
   getAdminOrderListPageOptions,
 } from "../../../services";
-import DeleteAccept from "../../../components/admin/DeleteAccept";
 import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Orders = (pageProps) => {
@@ -36,7 +35,7 @@ const Orders = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({props: pageProps});
 
   const onRebuild = (data) => {
     setStatusCount(data.statusCount);
