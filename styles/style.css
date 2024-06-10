@@ -4309,17 +4309,25 @@ Listings Details Area CSS
   margin-top: 15px;
   margin-bottom: 14px;
 }
+
+.base-full-rating-stars-info .rating,
 .listings-details-image .listings-details-content .rating {
   margin-bottom: 5px;
 }
+
+.base-full-rating-stars-info .rating .bx,
 .listings-details-image .listings-details-content .rating .bx {
   color: #cecfd2;
   font-size: var(--fontSize);
   margin-right: 2px;
 }
+
+.base-full-rating-stars-info .rating .bx.checked,
 .listings-details-image .listings-details-content .rating .bx.checked {
   color: #efc02f;
 }
+
+.base-full-rating-stars-info .rating .rating-count,
 .listings-details-image .listings-details-content .rating .rating-count {
   position: relative;
   color: var(--mainColor);
@@ -4327,6 +4335,17 @@ Listings Details Area CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.base-full-rating-stars-info .rating .overall-rating {
+  position: relative;
+  top: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 12px;
+}
+
 .listings-details-image .listings-details-content ul {
   padding-left: 0;
   list-style-type: none;
@@ -5473,6 +5492,7 @@ Listings Details Area CSS
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .listings-sidebar .listings_author .author .title {
   margin-left: 15px;

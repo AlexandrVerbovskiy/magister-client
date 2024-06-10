@@ -1,14 +1,10 @@
-const SubInfoRow = ({ label, value }) => {
+import SubInfoRowWithChild from "./SubInfoRowWithChild";
+
+const SubInfoRow = ({ label, value, newRow = false }) => {
   return (
-    <div
-      className="mt-1"
-      style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-    >
-      <span className="text-black">{label}:</span>{" "}
-      <span className="text-gray-400" style={{ textWrap: "wrap" }}>
-        {value}
-      </span>
-    </div>
+    <SubInfoRowWithChild label={label} newRow={newRow}>
+      {value}
+    </SubInfoRowWithChild>
   );
 };
 

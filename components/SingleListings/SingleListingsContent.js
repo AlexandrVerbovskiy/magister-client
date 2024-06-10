@@ -17,11 +17,14 @@ import { createOrder } from "../../services";
 import { useRouter } from "next/router";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
+import StarRating from "../StarRating";
 
 const SingleListingsContent = ({
   comments,
   listing,
   tenantBaseCommissionPercent,
+  listingRatingInfo,
+  ownerRatingInfo,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
@@ -134,14 +137,13 @@ const SingleListingsContent = ({
 
                   <h3>{listing.name}</h3>
 
-                  <div className="rating d-flex align-items-center">
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="rating-count">(45)</span>
-                  </div>
+                  <StarRating
+                    averageRating={listingRatingInfo["averageRating"]}
+                    commentCount={listingRatingInfo["commentCount"]}
+                    checked={true}
+                    countClass="rating-count"
+                    centerAlign={true}
+                  />
 
                   <ul className="d-flex align-items-center">
                     {listing.userPhone && (
@@ -293,70 +295,62 @@ const SingleListingsContent = ({
 
                   <h3>Review</h3>
                   <div className="listings-review">
-                    <div className="rating d-flex align-items-center">
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-
-                      <span className="overall-rating">5.0</span>
-                      <span className="rating-count">(5 reviews)</span>
-                    </div>
+                    <StarRating
+                      averageRating={listingRatingInfo["averageRating"]}
+                      commentCount={listingRatingInfo["commentCount"]}
+                      checked={true}
+                      countClass="rating-count"
+                      pointsValue={true}
+                      centerAlign={true}
+                    />
 
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
                         <div className="row m-0">
                           <div className="side">
-                            <div>Cleanliness</div>
+                            <div>Punctuality</div>
                           </div>
                           <div className="middle">
                             <div className="bar-container">
-                              <div className="bar-4"></div>
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo["averagePunctuality"]
+                                  ) || 1
+                                }`}
+                              ></div>
                             </div>
                           </div>
                           <div className="side right">
-                            <div>4.0</div>
+                            <div>
+                              {listingRatingInfo["averagePunctuality"].toFixed(
+                                1
+                              )}
+                            </div>
                           </div>
 
                           <div className="side">
-                            <div>Accuracy</div>
+                            <div>General Experience</div>
                           </div>
                           <div className="middle">
                             <div className="bar-container">
-                              <div className="bar-5"></div>
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo[
+                                      "averageGeneralExperience"
+                                    ]
+                                  ) || 1
+                                }`}
+                              ></div>
                             </div>
                           </div>
                           <div className="side right">
-                            <div>5.0</div>
-                          </div>
-
-                          <div className="side">
-                            <div>Location</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-5"></div>
+                            <div>
+                              {listingRatingInfo[
+                                "averageGeneralExperience"
+                              ].toFixed(1)}
                             </div>
-                          </div>
-                          <div className="side right">
-                            <div>5.0</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-6 col-md-6">
-                        <div className="row m-0">
-                          <div className="side">
-                            <div>Check-in</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-4"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>4.0</div>
                           </div>
 
                           <div className="side">
@@ -364,23 +358,89 @@ const SingleListingsContent = ({
                           </div>
                           <div className="middle">
                             <div className="bar-container">
-                              <div className="bar-5"></div>
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo["averageCommunication"]
+                                  ) || 1
+                                }`}
+                              ></div>
                             </div>
                           </div>
                           <div className="side right">
-                            <div>5.0</div>
+                            <div>
+                              {listingRatingInfo[
+                                "averageCommunication"
+                              ].toFixed(1)}
+                            </div>
                           </div>
+                        </div>
+                      </div>
 
+                      <div className="col-lg-6 col-md-6">
+                        <div className="row m-0">
                           <div className="side">
-                            <div>Value</div>
+                            <div>Reliability</div>
                           </div>
                           <div className="middle">
                             <div className="bar-container">
-                              <div className="bar-5"></div>
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo["averageReliability"]
+                                  ) || 1
+                                }`}
+                              ></div>
                             </div>
                           </div>
                           <div className="side right">
-                            <div>5.0</div>
+                            <div>
+                              {listingRatingInfo["averageReliability"].toFixed(
+                                1
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="side">
+                            <div>Kindness</div>
+                          </div>
+                          <div className="middle">
+                            <div className="bar-container">
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo["averageKindness"]
+                                  ) || 1
+                                }`}
+                              ></div>
+                            </div>
+                          </div>
+                          <div className="side right">
+                            <div>
+                              {listingRatingInfo["averageKindness"].toFixed(1)}
+                            </div>
+                          </div>
+
+                          <div className="side">
+                            <div>Flexibility</div>
+                          </div>
+                          <div className="middle">
+                            <div className="bar-container">
+                              <div
+                                className={`bar-${
+                                  Math.round(
+                                    listingRatingInfo["averageFlexibility"]
+                                  ) || 1
+                                }`}
+                              ></div>
+                            </div>
+                          </div>
+                          <div className="side right">
+                            <div>
+                              {listingRatingInfo["averageFlexibility"].toFixed(
+                                1
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -566,7 +626,7 @@ const SingleListingsContent = ({
                   </div>
 
                   <div className="listings-widget listings_author">
-                    <h3>Hosted By</h3>
+                    <h3>Owner</h3>
                     <div className="author">
                       <div className="d-flex align-items-center">
                         <img
@@ -579,53 +639,34 @@ const SingleListingsContent = ({
                         />
                         <div className="title row-dots-end">
                           <h4 className="row-dots-end">
-                            <a href="#">{listing.userName}</a>
+                            <a href={"/owner-listing-list/" + listing.ownerId}>
+                              {listing.userName}
+                            </a>
                           </h4>
+                          <span>
+                            {listing.countStoredItems}{" "}
+                            {autoMultiEnding(listing.countStoredItems, "Item")}{" "}
+                            for rental
+                          </span>
                         </div>
                       </div>
 
-                      <div className="author-profile">
+                      <div
+                        className="author-profile"
+                        style={{ borderTop: 0, margin: 0 }}
+                      >
                         <div className="row align-items-center">
-                          <div className="col-lg-5 col-md-5">
-                            <a href="#" className="view-profile">
-                              View Profile
-                            </a>
-                          </div>
-
-                          <div className="col-lg-7 col-md-7">
-                            <ul className="social">
-                              {listing.userInstagramUrl && (
-                                <li>
-                                  <a href={listing.userFacebookUrl}>
-                                    <i className="bx bxl-facebook"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userTwitterUrl && (
-                                <li>
-                                  <a href={listing.userTwitterUrl}>
-                                    <i className="bx bxl-twitter"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userLinkedinUrl && (
-                                <li>
-                                  <a href={listing.userLinkedinUrl}>
-                                    <i className="bx bxl-linkedin"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userInstagramUrl && (
-                                <li>
-                                  <a href={listing.userInstagramUrl}>
-                                    <i className="bx bxl-instagram"></i>
-                                  </a>
-                                </li>
-                              )}
-                            </ul>
+                          <div className="col-12">
+                            <div className="base-full-rating-stars-info">
+                              <StarRating
+                                averageRating={ownerRatingInfo["averageRating"]}
+                                commentCount={ownerRatingInfo["commentCount"]}
+                                checked={true}
+                                countClass="rating-count"
+                                pointsValue={true}
+                                centerAlign={true}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>

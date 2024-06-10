@@ -3,6 +3,7 @@ import { getFilePath, getListingImageByType, moneyFormat } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import STATIC from "../../static";
+import StarRating from "../StarRating";
 
 const ListingItem = ({ listing, hovered = false }) => {
   const images = listing.images ?? [];
@@ -55,9 +56,7 @@ const ListingItem = ({ listing, hovered = false }) => {
         <a href="#" className="bookmark-save">
           <i className="flaticon-heart"></i>
         </a>
-        <a href="#" className="category">
-          <i className="flaticon-cooking"></i>
-        </a>
+
       </div>
 
       <div className="listings-content">
@@ -106,14 +105,11 @@ const ListingItem = ({ listing, hovered = false }) => {
         justify-content-between
       "
         >
-          <div className="rating">
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bx-star"></i>
-            <span className="count">(10)</span>
-          </div>
+          <StarRating
+            averageRating={listing["averageRating"]??0}
+            commentCount={listing["commentCount"]??0}
+          />
+
           <div className="price">
             Per Day <span>${moneyFormat(listing.pricePerDay)}</span>
           </div>
