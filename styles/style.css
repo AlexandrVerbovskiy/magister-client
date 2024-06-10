@@ -3416,6 +3416,8 @@ Listings Area CSS
   line-height: 38px;
   font-size: 16px;
 }
+
+.single-listings-box .listings-image .bookmark-save.checked,
 .single-listings-box .listings-image .bookmark-save:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -4457,6 +4459,8 @@ Listings Details Area CSS
   top: 50%;
   transform: translateY(-50%);
 }
+
+.listings-details-image .container-fluid .share-save li a.active,
 .listings-details-image .container-fluid .share-save li a:hover,
 .listings-details-image .container-fluid .share-save li .share:hover {
   background-color: var(--whiteColor);

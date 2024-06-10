@@ -72,8 +72,8 @@ const Index = ({ topListings, categories }) => {
   );
 };
 
-const boostServerSideProps = async () => {
-  const options = await getIndexOptions();
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const options = await getIndexOptions(baseSideProps.authToken);
   return { ...options };
 };
 

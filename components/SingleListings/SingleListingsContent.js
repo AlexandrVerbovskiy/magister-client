@@ -13,7 +13,7 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import BookingModal from "./BookingModal";
-import { createOrder } from "../../services";
+import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
@@ -21,13 +21,11 @@ import StarRating from "../StarRating";
 
 const SingleListingsContent = ({
   comments,
-  listing,
+  listing: prevListing,
   tenantBaseCommissionPercent,
   listingRatingInfo,
   ownerRatingInfo,
 }) => {
-  console.log(listingRatingInfo);
-
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -35,6 +33,7 @@ const SingleListingsContent = ({
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
   const [currentApproveFromDate, setCurrentApproveFromDate] = useState(null);
   const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
+  const [listing, setListing] = useState(prevListing);
 
   const router = useRouter();
 
@@ -107,6 +106,20 @@ const SingleListingsContent = ({
       }
 
       setCreateOrderModalActive(true);
+    } else {
+      const triggerBtn = document.querySelector(".sign-form-trigger");
+
+      if (triggerBtn) {
+        triggerBtn.click();
+      }
+    }
+  };
+
+  const handleChangeFavorite = async (e) => {
+    if (sessionUser) {
+      e.preventDefault();
+      const favorite = await changeListingFavorite(listing.id, authToken);
+      setListing((prev) => ({ ...prev, favorite }));
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
 
@@ -193,7 +206,11 @@ const SingleListingsContent = ({
                 </li>
 
                 <li>
-                  <a href="#">
+                  <a
+                    className={listing.favorite ? "active" : ""}
+                    href="#"
+                    onClick={handleChangeFavorite}
+                  >
                     <i className="bx bx-heart"></i> Save
                   </a>
                 </li>
