@@ -26,6 +26,8 @@ const SingleListingsContent = ({
   listingRatingInfo,
   ownerRatingInfo,
 }) => {
+  console.log(listingRatingInfo);
+
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -460,7 +462,7 @@ const SingleListingsContent = ({
                           6
                         ).toFixed(0);
                         return (
-                          <div className="user-review">
+                          <div className="user-review" key={comment.id}>
                             <div className="row m-0">
                               <div className="col-lg-4 col-md-4 p-0">
                                 <div className="user">
