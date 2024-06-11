@@ -62,8 +62,6 @@ const UserReviewForm = ({
       return;
     }
 
-    console.log("test");
-
     await onSubmit();
   };
 

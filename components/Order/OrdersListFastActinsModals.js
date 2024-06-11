@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 import CancelModal from "./CancelModal";
-import CreateDisputeModal from "./CreateDisputeModal";
+import CreateCancelModal from "./CreateCancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
@@ -10,6 +10,7 @@ import { increaseDateByOneDay, tenantPaymentCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingModal from "../SingleListings/BookingModal";
+import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -21,9 +22,9 @@ const OrdersListFastActinsModals = ({
   closeActiveFastCancel,
   activeFastCancelOrder,
 
-  handleAcceptCreateDispute,
-  activeCreateDispute,
-  closeActiveCreateDispute,
+  handleAcceptCreateCancel,
+  activeCreateCancel,
+  closeActiveCreateCancel,
 
   handleOrderAcceptAcceptCancelByTenant,
   activeOrderAcceptCancelByTenant,
@@ -160,10 +161,10 @@ const OrdersListFastActinsModals = ({
         setDisabled={setPayedFastCancelDisabled}
       />
 
-      <CreateDisputeModal
-        modalActive={activeCreateDispute}
-        closeModal={closeActiveCreateDispute}
-        onCreateDispute={handleAcceptCreateDispute}
+      <CreateCancelModal
+        modalActive={activeCreateCancel}
+        closeModal={closeActiveCreateCancel}
+        onCancelOrder={handleAcceptCreateCancel}
       />
 
       <CancelModal

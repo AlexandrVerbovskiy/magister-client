@@ -78,7 +78,7 @@ const useOrderActions = ({ order }) => {
 
         if (isOwner || (isTenant && !order.canFastCancelPayed)) {
           newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
+            STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
           );
         }
 
@@ -98,7 +98,7 @@ const useOrderActions = ({ order }) => {
         }
 
         newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
+          STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
         );
       }
 
@@ -109,6 +109,17 @@ const useOrderActions = ({ order }) => {
 
         if (isTenant && !order.ownerCommentId) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+        }
+
+        if (
+          [
+            STATIC.ORDER_STATUSES.FINISHED,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+          ].includes(order.status) &&
+          STATIC.ORDER_CANCELATION_STATUSES.CANCELLED != order.cancelStatus
+        ) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
         }
       }
 

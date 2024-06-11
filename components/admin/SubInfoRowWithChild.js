@@ -1,4 +1,4 @@
-const SubInfoRowWithChild = ({ label, children, newRow = false }) => {
+const SubInfoRowWithChild = ({ label = null, children, newRow = false }) => {
   const LabelElement = (props) =>
     newRow ? <div {...props} /> : <span {...props} />;
 
@@ -10,7 +10,9 @@ const SubInfoRowWithChild = ({ label, children, newRow = false }) => {
         textOverflow: "ellipsis",
       }}
     >
-      <LabelElement className="text-black mr-1">{label}:</LabelElement>
+      {label && (
+        <LabelElement className="text-black mr-1">{label}:</LabelElement>
+      )}
       <span className="text-gray-400" style={{ textWrap: "wrap" }}>
         {children}
       </span>

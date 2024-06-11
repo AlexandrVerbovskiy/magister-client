@@ -18,7 +18,7 @@ const OrderInfo = ({
   link,
   handleClickCancel,
   handleClickPayedFastCancel,
-  handleClickCreateDispute,
+  handleClickCreateCancel,
   handleOrderClickAcceptCancelByTenant,
   handleOrderClickAcceptCancelByOwner,
   handleClickUpdateRequest,
@@ -27,6 +27,7 @@ const OrderInfo = ({
   handleClickPay,
   handleClickExtend,
   extension = false,
+  handleDisputeCreate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -226,6 +227,19 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+        ) && (
+          <button
+            className="default-btn"
+            onClick={() => handleDisputeCreate(order.id)}
+            type="button"
+          >
+            <i className="bx bx-transfer-alt"></i>
+            Open dispute
+          </button>
+        )}
+
+        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
         ) && (
           <button
@@ -236,7 +250,7 @@ const OrderInfo = ({
             }}
             className="default-btn"
           >
-            <i className="bx bx-calendar"></i> Extend
+            <i className="bx bx-calendar"></i> Extend Offer
           </button>
         )}
 
@@ -271,17 +285,17 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
+          STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
         ) && (
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              handleClickCreateDispute(order.id);
+              handleClickCreateCancel(order.id);
             }}
             className="default-btn danger"
           >
-            <i className="bx bx-x-circle"></i> Create Dispute
+            <i className="bx bx-x-circle"></i>Cancel
           </button>
         )}
         {currentActionButtons.includes(
@@ -323,7 +337,7 @@ const OrderItem = ({
   filterType,
   handleClickCancel,
   handleClickPayedFastCancel,
-  handleClickCreateDispute,
+  handleClickCreateCancel,
   handleOrderClickAcceptCancelByTenant,
   handleOrderClickAcceptCancelByOwner,
   handleClickUpdateRequest,
@@ -331,6 +345,7 @@ const OrderItem = ({
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
+  handleDisputeCreate,
 }) => {
   const router = useRouter();
 
@@ -380,7 +395,7 @@ const OrderItem = ({
           order={order}
           handleClickCancel={handleClickCancel}
           handleClickPayedFastCancel={handleClickPayedFastCancel}
-          handleClickCreateDispute={handleClickCreateDispute}
+          handleClickCreateCancel={handleClickCreateCancel}
           handleOrderClickAcceptCancelByTenant={
             handleOrderClickAcceptCancelByTenant
           }
@@ -393,6 +408,7 @@ const OrderItem = ({
           handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
+          handleDisputeCreate={handleDisputeCreate}
         />
       </tr>
 
@@ -412,7 +428,7 @@ const OrderItem = ({
               order={extendOrder}
               handleClickCancel={handleClickCancel}
               handleClickPayedFastCancel={handleClickPayedFastCancel}
-              handleClickCreateDispute={handleClickCreateDispute}
+              handleClickCreateCancel={handleClickCreateCancel}
               handleOrderClickAcceptCancelByTenant={
                 handleOrderClickAcceptCancelByTenant
               }

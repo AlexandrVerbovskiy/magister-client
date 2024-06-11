@@ -1,7 +1,8 @@
 import { autoMultiEnding, getFilePath } from "../../../utils";
 import STATIC from "../../../static";
+import StarRating from "../../StarRating";
 
-const OwnerInfo = ({ data }) => {
+const OwnerInfo = ({ data, countItemsType = "for rental" }) => {
   return (
     <div className="listings-widget listings_author">
       <h3>Owner</h3>
@@ -22,26 +23,20 @@ const OwnerInfo = ({ data }) => {
             </h4>
             <span style={{ color: "#666666" }}>
               {data.userCountItems}{" "}
-              {autoMultiEnding(data.userCountItems, "item")} for rental
+              {autoMultiEnding(data.userCountItems, "item")} {countItemsType}
             </span>
           </div>
         </div>
       </div>
 
       <div className="rating-section">
-        <div className="rating d-flex align-items-center">
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-        </div>
-        <span className="overall-rating">
-          <b>5.0</b>
-        </span>
-        <span className="rating-count">
-          <a href="#">(5 reviews)</a>
-        </span>
+        <StarRating
+          averageRating={data.userAverageRating ?? 0}
+          commentCount={data.userCommentCount ?? 0}
+          centerAlign={true}
+          countClass="rating-count"
+          pointsValue={true}
+        />
       </div>
     </div>
   );

@@ -30,12 +30,16 @@ import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 import PaypalTriggerModal from "../PaypalTriggerModal";
-import CreateDisputeTriggerModal from "./CreateDisputeTriggerModal";
+import CreateCancelTriggerModal from "./CreateCancelTriggerModal";
 import CancelTriggerModal from "./CancelTriggerModal";
 import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
 import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
-import { useOrderActions, useOrderDateError } from "../../hooks";
+import {
+  useCreateDispute,
+  useOrderActions,
+  useOrderDateError,
+} from "../../hooks";
 import PayedCancelTriggerModal from "./PayedCancelTriggerModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
@@ -44,6 +48,7 @@ import { useRouter } from "next/router";
 import BookingModal from "../SingleListings/BookingModal";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
+import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -66,6 +71,8 @@ const OrderContent = ({
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
   const [extendPopupActive, setExtendPopupActive] = useState(false);
   const [extendApproveData, setExtendApproveData] = useState(null);
+  const [activeDisputeWindow, setActiveDisputeWindow] = useState(false);
+  const createDisputeData = useCreateDispute({ order });
 
   const router = useRouter();
 
@@ -351,7 +358,7 @@ const OrderContent = ({
     }
   };
 
-  const onCreateDispute = async (description) => {
+  const onCancelOrder = async (description) => {
     try {
       if (isTenant) {
         await orderCancelByTenant({ id: order.id, description }, authToken);
@@ -573,6 +580,17 @@ const OrderContent = ({
         toDate={extendApproveData.toDate}
         price={extendApproveData.price}
         fee={tenantBaseCommission}
+      />
+    );
+  }
+
+  if (activeDisputeWindow) {
+    return (
+      <CreateDisputeSection
+        {...createDisputeData}
+        onGoBack={() => setActiveDisputeWindow(false)}
+        setCurrentOpenImg={setCurrentOpenImg}
+        needWrapping={false}
       />
     );
   }
@@ -1256,10 +1274,10 @@ const OrderContent = ({
                 <>
                   <p>{question.question}</p>
 
-                  <div class="form-group">
-                    <ul class="facilities-list">
+                  <div className="form-group">
+                    <ul className="facilities-list">
                       <li>
-                        <label class="checkbox">
+                        <label className="checkbox">
                           <input
                             type="checkbox"
                             name={`question[${question.id}]["yes"]`}
@@ -1273,7 +1291,7 @@ const OrderContent = ({
                         </label>
                       </li>
                       <li>
-                        <label class="checkbox">
+                        <label className="checkbox">
                           <input
                             type="checkbox"
                             name={`question[${question.id}]["no"]`}
@@ -1569,6 +1587,18 @@ const OrderContent = ({
             ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
 
             {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+            ) && (
+              <button
+                type="button"
+                className="default-btn error-btn"
+                onClick={() => setActiveDisputeWindow(true)}
+              >
+                Open dispute
+              </button>
+            )}
+
+            {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
             ) && (
               <>
@@ -1615,11 +1645,11 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
+              STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
             ) && (
-              <CreateDisputeTriggerModal
-                onCreateDispute={onCreateDispute}
-                text="Create Dispute"
+              <CreateCancelTriggerModal
+                onCancelOrder={onCancelOrder}
+                text="Cancel Request"
               />
             )}
 

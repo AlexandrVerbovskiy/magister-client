@@ -4,13 +4,13 @@ import BaseModal from "../_App/BaseModal";
 import { IndiceContext } from "../../contexts";
 import { validateBigText } from "../../utils";
 
-const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
+const CreateCancelModal = ({ modalActive, closeModal, onCancelOrder }) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const { error } = useContext(IndiceContext);
 
-  const handleAcceptCreateDisputeClick = async () => {
+  const handleAcceptCreateCancelClick = async () => {
     if (disabled) {
       return;
     }
@@ -22,10 +22,10 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
       hasError = true;
     }
 
-    const resValidateDisputeDescription = validateBigText(description);
+    const resValidateCancelDescription = validateBigText(description);
 
-    if (resValidateDisputeDescription !== true) {
-      setDescriptionError(resValidateDisputeDescription);
+    if (resValidateCancelDescription !== true) {
+      setDescriptionError(resValidateCancelDescription);
       hasError = true;
     }
 
@@ -34,7 +34,7 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
     }
 
     try {
-      await onCreateDispute(description);
+      await onCancelOrder(description);
       setDisabled(true);
       setDescription("");
     } catch (e) {
@@ -51,14 +51,11 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
         needCloseBtn={true}
       >
         <span className="sub-title mb-2">
-          <span>Do you really want to start a dispute?</span>
+          <span>Do you really want to cancel order?</span>
         </span>
         <form method="get" onSubmit={(e) => e.preventDefault}>
           <span style={{ fontSize: "14px" }}>
-            It will be resolved with the intervention of administrators who will
-            see your correspondence and other information about the order.For
-            the better result, describe the dispute in as much detail as
-            possible
+          Specify the reason for canceling the order
           </span>
 
           <div className="form-group mt-2 mb-4">
@@ -83,7 +80,7 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
             </button>
             <button
               type="button"
-              onClick={() => handleAcceptCreateDisputeClick("email")}
+              onClick={() => handleAcceptCreateCancelClick("email")}
               disabled={disabled}
             >
               Send
@@ -94,4 +91,4 @@ const CreateDisputeModal = ({ modalActive, closeModal, onCreateDispute }) => {
   );
 };
 
-export default CreateDisputeModal;
+export default CreateCancelModal;

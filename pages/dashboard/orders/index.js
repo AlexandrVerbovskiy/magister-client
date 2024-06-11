@@ -18,6 +18,7 @@ import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import ImagePopup from "../../../components/_App/ImagePopup";
 import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
+import CreateDisputeSection from "../../../components/Dispute/CreateDisputeSection";
 
 const Wrapper = ({ children }) => {
   return (
@@ -143,10 +144,11 @@ const Orders = (pageProps) => {
     activeFastCancelOrder,
     closeActiveFastCancel,
 
-    handleClickCreateDispute,
-    handleAcceptCreateDispute,
-    activeCreateDispute,
-    closeActiveCreateDispute,
+    handleClickCreateCancel,
+
+    handleAcceptCreateCancel,
+    activeCreateCancel,
+    closeActiveCreateCancel,
 
     handleOrderClickAcceptCancelByTenant,
     handleOrderAcceptAcceptCancelByTenant,
@@ -191,7 +193,22 @@ const Orders = (pageProps) => {
     acceptApproveExtendOrder,
 
     successIconPopupState,
+
+    closeDisputeWindow,
+    disputeWindowActive,
+    disputeCreate,
+    createDisputeData,
   } = useOrderFastActions({ orders: orders, setItemFields });
+
+  if (disputeWindowActive) {
+    return (
+      <CreateDisputeSection
+        {...createDisputeData}
+        onGoBack={closeDisputeWindow}
+        setCurrentOpenImg={setCurrentOpenImg}
+      />
+    );
+  }
 
   if (extendModalApproveActive && extendModalApproveData.order) {
     return (
@@ -273,7 +290,7 @@ const Orders = (pageProps) => {
                       link={`/dashboard/orders`}
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
-                      handleClickCreateDispute={handleClickCreateDispute}
+                      handleClickCreateCancel={handleClickCreateCancel}
                       handleOrderClickAcceptCancelByTenant={
                         handleOrderClickAcceptCancelByTenant
                       }
@@ -285,6 +302,7 @@ const Orders = (pageProps) => {
                       handleClickAccept={handleClickAccept}
                       handleClickPay={handleClickPay}
                       handleClickExtend={handleClickExtendOrder}
+                      handleDisputeCreate={disputeCreate}
                     />
                   ))}
                 </tbody>
@@ -310,9 +328,9 @@ const Orders = (pageProps) => {
             closeActiveFastCancel={closeActiveFastCancel}
             handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
             activeFastCancelOrder={activeFastCancelOrder}
-            activeCreateDispute={activeCreateDispute}
-            closeActiveCreateDispute={closeActiveCreateDispute}
-            handleAcceptCreateDispute={handleAcceptCreateDispute}
+            activeCreateCancel={activeCreateCancel}
+            closeActiveCreateCancel={closeActiveCreateCancel}
+            handleAcceptCreateCancel={handleAcceptCreateCancel}
             activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
             closeActiveOrderAcceptCancelByTenant={
               closeActiveOrderAcceptCancelByTenant

@@ -1,14 +1,14 @@
 import { useState } from "react";
-import CreateDisputeModal from "./CreateDisputeModal";
+import CreateCancelModal from "./CreateCancelModal";
 
-const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
+const CreateCancelTriggerModal = ({ onCancelOrder }) => {
   const [modalActive, setModalActive] = useState(false);
 
   return (
     <>
-      <CreateDisputeModal
+      <CreateCancelModal
         modalActive={modalActive}
-        onCreateDispute={onCreateDispute}
+        onCancelOrder={onCancelOrder}
         closeModal={() => setModalActive(false)}
       />
 
@@ -17,10 +17,10 @@ const CreateDisputeTriggerModal = ({ onCreateDispute }) => {
         type="button"
         onClick={() => setModalActive(true)}
       >
-        Create Dispute
+        Cancel
       </button>
     </>
   );
 };
 
-export default CreateDisputeTriggerModal;
+export default CreateCancelTriggerModal;

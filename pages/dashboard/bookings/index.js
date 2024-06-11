@@ -18,6 +18,7 @@ import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
 import ImagePopup from "../../../components/_App/ImagePopup";
+import CreateDisputeSection from "../../../components/Dispute/CreateDisputeSection";
 
 const TabHeaderSection = ({
   countForTenant,
@@ -136,10 +137,10 @@ const MyBookings = (pageProps) => {
     activeFastCancel,
     closeActiveFastCancel,
 
-    handleClickCreateDispute,
-    handleAcceptCreateDispute,
-    activeCreateDispute,
-    closeActiveCreateDispute,
+    handleClickCreateCancel,
+    handleAcceptCreateCancel,
+    activeCreateCancel,
+    closeActiveCreateCancel,
 
     handleOrderClickAcceptCancelByTenant,
     handleOrderAcceptAcceptCancelByTenant,
@@ -184,6 +185,11 @@ const MyBookings = (pageProps) => {
     acceptApproveExtendOrder,
 
     successIconPopupState,
+
+    closeDisputeWindow,
+    disputeWindowActive,
+    disputeCreate,
+    createDisputeData,
   } = useOrderFastActions({ orders: bookings, setItemFields });
 
   const changeType = (value) => {
@@ -218,6 +224,16 @@ const MyBookings = (pageProps) => {
           close={() => setCurrentOpenImg(null)}
         />
       </Wrapper>
+    );
+  }
+
+  if (disputeWindowActive) {
+    return (
+      <CreateDisputeSection
+        {...createDisputeData}
+        onGoBack={closeDisputeWindow}
+        setCurrentOpenImg={setCurrentOpenImg}
+      />
     );
   }
 
@@ -271,7 +287,7 @@ const MyBookings = (pageProps) => {
                       link={`/dashboard/bookings`}
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
-                      handleClickCreateDispute={handleClickCreateDispute}
+                      handleClickCreateCancel={handleClickCreateCancel}
                       handleOrderClickAcceptCancelByTenant={
                         handleOrderClickAcceptCancelByTenant
                       }
@@ -283,12 +299,14 @@ const MyBookings = (pageProps) => {
                       handleClickAccept={handleClickAccept}
                       handleClickPay={handleClickPay}
                       handleClickExtend={handleClickExtendOrder}
+                      handleDisputeCreate={disputeCreate}
                     />
                   ))}
                 </tbody>
               </table>
             </div>
           </section>
+
           <Pagination
             viewOnlyMoreOnePage={true}
             page={page}
@@ -297,6 +315,7 @@ const MyBookings = (pageProps) => {
             canNext={canMoveNextPage}
             canPrev={canMovePrevPage}
           />
+
           <OrdersListFastActinsModals
             tenantBaseCommission={pageProps.tenantBaseFee}
             activeCancel={activeCancel}
@@ -305,9 +324,9 @@ const MyBookings = (pageProps) => {
             activeFastCancel={activeFastCancel}
             closeActiveFastCancel={closeActiveFastCancel}
             handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
-            activeCreateDispute={activeCreateDispute}
-            closeActiveCreateDispute={closeActiveCreateDispute}
-            handleAcceptCreateDispute={handleAcceptCreateDispute}
+            activeCreateCancel={activeCreateCancel}
+            closeActiveCreateCancel={closeActiveCreateCancel}
+            handleAcceptCreateCancel={handleAcceptCreateCancel}
             activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
             closeActiveOrderAcceptCancelByTenant={
               closeActiveOrderAcceptCancelByTenant

@@ -15232,27 +15232,40 @@ Dashboard CSS
   border-color: var(--mainColor);
   background-color: transparent;
 }
+
+.form-group .facilities-list,
 .add-listings-box .form-group .facilities-list {
   padding-left: 0;
   margin-bottom: -15px;
   list-style-type: none;
   overflow: hidden;
 }
+
+.form-group .facilities-list li,
 .add-listings-box .form-group .facilities-list li {
   float: left;
   margin-right: 20px;
   position: relative;
   margin-bottom: 15px;
 }
+
+.form-group .facilities-list li .radio,
+.form-group .facilities-list li .checkbox,
 .add-listings-box .form-group .facilities-list li .checkbox {
   margin-bottom: 0;
   padding-left: 0;
   cursor: pointer;
   display: inline-block;
 }
+
+.form-group .facilities-list li .radio input,
+.form-group .facilities-list li .checkbox input,
 .add-listings-box .form-group .facilities-list li .checkbox input {
   display: none;
 }
+
+.form-group .facilities-list li .radio input + span,
+.form-group .facilities-list li .checkbox input + span,
 .add-listings-box .form-group .facilities-list li .checkbox input + span {
   line-height: 20px;
   height: 20px;
@@ -15261,6 +15274,17 @@ Dashboard CSS
   position: relative;
   font-weight: 500;
 }
+
+.facilities-list
+  li
+  .checkbox
+  input
+  + span:not(:empty),
+.facilities-list
+  li
+  .radio
+  input
+  + span:not(:empty),
 .add-listings-box
   .form-group
   .facilities-list
@@ -15270,6 +15294,11 @@ Dashboard CSS
   + span:not(:empty) {
   padding-left: 28px;
 }
+
+.form-group .facilities-list li .radio input + span:before,
+.form-group .facilities-list li .checkbox input + span:before,
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:before,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   content: "";
@@ -15281,6 +15310,17 @@ Dashboard CSS
   top: -1px;
   position: absolute;
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:before,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15292,10 +15332,23 @@ Dashboard CSS
   transition: background 0.2s ease,
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
 }
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   background: #eeeeee;
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:before,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15305,6 +15358,17 @@ Dashboard CSS
   + span:before {
   background: var(--mainColor);
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:after,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:after,
 .add-listings-box
   .form-group
   .facilities-list
