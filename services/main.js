@@ -338,3 +338,8 @@ export const createOwnerReview = async (
   );
   return data.body;
 };
+
+export const getAdminDisputeListOptions = async (params, authToken) => {
+  const data = await post(`/admin-dispute-list-options`, params, authToken);
+  return data.body;
+};

@@ -355,6 +355,56 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 )}
               />
 
+              <SidebarTypicalLink
+                title="Disputes"
+                link="disputes"
+                SVG={({ current }) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-scale"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="#2c3e50"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M7 20l10 0"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M6 6l6 -1l6 1"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M12 3l0 17"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"
+                    />
+                  </svg>
+                )}
+              />
+
               {isAdmin && (
                 <SidebarGroupedLinks
                   setSidebarExpanded={setSidebarExpanded}
