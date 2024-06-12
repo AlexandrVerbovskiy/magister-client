@@ -9,7 +9,7 @@ import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 import "../styles/index.css";
-import { useIsomorphicLayoutEffect } from "../hooks";
+import { useIsomorphicLayoutEffect, useTawkScript } from "../hooks";
 
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
@@ -122,6 +122,8 @@ function MyApp({ Component, pageProps }) {
       setLoading(false);
     },
   });
+
+  useTawkScript(pageType);
 
   if (globalError) {
     return (
