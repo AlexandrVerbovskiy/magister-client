@@ -13,7 +13,7 @@ import {
   useOrderFastActions,
   usePagination,
 } from "../../../hooks";
-import OrderItem from "../../../components/Listings/OrderItem";
+import OrderItem from "../../../components/Order/OrderItem";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import ImagePopup from "../../../components/_App/ImagePopup";
@@ -141,25 +141,8 @@ const Orders = (pageProps) => {
     handleClickPayedFastCancel,
     handleAcceptPayedFastCancel,
     activeFastCancel,
-    activeFastCancelOrder,
     closeActiveFastCancel,
-
     handleClickCreateCancel,
-
-    handleAcceptCreateCancel,
-    activeCreateCancel,
-    closeActiveCreateCancel,
-
-    handleOrderClickAcceptCancelByTenant,
-    handleOrderAcceptAcceptCancelByTenant,
-    activeOrderAcceptCancelByTenant,
-    closeActiveOrderAcceptCancelByTenant,
-
-    handleOrderClickAcceptCancelByOwner,
-    handleOrderAcceptAcceptCancelByOwner,
-    activeOrderAcceptCancelByOwner,
-    closeActiveOrderAcceptCancelByOwner,
-
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,
     activeUpdateRequest,
@@ -198,6 +181,7 @@ const Orders = (pageProps) => {
     disputeWindowActive,
     disputeCreate,
     createDisputeData,
+    onCreateDispute,
   } = useOrderFastActions({ orders: orders, setItemFields });
 
   if (disputeWindowActive) {
@@ -206,6 +190,7 @@ const Orders = (pageProps) => {
         {...createDisputeData}
         onGoBack={closeDisputeWindow}
         setCurrentOpenImg={setCurrentOpenImg}
+        onSubmit={onCreateDispute}
       />
     );
   }
@@ -291,12 +276,6 @@ const Orders = (pageProps) => {
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
                       handleClickCreateCancel={handleClickCreateCancel}
-                      handleOrderClickAcceptCancelByTenant={
-                        handleOrderClickAcceptCancelByTenant
-                      }
-                      handleOrderClickAcceptCancelByOwner={
-                        handleOrderClickAcceptCancelByOwner
-                      }
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
@@ -327,24 +306,6 @@ const Orders = (pageProps) => {
             activeFastCancel={activeFastCancel}
             closeActiveFastCancel={closeActiveFastCancel}
             handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
-            activeFastCancelOrder={activeFastCancelOrder}
-            activeCreateCancel={activeCreateCancel}
-            closeActiveCreateCancel={closeActiveCreateCancel}
-            handleAcceptCreateCancel={handleAcceptCreateCancel}
-            activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
-            closeActiveOrderAcceptCancelByTenant={
-              closeActiveOrderAcceptCancelByTenant
-            }
-            handleOrderAcceptAcceptCancelByTenant={
-              handleOrderAcceptAcceptCancelByTenant
-            }
-            activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
-            closeActiveOrderAcceptCancelByOwner={
-              closeActiveOrderAcceptCancelByOwner
-            }
-            handleOrderAcceptAcceptCancelByOwner={
-              handleOrderAcceptAcceptCancelByOwner
-            }
             handleAcceptUpdateRequest={handleAcceptUpdateRequest}
             activeUpdateRequest={activeUpdateRequest}
             closeActiveUpdateRequest={closeActiveUpdateRequest}
@@ -359,7 +320,6 @@ const Orders = (pageProps) => {
             closePay={closePay}
             onTenantPayed={onTenantPayed}
             activePayOrder={activePayOrder}
-            tenantCancelFee={tenantCancelFee}
             handleClickExtendOrder={handleClickExtendOrder}
             handleClickApproveExtendOrder={handleClickApproveExtendOrder}
             extendModalActive={extendModalActive}

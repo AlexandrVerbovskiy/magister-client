@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 import CancelModal from "./CancelModal";
-import CreateCancelModal from "./CreateCancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
@@ -10,7 +9,6 @@ import { increaseDateByOneDay, tenantPaymentCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingModal from "../SingleListings/BookingModal";
-import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -21,18 +19,6 @@ const OrdersListFastActinsModals = ({
   activeFastCancel,
   closeActiveFastCancel,
   activeFastCancelOrder,
-
-  handleAcceptCreateCancel,
-  activeCreateCancel,
-  closeActiveCreateCancel,
-
-  handleOrderAcceptAcceptCancelByTenant,
-  activeOrderAcceptCancelByTenant,
-  closeActiveOrderAcceptCancelByTenant,
-
-  handleOrderAcceptAcceptCancelByOwner,
-  activeOrderAcceptCancelByOwner,
-  closeActiveOrderAcceptCancelByOwner,
 
   handleAcceptUpdateRequest,
   activeUpdateRequest,
@@ -159,23 +145,6 @@ const OrdersListFastActinsModals = ({
         onCancel={handleAcceptPayedFastCancel}
         disabled={payedFastCancelDisabled}
         setDisabled={setPayedFastCancelDisabled}
-      />
-
-      <CreateCancelModal
-        modalActive={activeCreateCancel}
-        closeModal={closeActiveCreateCancel}
-        onCancelOrder={handleAcceptCreateCancel}
-      />
-
-      <CancelModal
-        modalActive={activeOrderAcceptCancelByTenant}
-        closeModal={closeActiveOrderAcceptCancelByTenant}
-        onCancel={handleOrderAcceptAcceptCancelByTenant}
-      />
-      <CancelModal
-        modalActive={activeOrderAcceptCancelByOwner}
-        closeModal={closeActiveOrderAcceptCancelByOwner}
-        onCancel={handleOrderAcceptAcceptCancelByOwner}
       />
 
       <AcceptAcceptOrderModal

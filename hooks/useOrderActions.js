@@ -7,6 +7,11 @@ const useOrderActions = ({ order }) => {
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
 
   useEffect(() => {
+    if (order.disputeId != null) {
+      setCurrentActionButtons([]);
+      return;
+    }
+
     const isOwner = order.ownerId == sessionUser?.id;
     const isTenant = order.tenantId == sessionUser?.id;
 
@@ -97,9 +102,7 @@ const useOrderActions = ({ order }) => {
           );
         }
 
-        newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
-        );
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON);
       }
 
       if (order.status == STATIC.ORDER_STATUSES.FINISHED) {

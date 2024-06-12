@@ -4,14 +4,12 @@ import ItemInfo from "../Order/OrderApprovementParts/ItemInfo";
 import ErrorSpan from "../ErrorSpan";
 import DashboardNavbar from "../Dashboard/DashboardNavbar";
 import NavbarThree from "../_App/NavbarThree";
+import STATIC from "../../static";
 
-const options = [
-  { title: "Damage", value: "damage" },
-  { title: "Communication", value: "communication" },
-  { title: "Problems with withdrawal", value: "problems-with-withdrawal" },
-  { title: "Payment", value: "payment" },
-  { title: "Others", value: "others" },
-];
+const options = Object.keys(STATIC.DISPUTE_TYPE_TITLE).map((value) => ({
+  title: STATIC.DISPUTE_TYPE_TITLE[value],
+  value,
+}));
 
 const Wrap = ({ children, needWrapping }) => {
   if (!needWrapping) return children;
@@ -46,6 +44,7 @@ const CreateDisputeSection = ({
   disabled,
   description,
   setDescription,
+  opponentId,
   opponentName,
   opponentPhoto,
   setCurrentOpenImg,
@@ -53,6 +52,7 @@ const CreateDisputeSection = ({
   opponentCommentCountName,
   opponentAverageRatingName,
   opponentItemsType = "for rental",
+  isOwnerCreateDispute,
   needWrapping = true,
 }) => {
   const handleDescriptionChange = (e) => {
@@ -72,6 +72,7 @@ const CreateDisputeSection = ({
           <div className="listings-sidebar mt-0">
             <OwnerInfo
               data={{
+                userId: opponentId,
                 userName: opponentName,
                 userPhoto: opponentPhoto,
                 userCountItems: +opponentCountItems,
@@ -79,6 +80,7 @@ const CreateDisputeSection = ({
                 userAverageRating: opponentAverageRatingName,
               }}
               countItemsType={opponentItemsType}
+              title={isOwnerCreateDispute ? "Renter" : "Owner"}
             />
 
             <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />

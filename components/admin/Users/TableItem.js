@@ -104,6 +104,8 @@ const TableItem = ({
   twitterUrl,
   ownerAverageRating,
   tenantAverageRating,
+  tenantDisputesCount,
+  ownerDisputesCount,
 }) => {
   const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
@@ -281,29 +283,53 @@ const TableItem = ({
             />
           </div>
         </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div>
-            <div className="font-semibold flex items-center">Activity</div>
-            <SubInfoRow
-              label="Last rental"
-              value={lastRenterDate ? timeConverter(lastRenterDate) : "-"}
-              newRow={true}
-            />
-            <SubInfoRow label="Disputes" value={0} />
-            <SubInfoRowWithChild label="Tenant">
-              <SingleRatingStar value={tenantAverageRating} />
-            </SubInfoRowWithChild>
-            <SubInfoRowWithChild label="Owner">
-              <SingleRatingStar value={ownerAverageRating} />
-            </SubInfoRowWithChild>
-          </div>
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 border-r">
-          <ActiveSpan
-            active={verified}
-            onClick={handleChangeVerified}
-            clickable={!isCurrent && role !== "admin"}
-          />
+        <td colSpan={2}>
+          <table>
+            <thead>
+              <tr>
+                <th style={{width:"60%"}}></th>
+                <th style={{width:"40%"}}></th>
+              </tr>
+            </thead>
+            <tbody>
+              <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
+                <div>
+                  <div className="font-semibold flex items-center">
+                    Activity
+                  </div>
+                  <SubInfoRow
+                    label="Last rental"
+                    value={lastRenterDate ? timeConverter(lastRenterDate) : "-"}
+                    newRow={true}
+                  />
+                  <SubInfoRow
+                    label="Tenant Disputes"
+                    value={tenantDisputesCount}
+                    newRow={true}
+                  />
+                  <SubInfoRow
+                    label="Owner Disputes"
+                    value={ownerDisputesCount}
+                    newRow={true}
+                  />
+
+                  <SubInfoRowWithChild label="Tenant">
+                    <SingleRatingStar value={tenantAverageRating} />
+                  </SubInfoRowWithChild>
+                  <SubInfoRowWithChild label="Owner">
+                    <SingleRatingStar value={ownerAverageRating} />
+                  </SubInfoRowWithChild>
+                </div>
+              </td>
+              <td className="px-2 py-3 border-r">
+                <ActiveSpan
+                  active={verified}
+                  onClick={handleChangeVerified}
+                  clickable={!isCurrent && role !== "admin"}
+                />
+              </td>
+            </tbody>
+          </table>
         </td>
         <td colSpan={2} className="px-2 first:pl-5 last:pr-5 py-3">
           <div className="flex items-center justify-start gap-2 flex-wrap">

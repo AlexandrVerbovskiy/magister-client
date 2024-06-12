@@ -51,4 +51,11 @@ export default {
     "image/png": [".png"],
     "image/jpeg": [".jpg", ".jpeg"],
   },
+  DISPUTE_TYPE_TITLE: {
+    damage: "Damage",
+    communication: "Communication",
+    "problems-with-withdrawal": "Problems with withdrawal",
+    payment: "Payment",
+    others: "Others",
+  },
 };

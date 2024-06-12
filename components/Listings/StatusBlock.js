@@ -3,7 +3,7 @@ import { separateDate } from "../../utils";
 
 const StatusBlock = ({
   status,
-  statusCancelled,
+  disputeStatus,
   ownerId,
   tenantId,
   userId,
@@ -65,30 +65,17 @@ const StatusBlock = ({
     text = "Denied";
   }
 
-  if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELLED) {
-    color = "status-background-red";
-    text = "Cancelled";
-  }
-
   if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE
+    disputeStatus == STATIC.DISPUTE_STATUSES.OPEN ||
+    disputeStatus == STATIC.DISPUTE_STATUSES.UNSOLVED
   ) {
-    color = "status-background-red";
+    color = "status-background-orange";
     text = "In dispute";
   }
 
-  if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
-  ) {
-    color = "status-background-red";
-    text = "In dispute";
-  }
-
-  if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE
-  ) {
-    color = "status-background-red";
-    text = "In dispute";
+  if (disputeStatus == STATIC.DISPUTE_STATUSES.SOLVED) {
+    color = "status-background-green";
+    text = "Dispute solved";
   }
 
   return <div className={`${dopClass} ${color}`}>{text}</div>;

@@ -13,7 +13,7 @@ import { IndiceContext } from "../../../contexts";
 import { getBookingListOptions } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import { baseTimeListPageParams } from "../../../utils";
-import OrderItem from "../../../components/Listings/OrderItem";
+import OrderItem from "../../../components/Order/OrderItem";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
@@ -137,21 +137,6 @@ const MyBookings = (pageProps) => {
     activeFastCancel,
     closeActiveFastCancel,
 
-    handleClickCreateCancel,
-    handleAcceptCreateCancel,
-    activeCreateCancel,
-    closeActiveCreateCancel,
-
-    handleOrderClickAcceptCancelByTenant,
-    handleOrderAcceptAcceptCancelByTenant,
-    activeOrderAcceptCancelByTenant,
-    closeActiveOrderAcceptCancelByTenant,
-
-    handleOrderClickAcceptCancelByOwner,
-    handleOrderAcceptAcceptCancelByOwner,
-    activeOrderAcceptCancelByOwner,
-    closeActiveOrderAcceptCancelByOwner,
-
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,
     activeUpdateRequest,
@@ -190,6 +175,7 @@ const MyBookings = (pageProps) => {
     disputeWindowActive,
     disputeCreate,
     createDisputeData,
+    onCreateDispute,
   } = useOrderFastActions({ orders: bookings, setItemFields });
 
   const changeType = (value) => {
@@ -233,6 +219,7 @@ const MyBookings = (pageProps) => {
         {...createDisputeData}
         onGoBack={closeDisputeWindow}
         setCurrentOpenImg={setCurrentOpenImg}
+        onSubmit={onCreateDispute}
       />
     );
   }
@@ -287,13 +274,6 @@ const MyBookings = (pageProps) => {
                       link={`/dashboard/bookings`}
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
-                      handleClickCreateCancel={handleClickCreateCancel}
-                      handleOrderClickAcceptCancelByTenant={
-                        handleOrderClickAcceptCancelByTenant
-                      }
-                      handleOrderClickAcceptCancelByOwner={
-                        handleOrderClickAcceptCancelByOwner
-                      }
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
@@ -324,23 +304,6 @@ const MyBookings = (pageProps) => {
             activeFastCancel={activeFastCancel}
             closeActiveFastCancel={closeActiveFastCancel}
             handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
-            activeCreateCancel={activeCreateCancel}
-            closeActiveCreateCancel={closeActiveCreateCancel}
-            handleAcceptCreateCancel={handleAcceptCreateCancel}
-            activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
-            closeActiveOrderAcceptCancelByTenant={
-              closeActiveOrderAcceptCancelByTenant
-            }
-            handleOrderAcceptAcceptCancelByTenant={
-              handleOrderAcceptAcceptCancelByTenant
-            }
-            activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
-            closeActiveOrderAcceptCancelByOwner={
-              closeActiveOrderAcceptCancelByOwner
-            }
-            handleOrderAcceptAcceptCancelByOwner={
-              handleOrderAcceptAcceptCancelByOwner
-            }
             handleAcceptUpdateRequest={handleAcceptUpdateRequest}
             activeUpdateRequest={activeUpdateRequest}
             closeActiveUpdateRequest={closeActiveUpdateRequest}

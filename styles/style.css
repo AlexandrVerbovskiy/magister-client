@@ -4312,25 +4312,21 @@ Listings Details Area CSS
   margin-bottom: 14px;
 }
 
-.base-full-rating-stars-info .rating,
-.listings-details-image .listings-details-content .rating {
+.rating {
   margin-bottom: 5px;
 }
 
-.base-full-rating-stars-info .rating .bx,
-.listings-details-image .listings-details-content .rating .bx {
+.rating .bx {
   color: #cecfd2;
   font-size: var(--fontSize);
   margin-right: 2px;
 }
 
-.base-full-rating-stars-info .rating .bx.checked,
-.listings-details-image .listings-details-content .rating .bx.checked {
+.rating .bx.checked {
   color: #efc02f;
 }
 
-.base-full-rating-stars-info .rating .rating-count,
-.listings-details-image .listings-details-content .rating .rating-count {
+.rating .rating-count {
   position: relative;
   color: var(--mainColor);
   top: 1px;
@@ -4338,7 +4334,7 @@ Listings Details Area CSS
   font-weight: 600;
 }
 
-.base-full-rating-stars-info .rating .overall-rating {
+.rating .overall-rating {
   position: relative;
   top: 1px;
   margin-left: 5px;

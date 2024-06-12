@@ -7,6 +7,7 @@ const useCreateDispute = ({ order = null }) => {
   const [type, setType] = useState("damage");
   const [description, setDescription] = useState("");
 
+  const [opponentId, setOpponentId] = useState(null);
   const [opponentName, setOpponentName] = useState("");
   const [opponentPhoto, setOpponentPhoto] = useState(null);
   const [opponentCountItems, setOpponentCountItems] = useState(0);
@@ -16,15 +17,17 @@ const useCreateDispute = ({ order = null }) => {
 
   const [listing, setListing] = useState({});
 
-  console.log(order);
+  const isOwnerCreateDispute = sessionUser?.id == order?.ownerId;
 
   useEffect(() => {
     setType("damage");
     setDescription("");
 
     if (order) {
-      const isOwnerCreateDispute = sessionUser.id == order.ownerId;
-      setOpponentName(isOwnerCreateDispute ? order.tenantId : order.ownerId);
+      setOpponentId(isOwnerCreateDispute ? order.tenantId : order.ownerId);
+      setOpponentName(
+        isOwnerCreateDispute ? order.tenantName : order.ownerName
+      );
       setOpponentPhoto(
         isOwnerCreateDispute ? order.tenantPhoto : order.ownerPhoto
       );
@@ -67,6 +70,7 @@ const useCreateDispute = ({ order = null }) => {
     description,
     setDescription,
 
+    opponentId,
     opponentName,
     opponentPhoto,
     opponentCountItems,
@@ -75,6 +79,7 @@ const useCreateDispute = ({ order = null }) => {
     opponentAverageRatingName,
 
     listing,
+    isOwnerCreateDispute,
   };
 };
 

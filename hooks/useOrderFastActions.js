@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../contexts";
 import {
+  createDispute,
   extendOrder,
   orderAcceptCancelByOwner,
   orderAcceptCancelByTenant,
@@ -57,7 +58,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [activeCreateCancelId, setActiveCreateCancelId] = useState(null);
 
   const [orderToDispute, setOrderToDispute] = useState(null);
-  const [disputeWindowActive, setDisputeWindowActive] = useState(null);
+  const [disputeWindowActive, setDisputeWindowActive] = useState(false);
   const createDisputeData = useCreateDispute({ order: orderToDispute });
 
   const disputeCreate = (orderId) => {
@@ -66,8 +67,38 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setOrderToDispute({ ...order });
   };
 
-  const closeDisputeWindow = (order) => {
+  const closeDisputeWindow = () => {
+    setOrderToDispute(null);
     setDisputeWindowActive(false);
+  };
+
+  const onCreateDispute = async () => {
+    try {
+      const disputeId = await createDispute(
+        {
+          orderId: orderToDispute.id,
+          type: createDisputeData.type,
+          description: createDisputeData.description,
+        },
+        authToken
+      );
+
+      autoParentOrderSetItemField(
+        {
+          disputeId,
+          disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+          disputeType: createDisputeData.type,
+          disputeDescription: createDisputeData.description,
+        },
+        orderToDispute.id
+      );
+
+      success.set("Dispute created success");
+
+      closeDisputeWindow();
+    } catch (e) {
+      error.set(e.message);
+    }
   };
 
   const [activeOrderAcceptCancelByTenant, setActiveOrderAcceptCancelByTenant] =
@@ -580,6 +611,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     disputeWindowActive,
     disputeCreate,
     closeDisputeWindow,
+    onCreateDispute,
   };
 };
 

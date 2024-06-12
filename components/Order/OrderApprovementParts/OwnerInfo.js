@@ -2,10 +2,14 @@ import { autoMultiEnding, getFilePath } from "../../../utils";
 import STATIC from "../../../static";
 import StarRating from "../../StarRating";
 
-const OwnerInfo = ({ data, countItemsType = "for rental" }) => {
+const OwnerInfo = ({
+  data,
+  countItemsType = "for rental",
+  title = "Owner",
+}) => {
   return (
     <div className="listings-widget listings_author">
-      <h3>Owner</h3>
+      <h3>{title}</h3>
 
       <div className="author">
         <div className="d-flex align-items-center">
