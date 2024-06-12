@@ -40,6 +40,7 @@ const OrderApprovementSection = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetails
+            needFeeSwitch={true}
             fee={fee}
             feeActive={feeActive}
             setFeeActive={setFeeActive}
@@ -49,7 +50,13 @@ const OrderApprovementSection = ({
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
-          <OwnerInfo listing={listing} />
+          <OwnerInfo
+            data={{
+              userName: listing.userName,
+              userPhoto: listing.userPhoto,
+              userCountItems: listing.userCountItems,
+            }}
+          />
         </div>
       </div>
     </div>

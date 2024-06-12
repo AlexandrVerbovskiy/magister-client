@@ -1,13 +1,19 @@
-import { autoMultiEnding, getDaysDifference, moneyFormat, timeConverter } from "../../../utils";
+import {
+  autoMultiEnding,
+  getDaysDifference,
+  moneyFormat,
+  timeConverter,
+} from "../../../utils";
 import Switch from "../../FormComponents/Switch";
 
 const ContractDetails = ({
-  feeActive,
-  setFeeActive,
   fromDate,
   toDate,
   price,
   fee,
+  needFeeSwitch = false,
+  feeActive = null,
+  setFeeActive = null,
 }) => {
   const duration = getDaysDifference(fromDate, toDate);
   const subtotalPrice = price * duration;
@@ -19,13 +25,15 @@ const ContractDetails = ({
       <h3>Rental Details</h3>
 
       <div>
-        <div className="date-fee-switch">
-          <Switch
-            title="Fee-free option"
-            active={feeActive}
-            onChange={setFeeActive}
-          />
-        </div>
+        {needFeeSwitch && (
+          <div className="date-fee-switch">
+            <Switch
+              title="Fee-free option"
+              active={feeActive}
+              onChange={setFeeActive}
+            />
+          </div>
+        )}
         <div>
           <div
             className="d-flex"

@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { IndiceContext } from "../contexts";
 import {
+  createDispute,
   extendOrder,
   orderAcceptCancelByOwner,
   orderAcceptCancelByTenant,
@@ -14,6 +15,7 @@ import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
 import { getDaysDifference } from "../utils";
+import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
@@ -52,8 +54,52 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [activeFastCancel, setActiveFastCancel] = useState(false);
   const [activeFastCancelOrder, setActiveFastCancelOrder] = useState(null);
 
-  const [activeCreateDispute, setActiveCreateDispute] = useState(false);
-  const [activeCreateDisputeId, setActiveCreateDisputeId] = useState(null);
+  const [activeCreateCancel, setActiveCreateCancel] = useState(false);
+  const [activeCreateCancelId, setActiveCreateCancelId] = useState(null);
+
+  const [orderToDispute, setOrderToDispute] = useState(null);
+  const [disputeWindowActive, setDisputeWindowActive] = useState(false);
+  const createDisputeData = useCreateDispute({ order: orderToDispute });
+
+  const disputeCreate = (orderId) => {
+    const order = orders.find((order) => order.id === orderId);
+    setDisputeWindowActive(true);
+    setOrderToDispute({ ...order });
+  };
+
+  const closeDisputeWindow = () => {
+    setOrderToDispute(null);
+    setDisputeWindowActive(false);
+  };
+
+  const onCreateDispute = async () => {
+    try {
+      const disputeId = await createDispute(
+        {
+          orderId: orderToDispute.id,
+          type: createDisputeData.type,
+          description: createDisputeData.description,
+        },
+        authToken
+      );
+
+      autoParentOrderSetItemField(
+        {
+          disputeId,
+          disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+          disputeType: createDisputeData.type,
+          disputeDescription: createDisputeData.description,
+        },
+        orderToDispute.id
+      );
+
+      success.set("Dispute created success");
+
+      closeDisputeWindow();
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
 
   const [activeOrderAcceptCancelByTenant, setActiveOrderAcceptCancelByTenant] =
     useState(false);
@@ -266,13 +312,13 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActiveFastCancel(true);
   };
 
-  const handleAcceptCreateDispute = async (description) => {
+  const handleAcceptCreateCancel = async (description) => {
     try {
       if (
-        findCurrentOrderById(activeCreateDisputeId).ownerId === sessionUser?.id
+        findCurrentOrderById(activeCreateCancelId).ownerId === sessionUser?.id
       ) {
         await orderCancelByOwner(
-          { id: activeCreateDisputeId, description },
+          { id: activeCreateCancelId, description },
           authToken
         );
 
@@ -281,11 +327,11 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
             cancelStatus:
               STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE,
           },
-          activeCreateDisputeId
+          activeCreateCancelId
         );
       } else {
         await orderCancelByTenant(
-          { id: activeCreateDisputeId, description },
+          { id: activeCreateCancelId, description },
           authToken
         );
 
@@ -294,24 +340,24 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
             cancelStatus:
               STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE,
           },
-          activeCreateDisputeId
+          activeCreateCancelId
         );
       }
 
-      setActiveCreateDisputeId(null);
-      setActiveCreateDispute(false);
+      setActiveCreateCancelId(null);
+      setActiveCreateCancel(false);
 
       activateSuccessOrderPopup({
-        text: "Dispute created successfully. Wait for the administrator to contact you",
+        text: "Request to cancel created successfully. Wait for the opponent feedback",
       });
     } catch (e) {
       error.set(e.message);
     }
   };
 
-  const handleClickCreateDispute = (orderId) => {
-    setActiveCreateDisputeId(orderId);
-    setActiveCreateDispute(true);
+  const handleClickCreateCancel = (orderId) => {
+    setActiveCreateCancelId(orderId);
+    setActiveCreateCancel(true);
   };
 
   const handleOrderAcceptAcceptCancelByTenant = async () => {
@@ -475,8 +521,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActiveFastCancel(false);
   };
 
-  const closeActiveCreateDispute = () => {
-    setActiveCreateDispute(false);
+  const closeActiveCreateCancel = () => {
+    setActiveCreateCancel(false);
   };
 
   const closeActiveOrderAcceptCancelByTenant = () => {
@@ -512,10 +558,10 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     activeFastCancelOrder,
     closeActiveFastCancel,
 
-    handleClickCreateDispute,
-    handleAcceptCreateDispute,
-    activeCreateDispute,
-    closeActiveCreateDispute,
+    handleClickCreateCancel,
+    handleAcceptCreateCancel,
+    activeCreateCancel,
+    closeActiveCreateCancel,
 
     handleOrderClickAcceptCancelByTenant,
     handleOrderAcceptAcceptCancelByTenant,
@@ -560,6 +606,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     acceptApproveExtendOrder,
 
     successIconPopupState,
+
+    createDisputeData,
+    disputeWindowActive,
+    disputeCreate,
+    closeDisputeWindow,
+    onCreateDispute,
   };
 };
 

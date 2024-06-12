@@ -667,7 +667,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -1883,13 +1883,13 @@
   .listings-details-desc .listings-review {
     padding: 15px;
   }
-  .listings-details-desc .listings-review .rating .bx {
+  .rating .bx {
     font-size: 15px;
   }
-  .listings-details-desc .listings-review .rating .overall-rating {
+  .rating .overall-rating {
     font-size: 15px;
   }
-  .listings-details-desc .listings-review .rating .rating-count {
+  .rating .rating-count {
     font-size: 15px;
   }
   .listings-details-desc .listings-review .side {
@@ -3331,7 +3331,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -3922,7 +3922,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-bottom: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {

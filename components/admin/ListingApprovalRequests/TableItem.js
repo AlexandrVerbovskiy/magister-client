@@ -9,6 +9,8 @@ import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
 import { getFilePath, getListingImageByType } from "../../../utils";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const ActiveSpan = ({ active }) => {
   const text = active === null ? "WAITING" : active ? "APPROVED" : "REJECTED";
@@ -61,6 +63,7 @@ const TableItem = ({
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
+  ownerAverageRating,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -202,7 +205,9 @@ const TableItem = ({
                         userPhone && userPhone.length ? userPhone.length : "-"
                       }
                     />
-                    <SubInfoRow label="Rating" value={0} />
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={ownerAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 last:pr-5 py-3 whitespace-nowrap overflow-separate">

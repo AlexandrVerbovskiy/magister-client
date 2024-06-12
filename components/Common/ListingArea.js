@@ -4,7 +4,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import Link from "next/link";
 import ListingItem from "../Listings/ListingItem";
 
-const ListingArea = ({ listings }) => {
+const ListingArea = ({ listings }) => { 
   return (
     <>
       <section className="main-listings-area listings-area ptb-100 bg-f9f9f9">

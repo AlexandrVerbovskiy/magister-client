@@ -22,6 +22,7 @@ import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import { useRouter } from "next/router";
 import STATIC from "../../../static";
+import StarRating from "../../../components/StarRating";
 
 const Tooltip = ({ text, children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -391,14 +392,10 @@ const ListingList = (pageProps) => {
                               </Link>
                             </h3>
                             <div className="d-flex align-items-center justify-content-between">
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star-half"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(45)</span>
-                              </div>
+                              <StarRating
+                                averageRating={listing.averageRating ?? 0}
+                                commentCount={listing.commentCount ?? 0}
+                              />
                             </div>
                           </div>
 
