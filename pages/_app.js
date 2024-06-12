@@ -123,7 +123,7 @@ function MyApp({ Component, pageProps }) {
     },
   });
 
-  useTawkScript();
+  useTawkScript(pageType);
 
   if (globalError) {
     return (
