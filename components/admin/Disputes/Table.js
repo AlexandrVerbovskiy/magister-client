@@ -8,7 +8,7 @@ import SolveModal from "./UnsolveModal";
 import { solveDispute, unsolveDispute } from "../../../services";
 import STATIC from "../../../static";
 
-const RequestsTable = ({
+const DisputesTable = ({
   disputes,
   orderField,
   orderType,
@@ -57,6 +57,8 @@ const RequestsTable = ({
     await solveDispute({ solution, disputeId: popupSolveId }, authToken);
     setItemFields({ status: STATIC.DISPUTE_STATUSES.SOLVED }, popupSolveId);
   };
+
+  console.log(disputes);
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -115,4 +117,4 @@ const RequestsTable = ({
   );
 };
 
-export default RequestsTable;
+export default DisputesTable;

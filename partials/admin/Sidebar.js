@@ -83,8 +83,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Sidebar header */}
         <div className="flex justify-between mb-10 mt-1 pr-3 sm:px-2">
           {/* Close button */}
-          <button
-            ref={trigger}
+          <Link
+            href="/"
             className="lg:hidden text-slate-500 hover:text-slate-400"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
@@ -96,7 +96,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               className="logo-image"
               alt="logo"
             />
-          </button>
+          </Link>
           {/* Logo */}
           <Link href="/" className="hidden lg:block w-full">
             <div className="adaptive-logo-image" />

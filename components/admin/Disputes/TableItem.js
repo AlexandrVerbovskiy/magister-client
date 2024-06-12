@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
 import ShowMore from "../FastActions/ShowMore";
@@ -5,6 +6,10 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
+import { getFilePath, getListingImageByType } from "../../../utils";
+import Link from "next/link";
+import SubInfoTitle from "../SubInfoTitle";
+import Tooltip from "../Tooltip";
 
 const ActiveSpan = ({ status }) => {
   const text =
@@ -15,9 +20,9 @@ const ActiveSpan = ({ status }) => {
       : "UNSOLVED";
 
   let dopClass =
-    active === null
+    status == STATIC.DISPUTE_STATUSES.OPEN
       ? "bg-amber-100 dark:bg-amber-500/30 text-amber-500"
-      : active
+      : status == STATIC.DISPUTE_STATUSES.SOLVED
       ? "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400"
       : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
 
@@ -27,9 +32,9 @@ const ActiveSpan = ({ status }) => {
     >
       <Tooltip
         title={
-          active === null
+          status == STATIC.DISPUTE_STATUSES.OPEN
             ? "The request hasn't answer, so tool cannot be rented"
-            : active
+            : status == STATIC.DISPUTE_STATUSES.SOLVED
             ? "The instrument is approved, so it can be rented"
             : "The tool is not approved, so it cannot be rented"
         }
@@ -128,18 +133,21 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link href={`/admin/listings/${listingId}`}>
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullListingPhotoPath}
-                width="32"
-                height="32"
-                alt="User"
-              />
-              {listingName} <LinkIcon />
-            </Link>
-          </div>
+          <Link
+            href={`/listing/${listingId}`}
+            className="flex items-center"
+            onClick={(e) => (isAdmin ? {} : e.preventDefault())}
+            style={isAdmin ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullListingPhotoPath}
+              width="32"
+              height="32"
+              alt="User"
+            />
+            {listingName} <LinkIcon />
+          </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <TableDateView date={offerStartDate} />
