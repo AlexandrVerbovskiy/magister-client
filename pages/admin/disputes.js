@@ -6,6 +6,7 @@ import { baseAdminTimeListPageParams } from "../../utils";
 import { supportSideProps } from "../../middlewares";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
+import DisputesTable  from "../../components/admin/Disputes/Table";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
@@ -41,7 +42,7 @@ const Disputes = (pageProps) => {
     handleChangeOrder,
     canMoveNextPage,
     canMovePrevPage,
-    items: reviews,
+    items: disputes,
     rebuild,
     setItemFields,
   } = usePagination({
@@ -96,6 +97,15 @@ const Disputes = (pageProps) => {
                 timeFilterType={timeFilterType}
                 handleChangeTimeFilterType={handleChangeTimeFilterType}
                 rebuild={rebuild}
+              />
+
+              <DisputesTable
+                disputes={disputes}
+                orderField={order}
+                orderType={orderType}
+                onClickTh={handleChangeOrder}
+                totalCount={countItems}
+                setItemFields={setItemFields}
               />
 
               <div className="mt-8">
