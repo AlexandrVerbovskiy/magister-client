@@ -70,3 +70,8 @@ export const getUserListingList = async (params, authToken) => {
   const data = await post(`/user-list`, params, authToken);
   return data.body;
 };
+
+export const changeListingFavorite = async (listingId, authToken) => {
+  const data = await post(`/change-favorite`, { listingId }, authToken);
+  return data.body.isFavorite;
+};

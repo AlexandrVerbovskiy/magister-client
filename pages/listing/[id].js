@@ -5,14 +5,23 @@ import SingleListingsContent from "../../components/SingleListings/SingleListing
 import { userSideProps } from "../../middlewares";
 import { getListingFullByIdOptions } from "../../services";
 
-const Listing = ({ listing, tenantBaseCommissionPercent }) => {
+const Listing = ({
+  listing,
+  tenantBaseCommissionPercent,
+  comments,
+  listingRatingInfo,
+  ownerRatingInfo,
+}) => {
   return (
     <>
       <NavbarTwo />
 
       <SingleListingsContent
         listing={listing}
+        comments={comments}
         tenantBaseCommissionPercent={tenantBaseCommissionPercent}
+        listingRatingInfo={listingRatingInfo}
+        ownerRatingInfo={ownerRatingInfo}
       />
 
       <Footer bgColor="bg-f5f5f5" />

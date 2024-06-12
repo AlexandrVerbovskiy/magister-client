@@ -16,26 +16,26 @@ import STATIC from "../../static";
 import {
   approveClientGotListing,
   finishedByOwner,
-  orderCancelByOwner,
-  orderCancelByTenant,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
-  orderAcceptCancelByTenant,
-  orderAcceptCancelByOwner,
   extendOrder,
+  createDispute,
 } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 import PaypalTriggerModal from "../PaypalTriggerModal";
-import CreateDisputeTriggerModal from "./CreateDisputeTriggerModal";
 import CancelTriggerModal from "./CancelTriggerModal";
 import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
 import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
-import { useOrderActions, useOrderDateError } from "../../hooks";
+import {
+  useCreateDispute,
+  useOrderActions,
+  useOrderDateError,
+} from "../../hooks";
 import PayedCancelTriggerModal from "./PayedCancelTriggerModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
@@ -43,6 +43,8 @@ import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import BookingModal from "../SingleListings/BookingModal";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
+import Link from "next/link";
+import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -65,6 +67,8 @@ const OrderContent = ({
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
   const [extendPopupActive, setExtendPopupActive] = useState(false);
   const [extendApproveData, setExtendApproveData] = useState(null);
+  const [activeDisputeWindow, setActiveDisputeWindow] = useState(false);
+  const createDisputeData = useCreateDispute({ order });
 
   const router = useRouter();
 
@@ -117,9 +121,8 @@ const OrderContent = ({
   const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
 
   const isBookingWithoutAgreement =
-    (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
-    order.cancelStatus == null;
+    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+    order.status == STATIC.ORDER_STATUSES.PENDING_TENANT;
 
   const { CanBeErrorBaseDateSpan, checkErrorData, BaseDateSpan } =
     useOrderDateError({
@@ -249,8 +252,6 @@ const OrderContent = ({
     });
   };
 
-  console.log(order.listingMinRentalDays)
-
   const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
     const offerPricePerDay = actualUpdateRequest
       ? actualUpdateRequest.newPricePerDay
@@ -352,69 +353,6 @@ const OrderContent = ({
     }
   };
 
-  const onCreateDispute = async (description) => {
-    try {
-      if (isTenant) {
-        await orderCancelByTenant({ id: order.id, description }, authToken);
-
-        setOrder((prev) => ({
-          ...prev,
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE,
-        }));
-      } else {
-        await orderCancelByOwner({ id: order.id, description }, authToken);
-
-        setOrder((prev) => ({
-          ...prev,
-          cancelStatus:
-            STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE,
-        }));
-      }
-
-      activateSuccessOrderPopup({
-        text: "Dispute created successfully. Wait for the administrator to contact you",
-      });
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const onOrderAcceptCancelByOwner = async () => {
-    try {
-      await orderAcceptCancelByOwner(order.id, authToken);
-
-      activateSuccessOrderPopup({
-        text: "Order cancelled successfully",
-        textWeight: 600,
-      });
-
-      setOrder((prev) => ({
-        ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-      }));
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const onOrderAcceptCancelByTenant = async () => {
-    try {
-      await orderAcceptCancelByTenant(order.id, authToken);
-
-      activateSuccessOrderPopup({
-        text: "Order cancelled successfully",
-        textWeight: 600,
-      });
-
-      setOrder((prev) => ({
-        ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-      }));
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
   const onCancel = async () => {
     try {
       if (isOwner) {
@@ -455,6 +393,31 @@ const OrderContent = ({
         ...prev,
         cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
       }));
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
+  const onCreateDispute = async () => {
+    try {
+      const disputeId = await createDispute(
+        {
+          orderId: order.id,
+          type: createDisputeData.type,
+          description: createDisputeData.description,
+        },
+        authToken
+      );
+
+      setOrder((prev) => ({
+        ...prev,
+        disputeId,
+        disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+        disputeType: createDisputeData.type,
+        disputeDescription: createDisputeData.description,
+      }));
+
+      success.set("Dispute created success");
     } catch (e) {
       error.set(e.message);
     }
@@ -578,12 +541,26 @@ const OrderContent = ({
     );
   }
 
+  if (activeDisputeWindow) {
+    return (
+      <CreateDisputeSection
+        {...createDisputeData}
+        onGoBack={() => setActiveDisputeWindow(false)}
+        setCurrentOpenImg={setCurrentOpenImg}
+        needWrapping={false}
+        onSubmit={onCreateDispute}
+      />
+    );
+  }
+
   return (
     <>
       <StatusBar
         statuses={statusBarStatuses}
         hasCancelStatus={
-          !!order.cancelStatus || order.status == STATIC.ORDER_STATUSES.REJECTED
+          !!order.disputeStatus ||
+          !!order.cancelStatus ||
+          order.status == STATIC.ORDER_STATUSES.REJECTED
         }
       />
 
@@ -882,7 +859,7 @@ const OrderContent = ({
                     Status:{" "}
                     <StatusBlock
                       status={order.status}
-                      statusCancelled={order.cancelStatus}
+                      disputeStatus={order.disputeStatus}
                       ownerId={order.ownerId}
                       tenantId={order.tenantId}
                       userId={sessionUser?.id}
@@ -1257,10 +1234,10 @@ const OrderContent = ({
                 <>
                   <p>{question.question}</p>
 
-                  <div class="form-group">
-                    <ul class="facilities-list">
+                  <div className="form-group">
+                    <ul className="facilities-list">
                       <li>
-                        <label class="checkbox">
+                        <label className="checkbox">
                           <input
                             type="checkbox"
                             name={`question[${question.id}]["yes"]`}
@@ -1274,7 +1251,7 @@ const OrderContent = ({
                         </label>
                       </li>
                       <li>
-                        <label class="checkbox">
+                        <label className="checkbox">
                           <input
                             type="checkbox"
                             name={`question[${question.id}]["no"]`}
@@ -1375,7 +1352,7 @@ const OrderContent = ({
                     <div className="d-flex justify-content-between">
                       <div>
                         Id:{" "}
-                        <a
+                        <Link
                           href={
                             bookingStatuses.includes(conflictOrder.status)
                               ? `/dashboard/bookings/${conflictOrder.id}`
@@ -1383,10 +1360,10 @@ const OrderContent = ({
                           }
                         >
                           #{conflictOrder.id}
-                        </a>
+                        </Link>
                       </div>
 
-                      <a
+                      <Link
                         href={
                           bookingStatuses.includes(conflictOrder.status)
                             ? `/dashboard/bookings/${conflictOrder.id}`
@@ -1395,14 +1372,14 @@ const OrderContent = ({
                       >
                         <StatusBlock
                           status={conflictOrder.status}
-                          statusCancelled={conflictOrder.cancelStatus}
+                          disputeStatus={order.disputeStatus}
                           ownerId={conflictOrder.ownerId}
                           tenantId={conflictOrder.tenantId}
                           userId={sessionUser?.id}
                           dopClass="order-status-small-span"
                           endDate={order.offerEndDate}
                         />
-                      </a>
+                      </Link>
                     </div>
 
                     <div>
@@ -1413,7 +1390,8 @@ const OrderContent = ({
                     </div>
 
                     <div>
-                      Rental: <a href={`/users/${tenantId}`}>{tenantName}</a>
+                      Rental:{" "}
+                      <Link href={`/users/${tenantId}`}>{tenantName}</Link>
                     </div>
 
                     <div>
@@ -1526,12 +1504,34 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
             ) && (
-              <a
+              <Link
                 className="default-btn"
                 href={`/dashboard/pay-by-credit-card/` + order.id}
               >
                 Update payment
-              </a>
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/creating-renter-review/` + order.id}
+              >
+                Leave a review
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/creating-owner-review/` + order.id}
+              >
+                Leave a review
+              </Link>
             )}
 
             {currentActionButtons.includes(
@@ -1545,6 +1545,18 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
             ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+            ) && (
+              <button
+                type="button"
+                className="default-btn error-btn"
+                onClick={() => setActiveDisputeWindow(true)}
+              >
+                Open dispute
+              </button>
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
@@ -1591,25 +1603,15 @@ const OrderContent = ({
                 order={order}
               />
             )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
-            ) && (
-              <CreateDisputeTriggerModal
-                onCreateDispute={onCreateDispute}
-                text="Create Dispute"
-              />
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_TENANT_CANCEL_BUTTON
-            ) && <CancelTriggerModal onCancel={onOrderAcceptCancelByTenant} />}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_CANCEL_BUTTON
-            ) && <CancelTriggerModal onCancel={onOrderAcceptCancelByOwner} />}
           </div>
         </div>
+      )}
+      {order.disputeId && (
+        <ErrorBlockMessage>
+          <b>Dispute type:</b> {STATIC.DISPUTE_TYPE_TITLE[order.disputeType]}
+          <br />
+          <b>Dispute description:</b> {order.disputeDescription}
+        </ErrorBlockMessage>
       )}
     </>
   );

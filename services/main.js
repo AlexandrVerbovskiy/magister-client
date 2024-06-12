@@ -1,8 +1,8 @@
 import { initAxios } from "../utils";
 const { get, post } = initAxios("/main");
 
-export const getIndexOptions = async () => {
-  const data = await get(`/index-options`);
+export const getIndexOptions = async (authToken = null) => {
+  const data = await get(`/index-options`, authToken);
   return data.body;
 };
 
@@ -275,5 +275,71 @@ export const getWaitingRefundOptions = async (id, authToken) => {
 
 export const getAdminIndexPageOptions = async (body, authToken) => {
   const data = await post(`/get-admin-index-page-option`, body, authToken);
+  return data.body;
+};
+
+export const getOrderReviewByTenantOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-tenant/${id}`, authToken);
+  return data.body;
+};
+
+export const getOrderReviewByOwnerOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-owner/${id}`, authToken);
+  return data.body;
+};
+
+export const getAdminTenantCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-tenant-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminOwnerCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-owner-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminListingCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-listing-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const createRenterReview = async (
+  { tenantCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-tenant-review`,
+    { tenantCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};
+
+export const createOwnerReview = async (
+  { ownerCommentInfo, listingCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-owner-review`,
+    { ownerCommentInfo, listingCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminDisputeListOptions = async (params, authToken) => {
+  const data = await post(`/admin-dispute-list-options`, params, authToken);
   return data.body;
 };

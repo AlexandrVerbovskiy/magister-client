@@ -12,6 +12,7 @@ const YesNoModal = ({
     onAccept();
     closeModal();
   };
+
   return (
     <>
       <div className={active ? "body_overlay open" : "body_overlay"}></div>

@@ -34,7 +34,13 @@ const OrderExtendApprovementSection = ({
             </div>
 
             <div className="col-12 col-md-6 mt-4 mt-md-0">
-              <OwnerInfo listing={listing} />
+              <OwnerInfo
+                data={{
+                  userName: listing.userName,
+                  userPhoto: listing.userPhoto,
+                  userCountItems: listing.userCountItems,
+                }}
+              />
             </div>
           </div>
         </div>
@@ -42,21 +48,24 @@ const OrderExtendApprovementSection = ({
 
       <div className="col-12">
         <div className="row listings-details-desc">
-          {<div className="col-12 col-md-8 order-2 order-md-1">
-            <RentalMessage
-              onApproved={onApproved}
-              handleGoBack={handleGoBack}
-              setSendingMessage={setSendingMessage}
-              sendingMessage={sendingMessage}
-              fromDate={fromDate}
-              toDate={toDate}
-              price={price}
-              listing={listing}
-            />
-  </div>}
+          {
+            <div className="col-12 col-md-8 order-2 order-md-1">
+              <RentalMessage
+                onApproved={onApproved}
+                handleGoBack={handleGoBack}
+                setSendingMessage={setSendingMessage}
+                sendingMessage={sendingMessage}
+                fromDate={fromDate}
+                toDate={toDate}
+                price={price}
+                listing={listing}
+              />
+            </div>
+          }
           <div className="col-12 col-md-4 order-1 order-md-2">
             <div className="listings-sidebar mt-0">
               <ContractDetails
+                needFeeSwitch={true}
                 fee={fee}
                 feeActive={feeActive}
                 setFeeActive={setFeeActive}

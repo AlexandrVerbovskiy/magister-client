@@ -3416,6 +3416,8 @@ Listings Area CSS
   line-height: 38px;
   font-size: 16px;
 }
+
+.single-listings-box .listings-image .bookmark-save.checked,
 .single-listings-box .listings-image .bookmark-save:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -4309,24 +4311,39 @@ Listings Details Area CSS
   margin-top: 15px;
   margin-bottom: 14px;
 }
-.listings-details-image .listings-details-content .rating {
+
+.rating {
   margin-bottom: 5px;
 }
-.listings-details-image .listings-details-content .rating .bx {
+
+.rating .bx {
   color: #cecfd2;
   font-size: var(--fontSize);
   margin-right: 2px;
 }
-.listings-details-image .listings-details-content .rating .bx.checked {
+
+.rating .bx.checked {
   color: #efc02f;
 }
-.listings-details-image .listings-details-content .rating .rating-count {
+
+.rating .rating-count {
   position: relative;
   color: var(--mainColor);
   top: 1px;
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.rating .overall-rating {
+  position: relative;
+  top: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 12px;
+}
+
 .listings-details-image .listings-details-content ul {
   padding-left: 0;
   list-style-type: none;
@@ -4438,6 +4455,8 @@ Listings Details Area CSS
   top: 50%;
   transform: translateY(-50%);
 }
+
+.listings-details-image .container-fluid .share-save li a.active,
 .listings-details-image .container-fluid .share-save li a:hover,
 .listings-details-image .container-fluid .share-save li .share:hover {
   background-color: var(--whiteColor);
@@ -5323,6 +5342,7 @@ Listings Details Area CSS
   font-size: var(--fontSize);
 }
 
+.listings-details-desc .review-form-wrapper form button[type="button"].submit,
 .listings-details-desc .review-form-wrapper form button[type="submit"] {
   color: var(--whiteColor);
   background-color: #847bdd;
@@ -5333,6 +5353,7 @@ Listings Details Area CSS
   color: #666666;
 }
 
+.listings-details-desc .review-form-wrapper form button[type="button"].submit:hover ,
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   background-color: #ede7f6;
   color: #666666;
@@ -5471,6 +5492,7 @@ Listings Details Area CSS
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .listings-sidebar .listings_author .author .title {
   margin-left: 15px;
@@ -15206,27 +15228,40 @@ Dashboard CSS
   border-color: var(--mainColor);
   background-color: transparent;
 }
+
+.form-group .facilities-list,
 .add-listings-box .form-group .facilities-list {
   padding-left: 0;
   margin-bottom: -15px;
   list-style-type: none;
   overflow: hidden;
 }
+
+.form-group .facilities-list li,
 .add-listings-box .form-group .facilities-list li {
   float: left;
   margin-right: 20px;
   position: relative;
   margin-bottom: 15px;
 }
+
+.form-group .facilities-list li .radio,
+.form-group .facilities-list li .checkbox,
 .add-listings-box .form-group .facilities-list li .checkbox {
   margin-bottom: 0;
   padding-left: 0;
   cursor: pointer;
   display: inline-block;
 }
+
+.form-group .facilities-list li .radio input,
+.form-group .facilities-list li .checkbox input,
 .add-listings-box .form-group .facilities-list li .checkbox input {
   display: none;
 }
+
+.form-group .facilities-list li .radio input + span,
+.form-group .facilities-list li .checkbox input + span,
 .add-listings-box .form-group .facilities-list li .checkbox input + span {
   line-height: 20px;
   height: 20px;
@@ -15235,6 +15270,17 @@ Dashboard CSS
   position: relative;
   font-weight: 500;
 }
+
+.facilities-list
+  li
+  .checkbox
+  input
+  + span:not(:empty),
+.facilities-list
+  li
+  .radio
+  input
+  + span:not(:empty),
 .add-listings-box
   .form-group
   .facilities-list
@@ -15244,6 +15290,11 @@ Dashboard CSS
   + span:not(:empty) {
   padding-left: 28px;
 }
+
+.form-group .facilities-list li .radio input + span:before,
+.form-group .facilities-list li .checkbox input + span:before,
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:before,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   content: "";
@@ -15255,6 +15306,17 @@ Dashboard CSS
   top: -1px;
   position: absolute;
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:before,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15266,10 +15328,23 @@ Dashboard CSS
   transition: background 0.2s ease,
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
 }
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   background: #eeeeee;
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:before,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15279,6 +15354,17 @@ Dashboard CSS
   + span:before {
   background: var(--mainColor);
 }
+
+.facilities-list
+  li
+  .checkbox
+  input:checked
+  + span:after,
+.facilities-list
+  li
+  .radio
+  input:checked
+  + span:after,
 .add-listings-box
   .form-group
   .facilities-list

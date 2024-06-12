@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import StatusBlock from "./StatusBlock";
+import StatusBlock from "../Listings/StatusBlock";
 import {
   getDaysDifference,
   getFilePath,
@@ -18,15 +18,13 @@ const OrderInfo = ({
   link,
   handleClickCancel,
   handleClickPayedFastCancel,
-  handleClickCreateDispute,
-  handleOrderClickAcceptCancelByTenant,
-  handleOrderClickAcceptCancelByOwner,
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
   extension = false,
+  handleDisputeCreate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -45,7 +43,7 @@ const OrderInfo = ({
           <div>{extension ? "Extension" : order.listingName}</div>
           <StatusBlock
             status={order.status}
-            statusCancelled={order.cancelStatus}
+            disputeStatus={order.disputeStatus}
             ownerId={order.ownerId}
             tenantId={order.tenantId}
             userId={sessionUser?.id}
@@ -114,6 +112,17 @@ const OrderInfo = ({
                     order.requestId ? order.newStartDate : order.offerStartDate
                   ).tooltipErrorMessage
                 }
+              </ErrorBlockMessage>
+            </li>
+          )}
+
+          {order.disputeId && (
+            <li className="order-list-item-error">
+              <ErrorBlockMessage>
+                <b>Dispute type:</b>{" "}
+                {STATIC.DISPUTE_TYPE_TITLE[order.disputeType]}
+                <br />
+                <b>Dispute description:</b> {order.disputeDescription}
               </ErrorBlockMessage>
             </li>
           )}
@@ -195,12 +204,47 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
         ) && (
-          <a
+          <Link
             className="default-btn"
             href={`/dashboard/pay-by-credit-card/` + order.id}
           >
             <i className="bx bx-wallet"></i> Update payment
-          </a>
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/creating-renter-review/` + order.id}
+          >
+            <i className="bx bx-comment-detail"></i> Leave a review
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/creating-owner-review/` + order.id}
+          >
+            <i className="bx bx-comment-detail"></i> Leave a review
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+        ) && (
+          <button
+            className="default-btn"
+            onClick={() => handleDisputeCreate(order.id)}
+            type="button"
+          >
+            <i className="bx bx-transfer-alt"></i>
+            Open dispute
+          </button>
         )}
 
         {currentActionButtons.includes(
@@ -214,7 +258,7 @@ const OrderInfo = ({
             }}
             className="default-btn"
           >
-            <i className="bx bx-calendar"></i> Extend
+            <i className="bx bx-calendar"></i> Extend Offer
           </button>
         )}
 
@@ -247,49 +291,6 @@ const OrderInfo = ({
             <i className="bx bx-x-circle"></i> Cancel
           </button>
         )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickCreateDispute(order.id);
-            }}
-            className="default-btn danger"
-          >
-            <i className="bx bx-x-circle"></i> Create Dispute
-          </button>
-        )}
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_TENANT_CANCEL_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOrderClickAcceptCancelByTenant(order.id);
-            }}
-            className="default-btn danger"
-          >
-            <i className="bx bx-x-circle"></i> Accept Cancel
-          </button>
-        )}
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_CANCEL_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOrderClickAcceptCancelByOwner(order.id);
-            }}
-            className="default-btn danger"
-          >
-            <i className="bx bx-x-circle"></i> Accept Cancel
-          </button>
-        )}
       </td>
     </>
   );
@@ -301,17 +302,14 @@ const OrderItem = ({
   filterType,
   handleClickCancel,
   handleClickPayedFastCancel,
-  handleClickCreateDispute,
-  handleOrderClickAcceptCancelByTenant,
-  handleOrderClickAcceptCancelByOwner,
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
+  handleDisputeCreate,
 }) => {
   const router = useRouter();
-
   const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
@@ -337,20 +335,20 @@ const OrderItem = ({
             <ul>
               {userPhone && (
                 <li>
-                  <a className="row-dots-end" href={`tel:${userPhone}`}>
+                  <Link className="row-dots-end" href={`tel:${userPhone}`}>
                     {userPhone}
-                  </a>
+                  </Link>
                 </li>
               )}
               <li>
-                <a className="row-dots-end" href={`mailto:${userEmail}`}>
+                <Link className="row-dots-end" href={`mailto:${userEmail}`}>
                   {userEmail}
-                </a>
+                </Link>
               </li>
             </ul>
-            <a href={`/chat/${userId}`} className="default-btn">
+            <Link href={`/chat/${userId}`} className="default-btn">
               <i className="bx bx-envelope"></i> Send Message
-            </a>
+            </Link>
           </div>
         </td>
 
@@ -358,19 +356,13 @@ const OrderItem = ({
           order={order}
           handleClickCancel={handleClickCancel}
           handleClickPayedFastCancel={handleClickPayedFastCancel}
-          handleClickCreateDispute={handleClickCreateDispute}
-          handleOrderClickAcceptCancelByTenant={
-            handleOrderClickAcceptCancelByTenant
-          }
-          handleOrderClickAcceptCancelByOwner={
-            handleOrderClickAcceptCancelByOwner
-          }
           handleClickUpdateRequest={handleClickUpdateRequest}
           handleClickReject={handleClickReject}
           handleClickAccept={handleClickAccept}
           handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
+          handleDisputeCreate={handleDisputeCreate}
         />
       </tr>
 
@@ -390,13 +382,6 @@ const OrderItem = ({
               order={extendOrder}
               handleClickCancel={handleClickCancel}
               handleClickPayedFastCancel={handleClickPayedFastCancel}
-              handleClickCreateDispute={handleClickCreateDispute}
-              handleOrderClickAcceptCancelByTenant={
-                handleOrderClickAcceptCancelByTenant
-              }
-              handleOrderClickAcceptCancelByOwner={
-                handleOrderClickAcceptCancelByOwner
-              }
               handleClickUpdateRequest={handleClickUpdateRequest}
               handleClickReject={handleClickReject}
               handleClickAccept={handleClickAccept}

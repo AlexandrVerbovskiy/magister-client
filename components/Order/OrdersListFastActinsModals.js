@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 import CancelModal from "./CancelModal";
-import CreateDisputeModal from "./CreateDisputeModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
@@ -20,18 +19,6 @@ const OrdersListFastActinsModals = ({
   activeFastCancel,
   closeActiveFastCancel,
   activeFastCancelOrder,
-
-  handleAcceptCreateDispute,
-  activeCreateDispute,
-  closeActiveCreateDispute,
-
-  handleOrderAcceptAcceptCancelByTenant,
-  activeOrderAcceptCancelByTenant,
-  closeActiveOrderAcceptCancelByTenant,
-
-  handleOrderAcceptAcceptCancelByOwner,
-  activeOrderAcceptCancelByOwner,
-  closeActiveOrderAcceptCancelByOwner,
 
   handleAcceptUpdateRequest,
   activeUpdateRequest,
@@ -158,23 +145,6 @@ const OrdersListFastActinsModals = ({
         onCancel={handleAcceptPayedFastCancel}
         disabled={payedFastCancelDisabled}
         setDisabled={setPayedFastCancelDisabled}
-      />
-
-      <CreateDisputeModal
-        modalActive={activeCreateDispute}
-        closeModal={closeActiveCreateDispute}
-        onCreateDispute={handleAcceptCreateDispute}
-      />
-
-      <CancelModal
-        modalActive={activeOrderAcceptCancelByTenant}
-        closeModal={closeActiveOrderAcceptCancelByTenant}
-        onCancel={handleOrderAcceptAcceptCancelByTenant}
-      />
-      <CancelModal
-        modalActive={activeOrderAcceptCancelByOwner}
-        closeModal={closeActiveOrderAcceptCancelByOwner}
-        onCancel={handleOrderAcceptAcceptCancelByOwner}
       />
 
       <AcceptAcceptOrderModal

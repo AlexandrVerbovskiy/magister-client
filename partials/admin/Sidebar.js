@@ -118,7 +118,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 Pages
               </span>
             </h3>
-            <ul className="mt-3">
+            <ul className="mt-3 p-0">
               {/* Main */}
               <SidebarTypicalLink
                 title="Main"
@@ -191,6 +191,50 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         }`}
                       ></path>
                     </g>
+                  </svg>
+                )}
+              />
+
+              <SidebarGroupedLinks
+                setSidebarExpanded={setSidebarExpanded}
+                title="Reviews"
+                sublinks={[
+                  { href: "owner-reviews", title: "Owner Reviews" },
+                  { href: "tenant-reviews", title: "Tenant Reviews" },
+                  { href: "listing-reviews", title: "Listing Reviews" },
+                ]}
+                SVG={({ current }) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-message"
+                    height="24"
+                    width="24"
+                    viewBox="0 0 22 22"
+                    strokeWidth="1.5"
+                    stroke="#2c3e50"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      d="M8 9h8"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
+                    <path
+                      d="M8 13h6"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
+                    <path
+                      d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                    />
                   </svg>
                 )}
               />
@@ -306,6 +350,56 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       }`}
                       d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"
                       strokeWidth="0.3"
+                    />
+                  </svg>
+                )}
+              />
+
+              <SidebarTypicalLink
+                title="Disputes"
+                link="disputes"
+                SVG={({ current }) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-scale"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#2c3e50"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M7 20l10 0"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M6 6l6 -1l6 1"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M12 3l0 17"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"
                     />
                   </svg>
                 )}

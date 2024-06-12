@@ -9,6 +9,8 @@ import { getDaysDifference } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
+import SingleRatingStar from "../SingleRatingStar";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
 
 const TableItem = (props) => {
   const {
@@ -35,6 +37,9 @@ const TableItem = (props) => {
     payedAdminApproved,
     listingRentalCount,
     orderCheckLists,
+    tenantAverageRating,
+    ownerAverageRating,
+    listingAverageRating,
   } = props;
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
@@ -103,7 +108,9 @@ const TableItem = (props) => {
             <SubInfoRow label="Category" value={listingCategoryName} />
             <SubInfoRow label="Location" value={listingAddress} />
             <SubInfoRow label="Times rented" value={listingRentalCount} />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={listingAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -120,7 +127,9 @@ const TableItem = (props) => {
               label="Phone"
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={ownerAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -137,7 +146,9 @@ const TableItem = (props) => {
               label="Phone"
               value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={tenantAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 

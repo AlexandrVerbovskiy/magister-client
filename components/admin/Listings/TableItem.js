@@ -10,6 +10,8 @@ import STATIC from "../../../static";
 import { getFilePath, getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
@@ -54,6 +56,8 @@ const TableItem = ({
   images,
   address,
   minRentalDays,
+  averageRating,
+  ownerAverageRating,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -153,7 +157,10 @@ const TableItem = ({
             <SubInfoRow label="Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays} />
+            <SubInfoRow label="Min Rental Days" value={minRentalDays || "-"} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={averageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -196,7 +203,9 @@ const TableItem = ({
               label="Phone"
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={ownerAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
