@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getFilePath, getListingImageByType, moneyFormat } from "../../utils";
+import { activateAuthPopup, getFilePath, getListingImageByType, moneyFormat } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import STATIC from "../../static";
@@ -18,11 +18,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
       const favorite = await changeListingFavorite(listing.id, authToken);
       setListing((prev) => ({ ...prev, favorite }));
     } else {
-      const triggerBtn = document.querySelector(".sign-form-trigger");
-
-      if (triggerBtn) {
-        triggerBtn.click();
-      }
+      activateAuthPopup();
     }
   };
 

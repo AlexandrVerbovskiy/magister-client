@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const SafeWithUs = ({ bgColor }) => {
@@ -7,11 +8,6 @@ const SafeWithUs = ({ bgColor }) => {
         <div className="container">
           <div className="section-title">
             <h2>You're safe with us</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-              ipsum suspendisse ultrices gravida. Risus commodo viverra.
-            </p>
           </div>
 
           <div className="row justify-content-center">
@@ -22,10 +18,7 @@ const SafeWithUs = ({ bgColor }) => {
                     <img src="/images/home/icons-how_it_works.png" />
                   </div>
                   <h3>How it works</h3>
-                  <p>
-                    Quis ipsum suspendisse ultrices gravida. Risus commodo
-                    viverra maecenas accumsan lacus vel facilisis.
-                  </p>
+                  <p>Search Item, book, collect and exchange</p>
                 </div>
               </a>
             </div>
@@ -36,10 +29,7 @@ const SafeWithUs = ({ bgColor }) => {
                   <img src="/images/home/icons-user_verification.png" />
                 </div>
                 <h3>User Verification</h3>
-                <p>
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis.
-                </p>
+                <p>RentAbout verifies all users prior to rental.</p>
               </div>
             </div>
 
@@ -48,13 +38,19 @@ const SafeWithUs = ({ bgColor }) => {
                 <div className="icon safe-with-us-img">
                   <img src="/images/home/icons-insurance_guarantee.png" />
                 </div>
-                <h3>Insurance Guarantee</h3>
+                <h3>RentAbout Has an Insurance Guarantee</h3>
                 <p>
                   Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
                   maecenas accumsan lacus vel facilisis.
                 </p>
               </div>
             </div>
+          </div>
+
+          <div className="row justify-content-center">
+            <Link href="/how-it-works" className="base-main-button">
+              Learn more
+            </Link>
           </div>
         </div>
       </section>

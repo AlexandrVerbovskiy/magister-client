@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import {
+  activateAuthPopup,
   autoMultiEnding,
   getFilePath,
   getListingImageByType,
@@ -121,11 +122,7 @@ const SingleListingsContent = ({
       const favorite = await changeListingFavorite(listing.id, authToken);
       setListing((prev) => ({ ...prev, favorite }));
     } else {
-      const triggerBtn = document.querySelector(".sign-form-trigger");
-
-      if (triggerBtn) {
-        triggerBtn.click();
-      }
+      activateAuthPopup();
     }
   };
 
