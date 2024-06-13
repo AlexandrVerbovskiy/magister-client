@@ -89,14 +89,19 @@ const useListingPhotoEdit = () => {
           );
           setLinkFiles(newLinkFiles);
         } else {
-          const newLinkFiles = linkFiles.map((file) => {
-            if (file.localId != photoPopupLocalFileId) return file;
+          if (photoPopupLink) {
+            const newLinkFiles = linkFiles.map((file) => {
+              if (file.localId != photoPopupLocalFileId) return file;
 
-            found = { ...file, link: photoPopupLink, type: "storage" };
-            return found;
-          });
+              found = { ...file, link: photoPopupLink, type: "storage" };
+              return found;
+            });
 
-          setLinkFiles(newLinkFiles);
+            setLinkFiles(newLinkFiles);
+          } else {
+            setPhotoPopupError("No file selected");
+            return;
+          }
         }
       }
 

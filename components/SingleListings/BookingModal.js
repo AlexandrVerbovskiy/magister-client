@@ -147,6 +147,13 @@ const BookingModal = ({
       hasError = true;
     }
 
+    if (getDaysDifference(fromDate, toDate) > 350) {
+      setCalendarError(
+        `You can't rent a listing more than 350 days`
+      );
+      hasError = true;
+    }
+
     if (hasError) {
       return;
     }

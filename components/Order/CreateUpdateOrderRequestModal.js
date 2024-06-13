@@ -288,8 +288,13 @@ const CreateUpdateOrderRequestModal = ({
             >
               <div ref={calendarContainer}></div>
               {calendarError && (
-                <div className="is-invalid">
-                  <ErrorSpan error={calendarError} />
+                <div
+                  className="w-full form-group p-2"
+                  style={{ margin: "-5px -20px -30px -35px " }}
+                >
+                  <div className="is-invalid">
+                    <ErrorSpan error={calendarError} />
+                  </div>
                 </div>
               )}
             </div>

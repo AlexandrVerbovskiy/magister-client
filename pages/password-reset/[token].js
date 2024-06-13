@@ -5,7 +5,7 @@ import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
 import { resetPassword } from "../../services";
 import { notAuthSideProps } from "../../middlewares";
-import ErrorSpan from "../../components/ErrorSpan";
+import PasswordInput from "../../components/FormComponents/PasswordInput";
 
 const PasswordResetSend = () => {
   const router = useRouter();
@@ -17,20 +17,6 @@ const PasswordResetSend = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
-  const [passwordFieldType, setPasswordFieldType] = useState("password");
-  const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
-    useState("password");
-
-  const handleChangePasswordFieldType = () => {
-    const newType = passwordFieldType == "password" ? "text" : "password";
-    setPasswordFieldType(newType);
-  };
-
-  const handleChangeConfirmPasswordFieldType = () => {
-    const newType =
-      confirmPasswordFieldType == "password" ? "text" : "password";
-    setConfirmPasswordFieldType(newType);
-  };
 
   const handleSendClick = async () => {
     setFormError(null);
@@ -94,53 +80,23 @@ const PasswordResetSend = () => {
               <h2>Password reset</h2>
 
               <form className="newsletter-form" method="get">
-                <div className="form-group">
-                  <input
-                    type={passwordFieldType}
-                    className={`input-newsletter border-bottom-required${
-                      passwordError ? " is-invalid" : ""
-                    }`}
-                    placeholder="Enter your password"
-                    name="password"
-                    value={password}
-                    onInput={handlePasswordInput}
-                    required
-                  />
-                  <i
-                    className={`bx ${
-                      passwordFieldType == "password"
-                        ? "bx-lock"
-                        : "bx-lock-open"
-                    } cursor-pointer`}
-                    onClick={handleChangePasswordFieldType}
-                  ></i>
+                <PasswordInput
+                  name="password"
+                  value={password}
+                  placeholder="Enter your password"
+                  onInput={handlePasswordInput}
+                  error={passwordError}
+                  inputClassName="input-newsletter border-bottom-required"
+                />
 
-                  <ErrorSpan error={passwordError} />
-                </div>
-
-                <div className="form-group">
-                  <input
-                    type={confirmPasswordFieldType}
-                    className={`input-newsletter border-bottom-required${
-                      confirmPasswordError ? " is-invalid" : ""
-                    }`}
-                    placeholder="Confirm your password"
-                    name="confirm_password"
-                    value={confirmPassword}
-                    onInput={handleConfirmedPasswordInput}
-                    required
-                  />
-                  <i
-                    className={`bx ${
-                      confirmPasswordFieldType == "password"
-                        ? "bx-lock"
-                        : "bx-lock-open"
-                    } cursor-pointer`}
-                    onClick={handleChangeConfirmPasswordFieldType}
-                  ></i>
-
-                  <ErrorSpan error={confirmPasswordError} />
-                </div>
+                <PasswordInput
+                  name="confirm_password"
+                  value={confirmPassword}
+                  placeholder="Confirm your password"
+                  onInput={handleConfirmedPasswordInput}
+                  error={confirmPasswordError}
+                  inputClassName="input-newsletter border-bottom-required"
+                />
 
                 {formError && (
                   <div

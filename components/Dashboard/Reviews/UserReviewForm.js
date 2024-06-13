@@ -53,7 +53,7 @@ const UserReviewForm = ({
     }
 
     if (description.trim().length < 1) {
-      setError("Description is required");
+      setError("Review description is required");
       return;
     }
 
