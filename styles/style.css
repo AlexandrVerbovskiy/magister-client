@@ -366,7 +366,7 @@ Navbar Area CSS
   position: absolute;
   right: 0;
   top: 32px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .miran-nav .navbar .navbar-nav .nav-item:last-child {
@@ -2023,7 +2023,7 @@ Navbar Area CSS
     margin-top: 57px;
   }
   .miran-responsive-nav .miran-responsive-menu.mean-container .mean-nav ul {
-    font-size: 15px;
+    font-size: 16px;
   }
   .miran-responsive-nav
     .miran-responsive-menu.mean-container
@@ -2290,7 +2290,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -2553,7 +2553,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -2785,7 +2785,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -3092,7 +3092,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -3435,7 +3435,7 @@ Listings Area CSS
   height: 35px;
   border-radius: 50%;
   line-height: 35px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .single-listings-box .listings-image .category:hover {
   background-color: var(--mainColor);
@@ -3688,7 +3688,7 @@ Listings Area CSS
   height: 35px;
   border-radius: 50%;
   line-height: 35px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .single-listings-item .listings-image .category:hover {
   background-color: var(--mainColor);
@@ -3779,11 +3779,11 @@ Listings Area CSS
   padding-top: 15px;
 }
 
-.password-input-parent{
+.password-input-parent {
   position: relative;
 }
 
-.password-input-parent input{
+.password-input-parent input {
   padding-right: 32px;
 }
 
@@ -3791,10 +3791,18 @@ Listings Area CSS
   position: absolute;
   left: auto;
   right: 0;
-  top: 50%;
+  top: 24px;
   transform: translate(-50%, -50%);
   font-size: 18px;
   width: 22px;
+}
+
+.password-input-parent .form-control.is-invalid {
+  background-image: none;
+}
+
+.password-input-parent:has(.form-control.is-invalid) i {
+  color: var(--bs-form-invalid-border-color);
 }
 
 .single-listings-item .listings-content .listings-meta li {
@@ -3860,7 +3868,7 @@ Listings Area CSS
   margin: 0 1px;
   color: var(--blackColor);
   transition: var(--transition);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 .shorting-menu .filter i {
@@ -4222,7 +4230,7 @@ Listings Area CSS
   color: #facc39;
   margin-top: -2px;
   margin-right: 4px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .map-popup-box .mp-review-count {
   color: rgba(255, 255, 255, 0.9);
@@ -5372,7 +5380,10 @@ Listings Details Area CSS
   color: #666666;
 }
 
-.listings-details-desc .review-form-wrapper form button[type="button"].submit:hover ,
+.listings-details-desc
+  .review-form-wrapper
+  form
+  button[type="button"].submit:hover,
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   background-color: #ede7f6;
   color: #666666;
@@ -6668,19 +6679,7 @@ How It Works Area CSS
   font-size: 22px;
   margin-bottom: 12px;
 }
-.single-how-it-works-box::before {
-  width: 197px;
-  height: 73px;
-  content: "";
-  position: absolute;
-  right: -100px;
-  top: 0;
-  z-index: -1;
-  background-image: url(/images/arrow-right.png);
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
+
 .single-how-it-works-box:hover .icon {
   animation: bounce 2s;
 }
@@ -8456,7 +8455,7 @@ Subscribe Area CSS
 .subscribe-content form .input-newsletter {
   display: block;
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
   height: 55px;
   padding-left: 20px;
   border: 1px solid var(--mainColor);
@@ -8653,7 +8652,7 @@ Page Title Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -10958,7 +10957,7 @@ Coming Soon Area CSS
 .coming-soon-content #timer div span {
   display: block;
   margin-top: -2px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 .coming-soon-content form {
@@ -12366,7 +12365,7 @@ Dashboard CSS
   right: 0;
   transition: var(--transition);
   top: 10px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .main-content
@@ -12870,7 +12869,7 @@ Dashboard CSS
   right: 20px;
   transition: var(--transition);
   top: 10px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .main-content
@@ -13713,7 +13712,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
   margin-top: -0.5px;
 }
 .bookings-listings-box table tbody td.name .default-btn:hover {
@@ -13733,7 +13732,7 @@ Dashboard CSS
   margin-left: 2px;
   font-weight: 500;
   font-size: 12px;
-  line-height: 13px!important;
+  line-height: 13px !important;
 }
 .bookings-listings-box table tbody td.details h4 .bookings-status.approved {
   background-color: #64bc36;
@@ -13801,7 +13800,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .bookings-listings-box table tbody td.action .default-btn.danger:hover {
@@ -14983,7 +14982,7 @@ Dashboard CSS
 }
 .visitor-reviews-box .user-review .review-rating .review-stars i {
   color: #f2b827;
-  font-size: 15px;
+  font-size: 16px;
   display: inline-block;
 }
 .visitor-reviews-box .user-review .review-rating span {
@@ -15063,7 +15062,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
 }
 .visitor-reviews-box .user-review .btn-box .default-btn.danger {
   margin-left: 10px;
@@ -15290,16 +15289,8 @@ Dashboard CSS
   font-weight: 500;
 }
 
-.facilities-list
-  li
-  .checkbox
-  input
-  + span:not(:empty),
-.facilities-list
-  li
-  .radio
-  input
-  + span:not(:empty),
+.facilities-list li .checkbox input + span:not(:empty),
+.facilities-list li .radio input + span:not(:empty),
 .add-listings-box
   .form-group
   .facilities-list
@@ -15326,16 +15317,8 @@ Dashboard CSS
   position: absolute;
 }
 
-.facilities-list
-  li
-  .checkbox
-  input:checked
-  + span:before,
-.facilities-list
-  li
-  .radio
-  input:checked
-  + span:before,
+.facilities-list li .checkbox input:checked + span:before,
+.facilities-list li .radio input:checked + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15354,16 +15337,8 @@ Dashboard CSS
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
 
-.facilities-list
-  li
-  .checkbox
-  input:checked
-  + span:before,
-.facilities-list
-  li
-  .radio
-  input:checked
-  + span:before,
+.facilities-list li .checkbox input:checked + span:before,
+.facilities-list li .radio input:checked + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15374,16 +15349,8 @@ Dashboard CSS
   background: var(--mainColor);
 }
 
-.facilities-list
-  li
-  .checkbox
-  input:checked
-  + span:after,
-.facilities-list
-  li
-  .radio
-  input:checked
-  + span:after,
+.facilities-list li .checkbox input:checked + span:after,
+.facilities-list li .radio input:checked + span:after,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15441,8 +15408,8 @@ Dashboard CSS
   transition: all 0.3s ease;
   display: block;
   position: relative;
-  background: var(--mainColor);
-  box-shadow: 0 8px 16px -1px rgba(8, 141, 211, 0.2);
+  background: lightgray;
+  box-shadow: 0 8px 16px -1px rgb(178 170 165 / 20%);
 }
 
 .switch-form-group .sidebar-widgets .box .switch input + span:before,
@@ -17036,7 +17003,7 @@ button.button-danger:hover {
   text-align: start;
 }
 
-.map-container{
+.map-container {
   height: 400px;
 }
 
@@ -17049,7 +17016,7 @@ button.button-danger:hover {
     padding-left: 5px !important;
   }
 
-  .map-container{
+  .map-container {
     height: fit-content;
   }
 }
@@ -18401,7 +18368,7 @@ input[type="number"] {
   border: 1px solid #d5d5d5;
   color: #666666;
   padding: 2px 5px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 #price-range .price-input {
@@ -18824,7 +18791,7 @@ span.flatpickr-weekday {
 
 .status-bar-title {
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 17.5px;
   display: flex;
   justify-content: center;
@@ -18943,7 +18910,7 @@ span.flatpickr-weekday {
   background-color: #f2f3f761 !important;
 }
 
-.row-dots-end{
+.row-dots-end {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -18952,7 +18919,7 @@ span.flatpickr-weekday {
   display: inline-block;
 }
 
-#__next-build-watcher{
+#__next-build-watcher {
   z-index: 9999999999 !important;
 }
 

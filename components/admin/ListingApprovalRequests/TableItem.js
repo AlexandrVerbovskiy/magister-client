@@ -202,7 +202,7 @@ const TableItem = ({
                     <SubInfoRow
                       label="Phone"
                       value={
-                        userPhone && userPhone.length ? userPhone.length : "-"
+                        userPhone && userPhone.length ? userPhone : "-"
                       }
                     />
                     <SubInfoRowWithChild label="Rating">

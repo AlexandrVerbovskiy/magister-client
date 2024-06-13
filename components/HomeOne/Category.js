@@ -8,13 +8,8 @@ const Category = ({ topCategories, needShowMore }) => {
         <div className="container">
           <div className="section-title">
             <h2>
-              Browse Businesses by <span>Category</span>
+              Browse by <span>Category</span>
             </h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-              ipsum suspendisse ultrices gravida. Risus commodo viverra.
-            </p>
           </div>
 
           <div className="row" style={{ height: "100%" }}>

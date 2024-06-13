@@ -92,10 +92,16 @@ const NavbarThree = () => {
                   </li>
                 )}
 
-                {isSupport && (
+                {isSupport ? (
                   <li className="nav-item">
                     <Link href="/admin/" className="nav-link">
                       Admin Section
+                    </Link>
+                  </li>
+                ) : (
+                  <li className="nav-item">
+                    <Link href="/how-it-works" className="nav-link">
+                      How it works
                     </Link>
                   </li>
                 )}
