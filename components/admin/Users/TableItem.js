@@ -287,47 +287,51 @@ const TableItem = ({
           <table>
             <thead>
               <tr>
-                <th style={{width:"60%"}}></th>
-                <th style={{width:"40%"}}></th>
+                <th style={{ width: "60%" }}></th>
+                <th style={{ width: "40%" }}></th>
               </tr>
             </thead>
             <tbody>
-              <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
-                <div>
-                  <div className="font-semibold flex items-center">
-                    Activity
-                  </div>
-                  <SubInfoRow
-                    label="Last rental"
-                    value={lastRenterDate ? timeConverter(lastRenterDate) : "-"}
-                    newRow={true}
-                  />
-                  <SubInfoRow
-                    label="Tenant Disputes"
-                    value={tenantDisputesCount}
-                    newRow={true}
-                  />
-                  <SubInfoRow
-                    label="Owner Disputes"
-                    value={ownerDisputesCount}
-                    newRow={true}
-                  />
+              <tr>
+                <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
+                  <div>
+                    <div className="font-semibold flex items-center">
+                      Activity
+                    </div>
+                    <SubInfoRow
+                      label="Last rental"
+                      value={
+                        lastRenterDate ? timeConverter(lastRenterDate) : "-"
+                      }
+                      newRow={true}
+                    />
+                    <SubInfoRow
+                      label="Tenant Disputes"
+                      value={tenantDisputesCount}
+                      newRow={true}
+                    />
+                    <SubInfoRow
+                      label="Owner Disputes"
+                      value={ownerDisputesCount}
+                      newRow={true}
+                    />
 
-                  <SubInfoRowWithChild label="Tenant">
-                    <SingleRatingStar value={tenantAverageRating} />
-                  </SubInfoRowWithChild>
-                  <SubInfoRowWithChild label="Owner">
-                    <SingleRatingStar value={ownerAverageRating} />
-                  </SubInfoRowWithChild>
-                </div>
-              </td>
-              <td className="px-2 py-3 border-r">
-                <ActiveSpan
-                  active={verified}
-                  onClick={handleChangeVerified}
-                  clickable={!isCurrent && role !== "admin"}
-                />
-              </td>
+                    <SubInfoRowWithChild label="Tenant">
+                      <SingleRatingStar value={tenantAverageRating} />
+                    </SubInfoRowWithChild>
+                    <SubInfoRowWithChild label="Owner">
+                      <SingleRatingStar value={ownerAverageRating} />
+                    </SubInfoRowWithChild>
+                  </div>
+                </td>
+                <td className="px-2 py-3 border-r">
+                  <ActiveSpan
+                    active={verified}
+                    onClick={handleChangeVerified}
+                    clickable={!isCurrent && role !== "admin"}
+                  />
+                </td>
+              </tr>
             </tbody>
           </table>
         </td>

@@ -3,7 +3,7 @@
   position: fixed !important;
   bottom: 20px;
   right: 20px;
-  z-index: 999999;
+  z-index: 9999999999;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 0.375rem;
@@ -94,7 +94,7 @@ Preloader Area CSS
   right: 0;
   bottom: 0;
   background-color: #ffffff;
-  z-index: 999999;
+  z-index: 9999999999;
   width: 100%;
   height: 100%;
 }
@@ -524,4 +524,8 @@ div.add-listings-box.dropzone > .gallery-flex {
   .main-site-alert {
     max-width: 80%;
   }
+}
+
+#__next-build-watcher{
+  z-index: 9999999999 !important;
 }

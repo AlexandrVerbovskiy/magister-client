@@ -651,7 +651,7 @@ const EditForm = ({
       if (hasChanges()) {
         activateUpdatePopup(e);
       } else {
-        await handleSubmit(true);
+        success.set(messageOnSuccess);
       }
     } else {
       handleSubmit(true);

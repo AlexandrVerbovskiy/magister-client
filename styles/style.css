@@ -16880,7 +16880,7 @@ Preloader Area CSS
   position: fixed !important;
   bottom: 20px;
   right: 20px;
-  z-index: 999999;
+  z-index: 9999999999;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 0.375rem;
@@ -18929,4 +18929,8 @@ span.flatpickr-weekday {
   max-width: 100%;
   vertical-align: middle;
   display: inline-block;
+}
+
+#__next-build-watcher{
+  z-index: 9999999999 !important;
 }
