@@ -3,6 +3,7 @@ import { separateDate } from "../../utils";
 
 const StatusBlock = ({
   status,
+  statusCancelled,
   disputeStatus,
   ownerId,
   tenantId,
@@ -63,6 +64,32 @@ const StatusBlock = ({
   if (orderStatus == STATIC.ORDER_STATUSES.REJECTED) {
     color = "status-background-red";
     text = "Denied";
+  }
+
+  if (statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.CANCELLED) {
+    color = "status-background-red";
+    text = "Cancelled";
+  }
+
+  if (
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE
+  ) {
+    color = "status-background-red";
+    text = "In dispute";
+  }
+
+  if (
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
+  ) {
+    color = "status-background-red";
+    text = "In dispute";
+  }
+
+  if (
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE
+  ) {
+    color = "status-background-red";
+    text = "In dispute";
   }
 
   if (

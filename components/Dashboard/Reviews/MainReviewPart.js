@@ -15,7 +15,7 @@ const MainReviewPart = ({
                 key={option.key}
               >
                 <div className="add-sub-rating">
-                  <h4>{option.title}</h4>
+                  <h4>{option.title} *</h4>
                   <div className="cleanliness-rating">
                     <input
                       type="radio"
@@ -72,6 +72,9 @@ const MainReviewPart = ({
 
       <div className="col-lg-12 col-md-12">
         <div className="form-group">
+          <label className="mb-2 fw-bold">
+            Your review <span className="required">*</span>
+          </label>
           <textarea
             placeholder="Your review"
             className="form-control"

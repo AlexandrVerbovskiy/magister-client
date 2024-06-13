@@ -23,6 +23,6 @@ export const solveDispute = async (
 };
 
 export const unsolveDispute = async (disputeId, authToken = null) => {
-  const data = await post(`/solve`, { disputeId }, authToken);
+  const data = await post(`/unsolve`, { disputeId }, authToken);
   return data.body;
 };

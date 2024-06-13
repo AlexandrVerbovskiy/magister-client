@@ -40,6 +40,8 @@ const TableItem = ({
   handleApproveClick,
   handleRejectClick,
   userColumnTitle,
+
+  rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -208,34 +210,44 @@ const TableItem = ({
                     </div>
                   </div>
                 </td>
-                <td className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate">
-                  <div className="flex text-left gap-2 flex-wrap">
-                    {waitingAdmin && (
-                      <>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleApproveClick(id);
-                          }}
-                          className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
-                        >
-                          Accept
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRejectClick(id);
-                          }}
-                          className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
-                        >
-                          Reject
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </td>
+                {waitingAdmin ? (
+                  <td className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate">
+                    <div className="flex text-left gap-2 flex-wrap">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleApproveClick(id);
+                        }}
+                        className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRejectClick(id);
+                        }}
+                        className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                ) : (
+                  <td className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top">
+                    <div className="flex text-left gap-2 flex-wrap">
+                      {approved ? (
+                        <></>
+                      ) : (
+                        <SubInfoRowWithChild label="Reject description">
+                          <div>{rejectedDescription}</div>
+                        </SubInfoRowWithChild>
+                      )}
+                    </div>
+                  </td>
+                )}
               </tr>
             </tbody>
           </table>

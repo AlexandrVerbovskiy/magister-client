@@ -859,6 +859,7 @@ const OrderContent = ({
                     Status:{" "}
                     <StatusBlock
                       status={order.status}
+                      statusCancelled={order.cancelStatus}
                       disputeStatus={order.disputeStatus}
                       ownerId={order.ownerId}
                       tenantId={order.tenantId}
@@ -1372,6 +1373,7 @@ const OrderContent = ({
                       >
                         <StatusBlock
                           status={conflictOrder.status}
+                          statusCancelled={order.cancelStatus}
                           disputeStatus={order.disputeStatus}
                           ownerId={conflictOrder.ownerId}
                           tenantId={conflictOrder.tenantId}

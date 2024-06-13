@@ -200,8 +200,10 @@ const BookingModal = ({
             </div>
           )}
           {fee && <div>Fee: {fee}%</div>}
-          {minRentalDays > 0 && (
+          {minRentalDays > 0 ? (
             <div>Minimal Count Rental Days: {minRentalDays}</div>
+          ) : (
+            <></>
           )}
           {fee && <div>Price: ${totalPrice}</div>}
           {fee && <div>Total Fee: ${totalFee}</div>}

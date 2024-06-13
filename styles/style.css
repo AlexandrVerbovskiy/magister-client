@@ -18934,3 +18934,9 @@ span.flatpickr-weekday {
 #__next-build-watcher{
   z-index: 9999999999 !important;
 }
+
+.paypal-payment-form > div > div:nth-of-type(1),
+.paypal-payment-form > div > div:nth-of-type(2) {
+  max-height: 44.8px;
+  overflow: hidden;
+}
