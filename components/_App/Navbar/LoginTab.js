@@ -96,8 +96,6 @@ const LoginTab = ({
         rememberMe,
       });
 
-      console.log(res);
-
       setUser(res.user);
       closeModal();
 
