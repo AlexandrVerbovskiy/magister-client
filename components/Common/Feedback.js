@@ -54,7 +54,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user1.jpg" alt="image" />
                     <div className="title">
                       <h3>John Smith</h3>
-                      <span>Restaurant Owner</span>
                     </div>
                   </div>
                 </div>
@@ -80,7 +79,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user2.jpg" alt="image" />
                     <div className="title">
                       <h3>Sarah Taylor</h3>
-                      <span>Hotel Owner</span>
                     </div>
                   </div>
                 </div>
@@ -106,7 +104,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user3.jpg" alt="image" />
                     <div className="title">
                       <h3>Alex Hales</h3>
-                      <span>Developer</span>
                     </div>
                   </div>
                 </div>
@@ -132,7 +129,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user4.jpg" alt="image" />
                     <div className="title">
                       <h3>Andy James</h3>
-                      <span>Traveler</span>
                     </div>
                   </div>
                 </div>
@@ -158,7 +154,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user2.jpg" alt="image" />
                     <div className="title">
                       <h3>Sarah Taylor</h3>
-                      <span>Hotel Owner</span>
                     </div>
                   </div>
                 </div>
@@ -184,7 +179,6 @@ const Feedback = ({ bgColor, bgImage }) => {
                     <img src="/images/user3.jpg" alt="image" />
                     <div className="title">
                       <h3>Alex Hales</h3>
-                      <span>Developer</span>
                     </div>
                   </div>
                 </div>

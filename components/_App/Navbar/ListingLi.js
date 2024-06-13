@@ -8,11 +8,11 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
           categoriesLength > 0 ? "dropdown-toggle " : ""
         }nav-link d-none d-xl-block`}
       >
-        Listings
+        List An Item
       </a>
 
       <a href="/listing-list" className={`nav-link d-block d-xl-none`}>
-        Listings
+        List An Item
       </a>
     </li>
   );

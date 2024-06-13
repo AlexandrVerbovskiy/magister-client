@@ -85,17 +85,22 @@ const DashboardNavbar = () => {
                 href="/dashboard/listings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/listings/") && "active"
-                }  ${
-                  !sessionUser?.verified
-                    ? "disabled"
-                    : ""
-                }`}
+                }  ${!sessionUser?.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
                   <i className="bx bx-layer"></i>
                 </span>
-                <span className="menu-title">Listings</span>
+                <span className="menu-title">My Items</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link href="/listing-list/" className={`nav-link`}>
+                <span className="icon">
+                  <i className="bx bx-wrench"></i>
+                </span>
+                <span className="menu-title">Search Items</span>
               </Link>
             </li>
 
@@ -104,11 +109,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/bookings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/bookings/") && "active"
-                }  ${
-                  !sessionUser?.verified
-                    ? "disabled"
-                    : ""
-                }`}
+                }  ${!sessionUser?.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -123,11 +124,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/orders/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/orders/") && "active"
-                }  ${
-                  !sessionUser?.verified
-                    ? "disabled"
-                    : ""
-                }`}
+                }  ${!sessionUser?.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
@@ -142,11 +139,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/wallet/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/wallet/") && "active"
-                }  ${
-                  !sessionUser?.verified
-                    ? "disabled"
-                    : ""
-                }`}
+                }  ${!sessionUser?.verified ? "disabled" : ""}`}
                 onClick={needVerifyAccount}
               >
                 <span className="icon">
