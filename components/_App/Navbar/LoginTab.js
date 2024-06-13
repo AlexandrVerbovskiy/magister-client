@@ -7,6 +7,7 @@ import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import PasswordInput from "../../FormComponents/PasswordInput";
 
 const LoginTab = ({
   email,
@@ -67,7 +68,8 @@ const LoginTab = ({
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setRememberMeView(false);
     setFormError(null);
 
@@ -94,6 +96,8 @@ const LoginTab = ({
         rememberMe,
       });
 
+      console.log(res);
+
       setUser(res.user);
       closeModal();
 
@@ -108,8 +112,10 @@ const LoginTab = ({
         }
       } else {
         await signIn("credentials", {
+          userId: res.userId,
           authToken: res.authToken,
           redirect: false,
+          needRegularViewInfoForm: rememberMe.needRegularViewInfoForm,
         });
 
         onLogin(res.user);
@@ -144,7 +150,7 @@ const LoginTab = ({
             <span>Or login with</span>
           </span>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <Input
               name="email"
               type="text"
@@ -154,9 +160,8 @@ const LoginTab = ({
               onInput={handleInputEmail}
             />
 
-            <Input
+            <PasswordInput
               name="password"
-              type="password"
               value={password}
               placeholder="Password"
               error={passwordError}
@@ -199,9 +204,7 @@ const LoginTab = ({
               <Link href="/password-reset-send">Reset It Now</Link>
             </span>
 
-            <button type="button" onClick={handleSubmit}>
-              Login Now
-            </button>
+            <button type="submit">Login Now</button>
           </form>
 
           <span className="dont-account">
