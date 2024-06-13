@@ -37,7 +37,7 @@ const Bookings = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps });
 
   const onRebuild = (data) => {
     setStatusCount(data.statusCount);
@@ -144,6 +144,7 @@ const Bookings = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 openDeleteModal={handleOpenDeleteModal}
+                type="bookings"
               />
 
               <div className="mt-8">

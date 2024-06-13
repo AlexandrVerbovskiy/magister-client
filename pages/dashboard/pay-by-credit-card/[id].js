@@ -322,7 +322,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                       type="button"
                       onClick={handleSubmit}
                     >
-                      Submit payment on the attaching check module
+                      Submit payment
                     </button>
                   </div>
                 </li>

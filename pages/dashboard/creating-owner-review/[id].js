@@ -73,7 +73,7 @@ const FullReview = (pageProps) => {
       await createOwnerReview(
         {
           ownerCommentInfo: ownerDataToSubmit(),
-          listingCommentInfo: listingDataToSubmit,
+          listingCommentInfo: listingDataToSubmit(),
           orderId: id,
         },
         authToken

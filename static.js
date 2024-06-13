@@ -58,5 +58,4 @@ export default {
     payment: "Payment",
     others: "Others",
   },
-  TAWK_PATH: "https://embed.tawk.to/6669d022981b6c56477c61da/1i06la2de",
 };
