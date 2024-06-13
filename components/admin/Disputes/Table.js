@@ -3,8 +3,8 @@ import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
-import UnsolveModal from "./SolveModal";
-import SolveModal from "./UnsolveModal";
+import UnsolveModal from "./UnsolveModal";
+import SolveModal from "./SolveModal";
 import { solveDispute, unsolveDispute } from "../../../services";
 import STATIC from "../../../static";
 
@@ -55,10 +55,11 @@ const DisputesTable = ({
 
   const handleApproveSolveClick = async (solution) => {
     await solveDispute({ solution, disputeId: popupSolveId }, authToken);
-    setItemFields({ status: STATIC.DISPUTE_STATUSES.SOLVED }, popupSolveId);
+    setItemFields(
+      { solution, status: STATIC.DISPUTE_STATUSES.SOLVED },
+      popupSolveId
+    );
   };
-
-  console.log(disputes);
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">

@@ -17,7 +17,7 @@ const useListingReview = () => {
   const [starOptions, setStarOptions] = useState(baseOptions);
   const [description, setDescription] = useState("");
 
-  const listingDataToSubmit = () => {
+  const dataToSubmit = () => {
     const values = {};
     starOptions.forEach((element) => {
       values[element.key] = element.value;
@@ -31,7 +31,7 @@ const useListingReview = () => {
     setStarOptions,
     description,
     setDescription,
-    listingDataToSubmit,
+    dataToSubmit,
   };
 };
 

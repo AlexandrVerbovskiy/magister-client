@@ -49,6 +49,7 @@ const OrderInfo = ({
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
+            statusCancelled={order.cancelStatus}
           />
         </h4>
 

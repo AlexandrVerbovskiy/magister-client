@@ -5,7 +5,7 @@ import ModalBlank from "../ModalBlank";
 import CheckboxList from "../Form/CheckboxList";
 import ErrorSpan from "../ErrorSpan";
 
-const UnsolveModal = ({ active, close, onAcceptClick }) => {
+const SolveModal = ({ active, close, onAcceptClick }) => {
   const [disabled, setDisabled] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
   const [checkedListError, setCheckedListError] = useState(null);
@@ -77,7 +77,7 @@ const UnsolveModal = ({ active, close, onAcceptClick }) => {
       setDisabled(true);
       const descriptionToSend = descriptionParts.join(", ");
       await onAcceptClick(descriptionToSend);
-      success.set("Rejected successfully");
+      success.set("Solved successfully");
       close();
     } catch (e) {
       error.set(e.message);
@@ -159,4 +159,4 @@ const UnsolveModal = ({ active, close, onAcceptClick }) => {
   );
 };
 
-export default UnsolveModal;
+export default SolveModal;

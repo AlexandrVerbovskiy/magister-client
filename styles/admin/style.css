@@ -507,17 +507,17 @@ div.add-listings-box.dropzone > .gallery-flex {
   top: 100%;
 }
 
-.flatpickr-calendar{
-  right: 0!important;
-  left: auto!important;
+.flatpickr-calendar {
+  right: 0 !important;
+  left: auto !important;
 }
 
-.order-form-title{
-  display: block!important;
-  max-width: 100%!important;
-  text-overflow: ellipsis!important;
-  overflow: hidden!important;
-  text-wrap: nowrap!important;
+.order-form-title {
+  display: block !important;
+  max-width: 100% !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  text-wrap: nowrap !important;
 }
 
 @media only screen and (max-width: 767px) {
@@ -526,6 +526,6 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
 }
 
-#__next-build-watcher{
+#__next-build-watcher {
   z-index: 9999999999 !important;
 }

@@ -13,7 +13,7 @@ const UnsolveModal = ({ active, close, onAcceptClick }) => {
 
     try {
       await onAcceptClick();
-      success.set("Approved successfully");
+      success.set("Unsolved successfully");
       close();
       setDisabled(true);
     } catch (e) {

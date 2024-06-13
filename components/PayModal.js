@@ -191,9 +191,10 @@ const PayModal = ({
           </div>
 
           <div
+            className="paypal-payment-form"
             style={
               type == "card"
-                ? { height: "120px", overflow: "hidden" }
+                ? { height: "140px", overflow: "hidden" }
                 : { height: "50px" }
             }
           >
