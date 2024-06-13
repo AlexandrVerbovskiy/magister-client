@@ -3778,6 +3778,25 @@ Listings Area CSS
   padding-left: 0;
   padding-top: 15px;
 }
+
+.password-input-parent{
+  position: relative;
+}
+
+.password-input-parent input{
+  padding-right: 32px;
+}
+
+.password-input-parent i {
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  width: 22px;
+}
+
 .single-listings-item .listings-content .listings-meta li {
   display: inline-block;
   margin-right: 12px;
@@ -16937,11 +16956,13 @@ Preloader Area CSS
   font-size: 22px;
   cursor: pointer;
   color: var(--mainColor);
+  transform: none;
 }
 
 .password-reset form .form-group i {
   left: 0;
   top: 11px;
+  right: auto;
 }
 
 .password-competing form .form-group i {

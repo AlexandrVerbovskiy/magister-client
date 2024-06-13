@@ -22,7 +22,7 @@ const Table = ({
       canOrder: false,
       width: "15%",
     },
-    { title: "Status", value: "orders.status", width: "15%" },
+    { title: "Status", canOrder: false, value: "orders.status", width: "15%" },
     { title: "", canOrder: false, value: "orders.actions", width: "5%" },
   ];
 

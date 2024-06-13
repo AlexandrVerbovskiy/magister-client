@@ -169,7 +169,7 @@ const DashboardNavbar = () => {
                 <span className="icon">
                   <i className="bx bxs-user-circle"></i>
                 </span>
-                <span className="menu-title">Profile Edit</span>
+                <span className="menu-title">Profile</span>
               </Link>
             </li>
 

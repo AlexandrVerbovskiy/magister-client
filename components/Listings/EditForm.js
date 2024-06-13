@@ -480,6 +480,13 @@ const EditForm = ({
       hasError = true;
     }
 
+    if (minRentalDays && minRentalDays > 350) {
+      setMinRentalDaysError(
+        "You cannot make the minimum rental duration longer than 350 days"
+      );
+      hasError = true;
+    }
+
     if (!countStoredItems) {
       setCountStoredItemsError("Required field");
       hasError = true;
@@ -524,7 +531,7 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (defect.length && validateBigText(defect) !== true) {
+    if (defect.trim().length && validateBigText(defect) !== true) {
       setDefectError(validateBigText(defect));
       hasError = true;
     }

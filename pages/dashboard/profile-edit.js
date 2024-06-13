@@ -97,23 +97,8 @@ const ProfileEdit = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
   const [currentPasswordError, setCurrentPasswordError] = useState(null);
 
-  const [passwordType, setPasswordType] = useState("password");
-  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
-  const [currentPasswordType, setCurrentPasswordType] = useState("password");
-
   const [paypalId, setPaypalId] = useState(sessionUser?.paypalId ?? "");
   const [paypalIdError, setPaypalIdError] = useState(null);
-
-  const handleChangePasswordType = () =>
-    setPasswordType(passwordType == "password" ? "text" : "password");
-  const handleChangeConfirmPasswordType = () =>
-    setConfirmPasswordType(
-      confirmPasswordType == "password" ? "text" : "password"
-    );
-  const handleChangeCurrentPasswordType = () =>
-    setCurrentPasswordType(
-      currentPasswordType == "password" ? "text" : "password"
-    );
 
   const objectToSave = () => ({
     name,
@@ -183,7 +168,7 @@ const ProfileEdit = () => {
 
     let hasError = false;
 
-    if (name.length < 1) {
+    if (name.trim().length < 1) {
       setNameError("Required field");
       hasError = true;
     }
@@ -195,7 +180,7 @@ const ProfileEdit = () => {
       hasError = true;
     }
 
-    if (paypalId.length < 1) {
+    if (paypalId.trim().length < 1) {
       setPaypalIdError("Required field");
       hasError = true;
     }
@@ -395,7 +380,7 @@ const ProfileEdit = () => {
   };
 
   const handleVerifyCode = async () => {
-    if (phoneCode.length < 1) {
+    if (phoneCode.trim().length < 1) {
       setVerifyFormError("Code is required field");
       return;
     }
@@ -488,23 +473,17 @@ const ProfileEdit = () => {
     <PasswordSection
       formInfo={{
         currentPassword,
-        currentPasswordType,
         setCurrentPassword,
         currentPasswordError,
         setCurrentPasswordError,
-        handleChangeCurrentPasswordType,
         password,
-        passwordType,
         setPassword,
         passwordError,
         setPasswordError,
-        handleChangePasswordType,
         confirmPassword,
-        confirmPasswordType,
         setConfirmPassword,
         confirmPasswordError,
         setConfirmPasswordError,
-        handleChangeConfirmPasswordType,
         passwordFormError,
         handleChangePassword,
       }}
@@ -573,7 +552,7 @@ const ProfileEdit = () => {
         <NavbarThree />
 
         <div className="breadcrumb-area">
-          <h1>Profile Edit</h1>
+          <h1>Profile</h1>
           <ol className="breadcrumb">
             <li className="item">
               <Link href="/">Home</Link>
@@ -581,7 +560,7 @@ const ProfileEdit = () => {
             <li className="item">
               <Link href="/dashboard/">Dashboard</Link>
             </li>
-            <li className="item">Profile Edit</li>
+            <li className="item">Profile</li>
           </ol>
         </div>
 

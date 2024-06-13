@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
+import { IndiceContext } from "../../contexts";
+import { validateBigText } from "../../utils";
 
 const OrderApprovementSection = ({
   handleApprove,
@@ -14,10 +16,21 @@ const OrderApprovementSection = ({
   price,
   fee,
 }) => {
+  const { error } = useContext(IndiceContext);
   const [feeActive, setFeeActive] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
 
   const onApproved = () => {
+    if (!sendingMessage.trim()) {
+      error.set("Description is required field");
+      return;
+    }
+
+    if (validateBigText(sendingMessage) !== true) {
+      error.set(validateBigText(sendingMessage));
+      return;
+    }
+
     handleApprove({ feeActive, sendingMessage });
   };
 
