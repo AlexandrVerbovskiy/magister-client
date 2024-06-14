@@ -18307,6 +18307,10 @@ input[type="number"] {
   padding-bottom: 20px !important;
 }
 
+.modal-margin-bottom-20 .modal-content {
+  margin-bottom: 20px !important;
+}
+
 .paypal-payment-card {
   display: flex;
   width: 100%;
@@ -18923,8 +18927,8 @@ span.flatpickr-weekday {
   z-index: 9999999999 !important;
 }
 
-.paypal-payment-form > div > div:nth-of-type(1),
-.paypal-payment-form > div > div:nth-of-type(2) {
+.paypal-payment-form > div:not(.payment-form) > div:nth-of-type(1),
+.paypal-payment-form > div:not(.payment-form) > div:nth-of-type(2) {
   max-height: 44.8px;
   overflow: hidden;
 }

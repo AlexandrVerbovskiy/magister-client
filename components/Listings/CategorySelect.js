@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { getFilePath } from "../../utils";
 import ListingCategorySelect from "../_App/ListingCategorySelect";
-import ErrorSpan from "../ErrorSpan";
 
 const CategorySelect = ({
   categories,
   selectedCategoryId,
-  categoryError,
   handleChangeCategory,
+  categoryError,
 }) => {
   const [active, setActive] = useState(false);
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState({});
@@ -15,27 +14,41 @@ const CategorySelect = ({
   return (
     <>
       <div
-        className="form-control d-flex align-items-center cursor-pointer"
+        className={`form-control d-flex align-items-center cursor-pointer ${
+          categoryError ? "is-invalid" : ""
+        }`}
         onClick={() => setActive(true)}
         style={{
           maxWidth: "100%",
         }}
       >
-        {selectedCategoryInfo.image && (
-          <img
-            width="25px"
-            height="25px"
-            className="category-option-image"
-            style={{ marginRight: "5px" }}
-            src={getFilePath(selectedCategoryInfo.image)}
-          />
+        {selectedCategoryId ? (
+          <>
+            {selectedCategoryInfo.image && (
+              <img
+                width="25px"
+                height="25px"
+                className="category-option-image"
+                style={{ marginRight: "5px" }}
+                src={getFilePath(selectedCategoryInfo.image)}
+              />
+            )}
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+              {selectedCategoryInfo.name ?? ""}
+            </span>
+          </>
+        ) : (
+          <span
+            style={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              color: "#999999",
+            }}
+          >
+            Select category
+          </span>
         )}
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
-          {selectedCategoryInfo.name ?? ""}
-        </span>
       </div>
-
-      <ErrorSpan error={categoryError} />
 
       <ListingCategorySelect
         active={active}

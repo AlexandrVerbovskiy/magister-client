@@ -109,7 +109,7 @@ const EditForm = ({
 
   const [listingDefects, setListingDefects] = useState([]);
 
-  const [category, setCategory] = useState(baseCategoryId);
+  const [category, setCategory] = useState(null);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -327,7 +327,7 @@ const EditForm = ({
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      categoryId: listing.categoryId ?? baseCategoryId,
+      categoryId: listing.categoryId ?? null,
       description: listing.description ?? "",
       rentalTerms: listing.rentalTerms ?? "",
       postcode: listing.postcode ?? "",
@@ -640,6 +640,18 @@ const EditForm = ({
 
   const activateUpdatePopup = (e) => {
     e.preventDefault();
+
+    if (!canChange) {
+      error.set(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+      return;
+    }
+
+    if (!validate()) {
+      return false;
+    }
+
     setActiveUpdatePopup(true);
   };
 
@@ -942,7 +954,7 @@ const EditForm = ({
               <button
                 type="button"
                 disabled={disabled}
-                onClick={handleBaseUpdateClick}
+                onClick={activateUpdatePopup}
               >
                 {listing.id ? "Update Listing" : "Create Listing"}
               </button>
@@ -986,9 +998,15 @@ const EditForm = ({
           active={activeUpdatePopup}
           closeModal={() => setActiveUpdatePopup(false)}
           onAccept={handleAcceptUpdate}
-          title="Are you sure you want update listing?"
+          title={
+            listing.id
+              ? "Are you sure you want update listing?"
+              : "Are you sure you want create listing?"
+          }
           body={
-            "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. An approval request will be sent automatically"
+            listing.id
+              ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
+              : "When you create a listing, you should send request to verify it. Users will not be able to rent the tool until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
           }
           acceptText="Update"
           actionsParentClass="mt-4"

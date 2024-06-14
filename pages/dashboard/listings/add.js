@@ -12,26 +12,33 @@ import { useRouter } from "next/router";
 
 const AddListing = ({ categories, defects }) => {
   const [listing, setListing] = useState({});
-  const [canSendRequest, setCanSendRequest] = useState(true);
+  const [canSendRequest, setCanSendRequest] = useState(false);
 
   const router = useRouter();
 
   const save = async (formData, authToken) => {
     if (listing.listingId) {
-      formData.append("id", id);
+      formData.append("id", listing.listingId);
       const res = await updateListing(formData, authToken);
-      setListing(res);
-      setCanSendRequest(false);
-      return res;
+      const updatedListing = res.listing;
+
+      setListing(updatedListing);
+      setCanSendRequest(!res.createdVerifiedRequest);
+
+      return updatedListing;
     } else {
       const res = await createListing(formData, authToken);
-      const listingId = res.listingId;
+      const createdListing = res.listing;
+      const listingId = createdListing.listingId;
+
       const newLinkPart =
         window.location.origin + "/dashboard/listings/update/" + listingId;
-      router.replace(newLinkPart, undefined, { shallow: true });
-      setListing(res);
-      setCanSendRequest(true);
-      return res;
+      //router.replace(newLinkPart, undefined, { shallow: true });
+      window.history.pushState(null, "", newLinkPart);
+
+      setListing(createdListing);
+      setCanSendRequest(!res.createdVerifiedRequest);
+      return createdListing;
     }
   };
 

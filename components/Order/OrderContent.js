@@ -59,6 +59,7 @@ const OrderContent = ({
   questions,
   ownerBaseCommission,
   tenantBaseCommission,
+  bankInfo,
 }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
@@ -462,7 +463,7 @@ const OrderContent = ({
           finished:
             order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
         },
-        { title: "Payed" },
+        { title: "Paid" },
       ]
     : [
         { title: "Make Order", finished: true },
@@ -709,7 +710,7 @@ const OrderContent = ({
       )}
 
       {isTenant && (
-        <div className="add-listings-box">
+        <div id="user-info" className="add-listings-box">
           <h3>Listing Owner Details</h3>
 
           <div className="order-info-main-opponent-info mb-4">
@@ -766,7 +767,7 @@ const OrderContent = ({
       )}
 
       {isOwner && (
-        <div className="add-listings-box">
+        <div id="user-info" className="add-listings-box">
           <h3>Renter Details</h3>
 
           <div className="order-info-main-opponent-info mb-4">
@@ -1285,7 +1286,7 @@ const OrderContent = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
       ) && (
-        <div className="order_widget add-listings-box">
+        <div id="tenant-qr-code" className="order_widget add-listings-box">
           <h3>Renters QR code to confirm acceptance of the tool</h3>
 
           <div className="booking-operations form-group">
@@ -1301,7 +1302,7 @@ const OrderContent = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
       ) && (
-        <div className="order_widget add-listings-box">
+        <div id="owner-qr-code" className="order_widget add-listings-box">
           <h3>Owners QR code to confirm acceptance of the tool</h3>
 
           <div className="booking-operations form-group">
@@ -1500,6 +1501,7 @@ const OrderContent = ({
                 offerEndDate={order.offerEndDate}
                 authToken={authToken}
                 text="Pay"
+                bankInfo={bankInfo}
               />
             )}
 
