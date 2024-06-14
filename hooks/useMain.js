@@ -78,6 +78,22 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
   }, [router.query.success]);
 
   useEffect(() => {
+    analizeQueryInfo("scroll-to", (currentParam) => {
+      if (currentParam) {
+        const intervalId = setInterval(() => {
+          const element = document.querySelector(`#${currentParam}`);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "center" });
+            clearInterval(intervalId);
+          }
+        }, 100);
+
+        return () => clearInterval(intervalId);
+      }
+    });
+  }, [router.query["scroll-to"]]);
+
+  useEffect(() => {
     setAuthToken(session?.user.authToken);
 
     if (session === undefined) {

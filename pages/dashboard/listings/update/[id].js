@@ -26,9 +26,10 @@ const UpdateListing = ({
   const save = async (formData, authToken) => {
     formData.append("id", id);
     const res = await updateListing(formData, authToken);
-    setListing(res);
-    setCanSendRequest(false);
-    return res;
+    const updatedListing = res.listing;
+    setListing(updatedListing);
+    setCanSendRequest(!res.createdVerifiedRequest);
+    return updatedListing;
   };
 
   return (

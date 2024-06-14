@@ -327,6 +327,7 @@ const MyBookings = (pageProps) => {
             closeExtendOrder={closeExtendOrder}
             closeApproveExtendOrder={closeApproveExtendOrder}
             successIconPopupState={successIconPopupState}
+            bankInfo={pageProps.bankInfo}
           />
         </>
       )}

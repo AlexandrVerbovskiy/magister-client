@@ -329,6 +329,7 @@ const Orders = (pageProps) => {
             closeExtendOrder={closeExtendOrder}
             closeApproveExtendOrder={closeApproveExtendOrder}
             successIconPopupState={successIconPopupState}
+            bankInfo={pageProps.bankInfo}
           />
         </>
       )}

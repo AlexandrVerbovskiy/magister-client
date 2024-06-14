@@ -20,6 +20,7 @@ const PayModal = ({
   closeModal,
   authToken,
   needAutoClose = true,
+  bankInfo,
 }) => {
   const { error } = useContext(IndiceContext);
   const [type, setType] = useState("paypal");
@@ -54,6 +55,8 @@ const PayModal = ({
   const subtotal =
     pricePerDay * getDaysDifference(offerStartDate, offerEndDate);
 
+  const total = (subtotal * (100 + offerFee)) / 100;
+
   const handleClose = () => {
     if (disabled) {
       return;
@@ -75,7 +78,7 @@ const PayModal = ({
       active={modalActive}
       closeModal={handleClose}
       needCloseBtn={true}
-      className="modal-padding-bottom-20"
+      className="modal-padding-bottom-20 modal-margin-bottom-20"
     >
       <div className="card card-shadow">
         <div className="card-body">
@@ -90,9 +93,7 @@ const PayModal = ({
           <div className="form-group">Subtotal: ${moneyFormat(subtotal)}</div>
           <div className="form-group">Fee: {offerFee}% </div>
           <div className="form-group">
-            <b>
-              Total to pay: ${moneyFormat((subtotal * (100 + offerFee)) / 100)}
-            </b>
+            <b>Total to pay: ${moneyFormat(total)}</b>
           </div>
         </div>
       </div>
@@ -195,7 +196,9 @@ const PayModal = ({
             style={
               type == "card"
                 ? { height: "140px", overflow: "hidden" }
-                : { height: "50px" }
+                : type == "paypal"
+                ? { height: "50px" }
+                : {}
             }
           >
             {type == "paypal" && amount && orderId && authToken && (
@@ -218,6 +221,93 @@ const PayModal = ({
 
             {type == "bank-transfer" && (
               <div className="payment-form">
+                <div className="earnings-box" style={{ marginBottom: "0" }}>
+                  <h3
+                    className="d-flex align-items-center justify-content-between"
+                    style={{
+                      padding: "0 0 20px",
+                    }}
+                  >
+                    Bank Details{" "}
+                  </h3>
+                  <ul>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                        borderTop: "1px solid rgb(204, 204, 204)",
+                      }}
+                    >
+                      <b>Booking:</b> #{orderId}
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>IBAN: </b>
+                      {bankInfo?.bankAccountIban?.value ?? ""}
+                      {}
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>SWIFT/BIC: </b>
+                      {bankInfo?.bankAccountSwiftBic?.value ?? ""}
+                      {}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Beneficiary Name and Address: </b>
+                      {bankInfo?.bankAccountBeneficiary?.value ?? ""}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Reference/Concept Code: </b>
+                      {bankInfo?.bankAccountReferenceConceptCode?.value ?? ""}
+                    </li>
+                    <li
+                      style={{
+                        background: "white",
+                        borderBottom: "0",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 0",
+                        color: "black",
+                        borderTop: "1px solid #CCCCCC",
+                      }}
+                    >
+                      <b>Total Amount to Transfer: </b>
+                      <span className="pay-by-card-price">${total}</span>
+                    </li>
+                  </ul>
+                </div>
+
                 <Link
                   className="pay-by-credit-card-link"
                   href={"/dashboard/pay-by-credit-card/" + orderId}

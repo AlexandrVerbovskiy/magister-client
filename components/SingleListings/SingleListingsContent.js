@@ -99,13 +99,6 @@ const SingleListingsContent = ({
         return;
       }
 
-      if (!sessionUser?.paypalId) {
-        error.set(
-          "Fill in your PayPal details in your profile settings to start the booking process"
-        );
-        return;
-      }
-
       setCreateOrderModalActive(true);
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
@@ -309,236 +302,246 @@ const SingleListingsContent = ({
                     </>
                   )}
 
-                  <h3>Review</h3>
-                  <div className="listings-review">
-                    <StarRating
-                      averageRating={listingRatingInfo["averageRating"]}
-                      commentCount={listingRatingInfo["commentCount"]}
-                      checked={true}
-                      countClass="rating-count"
-                      pointsValue={true}
-                      centerAlign={true}
-                    />
+                  {comments.length > 0 && (
+                    <>
+                      <h3>Review</h3>
+                      <div className="listings-review">
+                        <StarRating
+                          averageRating={listingRatingInfo["averageRating"]}
+                          commentCount={listingRatingInfo["commentCount"]}
+                          checked={true}
+                          countClass="rating-count"
+                          pointsValue={true}
+                          centerAlign={true}
+                        />
 
-                    <div className="row">
-                      <div className="col-lg-6 col-md-6">
-                        <div className="row m-0">
-                          <div className="side">
-                            <div>Punctuality</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo["averagePunctuality"]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo["averagePunctuality"].toFixed(
-                                1
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="side">
-                            <div>General Experience</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo[
-                                      "averageGeneralExperience"
-                                    ]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo[
-                                "averageGeneralExperience"
-                              ].toFixed(1)}
-                            </div>
-                          </div>
-
-                          <div className="side">
-                            <div>Communication</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo["averageCommunication"]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo[
-                                "averageCommunication"
-                              ].toFixed(1)}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-6 col-md-6">
-                        <div className="row m-0">
-                          <div className="side">
-                            <div>Reliability</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo["averageReliability"]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo["averageReliability"].toFixed(
-                                1
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="side">
-                            <div>Kindness</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo["averageKindness"]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo["averageKindness"].toFixed(1)}
-                            </div>
-                          </div>
-
-                          <div className="side">
-                            <div>Flexibility</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div
-                                className={`bar-${
-                                  Math.round(
-                                    listingRatingInfo["averageFlexibility"]
-                                  ) || 1
-                                }`}
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>
-                              {listingRatingInfo["averageFlexibility"].toFixed(
-                                1
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div id="review">
-                    <div className="listings-review-comments">
-                      {comments.map((comment) => {
-                        const average = (
-                          (comment.flexibility +
-                            comment.generalExperience +
-                            comment.communication +
-                            comment.kindness +
-                            comment.punctuality +
-                            comment.reliability) /
-                          6
-                        ).toFixed(0);
-                        return (
-                          <div className="user-review" key={comment.id}>
+                        <div className="row">
+                          <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
-                              <div className="col-lg-4 col-md-4 p-0">
-                                <div className="user">
-                                  <div className="d-flex">
-                                    <img
-                                      src={
-                                        comment.reviewerPhoto
-                                          ? getFilePath(comment.reviewerPhoto)
-                                          : STATIC.DEFAULT_PHOTO_LINK
-                                      }
-                                      alt="image"
-                                    />
-                                    <div className="title">
-                                      <h4>{comment.reviewerName}</h4>
-                                      <span>
-                                        {comment.reviewerPhone.length > 0
-                                          ? comment.reviewerPhone
-                                          : "-"}
-                                      </span>
+                              <div className="side">
+                                <div>Punctuality</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averagePunctuality"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averagePunctuality"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>General Experience</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo[
+                                          "averageGeneralExperience"
+                                        ]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageGeneralExperience"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Communication</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo[
+                                          "averageCommunication"
+                                        ]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageCommunication"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="col-lg-6 col-md-6">
+                            <div className="row m-0">
+                              <div className="side">
+                                <div>Reliability</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageReliability"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageReliability"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Kindness</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageKindness"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo["averageKindness"].toFixed(
+                                    1
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Flexibility</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageFlexibility"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageFlexibility"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div id="review">
+                        <div className="listings-review-comments">
+                          {comments.map((comment) => {
+                            const average = (
+                              (comment.flexibility +
+                                comment.generalExperience +
+                                comment.communication +
+                                comment.kindness +
+                                comment.punctuality +
+                                comment.reliability) /
+                              6
+                            ).toFixed(0);
+                            return (
+                              <div className="user-review" key={comment.id}>
+                                <div className="row m-0">
+                                  <div className="col-lg-4 col-md-4 p-0">
+                                    <div className="user">
+                                      <div className="d-flex">
+                                        <img
+                                          src={
+                                            comment.reviewerPhoto
+                                              ? getFilePath(
+                                                  comment.reviewerPhoto
+                                                )
+                                              : STATIC.DEFAULT_PHOTO_LINK
+                                          }
+                                          alt="image"
+                                        />
+                                        <div className="title">
+                                          <h4>{comment.reviewerName}</h4>
+                                          <span>
+                                            {comment.reviewerPhone.length > 0
+                                              ? comment.reviewerPhone
+                                              : "-"}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="col-lg-8 col-md-8 p-0">
+                                    <div className="comments">
+                                      <div className="rating">
+                                        <span
+                                          className={`bx bxs-star ${
+                                            average > 0 ? "checked" : ""
+                                          }`}
+                                        ></span>
+                                        <span
+                                          className={`bx bxs-star ${
+                                            average > 1 ? "checked" : ""
+                                          }`}
+                                        ></span>
+                                        <span
+                                          className={`bx bxs-star ${
+                                            average > 2 ? "checked" : ""
+                                          }`}
+                                        ></span>
+                                        <span
+                                          className={`bx bxs-star ${
+                                            average > 3 ? "checked" : ""
+                                          }`}
+                                        ></span>
+                                        <span
+                                          className={`bx bxs-star ${
+                                            average > 4 ? "checked" : ""
+                                          }`}
+                                        ></span>
+                                      </div>
+                                      <p>{comment.description}</p>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-
-                              <div className="col-lg-8 col-md-8 p-0">
-                                <div className="comments">
-                                  <div className="rating">
-                                    <span
-                                      className={`bx bxs-star ${
-                                        average > 0 ? "checked" : ""
-                                      }`}
-                                    ></span>
-                                    <span
-                                      className={`bx bxs-star ${
-                                        average > 1 ? "checked" : ""
-                                      }`}
-                                    ></span>
-                                    <span
-                                      className={`bx bxs-star ${
-                                        average > 2 ? "checked" : ""
-                                      }`}
-                                    ></span>
-                                    <span
-                                      className={`bx bxs-star ${
-                                        average > 3 ? "checked" : ""
-                                      }`}
-                                    ></span>
-                                    <span
-                                      className={`bx bxs-star ${
-                                        average > 4 ? "checked" : ""
-                                      }`}
-                                    ></span>
-                                  </div>
-                                  <p>{comment.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -549,7 +552,7 @@ const SingleListingsContent = ({
                       <h3>Booking Online</h3>
                       {listing.minRentalDays && (
                         <ul style={{ listStyle: "none", padding: "0" }}>
-                          <li>
+                          <li className="d-flex">
                             <i
                               style={{
                                 fontSize: "20px",
@@ -558,7 +561,7 @@ const SingleListingsContent = ({
                               }}
                               className="bx bx-envelope"
                             ></i>
-                            <span className="row-dots-end">
+                            <span className="row-dots-end mt-0">
                               Min rental:{listing.minRentalDays} days
                             </span>
                           </li>
@@ -571,75 +574,8 @@ const SingleListingsContent = ({
                       >
                         Book Now ${moneyFormat(listing.pricePerDay)}/day
                       </button>
-
-                      <span>
-                        By <a href="#">Booking.com</a>
-                      </span>
                     </div>
                   )}
-
-                  <div className="listings-widget listings_contact_details">
-                    <h3>Contact Details</h3>
-                    <ul>
-                      <li>
-                        <i className="bx bx-envelope"></i>
-                        <a className="row-dots-end" href="#">
-                          {listing.userEmail}
-                        </a>
-                      </li>
-                      {listing.userPhone && (
-                        <li>
-                          <i className="bx bx-phone-call"></i>
-                          <a
-                            className="row-dots-end"
-                            href={`tel:+${listing.userPhone}`}
-                          >
-                            {listing.userPhone}
-                          </a>
-                        </li>
-                      )}
-                      {listing.userPlaceWork && (
-                        <li>
-                          <i className="bx bx-building"></i>
-                          <a className="row-dots-end" href="#">
-                            {listing.userPlaceWork}
-                          </a>
-                        </li>
-                      )}
-                      <li>
-                        <i
-                          className="bx bx-map"
-                          style={{ marginTop: "7px" }}
-                        ></i>{" "}
-                        <span className="row-dots-end">{listing.city}</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="listings-widget listings_contact_details">
-                    <h3>Listing Location</h3>
-                    <ul>
-                      <li>
-                        <i
-                          className="bx bx-directions"
-                          style={{ marginTop: "0px" }}
-                        ></i>{" "}
-                        <span className="row-dots-end">{listing.city}</span>
-                      </li>
-
-                      {listing.address && (
-                        <li>
-                          <i
-                            className="bx bx-map"
-                            style={{ marginTop: "7px" }}
-                          ></i>{" "}
-                          <span className="row-dots-end">
-                            {listing.address}
-                          </span>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
 
                   <div className="listings-widget listings_author">
                     <h3>Owner</h3>
