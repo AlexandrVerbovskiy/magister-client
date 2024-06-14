@@ -255,7 +255,7 @@ const Settings = ({
 
     let hasError = false;
 
-    if (bankAccountBeneficiary.length < 1) {
+    if (!bankAccountBeneficiary.trim()) {
       setBankAccountBeneficiaryError("Required field");
       hasError = true;
     } else {
@@ -265,7 +265,7 @@ const Settings = ({
       }
     }
 
-    if (bankAccountIban.length < 1) {
+    if (!bankAccountIban.trim()) {
       setBankAccountIbanError("Required field");
       hasError = true;
     } else {
@@ -275,7 +275,7 @@ const Settings = ({
       }
     }
 
-    if (bankAccountReferenceConceptCode.length < 1) {
+    if (!bankAccountReferenceConceptCode.trim()) {
       setBankAccountReferenceConceptCodeError("Required field");
       hasError = true;
     } else {
@@ -285,7 +285,7 @@ const Settings = ({
       }
     }
 
-    if (bankAccountSwiftBic.length < 1) {
+    if (!bankAccountSwiftBic.trim()) {
       setBankAccountSwiftBicError("Required field");
       hasError = true;
     } else {

@@ -35,7 +35,7 @@ const Orders = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps });
 
   const onRebuild = (data) => {
     setStatusCount(data.statusCount);
@@ -106,11 +106,6 @@ const Orders = (pageProps) => {
                 handleChangeType={handleChangeType}
                 typeOptions={[
                   {
-                    value: "all",
-                    title: "All",
-                    count: statusCount["allCount"],
-                  },
-                  {
                     value: "active",
                     title: "Active",
                     count: statusCount["activeCount"],
@@ -129,6 +124,11 @@ const Orders = (pageProps) => {
                     value: "in-dispute",
                     title: "In dispute",
                     count: statusCount["disputeCount"],
+                  },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
                   },
                 ]}
                 filter={filter}

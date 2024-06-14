@@ -5,11 +5,6 @@ import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
-import InputView from "../../../components/admin/Form/InputView";
-import TextareaView from "../../../components/admin/Form/TextareaView";
-import Status from "../../../components/admin/Orders/Status";
-import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
-import STATIC from "../../../static";
 import {
   getDaysDifference,
   getListingImageByType,
@@ -18,14 +13,110 @@ import {
   tenantPaymentCalculate,
 } from "../../../utils";
 import { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
-import CancelStatus from "../../../components/admin/Orders/CancelStatus";
+import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
+import InputView from "../../../components/admin/Form/InputView";
+import TextareaView from "../../../components/admin/Form/TextareaView";
+import Status from "../../../components/admin/Orders/Status";
+
+const PreviousProposalElem = ({
+  index,
+  prevStartDate,
+  prevEndDate,
+  prevPricePerDay,
+  prevTotalPrice,
+  prevSenderName,
+  prevGetterName,
+  needBottomMargin = false,
+}) => {
+  return (
+    <>
+      <div className="flex flex-col gap-2 mb-2">
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevSenderName}
+              label="Request Sender"
+              name={`prev_sender_name_${index}`}
+              placeholder="Prev Sender"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevGetterName}
+              label="Request Recipient"
+              name={`prev_getter_name_${index}`}
+              placeholder="Prev Recipient"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevStartDate}
+              label="Previous Start Date"
+              name={`prev_start_date_${index}`}
+              placeholder="Prev Start Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevEndDate}
+              label="Previous End Date"
+              name={`prev_end_date_${index}`}
+              placeholder="Prev End Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevPricePerDay}
+              label="Previous Price Per Day"
+              name={`prev_price_per_day_${index}`}
+              placeholder="Prev Price Per Day"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevTotalPrice}
+              label="Previous Total Price"
+              name={`prev_total_price_${index}`}
+              placeholder="Prev Total Price"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+        </div>
+      </div>
+      {needBottomMargin && <hr className="my-8" />}
+    </>
+  );
+};
 
 const Order = (order) => {
-  const { listingImages, categoryInfo } = order;
+  const { requestsToUpdate, listingImages, categoryInfo } = order;
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
+
+  const activeRequestsToUpdate = requestsToUpdate.find(
+    (request) => request.active
+  );
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -40,7 +131,7 @@ const Order = (order) => {
               <div className="sm:flex sm:justify-between sm:items-center mb-8">
                 <BreadCrumbs
                   links={[
-                    { title: "Rentals", href: "/admin/orders" },
+                    { title: "Orders", href: "/admin/orders" },
                     { title: "#" + order.id },
                   ]}
                 />
@@ -51,18 +142,11 @@ const Order = (order) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Rent a ${order.listingName} by ${order.tenantName}`}</div>
-                        {order.cancelStatus ? (
-                          <CancelStatus
-                            status={order.cancelStatus}
-                            baseClass="form-input w-max ml-2"
-                          />
-                        ) : (
-                          <Status
-                            status={order.status}
-                            baseClass="form-input w-max ml-2"
-                          />
-                        )}
+                        <div className="order-form-title">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <Status
+                          status={order.status}
+                          baseClass="form-input w-max ml-2"
+                        />
                       </h2>
 
                       <section>
@@ -134,7 +218,11 @@ const Order = (order) => {
                                 label="From Date"
                                 placeholder="From Date"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.offerStartDate}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? activeRequestsToUpdate.newStartDate
+                                    : order.offerStartDate
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -145,7 +233,11 @@ const Order = (order) => {
                                 label="To Date"
                                 placeholder="To Date"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.offerEndDate}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? activeRequestsToUpdate.newEndDate
+                                    : order.offerEndDate
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -158,7 +250,11 @@ const Order = (order) => {
                                 label="Price Per Day, $"
                                 placeholder="Price Per Day"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.offerPricePerDay}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? activeRequestsToUpdate.newPricePerDay
+                                    : order.offerPricePerDay
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -169,12 +265,22 @@ const Order = (order) => {
                                 label="Total Price, $"
                                 placeholder="Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={moneyFormat(
-                                  getDaysDifference(
-                                    order.offerStartDate,
-                                    order.offerEndDate
-                                  ) * order.offerPricePerDay
-                                )}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? moneyFormat(
+                                        getDaysDifference(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
+                                        ) *
+                                          activeRequestsToUpdate.newPricePerDay
+                                      )
+                                    : moneyFormat(
+                                        getDaysDifference(
+                                          order.offerStartDate,
+                                          order.offerEndDate
+                                        ) * order.offerPricePerDay
+                                      )
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -212,13 +318,21 @@ const Order = (order) => {
                                 placeholder="Owner Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
-                                  (order.ownerFee *
-                                    getDaysDifference(
-                                      order.offerStartDate,
-                                      order.offerEndDate
-                                    ) *
-                                    order.offerPricePerDay) /
-                                  100
+                                  activeRequestsToUpdate
+                                    ? (order.ownerFee *
+                                        getDaysDifference(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
+                                        ) *
+                                        activeRequestsToUpdate.newPricePerDay) /
+                                      100
+                                    : (order.ownerFee *
+                                        getDaysDifference(
+                                          order.offerStartDate,
+                                          order.offerEndDate
+                                        ) *
+                                        order.offerPricePerDay) /
+                                      100
                                 }
                                 inputClassName="form-input w-full"
                               />
@@ -231,13 +345,21 @@ const Order = (order) => {
                                 placeholder="Tenant Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
-                                  (order.tenantFee *
-                                    getDaysDifference(
-                                      order.offerStartDate,
-                                      order.offerEndDate
-                                    ) *
-                                    order.offerPricePerDay) /
-                                  100
+                                  activeRequestsToUpdate
+                                    ? (order.tenantFee *
+                                        getDaysDifference(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate
+                                        ) *
+                                        activeRequestsToUpdate.newPricePerDay) /
+                                      100
+                                    : (order.tenantFee *
+                                        getDaysDifference(
+                                          order.offerStartDate,
+                                          order.offerEndDate
+                                        ) *
+                                        order.offerPricePerDay) /
+                                      100
                                 }
                                 inputClassName="form-input w-full"
                               />
@@ -251,14 +373,25 @@ const Order = (order) => {
                                 label="Owner Get Total Price, $"
                                 placeholder="Owner Get Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={moneyFormat(
-                                  ownerGetsCalculate(
-                                    order.offerStartDate,
-                                    order.offerEndDate,
-                                    order.ownerFee,
-                                    order.offerPricePerDay
-                                  )
-                                )}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? moneyFormat(
+                                        ownerGetsCalculate(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate,
+                                          order.ownerFee,
+                                          activeRequestsToUpdate.newPricePerDay
+                                        )
+                                      )
+                                    : moneyFormat(
+                                        ownerGetsCalculate(
+                                          order.offerStartDate,
+                                          order.offerEndDate,
+                                          order.ownerFee,
+                                          order.offerPricePerDay
+                                        )
+                                      )
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -269,14 +402,25 @@ const Order = (order) => {
                                 label="Tenant Send Total Price, $"
                                 placeholder="Tenant Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={moneyFormat(
-                                  tenantPaymentCalculate(
-                                    order.offerStartDate,
-                                    order.offerEndDate,
-                                    order.tenantFee,
-                                    order.offerPricePerDay
-                                  )
-                                )}
+                                value={
+                                  activeRequestsToUpdate
+                                    ? moneyFormat(
+                                        tenantPaymentCalculate(
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newEndDate,
+                                          order.tenantFee,
+                                          activeRequestsToUpdate.newPricePerDay
+                                        )
+                                      )
+                                    : moneyFormat(
+                                        tenantPaymentCalculate(
+                                          order.offerStartDate,
+                                          order.offerEndDate,
+                                          order.tenantFee,
+                                          order.offerPricePerDay
+                                        )
+                                      )
+                                }
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -330,6 +474,8 @@ const Order = (order) => {
                             style={{ height: "500px" }}
                           >
                             <MultyMarkersMap
+                              userLocation={userLocation}
+                              setUserLocation={setUserLocation}
                               markers={[
                                 {
                                   id: 1,
@@ -342,8 +488,6 @@ const Order = (order) => {
                                 lat: order.listingRentalLat,
                                 lng: order.listingRentalLng,
                               }}
-                              userLocation={userLocation}
-                              setUserLocation={setUserLocation}
                               center={mapCenter}
                               setCenter={setMapCenter}
                             />
@@ -351,7 +495,8 @@ const Order = (order) => {
                         </div>
                       </section>
 
-                      {(order.defects.length > 0 || order.listingDopDefect) && (
+                      {(order.defects.length > 0 ||
+                        order.listingDopDefect) && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
@@ -369,7 +514,7 @@ const Order = (order) => {
                             ))}
 
                             {order.listingDopDefect && (
-                              <div className="w-full">
+                              <div className="col-12">
                                 <InputView
                                   labelClassName="block text-sm font-medium mb-1"
                                   value={order.listingDopDefect}
@@ -429,6 +574,57 @@ const Order = (order) => {
                           />
                         </div>
                       </section>
+
+                      {requestsToUpdate.length > 0 && (
+                        <section>
+                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                            Previous Proposal
+                          </h2>
+
+                          <PreviousProposalElem
+                            index={0}
+                            prevStartDate={
+                              order.prevStartDate ?? order.offerStartDate
+                            }
+                            prevEndDate={
+                              order.prevEndDate ?? order.offerEndDate
+                            }
+                            prevPricePerDay={
+                              order.prevPricePerDay ?? order.offerPricePerDay
+                            }
+                            prevTotalPrice={
+                              order.prevFactTotalPrice ?? order.factTotalPrice
+                            }
+                            prevSenderName={order.tenantName}
+                            prevGetterName={order.ownerName}
+                            needBottomMargin={true}
+                          />
+
+                          {requestsToUpdate.map((request, index) => (
+                            <PreviousProposalElem
+                              key={request.id}
+                              index={index + 1}
+                              prevStartDate={request.newStartDate}
+                              prevEndDate={request.newEndDate}
+                              prevPricePerDay={request.newPricePerDay}
+                              prevTotalPrice={request.newFactTotalPrice}
+                              prevSenderName={
+                                request.senderId == order.tenantId
+                                  ? order.tenantName
+                                  : order.ownerName
+                              }
+                              prevGetterName={
+                                request.senderId == order.tenantId
+                                  ? order.ownerName
+                                  : order.tenantName
+                              }
+                              needBottomMargin={
+                                index != requestsToUpdate.length - 1
+                              }
+                            />
+                          ))}
+                        </section>
+                      )}
                     </div>
                   </div>
                 </div>

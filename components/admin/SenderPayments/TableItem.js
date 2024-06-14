@@ -32,6 +32,7 @@ const TableItem = (props) => {
     openPopupPaypal,
     handleApproveClick,
     handleRejectClick,
+    data,
   } = props;
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -185,6 +186,7 @@ const TableItem = (props) => {
                             payerEmail: payerEmail,
                             payerName: payerName,
                             payerId: payerId,
+                            data: data,
                           })
                         }
                       >
@@ -195,6 +197,7 @@ const TableItem = (props) => {
                           payerEmail={payerEmail}
                           payerName={payerName}
                           payerId={payerId}
+                          data={data}
                           sizeType="small-size"
                         />
                       </div>
