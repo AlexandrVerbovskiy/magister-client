@@ -14,7 +14,7 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { getDaysDifference } from "../utils";
+import { generateDatesBetween, getDaysDifference } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
@@ -269,13 +269,13 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     if (dayDiff == 2) {
       success.set("Order extended successfully");
-      router.push("/dashboard/orders", undefined, {
-        unstable_skipClientCache: true,
-      });
     } else {
       success.set("New booking created successfully");
-      router.push("/dashboard/bookings");
     }
+
+    router.push("/dashboard/orders", undefined, {
+      unstable_skipClientCache: true,
+    });
   };
 
   const handleAcceptPayedFastCancel = async ({
@@ -507,10 +507,49 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleAcceptAccept = () => {
     const order = findCurrentOrderById(acceptOrderModalActiveId);
+
     handleAcceptAcceptOrder(
       acceptOrderModalActiveId,
       order.ownerId === sessionUser?.id
     );
+
+    const ordersWithCurrentListing = orders.filter(
+      (checkOrder) =>
+        checkOrder.listingId === order.listingId && checkOrder.id !== order.id
+    );
+
+    const blockedStartDate = order.requestId
+      ? order.newStartDate
+      : order.offerStartDate;
+    const blockedEndDate = order.requestId
+      ? order.newEndDate
+      : order.offerEndDate;
+
+    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
+      let newBlockedDates = [
+        ...(orderWithCurrentListing.blockedDates ?? []),
+        ...generateDatesBetween(blockedStartDate, blockedEndDate),
+      ];
+
+      newBlockedDates = [...new Set(newBlockedDates)];
+
+      const newConflictOrders = [
+        ...orderWithCurrentListing.conflictOrders,
+        {
+          ...order,
+          offerStartDate: blockedStartDate,
+          offerEndDate: blockedEndDate,
+        },
+      ];
+
+      setItemFields(
+        {
+          blockedDates: newBlockedDates,
+          conflictOrders: newConflictOrders,
+        },
+        orderWithCurrentListing.id
+      );
+    });
   };
 
   const closeActiveCancel = () => {

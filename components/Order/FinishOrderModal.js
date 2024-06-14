@@ -27,7 +27,7 @@ const FinishOrderModal = ({ onFinish, modalActive, closeModal }) => {
       active={modalActive}
       closeModal={closeModal}
       title="Finish order"
-      body="To confirm the finalization of the order, click the 'Finish'"
+      body="To confirm the finalization of the order, click 'Finish'"
       onAccept={handleAcceptCancelOrder}
       acceptText="Finish"
       closeModalText="Close"

@@ -36,6 +36,11 @@ const useListingPhotoEdit = () => {
     setPhotoPopupError(null);
   };
 
+  const handleChangeLink = (value) => {
+    setPhotoPopupLink(value);
+    setLinkSuccessPhoto(false);
+  };
+
   const adaptLinkPropsToLocal = (list) =>
     list.map((info) => ({
       link: info.link,
@@ -199,7 +204,7 @@ const useListingPhotoEdit = () => {
     photoPopupLink,
     photoPopupActive,
     setPhotoPopupActive,
-    setPhotoPopupLink,
+    setPhotoPopupLink: handleChangeLink,
     setPhotoPopupPhoto,
     handlePhotoAddByPopup,
     photoPopupType,

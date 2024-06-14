@@ -158,9 +158,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(totalPayed)}
-                                label="Renter payed, $"
+                                label="Renter paid, $"
                                 name="renter-payed-money"
-                                placeholder="Renter Payed"
+                                placeholder="Renter Paid"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

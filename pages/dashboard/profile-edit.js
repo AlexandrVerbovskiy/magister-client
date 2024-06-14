@@ -101,16 +101,16 @@ const ProfileEdit = () => {
   const [paypalIdError, setPaypalIdError] = useState(null);
 
   const objectToSave = () => ({
-    name,
-    phone,
-    facebookUrl,
-    linkedinUrl,
-    instagramUrl,
-    twitterUrl,
-    briefBio,
-    contactDetails,
-    placeWork,
-    paypalId,
+    name: name.trim(),
+    phone: phone.trim(),
+    facebookUrl: facebookUrl.trim(),
+    linkedinUrl: linkedinUrl.trim(),
+    instagramUrl: instagramUrl.trim(),
+    twitterUrl: twitterUrl.trim(),
+    briefBio: briefBio.trim(),
+    contactDetails: contactDetails.trim(),
+    placeWork: placeWork.trim(),
+    paypalId: paypalId.trim(),
   });
 
   const userToState = () => ({
@@ -168,7 +168,7 @@ const ProfileEdit = () => {
 
     let hasError = false;
 
-    if (name.trim().length < 1) {
+    if (!name.trim()) {
       setNameError("Required field");
       hasError = true;
     }
@@ -180,7 +180,7 @@ const ProfileEdit = () => {
       hasError = true;
     }
 
-    if (paypalId.trim().length < 1) {
+    if (!paypalId.trim()) {
       setPaypalIdError("Required field");
       hasError = true;
     }

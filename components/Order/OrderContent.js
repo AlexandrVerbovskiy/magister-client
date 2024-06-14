@@ -82,11 +82,11 @@ const OrderContent = ({
     const handleClose = () => {
       if (!onClose) {
         onClose = () => {
-          if (bookingStatuses.includes(order.status)) {
-            router.push("/dashboard/bookings");
-          } else {
-            router.push("/dashboard/orders");
-          }
+          router.push(
+            `/dashboard/orders?type=${
+              sessionUser.id == order.ownerId ? "owner" : "tenant"
+            }`
+          );
         };
       }
 
@@ -512,13 +512,8 @@ const OrderContent = ({
       authToken
     );
 
-    if (dayDiff == 2) {
-      success.set("Order extended successfully");
-      router.push("/dashboard/orders");
-    } else {
-      success.set("New booking created successfully");
-      router.push("/dashboard/bookings");
-    }
+    success.set("Order extended successfully");
+    router.push("/dashboard/orders");
   };
 
   if (extendApproveData) {
@@ -1233,7 +1228,7 @@ const OrderContent = ({
 
             {questionAnswerInfos.map((question) => {
               return (
-                <>
+                <React.Fragment key={question.id}>
                   <p>{question.question}</p>
 
                   <div className="form-group">
@@ -1277,7 +1272,7 @@ const OrderContent = ({
                     }
                     error={question.error}
                   />
-                </>
+                </React.Fragment>
               );
             })}
           </div>
@@ -1350,28 +1345,16 @@ const OrderContent = ({
                 );
 
                 return (
-                  <li className="form-group">
+                  <li className="form-group" key={conflictOrder.id}>
                     <div className="d-flex justify-content-between">
                       <div>
                         Id:{" "}
-                        <Link
-                          href={
-                            bookingStatuses.includes(conflictOrder.status)
-                              ? `/dashboard/bookings/${conflictOrder.id}`
-                              : `/dashboard/orders/${conflictOrder.id}`
-                          }
-                        >
+                        <Link href={`/dashboard/orders/${conflictOrder.id}`}>
                           #{conflictOrder.id}
                         </Link>
                       </div>
 
-                      <Link
-                        href={
-                          bookingStatuses.includes(conflictOrder.status)
-                            ? `/dashboard/bookings/${conflictOrder.id}`
-                            : `/dashboard/orders/${conflictOrder.id}`
-                        }
-                      >
+                      <Link href={`/dashboard/orders/${conflictOrder.id}`}>
                         <StatusBlock
                           status={conflictOrder.status}
                           statusCancelled={order.cancelStatus}

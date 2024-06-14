@@ -105,21 +105,6 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
-                href="/dashboard/bookings/"
-                className={`nav-link ${
-                  currentPath.includes("/dashboard/bookings/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
-                onClick={needVerifyAccount}
-              >
-                <span className="icon">
-                  <i className="bx bx-timer"></i>
-                </span>
-                <span className="menu-title">Bookings</span>
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link
                 href="/dashboard/orders/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/orders/") && "active"

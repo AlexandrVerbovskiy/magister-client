@@ -4,7 +4,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import {
   unpaidOrderTransactionByCreditCard,
-  getBookingInfoForPayByCreditCardOptions,
+  getOrderInfoForPayByCreditCardOptions,
   generateOrderInvoicePdf,
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
@@ -21,7 +21,7 @@ import ErrorSpan from "../../../components/ErrorSpan";
 import OrderIconPopup from "../../../components/IconPopups/OrderIconPopup";
 import { useRouter } from "next/router";
 
-function PayByCreditCard({ bookingId, booking, bankAccount }) {
+function PayByCreditCard({ orderId, order, bankAccount }) {
   const [proof, setProof] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [proofError, setProofError] = useState(null);
@@ -56,9 +56,9 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
     });
 
   const totalPrice = calculateFullTotalByDaysCount(
-    getDaysDifference(booking.offerStartDate, booking.offerEndDate),
-    booking.offerPricePerDay,
-    booking.tenantFee,
+    getDaysDifference(order.offerStartDate, order.offerEndDate),
+    order.offerPricePerDay,
+    order.tenantFee,
     "sum"
   );
 
@@ -71,8 +71,8 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
       }
 
       setDisabled(true);
-      const fileUrl = await generateOrderInvoicePdf(bookingId, authToken);
-      downloadFileUrl(fileUrl, bookingId);
+      const fileUrl = await generateOrderInvoicePdf(orderId, authToken);
+      downloadFileUrl(fileUrl, orderId);
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -98,7 +98,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
     const formData = new FormData();
 
     formData.append("proof", proof);
-    formData.append("orderId", bookingId);
+    formData.append("orderId", orderId);
 
     try {
       setDisabled(true);
@@ -109,7 +109,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
         text: "Request sent successfully",
         closeButtonText: "Go to bookings page",
         onClose: () => {
-          router.push(`/dashboard/bookings/${bookingId}`);
+          router.push(`/dashboard/orders/${orderId}`);
         },
         textWeight: 600,
       });
@@ -137,9 +137,9 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                 <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href={"/dashboard/bookings/" + bookingId}>Bookings</Link>
+                <Link href={"/dashboard/orders/" + orderId}>Bookings</Link>
               </li>
-              <li className="item">#{bookingId}</li>
+              <li className="item">#{orderId}</li>
             </ol>
           </div>
         </div>
@@ -170,7 +170,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                     color: "black",
                   }}
                 >
-                  <b>Booking:</b> #{bookingId}
+                  <b>Booking:</b> #{orderId}
                 </li>
                 <li
                   style={{
@@ -181,7 +181,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                   }}
                 >
                   <b>IBAN: </b>
-                  {bankAccount?.bankAccountIban?.value ?? ""}
+                  {bankAccount?.bankAccountIban ?? ""}
                   {}
                 </li>
                 <li
@@ -193,7 +193,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                   }}
                 >
                   <b>SWIFT/BIC: </b>
-                  {bankAccount?.bankAccountSwiftBic?.value ?? ""}
+                  {bankAccount?.bankAccountSwiftBic ?? ""}
                   {}
                 </li>
 
@@ -206,7 +206,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                   }}
                 >
                   <b>Beneficiary Name and Address: </b>
-                  {bankAccount?.bankAccountBeneficiary?.value ?? ""}
+                  {bankAccount?.bankAccountBeneficiary ?? ""}
                 </li>
 
                 <li
@@ -218,7 +218,7 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
                   }}
                 >
                   <b>Reference/Concept Code: </b>
-                  {bankAccount?.bankAccountReferenceConceptCode?.value ?? ""}
+                  {bankAccount?.bankAccountReferenceConceptCode ?? ""}
                 </li>
                 <li
                   style={{
@@ -350,11 +350,11 @@ function PayByCreditCard({ bookingId, booking, bankAccount }) {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-  const options = await getBookingInfoForPayByCreditCardOptions(
+  const options = await getOrderInfoForPayByCreditCardOptions(
     id,
     baseSideProps.authToken
   );
-  return { ...options, bookingId: id };
+  return { ...options, orderId: id };
 };
 
 export const getServerSideProps = (context) =>

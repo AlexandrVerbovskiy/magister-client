@@ -10,6 +10,7 @@ import {
   findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
+  getMaxFlatpickrDate,
   groupDates,
   moneyFormat,
   separateDate,
@@ -120,6 +121,7 @@ const CreateUpdateOrderRequestModal = ({
       mode: "range",
       dateFormat: "Y-m-d",
       minDate: "today",
+      maxDate: getMaxFlatpickrDate(),
       static: true,
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
@@ -321,7 +323,7 @@ const CreateUpdateOrderRequestModal = ({
                 </div>
               )}
               {fee && <div>Fee: {fee}%</div>}
-              {minRentalDays && (
+              {minRentalDays > 0 && (
                 <div>Minimal Count Rental Days: {minRentalDays}</div>
               )}
               {fee && <div>Price: ${totalPrice}</div>}

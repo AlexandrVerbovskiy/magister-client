@@ -193,7 +193,7 @@ const InvoiceTable = ({
               </tr>
               <tr>
                 <td className="text-right total" colSpan="4">
-                  <strong>Payed</strong>
+                  <strong>Paid</strong>
                 </td>
                 <td className="text-right total-price">
                   <strong>

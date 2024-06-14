@@ -226,6 +226,10 @@ const PayModal = ({
                     className="d-flex align-items-center justify-content-between"
                     style={{
                       padding: "0 0 20px",
+                      marginLeft: "0",
+                      marginRight: "0",
+                      marginBottom: "0",
+                      marginTop: "0",
                     }}
                   >
                     Bank Details{" "}
@@ -251,7 +255,7 @@ const PayModal = ({
                       }}
                     >
                       <b>IBAN: </b>
-                      {bankInfo?.bankAccountIban?.value ?? ""}
+                      {bankInfo?.bankAccountIban ?? ""}
                       {}
                     </li>
                     <li
@@ -263,7 +267,7 @@ const PayModal = ({
                       }}
                     >
                       <b>SWIFT/BIC: </b>
-                      {bankInfo?.bankAccountSwiftBic?.value ?? ""}
+                      {bankInfo?.bankAccountSwiftBic ?? ""}
                       {}
                     </li>
 
@@ -276,7 +280,7 @@ const PayModal = ({
                       }}
                     >
                       <b>Beneficiary Name and Address: </b>
-                      {bankInfo?.bankAccountBeneficiary?.value ?? ""}
+                      {bankInfo?.bankAccountBeneficiary ?? ""}
                     </li>
 
                     <li
@@ -288,7 +292,7 @@ const PayModal = ({
                       }}
                     >
                       <b>Reference/Concept Code: </b>
-                      {bankInfo?.bankAccountReferenceConceptCode?.value ?? ""}
+                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
                     </li>
                     <li
                       style={{

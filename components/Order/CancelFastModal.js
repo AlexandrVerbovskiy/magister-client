@@ -27,7 +27,7 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
     }
   };
 
-  let message = "To confirm the cancellation of the order, click the 'Confirm'";
+  let message = "To confirm the cancellation of the order, click 'Confirm'";
   if (order) {
     const totalPayed = calculateFullTotalByDaysCount(
       getDaysDifference(order.offerStartDate, order.offerEndDate),

@@ -354,13 +354,13 @@ const EditForm = ({
     }));
 
     return {
-      address,
-      name,
+      address: address.trim(),
+      name: name.trim(),
       categoryId: category,
-      description,
-      rentalTerms,
-      postcode,
-      city,
+      description: description.trim(),
+      rentalTerms: rentalTerms.trim(),
+      postcode: postcode.trim(),
+      city: city.trim(),
       compensationCost,
       countStoredItems,
       pricePerDay,
@@ -371,7 +371,7 @@ const EditForm = ({
       listingImages,
       active,
       defects: listingDefects,
-      dopDefect: defect,
+      dopDefect: defect.trim(),
     };
   };
 
@@ -450,7 +450,7 @@ const EditForm = ({
   const validate = () => {
     let hasError = false;
 
-    if (!name) {
+    if (!name.trim()) {
       setNameError("Required field");
       hasError = true;
     }
@@ -460,12 +460,12 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!category) {
+    if (!category.trim()) {
       setCategoryError("Required field");
       hasError = true;
     }
 
-    if (!postcode) {
+    if (!postcode.trim()) {
       setPostcodeError("Required field");
       hasError = true;
     }
