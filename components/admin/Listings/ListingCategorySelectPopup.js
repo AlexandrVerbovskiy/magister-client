@@ -114,7 +114,7 @@ const ListingCategorySelectPopup = ({
       setModalOpen={setActive}
     >
       <div className="category-select-modal">
-        <div className="d-flex w-100" style={{height: "max-content"}}>
+        <div className="flex w-100" style={{height: "max-content"}}>
           <div className="categories-select-level-column sidebar-left">
             {categories["firstLevel"].map((category) => (
               <CategoryOption

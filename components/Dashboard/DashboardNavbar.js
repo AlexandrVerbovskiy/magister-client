@@ -85,8 +85,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/listings/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/listings/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
-                onClick={needVerifyAccount}
+                }`}
               >
                 <span className="icon">
                   <i className="bx bx-layer"></i>

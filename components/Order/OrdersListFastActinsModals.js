@@ -46,6 +46,8 @@ const OrdersListFastActinsModals = ({
 
   tenantBaseCommission,
   successIconPopupState,
+
+  bankInfo
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -186,6 +188,7 @@ const OrdersListFastActinsModals = ({
         modalActive={activePay}
         closeModal={closePay}
         authToken={authToken}
+        bankInfo={bankInfo}
       />
 
       <SuccessIconPopup

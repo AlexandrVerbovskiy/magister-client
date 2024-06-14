@@ -214,6 +214,28 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
+        ) && (
+          <Link
+            className="default-btn"
+            href={link + "/" + order.id + "?scroll-to=tenant-qr-code"}
+          >
+            <i className="bx bx-comment-detail"></i> Start the rental
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
+        ) && (
+          <Link
+            className="default-btn"
+            href={link + "/" + order.id + "?scroll-to=owner-qr-code"}
+          >
+            <i className="bx bx-comment-detail"></i> Finish the rental
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
         ) && (
           <Link
