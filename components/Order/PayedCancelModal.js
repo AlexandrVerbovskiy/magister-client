@@ -57,7 +57,11 @@ const PayedCancelModal = ({
     }
 
     try {
-      await onCancel({ type, paypalId, cardNumber });
+      await onCancel({
+        type: type.trim(),
+        paypalId: paypalId.trim(),
+        cardNumber: cardNumber.trim(),
+      });
       setDisabled(true);
       handleClose();
     } catch (e) {

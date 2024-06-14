@@ -133,6 +133,23 @@ export const separateDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+export const generateDatesBetween = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  let currentDate = startDate;
+
+  const datesObj = {};
+
+  while (currentDate <= endDate) {
+    const formattedDate = separateDate(currentDate);
+    datesObj[formattedDate] = true;
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return Object.keys(datesObj);
+};
+
 export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   const currentDate = separateDate(new Date());
   return date < currentDate;
@@ -188,3 +205,13 @@ export const increaseDateByOneDay = (dateString) => {
 };
 
 export const dateToSeconds = (days) => days * 24 * 60 * 60 * 1000;
+
+export const getMaxFlatpickrDate = () => {
+  const currentDate = new Date();
+
+  return new Date(
+    currentDate.getFullYear() + 2,
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+};

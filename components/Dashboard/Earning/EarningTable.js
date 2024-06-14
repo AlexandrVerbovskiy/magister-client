@@ -186,8 +186,8 @@ const EarningTable = ({
 
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Total Payed"
-                placeholder="Total Payed"
+                label="Total Paid"
+                placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
                 value={`${tenantPaymentCalculate(
                   offerStartDate,
@@ -258,7 +258,7 @@ const EarningTable = ({
 
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Total Payed"
+                label="Total Paid"
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(

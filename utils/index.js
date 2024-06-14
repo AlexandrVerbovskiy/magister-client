@@ -25,3 +25,15 @@ export * from "./elementEvent";
 export * from "./priceCalculations";
 export * from "./baseServerSideProps";
 export * from "./sort";
+
+
+
+export const capitalizeFirstLetter = (str) => {
+  if (!str) {
+    return "";
+  }
+
+  const firstLetter = str.charAt(0).toUpperCase();
+  const restOfString = str.slice(1).toLowerCase();
+  return firstLetter + restOfString;
+};

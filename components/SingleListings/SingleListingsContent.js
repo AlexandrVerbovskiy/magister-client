@@ -81,7 +81,7 @@ const SingleListingsContent = ({
         },
         authToken
       );
-      await router.push(`/dashboard/bookings/${id}`);
+      await router.push(`/dashboard/orders/${id}`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );
@@ -212,7 +212,13 @@ const SingleListingsContent = ({
         <div className="container">
           {!currentApprove && (
             <div className="row">
-              <div className="col-lg-8 col-md-12">
+              <div
+                className={
+                  sessionUser.id != listing.ownerId
+                    ? "col-lg-8 col-md-12"
+                    : "col-12"
+                }
+              >
                 <div className="listings-details-desc">
                   <h3>{listing.name}</h3>
                   <p>{listing.description}</p>
@@ -545,79 +551,88 @@ const SingleListingsContent = ({
                 </div>
               </div>
 
-              <div className="col-lg-4 col-md-12">
-                <div className="listings-sidebar">
-                  {listing.approved && listing.userId != sessionUser?.id && (
-                    <div className="listings-widget book_listings">
-                      <h3>Booking Online</h3>
-                      {listing.minRentalDays && (
-                        <ul style={{ listStyle: "none", padding: "0" }}>
-                          <li className="d-flex">
-                            <i
-                              style={{
-                                fontSize: "20px",
-                                transform: "translateY(3px)",
-                                marginRight: "4px",
-                              }}
-                              className="bx bx-envelope"
-                            ></i>
-                            <span className="row-dots-end mt-0">
-                              Min rental:{listing.minRentalDays} days
-                            </span>
-                          </li>
-                        </ul>
-                      )}
-                      <button
-                        type="button"
-                        className="default-btn w-100"
-                        onClick={handleMakeBookingTriggerClick}
-                      >
-                        Book Now ${moneyFormat(listing.pricePerDay)}/day
-                      </button>
-                    </div>
-                  )}
-
-                  <div className="listings-widget listings_author">
-                    <h3>Owner</h3>
-                    <div className="author">
-                      <div className="d-flex align-items-center">
-                        <img
-                          src={
-                            listing.userPhoto
-                              ? getFilePath(listing.userPhoto)
-                              : STATIC.DEFAULT_PHOTO_LINK
-                          }
-                          alt={listing.userName}
-                        />
-                        <div className="title row-dots-end">
-                          <h4 className="row-dots-end">
-                            <a href={"/owner-listing-list/" + listing.ownerId}>
-                              {listing.userName}
-                            </a>
-                          </h4>
-                          <span>
-                            {listing.countStoredItems}{" "}
-                            {autoMultiEnding(listing.countStoredItems, "Item")}{" "}
-                            for rental
-                          </span>
-                        </div>
+              {sessionUser.id != listing.ownerId && (
+                <div className="col-lg-4 col-md-12">
+                  <div className="listings-sidebar">
+                    {listing.approved && listing.userId != sessionUser?.id && (
+                      <div className="listings-widget book_listings">
+                        <h3>Booking Online</h3>
+                        {listing.minRentalDays > 0 && (
+                          <ul style={{ listStyle: "none", padding: "0" }}>
+                            <li className="d-flex">
+                              <i
+                                style={{
+                                  fontSize: "20px",
+                                  transform: "translateY(3px)",
+                                  marginRight: "4px",
+                                }}
+                                className="bx bx-envelope"
+                              ></i>
+                              <span className="row-dots-end mt-0">
+                                Min rental:{listing.minRentalDays} days
+                              </span>
+                            </li>
+                          </ul>
+                        )}
+                        <button
+                          type="button"
+                          className="default-btn w-100"
+                          onClick={handleMakeBookingTriggerClick}
+                        >
+                          Book Now ${moneyFormat(listing.pricePerDay)}/day
+                        </button>
                       </div>
+                    )}
 
-                      <div
-                        className="author-profile"
-                        style={{ borderTop: 0, margin: 0 }}
-                      >
-                        <div className="row align-items-center">
-                          <div className="col-12">
-                            <div className="base-full-rating-stars-info">
-                              <StarRating
-                                averageRating={ownerRatingInfo["averageRating"]}
-                                commentCount={ownerRatingInfo["commentCount"]}
-                                checked={true}
-                                countClass="rating-count"
-                                pointsValue={true}
-                                centerAlign={true}
-                              />
+                    <div className="listings-widget listings_author">
+                      <h3>Owner</h3>
+                      <div className="author">
+                        <div className="d-flex align-items-center">
+                          <img
+                            src={
+                              listing.userPhoto
+                                ? getFilePath(listing.userPhoto)
+                                : STATIC.DEFAULT_PHOTO_LINK
+                            }
+                            alt={listing.userName}
+                          />
+                          <div className="title row-dots-end">
+                            <h4 className="row-dots-end">
+                              <a
+                                href={"/owner-listing-list/" + listing.ownerId}
+                              >
+                                {listing.userName}
+                              </a>
+                            </h4>
+                            <span>
+                              {listing.countStoredItems}{" "}
+                              {autoMultiEnding(
+                                listing.countStoredItems,
+                                "Item"
+                              )}{" "}
+                              for rental
+                            </span>
+                          </div>
+                        </div>
+
+                        <div
+                          className="author-profile"
+                          style={{ borderTop: 0, margin: 0 }}
+                        >
+                          <div className="row align-items-center">
+                            <div className="col-12">
+                              <div className="base-full-rating-stars-info">
+                                <StarRating
+                                  averageRating={
+                                    ownerRatingInfo["averageRating"]
+                                  }
+                                  commentCount={ownerRatingInfo["commentCount"]}
+                                  checked={true}
+                                  countClass="rating-count"
+                                  pointsValue={true}
+                                  centerAlign={true}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -625,7 +640,7 @@ const SingleListingsContent = ({
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 

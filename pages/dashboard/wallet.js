@@ -104,7 +104,7 @@ const Wallet = ({
                 <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Payed <strong className="wallet-currency">USD</strong>
+                Total Paid <strong className="wallet-currency">USD</strong>
               </span>
               <h3>{moneyFormat(totalPayed)}</h3>
             </div>
@@ -248,7 +248,7 @@ const Wallet = ({
                               Fee: ${moneyFormat(feePerDuration)}
                             </li>
                             <li className="price">
-                              Net Payed:{" "}
+                              Net Paid:{" "}
                               <strong>${moneyFormat(sending.money)}</strong>
                             </li>
                             {!sending.adminApproved &&

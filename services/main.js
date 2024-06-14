@@ -21,11 +21,11 @@ export const getListingFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
-export const getBookingInfoForPayByCreditCardOptions = async (
+export const getOrderInfoForPayByCreditCardOptions = async (
   id,
   authToken = null
 ) => {
-  const data = await get(`/get-booking-for-card-pay-options/${id}`, authToken);
+  const data = await get(`/get-order-for-card-pay-options/${id}`, authToken);
   return data.body;
 };
 
@@ -205,16 +205,6 @@ export const getSettingsPageOptions = async (authToken) => {
   return data.body;
 };
 
-export const getBookingListOptions = async (params, authToken) => {
-  const data = await post("/booking-list-options", params, authToken);
-  return data.body;
-};
-
-export const getAdminBookingsListPageOptions = async (params, authToken) => {
-  const data = await post("/admin-booking-list-options", params, authToken);
-  return data.body;
-};
-
 export const getOrderListOptions = async (params, authToken) => {
   const data = await post("/order-list-options", params, authToken);
   return data.body;
@@ -227,11 +217,6 @@ export const getAdminOrderListPageOptions = async (params, authToken) => {
 
 export const getAdminOrderListOptions = async (params, authToken) => {
   const data = await post("/admin-order-list-options", params, authToken);
-  return data.body;
-};
-
-export const getAdminBookingInfo = async (id, authToken) => {
-  const data = await get("/admin-full-booking-info-options/" + id, authToken);
   return data.body;
 };
 

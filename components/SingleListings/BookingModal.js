@@ -9,6 +9,7 @@ import {
   findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
+  getMaxFlatpickrDate,
   groupDates,
   moneyFormat,
   separateDate,
@@ -83,6 +84,7 @@ const BookingModal = ({
       monthSelectorType: "static",
       yearSelectorType: "static",
       disable: datesToDisable,
+      maxDate: getMaxFlatpickrDate(),
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
       },
@@ -148,9 +150,7 @@ const BookingModal = ({
     }
 
     if (getDaysDifference(fromDate, toDate) > 350) {
-      setCalendarError(
-        `You can't rent a listing more than 350 days`
-      );
+      setCalendarError(`You can't rent a listing more than 350 days`);
       hasError = true;
     }
 
@@ -207,11 +207,8 @@ const BookingModal = ({
             </div>
           )}
           {fee && <div>Fee: {fee}%</div>}
-          {minRentalDays > 0 ? (
-            <div>Minimal Count Rental Days: {minRentalDays}</div>
-          ) : (
-            <></>
-          )}
+          {(minRentalDays > 0) &&
+          <div>Minimal Count Rental Days: {minRentalDays}</div>}
           {fee && <div>Price: ${totalPrice}</div>}
           {fee && <div>Total Fee: ${totalFee}</div>}
           <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>

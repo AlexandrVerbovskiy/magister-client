@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from "../../utils";
+
 const PaypalCheck = ({
   rentalPrice,
   listingName,
@@ -5,8 +7,23 @@ const PaypalCheck = ({
   payerEmail,
   payerName,
   payerId,
+  data,
   sizeType = "small-size",
 }) => {
+  let paidWith =
+    data.payerCardLastDigits && data.payerCardLastBrand
+      ? `${capitalizeFirstLetter(data.payerCardLastDigits)} x-${
+          data.payerCardLastBrand
+        }`
+      : null;
+
+  if (!paidWith && data.paypalSenderId) {
+    paidWith = "Paypal Id: " + data.paypalSenderId;
+  }
+
+  if (!paidWith) {
+    paidWith = "-";
+  }
 
   return (
     <div className={`paypal-check-wrapper ${sizeType}`}>
@@ -21,10 +38,7 @@ const PaypalCheck = ({
         <div className="receipt-body">
           <div className="top-section">
             <div className="confirmation">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <circle
                   cx="12"
                   cy="12"
@@ -148,7 +162,7 @@ const PaypalCheck = ({
                 </thead>
                 <tbody>
                   <tr className="row total">
-                    <td className="title">{listingName}</td>
+                    <td className="title">{paidWith}</td>
                     <td className="price">
                       <span className="amount">${rentalPrice}</span>
                       <span className="currency">USD</span>
