@@ -176,6 +176,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       activePayOrder.id
     );
 
+
     setActivePay(false);
     setActivePayOrder(null);
     activateSuccessOrderPopup({
