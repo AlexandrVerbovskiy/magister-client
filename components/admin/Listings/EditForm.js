@@ -327,7 +327,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
         hasError = true;
       }
 
-      if (!category.trim()) {
+      if (!category) {
         setCategoryError("Required field");
         hasError = true;
       }

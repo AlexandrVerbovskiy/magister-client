@@ -46,8 +46,34 @@ const ListingCommentsTable = ({
   };
 
   const handleApproveAcceptClick = async () => {
+    const approvedReview = reviews.find(
+      (review) => review.id == popupApproveId
+    );
+
+    const totalPoints =
+      approvedReview.listingAverageRating * approvedReview.listingCommentCount +
+      (approvedReview.flexibility +
+        approvedReview.communication +
+        approvedReview.kindness +
+        approvedReview.reliability +
+        approvedReview.generalExperience +
+        approvedReview.punctuality) /
+        6;
+
+    const newCount = approvedReview.listingCommentCount + 1;
+    const newAveragePoints = totalPoints / newCount;
+
     await listingCommentApprove({ id: popupApproveId }, authToken);
-    setItemFields({ approved: true, waitingAdmin: false }, popupApproveId);
+    
+    setItemFields(
+      {
+        approved: true,
+        waitingAdmin: false,
+        listingAverageRating: newAveragePoints,
+        listingCommentCount: newCount,
+      },
+      popupApproveId
+    );
   };
 
   return (

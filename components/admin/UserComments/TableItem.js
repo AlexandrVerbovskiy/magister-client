@@ -10,6 +10,8 @@ import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
 import { getFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
+import SingleRatingStar from "../SingleRatingStar";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
 
 const TableItem = ({
   id,
@@ -40,6 +42,9 @@ const TableItem = ({
   handleApproveClick,
   handleRejectClick,
   userColumnTitle,
+
+  reviewerAverageRating,
+  userAverageRating,
 
   rejectedDescription = null,
 }) => {
@@ -158,7 +163,9 @@ const TableItem = ({
                           : "-"
                       }
                     />
-                    <SubInfoRow label="Rating" value={0} />
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={reviewerAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
@@ -176,7 +183,9 @@ const TableItem = ({
                         userPhone && userPhone.length ? userPhone.length : "-"
                       }
                     />
-                    <SubInfoRow label="Rating" value={0} />
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={userAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">

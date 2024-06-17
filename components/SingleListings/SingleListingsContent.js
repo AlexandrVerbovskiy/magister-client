@@ -39,20 +39,11 @@ const SingleListingsContent = ({
   const router = useRouter();
 
   const handleShareClick = () => {
-    const clipboard = new ClipboardJS("#shareButton", {
-      text: function () {
-        return window.location.href;
-      },
+    navigator.share({
+      title: listing.name,
+      text: `Share a link to an item "${listing.name}"!`,
+      url: window.location.href,
     });
-    clipboard.on("success", function (e) {
-      success.set("Link copied successfully");
-      clipboard.destroy();
-    });
-    clipboard.on("error", function (e) {
-      error.set("Link copied error: " + e.message);
-      clipboard.destroy();
-    });
-    clipboard.onClick(event);
   };
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -214,7 +205,7 @@ const SingleListingsContent = ({
             <div className="row">
               <div
                 className={
-                  sessionUser.id != listing.ownerId
+                  sessionUser?.id != listing.ownerId
                     ? "col-lg-8 col-md-12"
                     : "col-12"
                 }
@@ -479,7 +470,8 @@ const SingleListingsContent = ({
                                 comment.punctuality +
                                 comment.reliability) /
                               6
-                            ).toFixed(0);
+                            ).toFixed(1);
+
                             return (
                               <div className="user-review" key={comment.id}>
                                 <div className="row m-0">
@@ -496,8 +488,10 @@ const SingleListingsContent = ({
                                           }
                                           alt="image"
                                         />
-                                        <div className="title">
-                                          <h4>{comment.reviewerName}</h4>
+                                        <div className="title row-dots-end">
+                                          <h4 className="row-dots-end">
+                                            {comment.reviewerName}
+                                          </h4>
                                           <span>
                                             {comment.reviewerPhone.length > 0
                                               ? comment.reviewerPhone
@@ -510,33 +504,12 @@ const SingleListingsContent = ({
 
                                   <div className="col-lg-8 col-md-8 p-0">
                                     <div className="comments">
-                                      <div className="rating">
-                                        <span
-                                          className={`bx bxs-star ${
-                                            average > 0 ? "checked" : ""
-                                          }`}
-                                        ></span>
-                                        <span
-                                          className={`bx bxs-star ${
-                                            average > 1 ? "checked" : ""
-                                          }`}
-                                        ></span>
-                                        <span
-                                          className={`bx bxs-star ${
-                                            average > 2 ? "checked" : ""
-                                          }`}
-                                        ></span>
-                                        <span
-                                          className={`bx bxs-star ${
-                                            average > 3 ? "checked" : ""
-                                          }`}
-                                        ></span>
-                                        <span
-                                          className={`bx bxs-star ${
-                                            average > 4 ? "checked" : ""
-                                          }`}
-                                        ></span>
-                                      </div>
+                                      <StarRating
+                                        averageRating={average}
+                                        checked={true}
+                                        checkedOnlyActive={true}
+                                        uncheckedStarClassName="bxs-star"
+                                      />
                                       <p>{comment.description}</p>
                                     </div>
                                   </div>
@@ -551,7 +524,7 @@ const SingleListingsContent = ({
                 </div>
               </div>
 
-              {sessionUser.id != listing.ownerId && (
+              {sessionUser?.id != listing.ownerId && (
                 <div className="col-lg-4 col-md-12">
                   <div className="listings-sidebar">
                     {listing.approved && listing.userId != sessionUser?.id && (

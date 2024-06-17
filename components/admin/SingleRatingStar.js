@@ -1,4 +1,8 @@
 const SingleRatingStar = ({ value, bodyColor = "rgb(248 250 252)" }) => {
+  if (!value) {
+    value = 0;
+  }
+
   return (
     <span className="text-amber-500">
       <svg

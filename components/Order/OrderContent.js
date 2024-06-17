@@ -61,6 +61,8 @@ const OrderContent = ({
   tenantBaseCommission,
   bankInfo,
 }) => {
+  console.log(baseOrder);
+
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);

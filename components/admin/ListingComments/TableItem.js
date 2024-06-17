@@ -11,6 +11,7 @@ import STATIC from "../../../static";
 import { getFilePath, getListingImageByType } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const TableItem = ({
   id,
@@ -42,6 +43,8 @@ const TableItem = ({
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
+  reviewerAverageRating,
+  listingAverageRating,
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -145,7 +148,9 @@ const TableItem = ({
                           : "-"
                       }
                     />
-                    <SubInfoRow label="Rating" value={0} />
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={reviewerAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
@@ -168,6 +173,10 @@ const TableItem = ({
                       label="Min Rental Days"
                       value={listingMinRentalDays ?? "-"}
                     />
+
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={listingAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
