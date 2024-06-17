@@ -3,6 +3,7 @@ export const baseListPageParams = (params) => ({
   page: params["page"],
   filter: params["filter"],
   orderType: params["order-type"],
+  itemsPerPage: 10,
 });
 
 export const baseTimeListPageParams = (params) => ({
