@@ -81,12 +81,6 @@ const useOrderActions = ({ order }) => {
           );
         }
 
-        if (isOwner || (isTenant && !order.canFastCancelPayed)) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON
-          );
-        }
-
         if (isTenant && order.canFastCancelPayed) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
         }
@@ -101,8 +95,6 @@ const useOrderActions = ({ order }) => {
             STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
           );
         }
-
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CREATE_CANCEL_BUTTON);
       }
 
       if (order.status == STATIC.ORDER_STATUSES.FINISHED) {

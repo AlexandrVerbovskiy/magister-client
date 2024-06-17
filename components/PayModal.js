@@ -19,7 +19,6 @@ const PayModal = ({
   modalActive,
   closeModal,
   authToken,
-  needAutoClose = true,
   bankInfo,
 }) => {
   const { error } = useContext(IndiceContext);
@@ -29,11 +28,11 @@ const PayModal = ({
   const onApprove = async (data) => {
     try {
       await paypalOrderPayed(data.orderID, authToken);
-      onTenantPayed();
 
-      if (needAutoClose) {
-        setTimeout(closeModal(), 100);
-      }
+      setTimeout(() => {
+        onTenantPayed();
+        closeModal();
+      }, 100);
     } catch (e) {
       error.set(e.message);
     }
