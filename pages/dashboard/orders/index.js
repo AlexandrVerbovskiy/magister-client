@@ -127,6 +127,8 @@ const Orders = (pageProps) => {
     }),
   });
 
+  console.log(orders)
+
   const changeType = (value) => {
     setType(value);
     rebuild({ type: value });

@@ -460,7 +460,7 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!category.trim()) {
+    if (!category) {
       setCategoryError("Required field");
       hasError = true;
     }
