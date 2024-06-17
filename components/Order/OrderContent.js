@@ -458,12 +458,16 @@ const OrderContent = ({
 
   let countDopAction = 0;
 
-  if(currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE)){
-    countDopAction+=1;
+  if (
+    currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE)
+  ) {
+    countDopAction += 1;
   }
 
-  if(currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE)){
-    countDopAction+=1;
+  if (
+    currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE)
+  ) {
+    countDopAction += 1;
   }
 
   const statusBarStatuses = bookingStatuses.includes(order.status)
@@ -1547,18 +1551,6 @@ const OrderContent = ({
             ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
-            ) && (
-              <button
-                type="button"
-                className="default-btn error-btn"
-                onClick={() => setActiveDisputeWindow(true)}
-              >
-                Open dispute
-              </button>
-            )}
-
-            {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
             ) && (
               <>
@@ -1586,6 +1578,18 @@ const OrderContent = ({
                   }
                 />
               </>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+            ) && (
+              <button
+                type="button"
+                className="default-btn error-btn"
+                onClick={() => setActiveDisputeWindow(true)}
+              >
+                Open dispute
+              </button>
             )}
 
             {currentActionButtons.includes(

@@ -75,14 +75,20 @@ const useOrderActions = ({ order }) => {
       }
 
       if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
-        if (isTenant && order.canAcceptTenantListing) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-          );
-        }
+        if (isTenant) {
+          if (order.canAcceptTenantListing) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
+            );
+          }
 
-        if (isTenant && order.canFastCancelPayed) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
+          if (order.canFastCancelPayed) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
+            );
+          } else {
+            newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+          }
         }
       }
 
@@ -105,17 +111,16 @@ const useOrderActions = ({ order }) => {
         if (isTenant && !order.ownerCommentId) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
         }
+      }
 
-        if (
-          [
-            STATIC.ORDER_STATUSES.FINISHED,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-          ].includes(order.status) &&
-          STATIC.ORDER_CANCELATION_STATUSES.CANCELLED != order.cancelStatus
-        ) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
-        }
+      if (
+        [
+          STATIC.ORDER_STATUSES.FINISHED,
+          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        ].includes(order.status)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
 
       const hasProcessedExtends =
