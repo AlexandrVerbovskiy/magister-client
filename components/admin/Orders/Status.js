@@ -1,6 +1,12 @@
 import STATIC from "../../../static";
 
-const Status = ({ status, baseClass = "" }) => {
+const Status = ({
+  status,
+  payedId,
+  payedAdminApproved,
+  payedWaitingApproved,
+  baseClass = "",
+}) => {
   let text = "Unknown Status";
   let dopClassName = "bg-slate-100 text-slate-500";
 
@@ -37,9 +43,21 @@ const Status = ({ status, baseClass = "" }) => {
   if (status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     text = "Waiting for payment";
     dopClassName = "bg-sky-100 text-sky-500";
+
+    if (payedId) {
+      if (payedWaitingApproved) {
+        text = "Waiting for payment confirmation";
+        dopClassName = "bg-rose-100 text-purple-500";
+      }
+
+      if (!payedWaitingApproved && !payedAdminApproved) {
+        text = "Payment rejected";
+        dopClassName = "bg-rose-100 text-rose-500";
+      }
+    }
   }
 
-  return <div className={`${baseClass} ${dopClassName}`}>{text}</div>;
+  return <div className={`max-w-full text-center ${baseClass} ${dopClassName}`}>{text}</div>;
 };
 
 export default Status;

@@ -12,7 +12,7 @@ const StarRating = ({
 }) => {
   return (
     <div className={`rating ${centerAlign ? "d-flex align-items-center" : ""}`}>
-      {[1, 2, 3, 4, 5].map((value) => {
+      {[0, 1, 2, 3, 4].map((value) => {
         let needChecked = checked;
         let className = uncheckedStarClassName;
 

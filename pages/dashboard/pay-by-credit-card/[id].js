@@ -311,8 +311,8 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                     </div>
                     {proofError && (
                       <div
-                        className="w-full form-group p-2"
-                        style={{ margin: "-5px -20px -30px -35px " }}
+                        className="w-full form-group"
+                        style={{ margin: "-8px 0px -20px" }}
                       >
                         <div className="is-invalid">
                           <ErrorSpan error={proofError} />

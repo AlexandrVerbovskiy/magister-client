@@ -37,7 +37,6 @@ export default {
     FOR_TENANT_QRCODE: "for-tenant-qrcode",
     FOR_OWNER_QRCODE: "for-owner-qrcode",
     TENANT_GOT_LISTING_APPROVE_BUTTON: "tenant-got-listing-approve-button",
-    CREATE_CANCEL_BUTTON: "create-cancel-button",
     FAST_CANCEL_BUTTON: "fast-cancel-button",
     ACCEPT_FINISH_BUTTON: "accept-finish-button",
     ACCEPT_OWNER_CANCEL_BUTTON: "accept-owner-cancel-button",

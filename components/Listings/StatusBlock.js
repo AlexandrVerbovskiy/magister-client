@@ -10,6 +10,8 @@ const StatusBlock = ({
   userId,
   endDate,
   dopClass = "",
+  adminApproved,
+  waitingApproved,
 }) => {
   let orderStatus =
     status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
@@ -39,6 +41,16 @@ const StatusBlock = ({
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for payment";
+
+    if(waitingApproved){
+      color = "status-background-base";
+      text = "Waiting for payment confirmation";
+    }
+
+    if(!adminApproved && !waitingApproved){
+      color = "status-background-red";
+      text = "Payment rejected";
+    }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {

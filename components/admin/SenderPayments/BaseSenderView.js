@@ -63,11 +63,11 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   };
 
   const handleReject = async (description) => {
-      await rejectSenderPaymentTransaction(
-        { orderId: payment.orderId, description },
-        authToken
-      );
-      router.push(parentLink);
+    await rejectSenderPaymentTransaction(
+      { orderId: payment.orderId, description },
+      authToken
+    );
+    router.push(parentLink);
   };
 
   return (
@@ -357,7 +357,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
           <AcceptModal
             active={approvedPopupActive}
             close={() => setApprovedPopupActive(false)}
-            onRejectClick={handleAccept}
+            onAcceptClick={handleAccept}
           />
         </main>
       </div>
