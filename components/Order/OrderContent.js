@@ -456,6 +456,16 @@ const OrderContent = ({
     order,
   });
 
+  let countDopAction = 0;
+
+  if(currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE)){
+    countDopAction+=1;
+  }
+
+  if(currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE)){
+    countDopAction+=1;
+  }
+
   const statusBarStatuses = bookingStatuses.includes(order.status)
     ? [
         { title: "Make Booking", finished: true },
@@ -1413,7 +1423,7 @@ const OrderContent = ({
           </div>
         )}
 
-      {currentActionButtons.length > 0 && (
+      {currentActionButtons.length > countDopAction && (
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
 

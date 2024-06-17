@@ -1,4 +1,8 @@
 const InputView = ({ label, value, icon = null, placeholder = "" }) => {
+    if(!value){
+        value="";
+    }
+
   return (
     <div className="form-group form-group-view form-group-view-input">
       {label && (
