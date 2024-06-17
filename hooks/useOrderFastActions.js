@@ -422,7 +422,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleClickPay = (orderId) => {
     const order = findCurrentOrderById(orderId);
-    console.log(order);
     setActivePayOrder(order);
     setActivePay(true);
   };
