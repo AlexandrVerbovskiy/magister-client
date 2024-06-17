@@ -35,13 +35,14 @@ const TableItem = (props) => {
     listingCategoryName,
     payedType,
     payedAdminApproved,
+    payedWaitingApproved,
     listingRentalCount,
     orderCheckLists,
     tenantAverageRating,
     ownerAverageRating,
     listingAverageRating,
+    payedId
   } = props;
-
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -76,6 +77,9 @@ const TableItem = (props) => {
           ) : (
             <Status
               status={status}
+              payedId={payedId}
+              payedAdminApproved={payedAdminApproved}
+              payedWaitingApproved={payedWaitingApproved}
               baseClass="px-3 rounded-full shadow-2xl w-max"
             />
           )}

@@ -36,6 +36,8 @@ const OrderInfo = ({
     order,
   });
 
+  const paymentType = order.paymentInfo?.type;
+
   return (
     <>
       <td className="details">
@@ -50,6 +52,8 @@ const OrderInfo = ({
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
             statusCancelled={order.cancelStatus}
+            adminApproved={order.paymentInfo?.adminApproved}
+            waitingApproved={order.paymentInfo?.waitingApproved}
           />
         </h4>
 
@@ -91,12 +95,14 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
+                STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
                 STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
                 STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
                 STATIC.ORDER_STATUSES.FINISHED,
-              ].includes(order.status) ? (
+              ].includes(order.status) && paymentType ? (
                 <>
-                  <strong className="paid">Paid</strong> using Paypal
+                  <strong className="paid">Paid</strong> using{" "}
+                  {paymentType == "credit-card" ? "Bank Transfer" : "Paypal"}
                 </>
               ) : (
                 <strong className="unpaid">Unpaid</strong>

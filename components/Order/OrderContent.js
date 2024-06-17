@@ -26,7 +26,6 @@ import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
-import PaypalTriggerModal from "../PaypalTriggerModal";
 import CancelTriggerModal from "./CancelTriggerModal";
 import BookingAgreementPanel from "./BookingAgreementPanel";
 import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
@@ -45,6 +44,7 @@ import BookingModal from "../SingleListings/BookingModal";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
 import CreateDisputeSection from "../Dispute/CreateDisputeSection";
+import PayModal from "../PayModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -61,8 +61,6 @@ const OrderContent = ({
   tenantBaseCommission,
   bankInfo,
 }) => {
-  console.log(baseOrder);
-
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
@@ -72,6 +70,7 @@ const OrderContent = ({
   const [extendApproveData, setExtendApproveData] = useState(null);
   const [activeDisputeWindow, setActiveDisputeWindow] = useState(false);
   const createDisputeData = useCreateDispute({ order });
+  const [paypalModalActive, setPaypalModalActive] = useState(false);
 
   const router = useRouter();
 
@@ -465,6 +464,10 @@ const OrderContent = ({
           finished:
             order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
         },
+        {
+          title: "Payment Confirmation",
+          finished: order.paymentInfo?.adminApproved,
+        },
         { title: "Paid" },
       ]
     : [
@@ -558,7 +561,10 @@ const OrderContent = ({
         hasCancelStatus={
           !!order.disputeStatus ||
           !!order.cancelStatus ||
-          order.status == STATIC.ORDER_STATUSES.REJECTED
+          order.status == STATIC.ORDER_STATUSES.REJECTED ||
+          (order.paymentInfo &&
+            !order.paymentInfo?.adminApproved &&
+            !order.paymentInfo?.waitingApproved)
         }
       />
 
@@ -863,6 +869,8 @@ const OrderContent = ({
                       tenantId={order.tenantId}
                       userId={sessionUser?.id}
                       endDate={order.offerEndDate}
+                      adminApproved={order.paymentInfo?.adminApproved}
+                      waitingApproved={order.paymentInfo?.waitingApproved}
                     />
                   </li>
                 )}
@@ -1366,6 +1374,8 @@ const OrderContent = ({
                           userId={sessionUser?.id}
                           dopClass="order-status-small-span"
                           endDate={order.offerEndDate}
+                          adminApproved={order.paymentInfo?.adminApproved}
+                          waitingApproved={order.paymentInfo?.waitingApproved}
                         />
                       </Link>
                     </div>
@@ -1379,7 +1389,9 @@ const OrderContent = ({
 
                     <div>
                       Rental:{" "}
-                      <Link href={`/users/${tenantId}`}>{tenantName}</Link>
+                      <Link href={`/owner-listing-list/${tenantId}`}>
+                        {tenantName}
+                      </Link>
                     </div>
 
                     <div>
@@ -1470,24 +1482,13 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
             ) && (
-              <PaypalTriggerModal
-                amount={calculateCurrentTotalPrice(
-                  order.offerStartDate,
-                  order.offerEndDate,
-                  order.offerPricePerDay,
-                  "tenant"
-                )}
-                orderId={order.id}
-                listingName={order.listingName}
-                onTenantPayed={onTenantPayed}
-                offerFee={order.tenantFee}
-                pricePerDay={order.offerPricePerDay}
-                offerStartDate={order.offerStartDate}
-                offerEndDate={order.offerEndDate}
-                authToken={authToken}
-                text="Pay"
-                bankInfo={bankInfo}
-              />
+              <button
+                className="default-btn"
+                type="button"
+                onClick={() => setPaypalModalActive(true)}
+              >
+                Pay
+              </button>
             )}
 
             {currentActionButtons.includes(
@@ -1592,6 +1593,26 @@ const OrderContent = ({
                 order={order}
               />
             )}
+
+            <PayModal
+              modalActive={paypalModalActive}
+              closeModal={() => setPaypalModalActive(false)}
+              amount={calculateCurrentTotalPrice(
+                order.offerStartDate,
+                order.offerEndDate,
+                order.offerPricePerDay,
+                "tenant"
+              )}
+              orderId={order.id}
+              listingName={order.listingName}
+              onTenantPayed={onTenantPayed}
+              pricePerDay={order.offerPricePerDay}
+              offerStartDate={order.offerStartDate}
+              offerEndDate={order.offerEndDate}
+              offerFee={order.tenantFee}
+              authToken={authToken}
+              bankInfo={bankInfo}
+            />
           </div>
         </div>
       )}
