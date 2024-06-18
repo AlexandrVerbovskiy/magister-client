@@ -10,6 +10,7 @@ function DropdownClassicAjax({
   onChange,
   selectedTitle,
   disabledText = null,
+  placeholder = null,
 }) {
   const { error } = useContext(IndiceContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -136,7 +137,11 @@ function DropdownClassicAjax({
         style={{ minHeight: "37.6px" }}
       >
         <span className="flex items-center">
-          <span>{selectedTitleToView}</span>
+          {selectedTitleToView ? (
+            <span>{selectedTitleToView}</span>
+          ) : (
+            <span className="text-slate-400">{placeholder}</span>
+          )}
         </span>
         <svg
           className="shrink-0 ml-1 fill-current text-slate-400"

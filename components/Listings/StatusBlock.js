@@ -9,6 +9,7 @@ const StatusBlock = ({
   tenantId,
   userId,
   endDate,
+  payedId,
   dopClass = "",
   adminApproved,
   waitingApproved,
@@ -42,14 +43,16 @@ const StatusBlock = ({
     color = "status-background-green";
     text = "Waiting for payment";
 
-    if(waitingApproved){
-      color = "status-background-base";
-      text = "Waiting for payment confirmation";
-    }
+    if (payedId) {
+      if (waitingApproved) {
+        color = "status-background-base";
+        text = "Waiting for payment confirmation";
+      }
 
-    if(!adminApproved && !waitingApproved){
-      color = "status-background-red";
-      text = "Payment rejected";
+      if (!adminApproved && !waitingApproved) {
+        color = "status-background-red";
+        text = "Payment rejected";
+      }
     }
   }
 

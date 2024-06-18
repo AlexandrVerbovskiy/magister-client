@@ -52,6 +52,7 @@ const OrderInfo = ({
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
             statusCancelled={order.cancelStatus}
+            payedId={order.paymentInfo?.id}
             adminApproved={order.paymentInfo?.adminApproved}
             waitingApproved={order.paymentInfo?.waitingApproved}
           />

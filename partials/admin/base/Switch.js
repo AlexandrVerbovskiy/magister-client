@@ -21,13 +21,12 @@ const Switch = ({
           <span className="sr-only">Enable smart sync</span>
         </label>
       </div>
-      
-      {(checked && onText) ||
-        (!checked && offText && (
-          <div className="text-sm text-slate-400 dark:text-slate-500 italic ml-2">
-            {checked ? onText : offText}
-          </div>
-        ))}
+
+      {((checked && onText) || (!checked && offText)) && (
+        <div className="text-sm text-slate-400 dark:text-slate-500 italic ml-2">
+          {checked ? onText : offText}
+        </div>
+      )}
     </div>
   );
 };

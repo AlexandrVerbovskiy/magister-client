@@ -22,7 +22,7 @@ const RentalMessage = ({
 
     let hasError = false;
 
-    if (sendingMessage.length < 1) {
+    if (!sendingMessage.trim()) {
       hasError = true;
       setSendingMessageError("Required field");
     }

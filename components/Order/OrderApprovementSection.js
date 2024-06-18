@@ -16,21 +16,10 @@ const OrderApprovementSection = ({
   price,
   fee,
 }) => {
-  const { error } = useContext(IndiceContext);
   const [feeActive, setFeeActive] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
 
   const onApproved = () => {
-    if (!sendingMessage.trim()) {
-      error.set("Description is required field");
-      return;
-    }
-
-    if (validateBigText(sendingMessage) !== true) {
-      error.set(validateBigText(sendingMessage));
-      return;
-    }
-
     handleApprove({ feeActive, sendingMessage });
   };
 

@@ -131,7 +131,7 @@ const SingleListingsContent = ({
                     </span>
                   ))}
 
-                  <h3>{listing.name}</h3>
+                  <h3 className="row-dots-end">{listing.name}</h3>
 
                   <StarRating
                     averageRating={listingRatingInfo["averageRating"]}

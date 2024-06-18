@@ -539,6 +539,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                                 onChange={handleChangeOwner}
                                 selectedTitle={ownerName}
                                 disabledText="You can't select not verified user"
+                                placeholder="Select Owner"
                               />
                               <ErrorSpan error={ownerIdError} />
                             </div>
@@ -787,6 +788,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                             row="7"
                             error={descriptionError}
                             setError={setDescriptionError}
+                            placeholder="Details..."
                           />
                         </div>
                       </section>
@@ -804,6 +806,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                             row="7"
                             error={rentalTermsError}
                             setError={setRentalTermsError}
+                            placeholder="Rental Terms..."
                           />
                         </div>
                       </section>

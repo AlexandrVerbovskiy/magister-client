@@ -12,8 +12,9 @@ const ListingEdit = ({ categories, listing: baseListing, id, defects }) => {
   const save = async (formData, authToken) => {
     formData.append("id", id);
     const res = await updateListingByAdmin(formData, authToken);
-    setListing(res);
-    return res;
+    const updatedListing = res.listing;
+    setListing(updatedListing);
+    return updatedListing;
   };
 
   return (

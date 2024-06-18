@@ -892,6 +892,7 @@ const OrderContent = ({
                       tenantId={order.tenantId}
                       userId={sessionUser?.id}
                       endDate={order.offerEndDate}
+                      payedId={order.paymentInfo?.id}
                       adminApproved={order.paymentInfo?.adminApproved}
                       waitingApproved={order.paymentInfo?.waitingApproved}
                     />
@@ -1397,6 +1398,7 @@ const OrderContent = ({
                           userId={sessionUser?.id}
                           dopClass="order-status-small-span"
                           endDate={order.offerEndDate}
+                          payedId={order.paymentInfo?.id}
                           adminApproved={order.paymentInfo?.adminApproved}
                           waitingApproved={order.paymentInfo?.waitingApproved}
                         />

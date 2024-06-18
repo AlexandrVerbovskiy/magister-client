@@ -33,10 +33,10 @@ const ActiveSpan = ({ status }) => {
       <Tooltip
         title={
           status == STATIC.DISPUTE_STATUSES.OPEN
-            ? "The request hasn't answer, so tool cannot be rented"
+            ? "The dispute is not resolved"
             : status == STATIC.DISPUTE_STATUSES.SOLVED
-            ? "The instrument is approved, so it can be rented"
-            : "The tool is not approved, so it cannot be rented"
+            ? "The dispute is resolved"
+            : "The dispute is postponed until later"
         }
       >
         <span className="overflow-separate flex justify-center">{text}</span>

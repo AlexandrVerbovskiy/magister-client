@@ -112,7 +112,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           </li>
         </ul>
         <h3>
-          <Link href={`/listing/${listing.id}`}>{listing.name}</Link>
+          <Link className="row-dots-end" href={`/listing/${listing.id}`}>{listing.name}</Link>
         </h3>
         <span className="status">
           <i className="flaticon-save"></i> Open Now

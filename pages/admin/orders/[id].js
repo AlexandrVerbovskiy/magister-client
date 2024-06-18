@@ -17,6 +17,7 @@ import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
+import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 
 const PreviousProposalElem = ({
   index,
@@ -143,10 +144,17 @@ const Order = (order) => {
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
                         <div className="order-form-title">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
-                        <Status
-                          status={order.status}
-                          baseClass="form-input w-max ml-2"
-                        />
+                        {order.cancelStatus ? (
+                          <CancelStatus
+                            status={order.cancelStatus}
+                            baseClass="px-3 rounded-full shadow-2xl w-max"
+                          />
+                        ) : (
+                          <Status
+                            status={order.status}
+                            baseClass="form-input w-max ml-2"
+                          />
+                        )}
                       </h2>
 
                       <section>
@@ -495,8 +503,7 @@ const Order = (order) => {
                         </div>
                       </section>
 
-                      {(order.defects.length > 0 ||
-                        order.listingDopDefect) && (
+                      {(order.defects.length > 0 || order.listingDopDefect) && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
