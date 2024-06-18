@@ -186,12 +186,19 @@ const Orders = (pageProps) => {
 
   if (disputeWindowActive) {
     return (
-      <CreateDisputeSection
-        {...createDisputeData}
-        onGoBack={closeDisputeWindow}
-        setCurrentOpenImg={setCurrentOpenImg}
-        onSubmit={onCreateDispute}
-      />
+      <>
+        <CreateDisputeSection
+          {...createDisputeData}
+          onGoBack={closeDisputeWindow}
+          setCurrentOpenImg={setCurrentOpenImg}
+          onSubmit={onCreateDispute}
+        />
+        <ImagePopup
+          photoUrl={currentOpenImg}
+          open={!!currentOpenImg}
+          close={() => setCurrentOpenImg(null)}
+        />
+      </>
     );
   }
 

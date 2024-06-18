@@ -93,8 +93,6 @@ const EarningTable = ({
   let typeText = "Unknown";
   let recipientNumber = "-";
 
-  console.log(data);
-
   if (data) {
     if (type == "paypal") {
       recipientNumber = data.paypalId;
