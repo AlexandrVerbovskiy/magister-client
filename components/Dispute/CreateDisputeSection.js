@@ -65,6 +65,15 @@ const CreateDisputeSection = ({
     setType(value);
   };
 
+  const handleSubmit = () => {
+    if (!description || description.trim().length < 1) {
+      setError("Required field");
+      return;
+    }
+
+    onSubmit();
+  };
+
   return (
     <Wrap needWrapping={needWrapping}>
       <div className="row">
@@ -161,7 +170,7 @@ const CreateDisputeSection = ({
                     </button>
 
                     <button
-                      onClick={onSubmit}
+                      onClick={handleSubmit}
                       disabled={disabled}
                       type="button"
                       className="submit"

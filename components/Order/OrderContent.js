@@ -419,6 +419,8 @@ const OrderContent = ({
         disputeDescription: createDisputeData.description,
       }));
 
+      setActiveDisputeWindow(false);
+
       success.set("Dispute created success");
     } catch (e) {
       error.set(e.message);
@@ -558,13 +560,20 @@ const OrderContent = ({
 
   if (activeDisputeWindow) {
     return (
-      <CreateDisputeSection
-        {...createDisputeData}
-        onGoBack={() => setActiveDisputeWindow(false)}
-        setCurrentOpenImg={setCurrentOpenImg}
-        needWrapping={false}
-        onSubmit={onCreateDispute}
-      />
+      <>
+        <CreateDisputeSection
+          {...createDisputeData}
+          onGoBack={() => setActiveDisputeWindow(false)}
+          setCurrentOpenImg={setCurrentOpenImg}
+          needWrapping={false}
+          onSubmit={onCreateDispute}
+        />
+        <ImagePopup
+          photoUrl={currentOpenImg}
+          open={!!currentOpenImg}
+          close={closeCurrentOpenImg}
+        />
+      </>
     );
   }
 
@@ -641,7 +650,7 @@ const OrderContent = ({
 
             <ImagePopup
               photoUrl={currentOpenImg}
-              open={currentOpenImg}
+              open={!!currentOpenImg}
               close={closeCurrentOpenImg}
             />
           </div>
