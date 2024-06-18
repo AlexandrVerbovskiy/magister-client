@@ -6,7 +6,11 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
-import { getFilePath, getListingImageByType } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+} from "../../../utils";
 import Link from "next/link";
 import SubInfoTitle from "../SubInfoTitle";
 import Tooltip from "../Tooltip";
@@ -77,13 +81,9 @@ const TableItem = ({
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
   const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
 
-  const fullOwnerPhotoPath = ownerPhoto
-    ? getFilePath(ownerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
 
-  const fullTenantPhotoPath = tenantPhoto
-    ? getFilePath(tenantPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)

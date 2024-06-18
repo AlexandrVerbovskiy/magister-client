@@ -9,6 +9,7 @@ const IndiceProvider = ({
   children,
   categories = {},
   dopProps = {},
+  io,
 }) => {
   const main = useMain({
     userInfo,
@@ -16,7 +17,7 @@ const IndiceProvider = ({
   });
 
   return (
-    <IndiceContext.Provider value={{ ...main, categories, ...dopProps }}>
+    <IndiceContext.Provider value={{ ...main, categories, ...dopProps, io }}>
       {children}
     </IndiceContext.Provider>
   );

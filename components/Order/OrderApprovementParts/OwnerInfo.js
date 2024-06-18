@@ -1,4 +1,8 @@
-import { autoMultiEnding, getFilePath } from "../../../utils";
+import {
+  autoMultiEnding,
+  generateProfileFilePath,
+  getFilePath,
+} from "../../../utils";
 import STATIC from "../../../static";
 import StarRating from "../../StarRating";
 
@@ -14,11 +18,7 @@ const OwnerInfo = ({
       <div className="author">
         <div className="d-flex align-items-center">
           <img
-            src={
-              data.userPhoto
-                ? getFilePath(data.userPhoto)
-                : STATIC.DEFAULT_PHOTO_LINK
-            }
+            src={generateProfileFilePath(data.userPhoto)}
             alt={data.userName}
           />
           <div className="title">

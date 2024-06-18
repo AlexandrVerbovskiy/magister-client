@@ -8,7 +8,7 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { getFilePath, getListingImageByType } from "../../../utils";
+import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -53,9 +53,7 @@ const TableItem = ({
 
   const canMoveToUser = isAdmin && sessionUser?.id != reviewerId;
 
-  const fullReviewerPhotoPath = reviewerPhoto
-    ? getFilePath(reviewerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)

@@ -1,6 +1,11 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
-import { fullTimeConverter, getFilePath, moneyFormat } from "../../../utils";
+import {
+  fullTimeConverter,
+  generateProfileFilePath,
+  getFilePath,
+  moneyFormat,
+} from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
 import { useContext, useState } from "react";
@@ -37,10 +42,8 @@ const TableItem = (props) => {
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const fullPayerPhotoPath = payerPhoto
-    ? getFilePath(payerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
-
+  const fullPayerPhotoPath = generateProfileFilePath(payerPhoto);
+  
   const proofPath = payedProof
     ? getFilePath(payedProof)
     : STATIC.DEFAULT_PHOTO_LINK;

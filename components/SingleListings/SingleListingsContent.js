@@ -4,6 +4,7 @@ import { IndiceContext } from "../../contexts";
 import {
   activateAuthPopup,
   autoMultiEnding,
+  generateProfileFilePath,
   getFilePath,
   getListingImageByType,
   moneyFormat,
@@ -479,13 +480,9 @@ const SingleListingsContent = ({
                                     <div className="user">
                                       <div className="d-flex">
                                         <img
-                                          src={
+                                          src={generateProfileFilePath(
                                             comment.reviewerPhoto
-                                              ? getFilePath(
-                                                  comment.reviewerPhoto
-                                                )
-                                              : STATIC.DEFAULT_PHOTO_LINK
-                                          }
+                                          )}
                                           alt="image"
                                         />
                                         <div className="title row-dots-end">
@@ -562,11 +559,7 @@ const SingleListingsContent = ({
                       <div className="author">
                         <div className="d-flex align-items-center">
                           <img
-                            src={
-                              listing.userPhoto
-                                ? getFilePath(listing.userPhoto)
-                                : STATIC.DEFAULT_PHOTO_LINK
-                            }
+                            src={generateProfileFilePath(listing.userPhoto)}
                             alt={listing.userName}
                           />
                           <div className="title row-dots-end">

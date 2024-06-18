@@ -8,7 +8,11 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { getFilePath, getListingImageByType } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+} from "../../../utils";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
 
@@ -71,9 +75,7 @@ const TableItem = ({
 
   const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullOwnerPhotoPath = userPhoto
-    ? getFilePath(userPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullOwnerPhotoPath = generateProfileFilePath(userPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
@@ -201,9 +203,7 @@ const TableItem = ({
                     <SubInfoRow label="Email" value={userEmail} />
                     <SubInfoRow
                       label="Phone"
-                      value={
-                        userPhone && userPhone.length ? userPhone : "-"
-                      }
+                      value={userPhone && userPhone.length ? userPhone : "-"}
                     />
                     <SubInfoRowWithChild label="Rating">
                       <SingleRatingStar value={ownerAverageRating} />

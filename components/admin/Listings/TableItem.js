@@ -7,7 +7,7 @@ import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import { getFilePath, getListingImageByType } from "../../../utils";
+import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
@@ -65,9 +65,7 @@ const TableItem = ({
 
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
 
-  const fullOwnerPhotoPath = ownerPhoto
-    ? getFilePath(ownerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)

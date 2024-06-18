@@ -14299,14 +14299,16 @@ Dashboard CSS
   border-bottom: 1px solid #eeeeee;
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
 }
 .chat-content-area
   .sidebar-left
   .sidebar
   .sidebar-content
   .chat-menu
-  .list-group-label::before {
-  width: 70px;
+  .list-group-label.active::before {
+  /*width: 70px;*/
+  width: 100%;
   height: 1px;
   content: "";
   position: absolute;
@@ -18920,6 +18922,10 @@ span.flatpickr-weekday {
   max-width: 100%;
   vertical-align: middle;
   display: inline-block;
+}
+
+.no-wrap{
+  text-wrap: nowrap;
 }
 
 #__next-build-watcher {

@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
+  generateProfileFilePath,
   getDaysDifference,
   getFilePath,
   moneyFormat,
@@ -356,10 +357,7 @@ const OrderItem = ({
           className="name"
           style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
         >
-          <img
-            src={userPhoto ? getFilePath(userPhoto) : STATIC.DEFAULT_PHOTO_LINK}
-            alt="image"
-          />
+          <img src={generateProfileFilePath(userPhoto)} alt="image" />
           <div className="info">
             <span className="row-dots-end">{userName}</span>
             <ul>
