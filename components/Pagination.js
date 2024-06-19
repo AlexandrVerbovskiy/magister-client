@@ -1,3 +1,4 @@
+import {useRef} from "react"
 import { generatePagination } from "../utils";
 
 const Pagination = ({
@@ -14,7 +15,7 @@ const Pagination = ({
 
   const handleMove = async (newPage) => {
     await move(newPage);
-    paginationRef.current.scrollIntoView();
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleNextClick = (e) => {
