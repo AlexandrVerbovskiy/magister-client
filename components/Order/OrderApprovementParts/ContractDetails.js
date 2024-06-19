@@ -2,7 +2,7 @@ import {
   autoMultiEnding,
   getDaysDifference,
   moneyFormat,
-  timeConverter,
+  dateConverter,
 } from "../../../utils";
 import Switch from "../../FormComponents/Switch";
 
@@ -41,11 +41,11 @@ const ContractDetails = ({
           >
             <div className="date-info">
               <div className="date-info-label">Withdrawal</div>
-              <div className="date-info-value">{timeConverter(fromDate)}</div>
+              <div className="date-info-value">{dateConverter(fromDate)}</div>
             </div>
             <div className="date-info">
               <div className="date-info-label">Devolution</div>
-              <div className="date-info-value">{timeConverter(toDate)}</div>
+              <div className="date-info-value">{dateConverter(toDate)}</div>
             </div>
           </div>
         </div>

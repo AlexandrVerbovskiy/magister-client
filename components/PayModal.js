@@ -1,7 +1,7 @@
 import { IndiceContext } from "../contexts";
 import { useContext, useEffect, useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { getDaysDifference, moneyFormat, timeConverter } from "../utils";
+import { getDaysDifference, moneyFormat, dateConverter } from "../utils";
 import PaypalButton from "./PaypalButton";
 import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
@@ -47,9 +47,9 @@ const PayModal = ({
   };
 
   const durationInfo =
-    timeConverter(offerStartDate) === timeConverter(offerEndDate)
-      ? timeConverter(offerStartDate)
-      : `${timeConverter(offerStartDate)} - ${timeConverter(offerEndDate)}`;
+    dateConverter(offerStartDate) === dateConverter(offerEndDate)
+      ? dateConverter(offerStartDate)
+      : `${dateConverter(offerStartDate)} - ${dateConverter(offerEndDate)}`;
 
   const subtotal =
     pricePerDay * getDaysDifference(offerStartDate, offerEndDate);

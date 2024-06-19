@@ -1,11 +1,11 @@
-import { fullTimeConverter, timeConverter } from "../../utils";
+import { fullDateConverter, dateConverter } from "../../utils";
 import Tooltip from "./Tooltip";
 
 const TableDateView = ({ date }) => {
   return (
-    <Tooltip title={fullTimeConverter(date)}>
+    <Tooltip title={fullDateConverter(date)}>
       <div className="font-medium overflow-separate">
-        <div>{timeConverter(date)}</div>
+        <div>{dateConverter(date)}</div>
       </div>
     </Tooltip>
   );

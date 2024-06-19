@@ -3,18 +3,25 @@ import { useChatList } from "../../../hooks";
 import { authSideProps } from "../../../middlewares";
 import { getUserChatOptions } from "../../../services";
 
-const Chat = () => {
+const Chat = ({ chats, chatsCanShowMore, options }) => {
   const listProps = useChatList({
-    chats: [],
-    canShowMore: true,
+    chats,
+    canShowMore: chatsCanShowMore,
+    options,
   });
 
   return <BaseChat listProps={listProps} />;
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const options = await getUserChatOptions(null, baseSideProps.authToken);
+  const chatType =
+    context.query["chat-type"] === "disputes" ? "disputes" : "orders";
 
+  const options = await getUserChatOptions(
+    { chatType },
+    baseSideProps.authToken
+  );
+  
   return { ...options };
 };
 export const getServerSideProps = (context) =>

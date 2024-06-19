@@ -1,4 +1,4 @@
-import { fullTimeConverter, getFilenameByPath } from "../../../utils";
+import { getFilenameByPath } from "../../../utils";
 import TableDateView from "../../admin/TableDateView";
 
 const StatusSpan = ({ status }) => {

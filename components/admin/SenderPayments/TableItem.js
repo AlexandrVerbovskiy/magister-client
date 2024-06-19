@@ -1,7 +1,7 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
 import {
-  fullTimeConverter,
+  fullDateConverter,
   generateProfileFilePath,
   getFilePath,
   moneyFormat,
@@ -141,7 +141,7 @@ const TableItem = (props) => {
           <SubInfoRow label="Sender's Name" value={payerName} />
           <SubInfoRow
             label="Upload Date"
-            value={fullTimeConverter(createdAt)}
+            value={fullDateConverter(createdAt)}
           />
           <SubInfoRow label="Rental Id" value={orderId} />
         </td>

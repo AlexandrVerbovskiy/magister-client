@@ -19,7 +19,7 @@ const SearchHeader = ({ filter, setFilter }) => {
         />
       </div>
 
-      <form className="form-group position-relative mb-0">
+      <form className="form-group position-relative mb-0 w-100">
         <label>
           <i className="bx bx-search"></i>
         </label>

@@ -17,6 +17,7 @@ export { default as reorderList } from "./reorderList";
 export { default as autoMultiEnding } from "./autoMultiEnding";
 export { default as downloadFileUrl } from "./downloadFileUrl";
 export { default as HttpError } from "./HttpError";
+export { default as getFileData } from "./getFileData";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
 export * from "./cookieHelpers";

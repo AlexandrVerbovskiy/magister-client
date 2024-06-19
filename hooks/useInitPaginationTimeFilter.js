@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  timeConverter,
+  dateConverter,
 } from "../utils";
 import { useRouter } from "next/router";
 
@@ -24,7 +24,7 @@ const useInitPaginationTimeFilter = ({
   const [fromTime, setFromTime] = useState(baseFromTime);
   const [toTime, setToTime] = useState(baseToTime);
 
-  const getTimeToProp = (date) => (date ? timeConverter(date) : null);
+  const getTimeToProp = (date) => (date ? dateConverter(date) : null);
 
   const fromTimePropHidden = (newValue) => {
     if (defaultFromTime) {

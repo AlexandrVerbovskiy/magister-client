@@ -8,7 +8,7 @@ import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
 import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
-import { generateProfileFilePath, getFilePath, moneyFormat, timeConverter } from "../../../utils";
+import { generateProfileFilePath, getFilePath, moneyFormat, dateConverter } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -301,7 +301,7 @@ const TableItem = ({
                     <SubInfoRow
                       label="Last rental"
                       value={
-                        lastRenterDate ? timeConverter(lastRenterDate) : "-"
+                        lastRenterDate ? dateConverter(lastRenterDate) : "-"
                       }
                       newRow={true}
                     />

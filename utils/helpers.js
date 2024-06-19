@@ -19,3 +19,21 @@ export const cardFormat = (str) => {
   }
   return formattedValue;
 };
+
+export const checkIsFileHasExtension = (file, extensions) => {
+  let result = null;
+  console.log(file.type);
+
+  extensions.forEach((extension) => {
+    if (
+      file &&
+      file.type &&
+      file.name &&
+      file.type.toLowerCase() == extension.toLowerCase()
+    ) {
+      result = extension;
+    }
+  });
+
+  return result;
+};

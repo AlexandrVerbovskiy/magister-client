@@ -74,7 +74,7 @@ const PayedCancelModal = ({
   const handleInputCardNumber = (e) => {
     const newValue = e.target.value.replaceAll(" ", "");
     
-    if (newValue.length >= 16) {
+    if (newValue.length > 16) {
       return;
     }
 

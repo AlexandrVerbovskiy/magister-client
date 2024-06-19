@@ -1,12 +1,18 @@
 import { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../contexts";
+import { getChatList } from "../services/chat";
 
-const useChatList = ({ chats: baseChats, canShowMore: baseCanShowMore }) => {
-  const { io } = useContext(IndiceContext);
-  const [type, setType] = useState("orders");
+const useChatList = ({
+  chats: baseChats,
+  canShowMore: baseCanShowMore,
+  options,
+}) => {
+  const { io, authToken } = useContext(IndiceContext);
+  const [type, setType] = useState(options.chatType ?? "orders");
   const [filter, setFilter] = useState("");
-  const [chats, setBaseChats] = useState(baseChats);
+  const [chats, setChats] = useState(baseChats);
   const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!io) {
@@ -14,11 +20,62 @@ const useChatList = ({ chats: baseChats, canShowMore: baseCanShowMore }) => {
     }
   });
 
-  const handleChangeType = (newType) => {
-    if (newType == "disputes") {
-      setType("disputes");
-    } else {
-      setType("orders");
+  const handleChangeType = async (newType) => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      if (newType != "disputes") {
+        newType = "orders";
+      }
+
+      setType(newType);
+
+      const result = await getChatList(
+        {
+          chatType: newType,
+          lastChatId: null,
+        },
+        authToken
+      );
+
+      setCanShowMore(result.canShowMore);
+      setChats([...result.chats]);
+    } catch (e) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleShowMore = async () => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const lastChatId = chats[chats.length - 1];
+
+      if (lastChatId == 0) {
+        return;
+      }
+
+      const chatList = await getChatList(
+        {
+          chatType: type,
+          lastChatId,
+        },
+        authToken
+      );
+
+      setChats((prev) => [...prev, ...chatList]);
+    } catch (e) {
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -29,6 +86,7 @@ const useChatList = ({ chats: baseChats, canShowMore: baseCanShowMore }) => {
     filter,
     setFilter,
     canShowMore,
+    handleShowMore,
   };
 };
 

@@ -9,7 +9,7 @@ import {
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
-  timeConverter,
+  dateConverter,
 } from "../../../utils";
 import PayedCancelModal from "../../Order/PayedCancelModal";
 import SuccessIconPopup from "../../../components/IconPopups/SuccessIconPopup";
@@ -135,7 +135,7 @@ const EarningTable = ({
             <InputView
               label="Offer Start Date"
               placeholder="Offer Start Date"
-              value={timeConverter(offerStartDate)}
+              value={dateConverter(offerStartDate)}
               icon="bx bx-calendar"
             />
           </div>
@@ -144,7 +144,7 @@ const EarningTable = ({
             <InputView
               label="Offer End Date"
               placeholder="Offer End Date"
-              value={timeConverter(offerEndDate)}
+              value={dateConverter(offerEndDate)}
               icon="bx bx-calendar"
             />
           </div>
