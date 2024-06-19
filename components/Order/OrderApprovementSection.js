@@ -57,6 +57,8 @@ const OrderApprovementSection = ({
               userName: listing.userName,
               userPhoto: listing.userPhoto,
               userCountItems: listing.userCountItems,
+              userAverageRating: listing.userAverageRating,
+              userCommentCount: listing.userCommentCount,
             }}
           />
         </div>
