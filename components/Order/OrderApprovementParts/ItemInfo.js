@@ -33,7 +33,7 @@ const ItemInfo = ({ setCurrentOpenImg, listing }) => {
       </div>
 
       <div className="title" style={{ fontSize: "20px", marginBottom: "15px" }}>
-        <h4>
+        <h4 className="row-dots-end">
           <a href="#">{listing.name}</a>
         </h4>
       </div>

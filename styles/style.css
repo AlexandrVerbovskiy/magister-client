@@ -18919,7 +18919,6 @@ span.flatpickr-weekday {
   text-overflow: ellipsis;
   max-width: 100%;
   vertical-align: middle;
-  display: inline-block;
 }
 
 #__next-build-watcher {
