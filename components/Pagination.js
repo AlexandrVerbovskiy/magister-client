@@ -8,21 +8,37 @@ const Pagination = ({
   countPages,
   viewOnlyMoreOnePage = false,
 }) => {
+  const paginationRef = useRef(null);
+
   const visiblePages = generatePagination(page, countPages);
+
+  const handleMove = async (newPage) => {
+    await move(newPage);
+    paginationRef.current.scrollIntoView();
+  };
 
   const handleNextClick = (e) => {
     e.preventDefault();
-    if (canNext) move(page + 1);
+
+    if (canNext) {
+      handleMove(page + 1);
+    }
   };
 
   const handlePrevClick = (e) => {
     e.preventDefault();
-    if (canPrev) move(page - 1);
+
+    if (canPrev) {
+      handleMove(page - 1);
+    }
   };
 
   const handlePageClick = (e, pageNumber) => {
     e.preventDefault();
-    if (pageNumber != page) move(pageNumber);
+
+    if (pageNumber != page) {
+      handleMove(pageNumber);
+    }
   };
 
   if (viewOnlyMoreOnePage && countPages < 2) {
@@ -30,10 +46,12 @@ const Pagination = ({
   }
 
   return (
-    <div className="pagination-area text-center">
+    <div ref={paginationRef} className="pagination-area text-center">
       <a
         href={
-          canPrev ? `/dashboard/listings?page=${page - 1}` : "/dashboard/listings"
+          canPrev
+            ? `/dashboard/listings?page=${page - 1}`
+            : "/dashboard/listings"
         }
         className={`prev page-numbers ${canPrev ? "" : "disabled"}`}
         onClick={handlePrevClick}
@@ -80,7 +98,9 @@ const Pagination = ({
 
       <a
         href={
-          canNext ? `/dashboard/listings?page=${page + 1}` : "/dashboard/listings"
+          canNext
+            ? `/dashboard/listings?page=${page + 1}`
+            : "/dashboard/listings"
         }
         className={`next page-numbers ${canNext ? "" : "disabled"}`}
         onClick={handleNextClick}

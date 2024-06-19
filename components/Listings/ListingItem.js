@@ -111,7 +111,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
             </Link>
           </li>
         </ul>
-        <h3>
+        <h3 className="row-dots-end">
           <Link className="row-dots-end" href={`/listing/${listing.id}`}>{listing.name}</Link>
         </h3>
         <span className="status">

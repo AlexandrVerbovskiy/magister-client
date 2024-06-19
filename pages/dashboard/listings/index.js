@@ -386,7 +386,7 @@ const ListingList = (pageProps) => {
                                 </Link>
                               </li>
                             </ul>
-                            <h3>
+                            <h3 className="row-dots-end">
                               <Link className="row-dots-end" href={`/listing/${listing.id}`}>
                                 {listing.name}
                               </Link>

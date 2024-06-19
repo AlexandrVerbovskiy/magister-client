@@ -621,7 +621,13 @@ const SingleListingsContent = ({
             <OrderApprovementSection
               handleApprove={handleMakeBooking}
               setCurrentOpenImg={setCurrentOpenImg}
-              listing={listing}
+              listing={{
+                ...listing,
+                averageRating: listingRatingInfo["averageRating"],
+                commentCount: listingRatingInfo["commentCount"],
+                userAverageRating: ownerRatingInfo["averageRating"],
+                userCommentCount: ownerRatingInfo["commentCount"],
+              }}
               handleGoBack={() => setCurrentApprove(false)}
               fromDate={currentApproveFromDate}
               toDate={currentApproveToDate}
