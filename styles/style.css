@@ -14258,6 +14258,17 @@ Dashboard CSS
   cursor: pointer;
   margin-bottom: 20px;
 }
+
+.chat-content-area
+  .sidebar-left
+  .sidebar
+  .sidebar-content
+  .chat-menu
+  .list-group-user
+  li:hover {
+  transition: var(--transition);
+}
+
 .chat-content-area
   .sidebar-left
   .sidebar
@@ -19036,10 +19047,22 @@ span.flatpickr-weekday {
   align-items: center;
 }
 
-.empty-chat-list{
+.empty-chat-list {
   margin-left: 0;
   max-width: 100%;
   font-size: 14px;
   padding: 9px 20px 8px;
   text-wrap: pretty;
+}
+
+.chat:not(.chat-left):has(+ .chat:not(.chat-left)),
+.chat.chat-left:has(+ .chat.chat-left) {
+  margin-bottom: 0.5rem;
+}
+
+.chat-message > video,
+.chat-message > audio,
+.chat-message > img {
+  max-width: 100% !important;
+  max-height: 200px !important;
 }

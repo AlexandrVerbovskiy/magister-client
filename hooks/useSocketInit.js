@@ -5,7 +5,7 @@ import ENV from "../env";
 const useSocketInit = ({ authToken }) => {
   const [socketIo, setSocketIo] = useState(null);
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (authToken) {
       const newSocketIo = io(ENV.SERVER_URL, {
         query: {
@@ -19,7 +19,7 @@ const useSocketInit = ({ authToken }) => {
     } else {
       setSocketIo(null);
     }
-  }, [authToken]);*/
+  }, [authToken]);
 
   return socketIo;
 };

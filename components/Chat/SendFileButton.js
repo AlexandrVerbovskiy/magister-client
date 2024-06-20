@@ -4,7 +4,7 @@ import useChatFileSendAccept from "../../hooks/useChatFileSendAccept";
 import SendFilePopup from "./SendFilePopup";
 import STATIC from "../../static";
 
-const SendFileButton = () => {
+const SendFileButton = ({ handleSendMedia }) => {
   const fileInputRef = useRef(null);
   const { file, handleSetFile, close, active } = useChatFileSendAccept();
 
@@ -15,6 +15,11 @@ const SendFileButton = () => {
       handleSetFile(newFile);
       fileInputRef.current.value = "";
     });
+  };
+
+  const handleSend = () => {
+    handleSendMedia(file);
+    close();
   };
 
   return (
@@ -38,7 +43,12 @@ const SendFileButton = () => {
         className="d-none"
       />
 
-      <SendFilePopup file={file} active={active} close={close} />
+      <SendFilePopup
+        handleSendClick={handleSend}
+        file={file}
+        active={active}
+        close={close}
+      />
     </>
   );
 };

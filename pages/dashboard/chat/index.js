@@ -1,16 +1,11 @@
 import BaseChat from "../../../components/Chat";
-import { useChatList } from "../../../hooks";
+import useChat from "../../../hooks/useChat";
 import { authSideProps } from "../../../middlewares";
 import { getUserChatOptions } from "../../../services";
 
-const Chat = ({ chats, chatsCanShowMore, options }) => {
-  const listProps = useChatList({
-    chats,
-    canShowMore: chatsCanShowMore,
-    options,
-  });
-
-  return <BaseChat listProps={listProps} />;
+const Chat = (props) => {
+  const chatProps = useChat(props);
+  return <BaseChat {...chatProps} />;
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
@@ -21,7 +16,7 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     { chatType },
     baseSideProps.authToken
   );
-  
+
   return { ...options };
 };
 export const getServerSideProps = (context) =>

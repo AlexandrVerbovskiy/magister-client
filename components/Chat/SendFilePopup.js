@@ -1,15 +1,10 @@
 import BaseModal from "../_App/BaseModal";
 import FileCard from "./FilePreviews.js/FileCard";
 
-const SendFilePopup = ({ file, active, close }) => {
+const SendFilePopup = ({ handleSendClick, file, active, close }) => {
   if (!active) {
     return;
   }
-
-  const handleSendClick = () => {
-    console.log(file);
-    close();
-  };
 
   return (
     <BaseModal

@@ -1,9 +1,54 @@
 import ChatHeader from "./ChatHeader";
 import DateLi from "./DateLi";
 import SenderPanel from "./SenderPanel";
+import MessageLi from "./MessageLi";
+import UploadTrigger from "../UploadTrigger";
+import { useEffect, useRef, useState } from "react";
+import { dateConverter } from "../../utils";
 
-const RightSidebar = ({ chat, messages, setListWindow }) => {
-  if (!chat) {
+const RightSidebar = ({
+  messages,
+  canShowMore,
+  handleShowMore,
+  setListWindow,
+  selectedChat,
+  actions,
+}) => {
+  const firstBuildRef = useRef(true);
+  const [messagesToView, setMessagesToView] = useState([]);
+
+  useEffect(() => {
+    if (messages.length == 0) {
+      firstBuildRef.current = true;
+    } else {
+      firstBuildRef.current = false;
+    }
+
+    const newMessagesToView = [];
+    let prevMessage = null;
+
+    messages.forEach((message) => {
+      if (prevMessage) {
+        const prevMessageDate = dateConverter(prevMessage.createdAt);
+        const messageDate = dateConverter(message.createdAt);
+
+        if (messageDate != prevMessageDate) {
+          newMessagesToView.push({
+            type: "date",
+            content: messageDate,
+            tempKey: messageDate,
+          });
+        }
+      }
+
+      prevMessage = message;
+      newMessagesToView.push(message);
+    });
+
+    setMessagesToView(newMessagesToView);
+  }, [JSON.stringify(messages)]);
+
+  if (!selectedChat) {
     return (
       <div className="content-right h-100">
         <div className="chat-area h-100">
@@ -28,16 +73,29 @@ const RightSidebar = ({ chat, messages, setListWindow }) => {
       <div className="chat-area">
         <div className="chat-list-wrapper">
           <div className="chat-list">
-            <ChatHeader handleGoBackClick={setListWindow} />
+            <ChatHeader handleGoBackClick={setListWindow} {...selectedChat} />
 
             <div className="chat-container" data-simplebar>
               <div className="chat-content">
-                <DateLi date={new Date()} />
+                {canShowMore && !firstBuildRef.current && (
+                  <UploadTrigger onTriggerShown={handleShowMore} />
+                )}
+                {messagesToView.map((message) =>
+                  message.type == "date" ? (
+                    <DateLi key={message.tempKey} date={message.content} />
+                  ) : (
+                    <MessageLi
+                      key={message.id ?? message.tempKey}
+                      {...message}
+                      stopSendMediaMessage={actions.stopSendMediaMessage}
+                    />
+                  )
+                )}
               </div>
             </div>
 
             <div className="chat-list-footer">
-              <SenderPanel />
+              <SenderPanel chatId={selectedChat.id} {...actions} />
             </div>
           </div>
         </div>

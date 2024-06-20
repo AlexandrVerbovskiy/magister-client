@@ -1,9 +1,12 @@
 import { generateProfileFilePath } from "../../utils";
 import OnlineStatus from "./OnlineStatus";
 
-const ChatLi = ({ chat }) => {
+const ChatLi = ({ chat, selected, onClick }) => {
   return (
-    <li>
+    <li
+      className={`cursor-pointer${selected ? " selected" : ""}`}
+      onClick={onClick}
+    >
       <div className="d-flex align-items-center">
         <div className="avatar me-2">
           <img

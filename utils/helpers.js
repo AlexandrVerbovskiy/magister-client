@@ -1,3 +1,5 @@
+import STATIC from "../static";
+
 export const capitalizeFirstLetter = (str) => {
   if (!str) {
     return "";
@@ -22,8 +24,7 @@ export const cardFormat = (str) => {
 
 export const checkIsFileHasExtension = (file, extensions) => {
   let result = null;
-  console.log(file.type);
-
+  
   extensions.forEach((extension) => {
     if (
       file &&
@@ -36,4 +37,14 @@ export const checkIsFileHasExtension = (file, extensions) => {
   });
 
   return result;
+};
+
+export const changeLocation = (location) =>
+  window.history.pushState(null, "", location);
+
+export const indicateMediaTypeByExtension = (type) => {
+  if (STATIC.VIDEO_EXTENSIONS.includes(type.toLowerCase())) return "video";
+  if (STATIC.AUDIO_EXTENSIONS.includes(type.toLowerCase())) return "audio";
+  if (STATIC.IMAGE_EXTENSIONS.includes(type.toLowerCase())) return "image";
+  return "file";
 };

@@ -26,7 +26,7 @@ export default ({ file }) => {
 
   return (
     <div className="card" style={{ maxWidth: "100%", maxHeight: "400px" }}>
-      <div className="card-body d-flex justify-content-center">
+      <div className="card-body d-flex justify-content-center overflow-hidden">
         <FileElem file={file} />
       </div>
     </div>

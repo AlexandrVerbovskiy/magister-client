@@ -3,7 +3,12 @@ import { generateProfileFilePath } from "../../utils";
 import OnlineStatus from "./OnlineStatus";
 import DropdownMenu from "./DropdownMenu";
 
-const ChatHeader = ({ userName, userOnline, userPhoto, handleGoBackClick }) => {
+const ChatHeader = ({
+  opponentName,
+  opponentOnline,
+  opponentPhoto,
+  handleGoBackClick,
+}) => {
   const [activePopup, setActivePopup] = useState(false);
 
   return (
@@ -16,15 +21,15 @@ const ChatHeader = ({ userName, userOnline, userPhoto, handleGoBackClick }) => {
       <div className="header-left d-flex align-items-center me-2">
         <div className="avatar me-2">
           <img
-            src={generateProfileFilePath(userPhoto)}
+            src={generateProfileFilePath(opponentPhoto)}
             width="70"
             height="70"
             className="rounded-circle"
             alt="image"
           />
-          <OnlineStatus online={userOnline} />
+          <OnlineStatus online={opponentOnline} />
         </div>
-        <h6 className="mb-0">{userName}</h6>
+        <h6 className="mb-0">{opponentName}</h6>
       </div>
       <div className="header-right text-right w-100">
         <ul className="list-unstyled mb-0">

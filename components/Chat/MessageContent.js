@@ -1,41 +1,51 @@
 import STATIC from "../../static";
 import ENV from "../../env";
 
-const MessageContent = ({ type, content }) => {
+const MessageContent = ({ isTemp, type, content }) => {
   if (type == "text") {
     return <p dangerouslySetInnerHTML={{ __html: content.text }}></p>;
   }
 
-  const fullFilePath = ENV.SERVER_URL + "/" + STATIC.SERVER_MESSAGE_FILES_PATH;
+  let src = "";
+
+  if (
+    type === "image" ||
+    type === "video" ||
+    type === "audio" ||
+    type === "file"
+  ) {
+    if (isTemp) {
+      const blob = new Blob([content.path], { type: content.path["type"] });
+      src = URL.createObjectURL(blob);
+    } else {
+      src = ENV.SERVER_URL + "/" + content.path;
+    }
+  }
 
   if (type === "image") {
-    return <img className="" src={fullFilePath + "/" + content.path} />;
+    return <img className="" src={src} />;
   }
 
   if (type === "video") {
-    return (
-      <video controls className="" src={fullFilePath + "/" + content.path} />
-    );
+    return <video controls className="" src={src} />;
   }
 
   if (type === "audio") {
-    return (
-      <audio controls className="" src={fullFilePath + "/" + content.path} />
-    );
+    return <audio controls className="" src={src} />;
   }
 
   if (type === "file") {
     return (
-      <a className="" href={fullFilePath + "/" + content.path} download>
-        <div className="">
+      <a style={{ color: "inherit" }} className="d-flex" href={src} download>
+        <div className="me-1">
           <i className="bx bxs-file"></i>
         </div>
-        {content}
+        {content.filename}
       </a>
     );
   }
 
-  return <p>WHAT?!?!??!</p>;
+  return <p>Unpredictable message</p>;
 };
 
 export default MessageContent;

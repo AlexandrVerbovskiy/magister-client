@@ -10,6 +10,9 @@ const LeftSidebar = ({
   canShowMore,
   setChatWindow,
   handleShowMore,
+  selectedChat,
+  handleSelectChat,
+  filterChats,
 }) => {
   const emptyListMessage =
     type == "orders"
@@ -28,10 +31,7 @@ const LeftSidebar = ({
                 className={`d-block w-50 list-group-label mt-0 ${
                   type == "orders" ? "active" : ""
                 }`}
-                onClick={() => {
-                  handleChangeType("orders");
-                  setChatWindow();
-                }}
+                onClick={() => handleChangeType("orders")}
               >
                 Orders
               </label>
@@ -39,37 +39,72 @@ const LeftSidebar = ({
                 className={`d-block w-50 list-group-label mt-0 ms-4 ${
                   type == "disputes" ? "active" : ""
                 }`}
-                onClick={() => {
-                  handleChangeType("disputes");
-                  setChatWindow();
-                }}
+                onClick={() => handleChangeType("disputes")}
               >
                 Disputes
               </label>
             </div>
 
-            {chats.length > 0 ? (
+            {filter.length ? (
               <>
-                <ul className="list-group list-group-user list-unstyled mb-0">
-                  {chats.map((chat) => (
-                    <ChatLi key={chat.id} chat={chat} />
-                  ))}
-                </ul>
-
-                {canShowMore && (
-                  <div
-                    className="d-flex align-items-center justify-content-center cursor-pointer mt-1"
-                    style={{ color: "#71738d" }}
-                    onClick={handleShowMore}
-                  >
-                    Show more
+                {filterChats.length > 0 ? (
+                  <ul className="list-group list-group-user list-unstyled mb-0">
+                    {filterChats.map((chat) => (
+                      <ChatLi
+                        key={chat.id}
+                        chat={chat}
+                        selected={selectedChat?.id == chat.id}
+                        onClick={() => {
+                          handleSelectChat(chat.id);
+                          setChatWindow();
+                        }}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="w-100 d-flex justify-content-center">
+                    <div className="badge badge-pill badge-light mb-3 gray empty-chat-list">
+                      No chat found
+                    </div>
                   </div>
                 )}
               </>
             ) : (
-              <div className="badge badge-pill badge-light mb-3 gray empty-chat-list">
-                {emptyListMessage}
-              </div>
+              <>
+                {chats.length > 0 ? (
+                  <>
+                    <ul className="list-group list-group-user list-unstyled mb-0">
+                      {chats.map((chat) => (
+                        <ChatLi
+                          key={chat.id}
+                          chat={chat}
+                          selected={selectedChat?.id == chat.id}
+                          onClick={() => {
+                            handleSelectChat(chat.id);
+                            setChatWindow();
+                          }}
+                        />
+                      ))}
+                    </ul>
+
+                    {canShowMore && (
+                      <div
+                        className="d-flex align-items-center justify-content-center cursor-pointer mt-1"
+                        style={{ color: "#71738d" }}
+                        onClick={handleShowMore}
+                      >
+                        Show more
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-100 d-flex justify-content-center">
+                    <div className="badge badge-pill badge-light mb-3 gray empty-chat-list">
+                      {emptyListMessage}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

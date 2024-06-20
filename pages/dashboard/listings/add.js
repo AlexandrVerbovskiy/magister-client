@@ -9,6 +9,7 @@ import {
 
 import EditForm from "../../../components/Listings/EditForm";
 import { useRouter } from "next/router";
+import { changeLocation } from "../../../utils";
 
 const AddListing = ({ categories, defects }) => {
   const [listing, setListing] = useState({});
@@ -34,7 +35,7 @@ const AddListing = ({ categories, defects }) => {
       const newLinkPart =
         window.location.origin + "/dashboard/listings/update/" + listingId;
       //router.replace(newLinkPart, undefined, { shallow: true });
-      window.history.pushState(null, "", newLinkPart);
+      changeLocation(newLinkPart);
 
       setListing(createdListing);
       setCanSendRequest(!res.createdVerifiedRequest);
