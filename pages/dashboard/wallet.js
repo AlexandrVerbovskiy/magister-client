@@ -13,7 +13,7 @@ import {
   calculateTotalPriceByDaysCount,
   getDaysDifference,
   moneyFormat,
-  timeConverter,
+  dateConverter,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -147,7 +147,7 @@ const Wallet = ({
                             <i className="bx bx-wallet"></i>
                           </div>
                           <ul>
-                            <li>Date: {timeConverter(earning.plannedTime)}</li>
+                            <li>Date: {dateConverter(earning.plannedTime)}</li>
                             <li>Order: #{earning.orderId}</li>
                             <li className="price">
                               ${moneyFormat(pricePerDuration)}
@@ -239,7 +239,7 @@ const Wallet = ({
                             <i className="bx bx-cart"></i>
                           </div>
                           <ul>
-                            <li>Date: {timeConverter(sending.createdAt)}</li>
+                            <li>Date: {dateConverter(sending.createdAt)}</li>
                             <li>Order: #{sending.orderId}</li>
                             <li className="price">
                               ${moneyFormat(pricePerDuration)}

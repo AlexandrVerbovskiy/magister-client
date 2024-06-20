@@ -328,3 +328,15 @@ export const getAdminDisputeListOptions = async (params, authToken) => {
   const data = await post(`/admin-dispute-list-options`, params, authToken);
   return data.body;
 };
+
+export const getUserChatOptions = async (
+  { chatType, id = null },
+  authToken
+) => {
+  const data = await post(
+    `/user-chat-options`,
+    { chatType, id },
+    authToken
+  );
+  return data.body;
+};

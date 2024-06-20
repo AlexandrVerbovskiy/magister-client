@@ -2,10 +2,9 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Transition from "../../utils/transition";
 import { IndiceContext } from "../../contexts";
-import { getFilePath } from "../../utils";
+import { generateProfileFilePath, getFilePath } from "../../utils";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
-
 import STATIC from "../../static";
 
 function DropdownProfile({ align }) {
@@ -17,10 +16,7 @@ function DropdownProfile({ align }) {
     isAdmin,
   } = useContext(IndiceContext);
   const name = sessionUser?.name ?? "";
-  const photo =
-    sessionUser && sessionUser?.photo
-      ? getFilePath(sessionUser?.photo)
-      : STATIC.DEFAULT_PHOTO_LINK;
+  const photo = generateProfileFilePath(sessionUser?.photo);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 

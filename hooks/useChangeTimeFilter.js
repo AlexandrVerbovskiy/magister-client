@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  getDateByCurrentAdd,
-  getDateByCurrentReject,
-  timeConverter,
+  dateConverter,
 } from "../utils";
 
 const useWatchChangeTimeFilter = ({
@@ -15,7 +13,7 @@ const useWatchChangeTimeFilter = ({
   defaultFromTime = null,
   defaultToTime = null,
 }) => {
-  const getTimeToProp = (date) => (date ? timeConverter(date) : null);
+  const getTimeToProp = (date) => (date ? dateConverter(date) : null);
 
   useEffect(() => {
     if (

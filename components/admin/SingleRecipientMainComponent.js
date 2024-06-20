@@ -6,7 +6,7 @@ import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
   tenantPaymentCalculate,
-  timeConverter,
+  dateConverter,
 } from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
@@ -331,7 +331,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                               <div className="w-full sm:w-1/2">
                                 <InputView
-                                  value={timeConverter(recipient.plannedTime)}
+                                  value={dateConverter(recipient.plannedTime)}
                                   label="Scheduled Payment Date"
                                   name="payment-payed-at"
                                   placeholder="Scheduled Payment Date"

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   checkStringDateLowerOrEqualCurrentDate,
+  generateProfileFilePath,
   getDaysDifference,
   getFilePath,
   getListingImageByType,
@@ -742,11 +743,7 @@ const OrderContent = ({
           <div className="order-info-main-opponent-info mb-4">
             <div className="d-flex align-items-center">
               <img
-                src={
-                  order.ownerPhoto
-                    ? getFilePath(order.ownerPhoto)
-                    : STATIC.DEFAULT_PHOTO_LINK
-                }
+                src={generateProfileFilePath(order.ownerPhoto)}
                 alt={order.ownerName}
               />
             </div>
@@ -799,11 +796,7 @@ const OrderContent = ({
           <div className="order-info-main-opponent-info mb-4">
             <div className="d-flex align-items-center">
               <img
-                src={
-                  order.tenantPhoto
-                    ? getFilePath(order.tenantPhoto)
-                    : STATIC.DEFAULT_PHOTO_LINK
-                }
+                src={generateProfileFilePath(order.tenantPhoto)}
                 alt={order.tenantName}
               />
             </div>

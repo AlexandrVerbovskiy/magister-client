@@ -1,4 +1,5 @@
 import { dateSort } from "./sort";
+import { format, isToday, isYesterday } from "date-fns";
 
 export const dateToInputString = (date) => {
   const year = date.getFullYear();
@@ -13,8 +14,8 @@ export const getCurrentUserUtc = () => {
   return -1 * (offsetMinutes / 60);
 };
 
-export const timeConverter = (time) => {
-  const dateObject = new Date(time);
+export const dateConverter = (date) => {
+  const dateObject = new Date(date);
 
   const formattedDate = dateObject.toLocaleDateString("en-US");
 
@@ -28,8 +29,8 @@ export const timeConverter = (time) => {
   return `${fullFormattedDate}`;
 };
 
-export const fullTimeConverter = (time) => {
-  const dateObject = new Date(time);
+export const fullDateConverter = (date) => {
+  const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
     hour12: false,
@@ -214,4 +215,21 @@ export const getMaxFlatpickrDate = () => {
     currentDate.getMonth(),
     currentDate.getDate()
   );
+};
+
+export const dateName = (date) => {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  if (isToday(dateObj)) {
+    return "Today";
+  } else if (isYesterday(dateObj)) {
+    return "Yesterday";
+  } else {
+    return format(dateObj, "dd/MM/yyyy");
+  }
+};
+
+export const formatTimeWithAmPm = (date) => {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  return format(dateObj, "hh:mm a");
 };

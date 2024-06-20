@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import { IndiceContext } from "../../../contexts";
-import { getFilePath } from "../../../utils";
+import { generateProfileFilePath, getFilePath } from "../../../utils";
 import STATIC from "../../../static";
 
 const TableItem = ({
@@ -43,9 +43,7 @@ const TableItem = ({
   const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const fullPhotoPath = isAdmin && userPhoto
-    ? getFilePath(userPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullPhotoPath = generateProfileFilePath(userPhoto);
 
   const canMoveToUser = sessionUser?.id != userId;
 

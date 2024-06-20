@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { activateAuthPopup, getFilePath, getListingImageByType, moneyFormat } from "../../utils";
+import {
+  activateAuthPopup,
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+  moneyFormat,
+} from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import STATIC from "../../static";
@@ -86,11 +92,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           <Link href={`/owner-listing-list/${listing.userId}`}>
             <div className="d-flex align-items-center">
               <img
-                src={
-                  listing.userPhoto
-                    ? getFilePath(listing.userPhoto)
-                    : STATIC.DEFAULT_PHOTO_LINK
-                }
+                src={generateProfileFilePath(listing.userPhoto)}
                 alt="image"
               />
               <span className="row-dots-end">{listing.userName}</span>
@@ -111,8 +113,11 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
             </Link>
           </li>
         </ul>
+
         <h3 className="row-dots-end">
-          <Link className="row-dots-end" href={`/listing/${listing.id}`}>{listing.name}</Link>
+          <Link className="row-dots-end" href={`/listing/${listing.id}`}>
+            {listing.name}
+          </Link>
         </h3>
         <span className="status">
           <i className="flaticon-save"></i> Open Now

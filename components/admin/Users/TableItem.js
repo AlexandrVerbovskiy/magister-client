@@ -8,7 +8,7 @@ import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
 import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
-import { getFilePath, moneyFormat, timeConverter } from "../../../utils";
+import { generateProfileFilePath, getFilePath, moneyFormat, dateConverter } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -139,7 +139,7 @@ const TableItem = ({
     onChangeVerified();
   };
 
-  const fullPhotoPath = photo ? getFilePath(photo) : STATIC.DEFAULT_PHOTO_LINK;
+  const fullPhotoPath = generateProfileFilePath(photo);
 
   const canMoveToUser = sessionUser?.id != id && isAdmin;
 
@@ -301,7 +301,7 @@ const TableItem = ({
                     <SubInfoRow
                       label="Last rental"
                       value={
-                        lastRenterDate ? timeConverter(lastRenterDate) : "-"
+                        lastRenterDate ? dateConverter(lastRenterDate) : "-"
                       }
                       newRow={true}
                     />

@@ -1,6 +1,5 @@
 const getFilenameByPath = (path) => {
-  const fileName = path.split(/[\\/]/).pop();
-  return fileName;
+  return path.split(/[\\/]/).pop();
 };
 
 export default getFilenameByPath;
