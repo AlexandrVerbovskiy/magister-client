@@ -46,7 +46,7 @@ const BeforeTheRental = () => {
           </div>
 
           <div className="col-lg-4 col-md-12 d-flex justify-content-center">
-            <img src="/images/rental-info.png" />
+            <img src="/images/right-rental-info.png" />
           </div>
         </div>
       </div>

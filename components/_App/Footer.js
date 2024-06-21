@@ -54,7 +54,7 @@ const Footer = ({ bgColor }) => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/about-as">
+                    <Link href="/about-us">
                       <i className="flaticon-left-chevron"></i> About us
                     </Link>
                   </li>
