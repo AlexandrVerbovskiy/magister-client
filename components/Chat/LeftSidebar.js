@@ -96,6 +96,7 @@ const LeftSidebar = ({
                         Show more
                       </div>
                     )}
+                    <div className="left-sidebar-bottom"></div>
                   </>
                 ) : (
                   <div className="w-100 d-flex justify-content-center">

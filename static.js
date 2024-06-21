@@ -45,6 +45,7 @@ export default {
     TENANT_REVIEW: "renter-review",
     OWNER_REVIEW: "owner-review",
     OPEN_DISPUTE: "open-dispute",
+    ORDER_CHAT: "order-chat",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],

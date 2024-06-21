@@ -1612,6 +1612,17 @@ const OrderContent = ({
               />
             )}
 
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/chat/${order.chatId}`}
+              >
+                Chat
+              </Link>
+            )}
+
             <PayModal
               modalActive={paypalModalActive}
               closeModal={() => setPaypalModalActive(false)}

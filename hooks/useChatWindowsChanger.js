@@ -36,26 +36,22 @@ const useChatWindowsChanger = (chatId) => {
     }
   };
 
-  const setListWindow = () => {
-    setActiveWindow("list");
-  };
-
   const scrollBodyBottom = () => {
     const observer = new MutationObserver((mutations, observer) => {
-      const bodyElement = bodyRef.current.lastElementChild;
-      const chatElements = bodyElement
-        ? bodyElement.querySelectorAll(".chat")
-        : [];
-      const lastElement = chatElements[chatElements.length - 1];
+      const chatBottom = document.querySelector(".right-sidebar-bottom");
 
-      if (lastElement) {
-        lastElement.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (!chatBottom) {
+        return;
+      }
+
+      if (chatBottom) {
+        setTimeout(() => chatBottom.scrollIntoView({ behavior: "smooth" }), 0);
         observer.disconnect();
       }
     });
 
-    if (bodyRef.current) {
-      observer.observe(bodyRef.current, { childList: true, subtree: true });
+    if (document) {
+      observer.observe(document, { childList: true, subtree: true });
     }
   };
 

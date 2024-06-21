@@ -322,6 +322,17 @@ const OrderInfo = ({
             <i className="bx bx-x-circle"></i> Cancel
           </button>
         )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/chat/${order.chatId}`}
+          >
+            <i className="bx bx-chat"></i> Chat
+          </Link>
+        )}
       </td>
     </>
   );

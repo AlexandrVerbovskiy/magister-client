@@ -1,18 +1,20 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../contexts";
-import { getChatMessageList } from "../services/chat";
+import { getChatBaseInfo, getChatMessageList } from "../services/chat";
 
 const useChatMessageList = ({
   messages: baseMessages,
   canShowMore: baseCanShowMore,
   chatId: baseChatId,
   authToken,
+  entity: baseEntity = null,
 }) => {
   const { io } = useContext(IndiceContext);
 
   const stateRef = useRef({
     messages: baseMessages,
     canShowMore: baseCanShowMore,
+    entity: baseEntity,
   });
 
   const [, rewriteState] = useState(false);
@@ -26,7 +28,7 @@ const useChatMessageList = ({
   });
 
   const setStateRef = (newState) => {
-    stateRef.current = newState;
+    stateRef.current = { ...stateRef.current, ...newState };
     rewriteState((prev) => !prev);
   };
 
@@ -68,17 +70,21 @@ const useChatMessageList = ({
     }
 
     try {
-      const result = await getChatMessageList(
+      const result = await getChatBaseInfo(
         {
           chatId: newChatId,
         },
         authToken
       );
 
+      console.log(result.entity);
+
       setStateRef({
         canShowMore: result.messagesCanShowMore,
         messages: [...result.messages],
+        entity: result.entity,
       });
+
       setChatId(newChatId);
     } catch (e) {
     } finally {
@@ -88,6 +94,7 @@ const useChatMessageList = ({
 
   const reset = () => {
     setStateRef({
+      entity: null,
       canShowMore: false,
       messages: [],
     });
@@ -96,7 +103,6 @@ const useChatMessageList = ({
 
   const appendMessageToChat = (message) => {
     setStateRef({
-      ...stateRef.current,
       messages: [...stateRef.current.messages, message],
     });
   };
@@ -113,7 +119,6 @@ const useChatMessageList = ({
     });
 
     setStateRef({
-      ...stateRef.current,
       messages: newMessages,
     });
   };
@@ -132,12 +137,12 @@ const useChatMessageList = ({
     ];
 
     setStateRef({
-      ...stateRef.current,
       messages: newMessages,
     });
   };
 
   return {
+    entity: stateRef.current.entity,
     messages: stateRef.current.messages,
     canShowMore: stateRef.current.canShowMore,
     handleShowMore,

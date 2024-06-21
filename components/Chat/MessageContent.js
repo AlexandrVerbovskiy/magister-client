@@ -1,4 +1,3 @@
-import STATIC from "../../static";
 import ENV from "../../env";
 
 const MessageContent = ({ isTemp, type, content }) => {
@@ -23,11 +22,11 @@ const MessageContent = ({ isTemp, type, content }) => {
   }
 
   if (type === "image") {
-    return <img className="" src={src} />;
+    return <img height="200px" className="" src={src} />;
   }
 
   if (type === "video") {
-    return <video controls className="" src={src} />;
+    return <video height="200px" controls className="" src={src} />;
   }
 
   if (type === "audio") {

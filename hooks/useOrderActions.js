@@ -17,6 +17,10 @@ const useOrderActions = ({ order }) => {
 
     const newActionButtons = [];
 
+    if(order.chatId){
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT)
+    }
+
     if (order.cancelStatus == null) {
       if (
         (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
