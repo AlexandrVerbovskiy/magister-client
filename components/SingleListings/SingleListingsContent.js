@@ -17,6 +17,9 @@ import STATIC from "../../static";
 import BookingModal from "./BookingModal";
 import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 import StarRating from "../StarRating";
@@ -116,7 +119,22 @@ const SingleListingsContent = ({
       <section className="listings-details-area pb-70">
         {!currentApprove && (
           <div className="listings-details-image">
-            <div className="swiper"></div>
+            <Swiper
+              loop={true}
+              autoplay={{
+                delay: 8000,
+              }}
+              modules={[Autoplay]}
+            >
+              {listing.listingImages.map((image) => (
+                <SwiperSlide key={image.link}>
+                  <img
+                    src={getListingImageByType(image.link, image.type)}
+                    alt="image"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
             <div className="container">
               <div className="container">

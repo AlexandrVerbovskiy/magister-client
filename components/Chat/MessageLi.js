@@ -18,6 +18,9 @@ const MessageLi = ({
   senderId,
   percent = 0,
   stopSendMediaMessage,
+  handleChangeUpdatingMessageId,
+  handleDeleteMessage,
+  chatId,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [activePopup, setActivePopup] = useState(false);
@@ -34,8 +37,10 @@ const MessageLi = ({
     type
   );
 
+  const closePopup = () => setActivePopup(false);
+
   const handleActivateEditPopup = (e) => {
-    if (!isAuthor) {
+    if (!isAuthor || isTemp) {
       return;
     }
 
@@ -63,6 +68,16 @@ const MessageLi = ({
     });
 
     setActivePopup(true);
+  };
+
+  const handleEditClick = () => {
+    handleChangeUpdatingMessageId(id);
+    closePopup();
+  };
+
+  const handleDeleteClick = () => {
+    handleDeleteMessage({ messageId: id, chatId });
+    closePopup();
   };
 
   return (
@@ -113,18 +128,24 @@ const MessageLi = ({
         </div>
       </div>
 
-      {isAuthor && isManuallySent && (
+      {!isTemp && isAuthor && isManuallySent && (
         <DropdownMenu
           activePopup={activePopup}
-          closePopup={() => setActivePopup(false)}
+          closePopup={closePopup}
           style={popupCoords}
         >
           {isText && (
-            <button className="dropdown-item d-flex align-items-center">
+            <button
+              className="dropdown-item d-flex align-items-center"
+              onClick={handleEditClick}
+            >
               <i className="bx bxs-pen"></i> Edit
             </button>
           )}
-          <button className="dropdown-item d-flex align-items-center">
+          <button
+            className="dropdown-item d-flex align-items-center"
+            onClick={handleDeleteClick}
+          >
             <i className="bx bxs-trash"></i> Delete
           </button>
         </DropdownMenu>
