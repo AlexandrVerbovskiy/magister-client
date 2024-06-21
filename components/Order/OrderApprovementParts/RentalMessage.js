@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { moneyFormat, timeConverter, validateBigText } from "../../../utils";
+import { moneyFormat, dateConverter, validateBigText } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 import YesNoModal from "../../_App/YesNoModal";
 
@@ -22,7 +22,7 @@ const RentalMessage = ({
 
     let hasError = false;
 
-    if (sendingMessage.length < 1) {
+    if (!sendingMessage.trim()) {
       hasError = true;
       setSendingMessageError("Required field");
     }
@@ -131,12 +131,12 @@ const RentalMessage = ({
         acceptText="Confirm"
         body={
           new Date(fromDate).toDateString() == new Date(toDate).toDateString()
-            ? `'${listing.name}' rental during ${timeConverter(
+            ? `'${listing.name}' rental during ${dateConverter(
                 fromDate
               )} for $${moneyFormat(price)} per day`
-            : `'${listing.name}' rental from ${timeConverter(
+            : `'${listing.name}' rental from ${dateConverter(
                 fromDate
-              )} to ${timeConverter(toDate)} for $${moneyFormat(price)} per day`
+              )} to ${dateConverter(toDate)} for $${moneyFormat(price)} per day`
         }
       />
     </>

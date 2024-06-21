@@ -20,7 +20,6 @@ import {
   getAdminOrderList,
   getAdminOrderListPageOptions,
 } from "../../../services";
-import DeleteAccept from "../../../components/admin/DeleteAccept";
 import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Orders = (pageProps) => {
@@ -36,7 +35,7 @@ const Orders = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({ props: pageProps });
 
   const onRebuild = (data) => {
     setStatusCount(data.statusCount);
@@ -107,11 +106,6 @@ const Orders = (pageProps) => {
                 handleChangeType={handleChangeType}
                 typeOptions={[
                   {
-                    value: "all",
-                    title: "All",
-                    count: statusCount["allCount"],
-                  },
-                  {
                     value: "active",
                     title: "Active",
                     count: statusCount["activeCount"],
@@ -130,6 +124,11 @@ const Orders = (pageProps) => {
                     value: "in-dispute",
                     title: "In dispute",
                     count: statusCount["disputeCount"],
+                  },
+                  {
+                    value: "all",
+                    title: "All",
+                    count: statusCount["allCount"],
                   },
                 ]}
                 filter={filter}
@@ -166,16 +165,16 @@ const Orders = (pageProps) => {
         </main>
       </div>
 
-      <DeleteAccept
+      {/*<DeleteAccept
         title="Delete order?"
         body={`Are you sure you want to remove order ${
           toDeleteOrderInfo?.id ?? ""
-        } from the system? All information about him will be lost`}
+        } from the system? All information about him (including payment information) will be lost`}
         modalOpen={dangerModalOpen}
         setModalOpen={setDangerModalOpen}
         handleCloseDeleteModal={handleCloseDeleteModal}
         onDeleteAccept={onDeleteAccept}
-      />
+      />*/}
     </div>
   );
 };

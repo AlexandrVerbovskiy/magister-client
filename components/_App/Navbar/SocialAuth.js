@@ -16,12 +16,12 @@ const SocialAuth = () => {
     <ul>
       <li>
         <a onClick={handleFacebookClick} className="facebook" style={{cursor:"pointer"}}>
-          <i className="bx bxl-facebook"></i> Facebook
+          <i className="bx bxl-facebook"></i>
         </a>
       </li>
       <li>
         <a onClick={handleGoogleClick} className="google" style={{cursor:"pointer"}}>
-          <i className="bx bxl-google"></i> Google
+          <i className="bx bxl-google"></i>
         </a>
       </li>
     </ul>

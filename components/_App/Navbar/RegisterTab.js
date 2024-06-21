@@ -6,6 +6,7 @@ import { register } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import ErrorSpan from "../../ErrorSpan";
+import PasswordInput from "../../FormComponents/PasswordInput";
 
 const RegisterTab = ({ moveToLogin, activePopup }) => {
   const [formError, setFormError] = useState(null);
@@ -68,7 +69,8 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
 
   const { success: mainSuccess } = useContext(IndiceContext);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setFormError(null);
 
     let error = false;
@@ -96,7 +98,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
       setEmailError(resEmailValid);
     }
 
-    if (!name) {
+    if (!name.trim()) {
       error = true;
       setNameError("Name is required field");
     }
@@ -140,7 +142,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
           <span>Or Register with</span>
         </span>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-12">
               <Input
@@ -168,9 +170,8 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
 
           <div className="row">
             <div className="col-6">
-              <Input
+              <PasswordInput
                 name="password"
-                type="password"
                 value={password}
                 placeholder="Password"
                 error={passwordError}
@@ -179,9 +180,8 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
             </div>
 
             <div className="col-6">
-              <Input
+              <PasswordInput
                 name="confirmPassword"
-                type="password"
                 value={confirmPassword}
                 placeholder="Confirm Password"
                 error={confirmPasswordError}
@@ -225,9 +225,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
             </div>
           )}
 
-          <button type="button" onClick={handleSubmit}>
-            Register Now
-          </button>
+          <button type="submit">Register Now</button>
         </form>
 
         <span className="already-account">

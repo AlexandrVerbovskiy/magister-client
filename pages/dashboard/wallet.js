@@ -13,7 +13,7 @@ import {
   calculateTotalPriceByDaysCount,
   getDaysDifference,
   moneyFormat,
-  timeConverter,
+  dateConverter,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -104,7 +104,7 @@ const Wallet = ({
                 <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Payed <strong className="wallet-currency">USD</strong>
+                Total Paid <strong className="wallet-currency">USD</strong>
               </span>
               <h3>{moneyFormat(totalPayed)}</h3>
             </div>
@@ -147,7 +147,7 @@ const Wallet = ({
                             <i className="bx bx-wallet"></i>
                           </div>
                           <ul>
-                            <li>Date: {timeConverter(earning.plannedTime)}</li>
+                            <li>Date: {dateConverter(earning.plannedTime)}</li>
                             <li>Order: #{earning.orderId}</li>
                             <li className="price">
                               ${moneyFormat(pricePerDuration)}
@@ -239,7 +239,7 @@ const Wallet = ({
                             <i className="bx bx-cart"></i>
                           </div>
                           <ul>
-                            <li>Date: {timeConverter(sending.createdAt)}</li>
+                            <li>Date: {dateConverter(sending.createdAt)}</li>
                             <li>Order: #{sending.orderId}</li>
                             <li className="price">
                               ${moneyFormat(pricePerDuration)}
@@ -248,7 +248,7 @@ const Wallet = ({
                               Fee: ${moneyFormat(feePerDuration)}
                             </li>
                             <li className="price">
-                              Net Payed:{" "}
+                              Net Paid:{" "}
                               <strong>${moneyFormat(sending.money)}</strong>
                             </li>
                             {!sending.adminApproved &&

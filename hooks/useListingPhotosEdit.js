@@ -36,6 +36,11 @@ const useListingPhotoEdit = () => {
     setPhotoPopupError(null);
   };
 
+  const handleChangeLink = (value) => {
+    setPhotoPopupLink(value);
+    setLinkSuccessPhoto(false);
+  };
+
   const adaptLinkPropsToLocal = (list) =>
     list.map((info) => ({
       link: info.link,
@@ -89,14 +94,19 @@ const useListingPhotoEdit = () => {
           );
           setLinkFiles(newLinkFiles);
         } else {
-          const newLinkFiles = linkFiles.map((file) => {
-            if (file.localId != photoPopupLocalFileId) return file;
+          if (photoPopupLink) {
+            const newLinkFiles = linkFiles.map((file) => {
+              if (file.localId != photoPopupLocalFileId) return file;
 
-            found = { ...file, link: photoPopupLink, type: "storage" };
-            return found;
-          });
+              found = { ...file, link: photoPopupLink, type: "storage" };
+              return found;
+            });
 
-          setLinkFiles(newLinkFiles);
+            setLinkFiles(newLinkFiles);
+          } else {
+            setPhotoPopupError("No file selected");
+            return;
+          }
         }
       }
 
@@ -194,7 +204,7 @@ const useListingPhotoEdit = () => {
     photoPopupLink,
     photoPopupActive,
     setPhotoPopupActive,
-    setPhotoPopupLink,
+    setPhotoPopupLink: handleChangeLink,
     setPhotoPopupPhoto,
     handlePhotoAddByPopup,
     photoPopupType,

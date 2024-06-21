@@ -9,6 +9,8 @@ import { getDaysDifference } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
+import SingleRatingStar from "../SingleRatingStar";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
 
 const TableItem = (props) => {
   const {
@@ -33,11 +35,15 @@ const TableItem = (props) => {
     listingCategoryName,
     payedType,
     payedAdminApproved,
+    payedWaitingApproved,
     listingRentalCount,
     orderCheckLists,
+    tenantAverageRating,
+    ownerAverageRating,
+    listingAverageRating,
+    payedId
   } = props;
-
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -71,6 +77,9 @@ const TableItem = (props) => {
           ) : (
             <Status
               status={status}
+              payedId={payedId}
+              payedAdminApproved={payedAdminApproved}
+              payedWaitingApproved={payedWaitingApproved}
               baseClass="px-3 rounded-full shadow-2xl w-max"
             />
           )}
@@ -92,17 +101,20 @@ const TableItem = (props) => {
           !descriptionOpen && "hidden"
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r">
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap align-top overflow-separate border-r">
           <div>
             <SubInfoTitle
               title="Item Details"
               href={"/admin/listings/edit/" + listingId}
+              canMove={isAdmin}
             />
             <SubInfoRow label="Name" value={listingName} />
             <SubInfoRow label="Category" value={listingCategoryName} />
             <SubInfoRow label="Location" value={listingAddress} />
             <SubInfoRow label="Times rented" value={listingRentalCount} />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={listingAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -111,7 +123,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Owner"
               href={"/admin/users/edit/" + ownerId}
-              canMove={sessionUser?.id != ownerId}
+              canMove={isAdmin && sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
             <SubInfoRow label="Email" value={ownerEmail} />
@@ -119,7 +131,9 @@ const TableItem = (props) => {
               label="Phone"
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={ownerAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -128,7 +142,7 @@ const TableItem = (props) => {
             <SubInfoTitle
               title="Renter"
               href={"/admin/users/edit/" + tenantId}
-              canMove={sessionUser?.id != tenantId}
+              canMove={isAdmin && sessionUser?.id != tenantId}
             />
             <SubInfoRow label="Name" value={tenantName} />
             <SubInfoRow label="Email" value={tenantEmail} />
@@ -136,7 +150,9 @@ const TableItem = (props) => {
               label="Phone"
               value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={tenantAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -195,7 +211,7 @@ const TableItem = (props) => {
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
             <View href={`/admin/orders/${id}`} />
-            <Delete onDeleteClick={onDeleteClick} />
+            {/*<Delete onDeleteClick={onDeleteClick} />*/}
           </div>
         </td>
       </tr>

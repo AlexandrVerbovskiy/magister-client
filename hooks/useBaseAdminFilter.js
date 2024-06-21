@@ -1,8 +1,12 @@
 import { useState } from "react";
 import useTimeTypeFilter from "./useTimeTypeFilter";
 
-const useBaseAdminFilter = (props) => {
-  const [type, setType] = useState(props.options.type ?? "all");
+const useBaseAdminFilter = ({ props, defaultTypeValue = null }) => {
+  if (!defaultTypeValue) {
+    defaultTypeValue = props.options.type ?? "all";
+  }
+
+  const [type, setType] = useState(props.options.type ?? defaultTypeValue);
   const { timeFilterType, geTimeTypeDopProps, handleChangeTimeFilterType } =
     useTimeTypeFilter(props);
 
@@ -15,7 +19,7 @@ const useBaseAdminFilter = (props) => {
     ...geTimeTypeDopProps(),
     type: {
       value: type,
-      hidden: (value) => value == "all",
+      hidden: (value) => value == defaultTypeValue,
     },
   });
 

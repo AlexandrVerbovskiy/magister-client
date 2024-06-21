@@ -18,15 +18,17 @@ const ListingCreate = ({ categories, defects }) => {
     if (listing.id) {
       formData.append("id", listing.id);
       const res = await updateListingByAdmin(formData, authToken);
-      setListing(res);
-      return res;
+      const updatedListing = res.listing;
+      setListing(updatedListing);
+      return updatedListing;
     } else {
       const res = await createListingByAdmin(formData, authToken);
-      const id = res.id;
+      const createdListing = res.listing;
+      const id = createdListing.id;
       const newLinkPart = window.location.origin + "/admin/listings/edit/" + id;
       router.replace(newLinkPart, undefined, { shallow: true });
-      setListing(res);
-      return res;
+      setListing(createdListing);
+      return createdListing;
     }
   };
 

@@ -12,7 +12,7 @@ import {
   getDaysDifference,
   getFilePath,
   moneyFormat,
-  timeConverter,
+  dateConverter,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -63,11 +63,11 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   };
 
   const handleReject = async (description) => {
-      await rejectSenderPaymentTransaction(
-        { orderId: payment.orderId, description },
-        authToken
-      );
-      router.push(parentLink);
+    await rejectSenderPaymentTransaction(
+      { orderId: payment.orderId, description },
+      authToken
+    );
+    router.push(parentLink);
   };
 
   return (
@@ -165,7 +165,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={timeConverter(payment.offerStartDate)}
+                                value={dateConverter(payment.offerStartDate)}
                                 label="Offer Start Date"
                                 name="offer-start-date"
                                 placeholder="Offer Start Date"
@@ -176,7 +176,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={timeConverter(payment.offerEndDate)}
+                                value={dateConverter(payment.offerEndDate)}
                                 label="Offer End Name"
                                 placeholder="Offer End Name"
                                 name="offer-end-date"
@@ -357,7 +357,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
           <AcceptModal
             active={approvedPopupActive}
             close={() => setApprovedPopupActive(false)}
-            onRejectClick={handleAccept}
+            onAcceptClick={handleAccept}
           />
         </main>
       </div>

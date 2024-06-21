@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ClipboardJS from "clipboard";
 import { IndiceContext } from "../../contexts";
 import {
+  activateAuthPopup,
   autoMultiEnding,
+  generateProfileFilePath,
   getFilePath,
   getListingImageByType,
   moneyFormat,
@@ -13,12 +15,19 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import STATIC from "../../static";
 import BookingModal from "./BookingModal";
-import { createOrder } from "../../services";
+import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
+import StarRating from "../StarRating";
 
-const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
+const SingleListingsContent = ({
+  comments,
+  listing: prevListing,
+  tenantBaseCommissionPercent,
+  listingRatingInfo,
+  ownerRatingInfo,
+}) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -26,24 +35,16 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
   const [currentApproveFromDate, setCurrentApproveFromDate] = useState(null);
   const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
+  const [listing, setListing] = useState(prevListing);
 
   const router = useRouter();
 
   const handleShareClick = () => {
-    const clipboard = new ClipboardJS("#shareButton", {
-      text: function () {
-        return window.location.href;
-      },
+    navigator.share({
+      title: listing.name,
+      text: `Share a link to an item "${listing.name}"!`,
+      url: window.location.href,
     });
-    clipboard.on("success", function (e) {
-      success.set("Link copied successfully");
-      clipboard.destroy();
-    });
-    clipboard.on("error", function (e) {
-      error.set("Link copied error: " + e.message);
-      clipboard.destroy();
-    });
-    clipboard.onClick(event);
   };
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -72,7 +73,7 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         },
         authToken
       );
-      await router.push(`/dashboard/bookings/${id}`);
+      await router.push(`/dashboard/orders/${id}`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );
@@ -90,13 +91,6 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         return;
       }
 
-      if (!sessionUser?.paypalId) {
-        error.set(
-          "Fill in your PayPal details in your profile settings to start the booking process"
-        );
-        return;
-      }
-
       setCreateOrderModalActive(true);
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");
@@ -104,6 +98,16 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
       if (triggerBtn) {
         triggerBtn.click();
       }
+    }
+  };
+
+  const handleChangeFavorite = async (e) => {
+    if (sessionUser) {
+      e.preventDefault();
+      const favorite = await changeListingFavorite(listing.id, authToken);
+      setListing((prev) => ({ ...prev, favorite }));
+    } else {
+      activateAuthPopup();
     }
   };
 
@@ -128,16 +132,15 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     </span>
                   ))}
 
-                  <h3>{listing.name}</h3>
+                  <h3 className="row-dots-end">{listing.name}</h3>
 
-                  <div className="rating d-flex align-items-center">
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="bx bxs-star checked"></span>
-                    <span className="rating-count">(45)</span>
-                  </div>
+                  <StarRating
+                    averageRating={listingRatingInfo["averageRating"]}
+                    commentCount={listingRatingInfo["commentCount"]}
+                    checked={true}
+                    countClass="rating-count"
+                    centerAlign={true}
+                  />
 
                   <ul className="d-flex align-items-center">
                     {listing.userPhone && (
@@ -185,7 +188,11 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                 </li>
 
                 <li>
-                  <a href="#">
+                  <a
+                    className={listing.favorite ? "active" : ""}
+                    href="#"
+                    onClick={handleChangeFavorite}
+                  >
                     <i className="bx bx-heart"></i> Save
                   </a>
                 </li>
@@ -197,7 +204,13 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
         <div className="container">
           {!currentApprove && (
             <div className="row">
-              <div className="col-lg-8 col-md-12">
+              <div
+                className={
+                  sessionUser?.id != listing.ownerId
+                    ? "col-lg-8 col-md-12"
+                    : "col-12"
+                }
+              >
                 <div className="listings-details-desc">
                   <h3>{listing.name}</h3>
                   <p>{listing.description}</p>
@@ -287,765 +300,313 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
                     </>
                   )}
 
-                  <h3>Review</h3>
-                  <div className="listings-review">
-                    <div className="rating d-flex align-items-center">
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-                      <span className="bx bxs-star checked"></span>
-
-                      <span className="overall-rating">5.0</span>
-                      <span className="rating-count">(5 reviews)</span>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-lg-6 col-md-6">
-                        <div className="row m-0">
-                          <div className="side">
-                            <div>Cleanliness</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-4"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>4.0</div>
-                          </div>
-
-                          <div className="side">
-                            <div>Accuracy</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-5"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>5.0</div>
-                          </div>
-
-                          <div className="side">
-                            <div>Location</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-5"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>5.0</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-6 col-md-6">
-                        <div className="row m-0">
-                          <div className="side">
-                            <div>Check-in</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-4"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>4.0</div>
-                          </div>
-
-                          <div className="side">
-                            <div>Communication</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-5"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>5.0</div>
-                          </div>
-
-                          <div className="side">
-                            <div>Value</div>
-                          </div>
-                          <div className="middle">
-                            <div className="bar-container">
-                              <div className="bar-5"></div>
-                            </div>
-                          </div>
-                          <div className="side right">
-                            <div>5.0</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="write-a-review">
-                    <h4>Tell people what you think.</h4>
-                    <p>
-                      Help others by sharing your experience with this business.
-                    </p>
-                    <a href="#" className="default-btn">
-                      Write A Review
-                    </a>
-                  </div>
-
-                  <div id="review">
-                    <div className="listings-review-comments">
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user1.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>James Andy</h4>
-                                  <span>New York, USA</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user2.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>Sarah Taylor</h4>
-                                  <span>New York, USA</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="user-review">
-                        <div className="row m-0">
-                          <div className="col-lg-4 col-md-4 p-0">
-                            <div className="user">
-                              <div className="d-flex">
-                                <img src="/images/user3.jpg" alt="image" />
-                                <div className="title">
-                                  <h4>Jason Smith</h4>
-                                  <span>New York, USA</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-8 col-md-8 p-0">
-                            <div className="comments">
-                              <div className="rating">
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                                <span className="bx bxs-star checked"></span>
-                              </div>
-                              <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                                Quis ipsum suspendisse ultrices gravida. Risus
-                                commodo maecenas accumsan lacus vel facilisis.
-                              </p>
-                              <div className="row m-0">
-                                <div className="col-lg-8 col-md-8 col-8 col-sm-8 p-0">
-                                  <ul className="like-unlike">
-                                    <li>
-                                      <a href="#">Like</a>
-                                    </li>
-                                    <li>
-                                      <a href="#">Unlike</a>
-                                    </li>
-                                  </ul>
-                                </div>
-                                <div
-                                  className="
-                                col-lg-4 col-md-4 col-4 col-sm-4
-                                p-0
-                                text-right
-                              "
-                                >
-                                  <a href="#">Comment</a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div id="add-review">
-                    <div className="review-form-wrapper">
-                      <h3>Add A Review</h3>
-                      <p className="comment-notes">
-                        Your email address will not be published. Required
-                        fields are marked <span>*</span>
-                      </p>
-
-                      <form>
-                        <div className="row">
-                          <div className="col-lg-12 col-md-12">
-                            <div className="sub-ratings">
-                              <div className="row">
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Cleanliness</h4>
-                                    <div className="cleanliness-rating">
-                                      <input
-                                        type="radio"
-                                        id="cleanlinessStar5"
-                                        name="cleanliness-rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="cleanlinessStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="cleanlinessStar4"
-                                        name="cleanliness-rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="cleanlinessStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="cleanlinessStar3"
-                                        name="cleanliness-rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="cleanlinessStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="cleanlinessStar2"
-                                        name="cleanliness-rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="cleanlinessStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="cleanlinessStar1"
-                                        name="cleanliness-rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="cleanlinessStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Accuracy</h4>
-                                    <div className="accuracy-rating">
-                                      <input
-                                        type="radio"
-                                        id="accuracyStar5"
-                                        name="accuracy-rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="accuracyStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="accuracyStar4"
-                                        name="accuracy-rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="accuracyStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="accuracyStar3"
-                                        name="accuracy-rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="accuracyStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="accuracyStar2"
-                                        name="accuracy-rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="accuracyStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="accuracyStar1"
-                                        name="accuracy-rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="accuracyStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Location</h4>
-                                    <div className="location-rating">
-                                      <input
-                                        type="radio"
-                                        id="locationStar5"
-                                        name="location-rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="locationStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="locationStar4"
-                                        name="location-rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="locationStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="locationStar3"
-                                        name="location-rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="locationStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="locationStar2"
-                                        name="location-rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="locationStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="locationStar1"
-                                        name="location-rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="locationStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Check-in</h4>
-                                    <div className="checkin-rating">
-                                      <input
-                                        type="radio"
-                                        id="checkInStar5"
-                                        name="rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="checkInStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="checkInStar4"
-                                        name="rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="checkInStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="checkInStar3"
-                                        name="rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="checkInStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="checkInStar2"
-                                        name="rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="checkInStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="checkInStar1"
-                                        name="rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="checkInStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Communication</h4>
-                                    <div className="communication-rating">
-                                      <input
-                                        type="radio"
-                                        id="communicationStar5"
-                                        name="communication-rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="communicationStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="communicationStar4"
-                                        name="communication-rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="communicationStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="communicationStar3"
-                                        name="communication-rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="communicationStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="communicationStar2"
-                                        name="communication-rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="communicationStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="communicationStar1"
-                                        name="communication-rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="communicationStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div className="col-lg-4 col-md-4 col-6 col-sm-6">
-                                  <div className="add-sub-rating">
-                                    <h4>Value</h4>
-                                    <div className="value-rating">
-                                      <input
-                                        type="radio"
-                                        id="valueStar5"
-                                        name="value-rating"
-                                        value="5"
-                                      />
-                                      <label htmlFor="valueStar5"></label>
-                                      <input
-                                        type="radio"
-                                        id="valueStar4"
-                                        name="value-rating"
-                                        value="4"
-                                      />
-                                      <label htmlFor="valueStar4"></label>
-                                      <input
-                                        type="radio"
-                                        id="valueStar3"
-                                        name="value-rating"
-                                        value="3"
-                                      />
-                                      <label htmlFor="valueStar3"></label>
-                                      <input
-                                        type="radio"
-                                        id="valueStar2"
-                                        name="value-rating"
-                                        value="2"
-                                      />
-                                      <label htmlFor="valueStar2"></label>
-                                      <input
-                                        type="radio"
-                                        id="valueStar1"
-                                        name="value-rating"
-                                        value="1"
-                                      />
-                                      <label htmlFor="valueStar1"></label>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-6 col-md-6">
-                            <div className="form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Name *"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-lg-6 col-md-6">
-                            <div className="form-group">
-                              <input
-                                type="email"
-                                className="form-control"
-                                placeholder="Email *"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-lg-12 col-md-12">
-                            <div className="form-group">
-                              <textarea
-                                placeholder="Your review"
-                                className="form-control"
-                                cols="30"
-                                rows="6"
-                              ></textarea>
-                            </div>
-                          </div>
-
-                          <div className="col-lg-12 col-md-12">
-                            <p className="comment-form-cookies-consent">
-                              <input type="checkbox" id="test1" />
-                              <label htmlFor="test1">
-                                Save my name, email, and website in this browser
-                                for the next time I comment.
-                              </label>
-                            </p>
-                          </div>
-
-                          <div className="col-lg-12 col-md-12">
-                            <button type="submit">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-4 col-md-12">
-                <div className="listings-sidebar">
-                  {listing.approved && listing.userId != sessionUser?.id && (
-                    <div className="listings-widget book_listings">
-                      <h3>Booking Online</h3>
-                      {listing.minRentalDays && (
-                        <ul style={{ listStyle: "none", padding: "0" }}>
-                          <li>
-                            <i
-                              style={{
-                                fontSize: "20px",
-                                transform: "translateY(3px)",
-                                marginRight: "4px",
-                              }}
-                              className="bx bx-envelope"
-                            ></i>
-                            Min rental:{listing.minRentalDays} days
-                          </li>
-                        </ul>
-                      )}
-                      <button
-                        type="button"
-                        className="default-btn w-100"
-                        onClick={handleMakeBookingTriggerClick}
-                      >
-                        Book Now ${moneyFormat(listing.pricePerDay)}/day
-                      </button>
-
-                      <span>
-                        By <a href="#">Booking.com</a>
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="listings-widget listings_contact_details">
-                    <h3>Contact Details</h3>
-                    <ul>
-                      <li>
-                        <i className="bx bx-envelope"></i>
-                        <a href="#">{listing.userEmail}</a>
-                      </li>
-                      {listing.userPhone && (
-                        <li>
-                          <i className="bx bx-phone-call"></i>
-                          <a href={`tel:+${listing.userPhone}`}>
-                            {listing.userPhone}
-                          </a>
-                        </li>
-                      )}
-                      {listing.userPlaceWork && (
-                        <li>
-                          <i className="bx bx-building"></i>
-                          <a href="#">{listing.userPlaceWork}</a>
-                        </li>
-                      )}
-                      <li>
-                        <i
-                          className="bx bx-map"
-                          style={{ marginTop: "7px" }}
-                        ></i>{" "}
-                        {listing.city}
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="listings-widget listings_contact_details">
-                    <h3>Listing Location</h3>
-                    <ul>
-                      <li>
-                        <i
-                          className="bx bx-directions"
-                          style={{ marginTop: "0px" }}
-                        ></i>{" "}
-                        {listing.city}
-                      </li>
-
-                      {listing.address && (
-                        <li>
-                          <i
-                            className="bx bx-map"
-                            style={{ marginTop: "7px" }}
-                          ></i>{" "}
-                          {listing.address}
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-
-                  <div className="listings-widget listings_author">
-                    <h3>Hosted By</h3>
-                    <div className="author">
-                      <div className="d-flex align-items-center">
-                        <img
-                          src={
-                            listing.userPhoto
-                              ? getFilePath(listing.userPhoto)
-                              : STATIC.DEFAULT_PHOTO_LINK
-                          }
-                          alt={listing.userName}
+                  {comments.length > 0 && (
+                    <>
+                      <h3>Review</h3>
+                      <div className="listings-review">
+                        <StarRating
+                          averageRating={listingRatingInfo["averageRating"]}
+                          commentCount={listingRatingInfo["commentCount"]}
+                          checked={true}
+                          countClass="rating-count"
+                          pointsValue={true}
+                          centerAlign={true}
                         />
-                        <div className="title">
-                          <h4>
-                            <a href="#">{listing.userName}</a>
-                          </h4>
+
+                        <div className="row">
+                          <div className="col-lg-6 col-md-6">
+                            <div className="row m-0">
+                              <div className="side">
+                                <div>Punctuality</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averagePunctuality"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averagePunctuality"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>General Experience</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo[
+                                          "averageGeneralExperience"
+                                        ]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageGeneralExperience"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Communication</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo[
+                                          "averageCommunication"
+                                        ]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageCommunication"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="col-lg-6 col-md-6">
+                            <div className="row m-0">
+                              <div className="side">
+                                <div>Reliability</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageReliability"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageReliability"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Kindness</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageKindness"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo["averageKindness"].toFixed(
+                                    1
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Flexibility</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        listingRatingInfo["averageFlexibility"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {listingRatingInfo[
+                                    "averageFlexibility"
+                                  ].toFixed(1)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="author-profile">
-                        <div className="row align-items-center">
-                          <div className="col-lg-5 col-md-5">
-                            <a href="#" className="view-profile">
-                              View Profile
-                            </a>
+                      <div id="review">
+                        <div className="listings-review-comments">
+                          {comments.map((comment) => {
+                            const average = (
+                              (comment.flexibility +
+                                comment.generalExperience +
+                                comment.communication +
+                                comment.kindness +
+                                comment.punctuality +
+                                comment.reliability) /
+                              6
+                            ).toFixed(1);
+
+                            return (
+                              <div className="user-review" key={comment.id}>
+                                <div className="row m-0">
+                                  <div className="col-lg-4 col-md-4 p-0">
+                                    <div className="user">
+                                      <div className="d-flex">
+                                        <img
+                                          src={generateProfileFilePath(
+                                            comment.reviewerPhoto
+                                          )}
+                                          alt="image"
+                                        />
+                                        <div className="title row-dots-end">
+                                          <h4 className="row-dots-end">
+                                            {comment.reviewerName}
+                                          </h4>
+                                          <span>
+                                            {comment.reviewerPhone.length > 0
+                                              ? comment.reviewerPhone
+                                              : "-"}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="col-lg-8 col-md-8 p-0">
+                                    <div className="comments">
+                                      <StarRating
+                                        averageRating={average}
+                                        checked={true}
+                                        checkedOnlyActive={true}
+                                        uncheckedStarClassName="bxs-star"
+                                      />
+                                      <p>{comment.description}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {sessionUser?.id != listing.ownerId && (
+                <div className="col-lg-4 col-md-12">
+                  <div className="listings-sidebar">
+                    {listing.approved && listing.userId != sessionUser?.id && (
+                      <div className="listings-widget book_listings">
+                        <h3>Booking Online</h3>
+                        {listing.minRentalDays > 0 && (
+                          <ul style={{ listStyle: "none", padding: "0" }}>
+                            <li className="d-flex">
+                              <i
+                                style={{
+                                  fontSize: "20px",
+                                  transform: "translateY(3px)",
+                                  marginRight: "4px",
+                                }}
+                                className="bx bx-envelope"
+                              ></i>
+                              <span className="row-dots-end mt-0">
+                                Min rental:{listing.minRentalDays} days
+                              </span>
+                            </li>
+                          </ul>
+                        )}
+                        <button
+                          type="button"
+                          className="default-btn w-100"
+                          onClick={handleMakeBookingTriggerClick}
+                        >
+                          Book Now ${moneyFormat(listing.pricePerDay)}/day
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="listings-widget listings_author">
+                      <h3>Owner</h3>
+                      <div className="author">
+                        <div className="d-flex align-items-center">
+                          <img
+                            src={generateProfileFilePath(listing.userPhoto)}
+                            alt={listing.userName}
+                          />
+                          <div className="title row-dots-end">
+                            <h4 className="row-dots-end">
+                              <a
+                                href={"/owner-listing-list/" + listing.ownerId}
+                              >
+                                {listing.userName}
+                              </a>
+                            </h4>
+                            <span>
+                              {listing.countStoredItems}{" "}
+                              {autoMultiEnding(
+                                listing.countStoredItems,
+                                "Item"
+                              )}{" "}
+                              for rental
+                            </span>
                           </div>
+                        </div>
 
-                          <div className="col-lg-7 col-md-7">
-                            <ul className="social">
-                              {listing.userInstagramUrl && (
-                                <li>
-                                  <a href={listing.userFacebookUrl}>
-                                    <i className="bx bxl-facebook"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userTwitterUrl && (
-                                <li>
-                                  <a href={listing.userTwitterUrl}>
-                                    <i className="bx bxl-twitter"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userLinkedinUrl && (
-                                <li>
-                                  <a href={listing.userLinkedinUrl}>
-                                    <i className="bx bxl-linkedin"></i>
-                                  </a>
-                                </li>
-                              )}
-
-                              {listing.userInstagramUrl && (
-                                <li>
-                                  <a href={listing.userInstagramUrl}>
-                                    <i className="bx bxl-instagram"></i>
-                                  </a>
-                                </li>
-                              )}
-                            </ul>
+                        <div
+                          className="author-profile"
+                          style={{ borderTop: 0, margin: 0 }}
+                        >
+                          <div className="row align-items-center">
+                            <div className="col-12">
+                              <div className="base-full-rating-stars-info">
+                                <StarRating
+                                  averageRating={
+                                    ownerRatingInfo["averageRating"]
+                                  }
+                                  commentCount={ownerRatingInfo["commentCount"]}
+                                  checked={true}
+                                  countClass="rating-count"
+                                  pointsValue={true}
+                                  centerAlign={true}
+                                />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
@@ -1053,7 +614,13 @@ const SingleListingsContent = ({ listing, tenantBaseCommissionPercent }) => {
             <OrderApprovementSection
               handleApprove={handleMakeBooking}
               setCurrentOpenImg={setCurrentOpenImg}
-              listing={listing}
+              listing={{
+                ...listing,
+                averageRating: listingRatingInfo["averageRating"],
+                commentCount: listingRatingInfo["commentCount"],
+                userAverageRating: ownerRatingInfo["averageRating"],
+                userCommentCount: ownerRatingInfo["commentCount"],
+              }}
               handleGoBack={() => setCurrentApprove(false)}
               fromDate={currentApproveFromDate}
               toDate={currentApproveToDate}

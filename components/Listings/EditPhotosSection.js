@@ -271,10 +271,18 @@ const EditPhotosSection = ({
                         : {
                             width: "20px",
                             height: "20px",
+                            display: "none",
                           }
                     }
                     src={photoPopupLink}
                   />
+
+                  {!linkSuccessPhoto && (
+                    <img
+                      src="/images/no-image.png"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  )}
                 </div>
               )}
             </div>

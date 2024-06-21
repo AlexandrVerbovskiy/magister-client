@@ -1,7 +1,17 @@
 import Link from "next/link";
 import LangDropdown from "./LangDropdown";
+import { activateAuthPopup } from "../../utils";
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
 
 const Footer = ({ bgColor }) => {
+  const { sessionUser } = useContext(IndiceContext);
+
+  const handleSignInClick = (e) => {
+    e.preventDefault();
+    activateAuthPopup();
+  };
+
   return (
     <>
       <footer className={`footer-area ${bgColor ?? ""}`}>
@@ -9,44 +19,48 @@ const Footer = ({ bgColor }) => {
           <div className="row">
             <div className="col-lg-3 col-sm-6 col-md-6">
               <div className="single-footer-widget">
-                <h3>About</h3>
+                <h3>Find</h3>
+
+                <ul className="link-list">
+                  {!sessionUser && (
+                    <li>
+                      <Link href="/#" onClick={handleSignInClick}>
+                        <i className="flaticon-left-chevron"></i> Login/sign-up
+                      </Link>
+                    </li>
+                  )}
+                  <li>
+                    <Link href="/listing-list">
+                      <i className="flaticon-left-chevron"></i> Search Items
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/listing-list">
+                      <i className="flaticon-left-chevron"></i> List item
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="col-lg-3 col-sm-6 col-md-6">
+              <div className="single-footer-widget">
+                <h3>Rentabout </h3>
 
                 <ul className="link-list">
                   <li>
-                    <Link href="/about">
-                      <i className="flaticon-left-chevron"></i> About Indice
+                    <Link href="/our-mission">
+                      <i className="flaticon-left-chevron"></i>Our Mission
                     </Link>
                   </li>
                   <li>
-                    <Link href="/about">
-                      <i className="flaticon-left-chevron"></i> Careers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/events">
-                      <i className="flaticon-left-chevron"></i> Recent News
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/testimonial">
-                      <i className="flaticon-left-chevron"></i> Investor
-                      Relations
+                    <Link href="/about-us">
+                      <i className="flaticon-left-chevron"></i> About us
                     </Link>
                   </li>
                   <li>
                     <Link href="/how-it-works">
-                      <i className="flaticon-left-chevron"></i> Content
-                      Guidelines
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/faq">
-                      <i className="flaticon-left-chevron"></i> Terms of Service
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/faq">
-                      <i className="flaticon-left-chevron"></i> Privacy Policy
+                      <i className="flaticon-left-chevron"></i> How it works
                     </Link>
                   </li>
                 </ul>
@@ -55,92 +69,23 @@ const Footer = ({ bgColor }) => {
 
             <div className="col-lg-3 col-sm-6 col-md-6">
               <div className="single-footer-widget">
-                <h3>Discover</h3>
+                <h3>The boring stuff</h3>
 
                 <ul className="link-list">
                   <li>
-                    <Link href="/pricing">
-                      <i className="flaticon-left-chevron"></i> Project Cost
-                      Guides
+                    <Link href="/terms-of-service">
+                      <i className="flaticon-left-chevron"></i> Terms of service
                     </Link>
                   </li>
                   <li>
-                    <Link href="/events">
-                      <i className="flaticon-left-chevron"></i> Upcoming Events
+                    <Link href="/insurance-guarantee">
+                      <i className="flaticon-left-chevron"></i> Insurance
+                      guarantee
                     </Link>
                   </li>
                   <li>
-                    <Link href="/gallery">
-                      <i className="flaticon-left-chevron"></i> Mobile App
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/contact">
-                      <i className="flaticon-left-chevron"></i> Customer Support
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/testimonial">
-                      <i className="flaticon-left-chevron"></i> Developers
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/gallery">
-                      <i className="flaticon-left-chevron"></i> Collections
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/blog-1">
-                      <i className="flaticon-left-chevron"></i> Our Blog
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-sm-6 col-md-6">
-              <div className="single-footer-widget">
-                <h3>Business With Indice</h3>
-
-                <ul className="link-list">
-                  <li>
-                    <Link href="/testimonial">
-                      <i className="flaticon-left-chevron"></i> Claim your
-                      Business
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/gallery">
-                      <i className="flaticon-left-chevron"></i> Advertise on
-                      Indice
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/events">
-                      <i className="flaticon-left-chevron"></i> Restaurant
-                      Owners
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/testimonial">
-                      <i className="flaticon-left-chevron"></i> Business Success
-                      Stories
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/contact">
-                      <i className="flaticon-left-chevron"></i> Business Support
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/blog-1">
-                      <i className="flaticon-left-chevron"></i> Blog for
-                      Business
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/faq">
-                      <i className="flaticon-left-chevron"></i> Privacy Policy
+                    <Link href="/privacy-policy">
+                      <i className="flaticon-left-chevron"></i> Privacy policy
                     </Link>
                   </li>
                 </ul>

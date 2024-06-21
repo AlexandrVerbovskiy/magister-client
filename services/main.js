@@ -1,8 +1,13 @@
 import { initAxios } from "../utils";
 const { get, post } = initAxios("/main");
 
-export const getIndexOptions = async () => {
-  const data = await get(`/index-options`);
+export const getIndexOptions = async (authToken = null) => {
+  const data = await get(`/index-options`, authToken);
+  return data.body;
+};
+
+export const getViewPageWithCategoriesOptions = async () => {
+  const data = await get(`/view-page-options`);
   return data.body;
 };
 
@@ -21,11 +26,11 @@ export const getListingFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
-export const getBookingInfoForPayByCreditCardOptions = async (
+export const getOrderInfoForPayByCreditCardOptions = async (
   id,
   authToken = null
 ) => {
-  const data = await get(`/get-booking-for-card-pay-options/${id}`, authToken);
+  const data = await get(`/get-order-for-card-pay-options/${id}`, authToken);
   return data.body;
 };
 
@@ -205,16 +210,6 @@ export const getSettingsPageOptions = async (authToken) => {
   return data.body;
 };
 
-export const getBookingListOptions = async (params, authToken) => {
-  const data = await post("/booking-list-options", params, authToken);
-  return data.body;
-};
-
-export const getAdminBookingsListPageOptions = async (params, authToken) => {
-  const data = await post("/admin-booking-list-options", params, authToken);
-  return data.body;
-};
-
 export const getOrderListOptions = async (params, authToken) => {
   const data = await post("/order-list-options", params, authToken);
   return data.body;
@@ -227,11 +222,6 @@ export const getAdminOrderListPageOptions = async (params, authToken) => {
 
 export const getAdminOrderListOptions = async (params, authToken) => {
   const data = await post("/admin-order-list-options", params, authToken);
-  return data.body;
-};
-
-export const getAdminBookingInfo = async (id, authToken) => {
-  const data = await get("/admin-full-booking-info-options/" + id, authToken);
   return data.body;
 };
 
@@ -275,5 +265,79 @@ export const getWaitingRefundOptions = async (id, authToken) => {
 
 export const getAdminIndexPageOptions = async (body, authToken) => {
   const data = await post(`/get-admin-index-page-option`, body, authToken);
+  return data.body;
+};
+
+export const getOrderReviewByTenantOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-tenant/${id}`, authToken);
+  return data.body;
+};
+
+export const getOrderReviewByOwnerOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-owner/${id}`, authToken);
+  return data.body;
+};
+
+export const getAdminTenantCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-tenant-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminOwnerCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-owner-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminListingCommentListOptions = async (params, authToken) => {
+  const data = await post(
+    `/admin-listing-comment-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const createRenterReview = async (
+  { tenantCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-tenant-review`,
+    { tenantCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};
+
+export const createOwnerReview = async (
+  { ownerCommentInfo, listingCommentInfo, orderId },
+  authToken
+) => {
+  const data = await post(
+    `/create-owner-review`,
+    { ownerCommentInfo, listingCommentInfo, orderId },
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminDisputeListOptions = async (params, authToken) => {
+  const data = await post(`/admin-dispute-list-options`, params, authToken);
+  return data.body;
+};
+
+export const getUserChatOptions = async (
+  { chatType, id = null },
+  authToken
+) => {
+  const data = await post(`/user-chat-options`, { chatType, id }, authToken);
   return data.body;
 };

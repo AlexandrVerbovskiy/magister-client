@@ -13,11 +13,12 @@ import {
   useOrderFastActions,
   usePagination,
 } from "../../../hooks";
-import OrderItem from "../../../components/Listings/OrderItem";
+import OrderItem from "../../../components/Order/OrderItem";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import ImagePopup from "../../../components/_App/ImagePopup";
 import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
+import CreateDisputeSection from "../../../components/Dispute/CreateDisputeSection";
 
 const Wrapper = ({ children }) => {
   return (
@@ -112,7 +113,7 @@ const Orders = (pageProps) => {
     items: orders,
     rebuild,
     options,
-    isFirstBookingCall,
+    isFirstCall: isFirstBookingCall,
     setItemFields,
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),
@@ -140,24 +141,8 @@ const Orders = (pageProps) => {
     handleClickPayedFastCancel,
     handleAcceptPayedFastCancel,
     activeFastCancel,
-    activeFastCancelOrder,
     closeActiveFastCancel,
-
-    handleClickCreateDispute,
-    handleAcceptCreateDispute,
-    activeCreateDispute,
-    closeActiveCreateDispute,
-
-    handleOrderClickAcceptCancelByTenant,
-    handleOrderAcceptAcceptCancelByTenant,
-    activeOrderAcceptCancelByTenant,
-    closeActiveOrderAcceptCancelByTenant,
-
-    handleOrderClickAcceptCancelByOwner,
-    handleOrderAcceptAcceptCancelByOwner,
-    activeOrderAcceptCancelByOwner,
-    closeActiveOrderAcceptCancelByOwner,
-
+    handleClickCreateCancel,
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,
     activeUpdateRequest,
@@ -191,7 +176,31 @@ const Orders = (pageProps) => {
     acceptApproveExtendOrder,
 
     successIconPopupState,
+
+    closeDisputeWindow,
+    disputeWindowActive,
+    disputeCreate,
+    createDisputeData,
+    onCreateDispute,
   } = useOrderFastActions({ orders: orders, setItemFields });
+
+  if (disputeWindowActive) {
+    return (
+      <>
+        <CreateDisputeSection
+          {...createDisputeData}
+          onGoBack={closeDisputeWindow}
+          setCurrentOpenImg={setCurrentOpenImg}
+          onSubmit={onCreateDispute}
+        />
+        <ImagePopup
+          photoUrl={currentOpenImg}
+          open={!!currentOpenImg}
+          close={() => setCurrentOpenImg(null)}
+        />
+      </>
+    );
+  }
 
   if (extendModalApproveActive && extendModalApproveData.order) {
     return (
@@ -273,18 +282,13 @@ const Orders = (pageProps) => {
                       link={`/dashboard/orders`}
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
-                      handleClickCreateDispute={handleClickCreateDispute}
-                      handleOrderClickAcceptCancelByTenant={
-                        handleOrderClickAcceptCancelByTenant
-                      }
-                      handleOrderClickAcceptCancelByOwner={
-                        handleOrderClickAcceptCancelByOwner
-                      }
+                      handleClickCreateCancel={handleClickCreateCancel}
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
                       handleClickPay={handleClickPay}
                       handleClickExtend={handleClickExtendOrder}
+                      handleDisputeCreate={disputeCreate}
                     />
                   ))}
                 </tbody>
@@ -309,24 +313,6 @@ const Orders = (pageProps) => {
             activeFastCancel={activeFastCancel}
             closeActiveFastCancel={closeActiveFastCancel}
             handleAcceptPayedFastCancel={handleAcceptPayedFastCancel}
-            activeFastCancelOrder={activeFastCancelOrder}
-            activeCreateDispute={activeCreateDispute}
-            closeActiveCreateDispute={closeActiveCreateDispute}
-            handleAcceptCreateDispute={handleAcceptCreateDispute}
-            activeOrderAcceptCancelByTenant={activeOrderAcceptCancelByTenant}
-            closeActiveOrderAcceptCancelByTenant={
-              closeActiveOrderAcceptCancelByTenant
-            }
-            handleOrderAcceptAcceptCancelByTenant={
-              handleOrderAcceptAcceptCancelByTenant
-            }
-            activeOrderAcceptCancelByOwner={activeOrderAcceptCancelByOwner}
-            closeActiveOrderAcceptCancelByOwner={
-              closeActiveOrderAcceptCancelByOwner
-            }
-            handleOrderAcceptAcceptCancelByOwner={
-              handleOrderAcceptAcceptCancelByOwner
-            }
             handleAcceptUpdateRequest={handleAcceptUpdateRequest}
             activeUpdateRequest={activeUpdateRequest}
             closeActiveUpdateRequest={closeActiveUpdateRequest}
@@ -341,7 +327,6 @@ const Orders = (pageProps) => {
             closePay={closePay}
             onTenantPayed={onTenantPayed}
             activePayOrder={activePayOrder}
-            tenantCancelFee={tenantCancelFee}
             handleClickExtendOrder={handleClickExtendOrder}
             handleClickApproveExtendOrder={handleClickApproveExtendOrder}
             extendModalActive={extendModalActive}
@@ -351,6 +336,7 @@ const Orders = (pageProps) => {
             closeExtendOrder={closeExtendOrder}
             closeApproveExtendOrder={closeApproveExtendOrder}
             successIconPopupState={successIconPopupState}
+            bankInfo={pageProps.bankInfo}
           />
         </>
       )}

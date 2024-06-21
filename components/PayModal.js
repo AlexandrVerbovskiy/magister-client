@@ -1,7 +1,7 @@
 import { IndiceContext } from "../contexts";
 import { useContext, useEffect, useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { getDaysDifference, moneyFormat, timeConverter } from "../utils";
+import { getDaysDifference, moneyFormat, dateConverter } from "../utils";
 import PaypalButton from "./PaypalButton";
 import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
@@ -19,7 +19,7 @@ const PayModal = ({
   modalActive,
   closeModal,
   authToken,
-  needAutoClose = true,
+  bankInfo,
 }) => {
   const { error } = useContext(IndiceContext);
   const [type, setType] = useState("paypal");
@@ -28,11 +28,11 @@ const PayModal = ({
   const onApprove = async (data) => {
     try {
       await paypalOrderPayed(data.orderID, authToken);
-      onTenantPayed();
 
-      if (needAutoClose) {
-        setTimeout(closeModal(), 100);
-      }
+      setTimeout(() => {
+        onTenantPayed();
+        closeModal();
+      }, 100);
     } catch (e) {
       error.set(e.message);
     }
@@ -47,12 +47,14 @@ const PayModal = ({
   };
 
   const durationInfo =
-    timeConverter(offerStartDate) === timeConverter(offerEndDate)
-      ? timeConverter(offerStartDate)
-      : `${timeConverter(offerStartDate)} - ${timeConverter(offerEndDate)}`;
+    dateConverter(offerStartDate) === dateConverter(offerEndDate)
+      ? dateConverter(offerStartDate)
+      : `${dateConverter(offerStartDate)} - ${dateConverter(offerEndDate)}`;
 
   const subtotal =
     pricePerDay * getDaysDifference(offerStartDate, offerEndDate);
+
+  const total = (subtotal * (100 + offerFee)) / 100;
 
   const handleClose = () => {
     if (disabled) {
@@ -75,7 +77,7 @@ const PayModal = ({
       active={modalActive}
       closeModal={handleClose}
       needCloseBtn={true}
-      className="modal-padding-bottom-20"
+      className="modal-padding-bottom-20 modal-margin-bottom-20"
     >
       <div className="card card-shadow">
         <div className="card-body">
@@ -90,9 +92,7 @@ const PayModal = ({
           <div className="form-group">Subtotal: ${moneyFormat(subtotal)}</div>
           <div className="form-group">Fee: {offerFee}% </div>
           <div className="form-group">
-            <b>
-              Total to pay: ${moneyFormat((subtotal * (100 + offerFee)) / 100)}
-            </b>
+            <b>Total to pay: ${moneyFormat(total)}</b>
           </div>
         </div>
       </div>
@@ -191,10 +191,13 @@ const PayModal = ({
           </div>
 
           <div
+            className="paypal-payment-form"
             style={
               type == "card"
-                ? { height: "120px", overflow: "hidden" }
-                : { height: "50px" }
+                ? { height: "140px", overflow: "hidden" }
+                : type == "paypal"
+                ? { height: "50px" }
+                : {}
             }
           >
             {type == "paypal" && amount && orderId && authToken && (
@@ -217,6 +220,97 @@ const PayModal = ({
 
             {type == "bank-transfer" && (
               <div className="payment-form">
+                <div className="earnings-box" style={{ marginBottom: "0" }}>
+                  <h3
+                    className="d-flex align-items-center justify-content-between"
+                    style={{
+                      padding: "0 0 20px",
+                      marginLeft: "0",
+                      marginRight: "0",
+                      marginBottom: "0",
+                      marginTop: "0",
+                    }}
+                  >
+                    Bank Details{" "}
+                  </h3>
+                  <ul>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                        borderTop: "1px solid rgb(204, 204, 204)",
+                      }}
+                    >
+                      <b>Booking:</b> #{orderId}
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>IBAN: </b>
+                      {bankInfo?.bankAccountIban ?? ""}
+                      {}
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>SWIFT/BIC: </b>
+                      {bankInfo?.bankAccountSwiftBic ?? ""}
+                      {}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Beneficiary Name and Address: </b>
+                      {bankInfo?.bankAccountBeneficiary ?? ""}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Reference/Concept Code: </b>
+                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
+                    </li>
+                    <li
+                      style={{
+                        background: "white",
+                        borderBottom: "0",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "10px 0",
+                        color: "black",
+                        borderTop: "1px solid #CCCCCC",
+                      }}
+                    >
+                      <b>Total Amount to Transfer: </b>
+                      <span className="pay-by-card-price">${total}</span>
+                    </li>
+                  </ul>
+                </div>
+
                 <Link
                   className="pay-by-credit-card-link"
                   href={"/dashboard/pay-by-credit-card/" + orderId}

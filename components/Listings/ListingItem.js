@@ -1,10 +1,33 @@
 import Link from "next/link";
-import { getFilePath, getListingImageByType, moneyFormat } from "../../utils";
+import {
+  activateAuthPopup,
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+  moneyFormat,
+} from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import STATIC from "../../static";
+import StarRating from "../StarRating";
+import { changeListingFavorite } from "../../services";
+import { useContext, useState } from "react";
+import { IndiceContext } from "../../contexts";
 
-const ListingItem = ({ listing, hovered = false }) => {
+const ListingItem = ({ listing: prevListing, hovered = false }) => {
+  const [listing, setListing] = useState({ ...prevListing });
+  const { authToken, sessionUser } = useContext(IndiceContext);
+
+  const handleChangeFavorite = async (e) => {
+    e.preventDefault();
+    if (sessionUser) {
+      const favorite = await changeListingFavorite(listing.id, authToken);
+      setListing((prev) => ({ ...prev, favorite }));
+    } else {
+      activateAuthPopup();
+    }
+  };
+
   const images = listing.images ?? [];
 
   return (
@@ -52,27 +75,27 @@ const ListingItem = ({ listing, hovered = false }) => {
           <Link href={`/listing/${listing.id}`} className="link-btn"></Link>
         )}
 
-        <a href="#" className="bookmark-save">
+        <a
+          href="#"
+          className={`bookmark-save ${listing.favorite ? "checked" : ""}`}
+          onClick={handleChangeFavorite}
+        >
           <i className="flaticon-heart"></i>
-        </a>
-        <a href="#" className="category">
-          <i className="flaticon-cooking"></i>
         </a>
       </div>
 
       <div className="listings-content">
-        <div className="author">
+        <div
+          className="author row-dots-end"
+          style={{ maxWidth: "calc(100% - 40px)" }}
+        >
           <Link href={`/owner-listing-list/${listing.userId}`}>
             <div className="d-flex align-items-center">
               <img
-                src={
-                  listing.userPhoto
-                    ? getFilePath(listing.userPhoto)
-                    : STATIC.DEFAULT_PHOTO_LINK
-                }
+                src={generateProfileFilePath(listing.userPhoto)}
                 alt="image"
               />
-              <span>{listing.userName}</span>
+              <span className="row-dots-end">{listing.userName}</span>
             </div>
           </Link>
         </div>
@@ -90,8 +113,11 @@ const ListingItem = ({ listing, hovered = false }) => {
             </Link>
           </li>
         </ul>
-        <h3>
-          <Link href={`/listing/${listing.id}`}>{listing.name}</Link>
+
+        <h3 className="row-dots-end">
+          <Link className="row-dots-end" href={`/listing/${listing.id}`}>
+            {listing.name}
+          </Link>
         </h3>
         <span className="status">
           <i className="flaticon-save"></i> Open Now
@@ -103,14 +129,11 @@ const ListingItem = ({ listing, hovered = false }) => {
         justify-content-between
       "
         >
-          <div className="rating">
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bxs-star"></i>
-            <i className="bx bx-star"></i>
-            <span className="count">(10)</span>
-          </div>
+          <StarRating
+            averageRating={listing["averageRating"] ?? 0}
+            commentCount={listing["commentCount"] ?? 0}
+          />
+
           <div className="price">
             Per Day <span>${moneyFormat(listing.pricePerDay)}</span>
           </div>

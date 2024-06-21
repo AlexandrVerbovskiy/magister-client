@@ -4,7 +4,7 @@ import {
   getDaysDifference,
   moneyFormat,
   tenantPaymentCalculate,
-  timeConverter,
+  dateConverter,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -114,7 +114,7 @@ const InvoiceTable = ({
                 </h5>
                 <h5>
                   Invoice Date #{" "}
-                  <sub>{invoiceDate ? timeConverter(invoiceDate) : "-"}</sub>
+                  <sub>{invoiceDate ? dateConverter(invoiceDate) : "-"}</sub>
                 </h5>
                 <h5>
                   P.O #{" "}
@@ -128,7 +128,7 @@ const InvoiceTable = ({
                   </sub>
                 </h5>
                 <h5 className="mb-0">
-                  Due Date # <sub>{dueDate ? timeConverter(dueDate) : "-"}</sub>
+                  Due Date # <sub>{dueDate ? dateConverter(dueDate) : "-"}</sub>
                 </h5>
               </div>
             </div>
@@ -153,8 +153,8 @@ const InvoiceTable = ({
                 <td className="text-right">${offer.pricePerDay}</td>
                 <td className="text-right">
                   {offer.startDate == offer.endDate
-                    ? timeConverter(offer.startDate)
-                    : `${timeConverter(offer.startDate)} - ${timeConverter(
+                    ? dateConverter(offer.startDate)
+                    : `${dateConverter(offer.startDate)} - ${dateConverter(
                         offer.endDate
                       )}`}
                 </td>
@@ -193,7 +193,7 @@ const InvoiceTable = ({
               </tr>
               <tr>
                 <td className="text-right total" colSpan="4">
-                  <strong>Payed</strong>
+                  <strong>Paid</strong>
                 </td>
                 <td className="text-right total-price">
                   <strong>

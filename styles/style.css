@@ -366,7 +366,7 @@ Navbar Area CSS
   position: absolute;
   right: 0;
   top: 32px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .miran-nav .navbar .navbar-nav .nav-item:last-child {
@@ -2023,7 +2023,7 @@ Navbar Area CSS
     margin-top: 57px;
   }
   .miran-responsive-nav .miran-responsive-menu.mean-container .mean-nav ul {
-    font-size: 15px;
+    font-size: 16px;
   }
   .miran-responsive-nav
     .miran-responsive-menu.mean-container
@@ -2290,7 +2290,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -2553,7 +2553,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -2785,7 +2785,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -3092,7 +3092,7 @@ Main Banner Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -3416,6 +3416,8 @@ Listings Area CSS
   line-height: 38px;
   font-size: 16px;
 }
+
+.single-listings-box .listings-image .bookmark-save.checked,
 .single-listings-box .listings-image .bookmark-save:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -3433,7 +3435,7 @@ Listings Area CSS
   height: 35px;
   border-radius: 50%;
   line-height: 35px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .single-listings-box .listings-image .category:hover {
   background-color: var(--mainColor);
@@ -3686,7 +3688,7 @@ Listings Area CSS
   height: 35px;
   border-radius: 50%;
   line-height: 35px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .single-listings-item .listings-image .category:hover {
   background-color: var(--mainColor);
@@ -3776,6 +3778,33 @@ Listings Area CSS
   padding-left: 0;
   padding-top: 15px;
 }
+
+.password-input-parent {
+  position: relative;
+}
+
+.password-input-parent input {
+  padding-right: 32px;
+}
+
+.password-input-parent i {
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 24px;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  width: 22px;
+}
+
+.password-input-parent .form-control.is-invalid {
+  background-image: none;
+}
+
+.password-input-parent:has(.form-control.is-invalid) i {
+  color: var(--bs-form-invalid-border-color);
+}
+
 .single-listings-item .listings-content .listings-meta li {
   display: inline-block;
   margin-right: 12px;
@@ -3839,7 +3868,7 @@ Listings Area CSS
   margin: 0 1px;
   color: var(--blackColor);
   transition: var(--transition);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 .shorting-menu .filter i {
@@ -4201,7 +4230,7 @@ Listings Area CSS
   color: #facc39;
   margin-top: -2px;
   margin-right: 4px;
-  font-size: 15px;
+  font-size: 16px;
 }
 .map-popup-box .mp-review-count {
   color: rgba(255, 255, 255, 0.9);
@@ -4309,24 +4338,39 @@ Listings Details Area CSS
   margin-top: 15px;
   margin-bottom: 14px;
 }
-.listings-details-image .listings-details-content .rating {
+
+.rating {
   margin-bottom: 5px;
 }
-.listings-details-image .listings-details-content .rating .bx {
+
+.rating .bx {
   color: #cecfd2;
   font-size: var(--fontSize);
   margin-right: 2px;
 }
-.listings-details-image .listings-details-content .rating .bx.checked {
+
+.rating .bx.checked {
   color: #efc02f;
 }
-.listings-details-image .listings-details-content .rating .rating-count {
+
+.rating .rating-count {
   position: relative;
   color: var(--mainColor);
   top: 1px;
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.rating .overall-rating {
+  position: relative;
+  top: 1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 12px;
+}
+
 .listings-details-image .listings-details-content ul {
   padding-left: 0;
   list-style-type: none;
@@ -4438,6 +4482,8 @@ Listings Details Area CSS
   top: 50%;
   transform: translateY(-50%);
 }
+
+.listings-details-image .container-fluid .share-save li a.active,
 .listings-details-image .container-fluid .share-save li a:hover,
 .listings-details-image .container-fluid .share-save li .share:hover {
   background-color: var(--whiteColor);
@@ -5310,6 +5356,7 @@ Listings Details Area CSS
   + label:before {
   border-color: var(--mainColor);
 }
+.listings-details-desc .review-form-wrapper .form button,
 .listings-details-desc .review-form-wrapper form button {
   margin-top: 25px;
   border: none;
@@ -5323,21 +5370,41 @@ Listings Details Area CSS
   font-size: var(--fontSize);
 }
 
+.listings-details-desc .review-form-wrapper .form button[type="button"].submit,
+.listings-details-desc
+  .review-form-wrapper
+  .form
+  button[type="submit"]
+  .listings-details-desc
+  .review-form-wrapper
+  form
+  button[type="button"].submit,
 .listings-details-desc .review-form-wrapper form button[type="submit"] {
   color: var(--whiteColor);
   background-color: #847bdd;
 }
 
+.listings-details-desc .review-form-wrapper .form button[type="button"],
 .listings-details-desc .review-form-wrapper form button[type="button"] {
   background-color: #ede7f6;
   color: #666666;
 }
 
+.listings-details-desc
+  .review-form-wrapper
+  .form
+  button[type="button"].submit:hover,
+.listings-details-desc .review-form-wrapper .form button[type="submit"]:hover,
+.listings-details-desc
+  .review-form-wrapper
+  form
+  button[type="button"].submit:hover,
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   background-color: #ede7f6;
   color: #666666;
 }
 
+.listings-details-desc .review-form-wrapper .form button[type="button"]:hover,
 .listings-details-desc .review-form-wrapper form button[type="button"]:hover {
   color: var(--whiteColor);
   background-color: #847bdd;
@@ -5471,6 +5538,7 @@ Listings Details Area CSS
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .listings-sidebar .listings_author .author .title {
   margin-left: 15px;
@@ -6627,19 +6695,7 @@ How It Works Area CSS
   font-size: 22px;
   margin-bottom: 12px;
 }
-.single-how-it-works-box::before {
-  width: 197px;
-  height: 73px;
-  content: "";
-  position: absolute;
-  right: -100px;
-  top: 0;
-  z-index: -1;
-  background-image: url(/images/arrow-right.png);
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
+
 .single-how-it-works-box:hover .icon {
   animation: bounce 2s;
 }
@@ -8415,7 +8471,7 @@ Subscribe Area CSS
 .subscribe-content form .input-newsletter {
   display: block;
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
   height: 55px;
   padding-left: 20px;
   border: 1px solid var(--mainColor);
@@ -8438,6 +8494,7 @@ Subscribe Area CSS
 .subscribe-content form .input-newsletter:focus::placeholder {
   color: transparent;
 }
+.subscribe-content .form button,
 .subscribe-content form button {
   position: absolute;
   right: 0;
@@ -8451,6 +8508,8 @@ Subscribe Area CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.subscribe-content .form button:hover,
 .subscribe-content form button:hover {
   color: var(--whiteColor);
   background-color: var(--blackColor);
@@ -8612,7 +8671,7 @@ Page Title Area CSS
   height: 60px;
   line-height: 60px;
   color: #666666;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
   padding-left: 30px;
   padding-right: 15px;
@@ -9825,6 +9884,7 @@ Products Details Area CSS
   + label:before {
   border-color: var(--mainColor);
 }
+.products-details-tabs .tab-content .tab-pane .review-form-wrapper .form button,
 .products-details-tabs .tab-content .tab-pane .review-form-wrapper form button {
   margin-top: 22px;
   border: none;
@@ -9839,6 +9899,12 @@ Products Details Area CSS
   font-weight: 700;
   font-size: var(--fontSize);
 }
+.products-details-tabs
+  .tab-content
+  .tab-pane
+  .review-form-wrapper
+  .form
+  button:hover,
 .products-details-tabs
   .tab-content
   .tab-pane
@@ -10601,6 +10667,7 @@ Widget Sidebar CSS
   .search-field[type="search"]::-webkit-search-decoration {
   display: none;
 }
+.widget-area .widget_search .form button,
 .widget-area .widget_search form button {
   border: none;
   background-color: var(--whiteColor);
@@ -10614,6 +10681,8 @@ Widget Sidebar CSS
   top: 5px;
   font-size: 20px;
 }
+
+.widget-area .widget_search .form button i,
 .widget-area .widget_search form button i {
   position: absolute;
   left: 0;
@@ -10621,6 +10690,8 @@ Widget Sidebar CSS
   top: 50%;
   transform: translateY(-50%);
 }
+.widget-area .widget_search .form button:hover,
+.widget-area .widget_search .form button:focus,
 .widget-area .widget_search form button:hover,
 .widget-area .widget_search form button:focus {
   border-radius: 5px;
@@ -10917,7 +10988,7 @@ Coming Soon Area CSS
 .coming-soon-content #timer div span {
   display: block;
   margin-top: -2px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 .coming-soon-content form {
@@ -11784,6 +11855,13 @@ All Modal CSS
   .modal-content
   .tab-content
   .miran-login
+  .form
+  button,
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
   form
   button {
   display: block;
@@ -11803,11 +11881,25 @@ All Modal CSS
   .modal-content
   .tab-content
   .miran-login
+  .form
+  button:not(.button-danger),
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
   form
   button:not(.button-danger) {
   background-color: var(--mainColor);
 }
 
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  .form
+  button:not(.button-danger):hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -12105,6 +12197,14 @@ All Modal CSS
   background-color: var(--whiteColor) !important;
   padding-top: 9px;
 }
+
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-register
+  .form
+  button,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -12123,6 +12223,14 @@ All Modal CSS
   padding: 14px 30px 13px;
   transition: var(--transition);
 }
+
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-register
+  .form
+  button:hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -12325,7 +12433,7 @@ Dashboard CSS
   right: 0;
   transition: var(--transition);
   top: 10px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .main-content
@@ -12829,7 +12937,7 @@ Dashboard CSS
   right: 20px;
   transition: var(--transition);
   top: 10px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Flaticon;
 }
 .main-content
@@ -13672,7 +13780,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
   margin-top: -0.5px;
 }
 .bookings-listings-box table tbody td.name .default-btn:hover {
@@ -13692,7 +13800,7 @@ Dashboard CSS
   margin-left: 2px;
   font-weight: 500;
   font-size: 12px;
-  line-height: 13px!important;
+  line-height: 13px !important;
 }
 .bookings-listings-box table tbody td.details h4 .bookings-status.approved {
   background-color: #64bc36;
@@ -13760,7 +13868,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .bookings-listings-box table tbody td.action .default-btn.danger:hover {
@@ -13959,6 +14067,7 @@ Dashboard CSS
 }
 
 .add-listings-box.footer-section button,
+.my-profile-box .form button,
 .my-profile-box form button {
   display: block;
   width: 100%;
@@ -13974,6 +14083,7 @@ Dashboard CSS
 }
 
 .add-listings-box.footer-section button:hover,
+.my-profile-box .form button:hover,
 .my-profile-box form button:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -14045,7 +14155,12 @@ Dashboard CSS
 
 /*message-chat-css*/
 .chat-content-area {
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;
+  flex-grow: 1;
+  flex-basis: 0;*/
+  flex-basis: 0;
+  display: flex;
+  justify-content: space-between;
 }
 .chat-content-area .sidebar-left {
   float: left;
@@ -14143,6 +14258,17 @@ Dashboard CSS
   cursor: pointer;
   margin-bottom: 20px;
 }
+
+.chat-content-area
+  .sidebar-left
+  .sidebar
+  .sidebar-content
+  .chat-menu
+  .list-group-user
+  li:hover {
+  transition: var(--transition);
+}
+
 .chat-content-area
   .sidebar-left
   .sidebar
@@ -14259,14 +14385,16 @@ Dashboard CSS
   border-bottom: 1px solid #eeeeee;
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
 }
 .chat-content-area
   .sidebar-left
   .sidebar
   .sidebar-content
   .chat-menu
-  .list-group-label::before {
-  width: 70px;
+  .list-group-label.active::before {
+  /*width: 70px;*/
+  width: 100%;
   height: 1px;
   content: "";
   position: absolute;
@@ -14840,7 +14968,6 @@ Dashboard CSS
   .chat-list-footer
   form {
   position: relative;
-  padding-right: 128px;
 }
 .chat-content-area
   .content-right
@@ -14875,10 +15002,6 @@ Dashboard CSS
   .chat-list-footer
   form
   .send-btn {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
   border: none;
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -14889,6 +15012,7 @@ Dashboard CSS
   box-shadow: 0 4px 12px 0 rgba(8, 141, 211, 0.2);
   font-size: var(--fontSize);
   font-weight: 600;
+  width: 160px;
 }
 .chat-content-area
   .content-right
@@ -14942,7 +15066,7 @@ Dashboard CSS
 }
 .visitor-reviews-box .user-review .review-rating .review-stars i {
   color: #f2b827;
-  font-size: 15px;
+  font-size: 16px;
   display: inline-block;
 }
 .visitor-reviews-box .user-review .review-rating span {
@@ -15022,7 +15146,7 @@ Dashboard CSS
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
+  font-size: 16px;
 }
 .visitor-reviews-box .user-review .btn-box .default-btn.danger {
   margin-left: 10px;
@@ -15206,27 +15330,40 @@ Dashboard CSS
   border-color: var(--mainColor);
   background-color: transparent;
 }
+
+.form-group .facilities-list,
 .add-listings-box .form-group .facilities-list {
   padding-left: 0;
   margin-bottom: -15px;
   list-style-type: none;
   overflow: hidden;
 }
+
+.form-group .facilities-list li,
 .add-listings-box .form-group .facilities-list li {
   float: left;
   margin-right: 20px;
   position: relative;
   margin-bottom: 15px;
 }
+
+.form-group .facilities-list li .radio,
+.form-group .facilities-list li .checkbox,
 .add-listings-box .form-group .facilities-list li .checkbox {
   margin-bottom: 0;
   padding-left: 0;
   cursor: pointer;
   display: inline-block;
 }
+
+.form-group .facilities-list li .radio input,
+.form-group .facilities-list li .checkbox input,
 .add-listings-box .form-group .facilities-list li .checkbox input {
   display: none;
 }
+
+.form-group .facilities-list li .radio input + span,
+.form-group .facilities-list li .checkbox input + span,
 .add-listings-box .form-group .facilities-list li .checkbox input + span {
   line-height: 20px;
   height: 20px;
@@ -15235,6 +15372,9 @@ Dashboard CSS
   position: relative;
   font-weight: 500;
 }
+
+.facilities-list li .checkbox input + span:not(:empty),
+.facilities-list li .radio input + span:not(:empty),
 .add-listings-box
   .form-group
   .facilities-list
@@ -15244,6 +15384,11 @@ Dashboard CSS
   + span:not(:empty) {
   padding-left: 28px;
 }
+
+.form-group .facilities-list li .radio input + span:before,
+.form-group .facilities-list li .checkbox input + span:before,
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:before,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   content: "";
@@ -15255,6 +15400,9 @@ Dashboard CSS
   top: -1px;
   position: absolute;
 }
+
+.facilities-list li .checkbox input:checked + span:before,
+.facilities-list li .radio input:checked + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15266,10 +15414,15 @@ Dashboard CSS
   transition: background 0.2s ease,
     transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 2);
 }
+.form-group .facilities-list li .radio input + span:after,
+.form-group .facilities-list li .checkbox input + span:after,
 .add-listings-box .form-group .facilities-list li .checkbox input + span:after {
   background: #eeeeee;
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
+
+.facilities-list li .checkbox input:checked + span:before,
+.facilities-list li .radio input:checked + span:before,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15279,6 +15432,9 @@ Dashboard CSS
   + span:before {
   background: var(--mainColor);
 }
+
+.facilities-list li .checkbox input:checked + span:after,
+.facilities-list li .radio input:checked + span:after,
 .add-listings-box
   .form-group
   .facilities-list
@@ -15336,8 +15492,8 @@ Dashboard CSS
   transition: all 0.3s ease;
   display: block;
   position: relative;
-  background: var(--mainColor);
-  box-shadow: 0 8px 16px -1px rgba(8, 141, 211, 0.2);
+  background: lightgray;
+  box-shadow: 0 8px 16px -1px rgb(178 170 165 / 20%);
 }
 
 .switch-form-group .sidebar-widgets .box .switch input + span:before,
@@ -15797,12 +15953,23 @@ Dashboard CSS
   top: -1px;
   padding: 4px 6px 4px 5px;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link .badge.yellow {
+
+.badge.yellow {
   background-color: #b9be1c;
 }
-.sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link .badge.red {
+
+.badge.red {
   background-color: #ee3535;
 }
+
+.badge.main {
+  background-color: var(--mainColor);
+}
+.badge.gray {
+  background-color: #f5f5f5;
+  color: #999999;
+}
+
 .sidemenu-area .sidemenu-body .sidemenu-nav .nav-item .nav-link.disabled {
   color: #a3a3a3;
 }
@@ -16794,7 +16961,7 @@ Preloader Area CSS
   position: fixed !important;
   bottom: 20px;
   right: 20px;
-  z-index: 999999;
+  z-index: 9999999999;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 0.375rem;
@@ -16851,11 +17018,13 @@ Preloader Area CSS
   font-size: 22px;
   cursor: pointer;
   color: var(--mainColor);
+  transform: none;
 }
 
 .password-reset form .form-group i {
   left: 0;
   top: 11px;
+  right: auto;
 }
 
 .password-competing form .form-group i {
@@ -16929,7 +17098,7 @@ button.button-danger:hover {
   text-align: start;
 }
 
-.map-container{
+.map-container {
   height: 400px;
 }
 
@@ -16942,7 +17111,7 @@ button.button-danger:hover {
     padding-left: 5px !important;
   }
 
-  .map-container{
+  .map-container {
     height: fit-content;
   }
 }
@@ -18149,10 +18318,6 @@ input[type="number"] {
   line-height: 2;
 }
 
-.flatpickr-day.nextMonthDay:not(.notAllowed):not(.flatpickr-disabled) {
-  color: rgba(57, 57, 57, 1) !important;
-}
-
 .form-group-view .form-control.view-placeholder {
   color: #999999 !important;
 }
@@ -18237,6 +18402,10 @@ input[type="number"] {
   padding-bottom: 20px !important;
 }
 
+.modal-margin-bottom-20 .modal-content {
+  margin-bottom: 20px !important;
+}
+
 .paypal-payment-card {
   display: flex;
   width: 100%;
@@ -18298,7 +18467,7 @@ input[type="number"] {
   border: 1px solid #d5d5d5;
   color: #666666;
   padding: 2px 5px;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 #price-range .price-input {
@@ -18721,7 +18890,7 @@ span.flatpickr-weekday {
 
 .status-bar-title {
   font-weight: 500;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 17.5px;
   display: flex;
   justify-content: center;
@@ -18838,4 +19007,62 @@ span.flatpickr-weekday {
 .flatpickr-day.flatpickr-disabled:hover {
   color: rgba(57, 57, 57, 0.5) !important;
   background-color: #f2f3f761 !important;
+}
+
+.row-dots-end {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.no-wrap {
+  text-wrap: nowrap;
+}
+
+#__next-build-watcher {
+  z-index: 9999999999 !important;
+}
+
+.paypal-payment-form > div:not(.payment-form) > div:nth-of-type(1),
+.paypal-payment-form > div:not(.payment-form) > div:nth-of-type(2) {
+  max-height: 44.8px;
+  overflow: hidden;
+}
+
+.chat-toggle-btn > div {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  text-align: center;
+  font-size: 24px;
+  color: #6c757d;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid rgb(0 0 0 / 15%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-chat-list {
+  margin-left: 0;
+  max-width: 100%;
+  font-size: 14px;
+  padding: 9px 20px 8px;
+  text-wrap: pretty;
+}
+
+.chat:not(.chat-left):has(+ .chat:not(.chat-left)),
+.chat.chat-left:has(+ .chat.chat-left) {
+  margin-bottom: 0.5rem;
+}
+
+.chat-message > video,
+.chat-message > audio,
+.chat-message > img {
+  max-width: 100% !important;
+  max-height: 200px !important;
 }

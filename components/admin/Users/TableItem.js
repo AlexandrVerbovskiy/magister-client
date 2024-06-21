@@ -8,8 +8,10 @@ import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
 import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
-import { getFilePath, moneyFormat, timeConverter } from "../../../utils";
+import { generateProfileFilePath, getFilePath, moneyFormat, dateConverter } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "Active" : "Suspended";
@@ -57,8 +59,7 @@ const RoleSpan = ({ role, onClick = () => {} }) => {
 };
 
 const EmailSpan = ({ email, verified }) => {
-  let className =
-    "text-left cursor-pointer overflow-separate overflow-separate";
+  let className = "text-left overflow-separate overflow-separate";
   let tooltipText = "";
 
   if (verified) {
@@ -101,6 +102,10 @@ const TableItem = ({
   instagramUrl,
   linkedinUrl,
   twitterUrl,
+  ownerAverageRating,
+  tenantAverageRating,
+  tenantDisputesCount,
+  ownerDisputesCount,
 }) => {
   const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
@@ -134,7 +139,7 @@ const TableItem = ({
     onChangeVerified();
   };
 
-  const fullPhotoPath = photo ? getFilePath(photo) : STATIC.DEFAULT_PHOTO_LINK;
+  const fullPhotoPath = generateProfileFilePath(photo);
 
   const canMoveToUser = sessionUser?.id != id && isAdmin;
 
@@ -204,17 +209,15 @@ const TableItem = ({
           </div>
         </td>
 
-        {isAdmin && (
-          <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-            <div className="text-left">
-              <ActiveSpan
-                active={active}
-                onClick={handleChangeActive}
-                clickable={!isCurrent && role !== "admin"}
-              />
-            </div>
-          </td>
-        )}
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <div className="text-left">
+            <ActiveSpan
+              active={active}
+              onClick={handleChangeActive}
+              clickable={!isCurrent && role !== "admin"}
+            />
+          </div>
+        </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="flex text-left">
@@ -245,7 +248,7 @@ const TableItem = ({
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div>
+          <div style={{ textWrap: "wrap" }}>
             <div className="font-semibold flex items-center">Biography</div>
             {briefBio && briefBio.length ? briefBio : "-"}
           </div>
@@ -280,23 +283,57 @@ const TableItem = ({
             />
           </div>
         </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div>
-            <div className="font-semibold flex items-center">Activity</div>
-            <SubInfoRow
-              label="Last rental"
-              value={lastRenterDate ? timeConverter(lastRenterDate) : "-"}
-            />
-            <SubInfoRow label="Disputes" value={0} />
-            <SubInfoRow label="Rating" value={0} />
-          </div>
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 border-r">
-          <ActiveSpan
-            active={verified}
-            onClick={handleChangeVerified}
-            clickable={!isCurrent && role !== "admin"}
-          />
+        <td colSpan={2}>
+          <table>
+            <thead>
+              <tr>
+                <th style={{ width: "60%" }}></th>
+                <th style={{ width: "40%" }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
+                  <div>
+                    <div className="font-semibold flex items-center">
+                      Activity
+                    </div>
+                    <SubInfoRow
+                      label="Last rental"
+                      value={
+                        lastRenterDate ? dateConverter(lastRenterDate) : "-"
+                      }
+                      newRow={true}
+                    />
+                    <SubInfoRow
+                      label="Tenant Disputes"
+                      value={tenantDisputesCount}
+                      newRow={true}
+                    />
+                    <SubInfoRow
+                      label="Owner Disputes"
+                      value={ownerDisputesCount}
+                      newRow={true}
+                    />
+
+                    <SubInfoRowWithChild label="Tenant">
+                      <SingleRatingStar value={tenantAverageRating} />
+                    </SubInfoRowWithChild>
+                    <SubInfoRowWithChild label="Owner">
+                      <SingleRatingStar value={ownerAverageRating} />
+                    </SubInfoRowWithChild>
+                  </div>
+                </td>
+                <td className="px-2 py-3 border-r">
+                  <ActiveSpan
+                    active={verified}
+                    onClick={handleChangeVerified}
+                    clickable={!isCurrent && role !== "admin"}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </td>
         <td colSpan={2} className="px-2 first:pl-5 last:pr-5 py-3">
           <div className="flex items-center justify-start gap-2 flex-wrap">

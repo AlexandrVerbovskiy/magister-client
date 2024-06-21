@@ -318,7 +318,7 @@ const DocumentsVerification = ({
               <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href="/profile-edit/">Profile Edit</Link>
+              <Link href="/dashboard/profile-edit/">Profile</Link>
             </li>
             <li className="item">Documents Verification</li>
           </ol>
@@ -408,7 +408,7 @@ const DocumentsVerification = ({
                   </div>
 
                   {formError && (
-                    <div className="col-lg-12 col-md-12 mb-2">
+                    <div className="col-12 mb-2">
                       <div
                         className="alert-dismissible fade show alert alert-danger"
                         role="alert"

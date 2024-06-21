@@ -10,3 +10,11 @@ export const shakeUnverifiedAlert = () => {
   warningElem.classList.add("shaked");
   setTimeout(() => warningElem.classList.remove("shaked"), 500);
 };
+
+export const activateAuthPopup = () => {
+  const triggerBtn = document.querySelector(".sign-form-trigger");
+
+  if (triggerBtn) {
+    triggerBtn.click();
+  }
+};

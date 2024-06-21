@@ -1,4 +1,5 @@
 import { dateSort } from "./sort";
+import { format, isToday, isYesterday } from "date-fns";
 
 export const dateToInputString = (date) => {
   const year = date.getFullYear();
@@ -13,8 +14,8 @@ export const getCurrentUserUtc = () => {
   return -1 * (offsetMinutes / 60);
 };
 
-export const timeConverter = (time) => {
-  const dateObject = new Date(time);
+export const dateConverter = (date) => {
+  const dateObject = new Date(date);
 
   const formattedDate = dateObject.toLocaleDateString("en-US");
 
@@ -28,8 +29,8 @@ export const timeConverter = (time) => {
   return `${fullFormattedDate}`;
 };
 
-export const fullTimeConverter = (time) => {
-  const dateObject = new Date(time);
+export const fullDateConverter = (date) => {
+  const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
     hour12: false,
@@ -133,6 +134,23 @@ export const separateDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 
+export const generateDatesBetween = (start, end) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  let currentDate = startDate;
+
+  const datesObj = {};
+
+  while (currentDate <= endDate) {
+    const formattedDate = separateDate(currentDate);
+    datesObj[formattedDate] = true;
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return Object.keys(datesObj);
+};
+
 export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   const currentDate = separateDate(new Date());
   return date < currentDate;
@@ -188,3 +206,30 @@ export const increaseDateByOneDay = (dateString) => {
 };
 
 export const dateToSeconds = (days) => days * 24 * 60 * 60 * 1000;
+
+export const getMaxFlatpickrDate = () => {
+  const currentDate = new Date();
+
+  return new Date(
+    currentDate.getFullYear() + 2,
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+};
+
+export const dateName = (date) => {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  if (isToday(dateObj)) {
+    return "Today";
+  } else if (isYesterday(dateObj)) {
+    return "Yesterday";
+  } else {
+    return format(dateObj, "dd/MM/yyyy");
+  }
+};
+
+export const formatTimeWithAmPm = (date) => {
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  return format(dateObj, "hh:mm a");
+};

@@ -23,8 +23,6 @@ const middlewareCallbackWrapper = async ({ callback, res, context }) => {
         status = e.status ?? null;
       }
 
-      console.log("status: ", status);
-
       if (status === 404) {
         return {
           notFound: true,

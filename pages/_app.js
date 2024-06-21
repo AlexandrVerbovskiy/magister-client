@@ -9,7 +9,11 @@ import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 import "../styles/index.css";
-import { useIsomorphicLayoutEffect } from "../hooks";
+import {
+  useIsomorphicLayoutEffect,
+  useTawkScript,
+  useSocketInit,
+} from "../hooks";
 
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
@@ -115,6 +119,8 @@ function MyApp({ Component, pageProps }) {
   const categories = pageProps.categories ?? {};
   const globalError = pageProps.globalError ?? null;
 
+  const io = useSocketInit({ authToken });
+
   useImportGlobalStyle({
     type: pageType,
     onStart: () => setLoading(true),
@@ -122,6 +128,8 @@ function MyApp({ Component, pageProps }) {
       setLoading(false);
     },
   });
+
+  useTawkScript(pageType);
 
   if (globalError) {
     return (
@@ -136,6 +144,7 @@ function MyApp({ Component, pageProps }) {
         userInfo={sessionUser}
         dopProps={{ setLoading }}
         categories={categories}
+        io={io}
       >
         <Layout>
           {!loading && <Component {...pageProps} />}

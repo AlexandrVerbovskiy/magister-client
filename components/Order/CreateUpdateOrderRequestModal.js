@@ -10,6 +10,7 @@ import {
   findFirstAvailableDate,
   getDateByCurrentAdd,
   getDaysDifference,
+  getMaxFlatpickrDate,
   groupDates,
   moneyFormat,
   separateDate,
@@ -86,6 +87,8 @@ const CreateUpdateOrderRequestModal = ({
       setFromDate(fromDate);
       setToDate(toDate);
     }
+
+    setCalendarError(null);
   };
 
   useEffect(() => {
@@ -118,6 +121,7 @@ const CreateUpdateOrderRequestModal = ({
       mode: "range",
       dateFormat: "Y-m-d",
       minDate: "today",
+      maxDate: getMaxFlatpickrDate(),
       static: true,
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
@@ -280,9 +284,21 @@ const CreateUpdateOrderRequestModal = ({
               <span>Your offer</span>
             </span>
 
-            <div className="flatpickr-parent-wrapper popup-widget">
+            <div
+              className="flatpickr-parent-wrapper popup-widget"
+              style={{ flexDirection: "column", alignItems: "center" }}
+            >
               <div ref={calendarContainer}></div>
-              <ErrorSpan error={calendarError} />
+              {calendarError && (
+                <div
+                  className="w-full form-group p-2"
+                  style={{ margin: "-5px -20px -30px -35px " }}
+                >
+                  <div className="is-invalid">
+                    <ErrorSpan error={calendarError} />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="popup-widget order-info-widget">
@@ -307,7 +323,7 @@ const CreateUpdateOrderRequestModal = ({
                 </div>
               )}
               {fee && <div>Fee: {fee}%</div>}
-              {minRentalDays && (
+              {minRentalDays > 0 && (
                 <div>Minimal Count Rental Days: {minRentalDays}</div>
               )}
               {fee && <div>Price: ${totalPrice}</div>}

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
+import { IndiceContext } from "../../contexts";
+import { validateBigText } from "../../utils";
 
 const OrderApprovementSection = ({
   handleApprove,
@@ -40,6 +42,7 @@ const OrderApprovementSection = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetails
+            needFeeSwitch={true}
             fee={fee}
             feeActive={feeActive}
             setFeeActive={setFeeActive}
@@ -49,7 +52,15 @@ const OrderApprovementSection = ({
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
-          <OwnerInfo listing={listing} />
+          <OwnerInfo
+            data={{
+              userName: listing.userName,
+              userPhoto: listing.userPhoto,
+              userCountItems: listing.userCountItems,
+              userAverageRating: listing.userAverageRating,
+              userCommentCount: listing.userCommentCount,
+            }}
+          />
         </div>
       </div>
     </div>

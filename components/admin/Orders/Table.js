@@ -9,19 +9,20 @@ const Table = ({
   totalCount,
   onClickTh,
   openDeleteModal,
+  type="orders"
 }) => {
   const ths = [
     { title: "Rental Id", value: "id", width: "15%" },
     { title: "Item", value: "listings.name", width: "20%" },
-    { title: "Rental Start", value: "tenants.start_date", width: "15%" },
-    { title: "Rental End", value: "owners.end_date", width: "15%" },
+    { title: "Rental Start", value: "orders.start_date", width: "15%" },
+    { title: "Rental End", value: "orders.end_date", width: "15%" },
     {
       title: "Total Amount",
       value: "owners.total_amount",
       canOrder: false,
       width: "15%",
     },
-    { title: "Status", value: "orders.status", width: "15%" },
+    { title: "Status", canOrder: false, value: "orders.status", width: "15%" },
     { title: "", canOrder: false, value: "orders.actions", width: "5%" },
   ];
 
@@ -29,7 +30,7 @@ const Table = ({
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Orders{" "}
+          All {type=="orders"?"Orders":"Bookings"}{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>

@@ -16,7 +16,7 @@ import BeforeTheRental from "../components/Common/BeforeTheRental";
 import DuringRental from "../components/Common/DuringRental";
 import HowItWorks from "../components/HomeOne/HowItWorks";
 
-const Index = ({ topListings, categories }) => {
+const Index = ({ categories }) => {
   const popularCategories = [];
   let topCategories = [];
   const maxTopCategoriesSectionView = 11;
@@ -42,38 +42,32 @@ const Index = ({ topListings, categories }) => {
 
       <Banner popularCategories={popularCategories} />
 
-      <YourBusiness />
+      <Feedback />
 
-      <ListingArea listings={topListings} />
+      <SafeWithUs bgColor="bg-f9f9f9" />
+
+      <YourBusiness />
 
       <Category
         topCategories={topCategories}
         needShowMore={moreCategoriesThanView}
       />
 
-      <DestinationsTwo />
-
-      <HowItWorks />
-
-      <Feedback />
-
-      <SafeWithUs bgColor="bg-f9f9f9" />
+      <BeforeTheRental />
 
       <DuringRental />
 
-      <BeforeTheRental />
+      {/*<ListingArea listings={topListings} />*/}
 
-      <Blog />
-
-      <AppDownload />
+      <DestinationsTwo />
 
       <Footer />
     </>
   );
 };
 
-const boostServerSideProps = async () => {
-  const options = await getIndexOptions();
+const boostServerSideProps = async ({ baseSideProps }) => {
+  const options = await getIndexOptions(baseSideProps.authToken);
   return { ...options };
 };
 

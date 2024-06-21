@@ -47,7 +47,12 @@ const RequestsTable = ({
       { listingId: popupRejectId, description },
       authToken
     );
-    setItemFields({ approved: false }, popupRejectId);
+
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == popupRejectId
+    );
+
+    setItemFields({ approved: false }, request.id);
   };
 
   const handleApproveAcceptClick = async () => {
@@ -55,14 +60,19 @@ const RequestsTable = ({
       { listingId: popupApproveId },
       authToken
     );
-    setItemFields({ approved: true }, popupApproveId);
+
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == popupApproveId
+    );
+
+    setItemFields({ approved: true }, request.id);
   };
 
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          Requests{" "}
+          All Requests{" "}
           <span className="text-slate-400 dark:text-slate-500 font-medium">
             {totalCount}
           </span>
@@ -90,8 +100,10 @@ const RequestsTable = ({
                   key={request.id}
                   {...request}
                   openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleRejectClick={(id) => setPopupRejectId(id)}
+                  handleApproveClick={(listingId) =>
+                    setPopupApproveId(listingId)
+                  }
+                  handleRejectClick={(listingId) => setPopupRejectId(listingId)}
                 />
               ))}
             </tbody>

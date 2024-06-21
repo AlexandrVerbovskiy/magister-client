@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import BaseModal from "../_App/BaseModal";
 import ErrorSpan from "../ErrorSpan";
-import { validateCardNumber, validateSmallText } from "../../utils";
+import { cardFormat, validateCardNumber, validateSmallText } from "../../utils";
 
 const PayedCancelModal = ({
   modalActive,
@@ -57,7 +57,11 @@ const PayedCancelModal = ({
     }
 
     try {
-      await onCancel({ type, paypalId, cardNumber });
+      await onCancel({
+        type: type.trim(),
+        paypalId: paypalId.trim(),
+        cardNumber: cardNumber.trim(),
+      });
       setDisabled(true);
       handleClose();
     } catch (e) {
@@ -68,7 +72,13 @@ const PayedCancelModal = ({
   };
 
   const handleInputCardNumber = (e) => {
-    setCardNumber(e.target.value);
+    const newValue = e.target.value.replaceAll(" ", "");
+    
+    if (newValue.length > 16) {
+      return;
+    }
+
+    setCardNumber(newValue);
     setCardNumberError(null);
   };
 
@@ -180,7 +190,7 @@ const PayedCancelModal = ({
             <label>Card Number</label>
             <input
               name="card-number"
-              value={cardNumber}
+              value={cardFormat(cardNumber)}
               onInput={handleInputCardNumber}
               type="text"
               placeholder="Card Number"

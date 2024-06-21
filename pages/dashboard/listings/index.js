@@ -22,6 +22,7 @@ import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import { useRouter } from "next/router";
 import STATIC from "../../../static";
+import StarRating from "../../../components/StarRating";
 
 const Tooltip = ({ text, children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -78,7 +79,7 @@ const TabHeaderSection = ({
             {[
               { value: "approved", label: "Approved" },
               { value: "unapproved", label: "Unapproved" },
-              { value: "not_processed", label: "Not Processed" },
+              { value: "not-processed", label: "Not Processed" },
               { value: "all", label: "All" },
             ].map((option) => (
               <div className="py-1" key={option.value}>
@@ -139,8 +140,9 @@ const ListingList = (pageProps) => {
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);
 
-  const baseStatusFilter = router.query.status ?? "all";
+  const baseStatusFilter = pageProps.options.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
+  const [hasMore, setHasMore] = useState(pageProps.items.length > 0);
 
   const {
     page,
@@ -164,6 +166,7 @@ const ListingList = (pageProps) => {
         hidden: (value) => value == "all",
       },
     }),
+    onRebuild: (data) => setHasMore(data.items.length > 0),
   });
 
   const handleAcceptDelete = async () => {
@@ -198,9 +201,7 @@ const ListingList = (pageProps) => {
     try {
       const { active } = await changeActiveListing(id, authToken);
       setItemFields({ active }, id);
-      success.set(
-        `${name} ${active ? "restored" : "deleted"} successfully`
-      );
+      success.set(`${name} ${active ? "restored" : "deleted"} successfully`);
     } catch (e) {
       error.set(e.message);
     }
@@ -253,7 +254,7 @@ const ListingList = (pageProps) => {
           </Link>
         </div>
 
-        {listings.length < 1 && pageProps.items.length < 1 ? (
+        {!hasMore ? (
           <section className="listing-area">
             <TabHeaderSection
               style={{ marginBottom: "0" }}
@@ -373,7 +374,7 @@ const ListingList = (pageProps) => {
                                   href={`/listing-list/?categories=${listing.categoryName}`}
                                 >
                                   <i className="flaticon-furniture-and-household"></i>
-                                  <span>{listing.categoryName}</span>
+                                  <span className="row-dots-end">{listing.categoryName}</span>
                                 </Link>
                               </li>
                               <li>
@@ -381,24 +382,20 @@ const ListingList = (pageProps) => {
                                   href={`/listing-list/?city=${listing.city}`}
                                 >
                                   <i className="flaticon-pin"></i>
-                                  <span>{listing.city}</span>
+                                  <span className="row-dots-end">{listing.city}</span>
                                 </Link>
                               </li>
                             </ul>
-                            <h3>
-                              <Link href={`/listing/${listing.id}`}>
+                            <h3 className="row-dots-end">
+                              <Link className="row-dots-end" href={`/listing/${listing.id}`}>
                                 {listing.name}
                               </Link>
                             </h3>
                             <div className="d-flex align-items-center justify-content-between">
-                              <div className="rating">
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star"></i>
-                                <i className="bx bxs-star-half"></i>
-                                <i className="bx bx-star"></i>
-                                <span className="count">(45)</span>
-                              </div>
+                              <StarRating
+                                averageRating={listing.averageRating ?? 0}
+                                commentCount={listing.commentCount ?? 0}
+                              />
                             </div>
                           </div>
 

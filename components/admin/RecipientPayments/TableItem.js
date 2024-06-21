@@ -1,6 +1,10 @@
 import Link from "next/link";
 import View from "../FastActions/View";
-import { getFilePath, moneyFormat } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  moneyFormat,
+} from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import STATIC from "../../../static";
@@ -88,18 +92,14 @@ const TableItem = ({
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToTenant = sessionUser?.id != tenantId;
-  const canMoveToRecipient = sessionUser?.id != recipientId;
+  const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
+  const canMoveToRecipient = isAdmin && sessionUser?.id != recipientId;
 
-  const fullRecipientPhotoPath = recipientPhoto
-    ? getFilePath(recipientPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullRecipientPhotoPath = generateProfileFilePath(recipientPhoto);
 
-  const fullTenantPhotoPath = tenantPhoto
-    ? getFilePath(tenantPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
 
   return (
     <>

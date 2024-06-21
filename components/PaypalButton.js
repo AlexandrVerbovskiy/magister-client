@@ -2,7 +2,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import env from "../env";
 
 const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
-  return (
+    return (
     <PayPalScriptProvider
       options={{
         "client-id": env.PAYPAL_CLIENT_ID,

@@ -1,4 +1,5 @@
 import Input from "../DashboardComponents/Input";
+import PasswordInput from "../FormComponents/PasswordInput";
 
 const PasswordSection = ({ formInfo }) => {
   const {
@@ -7,19 +8,14 @@ const PasswordSection = ({ formInfo }) => {
     setCurrentPassword,
     currentPasswordError,
     setCurrentPasswordError,
-    handleChangeCurrentPasswordType,
     password,
-    passwordType,
     setPassword,
     passwordError,
     setPasswordError,
-    handleChangePasswordType,
     confirmPassword,
-    confirmPasswordType,
     setConfirmPassword,
     confirmPasswordError,
     setConfirmPasswordError,
-    handleChangeConfirmPasswordType,
     passwordFormError,
     handleChangePassword,
   } = formInfo;
@@ -31,67 +27,49 @@ const PasswordSection = ({ formInfo }) => {
       <form method="get">
         <div className="row">
           <div className="col-lg-12 col-md-12 left-input-icon">
-            <Input
+            <PasswordInput
               label="Current Password"
-              placeholder="Current Password"
+              name="password"
               value={currentPassword}
-              type={currentPasswordType}
-              setValue={setCurrentPassword}
+              placeholder="Current Password"
               error={currentPasswordError}
-              setError={setCurrentPasswordError}
-              name="current-password"
-            >
-              <i
-                className={`bx ${
-                  currentPasswordType == "password" ? "bx-lock" : "bx-lock-open"
-                } cursor-pointer`}
-                onClick={handleChangeCurrentPasswordType}
-              ></i>
-            </Input>
+              onInput={(e) => {
+                setCurrentPasswordError(null);
+                setCurrentPassword(e.target.value);
+              }}
+            />
           </div>
 
           <div className="col-lg-12 col-md-12 left-input-icon">
-            <Input
+            <PasswordInput
               label="New Password"
-              placeholder="New Password"
+              name="password"
               value={password}
-              type={passwordType}
-              setValue={setPassword}
+              placeholder="New Password"
               error={passwordError}
-              setError={setPasswordError}
-              name="new-password"
-            >
-              <i
-                className={`bx ${
-                  passwordType == "password" ? "bx-lock" : "bx-lock-open"
-                } cursor-pointer`}
-                onClick={handleChangePasswordType}
-              ></i>
-            </Input>
+              onInput={(e) => {
+                setPasswordError(null);
+                setPassword(e.target.value);
+              }}
+            />
           </div>
 
           <div className="col-lg-12 col-md-12 left-input-icon">
-            <Input
+            <PasswordInput
               label="Confirm New Password"
-              placeholder="Confirm New Password"
-              value={confirmPassword}
-              type={confirmPasswordType}
-              setValue={setConfirmPassword}
-              error={confirmPasswordError}
-              setError={setConfirmPasswordError}
               name="confirm-new-password"
-            >
-              <i
-                className={`bx ${
-                  confirmPasswordType == "password" ? "bx-lock" : "bx-lock-open"
-                } cursor-pointer`}
-                onClick={handleChangeConfirmPasswordType}
-              ></i>
-            </Input>
+              value={confirmPassword}
+              placeholder="Confirm New Password"
+              error={confirmPasswordError}
+              onInput={(e) => {
+                setConfirmPasswordError(null);
+                setConfirmPassword(e.target.value);
+              }}
+            />
           </div>
 
           {passwordFormError && (
-            <div className="col-lg-12 col-md-12">
+            <div className="col-12">
               <div
                 className="alert-dismissible fade show alert alert-danger"
                 role="alert"

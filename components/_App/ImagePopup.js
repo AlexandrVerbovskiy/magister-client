@@ -4,6 +4,7 @@ import { isClickedOnVisualImagePart } from "../../utils";
 
 const ImagePopup = ({ open, close, photoUrl }) => {
   const supportImageRef = useRef(null);
+
   if (!open) return;
 
   const handleImageClick = (e) => {

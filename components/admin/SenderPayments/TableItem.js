@@ -1,6 +1,11 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
-import { fullTimeConverter, getFilePath, moneyFormat } from "../../../utils";
+import {
+  fullDateConverter,
+  generateProfileFilePath,
+  getFilePath,
+  moneyFormat,
+} from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
 import { useContext, useState } from "react";
@@ -32,21 +37,20 @@ const TableItem = (props) => {
     openPopupPaypal,
     handleApproveClick,
     handleRejectClick,
+    data,
   } = props;
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const fullPayerPhotoPath = payerPhoto
-    ? getFilePath(payerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
-
+  const fullPayerPhotoPath = generateProfileFilePath(payerPhoto);
+  
   const proofPath = payedProof
     ? getFilePath(payedProof)
     : STATIC.DEFAULT_PHOTO_LINK;
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToUser = sessionUser?.id != payerId;
+  const canMoveToUser = isAdmin && sessionUser?.id != payerId;
 
   return (
     <>
@@ -137,7 +141,7 @@ const TableItem = (props) => {
           <SubInfoRow label="Sender's Name" value={payerName} />
           <SubInfoRow
             label="Upload Date"
-            value={fullTimeConverter(createdAt)}
+            value={fullDateConverter(createdAt)}
           />
           <SubInfoRow label="Rental Id" value={orderId} />
         </td>
@@ -185,6 +189,7 @@ const TableItem = (props) => {
                             payerEmail: payerEmail,
                             payerName: payerName,
                             payerId: payerId,
+                            data: data,
                           })
                         }
                       >
@@ -195,6 +200,7 @@ const TableItem = (props) => {
                           payerEmail={payerEmail}
                           payerName={payerName}
                           payerId={payerId}
+                          data={data}
                           sizeType="small-size"
                         />
                       </div>

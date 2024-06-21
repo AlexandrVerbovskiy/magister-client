@@ -24,7 +24,7 @@ const BaseModal = ({
   return (
     <>
       <div className={active ? "body_overlay open test" : "body_overlay"}></div>
-      <div className={className} onClick={handlePopupOverlayClick}>
+      <div className={className} onMouseDown={handlePopupOverlayClick}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {needCloseBtn && (

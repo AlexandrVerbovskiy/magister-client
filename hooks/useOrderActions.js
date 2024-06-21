@@ -7,10 +7,19 @@ const useOrderActions = ({ order }) => {
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
 
   useEffect(() => {
+    if (order.disputeId != null) {
+      setCurrentActionButtons([]);
+      return;
+    }
+
     const isOwner = order.ownerId == sessionUser?.id;
     const isTenant = order.tenantId == sessionUser?.id;
 
     const newActionButtons = [];
+
+    if(order.chatId){
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT)
+    }
 
     if (order.cancelStatus == null) {
       if (
@@ -46,9 +55,11 @@ const useOrderActions = ({ order }) => {
             STATIC.ORDER_STATUSES.PENDING_TENANT,
             STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
           ].includes(order.status)) ||
-        (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        (order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
-          isTenant)
+        (isTenant &&
+          [
+            STATIC.ORDER_STATUSES.PENDING_OWNER,
+            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+          ].includes(order.status))
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
       }
@@ -68,20 +79,20 @@ const useOrderActions = ({ order }) => {
       }
 
       if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
-        if (isTenant && order.canAcceptTenantListing) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-          );
-        }
+        if (isTenant) {
+          if (order.canAcceptTenantListing) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
+            );
+          }
 
-        if (isOwner || (isTenant && !order.canFastCancelPayed)) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
-          );
-        }
-
-        if (isTenant && order.canFastCancelPayed) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
+          if (order.canFastCancelPayed) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
+            );
+          } else {
+            newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+          }
         }
       }
 
@@ -94,10 +105,26 @@ const useOrderActions = ({ order }) => {
             STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
           );
         }
+      }
 
-        newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.CREATE_DISPUTE_BUTTON
-        );
+      if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
+        if (isOwner && !order.tenantCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW);
+        }
+
+        if (isTenant && !order.ownerCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+        }
+      }
+
+      if (
+        [
+          STATIC.ORDER_STATUSES.FINISHED,
+          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        ].includes(order.status)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
 
       const hasProcessedExtends =

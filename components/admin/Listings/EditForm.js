@@ -24,7 +24,7 @@ import {
   validateInteger,
   validatePrice,
   validateSmallText,
-  byteConverter
+  byteConverter,
 } from "../../../utils";
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
@@ -280,13 +280,13 @@ const EditForm = ({ listing, categories, defects, save }) => {
     }));
 
     return {
-      name,
-      address,
+      name: name.trim(),
+      address: address.trim(),
       categoryId: category,
-      description,
-      rentalTerms,
-      postcode,
-      city,
+      description: description.trim(),
+      rentalTerms: rentalTerms.trim(),
+      postcode: postcode.trim(),
+      city: city.trim(),
       compensationCost,
       countStoredItems,
       pricePerDay,
@@ -299,7 +299,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
       ownerId,
       active,
       defects: listingDefects,
-      dopDefect: defect,
+      dopDefect: defect.trim(),
     };
   };
 
@@ -317,7 +317,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
       let hasError = false;
 
-      if (!name) {
+      if (!name.trim()) {
         setNameError("Required field");
         hasError = true;
       }
@@ -332,7 +332,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
         hasError = true;
       }
 
-      if (!postcode) {
+      if (!postcode.trim()) {
         setPostcodeError("Required field");
         hasError = true;
       }
@@ -354,6 +354,15 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
       if (countStoredItems && validateInteger(countStoredItems) !== true) {
         setCountStoredItemsError(validateInteger(countStoredItems));
+        hasError = true;
+      }
+
+      if (
+        countStoredItems &&
+        validateInteger(countStoredItems) === true &&
+        Number(countStoredItems) == 0
+      ) {
+        setCountStoredItemsError("Field must be higher than zero");
         hasError = true;
       }
 
@@ -530,6 +539,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                                 onChange={handleChangeOwner}
                                 selectedTitle={ownerName}
                                 disabledText="You can't select not verified user"
+                                placeholder="Select Owner"
                               />
                               <ErrorSpan error={ownerIdError} />
                             </div>
@@ -778,6 +788,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                             row="7"
                             error={descriptionError}
                             setError={setDescriptionError}
+                            placeholder="Details..."
                           />
                         </div>
                       </section>
@@ -795,6 +806,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                             row="7"
                             error={rentalTermsError}
                             setError={setRentalTermsError}
+                            placeholder="Rental Terms..."
                           />
                         </div>
                       </section>

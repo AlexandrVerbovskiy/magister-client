@@ -109,7 +109,7 @@ const EditForm = ({
 
   const [listingDefects, setListingDefects] = useState([]);
 
-  const [category, setCategory] = useState(baseCategoryId);
+  const [category, setCategory] = useState(null);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -327,7 +327,7 @@ const EditForm = ({
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      categoryId: listing.categoryId ?? baseCategoryId,
+      categoryId: listing.categoryId ?? null,
       description: listing.description ?? "",
       rentalTerms: listing.rentalTerms ?? "",
       postcode: listing.postcode ?? "",
@@ -354,13 +354,13 @@ const EditForm = ({
     }));
 
     return {
-      address,
-      name,
+      address: address.trim(),
+      name: name.trim(),
       categoryId: category,
-      description,
-      rentalTerms,
-      postcode,
-      city,
+      description: description.trim(),
+      rentalTerms: rentalTerms.trim(),
+      postcode: postcode.trim(),
+      city: city.trim(),
       compensationCost,
       countStoredItems,
       pricePerDay,
@@ -371,7 +371,7 @@ const EditForm = ({
       listingImages,
       active,
       defects: listingDefects,
-      dopDefect: defect,
+      dopDefect: defect.trim(),
     };
   };
 
@@ -450,7 +450,7 @@ const EditForm = ({
   const validate = () => {
     let hasError = false;
 
-    if (!name) {
+    if (!name.trim()) {
       setNameError("Required field");
       hasError = true;
     }
@@ -465,7 +465,7 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!postcode) {
+    if (!postcode.trim()) {
       setPostcodeError("Required field");
       hasError = true;
     }
@@ -480,6 +480,13 @@ const EditForm = ({
       hasError = true;
     }
 
+    if (minRentalDays && minRentalDays > 350) {
+      setMinRentalDaysError(
+        "You cannot make the minimum rental duration longer than 350 days"
+      );
+      hasError = true;
+    }
+
     if (!countStoredItems) {
       setCountStoredItemsError("Required field");
       hasError = true;
@@ -487,6 +494,15 @@ const EditForm = ({
 
     if (countStoredItems && validateInteger(countStoredItems) !== true) {
       setCountStoredItemsError(validateInteger(countStoredItems));
+      hasError = true;
+    }
+
+    if (
+      countStoredItems &&
+      validateInteger(countStoredItems) === true &&
+      Number(countStoredItems) == 0
+    ) {
+      setCountStoredItemsError("Field must be higher than zero");
       hasError = true;
     }
 
@@ -515,7 +531,7 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (defect.length && validateBigText(defect) !== true) {
+    if (defect.trim().length && validateBigText(defect) !== true) {
       setDefectError(validateBigText(defect));
       hasError = true;
     }
@@ -624,6 +640,18 @@ const EditForm = ({
 
   const activateUpdatePopup = (e) => {
     e.preventDefault();
+
+    if (!canChange) {
+      error.set(
+        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
+      );
+      return;
+    }
+
+    if (!validate()) {
+      return false;
+    }
+
     setActiveUpdatePopup(true);
   };
 
@@ -642,7 +670,7 @@ const EditForm = ({
       if (hasChanges()) {
         activateUpdatePopup(e);
       } else {
-        await handleSubmit(true);
+        success.set(messageOnSuccess);
       }
     } else {
       handleSubmit(true);
@@ -926,7 +954,7 @@ const EditForm = ({
               <button
                 type="button"
                 disabled={disabled}
-                onClick={handleBaseUpdateClick}
+                onClick={activateUpdatePopup}
               >
                 {listing.id ? "Update Listing" : "Create Listing"}
               </button>
@@ -947,7 +975,7 @@ const EditForm = ({
                   onClick={handleChangeActive}
                   disabled={changeActiveDisabled}
                 >
-                  {listing.active ? "Delete" : "Restore"}
+                  {active ? "Delete" : "Restore"}
                 </button>
               )}
 
@@ -970,11 +998,17 @@ const EditForm = ({
           active={activeUpdatePopup}
           closeModal={() => setActiveUpdatePopup(false)}
           onAccept={handleAcceptUpdate}
-          title="Are you sure you want update listing?"
-          body={
-            "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. An approval request will be sent automatically"
+          title={
+            listing.id
+              ? "Are you sure you want update listing?"
+              : "Are you sure you want create listing?"
           }
-          acceptText="Update"
+          body={
+            listing.id
+              ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
+              : "When you create a listing, you should send request to verify it. Users will not be able to rent the tool until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
+          }
+          acceptText={listing.id ? "Create" : "Update"}
           actionsParentClass="mt-4"
         />
         <YesNoModal

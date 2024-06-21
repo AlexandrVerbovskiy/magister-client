@@ -6,7 +6,6 @@ import { getOrderInvoiceOptions } from "../../../services";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
-import { fullTimeConverter } from "../../../utils";
 
 const Invoice = ({ payment }) => {
   const { success, authToken, error } = useContext(IndiceContext);

@@ -4,18 +4,13 @@ import { Pagination, Navigation } from "swiper/modules";
 import Link from "next/link";
 import ListingItem from "../Listings/ListingItem";
 
-const ListingArea = ({ listings }) => {
+const ListingArea = ({ listings }) => { 
   return (
     <>
       <section className="main-listings-area listings-area ptb-100 bg-f9f9f9">
         <div className="container">
           <div className="section-title">
             <h2>Trending Listings Right Now</h2>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-              ipsum suspendisse ultrices gravida. Risus commodo viverra.
-            </p>
           </div>
 
           <Swiper

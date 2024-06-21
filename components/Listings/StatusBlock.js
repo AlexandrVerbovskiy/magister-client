@@ -4,11 +4,15 @@ import { separateDate } from "../../utils";
 const StatusBlock = ({
   status,
   statusCancelled,
+  disputeStatus,
   ownerId,
   tenantId,
   userId,
   endDate,
+  payedId,
   dopClass = "",
+  adminApproved,
+  waitingApproved,
 }) => {
   let orderStatus =
     status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
@@ -38,6 +42,18 @@ const StatusBlock = ({
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for payment";
+
+    if (payedId) {
+      if (waitingApproved) {
+        color = "status-background-base";
+        text = "Waiting for payment confirmation";
+      }
+
+      if (!adminApproved && !waitingApproved) {
+        color = "status-background-red";
+        text = "Payment rejected";
+      }
+    }
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
@@ -89,6 +105,19 @@ const StatusBlock = ({
   ) {
     color = "status-background-red";
     text = "In dispute";
+  }
+
+  if (
+    disputeStatus == STATIC.DISPUTE_STATUSES.OPEN ||
+    disputeStatus == STATIC.DISPUTE_STATUSES.UNSOLVED
+  ) {
+    color = "status-background-orange";
+    text = "In dispute";
+  }
+
+  if (disputeStatus == STATIC.DISPUTE_STATUSES.SOLVED) {
+    color = "status-background-green";
+    text = "Dispute solved";
   }
 
   return <div className={`${dopClass} ${color}`}>{text}</div>;

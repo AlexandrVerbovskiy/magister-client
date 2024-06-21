@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
@@ -20,12 +20,17 @@ import {
   getAdminUserEventLogListPageOptions,
   getUserEventLogList,
 } from "../../services";
-import { baseTimeListPageParams } from "../../utils";
+import { baseTimeListPageParams, baseTimeTypePageParams } from "../../utils";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
+  const [typeCount, setTypeCount] = useState(pageProps.typeCount);
+
+  const onRebuild = (data) => {
+    setTypeCount(data.typeCount);
+  };
 
   const {
     timeFilterType,
@@ -33,7 +38,7 @@ const Logs = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter(pageProps);
+  } = useBaseAdminFilter({props: pageProps});
 
   const {
     page,
@@ -57,6 +62,7 @@ const Logs = (pageProps) => {
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
+    onRebuild,
   });
 
   return (
@@ -77,9 +83,17 @@ const Logs = (pageProps) => {
                 type={type}
                 handleChangeType={handleChangeType}
                 typeOptions={[
-                  { value: "all", title: "All", count: 67 },
-                  { value: "User Actions", title: "user", count: 19 },
-                  { value: "Admin Actions", title: "admin", count: 19 },
+                  { value: "all", title: "All", count: typeCount["allCount"] },
+                  {
+                    title: "User Actions",
+                    value: "user",
+                    count: typeCount["userCount"],
+                  },
+                  {
+                    title: "Admin Actions",
+                    value: "admin",
+                    count: typeCount["adminCount"],
+                  },
                 ]}
                 filter={filter}
                 filterPlaceholder="Search by Log Id"
@@ -119,7 +133,7 @@ const Logs = (pageProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const options = await getAdminUserEventLogListPageOptions(
-    baseTimeListPageParams(context.query),
+    { ...baseTimeTypePageParams(context.query), type: context.query["type"] },
     baseSideProps.authToken
   );
 

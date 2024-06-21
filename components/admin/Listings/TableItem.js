@@ -7,9 +7,11 @@ import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import { getFilePath } from "../../../utils";
+import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
@@ -54,19 +56,19 @@ const TableItem = ({
   images,
   address,
   minRentalDays,
+  averageRating,
+  ownerAverageRating,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToOwner = sessionUser?.id != ownerId;
+  const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
 
-  const fullOwnerPhotoPath = ownerPhoto
-    ? getFilePath(ownerPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
 
   const fullListingPhotoPath = images[0]
-    ? getFilePath(images[0].link)
+    ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULT_PHOTO_LINK;
 
   return (
@@ -115,8 +117,8 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <ActiveSpan
             active={active}
-            activeText="Users can rent it"
-            inactiveText="Users can't rent it"
+            activeText="Users can view it"
+            inactiveText="Users can't view it"
             onClick={onChangeActive}
           />
         </td>
@@ -153,7 +155,10 @@ const TableItem = ({
             <SubInfoRow label="Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays} />
+            <SubInfoRow label="Min Rental Days" value={minRentalDays || "-"} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={averageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 
@@ -196,7 +201,9 @@ const TableItem = ({
               label="Phone"
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
-            <SubInfoRow label="Rating" value={0} />
+            <SubInfoRowWithChild label="Rating">
+              <SingleRatingStar value={ownerAverageRating} />
+            </SubInfoRowWithChild>
           </div>
         </td>
 

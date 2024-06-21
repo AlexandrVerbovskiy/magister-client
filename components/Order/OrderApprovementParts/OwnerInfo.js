@@ -1,47 +1,46 @@
-import { autoMultiEnding, getFilePath } from "../../../utils";
+import {
+  autoMultiEnding,
+  generateProfileFilePath,
+  getFilePath,
+} from "../../../utils";
 import STATIC from "../../../static";
+import StarRating from "../../StarRating";
 
-const OwnerInfo = ({ listing }) => {
+const OwnerInfo = ({
+  data,
+  countItemsType = "for rental",
+  title = "Owner",
+}) => {
   return (
     <div className="listings-widget listings_author">
-      <h3>Owner</h3>
+      <h3>{title}</h3>
 
       <div className="author">
         <div className="d-flex align-items-center">
           <img
-            src={
-              listing.userPhoto
-                ? getFilePath(listing.userPhoto)
-                : STATIC.DEFAULT_PHOTO_LINK
-            }
-            alt={listing.userName}
+            src={generateProfileFilePath(data.userPhoto)}
+            alt={data.userName}
           />
           <div className="title">
             <h4>
-              <a href="#">{listing.userName}</a>
+              <a href="#">{data.userName}</a>
             </h4>
             <span style={{ color: "#666666" }}>
-              {listing.userCountItems}{" "}
-              {autoMultiEnding(listing.userCountItems, "item")} for rental
+              {data.userCountItems}{" "}
+              {autoMultiEnding(data.userCountItems, "item")} {countItemsType}
             </span>
           </div>
         </div>
       </div>
 
       <div className="rating-section">
-        <div className="rating d-flex align-items-center">
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-          <span className="bx bxs-star checked"></span>
-        </div>
-        <span className="overall-rating">
-          <b>5.0</b>
-        </span>
-        <span className="rating-count">
-          <a href="#">(5 reviews)</a>
-        </span>
+        <StarRating
+          averageRating={data.userAverageRating ?? 0}
+          commentCount={data.userCommentCount ?? 0}
+          centerAlign={true}
+          countClass="rating-count"
+          pointsValue={true}
+        />
       </div>
     </div>
   );

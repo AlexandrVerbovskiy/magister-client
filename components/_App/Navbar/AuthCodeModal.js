@@ -15,7 +15,9 @@ const AuthCodeModal = ({
       </span>
 
       <form method="get" onSubmit={(e) => e.preventDefault}>
-        <div className="form-group">
+        You received a verification code on your email. Copy and paste it in the
+        field below
+        <div className="form-group mt-1">
           <input
             name="verifyCode"
             value={code}
@@ -25,9 +27,8 @@ const AuthCodeModal = ({
             className="form-control"
           />
         </div>
-
         {codeModalError && (
-          <div className="col-lg-12 col-md-12">
+          <div className="col-12">
             <div
               className="alert-dismissible fade show alert alert-danger"
               role="alert"
@@ -36,7 +37,6 @@ const AuthCodeModal = ({
             </div>
           </div>
         )}
-
         <button type="button" onClick={handleCheckCode}>
           Verify
         </button>

@@ -667,7 +667,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -796,7 +796,7 @@
     margin-top: 15px;
   }
   .single-feedback-box .client-info .title h3 {
-    font-size: 15px;
+    font-size: 16px;
   }
   .single-feedback-box .client-info .title span {
     font-size: 13px;
@@ -813,7 +813,7 @@
     margin-top: 15px;
   }
   .single-feedback-item .client-info .title h3 {
-    font-size: 15px;
+    font-size: 16px;
   }
   .single-feedback-item .client-info .title span {
     font-size: 13px;
@@ -1062,7 +1062,7 @@
     width: 35px;
     height: 35px;
     line-height: 34px;
-    font-size: 15px;
+    font-size: 16px;
     margin-left: 2px;
     margin-right: 2px;
   }
@@ -1145,7 +1145,7 @@
     font-size: 17px;
   }
   .widget-area .widget_miran_posts_thumb .item .info .title {
-    font-size: 15px;
+    font-size: 16px;
   }
   .widget-area .widget_categories ul li {
     font-size: 14px;
@@ -1241,7 +1241,7 @@
     padding-left: 0;
   }
   .comments-area .comment-author {
-    font-size: 15px;
+    font-size: 16px;
   }
   .comments-area .comment-author .avatar {
     height: 50px;
@@ -1295,7 +1295,7 @@
     font-size: 17px;
   }
   .single-products-box .products-content .price {
-    font-size: 15px;
+    font-size: 16px;
   }
   .cart-table table thead tr th {
     font-size: 14.5px;
@@ -1407,7 +1407,7 @@
     font-size: 17px;
   }
   .products-details-desc .products-review .rating {
-    font-size: 15px;
+    font-size: 16px;
   }
   .products-details-desc .products-review .rating .rating-count {
     top: -2px;
@@ -1421,7 +1421,7 @@
   }
   .products-details-desc .products-add-to-cart .input-counter input {
     height: 45px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .products-details-desc .products-add-to-cart .input-counter span {
     width: 40px;
@@ -1436,7 +1436,7 @@
     margin-right: 10px;
   }
   .products-details-tabs .nav .nav-item .nav-link {
-    font-size: 15px;
+    font-size: 16px;
   }
   .products-details-tabs .tab-content .tab-pane .products-reviews h3 {
     font-size: 17px;
@@ -1445,7 +1445,7 @@
     top: 2px;
   }
   .products-details-tabs .tab-content .tab-pane .products-reviews .rating span {
-    font-size: 15px;
+    font-size: 16px;
   }
   .products-details-tabs .tab-content .tab-pane .products-reviews .side {
     width: 20%;
@@ -1487,7 +1487,7 @@
     span {
     display: block !important;
     top: 0;
-    font-size: 15px;
+    font-size: 16px;
     margin-left: 0;
     margin-top: 5px;
   }
@@ -1646,6 +1646,7 @@
     height: 50px;
     padding-left: 15px;
   }
+  .subscribe-content .form button,
   .subscribe-content form button {
     position: relative;
     height: 50px;
@@ -1751,7 +1752,7 @@
     font-size: 28px;
   }
   .single-pricing-box .price span {
-    font-size: 15px;
+    font-size: 16px;
   }
   .single-pricing-box .pricing-features ul li i.action-close {
     padding-top: 0;
@@ -1808,7 +1809,7 @@
     margin-top: 20px;
   }
   .listings-details-image .listings-details-content ul li.phone-number a {
-    font-size: 15px;
+    font-size: 16px;
     padding-left: 50px;
     padding-right: 15px;
     padding-top: 12px;
@@ -1823,7 +1824,7 @@
     padding-left: 52px;
   }
   .listings-details-image .listings-details-content ul li.time span {
-    font-size: 15px;
+    font-size: 16px;
   }
   .listings-details-image .listings-details-content ul li.time i {
     font-size: 45px;
@@ -1832,7 +1833,7 @@
     padding-left: 52px;
   }
   .listings-details-image .listings-details-content ul li.location span {
-    font-size: 15px;
+    font-size: 16px;
   }
   .listings-details-image .listings-details-content ul li.location i {
     font-size: 45px;
@@ -1883,14 +1884,14 @@
   .listings-details-desc .listings-review {
     padding: 15px;
   }
-  .listings-details-desc .listings-review .rating .bx {
-    font-size: 15px;
+  .rating .bx {
+    font-size: 16px;
   }
-  .listings-details-desc .listings-review .rating .overall-rating {
-    font-size: 15px;
+  .rating .overall-rating {
+    font-size: 16px;
   }
-  .listings-details-desc .listings-review .rating .rating-count {
-    font-size: 15px;
+  .rating .rating-count {
+    font-size: 16px;
   }
   .listings-details-desc .listings-review .side {
     font-size: 13px;
@@ -2269,7 +2270,7 @@
     top: 3.5px;
     line-height: 15px;
     right: -17px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .breadcrumb-area .breadcrumb .item:first-child {
     margin-left: 0;
@@ -2309,7 +2310,7 @@
     right: 15px;
     opacity: 1;
     visibility: visible;
-    font-size: 15px;
+    font-size: 16px;
   }
   .invoices-box h3 {
     padding: 15px 20px;
@@ -2328,7 +2329,7 @@
     height: 35px;
   }
   .invoices-box ul li span {
-    font-size: 15px;
+    font-size: 16px;
   }
   .invoices-box ul li .default-btn {
     position: relative;
@@ -2359,7 +2360,7 @@
     .chat-list
     .chat-list-footer
     form {
-    display: block !important;
+    /*display: block !important;*/
     padding-right: 0;
   }
   .chat-content-area
@@ -2370,7 +2371,7 @@
     form
     .form-control {
     font-size: 14px;
-    margin-top: 15px;
+    /*margin-top: 15px;*/
   }
   .chat-content-area
     .content-right
@@ -2379,12 +2380,11 @@
     .chat-list-footer
     form
     .send-btn {
-    position: relative;
     top: 0;
     transform: unset;
     height: 40px;
     font-size: 14px;
-    margin-top: 15px;
+    width: 120px;
   }
   .bookings-listings-box h3 {
     padding: 15px 20px;
@@ -2400,7 +2400,7 @@
     font-size: 16px;
   }
   .bookings-listings-box table tbody td.details h4 {
-    font-size: 15px;
+    font-size: 16px;
   }
   .bookings-listings-box table tbody td.action .default-btn {
     font-size: 12px;
@@ -2420,7 +2420,7 @@
   }
   .earnings-box ul li span {
     margin-top: 10px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .earnings-box ul li ul li {
     font-size: 14px;
@@ -2571,6 +2571,8 @@
   .single-category-box.more-categories h3 {
     margin-bottom: 12px;
   }
+  
+  .subscribe-content .form button,
   .subscribe-content form button {
     position: absolute;
     height: 50px;
@@ -2890,7 +2892,7 @@
   }
   .main-banner-content .popular-search-list li {
     margin-top: 10px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .banner-area {
     padding-top: 130px;
@@ -2962,7 +2964,7 @@
   }
   .banner-content .popular-search-list li {
     margin-top: 10px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .banner-image {
     margin-left: 0;
@@ -3032,7 +3034,7 @@
   }
   .banner-wrapper-content .popular-search-list li {
     margin-top: 10px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .home-slider-area .banner-content {
     max-width: 690px;
@@ -3042,7 +3044,7 @@
     font-size: 35px;
   }
   .home-slider-area .banner-content p {
-    font-size: 15px;
+    font-size: 16px;
   }
   .map-home-area form {
     border-radius: 0;
@@ -3331,7 +3333,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-top: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -3798,7 +3800,7 @@
     padding: 15px;
   }
   .events-details-info .info li {
-    font-size: 15px;
+    font-size: 16px;
   }
   .claim-your-business-content form {
     padding: 25px;
@@ -3836,7 +3838,7 @@
   }
   .app-download-content .btn-box .playstore-btn span {
     margin-top: -1px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .app-download-content .btn-box .applestore-btn {
     padding-left: 55px;
@@ -3847,7 +3849,7 @@
   }
   .app-download-content .btn-box .applestore-btn span {
     margin-top: -1px;
-    font-size: 15px;
+    font-size: 16px;
   }
   .page-title-area {
     padding-bottom: 100px;
@@ -3922,7 +3924,7 @@
   }
   .map-container.fw-map.side-full-map {
     margin-bottom: 40px;
-    height: auto!important;
+    height: auto !important;
     padding-bottom: 0;
   }
   .map-container.fw-map.side-full-map #main-full-map {
@@ -4077,7 +4079,7 @@
     font-size: 40px;
   }
   .banner-content p {
-    font-size: 15px;
+    font-size: 16px;
   }
   .banner-content form {
     margin-top: 25px;

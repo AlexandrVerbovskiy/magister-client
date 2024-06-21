@@ -8,7 +8,13 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { getFilePath } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+} from "../../../utils";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import SingleRatingStar from "../SingleRatingStar";
 
 const ActiveSpan = ({ active }) => {
   const text = active === null ? "WAITING" : active ? "APPROVED" : "REJECTED";
@@ -61,19 +67,18 @@ const TableItem = ({
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
+  ownerAverageRating,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const { sessionUser } = useContext(IndiceContext);
+  const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToUser = sessionUser?.id != userId;
+  const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullOwnerPhotoPath = userPhoto
-    ? getFilePath(userPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const fullOwnerPhotoPath = generateProfileFilePath(userPhoto);
 
   const fullListingPhotoPath = images[0]
-    ? getFilePath(images[0].link)
+    ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULT_PHOTO_LINK;
 
   return (
@@ -198,11 +203,11 @@ const TableItem = ({
                     <SubInfoRow label="Email" value={userEmail} />
                     <SubInfoRow
                       label="Phone"
-                      value={
-                        userPhone && userPhone.length ? userPhone.length : "-"
-                      }
+                      value={userPhone && userPhone.length ? userPhone : "-"}
                     />
-                    <SubInfoRow label="Rating" value={0} />
+                    <SubInfoRowWithChild label="Rating">
+                      <SingleRatingStar value={ownerAverageRating} />
+                    </SubInfoRowWithChild>
                   </div>
                 </td>
                 <td className="px-2 last:pr-5 py-3 whitespace-nowrap overflow-separate">
@@ -213,7 +218,7 @@ const TableItem = ({
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleApproveClick(id);
+                            handleApproveClick(listingId);
                           }}
                           className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
                         >
@@ -223,7 +228,7 @@ const TableItem = ({
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleRejectClick(id);
+                            handleRejectClick(listingId);
                           }}
                           className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
                         >

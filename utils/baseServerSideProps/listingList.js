@@ -31,6 +31,7 @@ const listingList = (context) => {
 
   return {
     ...baseTimeListPageParams(context.query),
+    itemsPerPage: 6,
     cities,
     categories,
     clientIp,
