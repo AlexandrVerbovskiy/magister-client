@@ -107,11 +107,11 @@ const useChatMessageList = ({
     });
   };
 
-  const updateMessageByTempKey = (message, tempKey) => {
+  const updateMessageByField = (message, fieldValue, field) => {
     const newMessages = [];
 
     stateRef.current.messages.forEach((prevMessage) => {
-      if (prevMessage.tempKey == tempKey) {
+      if (prevMessage[field] == fieldValue) {
         prevMessage = { ...prevMessage, ...message };
       }
 
@@ -122,6 +122,12 @@ const useChatMessageList = ({
       messages: newMessages,
     });
   };
+
+  const updateMessageByTempKey = (message, tempKey) =>
+    updateMessageByField(message, tempKey, "tempKey");
+
+  const updateMessageById = (message, id) =>
+    updateMessageByField(message, id, "id");
 
   const successCreatedMessage = (message, tempKey) =>
     updateMessageByTempKey({ ...message, tempKey: null }, tempKey);
@@ -141,7 +147,38 @@ const useChatMessageList = ({
     });
   };
 
+  const deleteMessage = (messageChatId, messageId, replacementMessage) => {
+    if (chatId != messageChatId) {
+      return;
+    }
+
+    const filteredMessages = [
+      ...stateRef.current.messages.filter((message) => message.id != messageId),
+    ];
+
+    let newMessages = [];
+
+    if (replacementMessage) {
+      const chatHasMessage = !!stateRef.current.messages.find(
+        (message) => message.id == replacementMessage.id
+      );
+
+      if (chatHasMessage) {
+        newMessages = filteredMessages;
+      } else {
+        newMessages = [replacementMessage, ...filteredMessages];
+      }
+    } else {
+      newMessages = filteredMessages;
+    }
+
+    setStateRef({
+      messages: newMessages,
+    });
+  };
+
   return {
+    loading,
     entity: stateRef.current.entity,
     messages: stateRef.current.messages,
     canShowMore: stateRef.current.canShowMore,
@@ -152,6 +189,8 @@ const useChatMessageList = ({
     successCreatedMessage,
     onUpdateMessagePercent,
     onCancelledMessage,
+    updateMessage: updateMessageById,
+    deleteMessage,
   };
 };
 

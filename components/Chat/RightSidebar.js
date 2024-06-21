@@ -7,16 +7,18 @@ import { useEffect, useRef, useState } from "react";
 import { dateConverter } from "../../utils";
 
 const RightSidebar = ({
+  loading,
   messages,
   canShowMore,
   handleShowMore,
   setListWindow,
   selectedChat,
   actions,
-  entity
+  entity,
 }) => {
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
+  const [updatingMessage, setUpdatingMessage] = useState(null);
 
   useEffect(() => {
     const newMessagesToView = [];
@@ -62,6 +64,15 @@ const RightSidebar = ({
     }
   };
 
+  const handleChangeUpdatingMessageId = (messageId) => {
+    const message = messages.find((message) => message.id === messageId);
+    setUpdatingMessage(message);
+  };
+
+  const stopUpdatingMessage = () => {
+    setUpdatingMessage(null);
+  };
+
   if (!selectedChat) {
     return (
       <div className="content-right h-100">
@@ -87,7 +98,11 @@ const RightSidebar = ({
       <div className="chat-area">
         <div className="chat-list-wrapper">
           <div className="chat-list">
-            <ChatHeader entity={entity} handleGoBackClick={setListWindow} {...selectedChat} />
+            <ChatHeader
+              entity={entity}
+              handleGoBackClick={setListWindow}
+              {...selectedChat}
+            />
 
             <div
               className="chat-container"
@@ -103,6 +118,10 @@ const RightSidebar = ({
                       key={message.id ?? message.tempKey}
                       {...message}
                       stopSendMediaMessage={actions.stopSendMediaMessage}
+                      handleChangeUpdatingMessageId={
+                        handleChangeUpdatingMessageId
+                      }
+                      handleDeleteMessage={actions.deleteMessage}
                     />
                   )
                 )}
@@ -111,7 +130,12 @@ const RightSidebar = ({
             </div>
 
             <div className="chat-list-footer">
-              <SenderPanel chatId={selectedChat.id} {...actions} />
+              <SenderPanel
+                stopUpdatingMessage={stopUpdatingMessage}
+                updatingMessage={updatingMessage}
+                chatId={selectedChat.id}
+                {...actions}
+              />
             </div>
           </div>
         </div>

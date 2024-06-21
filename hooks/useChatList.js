@@ -108,7 +108,7 @@ const useChatList = ({
   };
 
   const getFilterChats = async (filter) => {
-    if (loading || !stateRef.current.canShowMore) {
+    if (loading) {
       return;
     }
 
@@ -175,7 +175,35 @@ const useChatList = ({
   const opponentOffline = (chatId) =>
     updateChatInfo(chatId, { opponentOnline: false });
 
+  const deleteMessage = (messageChatId, messageId, previousMessage) => {
+    const newChatList = [];
+
+    stateRef.current.chats.forEach((chat) => {
+      if (chat.id === messageChatId && chat.messageId == messageId) {
+        chat = {
+          ...chat,
+          messageId: previousMessage.id,
+          messageType: previousMessage.type,
+          messageSenderId: previousMessage.senderId,
+          messageCreatedAt: previousMessage.createdAt,
+        };
+      }
+
+      newChatList.push(chat);
+    });
+
+    newChatList.sort((a, b) => a.messageCreatedAt - b.messageCreatedAt);
+
+    setStateRef({
+      ...stateRef.current,
+      chats: [...newChatList],
+    });
+  };
+
+  const onGetMessage = (message) => {};
+
   return {
+    loading,
     type,
     chats: stateRef.current.chats,
     changeType,
@@ -189,6 +217,8 @@ const useChatList = ({
     finishTyping,
     opponentOnline,
     opponentOffline,
+    deleteMessage,
+    onGetMessage,
   };
 };
 
