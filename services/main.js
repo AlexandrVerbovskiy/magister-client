@@ -6,6 +6,11 @@ export const getIndexOptions = async (authToken = null) => {
   return data.body;
 };
 
+export const getViewPageWithCategoriesOptions = async () => {
+  const data = await get(`/view-page-options`);
+  return data.body;
+};
+
 export const getListingListOptions = async (params, authToken = null) => {
   const data = await post(`/listing-list-options`, params, authToken);
   return data.body;
@@ -333,10 +338,6 @@ export const getUserChatOptions = async (
   { chatType, id = null },
   authToken
 ) => {
-  const data = await post(
-    `/user-chat-options`,
-    { chatType, id },
-    authToken
-  );
+  const data = await post(`/user-chat-options`, { chatType, id }, authToken);
   return data.body;
 };

@@ -24,3 +24,15 @@ export const getChatMessageList = async (
   );
   return data.body;
 };
+
+export const getChatBaseInfo = async (
+  { chatId, lastMessageId = null },
+  authToken
+) => {
+  const data = await post(
+    `/chat-base-info`,
+    { id: chatId, lastMessageId },
+    authToken
+  );
+  return data.body;
+};

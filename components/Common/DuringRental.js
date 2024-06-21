@@ -19,7 +19,7 @@ const DuringRental = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-4 col-md-12 d-flex justify-content-center">
-            <img src="/images/rental-info.png" />
+            <img src="/images/left-rental-info.png" />
           </div>
           <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
             <div className="d-flex flex-column justify-content-between h-100">

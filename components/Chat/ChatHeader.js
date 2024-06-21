@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { generateProfileFilePath } from "../../utils";
 import OnlineStatus from "./OnlineStatus";
-import DropdownMenu from "./DropdownMenu";
+import DropdownMenu from "../_App/DropdownMenu";
+import OrderHeaderActions from "./OrderHeaderActions";
+import DisputeHeaderActions from "./DisputeHeaderActions";
 
 const ChatHeader = ({
+  entity,
   opponentName,
   opponentOnline,
   opponentPhoto,
@@ -50,9 +53,18 @@ const ChatHeader = ({
               </button>
 
               <DropdownMenu
+                entity={entity}
                 activePopup={activePopup}
                 closePopup={() => setActivePopup(false)}
-              />
+              >
+                {entity.type == "order" && (
+                  <OrderHeaderActions order={entity} />
+                )}
+
+                {entity.type == "dispute" && (
+                  <DisputeHeaderActions dispute={entity} />
+                )}
+              </DropdownMenu>
             </div>
           </li>
         </ul>

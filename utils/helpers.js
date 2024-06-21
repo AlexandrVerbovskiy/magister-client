@@ -24,7 +24,7 @@ export const cardFormat = (str) => {
 
 export const checkIsFileHasExtension = (file, extensions) => {
   let result = null;
-  
+
   extensions.forEach((extension) => {
     if (
       file &&
@@ -47,4 +47,14 @@ export const indicateMediaTypeByExtension = (type) => {
   if (STATIC.AUDIO_EXTENSIONS.includes(type.toLowerCase())) return "audio";
   if (STATIC.IMAGE_EXTENSIONS.includes(type.toLowerCase())) return "image";
   return "file";
+};
+
+export const getRelativeCoordinates = (child, parent) => {
+  const childRect = child.getBoundingClientRect();
+  const parentRect = parent.getBoundingClientRect();
+
+  return {
+    top: childRect.top - parentRect.top,
+    right: childRect.right - parentRect.right,
+  };
 };

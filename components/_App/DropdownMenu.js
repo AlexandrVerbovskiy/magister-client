@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const DropdownMenu = ({ activePopup, closePopup }) => {
+const DropdownMenu = ({ children, activePopup, closePopup, style = {} }) => {
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -21,16 +21,9 @@ const DropdownMenu = ({ activePopup, closePopup }) => {
       ref={dropdownRef}
       className={`dropdown-menu ${activePopup ? "show" : ""}`}
       tabIndex={0}
+      style={{ ...style }}
     >
-      <button className="dropdown-item d-flex align-items-center">
-        <i className="bx bx-pin"></i> Pin to Top
-      </button>
-      <button className="dropdown-item d-flex align-items-center">
-        <i className="bx bx-trash"></i> Delete Chat
-      </button>
-      <button className="dropdown-item d-flex align-items-center">
-        <i className="bx bx-block"></i> Block
-      </button>
+      {activePopup && children}
     </div>
   );
 };

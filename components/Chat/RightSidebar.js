@@ -13,17 +13,12 @@ const RightSidebar = ({
   setListWindow,
   selectedChat,
   actions,
+  entity
 }) => {
-  const firstBuildRef = useRef(true);
   const [messagesToView, setMessagesToView] = useState([]);
+  const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
 
   useEffect(() => {
-    if (messages.length == 0) {
-      firstBuildRef.current = true;
-    } else {
-      firstBuildRef.current = false;
-    }
-
     const newMessagesToView = [];
     let prevMessage = null;
 
@@ -46,7 +41,26 @@ const RightSidebar = ({
     });
 
     setMessagesToView(newMessagesToView);
+
+    if (lastShowedMessageId) {
+      setTimeout(
+        () =>
+          document
+            .querySelector("#message-" + lastShowedMessageId)
+            .scrollIntoView({ behavior: "instant", block: "end" }),
+        0
+      );
+
+      setLastShowedMessageId(null);
+    }
   }, [JSON.stringify(messages)]);
+
+  const handleScrollBody = (e) => {
+    if (e.target.scrollTop === 0) {
+      setLastShowedMessageId(messages[0].id);
+      handleShowMore();
+    }
+  };
 
   if (!selectedChat) {
     return (
@@ -73,13 +87,14 @@ const RightSidebar = ({
       <div className="chat-area">
         <div className="chat-list-wrapper">
           <div className="chat-list">
-            <ChatHeader handleGoBackClick={setListWindow} {...selectedChat} />
+            <ChatHeader entity={entity} handleGoBackClick={setListWindow} {...selectedChat} />
 
-            <div className="chat-container" data-simplebar>
+            <div
+              className="chat-container"
+              data-simplebar
+              onScroll={handleScrollBody}
+            >
               <div className="chat-content">
-                {canShowMore && !firstBuildRef.current && (
-                  <UploadTrigger onTriggerShown={handleShowMore} />
-                )}
                 {messagesToView.map((message) =>
                   message.type == "date" ? (
                     <DateLi key={message.tempKey} date={message.content} />
@@ -91,6 +106,7 @@ const RightSidebar = ({
                     />
                   )
                 )}
+                <div className="right-sidebar-bottom"></div>
               </div>
             </div>
 
