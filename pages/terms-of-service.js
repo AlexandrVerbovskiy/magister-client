@@ -1,6 +1,6 @@
 import Footer from "../components/_App/Footer";
 import Navbar from "../components/_App/Navbar";
-import { authSideProps } from "../middlewares";
+import { userSideProps } from "../middlewares";
 import { getViewPageWithCategoriesOptions } from "../services";
 
 const TermsOfService = () => {
@@ -93,6 +93,6 @@ const boostServerSideProps = async () => {
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  userSideProps(context, boostServerSideProps);
 
 export default TermsOfService;
