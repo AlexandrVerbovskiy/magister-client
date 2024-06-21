@@ -1,7 +1,9 @@
+import SmallLoader from "../_App/SmallLoader";
 import ChatLi from "./ChatLi";
 import SearchHeader from "./SearchHeader";
 
 const LeftSidebar = ({
+  loading,
   type,
   chats,
   handleChangeType,
@@ -18,6 +20,8 @@ const LeftSidebar = ({
     type == "orders"
       ? "You don't have any order chats yet"
       : "You don't have any dispute chats yet";
+
+  console.log(loading);
 
   return (
     <div className="sidebar-left h-100">
@@ -45,7 +49,9 @@ const LeftSidebar = ({
               </label>
             </div>
 
-            {filter.length ? (
+            {loading && <SmallLoader />}
+
+            {!loading && filter.length ? (
               <>
                 {filterChats.length > 0 ? (
                   <ul className="list-group list-group-user list-unstyled mb-0">

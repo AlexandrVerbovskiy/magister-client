@@ -62,6 +62,7 @@ const useChat = ({
 
       if (nextPartData == "done" && data.message) {
         bodyProps.successCreatedMessage(data.message, data.tempKey);
+        listProps.onGetMessage(data.message);
         return;
       }
 
@@ -77,7 +78,47 @@ const useChat = ({
       bodyProps.onCancelledMessage(data.tempKey)
     );
 
-    io.on("get-message", (data) => bodyProps.appendMessageToChat(data.message));
+    io.on("get-message", (data) => {
+      listProps.onGetMessage(data.message);
+      bodyProps.appendMessageToChat(data.message);
+    });
+
+    io.on("message-updated", async (data) =>
+      bodyProps.updateMessage(data.message, data.message.id)
+    );
+
+    io.on("success-message-updated", async (data) =>
+      bodyProps.updateMessage(data.message, data.message.id)
+    );
+
+    io.on("message-deleted", async (data) => {
+      bodyProps.deleteMessage(
+        data.deletedMessage.chatId,
+        data.deletedMessage.id,
+        data.replacementMessage
+      );
+
+      listProps.deleteMessage(
+        data.deletedMessage.chatId,
+        data.deletedMessage.id,
+        data.previousMessage
+      );
+    });
+
+    io.on("success-message-deleted", async (data) => {
+      bodyProps.deleteMessage(
+        data.deletedMessage.chatId,
+        data.deletedMessage.id,
+        data.replacementMessage
+      );
+
+      listProps.deleteMessage(
+        data.deletedMessage.chatId,
+        data.deletedMessage.id,
+        data.previousMessage
+      );
+    });
+
     io.on("start-typing", (data) => listProps.startTyping(data.chatId));
     io.on("finish-typing", (data) => listProps.finishTyping(data.chatId));
     io.on("opponent-online", (data) => listProps.opponentOnline(data.chatId));
@@ -129,17 +170,20 @@ const useChat = ({
     io.emit("send-message", dataToSend);
   };
 
-  const updateMessage = (messageId, content) => {
+  const updateMessage = (messageId, text) => {
+    bodyProps.updateMessage({ content: text }, messageId);
+
     io.emit("update-message", {
       messageId,
-      content,
+      text,
     });
   };
 
-  const deleteMessage = (messageId, lastMessageId) => {
+  const deleteMessage = ({ chatId, messageId }) => {
+    bodyProps.deleteMessage(chatId, messageId, null);
+
     io.emit("delete-message", {
       messageId,
-      lastMessageId,
     });
   };
 

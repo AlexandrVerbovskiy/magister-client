@@ -14725,6 +14725,13 @@ Dashboard CSS
 .chat-content-area
   .content-right
   .chat-list-wrapper
+  .chat-list:has(.editable-message-panel)
+  .chat-container {
+  height: calc(100vh - 375.5px);
+}
+.chat-content-area
+  .content-right
+  .chat-list-wrapper
   .chat-list
   .chat-container
   .chat-content {

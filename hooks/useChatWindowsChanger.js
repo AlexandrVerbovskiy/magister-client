@@ -37,22 +37,14 @@ const useChatWindowsChanger = (chatId) => {
   };
 
   const scrollBodyBottom = () => {
-    const observer = new MutationObserver((mutations, observer) => {
+    const interval = setInterval(() => {
       const chatBottom = document.querySelector(".right-sidebar-bottom");
 
-      if (!chatBottom) {
-        return;
-      }
-
       if (chatBottom) {
-        setTimeout(() => chatBottom.scrollIntoView({ behavior: "smooth" }), 0);
-        observer.disconnect();
+        chatBottom.scrollIntoView({ behavior: "smooth" });
+        clearInterval(interval);
       }
-    });
-
-    if (document) {
-      observer.observe(document, { childList: true, subtree: true });
-    }
+    }, 100);
   };
 
   return {
