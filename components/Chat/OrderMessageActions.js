@@ -1,16 +1,17 @@
 import { useOrderActions } from "../../hooks";
 import OrderActions from "../Order/OrderActions";
 
-const OrderHeaderActions = ({ order }) => {
+const OrderMessageActions = ({ order }) => {
   const currentActionButtons = useOrderActions({ order });
 
   return (
     <OrderActions
       currentActionButtons={currentActionButtons}
       order={order}
-      actionClass="dropdown-item d-flex align-items-center"
+      actionClass="message-content-action"
+      needIcon={false}
     />
   );
 };
 
-export default OrderHeaderActions;
+export default OrderMessageActions;

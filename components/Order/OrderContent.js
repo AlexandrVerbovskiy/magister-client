@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
+  calculateCurrentTotalPrice,
   checkStringDateLowerOrEqualCurrentDate,
   generateProfileFilePath,
   getDaysDifference,
-  getFilePath,
   getListingImageByType,
   increaseDateByOneDay,
   moneyFormat,
-  ownerGetsCalculate,
-  tenantPaymentCalculate,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -132,23 +130,6 @@ const OrderContent = ({
       order,
     });
 
-  const calculateCurrentTotalPrice = (
-    startDate,
-    endDate,
-    pricePerDay,
-    type = null
-  ) => {
-    if (!type) {
-      type = isOwner ? "owner" : "tenant";
-    }
-
-    const fee = type == "owner" ? order.ownerFee : order.tenantFee;
-    const calculationFunc =
-      type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
-
-    return calculationFunc(startDate, endDate, fee, pricePerDay);
-  };
-
   useEffect(() => {
     if (questions) {
       const convertedQuestions = questions.map((question) => ({
@@ -164,6 +145,22 @@ const OrderContent = ({
       setQuestionAnswerInfos([]);
     }
   }, [questions]);
+
+  const localCalculateCurrentTotalPrice = ({
+    type = null,
+    startDate,
+    endDate,
+    pricePerDay,
+  }) =>
+    calculateCurrentTotalPrice({
+      startDate,
+      endDate,
+      pricePerDay,
+      type,
+      isOwner,
+      ownerFee: order.ownerFee,
+      tenantFee: order.tenantFee,
+    });
 
   const handleUpdateQuestionDescription = (e, id) => {
     setQuestionAnswerInfos((questions) => {
@@ -266,11 +263,11 @@ const OrderContent = ({
       ? actualUpdateRequest.newEndDate
       : order.offerEndDate;
 
-    const totalPrice = calculateCurrentTotalPrice(
-      offerStartDate,
-      offerEndDate,
-      offerPricePerDay
-    );
+    const totalPrice = localCalculateCurrentTotalPrice({
+      startDate: offerStartDate,
+      endDate: offerEndDate,
+      pricePerDay: offerPricePerDay,
+    });
 
     const updatedFields = {
       offerPricePerDay,
@@ -946,12 +943,12 @@ const OrderContent = ({
                         >
                           Price with listing price per day to get $
                           {moneyFormat(
-                            calculateCurrentTotalPrice(
-                              order.offerStartDate,
-                              order.offerEndDate,
-                              order.listingPricePerDay,
-                              "owner"
-                            )
+                            localCalculateCurrentTotalPrice({
+                              startDate: order.offerStartDate,
+                              endDate: order.offerEndDate,
+                              pricePerDay: order.listingPricePerDay,
+                              type: "owner",
+                            })
                           )}
                         </li>
                       )}
@@ -965,12 +962,12 @@ const OrderContent = ({
                         >
                           Price with listing price per day to pay $
                           {moneyFormat(
-                            calculateCurrentTotalPrice(
-                              order.offerStartDate,
-                              order.offerEndDate,
-                              order.listingPricePerDay,
-                              "tenant"
-                            )
+                            localCalculateCurrentTotalPrice({
+                              startDate: order.offerStartDate,
+                              endDate: order.offerEndDate,
+                              pricePerDay: order.listingPricePerDay,
+                              type: "tenant",
+                            })
                           )}
                         </li>
                       )}
@@ -981,12 +978,12 @@ const OrderContent = ({
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to get: $
                     {moneyFormat(
-                      calculateCurrentTotalPrice(
-                        order.offerStartDate,
-                        order.offerEndDate,
-                        order.offerPricePerDay,
-                        "owner"
-                      )
+                      localCalculateCurrentTotalPrice({
+                        startDate: order.offerStartDate,
+                        endDate: order.offerEndDate,
+                        pricePerDay: order.offerPricePerDay,
+                        type: "owner",
+                      })
                     )}
                   </li>
                 )}
@@ -995,12 +992,12 @@ const OrderContent = ({
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay: $
                     {moneyFormat(
-                      calculateCurrentTotalPrice(
-                        order.offerStartDate,
-                        order.offerEndDate,
-                        order.offerPricePerDay,
-                        "tenant"
-                      )
+                      localCalculateCurrentTotalPrice({
+                        startDate: order.offerStartDate,
+                        endDate: order.offerEndDate,
+                        pricePerDay: order.offerPricePerDay,
+                        type: "tenant",
+                      })
                     )}
                   </li>
                 )}
@@ -1096,11 +1093,11 @@ const OrderContent = ({
                     >
                       Price with listing price per day: $
                       {moneyFormat(
-                        calculateCurrentTotalPrice(
-                          prevUpdateRequest.startDate,
-                          prevUpdateRequest.endDate,
-                          order.listingPricePerDay
-                        )
+                        localCalculateCurrentTotalPrice({
+                          startDate: prevUpdateRequest.startDate,
+                          endDate: prevUpdateRequest.endDate,
+                          pricePerDay: order.listingPricePerDay,
+                        })
                       )}
                     </li>
                   )}
@@ -1108,11 +1105,11 @@ const OrderContent = ({
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {moneyFormat(
-                    calculateCurrentTotalPrice(
-                      prevUpdateRequest.startDate,
-                      prevUpdateRequest.endDate,
-                      prevUpdateRequest.pricePerDay
-                    )
+                    localCalculateCurrentTotalPrice({
+                      startDate: prevUpdateRequest.startDate,
+                      endDate: prevUpdateRequest.endDate,
+                      pricePerDay: prevUpdateRequest.pricePerDay,
+                    })
                   )}
                 </li>
               </ul>
@@ -1197,11 +1194,11 @@ const OrderContent = ({
                     Price {isOwner ? "to get" : "to pay"} with listing price per
                     day: $
                     {moneyFormat(
-                      calculateCurrentTotalPrice(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newEndDate,
-                        order.listingPricePerDay
-                      )
+                      localCalculateCurrentTotalPrice({
+                        startDate: actualUpdateRequest.newStartDate,
+                        endDate: actualUpdateRequest.newEndDate,
+                        pricePerDay: order.listingPricePerDay,
+                      })
                     )}
                   </li>
                 )}
@@ -1209,11 +1206,11 @@ const OrderContent = ({
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}: $
                   {moneyFormat(
-                    calculateCurrentTotalPrice(
-                      actualUpdateRequest.newStartDate,
-                      actualUpdateRequest.newEndDate,
-                      actualUpdateRequest.newPricePerDay
-                    )
+                    localCalculateCurrentTotalPrice({
+                      startDate: actualUpdateRequest.newStartDate,
+                      endDate: actualUpdateRequest.newEndDate,
+                      pricePerDay: actualUpdateRequest.newPricePerDay,
+                    })
                   )}
                 </li>
 
@@ -1361,15 +1358,15 @@ const OrderContent = ({
                 const endDate =
                   conflictOrder.newEndDate ?? conflictOrder.offerEndDate;
 
-                const pricePrice =
+                const pricePerDay =
                   conflictOrder.newPricePerDay ??
                   conflictOrder.offerPricePerDay;
 
-                const totalPrice = calculateCurrentTotalPrice(
+                const totalPrice = localCalculateCurrentTotalPrice({
                   startDate,
                   endDate,
-                  pricePrice
-                );
+                  pricePerDay,
+                });
 
                 return (
                   <li className="form-group" key={conflictOrder.id}>
@@ -1416,7 +1413,7 @@ const OrderContent = ({
                       <BaseDateSpan startDate={startDate} endDate={endDate} />
                     </div>
 
-                    <div>Price per day: ${moneyFormat(pricePrice)}</div>
+                    <div>Price per day: ${moneyFormat(pricePerDay)}</div>
 
                     <div>
                       <b>
@@ -1613,7 +1610,7 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+              STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT
             ) && (
               <Link
                 className="default-btn"
@@ -1626,12 +1623,12 @@ const OrderContent = ({
             <PayModal
               modalActive={paypalModalActive}
               closeModal={() => setPaypalModalActive(false)}
-              amount={calculateCurrentTotalPrice(
-                order.offerStartDate,
-                order.offerEndDate,
-                order.offerPricePerDay,
-                "tenant"
-              )}
+              amount={localCalculateCurrentTotalPrice({
+                startDate: order.offerStartDate,
+                endDate: order.offerEndDate,
+                pricePerDay: order.offerPricePerDay,
+                type: "tenant",
+              })}
               orderId={order.id}
               listingName={order.listingName}
               onTenantPayed={onTenantPayed}

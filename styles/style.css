@@ -14714,10 +14714,9 @@ Dashboard CSS
   .chat-list
   .chat-container {
   height: calc(100vh - 340px);
-  background-color: #e3e6f1;
+  background-color: #DAD8EE;
   padding: 25px 20px;
   overflow-y: scroll;
-  background-image: url(/images/chat-bg.png);
   background-position: center center;
   background-size: contain;
   background-repeat: repeat;
@@ -14775,7 +14774,7 @@ Dashboard CSS
   clear: both;
   word-break: break-word;
   color: var(--whiteColor);
-  background-color: #3578e5;
+  background-color: #847BDD;
   border-radius: 5px;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.3);
 }
@@ -19072,4 +19071,26 @@ span.flatpickr-weekday {
 .chat-message > img {
   max-width: 100% !important;
   max-height: 200px !important;
+}
+
+.small-message-media {
+  max-width: 100% !important;
+  max-height: 100px !important;
+}
+
+.chat-content-area .avatar {
+  width: 50px !important;
+}
+
+.message-content-action {
+  background: #ede7f6;
+  color: #666666!important;
+  padding: 10px 20px 10px 20px;
+  border-radius: 100px;
+  border: 0;
+  transition: var(--transition);
+}
+
+.message-content-action:hover {
+  background: #c0baca!important;
 }

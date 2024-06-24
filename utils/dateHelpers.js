@@ -16,9 +16,7 @@ export const getCurrentUserUtc = () => {
 
 export const dateConverter = (date) => {
   const dateObject = new Date(date);
-
   const formattedDate = dateObject.toLocaleDateString("en-US");
-
   const formattedDateParts = formattedDate.split("/");
 
   const fullFormattedDate =
@@ -135,12 +133,11 @@ export const separateDate = (date) => {
 };
 
 export const generateDatesBetween = (start, end) => {
+  const datesObj = {};
   const startDate = new Date(start);
   const endDate = new Date(end);
 
   let currentDate = startDate;
-
-  const datesObj = {};
 
   while (currentDate <= endDate) {
     const formattedDate = separateDate(currentDate);
