@@ -7,6 +7,7 @@ import STATIC from "../../static";
 import {
   byteConverter,
   convertToSelectPopupCategories,
+  getFilePath,
   onCurrentUserLocation,
   uniqueImageId,
   validateBigText,
@@ -31,7 +32,10 @@ import {
 } from "../../services";
 import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
-import env from "../../env";
+import ENV from "../../env";
+import ImageInput from "../DashboardComponents/ImageInput";
+import ErrorSpan from "../ErrorSpan";
+import { useDropzone } from "react-dropzone";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -137,6 +141,10 @@ const EditForm = ({
 
   const [minRentalDays, setMinRentalDays] = useState("");
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
+
+  const [backgroundPhoto, setBackgroundPhoto] = useState(null);
+  const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
+  const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
 
   const [active, setActive] = useState(true);
 
@@ -343,8 +351,56 @@ const EditForm = ({
       active: listing.active ?? true,
       defects: listingDefectIds,
       dopDefect: listing.dopDefect ?? "",
+      backgroundPhotoUrl: listing.backgroundPhoto
+        ? getFilePath(listing.backgroundPhoto)
+        : null,
     };
   };
+
+  const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
+    useDropzone({
+      accept: STATIC.ACCEPT_IMAGE_FORMAT,
+      maxSize: ENV.MAX_FILE_SIZE,
+      onDrop: (acceptedFiles, fileRejections) => {
+        const newFile = acceptedFiles[0];
+
+        if (newFile) {
+          const img = new Image();
+          img.src = URL.createObjectURL(newFile);
+
+          img.onload = () => {
+            console.log(img.height, img.width);
+
+            if (3 * img.height > img.width) {
+              setBackgroundPhotoError("Need more wider photo");
+              return;
+            }
+
+            const photoWithPreview = Object.assign(newFile, {
+              preview: img.src, // Використовуємо вже створений URL
+              localId: uniqueImageId(),
+              date: Date.now(),
+            });
+
+            setBackgroundPhoto(photoWithPreview);
+            setBackgroundPhotoError(null);
+          };
+
+          img.onerror = (err) => {
+            console.error("Error loading image:", err);
+            setBackgroundPhotoError("Error loading image");
+          };
+        } else {
+          setBackgroundPhoto(null);
+        }
+
+        if (fileRejections.length > 0) {
+          setBackgroundPhotoError(fileRejections[0].errors[0].message);
+        } else {
+          setBackgroundPhotoError(null);
+        }
+      },
+    });
 
   const objectToSave = () => {
     const listingImages = linkFiles.map((elem) => ({
@@ -394,6 +450,7 @@ const EditForm = ({
     setActive(data.active);
     setListingDefects(data.defects);
     setDefect(data.dopDefect);
+    setBackgroundPhotoUrl(data.backgroundPhotoUrl);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -405,7 +462,10 @@ const EditForm = ({
   }, [listing]);
 
   const hasChanges = () => {
-    if (files.length > 0) return true;
+    if (files.length > 0 || backgroundPhoto) {
+      return true;
+    }
+
     const dataToSave = objectToSave();
     const listingToCheck = listingToState();
     return !lodash.isEqual(listingToCheck, dataToSave);
@@ -429,7 +489,7 @@ const EditForm = ({
         totalSize += file.size;
       });
 
-      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
+      const maxFileSize = Number(ENV.MAX_SUMMARY_FILE_SIZE);
 
       if (totalSize > maxFileSize) {
         throw new Error(
@@ -439,9 +499,14 @@ const EditForm = ({
       }
     }
 
+    if (backgroundPhoto) {
+      formData.append("background_photo", backgroundPhoto);
+    }
+
     const info = objectToSave();
     info["listingImages"] = JSON.stringify(info["listingImages"]);
     info["defects"] = JSON.stringify(info["defects"]);
+
     Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
     return formData;
@@ -570,6 +635,11 @@ const EditForm = ({
         const res = await save(formData, authToken);
         setFiles([]);
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
+
+        if (res.backgroundPhoto) {
+          setBackgroundPhoto(null);
+          setBackgroundPhotoUrl(getFilePath(res.backgroundPhoto));
+        }
       }
 
       if (needShowMessage) {
@@ -843,6 +913,7 @@ const EditForm = ({
             setRadius={setRadius}
           />
         </div>
+
         <EditPhotosSection
           files={files}
           linkFiles={linkFiles}
@@ -867,6 +938,60 @@ const EditForm = ({
           linkSuccessPhoto={linkSuccessPhoto}
           successLoadLinkPhoto={successLoadLinkPhoto}
         />
+
+        <div className="add-listings-box">
+          <h3>
+            Listing Background Photo
+            <div
+              style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
+            >
+              You can add file with maximum size 5 MB
+            </div>
+          </h3>
+
+          <div className="row">
+            <div className="col-lg-12 col-md-12">
+              <div
+                className="dropzone add-listings-box p-0"
+                {...getRootPropsPopup()}
+                style={{ marginBottom: "25px", height: "400px" }}
+              >
+                {backgroundPhotoUrl || backgroundPhoto ? (
+                  <div
+                    className="invoice-btn-box gallery-flex form-group"
+                    style={{ height: "400px" }}
+                  >
+                    <img
+                      src={
+                        backgroundPhoto
+                          ? backgroundPhoto.preview
+                          : backgroundPhotoUrl
+                      }
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <input name="modalImage" {...getInputPropsPopup()} />
+                  </div>
+                ) : (
+                  <div className="gallery-flex form-group">
+                    <div className="add-more-image">
+                      Drag 'n' drop some file here, or click to select file
+                    </div>
+                  </div>
+                )}
+
+                <ErrorSpan
+                  error={backgroundPhotoError}
+                  className="d-block mb-3"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {defects.length > 0 && (
           <div className="add-listings-box">
             <h3>Defects</h3>
@@ -904,6 +1029,7 @@ const EditForm = ({
             </div>
           </div>
         )}
+
         <div className="add-listings-box">
           <h3>Details</h3>
 

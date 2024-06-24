@@ -188,7 +188,7 @@ const EditPhotosSection = ({
           Photos
         </h2>
 
-        <div className="text-sm">You can add maximum 5 files</div>
+        <div className="text-sm">You can add maximum 5 files with maximum summary size 20 MB</div>
 
         <div
           className="flex flex-wrap mt-5"
