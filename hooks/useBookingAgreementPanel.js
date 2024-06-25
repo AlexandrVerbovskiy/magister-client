@@ -9,8 +9,8 @@ import STATIC from "../static";
 
 const useBookingAgreementPanel = ({
   setUpdatedOffer,
-  setActualUpdateRequest,
-  setPrevUpdateRequest,
+  setActualUpdateRequest = null,
+  setPrevUpdateRequest = null,
   onCreateUpdateRequest,
 }) => {
   const [disabled, setDisabled] = useState(false);
@@ -74,8 +74,13 @@ const useBookingAgreementPanel = ({
       );
 
       setTimeout(() => {
-        setActualUpdateRequest(null);
-        setPrevUpdateRequest(null);
+        if (setActualUpdateRequest) {
+          setActualUpdateRequest(null);
+        }
+
+        if (setPrevUpdateRequest) {
+          setPrevUpdateRequest(null);
+        }
       }, 0);
       success.set("Order accepted successfully");
     } catch (e) {
@@ -108,8 +113,13 @@ const useBookingAgreementPanel = ({
       }
 
       setTimeout(() => {
-        setActualUpdateRequest(null);
-        setPrevUpdateRequest(null);
+        if (setActualUpdateRequest) {
+          setActualUpdateRequest(null);
+        }
+
+        if (setPrevUpdateRequest) {
+          setPrevUpdateRequest(null);
+        }
       }, 0);
 
       success.set("Order cancelled successfully");

@@ -2,9 +2,11 @@ import ChatHeader from "./ChatHeader";
 import DateLi from "./DateLi";
 import SenderPanel from "./SenderPanel";
 import MessageLi from "./MessageLi";
-import UploadTrigger from "../UploadTrigger";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { dateConverter } from "../../utils";
+import OrderModals from "./OrderModals";
+import { IndiceContext } from "../../contexts";
+import { useSingleOrderActions } from "../../hooks";
 
 const RightSidebar = ({
   loading,
@@ -15,7 +17,11 @@ const RightSidebar = ({
   selectedChat,
   actions,
   entity,
+  dopEntityInfo,
+  setEntity,
 }) => {
+  const { error } = useContext(IndiceContext);
+
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
   const [updatingMessage, setUpdatingMessage] = useState(null);
@@ -64,6 +70,33 @@ const RightSidebar = ({
     }
   };
 
+  let usePopupsData = () => {};
+
+  if (entity.type == "order") {
+    const setActualUpdateRequest = (request) => {
+      setEntity({ actualUpdateRequest: request });
+    };
+
+    const onCreateUpdateRequest = () => {};
+
+    const onCancel = () => {};
+
+    const onExtendOrder = () => {};
+
+    usePopupsData = () =>
+      useSingleOrderActions({
+        order: entity,
+        setUpdatedOffer: setEntity,
+        setActualUpdateRequest,
+        onCreateUpdateRequest,
+        onCancel,
+        onExtendOrder,
+        setError: error.set,
+      });
+  }
+
+  const popupsData = usePopupsData();
+
   const handleChangeUpdatingMessageId = (messageId) => {
     const message = messages.find((message) => message.id === messageId);
     setUpdatingMessage(message);
@@ -102,6 +135,7 @@ const RightSidebar = ({
               entity={entity}
               handleGoBackClick={setListWindow}
               {...selectedChat}
+              popupsData={popupsData}
             />
 
             <div
@@ -123,6 +157,7 @@ const RightSidebar = ({
                       }
                       handleDeleteMessage={actions.deleteMessage}
                       entity={entity}
+                      popupsData={popupsData}
                     />
                   )
                 )}
@@ -141,6 +176,13 @@ const RightSidebar = ({
           </div>
         </div>
       </div>
+
+      <OrderModals
+        {...dopEntityInfo}
+        order={entity}
+        setOrder={setEntity}
+        orderPopupsData={popupsData}
+      />
     </div>
   );
 };

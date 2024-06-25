@@ -22,6 +22,7 @@ const MessageLi = ({
   handleDeleteMessage,
   chatId,
   entity,
+  popupsData
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [activePopup, setActivePopup] = useState(false);
@@ -108,6 +109,7 @@ const MessageLi = ({
             isTemp={isTemp}
             type={type}
             content={content}
+            popupsData={popupsData}
           />
 
           {isTemp ? (

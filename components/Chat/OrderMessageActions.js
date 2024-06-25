@@ -1,7 +1,7 @@
 import { useOrderActions } from "../../hooks";
 import OrderActions from "../Order/OrderActions";
 
-const OrderMessageActions = ({ order }) => {
+const OrderMessageActions = ({ order, popupsData }) => {
   const currentActionButtons = useOrderActions({ order });
 
   return (
@@ -10,6 +10,7 @@ const OrderMessageActions = ({ order }) => {
       order={order}
       actionClass="message-content-action"
       needIcon={false}
+      popupsData={popupsData}
     />
   );
 };
