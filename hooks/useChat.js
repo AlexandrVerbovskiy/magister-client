@@ -15,6 +15,7 @@ const useChat = ({
   messagesCanShowMore,
   authToken,
   entity = null,
+  dopEntityInfo = null,
 }) => {
   const { io, sessionUser } = useContext(IndiceContext);
   const [selectedChatId, setSelectedChatId] = useState(baseChatId);
@@ -38,6 +39,7 @@ const useChat = ({
     options,
     authToken,
     entity,
+    dopEntityInfo,
   });
 
   useEffect(() => {

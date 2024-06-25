@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../contexts";
 import { getChatBaseInfo, getChatMessageList } from "../services/chat";
+import useSingleOrderActions from "./useSingleOrderActions";
 
 const useChatMessageList = ({
   messages: baseMessages,
@@ -8,6 +9,7 @@ const useChatMessageList = ({
   chatId: baseChatId,
   authToken,
   entity: baseEntity = null,
+  dopEntityInfo: baseDopEntityInfo = null,
 }) => {
   const { io } = useContext(IndiceContext);
 
@@ -16,6 +18,7 @@ const useChatMessageList = ({
     canShowMore: baseCanShowMore,
     entity: baseEntity,
     chatId: baseChatId,
+    dopEntityInfo: baseDopEntityInfo,
   });
 
   const [, rewriteState] = useState(false);
@@ -85,6 +88,7 @@ const useChatMessageList = ({
         canShowMore: result.messagesCanShowMore,
         messages: [...result.messages],
         entity: result.entity,
+        dopEntityInfo: result.dopEntityInfo,
       });
     } catch (e) {
     } finally {
@@ -96,6 +100,7 @@ const useChatMessageList = ({
     setStateRef({
       entity: null,
       canShowMore: false,
+      dopEntityInfo: null,
       messages: [],
     });
   };
@@ -186,9 +191,11 @@ const useChatMessageList = ({
 
   return {
     loading,
+    setEntity: setStateRef,
     entity: stateRef.current.entity,
     messages: stateRef.current.messages,
     canShowMore: stateRef.current.canShowMore,
+    dopEntityInfo: stateRef.current.dopEntityInfo,
     handleShowMore,
     handleChangeChat,
     reset,

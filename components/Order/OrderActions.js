@@ -8,6 +8,7 @@ const OrderActions = ({
   actionClass = "d-flex align-items-center",
   needIcon = true,
   link = "/dashboard/orders",
+  popupsData,
 }) => {
   const { checkErrorData } = useOrderDateError({
     order,
@@ -26,14 +27,29 @@ const OrderActions = ({
           {!checkErrorData(
             order.requestId ? order.newStartDate : order.offerStartDate
           ).blocked && (
-            <button type="button" className={actionClass}>
+            <button
+              type="button"
+              className={actionClass}
+              onClick={() => popupsData.setAcceptOrderModalActive(true)}
+              disabled={popupsData.bookingActionsDisabled}
+            >
               {needIcon && <i className="bx bx-check-circle"></i>} Accept
             </button>
           )}
-          <button type="button" className={actionClass}>
+          <button
+            type="button"
+            className={actionClass}
+            onClick={() => popupsData.setUpdateRequestModalActive(true)}
+            disabled={popupsData.bookingActionsDisabled}
+          >
             {needIcon && <i className="bx bx-pencil"></i>} Edit
           </button>
-          <button type="button" className={actionClass}>
+          <button
+            type="button"
+            className={actionClass}
+            onClick={() => popupsData.setRejectOrderModalActive(true)}
+            disabled={popupsData.bookingActionsDisabled}
+          >
             {needIcon && <i className="bx bx-x-circle"></i>} Reject
           </button>
         </>
@@ -42,7 +58,11 @@ const OrderActions = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
       ) && (
-        <button type="button" className={actionClass}>
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => popupsData.setPaypalModalActive(true)}
+        >
           {needIcon && <i className="bx bx-wallet"></i>} Pay
         </button>
       )}
@@ -107,7 +127,11 @@ const OrderActions = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
       ) && (
-        <button type="button" className={actionClass}>
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => popupsData.setActiveDisputeWindow(true)}
+        >
           {needIcon && <i className="bx bx-transfer-alt"></i>}
           Open dispute
         </button>
@@ -116,7 +140,11 @@ const OrderActions = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
       ) && (
-        <button type="button" className={actionClass}>
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => popupsData.setExtendPopupActive(true)}
+        >
           {needIcon && <i className="bx bx-calendar"></i>} Extend Offer
         </button>
       )}
@@ -124,7 +152,11 @@ const OrderActions = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
       ) && (
-        <button type="button" className={actionClass}>
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => popupsData.setPayedCancelModalActive(true)}
+        >
           {needIcon && <i className="bx bx-x-circle"></i>} Cancel
         </button>
       )}
@@ -132,7 +164,11 @@ const OrderActions = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON
       ) && (
-        <button type="button" className={actionClass}>
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => popupsData.setCancelModalActive(true)}
+        >
           {needIcon && <i className="bx bx-x-circle"></i>} Cancel
         </button>
       )}

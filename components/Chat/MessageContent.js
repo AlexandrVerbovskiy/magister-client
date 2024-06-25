@@ -13,7 +13,7 @@ import StatusBlock from "../Listings/StatusBlock";
 import { IndiceContext } from "../../contexts";
 import OrderMessageActions from "./OrderMessageActions";
 
-const MessageContent = ({ isTemp, type, content, entity }) => {
+const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
   const isOrder = entity["type"] == "order";
   const { sessionUser } = useContext(IndiceContext);
 
@@ -121,7 +121,9 @@ const MessageContent = ({ isTemp, type, content, entity }) => {
             className="d-flex flex-column"
             style={{ gap: "10px", marginTop: "10px" }}
           >
-            {isOrder && <OrderMessageActions order={entity} />}
+            {isOrder && (
+              <OrderMessageActions order={entity} popupsData={popupsData} />
+            )}
           </div>
         </div>
       );
