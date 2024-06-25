@@ -62,7 +62,7 @@ const useChat = ({
 
       if (nextPartData == "done" && data.message) {
         bodyProps.successCreatedMessage(data.message, data.tempKey);
-        listProps.onGetMessage(data.message);
+        listProps.onGetMessage(data.message, data.opponent);
         return;
       }
 
@@ -70,16 +70,17 @@ const useChat = ({
       io.emit("file-part-upload", { ...nextPartData });
     });
 
-    io.on("success-sended-message", (data) =>
-      bodyProps.successCreatedMessage(data.message, data.tempKey)
-    );
+    io.on("success-sended-message", (data) => {
+      bodyProps.successCreatedMessage(data.message, data.tempKey);
+      listProps.onGetMessage(data.message, data.opponent);
+    });
 
     io.on("message-cancelled", async (data) =>
       bodyProps.onCancelledMessage(data.tempKey)
     );
 
     io.on("get-message", (data) => {
-      listProps.onGetMessage(data.message);
+      listProps.onGetMessage(data.message, data.opponent);
       bodyProps.appendMessageToChat(data.message);
     });
 

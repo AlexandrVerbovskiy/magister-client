@@ -189,7 +189,7 @@ const EditPhotosSection = ({
         <h3>
           Photos
           <div style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
-            You can add maximum 5 files
+            You can add maximum 5 files with maximum summary size 20 MB
           </div>
         </h3>
 

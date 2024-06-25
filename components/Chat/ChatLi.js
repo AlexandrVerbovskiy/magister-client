@@ -19,7 +19,7 @@ const ChatLi = ({ chat, selected, onClick }) => {
           <OnlineStatus online={chat.opponentOnline} />
         </div>
 
-        <div className="user-name row-dots-end">
+        <div className="w-100 user-name row-dots-end">
           <h6 className="row-dots-end">{chat.opponentName}</h6>
           <span className="d-block row-dots-end no-wrap">{chat.name}</span>
         </div>

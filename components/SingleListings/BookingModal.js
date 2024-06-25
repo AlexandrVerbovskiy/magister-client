@@ -15,7 +15,6 @@ import {
   separateDate,
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
-import YesNoModal from "../../components/_App/YesNoModal";
 import "flatpickr/dist/flatpickr.min.css";
 
 const BookingModal = ({
