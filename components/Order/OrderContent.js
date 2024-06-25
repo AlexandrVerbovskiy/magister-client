@@ -1609,6 +1609,7 @@ const OrderContent = ({
               actionButtons={currentActionButtons}
               onTenantPayed={onTenantPayed}
               onMakeExtend={onMakeExtend}
+              bankInfo={bankInfo}
             />
 
             {currentActionButtons.includes(

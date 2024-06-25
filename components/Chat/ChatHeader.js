@@ -11,6 +11,7 @@ const ChatHeader = ({
   opponentOnline,
   opponentPhoto,
   handleGoBackClick,
+  popupsData,
 }) => {
   const [activePopup, setActivePopup] = useState(false);
 
@@ -58,7 +59,7 @@ const ChatHeader = ({
                 closePopup={() => setActivePopup(false)}
               >
                 {entity.type == "order" && (
-                  <OrderHeaderActions order={entity} />
+                  <OrderHeaderActions order={entity} popupsData={popupsData} />
                 )}
 
                 {entity.type == "dispute" && (
