@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 
-const CancelModal = ({ onCancel, modalActive, closeModal }) => {
+const CancelModal = ({ handleCancel, modalActive, closeModal }) => {
   const { error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
@@ -12,7 +12,7 @@ const CancelModal = ({ onCancel, modalActive, closeModal }) => {
     }
 
     try {
-      await onCancel();
+      await handleCancel();
       setDisabled(true);
       closeModal();
     } catch (e) {

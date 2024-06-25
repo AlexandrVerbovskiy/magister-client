@@ -803,7 +803,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                               marginTop: "2px",
                             }}
                           >
-                            You can add file with maximum size 5 MB
+                            You can add file with maximum size 5 MB. Valid photo format is 3 to 1
                           </div>
                         </h2>
 

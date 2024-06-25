@@ -47,7 +47,7 @@ const OrdersListFastActinsModals = ({
   tenantBaseCommission,
   successIconPopupState,
 
-  bankInfo
+  bankInfo,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -139,12 +139,12 @@ const OrdersListFastActinsModals = ({
       <CancelModal
         modalActive={activeCancel}
         closeModal={closeActiveCancel}
-        onCancel={handleAcceptCancel}
+        handleCancel={handleAcceptCancel}
       />
       <PayedCancelModal
         modalActive={activeFastCancel}
         handleClose={closeActiveFastCancel}
-        onCancel={handleAcceptPayedFastCancel}
+        handleCancel={handleAcceptPayedFastCancel}
         disabled={payedFastCancelDisabled}
         setDisabled={setPayedFastCancelDisabled}
       />

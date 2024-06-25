@@ -313,7 +313,7 @@ const EarningTable = ({
             handleClose={() => setUpdatePopupActive(false)}
             disabled={disabled}
             setDisabled={setDisabled}
-            onCancel={onPayedFastCancel}
+            handleCancel={onPayedFastCancel}
           />
           <SuccessIconPopup
             modalActive={successIconPopupState.active}

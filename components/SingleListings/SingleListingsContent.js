@@ -146,7 +146,12 @@ const SingleListingsContent = ({
                     </span>
                   ))}
 
-                  <h3 className="row-dots-end">{listing.name}</h3>
+                  <h3
+                    className="row-dots-end"
+                    style={{ color: "var(--mainColor)" }}
+                  >
+                    {listing.name}
+                  </h3>
 
                   <StarRating
                     averageRating={listingRatingInfo["averageRating"]}
@@ -167,7 +172,7 @@ const SingleListingsContent = ({
                     )}
                     <li className="location">
                       <i className="bx bx-map"></i>
-                      <span>City</span>
+                      <span style={{ color: "var(--mainColor)" }}>City</span>
                       {listing.city}
                     </li>
                   </ul>

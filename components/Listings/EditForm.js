@@ -945,7 +945,7 @@ const EditForm = ({
             <div
               style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
             >
-              You can add file with maximum size 5 MB
+              You can add file with maximum size 5 MB. Valid photo format is 3 to 1
             </div>
           </h3>
 

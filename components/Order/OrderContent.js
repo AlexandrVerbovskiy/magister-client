@@ -25,25 +25,22 @@ import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
-import CancelTriggerModal from "./CancelTriggerModal";
-import BookingAgreementPanel from "./BookingAgreementPanel";
-import TenantGotListingApproveTriggerModal from "./TenantGotListingApproveTriggerModal";
-import FinishOrderTriggerModal from "./FinishOrderTriggerModal";
 import {
   useCreateDispute,
   useOrderActions,
   useOrderDateError,
+  useSingleOrderActions,
 } from "../../hooks";
-import PayedCancelTriggerModal from "./PayedCancelTriggerModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
-import BookingModal from "../SingleListings/BookingModal";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
 import CreateDisputeSection from "../Dispute/CreateDisputeSection";
-import PayModal from "../PayModal";
+import OrderPopups from "./OrderPopups";
+import TenantGotListingApproveModal from "./TenantGotListingApproveModal";
+import FinishOrderModal from "./FinishOrderModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
@@ -65,13 +62,73 @@ const OrderContent = ({
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
-  const [extendPopupActive, setExtendPopupActive] = useState(false);
-  const [extendApproveData, setExtendApproveData] = useState(null);
-  const [activeDisputeWindow, setActiveDisputeWindow] = useState(false);
-  const createDisputeData = useCreateDispute({ order });
-  const [paypalModalActive, setPaypalModalActive] = useState(false);
+
+  const [
+    tenantGotListingApproveModalActive,
+    setTenantGotListingApproveModalActive,
+  ] = useState(false);
+
+  const [finishOrderModalActive, setFinishOrderModalActive] = useState(false);
 
   const router = useRouter();
+  const createDisputeData = useCreateDispute({ order });
+
+  const [currentOpenImg, setCurrentOpenImg] = useState(null);
+  const closeCurrentOpenImg = () => setCurrentOpenImg(null);
+
+  const [isOwner, setIsOwner] = useState(false);
+  const [isTenant, setIsTenant] = useState(false);
+
+  const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
+  const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
+  const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
+
+  const isBookingWithoutAgreement =
+    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+    order.status == STATIC.ORDER_STATUSES.PENDING_TENANT;
+
+  const { CanBeErrorBaseDateSpan, checkErrorData, BaseDateSpan } =
+    useOrderDateError({
+      order,
+    });
+
+  useEffect(() => {
+    if (questions) {
+      const convertedQuestions = questions.map((question) => ({
+        ...question,
+        answer: false,
+        description: "",
+        question: question.name,
+        error: null,
+      }));
+
+      setQuestionAnswerInfos(convertedQuestions);
+    } else {
+      setQuestionAnswerInfos([]);
+    }
+  }, [questions]);
+
+  useEffect(() => {
+    setIsOwner(order.ownerId == sessionUser?.id);
+    setIsTenant(order.tenantId == sessionUser?.id);
+
+    if (isBookingWithoutAgreement) {
+      if (order.previousUpdateRequest) {
+        setPrevUpdateRequest(order.previousUpdateRequest);
+      } else {
+        if (order.actualUpdateRequest) {
+          setPrevUpdateRequest({
+            senderId: order.tenantId,
+            startDate: order.offerStartDate,
+            endDate: order.offerEndDate,
+            pricePerDay: order.offerPricePerDay,
+          });
+        }
+      }
+
+      setActualUpdateRequest(order.actualUpdateRequest);
+    }
+  }, [order.id]);
 
   const activateSuccessOrderPopup = ({
     closeButtonText = null,
@@ -110,41 +167,6 @@ const OrderContent = ({
       textWeight: textWeight ?? 600,
     });
   };
-
-  const [currentOpenImg, setCurrentOpenImg] = useState(null);
-  const closeCurrentOpenImg = () => setCurrentOpenImg(null);
-
-  const [isOwner, setIsOwner] = useState(false);
-  const [isTenant, setIsTenant] = useState(false);
-
-  const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
-  const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
-  const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
-
-  const isBookingWithoutAgreement =
-    order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-    order.status == STATIC.ORDER_STATUSES.PENDING_TENANT;
-
-  const { CanBeErrorBaseDateSpan, checkErrorData, BaseDateSpan } =
-    useOrderDateError({
-      order,
-    });
-
-  useEffect(() => {
-    if (questions) {
-      const convertedQuestions = questions.map((question) => ({
-        ...question,
-        answer: false,
-        description: "",
-        question: question.name,
-        error: null,
-      }));
-
-      setQuestionAnswerInfos(convertedQuestions);
-    } else {
-      setQuestionAnswerInfos([]);
-    }
-  }, [questions]);
 
   const localCalculateCurrentTotalPrice = ({
     type = null,
@@ -187,29 +209,7 @@ const OrderContent = ({
     });
   };
 
-  useEffect(() => {
-    setIsOwner(order.ownerId == sessionUser?.id);
-    setIsTenant(order.tenantId == sessionUser?.id);
-
-    if (isBookingWithoutAgreement) {
-      if (order.previousUpdateRequest) {
-        setPrevUpdateRequest(order.previousUpdateRequest);
-      } else {
-        if (order.actualUpdateRequest) {
-          setPrevUpdateRequest({
-            senderId: order.tenantId,
-            startDate: order.offerStartDate,
-            endDate: order.offerEndDate,
-            pricePerDay: order.offerPricePerDay,
-          });
-        }
-      }
-
-      setActualUpdateRequest(order.actualUpdateRequest);
-    }
-  }, [order.id]);
-
-  const onCreateUpdateRequest = async ({ price, fromDate, toDate }) => {
+  const onCreateUpdateRequest = ({ price, fromDate, toDate }) => {
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
@@ -306,6 +306,39 @@ const OrderContent = ({
     }, 100);
   };
 
+  const onCancel = () => {
+    if (isOwner) {
+      setActualUpdateRequest(null);
+      setPrevUpdateRequest(null);
+      setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED });
+    } else {
+      setOrder((prev) => ({
+        ...prev,
+        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
+      }));
+    }
+
+    activateSuccessOrderPopup({
+      text: "Booking cancelled successfully",
+    });
+  };
+
+  const onPayedFastCancel = () => {
+    activateSuccessOrderPopup({
+      text: `Order cancelled successfully. The money was returned to your paypal`,
+    });
+
+    setOrder((prev) => ({
+      ...prev,
+      cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
+    }));
+  };
+
+  const onExtendOrder = () => {
+    success.set("Order extended successfully");
+    router.push("/dashboard/orders");
+  };
+
   const validateQuestions = () => {
     let hasError = true;
 
@@ -327,7 +360,7 @@ const OrderContent = ({
     return hasError;
   };
 
-  const onTenantGotListingApprove = async () => {
+  const handleTenantGotListingApprove = async () => {
     try {
       if (!validateQuestions()) {
         return;
@@ -353,52 +386,7 @@ const OrderContent = ({
     }
   };
 
-  const onCancel = async () => {
-    try {
-      if (isOwner) {
-        await rejectOrder(order.id, authToken);
-
-        setActualUpdateRequest(null);
-        setPrevUpdateRequest(null);
-        setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED });
-      } else {
-        await orderFullCancel(order.id, authToken);
-
-        setOrder((prev) => ({
-          ...prev,
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-        }));
-      }
-
-      activateSuccessOrderPopup({
-        text: "Booking cancelled successfully",
-      });
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const onPayedFastCancel = async ({ type, paypalId, cardNumber }) => {
-    try {
-      await orderFullCancelPayed(
-        { id: order.id, type, paypalId, cardNumber },
-        authToken
-      );
-
-      activateSuccessOrderPopup({
-        text: `Order cancelled successfully. The money was returned to your paypal`,
-      });
-
-      setOrder((prev) => ({
-        ...prev,
-        cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-      }));
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const onCreateDispute = async () => {
+  const handleCreateDispute = async () => {
     try {
       const disputeId = await createDispute(
         {
@@ -417,7 +405,7 @@ const OrderContent = ({
         disputeDescription: createDisputeData.description,
       }));
 
-      setActiveDisputeWindow(false);
+      orderPopupsData.setActiveDisputeWindow(false);
 
       success.set("Dispute created success");
     } catch (e) {
@@ -425,7 +413,7 @@ const OrderContent = ({
     }
   };
 
-  const finishOrder = async () => {
+  const handleFinishOrder = async () => {
     try {
       if (!validateQuestions()) {
         return;
@@ -503,42 +491,31 @@ const OrderContent = ({
         },
       ];
 
-  const handleBeforeMakeExtend = ({ price, fromDate, toDate }) => {
-    setExtendPopupActive(false);
-    setExtendApproveData({
+  const orderPopupsData = useSingleOrderActions({
+    order,
+    setUpdatedOffer,
+    setActualUpdateRequest,
+    setPrevUpdateRequest,
+    onCreateUpdateRequest: onCreateUpdateRequest,
+    onCancel,
+    onPayedFastCancel,
+    setError: error.set,
+    onExtendOrder,
+  });
+
+  const onMakeExtend = ({ price, fromDate, toDate }) => {
+    orderPopupsData.setExtendPopupActive(false);
+    orderPopupsData.setExtendApproveData({
       price,
       fromDate,
       toDate,
     });
   };
 
-  const handleMakeBooking = async ({ feeActive, sendingMessage }) => {
-    const dayDiff = getDaysDifference(
-      order.offerEndDate,
-      extendApproveData.fromDate
-    );
-
-    await extendOrder(
-      {
-        pricePerDay: extendApproveData.price,
-        startDate: extendApproveData.fromDate,
-        endDate: extendApproveData.toDate,
-        listingId: order.listingId,
-        feeActive,
-        message: sendingMessage,
-        parentOrderId: order.id,
-      },
-      authToken
-    );
-
-    success.set("Order extended successfully");
-    router.push("/dashboard/orders");
-  };
-
-  if (extendApproveData) {
+  if (orderPopupsData.extendApproveData) {
     return (
       <OrderExtendApprovementSection
-        handleApprove={handleMakeBooking}
+        handleApprove={orderPopupsData.handleMakeBooking}
         setCurrentOpenImg={setCurrentOpenImg}
         listing={{
           listingImages: order.listingImages,
@@ -547,24 +524,24 @@ const OrderContent = ({
           userPhoto: order.ownerPhoto,
           userCountItems: order.listingCountStoredItems,
         }}
-        handleGoBack={() => setExtendApproveData(null)}
-        fromDate={extendApproveData.fromDate}
-        toDate={extendApproveData.toDate}
-        price={extendApproveData.price}
+        handleGoBack={() => orderPopupsData.setExtendApproveData(null)}
+        fromDate={orderPopupsData.extendApproveData.fromDate}
+        toDate={orderPopupsData.extendApproveData.toDate}
+        price={orderPopupsData.extendApproveData.price}
         fee={tenantBaseCommission}
       />
     );
   }
 
-  if (activeDisputeWindow) {
+  if (orderPopupsData.activeDisputeWindow) {
     return (
       <>
         <CreateDisputeSection
           {...createDisputeData}
-          onGoBack={() => setActiveDisputeWindow(false)}
+          onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
           setCurrentOpenImg={setCurrentOpenImg}
           needWrapping={false}
-          onSubmit={onCreateDispute}
+          onSubmit={handleCreateDispute}
         />
         <ImagePopup
           photoUrl={currentOpenImg}
@@ -574,6 +551,15 @@ const OrderContent = ({
       </>
     );
   }
+
+  const bookingAcceptView =
+    ((actualUpdateRequest &&
+      !checkStringDateLowerOrEqualCurrentDate(
+        actualUpdateRequest.newStartDate
+      )) ||
+      (!actualUpdateRequest &&
+        !checkStringDateLowerOrEqualCurrentDate(order.offerStartDate))) &&
+    (!order.conflictOrders || order.conflictOrders.length < 1);
 
   return (
     <>
@@ -1448,50 +1434,42 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
             ) && (
-              <BookingAgreementPanel
-                onCreateUpdateRequest={onCreateUpdateRequest}
-                acceptView={
-                  ((actualUpdateRequest &&
-                    !checkStringDateLowerOrEqualCurrentDate(
-                      actualUpdateRequest.newStartDate
-                    )) ||
-                    (!actualUpdateRequest &&
-                      !checkStringDateLowerOrEqualCurrentDate(
-                        order.offerStartDate
-                      ))) &&
-                  (!order.conflictOrders || order.conflictOrders.length < 1)
-                }
-                listingName={order.listingName}
-                blockedDates={order.blockedDates}
-                listingPricePerDay={order.listingPricePerDay}
-                proposalPrice={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newPricePerDay
-                    : order.offerPricePerDay
-                }
-                proposalStartDate={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newStartDate
-                    : order.offerStartDate
-                }
-                proposalEndDate={
-                  actualUpdateRequest
-                    ? actualUpdateRequest.newEndDate
-                    : order.offerEndDate
-                }
-                listingMinRentalDays={order.listingMinRentalDays}
-                fee={currentFee}
-                commissionType={
-                  order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
-                    ? "reject"
-                    : "sum"
-                }
-                setUpdatedOffer={setUpdatedOffer}
-                setActualUpdateRequest={setActualUpdateRequest}
-                setPrevUpdateRequest={setPrevUpdateRequest}
-                orderId={order.id}
-                ownerId={order.ownerId}
-              />
+              <>
+                {bookingAcceptView && (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() =>
+                      orderPopupsData.setAcceptOrderModalActive(true)
+                    }
+                    disabled={orderPopupsData.bookingActionsDisabled}
+                  >
+                    Accept
+                  </button>
+                )}
+
+                <button
+                  className="default-btn"
+                  type="button"
+                  onClick={() =>
+                    orderPopupsData.setUpdateRequestModalActive(true)
+                  }
+                  disabled={orderPopupsData.bookingActionsDisabled}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="default-btn error-btn"
+                  type="button"
+                  onClick={() =>
+                    orderPopupsData.setRejectOrderModalActive(true)
+                  }
+                  disabled={orderPopupsData.bookingActionsDisabled}
+                >
+                  Reject
+                </button>
+              </>
             )}
 
             {currentActionButtons.includes(
@@ -1500,7 +1478,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => setPaypalModalActive(true)}
+                onClick={() => orderPopupsData.setPaypalModalActive(true)}
               >
                 Pay
               </button>
@@ -1542,43 +1520,37 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
             ) && (
-              <TenantGotListingApproveTriggerModal
-                onApprove={onTenantGotListingApprove}
-              />
+              <button
+                className="default-btn"
+                type="button"
+                onClick={() => setTenantGotListingApproveModalActive(true)}
+              >
+                Approve
+              </button>
             )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
-            ) && <FinishOrderTriggerModal onFinish={finishOrder} />}
+            ) && (
+              <button
+                className="default-btn"
+                type="button"
+                onClick={() => setFinishOrderModalActive(true)}
+              >
+                Finish
+              </button>
+            )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
             ) && (
-              <>
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={() => setExtendPopupActive(true)}
-                >
-                  Extend Offer
-                </button>
-                <BookingModal
-                  handleMakeBooking={handleBeforeMakeExtend}
-                  price={order.offerPricePerDay}
-                  minRentalDays={order.listingMinRentalDays}
-                  fee={tenantBaseCommission}
-                  createOrderModalActive={extendPopupActive}
-                  closeModal={() => setExtendPopupActive(false)}
-                  listingName={order.listingName}
-                  blockedDates={order.blockedForRentalDates}
-                  title="Extend Now"
-                  startDate={
-                    order.offerEndDate
-                      ? increaseDateByOneDay(order.offerEndDate)
-                      : null
-                  }
-                />
-              </>
+              <button
+                className="default-btn"
+                type="button"
+                onClick={() => orderPopupsData.setExtendPopupActive(true)}
+              >
+                Extend Offer
+              </button>
             )}
 
             {currentActionButtons.includes(
@@ -1587,7 +1559,7 @@ const OrderContent = ({
               <button
                 type="button"
                 className="default-btn error-btn"
-                onClick={() => setActiveDisputeWindow(true)}
+                onClick={() => orderPopupsData.setActiveDisputeWindow(true)}
               >
                 Open dispute
               </button>
@@ -1596,17 +1568,25 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON
             ) && (
-              <CancelTriggerModal onCancel={onCancel} text="Cancel Request" />
+              <button
+                className="default-btn error-btn"
+                type="button"
+                onClick={() => orderPopupsData.setCancelModalActive(true)}
+              >
+                Cancel Request
+              </button>
             )}
 
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
             ) && (
-              <PayedCancelTriggerModal
-                onCancel={onPayedFastCancel}
-                text="Cancel Request"
-                order={order}
-              />
+              <button
+                className="default-btn error-btn"
+                type="button"
+                onClick={() => orderPopupsData.setPayedCancelModalActive(true)}
+              >
+                Cancel Request
+              </button>
             )}
 
             {currentActionButtons.includes(
@@ -1620,28 +1600,40 @@ const OrderContent = ({
               </Link>
             )}
 
-            <PayModal
-              modalActive={paypalModalActive}
-              closeModal={() => setPaypalModalActive(false)}
-              amount={localCalculateCurrentTotalPrice({
-                startDate: order.offerStartDate,
-                endDate: order.offerEndDate,
-                pricePerDay: order.offerPricePerDay,
-                type: "tenant",
-              })}
-              orderId={order.id}
-              listingName={order.listingName}
+            <OrderPopups
+              {...orderPopupsData}
+              order={order}
+              actualUpdateRequest={actualUpdateRequest}
+              tenantBaseCommission={tenantBaseCommission}
+              currentFee={currentFee}
+              actionButtons={currentActionButtons}
               onTenantPayed={onTenantPayed}
-              pricePerDay={order.offerPricePerDay}
-              offerStartDate={order.offerStartDate}
-              offerEndDate={order.offerEndDate}
-              offerFee={order.tenantFee}
-              authToken={authToken}
-              bankInfo={bankInfo}
+              onMakeExtend={onMakeExtend}
             />
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
+            ) && (
+              <TenantGotListingApproveModal
+                onApprove={handleTenantGotListingApprove}
+                modalActive={tenantGotListingApproveModalActive}
+                closeModal={() => setTenantGotListingApproveModalActive(false)}
+              />
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
+            ) && (
+              <FinishOrderModal
+                modalActive={finishOrderModalActive}
+                closeModal={() => setFinishOrderModalActive(false)}
+                onFinish={handleFinishOrder}
+              />
+            )}
           </div>
         </div>
       )}
+
       {order.disputeId && (
         <ErrorBlockMessage>
           <b>Dispute type:</b> {STATIC.DISPUTE_TYPE_TITLE[order.disputeType]}

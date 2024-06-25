@@ -17485,7 +17485,8 @@ button.button-danger:hover {
 
 .listings-details-image .swiper {
   min-height: 500px;
-  background-color: #373737;
+  /*background-color: #373737;*/
+  background-color: #f5f5f5;
 }
 
 .listings-details-image img {
