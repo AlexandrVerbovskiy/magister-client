@@ -100,4 +100,16 @@ export default {
     ".txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .mp3, .wav, .mp4, .avi, .mov, .csv, .html, .css, .js, .xml, .json, .svg, .bmp, .ico, .tif, .tiff, .psd, .ai, .eps, .wmv, .flv, .mkv, .ogg, .aac, .wma, .flac, .exe, .dll, .bat, .cmd, .apk, .jar, .cpp, .c, .java, .py, .php, .html, .htm, .asp, .aspx, .jsp, .rb, .pl, .sql, .db, .bak, .tar, .gz, .tgz, .deb, .rpm, .iso, .img, .dmg, .swf, .mpg, .mpeg, .3gp, .wmv, .mov, .ogg, .m4a, .aac, .ac3, .aiff, .au, .mid, .midi, .wma, .rtf, .odt, .ods, .odp, .odg, .odf, .log, .yaml, .m3u, .pls, .log, .ini, .cfg, .inf, .nfo, .url, .torrent, .bak, .tmp, .tmp, .old, .temp, .part, .bak, .dmp, .crash, .swp, .srt, .sub, .ass, .vtt, .ttf, .otf, .woff, .woff2, .eot, .tsv, .webp",
   BLOB_CHUNK_SIZE: 200 * 1024,
   UNBLOB_CHUNK_SIZE: 200 * 1024,
+  MESSAGE_TYPES: {
+    TEXT: "text",
+    FILE: "file",
+    VIDEO: "video",
+    AUDIO: "audio",
+    IMAGE: "image",
+    NEW_ORDER: "new-order",
+    UPDATE_ORDER: "update-order",
+    LISTING_REVIEW: "listing-review",
+    USER_REVIEW: "user-review",
+    STARTED_DISPUTE: "started-dispute",
+  },
 };

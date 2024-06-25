@@ -21,8 +21,6 @@ const LeftSidebar = ({
       ? "You don't have any order chats yet"
       : "You don't have any dispute chats yet";
 
-  console.log(loading);
-
   return (
     <div className="sidebar-left h-100">
       <div className="sidebar h-100">

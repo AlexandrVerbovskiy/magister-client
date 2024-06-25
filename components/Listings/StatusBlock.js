@@ -13,6 +13,7 @@ const StatusBlock = ({
   dopClass = "",
   adminApproved,
   waitingApproved,
+  needBackground = true,
 }) => {
   let orderStatus =
     status ?? STATIC.ORDER_STATUSES[Object.keys(STATIC.ORDER_STATUSES)[0]];
@@ -120,6 +121,10 @@ const StatusBlock = ({
     text = "Dispute solved";
   }
 
-  return <div className={`${dopClass} ${color}`}>{text}</div>;
+  return (
+    <div className={`${dopClass}${needBackground ? ` ${color}` : ""}`}>
+      {text}
+    </div>
+  );
 };
 export default StatusBlock;

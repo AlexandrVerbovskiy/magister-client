@@ -21,6 +21,7 @@ const MessageLi = ({
   handleChangeUpdatingMessageId,
   handleDeleteMessage,
   chatId,
+  entity,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [activePopup, setActivePopup] = useState(false);
@@ -40,7 +41,7 @@ const MessageLi = ({
   const closePopup = () => setActivePopup(false);
 
   const handleActivateEditPopup = (e) => {
-    if (!isAuthor || isTemp) {
+    if (!isAuthor || isTemp || !isManuallySent) {
       return;
     }
 
@@ -102,7 +103,12 @@ const MessageLi = ({
           aria-expanded="false"
           onContextMenu={handleActivateEditPopup}
         >
-          <MessageContent isTemp={isTemp} type={type} content={content} />
+          <MessageContent
+            entity={entity}
+            isTemp={isTemp}
+            type={type}
+            content={content}
+          />
 
           {isTemp ? (
             <span

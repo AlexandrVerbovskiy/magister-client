@@ -9,7 +9,7 @@ const PayedCancelModal = ({
   handleClose,
   disabled,
   setDisabled,
-  onCancel,
+  handleCancel,
 }) => {
   const { error, sessionUser } = useContext(IndiceContext);
   const [type, setType] = useState("paypal");
@@ -57,7 +57,7 @@ const PayedCancelModal = ({
     }
 
     try {
-      await onCancel({
+      await handleCancel({
         type: type.trim(),
         paypalId: paypalId.trim(),
         cardNumber: cardNumber.trim(),

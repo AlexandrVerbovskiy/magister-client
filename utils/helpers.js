@@ -1,4 +1,8 @@
 import STATIC from "../static";
+import {
+  ownerGetsCalculate,
+  tenantPaymentCalculate,
+} from "./priceCalculations";
 
 export const capitalizeFirstLetter = (str) => {
   if (!str) {
@@ -43,10 +47,13 @@ export const changeLocation = (location) =>
   window.history.pushState(null, "", location);
 
 export const indicateMediaTypeByExtension = (type) => {
-  if (STATIC.VIDEO_EXTENSIONS.includes(type.toLowerCase())) return "video";
-  if (STATIC.AUDIO_EXTENSIONS.includes(type.toLowerCase())) return "audio";
-  if (STATIC.IMAGE_EXTENSIONS.includes(type.toLowerCase())) return "image";
-  return "file";
+  if (STATIC.VIDEO_EXTENSIONS.includes(type.toLowerCase()))
+    return STATIC.MESSAGE_TYPES.VIDEO;
+  if (STATIC.AUDIO_EXTENSIONS.includes(type.toLowerCase()))
+    return STATIC.MESSAGE_TYPES.AUDIO;
+  if (STATIC.IMAGE_EXTENSIONS.includes(type.toLowerCase()))
+    return STATIC.MESSAGE_TYPES.IMAGE;
+  return STATIC.MESSAGE_TYPES.FILE;
 };
 
 export const getRelativeCoordinates = (child, parent) => {
@@ -57,4 +64,24 @@ export const getRelativeCoordinates = (child, parent) => {
     top: childRect.top - parentRect.top,
     right: childRect.right - parentRect.right,
   };
+};
+
+export const calculateCurrentTotalPrice = ({
+  startDate,
+  endDate,
+  pricePerDay,
+  ownerFee,
+  tenantFee,
+  type = null,
+  isOwner = null,
+}) => {
+  if (!type) {
+    type = isOwner ? "owner" : "tenant";
+  }
+
+  const fee = type == "owner" ? ownerFee : tenantFee;
+  const calculationFunc =
+    type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
+
+  return calculationFunc(startDate, endDate, fee, pricePerDay);
 };

@@ -122,6 +122,7 @@ const RightSidebar = ({
                         handleChangeUpdatingMessageId
                       }
                       handleDeleteMessage={actions.deleteMessage}
+                      entity={entity}
                     />
                   )
                 )}

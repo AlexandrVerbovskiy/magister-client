@@ -200,7 +200,38 @@ const useChatList = ({
     });
   };
 
-  const onGetMessage = (message) => {};
+  const onGetMessage = (message, opponent) => {
+    const newChatList = [];
+
+    stateRef.current.chats.forEach((chat) => {
+      if (chat.id === message.chatId) {
+        return;
+      }
+
+      newChatList.push(chat);
+    });
+
+    const firstChat = {
+      entityId: message.entityId,
+      entityType: message.entityType,
+      id: message.chatId,
+      messageCreatedAt: message.createdAt,
+      messageId: message.id,
+      messageSenderId: message.senderId,
+      messageType: message.type,
+      name: message.chatName,
+      opponentId: opponent.id,
+      opponentName: opponent.name,
+      opponentOnline: opponent.online,
+      opponentPhoto: opponent.photo,
+      opponentTyping: false,
+    };
+
+    setStateRef({
+      ...stateRef.current,
+      chats: [firstChat, ...newChatList],
+    });
+  };
 
   return {
     loading,

@@ -20,7 +20,6 @@ import { useRouter } from "next/router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
-
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 import StarRating from "../StarRating";
 
@@ -126,14 +125,11 @@ const SingleListingsContent = ({
               }}
               modules={[Autoplay]}
             >
-              {listing.listingImages.map((image) => (
-                <SwiperSlide key={image.link}>
-                  <img
-                    src={getListingImageByType(image.link, image.type)}
-                    alt="image"
-                  />
+              {listing.backgroundPhoto && (
+                <SwiperSlide key="main">
+                  <img src={getFilePath(listing.backgroundPhoto)} alt="image" />
                 </SwiperSlide>
-              ))}
+              )}
             </Swiper>
 
             <div className="container">
@@ -150,7 +146,12 @@ const SingleListingsContent = ({
                     </span>
                   ))}
 
-                  <h3 className="row-dots-end">{listing.name}</h3>
+                  <h3
+                    className="row-dots-end"
+                    style={{ color: "var(--mainColor)" }}
+                  >
+                    {listing.name}
+                  </h3>
 
                   <StarRating
                     averageRating={listingRatingInfo["averageRating"]}
@@ -171,7 +172,7 @@ const SingleListingsContent = ({
                     )}
                     <li className="location">
                       <i className="bx bx-map"></i>
-                      <span>City</span>
+                      <span style={{ color: "var(--mainColor)" }}>City</span>
                       {listing.city}
                     </li>
                   </ul>

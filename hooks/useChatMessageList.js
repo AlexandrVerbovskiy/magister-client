@@ -15,10 +15,10 @@ const useChatMessageList = ({
     messages: baseMessages,
     canShowMore: baseCanShowMore,
     entity: baseEntity,
+    chatId: baseChatId,
   });
 
   const [, rewriteState] = useState(false);
-  const [chatId, setChatId] = useState(baseChatId);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -31,6 +31,10 @@ const useChatMessageList = ({
     stateRef.current = { ...stateRef.current, ...newState };
     rewriteState((prev) => !prev);
   };
+
+  useEffect(() => {
+    setStateRef({ chatId: baseChatId });
+  }, [baseChatId]);
 
   const handleShowMore = async () => {
     if (loading || !stateRef.current.canShowMore) {
@@ -48,7 +52,7 @@ const useChatMessageList = ({
 
       const result = await getChatMessageList(
         {
-          chatId,
+          chatId: stateRef.current.chatId,
           lastMessageId,
         },
         authToken
@@ -65,7 +69,7 @@ const useChatMessageList = ({
   };
 
   const handleChangeChat = async (newChatId) => {
-    if (newChatId == chatId) {
+    if (newChatId == stateRef.current.chatId) {
       return;
     }
 
@@ -77,15 +81,11 @@ const useChatMessageList = ({
         authToken
       );
 
-      console.log(result.entity);
-
       setStateRef({
         canShowMore: result.messagesCanShowMore,
         messages: [...result.messages],
         entity: result.entity,
       });
-
-      setChatId(newChatId);
     } catch (e) {
     } finally {
       setLoading(false);
@@ -98,16 +98,23 @@ const useChatMessageList = ({
       canShowMore: false,
       messages: [],
     });
-    setChatId(null);
   };
 
   const appendMessageToChat = (message) => {
+    if (stateRef.current.chatId != message.chatId) {
+      return;
+    }
+
     setStateRef({
       messages: [...stateRef.current.messages, message],
     });
   };
 
   const updateMessageByField = (message, fieldValue, field) => {
+    if (stateRef.current.chatId != message.chatId) {
+      return;
+    }
+
     const newMessages = [];
 
     stateRef.current.messages.forEach((prevMessage) => {
@@ -148,7 +155,7 @@ const useChatMessageList = ({
   };
 
   const deleteMessage = (messageChatId, messageId, replacementMessage) => {
-    if (chatId != messageChatId) {
+    if (stateRef.current.chatId != messageChatId) {
       return;
     }
 
