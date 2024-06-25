@@ -252,7 +252,7 @@ const OrderContent = ({
     });
   };
 
-  const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
+  const setUpdatedOffer = ({ status, cancelStatus = null }) => {
     const offerPricePerDay = actualUpdateRequest
       ? actualUpdateRequest.newPricePerDay
       : order.offerPricePerDay;

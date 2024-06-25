@@ -264,6 +264,7 @@ const useChat = ({
       finishTyping,
       sendMediaMessage,
       stopSendMediaMessage,
+      appendMessage: bodyProps.appendMessageToChat,
     },
     windowProps,
     stopSendMediaMessage,

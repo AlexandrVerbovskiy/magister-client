@@ -34,7 +34,7 @@ const useBookingAgreementPanel = ({
       setDisabled(true);
       setUpdateRequestModalActive(false);
 
-      const request = await createOrderUpdateRequest(
+      const { chatMessage, request } = await createOrderUpdateRequest(
         {
           orderId: orderId,
           newStartDate: fromDate,
@@ -49,7 +49,8 @@ const useBookingAgreementPanel = ({
         price,
         fromDate,
         toDate,
-        requestId: request.id,
+        request,
+        chatMessage,
       });
     } catch (e) {
       error.set(e.message);

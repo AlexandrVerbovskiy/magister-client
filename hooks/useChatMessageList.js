@@ -189,6 +189,12 @@ const useChatMessageList = ({
     });
   };
 
+  const handleOrderUpdate = (order) => {
+    if (order.id == stateRef.current.entity?.id) {
+      setStateRef({ entity: { ...stateRef.current.entity, ...order } });
+    }
+  };
+
   return {
     loading,
     setEntity: setStateRef,
@@ -205,6 +211,7 @@ const useChatMessageList = ({
     onCancelledMessage,
     updateMessage: updateMessageById,
     deleteMessage,
+    handleOrderUpdate,
   };
 };
 

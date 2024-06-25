@@ -176,7 +176,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       activePayOrder.id
     );
 
-
     setActivePay(false);
     setActivePayOrder(null);
     activateSuccessOrderPopup({
@@ -431,9 +430,10 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     price,
     fromDate,
     toDate,
-    requestId,
+    request,
   }) => {
     let status = null;
+    const requestId = request.id;
 
     if (findCurrentOrderById(orderId).ownerId === sessionUser?.id) {
       status = STATIC.ORDER_STATUSES.PENDING_TENANT;

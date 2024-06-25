@@ -49,22 +49,6 @@ const OrderPopups = ({
 
   const isOwner = sessionUser.id == order.ownerId;
 
-  const localCalculateCurrentTotalPrice = ({
-    type = null,
-    startDate,
-    endDate,
-    pricePerDay,
-  }) =>
-    calculateCurrentTotalPrice({
-      startDate,
-      endDate,
-      pricePerDay,
-      type,
-      isOwner,
-      ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
-    });
-
   return (
     <>
       {actionButtons.includes(
@@ -149,10 +133,13 @@ const OrderPopups = ({
       <PayModal
         modalActive={paypalModalActive}
         closeModal={() => setPaypalModalActive(false)}
-        amount={localCalculateCurrentTotalPrice({
+        amount={calculateCurrentTotalPrice({
+          isOwner,
           startDate: order.offerStartDate,
           endDate: order.offerEndDate,
           pricePerDay: order.offerPricePerDay,
+          ownerFee: order.ownerFee,
+          tenantFee: order.tenantFee,
           type: "tenant",
         })}
         orderId={order.id}
