@@ -15,18 +15,12 @@ import STATIC from "../../static";
 import {
   approveClientGotListing,
   finishedByOwner,
-  orderFullCancel,
-  orderFullCancelPayed,
-  rejectOrder,
-  extendOrder,
-  createDispute,
 } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 import {
-  useCreateDispute,
   useOrderActions,
   useOrderDateError,
   useSingleOrderActions,
@@ -71,7 +65,6 @@ const OrderContent = ({
   const [finishOrderModalActive, setFinishOrderModalActive] = useState(false);
 
   const router = useRouter();
-  const createDisputeData = useCreateDispute({ order });
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -386,33 +379,6 @@ const OrderContent = ({
     }
   };
 
-  const handleCreateDispute = async () => {
-    try {
-      const disputeId = await createDispute(
-        {
-          orderId: order.id,
-          type: createDisputeData.type,
-          description: createDisputeData.description,
-        },
-        authToken
-      );
-
-      setOrder((prev) => ({
-        ...prev,
-        disputeId,
-        disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-        disputeType: createDisputeData.type,
-        disputeDescription: createDisputeData.description,
-      }));
-
-      orderPopupsData.setActiveDisputeWindow(false);
-
-      success.set("Dispute created success");
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
   const handleFinishOrder = async () => {
     try {
       if (!validateQuestions()) {
@@ -491,6 +457,20 @@ const OrderContent = ({
         },
       ];
 
+  const onDisputeOpened = async ({ createDisputeData, disputeId }) => {
+    setOrder((prev) => ({
+      ...prev,
+      disputeId,
+      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+      disputeType: createDisputeData.type,
+      disputeDescription: createDisputeData.description,
+    }));
+
+    orderPopupsData.setActiveDisputeWindow(false);
+
+    success.set("Dispute created success");
+  };
+
   const orderPopupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -501,6 +481,7 @@ const OrderContent = ({
     onPayedFastCancel,
     setError: error.set,
     onExtendOrder,
+    onDisputeOpened,
   });
 
   const onMakeExtend = ({ price, fromDate, toDate }) => {
@@ -537,11 +518,11 @@ const OrderContent = ({
     return (
       <>
         <CreateDisputeSection
-          {...createDisputeData}
+          {...orderPopupsData.createDisputeData}
           onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
           setCurrentOpenImg={setCurrentOpenImg}
           needWrapping={false}
-          onSubmit={handleCreateDispute}
+          onSubmit={orderPopupsData.handleOpenDispute}
         />
         <ImagePopup
           photoUrl={currentOpenImg}

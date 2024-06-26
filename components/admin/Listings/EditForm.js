@@ -294,8 +294,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
           img.src = URL.createObjectURL(newFile);
 
           img.onload = () => {
-            console.log(img.height, img.width);
-
             if (3 * img.height > img.width) {
               setBackgroundPhotoError("Need more wider photo");
               return;

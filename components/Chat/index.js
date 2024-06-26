@@ -12,7 +12,6 @@ const Chat = ({
   actions,
   windowProps,
 }) => {
-
   return (
     <>
       <DashboardNavbar />

@@ -16,13 +16,14 @@ const OrderInfoMessageContent = ({
   popupsData,
   type,
   duration,
+  title,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
   return (
     <div className="d-flex flex-column align-items-center">
       <div className="mb-1">
-        <b>Request</b>
+        <b>{title}</b>
       </div>
       <img
         height="100px"

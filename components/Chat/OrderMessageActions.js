@@ -42,9 +42,31 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         type == STATIC.MESSAGE_TYPES.UPDATE_ORDER &&
+        order.actualUpdateRequest &&
         order.actualUpdateRequest.id == content.requestId &&
         ((isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
           (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT))
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.FINISHED &&
+        order.status == STATIC.ORDER_STATUSES.FINISHED
       ) {
         canActions = true;
       }

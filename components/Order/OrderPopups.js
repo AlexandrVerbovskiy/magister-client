@@ -7,6 +7,7 @@ import PayModal from "../PayModal";
 import { calculateCurrentTotalPrice, increaseDateByOneDay } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
+import DisputeModal from "./DisputeModal";
 
 const OrderPopups = ({
   order,

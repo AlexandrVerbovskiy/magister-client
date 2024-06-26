@@ -4,8 +4,29 @@ import { authSideProps } from "../../../middlewares";
 import { getUserChatOptions } from "../../../services";
 
 const Chat = (props) => {
-  const chatProps = useChat(props);
-  return <BaseChat {...chatProps} />;
+  const {
+    listProps,
+    bodyProps,
+    handleSelectChat,
+    selectedChat,
+    handleChangeType,
+    actions,
+    windowProps,
+    stopSendMediaMessage,
+  } = useChat(props);
+
+  return (
+    <BaseChat
+      listProps={listProps}
+      bodyProps={bodyProps}
+      handleSelectChat={handleSelectChat}
+      selectedChat={selectedChat}
+      handleChangeType={handleChangeType}
+      actions={actions}
+      windowProps={windowProps}
+      stopSendMediaMessage={stopSendMediaMessage}
+    />
+  );
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {

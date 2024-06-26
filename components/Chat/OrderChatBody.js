@@ -1,13 +1,17 @@
 import { useContext } from "react";
-import { useSingleOrderActions } from "../../hooks";
+import { useOrderActions, useSingleOrderActions } from "../../hooks";
 import ChatHeader from "./ChatHeader";
-import DateLi from "./DateLi";
 import SenderPanel from "./SenderPanel";
 import MessageLi from "./MessageLi";
 import OrderModals from "./OrderModals";
 import { IndiceContext } from "../../contexts";
-import { calculateCurrentTotalPrice } from "../../utils";
+import {
+  calculateCurrentTotalPrice,
+  dateName,
+  getDaysDifference,
+} from "../../utils";
 import STATIC from "../../static";
+import DisputeModal from "../Order/DisputeModal";
 
 const OrderChatBody = ({
   handleScrollBody,
@@ -15,19 +19,23 @@ const OrderChatBody = ({
   handleChangeUpdatingMessageId,
   messagesToView,
   updatingMessage,
-  setEntity: setOrder,
+  updateEntity: updateOrder,
   entity: order,
   setListWindow,
   selectedChat,
   actions,
   dopEntityInfo: dopOrderInfo,
 }) => {
+  const currentActionButtons = useOrderActions({
+    order,
+  });
+
   const { error, sessionUser, success } = useContext(IndiceContext);
   const isOwner = sessionUser.id == order.ownerId;
   const actualUpdateRequest = order.actualUpdateRequest;
 
   const setActualUpdateRequest = (request) => {
-    setOrder({ actualUpdateRequest: request });
+    updateOrder({ actualUpdateRequest: request });
   };
 
   const setUpdatedOffer = ({ status, cancelStatus = null }) => {
@@ -66,10 +74,9 @@ const OrderChatBody = ({
       updatedFields["cancelStatus"] = cancelStatus;
     }
 
-    setOrder((prev) => ({
-      ...prev,
+    updateOrder({
       ...updatedFields,
-    }));
+    });
   };
 
   const onCreateUpdateRequest = ({
@@ -95,28 +102,63 @@ const OrderChatBody = ({
       newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
 
-    setOrder(newOrderPart);
+    updateOrder(newOrderPart);
 
     actions.appendMessage(chatMessage);
   };
 
-  const onCancel = () => {
+  const onCancel = ({ chatMessage }) => {
     if (isOwner) {
       setUpdatedOffer({
         status: STATIC.ORDER_STATUSES.REJECTED,
         actualUpdateRequest: null,
       });
     } else {
-      setOrder({
+      updateOrder({
         cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
       });
     }
+
+    actions.appendMessage(chatMessage);
+  };
+
+  const onPayedFastCancel = ({ chatMessage }) => {
+    updateOrder({
+      cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
+    });
+
+    actions.appendMessage(chatMessage);
   };
 
   const onExtendOrder = () => {
     success.set(
       "Order extended successfully. You can discuss the new terms in a new chat"
     );
+  };
+
+  const onAcceptOrder = ({ chatMessage, status }) => {
+    updateOrder({ status });
+    actions.appendMessage(chatMessage);
+  };
+
+  const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
+    updateOrder({ status, cancelStatus });
+    actions.appendMessage(chatMessage);
+  };
+
+  const onDisputeOpened = async ({
+    chatMessage,
+    createDisputeData,
+    disputeId,
+  }) => {
+    updateOrder({
+      disputeId,
+      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+      disputeType: createDisputeData.type,
+      disputeDescription: createDisputeData.description,
+    });
+
+    actions.appendMessage(chatMessage);
   };
 
   const popupsData = useSingleOrderActions({
@@ -127,7 +169,15 @@ const OrderChatBody = ({
     onCancel,
     onExtendOrder,
     setError: error.set,
+    onAcceptOrder,
+    onRejectOrder,
+    onPayedFastCancel,
+    onDisputeOpened,
   });
+
+  /*  activeDisputeWindow,
+  setActiveDisputeWindow,
+  handleOpenDispute, */
 
   return (
     <>
@@ -145,10 +195,27 @@ const OrderChatBody = ({
           onScroll={handleScrollBody}
         >
           <div className="chat-content">
-            {messagesToView.map((message) =>
-              message.type == "date" ? (
-                <DateLi key={message.tempKey} date={message.content} />
-              ) : (
+            {messagesToView.map((message) => {
+              if (message.type == "date") {
+                return (
+                  <div
+                    key={message.tempKey}
+                    className="badge badge-pill badge-light my-3"
+                  >
+                    {dateName(message.content)}
+                  </div>
+                );
+              }
+
+              if (message.type == STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE) {
+                return (
+                  <div key={message.id} className="badge badge-light gray badge-pill chat-message my-3">
+                    Dispute resolved
+                  </div>
+                );
+              }
+
+              return (
                 <MessageLi
                   key={message.id ?? message.tempKey}
                   {...message}
@@ -158,8 +225,8 @@ const OrderChatBody = ({
                   entity={order}
                   popupsData={popupsData}
                 />
-              )
-            )}
+              );
+            })}
             <div className="right-sidebar-bottom"></div>
           </div>
         </div>
@@ -177,9 +244,19 @@ const OrderChatBody = ({
       <OrderModals
         {...dopOrderInfo}
         order={order}
-        setOrder={setOrder}
         orderPopupsData={popupsData}
       />
+
+      {currentActionButtons.includes(
+        STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+      ) && (
+        <DisputeModal
+          {...popupsData.createDisputeData}
+          handleOpenDispute={popupsData.handleOpenDispute}
+          modalActive={popupsData.activeDisputeWindow}
+          closeModal={() => popupsData.setActiveDisputeWindow(false)}
+        />
+      )}
     </>
   );
 };

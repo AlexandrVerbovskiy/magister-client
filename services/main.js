@@ -311,7 +311,7 @@ export const createRenterReview = async (
 ) => {
   const data = await post(
     `/create-tenant-review`,
-    { tenantCommentInfo, orderId },
+    { userCommentInfo: tenantCommentInfo, orderId },
     authToken
   );
   return data.body;
@@ -323,7 +323,7 @@ export const createOwnerReview = async (
 ) => {
   const data = await post(
     `/create-owner-review`,
-    { ownerCommentInfo, listingCommentInfo, orderId },
+    { userCommentInfo: ownerCommentInfo, listingCommentInfo, orderId },
     authToken
   );
   return data.body;

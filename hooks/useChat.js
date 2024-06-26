@@ -82,8 +82,14 @@ const useChat = ({
     );
 
     io.on("get-message", (data) => {
-      listProps.onGetMessage(data.message, data.opponent);
       bodyProps.appendMessageToChat(data.message);
+      listProps.onGetMessage(data.message, data.opponent);
+    });
+
+    io.on("update-order-message", (data) => {
+      bodyProps.appendMessageToChat(data.message);
+      bodyProps.handleOrderUpdate(data.orderPart);
+      listProps.onGetMessage(data.message, data.opponent);
     });
 
     io.on("message-updated", async (data) =>

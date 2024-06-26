@@ -2,11 +2,13 @@ import { useContext, useState } from "react";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import { IndiceContext } from "../contexts";
 import {
+  createDispute,
   extendOrder,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
 } from "../services";
+import useCreateDispute from "./useCreateDispute";
 
 const useSingleOrderActions = ({
   order,
@@ -17,6 +19,10 @@ const useSingleOrderActions = ({
   onCancel,
   onExtendOrder,
   setError,
+  onAcceptOrder = null,
+  onRejectOrder = null,
+  onPayedFastCancel = null,
+  onDisputeOpened = null,
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
@@ -28,8 +34,30 @@ const useSingleOrderActions = ({
   const [cancelModalActive, setCancelModalActive] = useState(false);
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
+  const createDisputeData = useCreateDispute({ order });
 
   const ownerId = order.ownerId;
+
+  const handleOpenDispute = async () => {
+    try {
+      const result = await createDispute(
+        {
+          orderId: order.id,
+          type: createDisputeData.type,
+          description: createDisputeData.description,
+        },
+        authToken
+      );
+
+      if (onDisputeOpened) {
+        onDisputeOpened({ ...result, createDisputeData });
+      }
+
+      setActiveDisputeWindow(false);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
 
   const {
     disabled: bookingActionsDisabled,
@@ -48,19 +76,22 @@ const useSingleOrderActions = ({
     setPrevUpdateRequest,
     ownerId,
     onCreateUpdateRequest,
+    onAcceptOrder,
+    onRejectOrder,
   });
 
   const isOwner = sessionUser.id == ownerId;
 
   const handleCancelApprove = async () => {
     try {
+      let result = null;
       if (isOwner) {
-        await rejectOrder(order.id, authToken);
+        result = await rejectOrder(order.id, authToken);
       } else {
-        await orderFullCancel(order.id, authToken);
+        result = await orderFullCancel(order.id, authToken);
       }
 
-      onCancel();
+      onCancel(result);
     } catch (e) {
       setError(e.message);
     }
@@ -68,10 +99,14 @@ const useSingleOrderActions = ({
 
   const handlePayedFastCancel = async ({ type, paypalId, cardNumber }) => {
     try {
-      await orderFullCancelPayed(
+      const result = await orderFullCancelPayed(
         { id: order.id, type, paypalId, cardNumber },
         authToken
       );
+
+      if (onPayedFastCancel) {
+        onPayedFastCancel(result);
+      }
     } catch (e) {
       setError(e.message);
     }
@@ -95,6 +130,7 @@ const useSingleOrderActions = ({
   };
 
   return {
+    createDisputeData,
     bookingActionsDisabled,
     updateRequestModalActive,
     setUpdateRequestModalActive,
@@ -124,6 +160,8 @@ const useSingleOrderActions = ({
     handleCancelApprove,
     handlePayedFastCancel,
     handleMakeBooking,
+
+    handleOpenDispute,
   };
 };
 

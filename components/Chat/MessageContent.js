@@ -4,6 +4,25 @@ import STATIC from "../../static";
 import { getDaysDifference, calculateCurrentTotalPrice } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
+import SuccessIcon from "../Icons/SuccessIcon";
+import ErrorIcon from "../Icons/ErrorIcon";
+import OrderUpdateStatusMessageContent from "./OrderUpdateStatusMessageContent";
+import OrderMessageActions from "./OrderMessageActions";
+import StarRating from "../StarRating";
+
+const PointStarInfo = ({ label, value }) => {
+  return (
+    <div>
+      <label>{label}</label>
+      <StarRating
+        averageRating={value}
+        checked={true}
+        checkedOnlyActive={true}
+        uncheckedStarClassName="bxs-star"
+      />
+    </div>
+  );
+};
 
 const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
   let src = "";
@@ -81,7 +100,183 @@ const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
           popupsData={popupsData}
           type={type}
           duration={duration}
+          title={
+            type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
+              ? "Updating Request"
+              : "Request"
+          }
         />
+      );
+    }
+
+    if (
+      [
+        STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
+        STATIC.MESSAGE_TYPES.TENANT_PAYED,
+        STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT,
+        STATIC.MESSAGE_TYPES.FINISHED,
+        STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
+      ].includes(type)
+    ) {
+      let title = "Proposal accepted";
+
+      if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED) {
+        title = "Paid for the rental";
+      }
+
+      if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {
+        title = "Got the item";
+      }
+
+      if (type == STATIC.MESSAGE_TYPES.FINISHED) {
+        title = "Order finished";
+      }
+
+      if (type == STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST) {
+        title = "Confirmed the cancellation of the order";
+      }
+
+      return (
+        <OrderUpdateStatusMessageContent
+          content={content}
+          entity={entity}
+          popupsData={popupsData}
+          type={type}
+          title={title}
+          Icon={SuccessIcon}
+        />
+      );
+    }
+
+    if (
+      [
+        STATIC.MESSAGE_TYPES.CANCELED_ORDER,
+        STATIC.MESSAGE_TYPES.REJECTED_ORDER,
+        STATIC.MESSAGE_TYPES.CREATED_CANCEL_REQUEST,
+      ].includes(type)
+    ) {
+      let title = "Order canceled";
+
+      if (type == STATIC.MESSAGE_TYPES.REJECTED_ORDER) {
+        title = "Proposal rejected";
+      }
+
+      if (type == STATIC.MESSAGE_TYPES.CREATED_CANCEL_REQUEST) {
+        title = "Created cancel request";
+      }
+
+      return (
+        <OrderUpdateStatusMessageContent
+          content={content}
+          entity={entity}
+          popupsData={popupsData}
+          type={type}
+          title={title}
+          Icon={ErrorIcon}
+        />
+      );
+    }
+
+    if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
+      return (
+        <div className="d-flex flex-column">
+          <div className="text-center">
+            <b>Started dispute</b>
+          </div>
+
+          <div className="my-1">
+            <b>Type: </b>
+            {STATIC.DISPUTE_TYPE_TITLE[content.type]}
+          </div>
+
+          <div className="my-1">
+            <b>Description: </b>
+            {content.description}
+          </div>
+
+          <div
+            className="d-flex flex-column align-items-center"
+            style={{ gap: "10px", marginTop: "10px" }}
+          >
+            <OrderMessageActions
+              type={type}
+              order={entity}
+              popupsData={popupsData}
+              content={content}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    if (STATIC.MESSAGE_TYPES.LISTING_REVIEW == type) {
+      return (
+        <div className="d-flex flex-column align-items-center">
+          <div>
+            <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          </div>
+
+          <div className="my-1">
+            <div>
+              <PointStarInfo label="Punctuality" value={punctuality} />
+              <PointStarInfo
+                label="General Experience"
+                value={generalExperience}
+              />
+              <PointStarInfo label="Communication" value={communication} />
+            </div>
+
+            <div>
+              <PointStarInfo label="Reliability" value={reliability} />
+              <PointStarInfo label="Kindness" value={kindness} />
+              <PointStarInfo label="Flexibility" value={flexibility} />
+            </div>
+          </div>
+
+          <div className="my-1">
+            <b>Description: </b>
+            {content.description}
+          </div>
+        </div>
+      );
+    }
+
+    if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+      return (
+        <div className="d-flex flex-column align-items-center">
+          <div>
+            <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          </div>
+
+          <div className="my-1">
+            <div>
+              <PointStarInfo label="Quality" value={content.quality} />
+              <PointStarInfo
+                label="Listing Accuracy"
+                value={content.listingAccuracy}
+              />
+              <PointStarInfo label="Utility" value={content.utility} />
+            </div>
+
+            <div>
+              <PointStarInfo label="Condition" value={content.condition} />
+              <PointStarInfo label="Performance" value={content.performance} />
+              <PointStarInfo label="Location" value={content.location} />
+            </div>
+          </div>
+
+          <div className="my-1">
+            <b>Description: </b>
+            {content.description}
+          </div>
+
+          {content.leaveFeedback && (
+            <div className="my-1">
+              <b>Private feedback: </b>
+              {content.leaveFeedback}
+            </div>
+          )}
+        </div>
       );
     }
   }

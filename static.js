@@ -108,8 +108,18 @@ export default {
     IMAGE: "image",
     NEW_ORDER: "new-order",
     UPDATE_ORDER: "update-order",
+    ACCEPTED_ORDER: "accepted-order",
+    REJECTED_ORDER: "rejected-order",
+    CANCELED_ORDER: "canceled-order",
+    TENANT_PAYED: "tenant-payed",
+    PENDED_TO_CLIENT: "pending_item_to_client",
+    FINISHED: "finished",
+    CREATED_CANCEL_REQUEST: "created-cancel",
+    ACCEPTED_CANCEL_REQUEST: "accepted-cancel",
+
     LISTING_REVIEW: "listing-review",
     USER_REVIEW: "user-review",
     STARTED_DISPUTE: "started-dispute",
+    RESOLVED_DISPUTE: "resolved-dispute",
   },
 };

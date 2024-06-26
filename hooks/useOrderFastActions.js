@@ -74,7 +74,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const onCreateDispute = async () => {
     try {
-      const disputeId = await createDispute(
+      const { disputeId } = await createDispute(
         {
           orderId: orderToDispute.id,
           type: createDisputeData.type,

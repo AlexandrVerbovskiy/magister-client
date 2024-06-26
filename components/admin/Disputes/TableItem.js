@@ -182,7 +182,7 @@ const TableItem = ({
         >
           <div>
             <span className="font-semibold flex items-center">Issue</span>
-            <SubInfoRow value={type} />
+            <SubInfoRow value={STATIC.DISPUTE_TYPE_TITLE[type]} />
 
             {solution && (
               <>

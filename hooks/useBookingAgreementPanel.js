@@ -11,6 +11,8 @@ const useBookingAgreementPanel = ({
   setUpdatedOffer,
   setActualUpdateRequest = null,
   setPrevUpdateRequest = null,
+  onAcceptOrder = null,
+  onRejectOrder = null,
   onCreateUpdateRequest,
 }) => {
   const [disabled, setDisabled] = useState(false);
@@ -67,7 +69,11 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      await acceptOrder(orderId, authToken);
+      const result = await acceptOrder(orderId, authToken);
+
+      if (onAcceptOrder) {
+        onAcceptOrder(result);
+      }
 
       setUpdatedOffer(
         { status: STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT },
@@ -99,7 +105,11 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      await rejectOrder(orderId, authToken);
+      const result = await rejectOrder(orderId, authToken);
+
+      if (onRejectOrder) {
+        onRejectOrder(result);
+      }
 
       if (isOwner) {
         setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED }, orderId);

@@ -2,11 +2,12 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import { useOrderActions } from "../../hooks";
 import OrderPopups from "../Order/OrderPopups";
+import STATIC from "../../static";
 
 const OrderModals = ({
   tenantBaseCommission,
   order,
-  setOrder,
+  updateOrder,
   orderPopupsData,
   bankInfo,
 }) => {
@@ -30,7 +31,7 @@ const OrderModals = ({
 
   const onTenantPayed = () => {
     setTimeout(() => {
-      setOrder({
+      updateOrder({
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
       });
     }, 100);
