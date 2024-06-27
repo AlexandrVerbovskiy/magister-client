@@ -555,6 +555,11 @@ const EditForm = ({
       hasError = true;
     }
 
+    if (!backgroundPhotoUrl && !backgroundPhoto) {
+      setBackgroundPhotoError("Required field");
+      hasError = true;
+    }
+
     if (countStoredItems && validateInteger(countStoredItems) !== true) {
       setCountStoredItemsError(validateInteger(countStoredItems));
       hasError = true;
@@ -943,7 +948,8 @@ const EditForm = ({
             <div
               style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
             >
-              You can add file with maximum size 5 MB. Valid photo format is 3 to 1
+              You can add file with maximum size 5 MB. Valid photo format is 3
+              to 1
             </div>
           </h3>
 
@@ -984,6 +990,7 @@ const EditForm = ({
                 <ErrorSpan
                   error={backgroundPhotoError}
                   className="d-block mb-3"
+                  style={{marginTop: "-24px"}}
                 />
               </div>
             </div>
