@@ -32,6 +32,8 @@ const useChat = ({
     authToken,
   });
 
+  console.log(selectedChatId);
+
   const bodyProps = useChatMessageList({
     messages,
     canShowMore: messagesCanShowMore,

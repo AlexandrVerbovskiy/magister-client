@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../contexts";
 import { getChatBaseInfo, getChatMessageList } from "../services/chat";
 
@@ -15,9 +15,9 @@ const useChatMessageList = ({
   const [messages, setMessages] = useState(baseMessages);
   const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
   const [entity, setEntity] = useState(baseEntity);
-  const [chatId, setChatId] = useState(baseChatId);
   const [dopEntityInfo, setDopEntityInfo] = useState(baseDopEntityInfo);
   const [loading, setLoading] = useState(false);
+  const chatIdRef = useRef(baseChatId);
 
   useEffect(() => {
     if (!io) {
@@ -26,7 +26,7 @@ const useChatMessageList = ({
   }, [io]);
 
   useEffect(() => {
-    setChatId(baseChatId);
+    chatIdRef.current = baseChatId;
   }, [baseChatId]);
 
   const updateEntity = (part) => {
@@ -49,7 +49,7 @@ const useChatMessageList = ({
 
       const result = await getChatMessageList(
         {
-          chatId,
+          chatId: chatIdRef.current,
           lastMessageId,
         },
         authToken
@@ -65,7 +65,7 @@ const useChatMessageList = ({
   };
 
   const handleChangeChat = async (newChatId) => {
-    if (newChatId === chatId) {
+    if (newChatId === chatIdRef.current) {
       return;
     }
 
@@ -98,8 +98,9 @@ const useChatMessageList = ({
   };
 
   const appendMessageToChat = (message) => {
-    console.log(chatId, message.chatId);
-    if (chatId !== message.chatId) {
+    console.log(chatIdRef.current, message.chatId);
+
+    if (chatIdRef.current !== message.chatId) {
       return;
     }
 
@@ -107,7 +108,7 @@ const useChatMessageList = ({
   };
 
   const updateMessageByField = (message, fieldValue, field) => {
-    if (chatId !== message.chatId) {
+    if (chatIdRef.current !== message.chatId) {
       return;
     }
 
@@ -143,7 +144,7 @@ const useChatMessageList = ({
   };
 
   const deleteMessage = (messageChatId, messageId, replacementMessage) => {
-    if (chatId !== messageChatId) {
+    if (chatIdRef.current !== messageChatId) {
       return;
     }
 
