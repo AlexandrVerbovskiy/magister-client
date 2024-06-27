@@ -17,6 +17,7 @@ const OrderInfoMessageContent = ({
   type,
   duration,
   title,
+  hasDescription = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -58,6 +59,11 @@ const OrderInfoMessageContent = ({
           needBackground={false}
         />
       </div>
+      {hasDescription && (
+        <div className="w-100">
+          <b>Description: </b> {content.description}
+        </div>
+      )}
       <div
         className="d-flex flex-column"
         style={{ gap: "10px", marginTop: "10px" }}

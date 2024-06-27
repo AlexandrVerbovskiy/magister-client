@@ -112,12 +112,18 @@ const useSingleOrderActions = ({
     }
   };
 
-  const handleMakeBooking = async ({ feeActive, sendingMessage }) => {
-    await extendOrder(
+  const handleMakeBooking = async ({
+    feeActive,
+    sendingMessage,
+    price,
+    fromDate,
+    toDate,
+  }) => {
+    const result = await extendOrder(
       {
-        pricePerDay: extendApproveData.price,
-        startDate: extendApproveData.fromDate,
-        endDate: extendApproveData.toDate,
+        pricePerDay: price,
+        startDate: fromDate,
+        endDate: toDate,
         listingId: order.listingId,
         feeActive,
         message: sendingMessage,
@@ -126,7 +132,7 @@ const useSingleOrderActions = ({
       authToken
     );
 
-    onExtendOrder();
+    onExtendOrder(result);
   };
 
   return {

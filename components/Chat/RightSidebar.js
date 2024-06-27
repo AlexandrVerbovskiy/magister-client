@@ -4,7 +4,8 @@ import NoChatSelected from "./NoChatSelected";
 import OrderChatBody from "./OrderChatBody";
 
 const RightSidebar = (props) => {
-  const { messages, handleShowMore, selectedChat, entity } = props;
+  const { messages, handleShowMore, selectedChat, entity, handleSelectChat } =
+    props;
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
   const [updatingMessage, setUpdatingMessage] = useState(null);
@@ -77,6 +78,7 @@ const RightSidebar = (props) => {
               handleChangeUpdatingMessageId={handleChangeUpdatingMessageId}
               messagesToView={messagesToView}
               updatingMessage={updatingMessage}
+              handleSelectChat={handleSelectChat}
               {...props}
             />
           )}

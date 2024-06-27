@@ -273,6 +273,7 @@ const useChat = ({
       sendMediaMessage,
       stopSendMediaMessage,
       appendMessage: bodyProps.appendMessageToChat,
+      appendChatToListByMessage: listProps.onGetMessage,
     },
     windowProps,
     stopSendMediaMessage,

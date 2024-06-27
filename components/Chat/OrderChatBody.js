@@ -25,6 +25,7 @@ const OrderChatBody = ({
   selectedChat,
   actions,
   dopEntityInfo: dopOrderInfo,
+  handleSelectChat,
 }) => {
   const currentActionButtons = useOrderActions({
     order,
@@ -130,7 +131,10 @@ const OrderChatBody = ({
     actions.appendMessage(chatMessage);
   };
 
-  const onExtendOrder = () => {
+  const onExtendOrder = ({ id, chatMessage, opponent }) => {
+    actions.appendChatToListByMessage(chatMessage, opponent);
+    handleSelectChat(chatMessage.chatId);
+
     success.set(
       "Order extended successfully. You can discuss the new terms in a new chat"
     );

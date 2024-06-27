@@ -105,6 +105,7 @@ const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
               ? "Updating Request"
               : "Request"
           }
+          hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
         />
       );
     }

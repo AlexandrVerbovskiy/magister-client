@@ -12,10 +12,7 @@ import {
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
-import {
-  approveClientGotListing,
-  finishedByOwner,
-} from "../../services";
+import { approveClientGotListing, finishedByOwner } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
@@ -327,7 +324,7 @@ const OrderContent = ({
     }));
   };
 
-  const onExtendOrder = () => {
+  const onExtendOrder = ({ id }) => {
     success.set("Order extended successfully");
     router.push("/dashboard/orders");
   };

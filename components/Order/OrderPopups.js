@@ -18,7 +18,7 @@ const OrderPopups = ({
 
   extendPopupActive,
   setExtendPopupActive,
-  onMakeExtend,
+  handleMakeBooking,
 
   handleCancelApprove,
   cancelModalActive,
@@ -98,7 +98,7 @@ const OrderPopups = ({
         <BookingModal
           createOrderModalActive={extendPopupActive}
           closeModal={() => setExtendPopupActive(false)}
-          handleMakeBooking={onMakeExtend}
+          handleMakeBooking={handleMakeBooking}
           fee={tenantBaseCommission}
           price={order.offerPricePerDay}
           minRentalDays={order.listingMinRentalDays}
@@ -108,6 +108,7 @@ const OrderPopups = ({
           startDate={
             order.offerEndDate ? increaseDateByOneDay(order.offerEndDate) : null
           }
+          fullVersion={true}
         />
       )}
 

@@ -38,7 +38,7 @@ export const extendOrder = async (
     },
     authToken
   );
-  return data.body.id;
+  return data.body;
 };
 
 export const getOrderFullInfo = async (id, authToken) => {
