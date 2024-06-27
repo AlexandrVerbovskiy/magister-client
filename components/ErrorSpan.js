@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const ErrorSpan = ({ error, className = "base" }) => {
+const ErrorSpan = ({ error, className = "base", style = {} }) => {
   const errorRef = useRef(null);
 
   className = `invalid-feedback${className ? ` ${className}` : ""}`;
@@ -16,7 +16,7 @@ const ErrorSpan = ({ error, className = "base" }) => {
 
   if (error) {
     return (
-      <div ref={errorRef} className={className}>
+      <div ref={errorRef} className={className} style={style}>
         {error}
       </div>
     );
