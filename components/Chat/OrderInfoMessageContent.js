@@ -23,7 +23,7 @@ const OrderInfoMessageContent = ({
 
   return (
     <div className="d-flex flex-column align-items-center">
-      <div className="mb-1">
+      <div className="mb-2">
         <b>{title}</b>
       </div>
       <img
@@ -44,7 +44,7 @@ const OrderInfoMessageContent = ({
         {dateConverter(content.offerDateStart)} -{" "}
         {dateConverter(content.offerDateEnd)})
       </div>
-      <div>
+      <div className="mb-1">
         <StatusBlock
           status={entity.status}
           statusCancelled={entity.cancelStatus}
@@ -60,7 +60,7 @@ const OrderInfoMessageContent = ({
         />
       </div>
       {hasDescription && (
-        <div className="w-100">
+        <div className="w-100 mb-1">
           <b>Description: </b> {content.description}
         </div>
       )}

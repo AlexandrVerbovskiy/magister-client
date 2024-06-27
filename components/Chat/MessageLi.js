@@ -7,13 +7,14 @@ import {
 } from "../../utils";
 import MessageContent from "./MessageContent";
 import DropdownMenu from "../_App/DropdownMenu";
+import STATIC from "../../static";
 
 const MessageLi = ({
   id,
   tempKey = null,
   type,
   content,
-  senderPhoto,
+  senderPhoto = null,
   createdAt,
   senderId,
   percent = 0,
@@ -22,7 +23,7 @@ const MessageLi = ({
   handleDeleteMessage,
   chatId,
   entity,
-  popupsData
+  popupsData,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [activePopup, setActivePopup] = useState(false);
@@ -87,11 +88,16 @@ const MessageLi = ({
       <div className="chat-avatar">
         <a className="d-inline-block">
           <img
-            src={generateProfileFilePath(senderPhoto)}
-            width="50"
-            height="50"
+            src={
+              senderPhoto
+                ? generateProfileFilePath(senderPhoto)
+                : STATIC.ADMIN_CHAT_LOGO
+            }
+            width="40"
+            height="40"
             className="rounded-circle"
             alt="image"
+            style={{width:"40px", height:"40px"}}
           />
         </a>
       </div>

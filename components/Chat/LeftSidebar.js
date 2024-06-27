@@ -1,6 +1,7 @@
 import SmallLoader from "../_App/SmallLoader";
 import ChatLi from "./ChatLi";
 import SearchHeader from "./SearchHeader";
+import STATIC from "../../static";
 
 const LeftSidebar = ({
   loading,
@@ -17,9 +18,9 @@ const LeftSidebar = ({
   filterChats,
 }) => {
   const emptyListMessage =
-    type == "orders"
-      ? "You don't have any order chats yet"
-      : "You don't have any dispute chats yet";
+    type == STATIC.CHAT_TYPES.DISPUTE
+      ? "You don't have any dispute chats yet"
+      : "You don't have any order chats yet";
 
   return (
     <div className="sidebar-left h-100">
@@ -31,17 +32,17 @@ const LeftSidebar = ({
             <div className="d-flex">
               <label
                 className={`d-block w-50 list-group-label mt-0 ${
-                  type == "orders" ? "active" : ""
+                  type == STATIC.CHAT_TYPES.ORDER ? "active" : ""
                 }`}
-                onClick={() => handleChangeType("orders")}
+                onClick={() => handleChangeType(STATIC.CHAT_TYPES.ORDER)}
               >
                 Orders
               </label>
               <label
                 className={`d-block w-50 list-group-label mt-0 ms-4 ${
-                  type == "disputes" ? "active" : ""
+                  type == STATIC.CHAT_TYPES.DISPUTE ? "active" : ""
                 }`}
-                onClick={() => handleChangeType("disputes")}
+                onClick={() => handleChangeType(STATIC.CHAT_TYPES.DISPUTE)}
               >
                 Disputes
               </label>

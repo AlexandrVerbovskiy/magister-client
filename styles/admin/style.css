@@ -1,3 +1,7 @@
+:root {
+  --mainColor: #818cf8;
+}
+
 .main-site-alert {
   margin: 0;
   position: fixed !important;

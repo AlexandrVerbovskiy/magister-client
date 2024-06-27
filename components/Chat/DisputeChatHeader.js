@@ -4,15 +4,9 @@ import OnlineStatus from "./OnlineStatus";
 import DropdownMenu from "../_App/DropdownMenu";
 import OrderHeaderActions from "./OrderHeaderActions";
 import DisputeHeaderActions from "./DisputeHeaderActions";
+import STATIC from "../../static";
 
-const ChatHeader = ({
-  entity,
-  opponentName,
-  opponentOnline,
-  opponentPhoto,
-  handleGoBackClick,
-  popupsData,
-}) => {
+const DisputeChatHeader = ({ entity, handleGoBackClick }) => {
   const [activePopup, setActivePopup] = useState(false);
 
   return (
@@ -25,15 +19,15 @@ const ChatHeader = ({
       <div className="header-left d-flex align-items-center me-2">
         <div className="avatar me-2">
           <img
-            src={generateProfileFilePath(opponentPhoto)}
-            width="70"
-            height="70"
+            src={STATIC.ADMIN_CHAT_LOGO}
+            width="40"
+            height="40"
             className="rounded-circle"
             alt="image"
+            style={{ width: "40px", height: "40px" }}
           />
-          <OnlineStatus online={opponentOnline} />
         </div>
-        <h6 className="mb-0">{opponentName}</h6>
+        <h6 className="mb-0">RENT ABOUT SUPPORT CHAT</h6>
       </div>
       <div className="header-right text-right w-100">
         <ul className="list-unstyled mb-0">
@@ -58,11 +52,7 @@ const ChatHeader = ({
                 activePopup={activePopup}
                 closePopup={() => setActivePopup(false)}
               >
-                {entity.type == "order" && (
-                  <OrderHeaderActions order={entity} popupsData={popupsData} />
-                )}
-
-                {entity.type == "dispute" && (
+                {entity.type == STATIC.CHAT_TYPES.DISPUTE && (
                   <DisputeHeaderActions dispute={entity} />
                 )}
               </DropdownMenu>
@@ -74,4 +64,4 @@ const ChatHeader = ({
   );
 };
 
-export default ChatHeader;
+export default DisputeChatHeader;

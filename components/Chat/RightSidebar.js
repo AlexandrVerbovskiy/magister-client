@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { dateConverter } from "../../utils";
 import NoChatSelected from "./NoChatSelected";
 import OrderChatBody from "./OrderChatBody";
+import STATIC from "../../static";
+import DisputeChatBody from "./DisputeChatBody";
 
 const RightSidebar = (props) => {
   const { messages, handleShowMore, selectedChat, entity, handleSelectChat } =
@@ -35,13 +37,15 @@ const RightSidebar = (props) => {
     setMessagesToView(newMessagesToView);
 
     if (lastShowedMessageId) {
-      setTimeout(
-        () =>
-          document
-            .querySelector("#message-" + lastShowedMessageId)
-            .scrollIntoView({ behavior: "instant", block: "end" }),
-        0
-      );
+      setTimeout(() => {
+        const lastMessage = document.querySelector(
+          "#message-" + lastShowedMessageId
+        );
+
+        if (lastMessage) {
+          lastMessage.scrollIntoView({ behavior: "instant", block: "end" });
+        }
+      }, 0);
 
       setLastShowedMessageId(null);
     }
@@ -71,8 +75,20 @@ const RightSidebar = (props) => {
     <div className="content-right">
       <div className="chat-area">
         <div className="chat-list-wrapper">
-          {entity.type == "order" && (
+          {entity.type == STATIC.CHAT_TYPES.ORDER && (
             <OrderChatBody
+              handleScrollBody={handleScrollBody}
+              stopUpdatingMessage={stopUpdatingMessage}
+              handleChangeUpdatingMessageId={handleChangeUpdatingMessageId}
+              messagesToView={messagesToView}
+              updatingMessage={updatingMessage}
+              handleSelectChat={handleSelectChat}
+              {...props}
+            />
+          )}
+
+          {entity.type == STATIC.CHAT_TYPES.DISPUTE && (
+            <DisputeChatBody
               handleScrollBody={handleScrollBody}
               stopUpdatingMessage={stopUpdatingMessage}
               handleChangeUpdatingMessageId={handleChangeUpdatingMessageId}

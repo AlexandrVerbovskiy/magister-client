@@ -2,6 +2,7 @@ import BaseChat from "../../../components/Chat";
 import useChat from "../../../hooks/useChat";
 import { authSideProps } from "../../../middlewares";
 import { getUserChatOptions } from "../../../services";
+import STATIC from "../../../static";
 
 const Chat = (props) => {
   const chatProps = useChat(props);
@@ -10,7 +11,10 @@ const Chat = (props) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const chatType =
-    context.query["chat-type"] === "disputes" ? "disputes" : "orders";
+    context.query["chat-type"] === STATIC.CHAT_TYPES.DISPUTE
+      ? STATIC.CHAT_TYPES.DISPUTE
+      : STATIC.CHAT_TYPES.ORDER;
+
   const chatId = +context.params.id;
 
   const options = await getUserChatOptions(

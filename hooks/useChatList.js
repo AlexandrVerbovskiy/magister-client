@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../contexts";
 import { getChatList } from "../services/chat";
 import { changeLocation } from "../utils";
+import STATIC from "../static";
 
 const useChatList = ({
   chats: baseChats,
@@ -10,12 +11,12 @@ const useChatList = ({
   authToken,
 }) => {
   const { io } = useContext(IndiceContext);
-  const [type, setType] = useState(options.chatType ?? "orders");
   const [filter, setFilter] = useState("");
   const [filterChats, setFilterChats] = useState([]);
   const [chats, setChats] = useState(baseChats);
   const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
   const [loading, setLoading] = useState(false);
+  const typeRef = useRef(options.chatType ?? STATIC.CHAT_TYPES.ORDER);
 
   useEffect(() => {
     if (!io) {
@@ -32,11 +33,11 @@ const useChatList = ({
     setLoading(true);
 
     try {
-      if (newType !== "disputes") {
-        newType = "orders";
+      if (newType !== STATIC.CHAT_TYPES.DISPUTE) {
+        newType = STATIC.CHAT_TYPES.ORDER;
       }
 
-      setType(newType);
+      typeRef.current = newType;
 
       const result = await getChatList(
         {
@@ -51,7 +52,7 @@ const useChatList = ({
       setFilter("");
       setFilterChats([]);
 
-      if (newType === "disputes") {
+      if (newType === STATIC.CHAT_TYPES.DISPUTE) {
         changeLocation(`/dashboard/chat?chat-type=${newType}`);
       } else {
         changeLocation(`/dashboard/chat`);
@@ -79,7 +80,7 @@ const useChatList = ({
 
       const result = await getChatList(
         {
-          chatType: type,
+          chatType: typeRef.current,
           lastChatId,
         },
         authToken
@@ -109,7 +110,7 @@ const useChatList = ({
 
       const result = await getChatList(
         {
-          chatType: type,
+          chatType: typeRef.current,
           chatFilter: filter,
         },
         authToken
@@ -174,6 +175,12 @@ const useChatList = ({
   };
 
   const onGetMessage = (message, opponent = null) => {
+    console.log(message.entityType, typeRef.current);
+
+    if (message.entityType != typeRef.current) {
+      return;
+    }
+
     setChats((prevChats) => {
       const prevFirstChat = prevChats.find(
         (chat) => chat.id === message.chatId
@@ -215,7 +222,7 @@ const useChatList = ({
 
   return {
     loading,
-    type,
+    type: typeRef.current,
     chats,
     changeType,
     filter,

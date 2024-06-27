@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 
 const ChatContent = () => {
   return (
@@ -232,10 +232,11 @@ const ChatContent = () => {
                     <div className="avatar me-2">
                       <img
                         src="/images/user2.jpg"
-                        width="70"
-                        height="70"
+                        width="50"
+                        height="50"
                         className="rounded-circle"
                         alt="image"
+                        style={{ width: "50px", height: "50px" }}
                       />
                       <span className="status-online"></span>
                     </div>

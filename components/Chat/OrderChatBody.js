@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useOrderActions, useSingleOrderActions } from "../../hooks";
-import ChatHeader from "./ChatHeader";
+import OrderChatHeader from "./OrderChatHeader";
 import SenderPanel from "./SenderPanel";
 import MessageLi from "./MessageLi";
 import OrderModals from "./OrderModals";
@@ -186,7 +186,7 @@ const OrderChatBody = ({
   return (
     <>
       <div className="chat-list">
-        <ChatHeader
+        <OrderChatHeader
           entity={order}
           handleGoBackClick={setListWindow}
           {...selectedChat}

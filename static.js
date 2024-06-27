@@ -122,4 +122,6 @@ export default {
     STARTED_DISPUTE: "started-dispute",
     RESOLVED_DISPUTE: "resolved-dispute",
   },
+  CHAT_TYPES: { DISPUTE: "dispute", ORDER: "order" },
+  ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
 };

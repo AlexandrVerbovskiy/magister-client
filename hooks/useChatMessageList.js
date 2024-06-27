@@ -98,8 +98,6 @@ const useChatMessageList = ({
   };
 
   const appendMessageToChat = (message) => {
-    console.log(chatIdRef.current, message.chatId);
-
     if (chatIdRef.current !== message.chatId) {
       return;
     }
