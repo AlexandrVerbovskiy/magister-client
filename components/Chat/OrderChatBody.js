@@ -209,7 +209,10 @@ const OrderChatBody = ({
 
               if (message.type == STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE) {
                 return (
-                  <div key={message.id} className="badge badge-light gray badge-pill chat-message my-3">
+                  <div
+                    key={message.id}
+                    className="badge badge-light gray badge-pill chat-message my-3"
+                  >
                     Dispute resolved
                   </div>
                 );
@@ -245,6 +248,7 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
+        updateOrder={updateOrder}
       />
 
       {currentActionButtons.includes(
