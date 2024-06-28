@@ -42,17 +42,7 @@ const useAdminChat = ({
     dopInfo,
   });
 
-  const baseChat =
-    listProps.chats.find((chat) => chat.id === baseChatId) ?? null;
-
-  const [selectedChat, setSelectedChat] = useState(baseChat);
-
   useEffect(() => {
-    const chat =
-      listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
-
-    setSelectedChat(chat);
-
     setTimeout(() => {
       const interval = setInterval(() => {
         if (chatBodyTriggerRef.current) {
@@ -68,6 +58,9 @@ const useAdminChat = ({
     setSelectedChatId(chatId);
     changeLocation(`/admin/chats/${chatId}`);
   };
+
+  const selectedChat =
+    listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
 
   return {
     listProps,
