@@ -41,17 +41,9 @@ const useChat = ({
     entity,
     dopEntityInfo,
   });
-
-  const baseChat =
-    listProps.chats.find((chat) => chat.id === baseChatId) ?? null;
-
-  const [selectedChat, setSelectedChat] = useState(baseChat);
+    
 
   useEffect(() => {
-    const chat =
-      listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
-    setSelectedChat(chat);
-
     if (!selectedChatId) {
       return;
     }
@@ -261,6 +253,8 @@ const useChat = ({
     onStopSendMedia(tempKey);
     io.emit("stop-file-upload", { tempKey });
   };
+
+  const selectedChat = listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
 
   return {
     listProps,
