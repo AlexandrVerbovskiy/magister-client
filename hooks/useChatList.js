@@ -53,9 +53,9 @@ const useChatList = ({
       setFilterChats([]);
 
       if (newType === STATIC.CHAT_TYPES.DISPUTE) {
-        changeLocation(`/dashboard/chat?chat-type=${newType}`);
+        changeLocation(`/dashboard/chats?chat-type=${newType}`);
       } else {
-        changeLocation(`/dashboard/chat`);
+        changeLocation(`/dashboard/chats`);
       }
     } catch (e) {
       // Обробка помилок

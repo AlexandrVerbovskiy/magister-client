@@ -1,34 +1,50 @@
-import { useContext } from "react";
-import ENV from "../../env";
-import STATIC from "../../static";
-import { getDaysDifference, calculateCurrentTotalPrice } from "../../utils";
-import { IndiceContext } from "../../contexts";
+import STATIC from "../../../static";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
-import SuccessIcon from "../Icons/SuccessIcon";
-import ErrorIcon from "../Icons/ErrorIcon";
 import OrderUpdateStatusMessageContent from "./OrderUpdateStatusMessageContent";
-import OrderMessageActions from "./OrderMessageActions";
-import StarRating from "../StarRating";
+import SuccessIcon from "../../Icons/SuccessIcon";
+import ErrorIcon from "../../Icons/ErrorIcon";
+import SingleRatingStar from "../SingleRatingStar";
+import ENV from "../../../env";
+import { calculateCurrentTotalPrice, getDaysDifference } from "../../../utils";
+
+const DownloadButton = ({ src }) => {
+  return (
+    <a
+      href={src}
+      type="button"
+      className="p-1.5 rounded-full border border-slate-200 dark:border-slate-700 ml-4 hover:bg-white dark:hover:bg-slate-800 transition duration-150"
+      download
+    >
+      <span className="sr-only">Download</span>
+      <svg
+        className="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-slate-500"
+        viewBox="0 0 16 16"
+      >
+        <path d="M15 15H1a1 1 0 01-1-1V2a1 1 0 011-1h4v2H2v10h12V3h-3V1h4a1 1 0 011 1v12a1 1 0 01-1 1zM9 7h3l-4 4-4-4h3V1h2v6z" />
+      </svg>
+    </a>
+  );
+};
 
 const PointStarInfo = ({ label, value }) => {
   return (
     <div>
       <label>{label}</label>
-      <StarRating
-        averageRating={value}
-        checked={true}
-        checkedOnlyActive={true}
-        uncheckedStarClassName="bxs-star"
-      />
+      <SingleRatingStar value={value} />
     </div>
   );
 };
 
-const baseMessageContent = ({ isTemp, type, content }) => {
+const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   let src = "";
 
   if (type == STATIC.MESSAGE_TYPES.TEXT) {
-    return <p dangerouslySetInnerHTML={{ __html: content.text }}></p>;
+    return (
+      <div
+        className={messageClassName}
+        dangerouslySetInnerHTML={{ __html: content.text }}
+      ></div>
+    );
   }
 
   if (
@@ -49,60 +65,93 @@ const baseMessageContent = ({ isTemp, type, content }) => {
 
   if (type === STATIC.MESSAGE_TYPES.IMAGE) {
     return (
-      <img
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
-        height="200px"
-        className=""
-        src={src}
-      />
+      <div className="flex items-center">
+        <img
+          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          className="rounded-lg shadow-md mb-1"
+          height="200px"
+          src={src}
+        />
+        <DownloadButton src={src} />
+      </div>
     );
   }
 
   if (type === STATIC.MESSAGE_TYPES.VIDEO) {
     return (
-      <video
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
-        height="200px"
-        controls
-        className=""
-        src={src}
-      />
+      <div className="flex items-center">
+        <video
+          className="rounded-lg shadow-md mb-1"
+          height="200px"
+          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          controls
+          src={src}
+        />
+        <DownloadButton src={src} />
+      </div>
     );
   }
 
   if (type === STATIC.MESSAGE_TYPES.AUDIO) {
-    return <audio controls className="" src={src} />;
+    return (
+      <div className="flex items-center">
+        <audio className="rounded-lg shadow-md mb-1" controls src={src} />
+        <DownloadButton src={src} />
+      </div>
+    );
   }
 
   if (type === STATIC.MESSAGE_TYPES.FILE) {
     return (
-      <a style={{ color: "inherit" }} className="d-flex" href={src} download>
-        <div className="me-1">
-          <i className="bx bxs-file"></i>
+      <div className="flex items-center">
+        <div className={messageClassName}>
+          <a
+            style={{ color: "inherit" }}
+            href={src}
+            download
+          >
+            <div className="me-1"></div>
+            {content.filename}
+          </a>
         </div>
-        {content.filename}
-      </a>
+
+        <DownloadButton src={src} />
+      </div>
     );
   }
 
   return null;
 };
 
-const orderMessageContent = ({ type, content, entity, popupsData }) => {
-  const { sessionUser } = useContext(IndiceContext);
-
+const orderMessageContent = ({
+  type,
+  content,
+  order,
+  dispute,
+  messageClassName,
+}) => {
   if (
     type === STATIC.MESSAGE_TYPES.NEW_ORDER ||
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
-    const totalPrice = calculateCurrentTotalPrice({
+    const forOwnerPrice = calculateCurrentTotalPrice({
       startDate: content.offerDateStart,
       endDate: content.offerDateEnd,
       pricePerDay: content.offerPrice,
       type,
-      isOwner: sessionUser.id == entity.ownerId,
-      ownerFee: entity.ownerFee,
-      tenantFee: entity.tenantFee,
+      isOwner: true,
+      ownerFee: order.ownerFee,
+      tenantFee: order.tenantFee,
+    });
+
+    const forTenantPrice = calculateCurrentTotalPrice({
+      startDate: content.offerDateStart,
+      endDate: content.offerDateEnd,
+      pricePerDay: content.offerPrice,
+      type,
+      isOwner: false,
+      ownerFee: order.ownerFee,
+      tenantFee: order.tenantFee,
     });
 
     const duration = getDaysDifference(
@@ -112,12 +161,13 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
     return (
       <OrderInfoMessageContent
-        totalPrice={totalPrice}
+        messageClassName={messageClassName}
+        forOwnerPrice={forOwnerPrice}
+        forTenantPrice={forTenantPrice}
         content={content}
-        entity={entity}
-        popupsData={popupsData}
-        type={type}
         duration={duration}
+        order={order}
+        dispute={dispute}
         title={
           type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
             ? "Updating Request"
@@ -157,10 +207,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
     return (
       <OrderUpdateStatusMessageContent
-        content={content}
-        entity={entity}
-        popupsData={popupsData}
-        type={type}
+        messageClassName={messageClassName}
         title={title}
         Icon={SuccessIcon}
       />
@@ -186,10 +233,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
     return (
       <OrderUpdateStatusMessageContent
-        content={content}
-        entity={entity}
-        popupsData={popupsData}
-        type={type}
+        messageClassName={messageClassName}
         title={title}
         Icon={ErrorIcon}
       />
@@ -198,31 +242,19 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
     return (
-      <div className="d-flex flex-column">
-        <div className="text-center mb-2">
+      <div className={`flex flex-col ${messageClassName}`}>
+        <div className="text-center mb-1">
           <b>Started dispute</b>
         </div>
 
-        <div className="my-1">
+        <div>
           <b>Type: </b>
           {STATIC.DISPUTE_TYPE_TITLE[content.type]}
         </div>
 
-        <div className="my-1">
+        <div>
           <b>Description: </b>
           {content.description}
-        </div>
-
-        <div
-          className="d-flex flex-column align-items-center"
-          style={{ gap: "10px", marginTop: "10px" }}
-        >
-          <OrderMessageActions
-            type={type}
-            order={entity}
-            popupsData={popupsData}
-            content={content}
-          />
         </div>
       </div>
     );
@@ -230,12 +262,12 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
   if (STATIC.MESSAGE_TYPES.LISTING_REVIEW == type) {
     return (
-      <div className="d-flex flex-column align-items-center">
-        <div className="mb-2">
+      <div className={`flex flex-col items-center ${messageClassName}`}>
+        <div className="mb-1">
           <b>Listing review</b>
         </div>
 
-        <div className="my-1">
+        <div>
           <div>
             <PointStarInfo label="Punctuality" value={punctuality} />
             <PointStarInfo
@@ -252,7 +284,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
           </div>
         </div>
 
-        <div className="my-1">
+        <div>
           <b>Description: </b>
           {content.description}
         </div>
@@ -262,35 +294,36 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
     return (
-      <div className="d-flex flex-column align-items-center">
-        <div className="mb-2">
+      <div className={`flex flex-col items-center ${messageClassName}`}>
+        <div className="mb-1">
           <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div className="my-1">
-          <div>
-            <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo
-              label="Listing Accuracy"
-              value={content.listingAccuracy}
-            />
-            <PointStarInfo label="Utility" value={content.utility} />
-          </div>
-
-          <div>
-            <PointStarInfo label="Condition" value={content.condition} />
-            <PointStarInfo label="Performance" value={content.performance} />
-            <PointStarInfo label="Location" value={content.location} />
+        <div>
+          <div className="flex flex-wrap justify-center">
+            <div className="w-full sm:w-1/2">
+              <PointStarInfo label="Quality" value={content.quality} />
+              <PointStarInfo
+                label="Listing Accuracy"
+                value={content.listingAccuracy}
+              />
+              <PointStarInfo label="Utility" value={content.utility} />
+            </div>
+            <div className="w-full sm:w-1/2">
+              <PointStarInfo label="Condition" value={content.condition} />
+              <PointStarInfo label="Performance" value={content.performance} />
+              <PointStarInfo label="Location" value={content.location} />
+            </div>
           </div>
         </div>
 
-        <div className="my-1">
+        <div>
           <b>Description: </b>
           {content.description}
         </div>
 
         {content.leaveFeedback && (
-          <div className="my-1">
+          <div>
             <b>Private feedback: </b>
             {content.leaveFeedback}
           </div>
@@ -302,20 +335,36 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
   return null;
 };
 
-const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
-  const isOrder = entity["type"] == STATIC.CHAT_TYPES.ORDER;
+const ChatMessageContent = ({
+  isTemp,
+  type,
+  content,
+  order,
+  dispute,
+  messageClassName,
+}) => {
+  let messageContent = baseMessageContent({
+    isTemp,
+    type,
+    content,
+    messageClassName,
+  });
 
-  let messageContent = baseMessageContent({ isTemp, type, content });
-
-  if (!messageContent && isOrder) {
-    messageContent = orderMessageContent({ type, content, entity, popupsData });
+  if (!messageContent) {
+    messageContent = orderMessageContent({
+      type,
+      content,
+      order,
+      dispute,
+      messageClassName,
+    });
   }
 
   if (!messageContent) {
-    messageContent = <p>Unpredictable message</p>;
+    messageContent = <div>Unpredictable message</div>;
   }
 
   return messageContent;
 };
 
-export default MessageContent;
+export default ChatMessageContent;

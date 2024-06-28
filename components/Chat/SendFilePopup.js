@@ -1,5 +1,5 @@
 import BaseModal from "../_App/BaseModal";
-import FileCard from "./FilePreviews.js/FileCard";
+import FilePreviewCard from "./FilePreviewCard";
 
 const SendFilePopup = ({ handleSendClick, file, active, close }) => {
   if (!active) {
@@ -17,7 +17,7 @@ const SendFilePopup = ({ handleSendClick, file, active, close }) => {
         <span>Are you sure you want to send this file?</span>
       </span>
 
-      <FileCard file={file} />
+      <FilePreviewCard file={file} />
 
       <div className="form mt-4">
         <div className="d-flex gap-2">

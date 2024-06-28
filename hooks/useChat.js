@@ -42,7 +42,16 @@ const useChat = ({
     dopEntityInfo,
   });
 
+  const baseChat =
+    listProps.chats.find((chat) => chat.id === baseChatId) ?? null;
+
+  const [selectedChat, setSelectedChat] = useState(baseChat);
+
   useEffect(() => {
+    const chat =
+      listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
+    setSelectedChat(chat);
+
     if (!selectedChatId) {
       return;
     }
@@ -137,7 +146,7 @@ const useChat = ({
   const handleSelectChat = async (chatId) => {
     await bodyProps.handleChangeChat(chatId);
     setSelectedChatId(chatId);
-    changeLocation(`/dashboard/chat/${chatId}`);
+    changeLocation(`/dashboard/chats/${chatId}`);
   };
 
   const handleChangeType = (type) => {
@@ -252,9 +261,6 @@ const useChat = ({
     onStopSendMedia(tempKey);
     io.emit("stop-file-upload", { tempKey });
   };
-
-  const selectedChat =
-    listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
 
   return {
     listProps,

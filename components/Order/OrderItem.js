@@ -324,11 +324,11 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+          STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chat/${order.chatId}`}
+            href={`/dashboard/chats/${order.chatId}`}
           >
             <i className="bx bx-chat"></i> Chat
           </Link>

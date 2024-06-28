@@ -1572,7 +1572,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/chat/${order.chatId}`}
+                href={`/dashboard/chats/${order.chatId}`}
               >
                 Chat
               </Link>

@@ -70,6 +70,13 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
       ) {
         canActions = true;
       }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.ACCEPTED_ORDER &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT
+      ) {
+        canActions = true;
+      }
     }
   }
 

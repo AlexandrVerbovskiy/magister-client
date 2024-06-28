@@ -6,10 +6,7 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
-import {
-  generateProfileFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { generateProfileFilePath, getListingImageByType } from "../../../utils";
 import Link from "next/link";
 import SubInfoTitle from "../SubInfoTitle";
 import ActiveSpan from "./ActiveSpan";
@@ -38,6 +35,7 @@ const TableItem = ({
   description,
   handleSolveClick,
   handleUnsolveClick,
+  chatId,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -245,15 +243,12 @@ const TableItem = ({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="bg-slate-100 hover:bg-slate-200  flex items-center text-dark-500 hover:text-dark-600 rounded-full py-2 px-4"
+            <Link
+              href={"/admin/chats/" + chatId}
+              className="bg-indigo-100 hover:bg-indigo-200  flex items-center text-indigo-500 hover:text-indigo-600 rounded-full py-2 px-4"
             >
               Chat
-            </button>
+            </Link>
           </div>
         </td>
       </tr>

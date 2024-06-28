@@ -341,3 +341,11 @@ export const getUserChatOptions = async (
   const data = await post(`/user-chat-options`, { chatType, id }, authToken);
   return data.body;
 };
+
+export const getAdminChatOptions = async (
+  { id = null },
+  authToken
+) => {
+  const data = await post(`/admin-chat-options`, { id }, authToken);
+  return data.body;
+};

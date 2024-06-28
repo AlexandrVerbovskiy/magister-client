@@ -30,12 +30,13 @@ const Chats = (props) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const chatId = +context.params.id;
   const options = await getAdminChatOptions(
-    { id: null },
+    { id: chatId },
     baseSideProps.authToken
   );
 
-  return { ...options, chatId: null };
+  return { ...options, chatId };
 };
 
 export const getServerSideProps = (context) =>
