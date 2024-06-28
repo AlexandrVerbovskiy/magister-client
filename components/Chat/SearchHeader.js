@@ -12,14 +12,18 @@ const SearchHeader = ({ filter, setFilter }) => {
       <div className="avatar me-2">
         <img
           src={photo}
-          width="50"
-          height="50"
+          width="40"
+          height="40"
           className="rounded-circle"
           alt="image"
+          style={{ width: "40px", height: "40px" }}
         />
       </div>
 
-      <form className="form-group position-relative mb-0 w-100">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="form-group position-relative mb-0 w-100"
+      >
         <label>
           <i className="bx bx-search"></i>
         </label>

@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../contexts";
 import { getChatList } from "../services/chat";
 import { changeLocation } from "../utils";
+import STATIC from "../static";
 
 const useChatList = ({
   chats: baseChats,
@@ -10,28 +11,19 @@ const useChatList = ({
   authToken,
 }) => {
   const { io } = useContext(IndiceContext);
-  const [type, setType] = useState(options.chatType ?? "orders");
   const [filter, setFilter] = useState("");
   const [filterChats, setFilterChats] = useState([]);
-
-  const stateRef = useRef({
-    chats: baseChats,
-    canShowMore: baseCanShowMore,
-  });
-
-  const [, rewriteState] = useState(false);
+  const [chats, setChats] = useState(baseChats);
+  const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
   const [loading, setLoading] = useState(false);
+  const typeRef = useRef(options.chatType ?? STATIC.CHAT_TYPES.ORDER);
 
   useEffect(() => {
     if (!io) {
       return;
     }
-  });
-
-  const setStateRef = (newState) => {
-    stateRef.current = newState;
-    rewriteState((prev) => !prev);
-  };
+    // Додаткові дії, якщо потрібні
+  }, [io]);
 
   const changeType = async (newType) => {
     if (loading) {
@@ -41,11 +33,11 @@ const useChatList = ({
     setLoading(true);
 
     try {
-      if (newType != "disputes") {
-        newType = "orders";
+      if (newType !== STATIC.CHAT_TYPES.DISPUTE) {
+        newType = STATIC.CHAT_TYPES.ORDER;
       }
 
-      setType(newType);
+      typeRef.current = newType;
 
       const result = await getChatList(
         {
@@ -55,20 +47,18 @@ const useChatList = ({
         authToken
       );
 
-      setStateRef({
-        canShowMore: result.chatsCanShowMore,
-        chats: [...result.chats],
-      });
-
+      setCanShowMore(result.chatsCanShowMore);
+      setChats(result.chats);
       setFilter("");
       setFilterChats([]);
 
-      if (newType == "disputes") {
-        changeLocation(`/dashboard/chat?chat-type=${newType}`);
+      if (newType === STATIC.CHAT_TYPES.DISPUTE) {
+        changeLocation(`/dashboard/chats?chat-type=${newType}`);
       } else {
-        changeLocation(`/dashboard/chat`);
+        changeLocation(`/dashboard/chats`);
       }
     } catch (e) {
+      // Обробка помилок
     } finally {
       setLoading(false);
     }
@@ -82,26 +72,24 @@ const useChatList = ({
     setLoading(true);
 
     try {
-      if (!stateRef.current.chats.length) {
+      if (!chats.length) {
         return;
       }
 
-      const lastChatId =
-        stateRef.current.chats[stateRef.current.chats.length - 1].id;
+      const lastChatId = chats[chats.length - 1].id;
 
       const result = await getChatList(
         {
-          chatType: type,
+          chatType: typeRef.current,
           lastChatId,
         },
         authToken
       );
 
-      setStateRef({
-        canShowMore: result.chatsCanShowMore,
-        chats: [...prev, ...result.chats],
-      });
+      setCanShowMore(result.chatsCanShowMore);
+      setChats([...chats, ...result.chats]);
     } catch (e) {
+      // Обробка помилок
     } finally {
       setLoading(false);
     }
@@ -122,14 +110,15 @@ const useChatList = ({
 
       const result = await getChatList(
         {
-          chatType: type,
+          chatType: typeRef.current,
           chatFilter: filter,
         },
         authToken
       );
 
-      setFilterChats([...result.chats]);
+      setFilterChats(result.chats);
     } catch (e) {
+      // Обробка помилок
     } finally {
       setLoading(false);
     }
@@ -146,21 +135,13 @@ const useChatList = ({
   }, [filter]);
 
   const updateChatInfo = (chatId, chatInfo) => {
-    const newChatList = [];
+    setChats((prevChats) => {
+      const newChatList = prevChats.map((chat) =>
+        chat.id === chatId ? { ...chat, ...chatInfo } : chat
+      );
 
-    stateRef.current.chats.forEach((chat) => {
-      if (chat.id === chatId) {
-        chat = { ...chat, ...chatInfo };
-      }
-
-      newChatList.push(chat);
-    });
-
-    newChatList.sort((a, b) => a.messageCreatedAt - b.messageCreatedAt);
-
-    setStateRef({
-      ...stateRef.current,
-      chats: [...newChatList],
+      newChatList.sort((a, b) => b.messageCreatedAt - a.messageCreatedAt);
+      return newChatList;
     });
   };
 
@@ -168,80 +149,86 @@ const useChatList = ({
 
   const finishTyping = (chatId) => updateChatInfo(chatId, { typing: false });
 
-  const opponentOnline = (chatId) => {
+  const opponentOnline = (chatId) =>
     updateChatInfo(chatId, { opponentOnline: true });
-  };
 
   const opponentOffline = (chatId) =>
     updateChatInfo(chatId, { opponentOnline: false });
 
   const deleteMessage = (messageChatId, messageId, previousMessage) => {
-    const newChatList = [];
+    setChats((prevChats) => {
+      const newChatList = prevChats.map((chat) =>
+        chat.id === messageChatId && chat.messageId === messageId
+          ? {
+              ...chat,
+              messageId: previousMessage.id,
+              messageType: previousMessage.type,
+              messageSenderId: previousMessage.senderId,
+              messageCreatedAt: previousMessage.createdAt,
+            }
+          : chat
+      );
 
-    stateRef.current.chats.forEach((chat) => {
-      if (chat.id === messageChatId && chat.messageId == messageId) {
-        chat = {
-          ...chat,
-          messageId: previousMessage.id,
-          messageType: previousMessage.type,
-          messageSenderId: previousMessage.senderId,
-          messageCreatedAt: previousMessage.createdAt,
-        };
-      }
-
-      newChatList.push(chat);
-    });
-
-    newChatList.sort((a, b) => a.messageCreatedAt - b.messageCreatedAt);
-
-    setStateRef({
-      ...stateRef.current,
-      chats: [...newChatList],
+      newChatList.sort((a, b) => b.messageCreatedAt - a.messageCreatedAt);
+      return newChatList;
     });
   };
 
-  const onGetMessage = (message, opponent) => {
-    const newChatList = [];
+  const onGetMessage = (message, opponent = null) => {
+    console.log(message.entityType, typeRef.current);
 
-    stateRef.current.chats.forEach((chat) => {
-      if (chat.id === message.chatId) {
-        return;
+    if (message.entityType != typeRef.current) {
+      return;
+    }
+
+    setChats((prevChats) => {
+      const prevFirstChat = prevChats.find(
+        (chat) => chat.id === message.chatId
+      );
+
+      const newChatList = prevChats.filter(
+        (chat) => chat.id !== message.chatId
+      );
+
+      let firstChat = {};
+
+      if (prevFirstChat) {
+        firstChat = { ...prevFirstChat };
       }
 
-      newChatList.push(chat);
-    });
+      firstChat = {
+        ...firstChat,
+        entityId: message.entityId,
+        entityType: message.entityType,
+        id: message.chatId,
+        messageCreatedAt: message.createdAt,
+        messageId: message.id,
+        messageSenderId: message.senderId,
+        messageType: message.type,
+        name: message.chatName,
+      };
 
-    const firstChat = {
-      entityId: message.entityId,
-      entityType: message.entityType,
-      id: message.chatId,
-      messageCreatedAt: message.createdAt,
-      messageId: message.id,
-      messageSenderId: message.senderId,
-      messageType: message.type,
-      name: message.chatName,
-      opponentId: opponent.id,
-      opponentName: opponent.name,
-      opponentOnline: opponent.online,
-      opponentPhoto: opponent.photo,
-      opponentTyping: false,
-    };
+      if (opponent) {
+        firstChat["opponentId"] = opponent?.id;
+        firstChat["opponentName"] = opponent?.name;
+        firstChat["opponentOnline"] = opponent?.online;
+        firstChat["opponentPhoto"] = opponent?.photo;
+        firstChat["opponentTyping"] = false;
+      }
 
-    setStateRef({
-      ...stateRef.current,
-      chats: [firstChat, ...newChatList],
+      return [firstChat, ...newChatList];
     });
   };
 
   return {
     loading,
-    type,
-    chats: stateRef.current.chats,
+    type: typeRef.current,
+    chats,
     changeType,
     filter,
     setFilter,
     filterChats,
-    canShowMore: stateRef.current.canShowMore,
+    canShowMore,
     handleShowMore,
     updateChatInfo,
     startTyping,

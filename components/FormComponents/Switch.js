@@ -1,6 +1,6 @@
-const Switch = ({ title, active, onChange }) => {
+const Switch = ({ title, active, onChange, style }) => {
   return (
-    <div className="form-group switch-form-group">
+    <div className="form-group switch-form-group" style={style}>
       <div className="sidebar-widgets">
         <div className="box">
           <span className="title">{title}</span>

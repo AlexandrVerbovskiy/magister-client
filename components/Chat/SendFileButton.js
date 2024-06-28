@@ -1,26 +1,16 @@
-import { useRef } from "react";
-import { getFileData } from "../../utils";
-import useChatFileSendAccept from "../../hooks/useChatFileSendAccept";
 import SendFilePopup from "./SendFilePopup";
+import useSendFileButton from "../../hooks/useSendFileButton";
 import STATIC from "../../static";
 
 const SendFileButton = ({ handleSendMedia }) => {
-  const fileInputRef = useRef(null);
-  const { file, handleSetFile, close, active } = useChatFileSendAccept();
-
-  const handleFileInputChange = (e) => {
-    if (!e.target.files[0]) return;
-
-    getFileData(e.target.files[0], (newFile) => {
-      handleSetFile(newFile);
-      fileInputRef.current.value = "";
-    });
-  };
-
-  const handleSend = () => {
-    handleSendMedia(file);
-    close();
-  };
+  const {
+    file,
+    close,
+    active,
+    fileInputRef,
+    handleFileInputChange,
+    handleSend,
+  } = useSendFileButton({ handleSendMedia });
 
   return (
     <>

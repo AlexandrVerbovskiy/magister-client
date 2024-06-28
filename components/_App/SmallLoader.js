@@ -1,8 +1,8 @@
 const SmallLoader = () => {
   return (
-    <div class="d-flex justify-content-center">
+    <div className="d-flex justify-content-center">
       <div
-        class="spinner-border"
+        className="spinner-border"
         role="status"
         style={{
           color: "var(--mainColor)",
@@ -11,7 +11,7 @@ const SmallLoader = () => {
           borderWidth: "2px",
         }}
       >
-        <span class="visually-hidden">Loading...</span>
+        <span className="visually-hidden">Loading...</span>
       </div>
     </div>
   );

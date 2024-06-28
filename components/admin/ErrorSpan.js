@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const ErrorSpan = ({ error }) => {
+const ErrorSpan = ({ error, style = {} }) => {
   const errorRef = useRef(null);
 
   useEffect(() => {
@@ -19,7 +19,11 @@ const ErrorSpan = ({ error }) => {
 
   if (error) {
     return (
-      <div ref={errorRef} className="text-rose-500 text-sm error-span">
+      <div
+        style={style}
+        ref={errorRef}
+        className="text-rose-500 text-sm error-span"
+      >
         {error}
       </div>
     );

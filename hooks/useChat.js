@@ -42,7 +42,16 @@ const useChat = ({
     dopEntityInfo,
   });
 
+  const baseChat =
+    listProps.chats.find((chat) => chat.id === baseChatId) ?? null;
+
+  const [selectedChat, setSelectedChat] = useState(baseChat);
+
   useEffect(() => {
+    const chat =
+      listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
+    setSelectedChat(chat);
+
     if (!selectedChatId) {
       return;
     }
@@ -82,8 +91,14 @@ const useChat = ({
     );
 
     io.on("get-message", (data) => {
-      listProps.onGetMessage(data.message, data.opponent);
       bodyProps.appendMessageToChat(data.message);
+      listProps.onGetMessage(data.message, data.opponent);
+    });
+
+    io.on("update-order-message", (data) => {
+      bodyProps.appendMessageToChat(data.message);
+      bodyProps.handleOrderUpdate(data.orderPart);
+      listProps.onGetMessage(data.message, data.opponent);
     });
 
     io.on("message-updated", async (data) =>
@@ -131,7 +146,7 @@ const useChat = ({
   const handleSelectChat = async (chatId) => {
     await bodyProps.handleChangeChat(chatId);
     setSelectedChatId(chatId);
-    changeLocation(`/dashboard/chat/${chatId}`);
+    changeLocation(`/dashboard/chats/${chatId}`);
   };
 
   const handleChangeType = (type) => {
@@ -247,9 +262,6 @@ const useChat = ({
     io.emit("stop-file-upload", { tempKey });
   };
 
-  const selectedChat =
-    listProps.chats.find((chat) => chat.id === selectedChatId) ?? null;
-
   return {
     listProps,
     bodyProps,
@@ -264,6 +276,8 @@ const useChat = ({
       finishTyping,
       sendMediaMessage,
       stopSendMediaMessage,
+      appendMessage: bodyProps.appendMessageToChat,
+      appendChatToListByMessage: listProps.onGetMessage,
     },
     windowProps,
     stopSendMediaMessage,

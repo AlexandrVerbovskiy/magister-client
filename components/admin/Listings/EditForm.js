@@ -294,8 +294,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
           img.src = URL.createObjectURL(newFile);
 
           img.onload = () => {
-            console.log(img.height, img.width);
-
             if (3 * img.height > img.width) {
               setBackgroundPhotoError("Need more wider photo");
               return;
@@ -803,7 +801,8 @@ const EditForm = ({ listing, categories, defects, save }) => {
                               marginTop: "2px",
                             }}
                           >
-                            You can add file with maximum size 5 MB. Valid photo format is 3 to 1
+                            You can add file with maximum size 5 MB. Valid photo
+                            format is 3 to 1
                           </div>
                         </h2>
 
@@ -817,7 +816,10 @@ const EditForm = ({ listing, categories, defects, save }) => {
                               {backgroundPhotoUrl || backgroundPhoto ? (
                                 <div
                                   className="invoice-btn-box gallery-flex form-group bg-gray-100"
-                                  style={{ height: "400px" }}
+                                  style={{
+                                    height: "400px",
+                                    marginBottom: "20px",
+                                  }}
                                 >
                                   <img
                                     src={
@@ -837,7 +839,13 @@ const EditForm = ({ listing, categories, defects, save }) => {
                                   />
                                 </div>
                               ) : (
-                                <div className="gallery-flex form-group bg-gray-100">
+                                <div
+                                  className="gallery-flex form-group bg-gray-100"
+                                  style={{
+                                    height: "400px",
+                                    marginBottom: "22px",
+                                  }}
+                                >
                                   <div className="add-more-image">
                                     Drag 'n' drop some file here, or click to
                                     select file
@@ -848,6 +856,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                               <ErrorSpan
                                 error={backgroundPhotoError}
                                 className="d-block mb-3"
+                                style={{ marginTop: "-22px" }}
                               />
                             </div>
                           </div>
@@ -855,7 +864,7 @@ const EditForm = ({ listing, categories, defects, save }) => {
                       </section>
 
                       {defects.length > 0 && (
-                        <section>
+                        <section style={{ marginTop: "0" }}>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Defects
                           </h2>

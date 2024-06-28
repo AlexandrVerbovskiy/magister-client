@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
 
-const DropdownMenu = ({ children, activePopup, closePopup, style = {} }) => {
+const DropdownMenu = ({
+  children,
+  activePopup,
+  closePopup,
+  style = {},
+  className = "dropdown-menu",
+}) => {
   const dropdownRef = useRef(null);
 
   const handleClickOutside = (event) => {
@@ -19,7 +25,7 @@ const DropdownMenu = ({ children, activePopup, closePopup, style = {} }) => {
   return (
     <div
       ref={dropdownRef}
-      className={`dropdown-menu ${activePopup ? "show" : ""}`}
+      className={`${className} ${activePopup ? "show" : ""}`}
       tabIndex={0}
       style={{ ...style }}
     >

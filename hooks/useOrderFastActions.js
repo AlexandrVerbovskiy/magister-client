@@ -74,7 +74,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const onCreateDispute = async () => {
     try {
-      const disputeId = await createDispute(
+      const { disputeId } = await createDispute(
         {
           orderId: orderToDispute.id,
           type: createDisputeData.type,
@@ -175,7 +175,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       },
       activePayOrder.id
     );
-
 
     setActivePay(false);
     setActivePayOrder(null);
@@ -431,9 +430,10 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     price,
     fromDate,
     toDate,
-    requestId,
+    request,
   }) => {
     let status = null;
+    const requestId = request.id;
 
     if (findCurrentOrderById(orderId).ownerId === sessionUser?.id) {
       status = STATIC.ORDER_STATUSES.PENDING_TENANT;

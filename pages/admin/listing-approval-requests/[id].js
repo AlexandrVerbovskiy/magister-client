@@ -15,7 +15,7 @@ import TextareaView from "../../../components/admin/Form/TextareaView";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
-import { getListingImageByType } from "../../../utils";
+import { getFilePath, getListingImageByType } from "../../../utils";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
 import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
@@ -326,6 +326,41 @@ const ListingApprovalRequest = ({
                             src={getListingImageByType(image.link, image.type)}
                           />
                         ))}
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Listing Background Photo
+                      </h2>
+
+                      <div className="flex w-full gap-2">
+                        <div className="w-full">
+                          {listing.backgroundPhoto ? (
+                            <div
+                              className="invoice-btn-box gallery-flex form-group bg-gray-100"
+                              style={{ height: "400px" }}
+                            >
+                              <img
+                                src={getFilePath(listing.backgroundPhoto)}
+                                style={{
+                                  height: "100%",
+                                  width: "100%",
+                                  objectFit: "contain",
+                                }}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className="gallery-flex form-group bg-gray-100"
+                              style={{ height: "400px" }}
+                            >
+                              <div className="add-more-image">
+                                No background photo
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </section>
 

@@ -12,21 +12,12 @@ import {
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
-import {
-  approveClientGotListing,
-  finishedByOwner,
-  orderFullCancel,
-  orderFullCancelPayed,
-  rejectOrder,
-  extendOrder,
-  createDispute,
-} from "../../services";
+import { approveClientGotListing, finishedByOwner } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 import {
-  useCreateDispute,
   useOrderActions,
   useOrderDateError,
   useSingleOrderActions,
@@ -71,7 +62,6 @@ const OrderContent = ({
   const [finishOrderModalActive, setFinishOrderModalActive] = useState(false);
 
   const router = useRouter();
-  const createDisputeData = useCreateDispute({ order });
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -252,7 +242,7 @@ const OrderContent = ({
     });
   };
 
-  const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
+  const setUpdatedOffer = ({ status, cancelStatus = null }) => {
     const offerPricePerDay = actualUpdateRequest
       ? actualUpdateRequest.newPricePerDay
       : order.offerPricePerDay;
@@ -334,7 +324,7 @@ const OrderContent = ({
     }));
   };
 
-  const onExtendOrder = () => {
+  const onExtendOrder = ({ id }) => {
     success.set("Order extended successfully");
     router.push("/dashboard/orders");
   };
@@ -381,33 +371,6 @@ const OrderContent = ({
       activateSuccessOrderPopup({
         text: "Approved successfully",
       });
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const handleCreateDispute = async () => {
-    try {
-      const disputeId = await createDispute(
-        {
-          orderId: order.id,
-          type: createDisputeData.type,
-          description: createDisputeData.description,
-        },
-        authToken
-      );
-
-      setOrder((prev) => ({
-        ...prev,
-        disputeId,
-        disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-        disputeType: createDisputeData.type,
-        disputeDescription: createDisputeData.description,
-      }));
-
-      orderPopupsData.setActiveDisputeWindow(false);
-
-      success.set("Dispute created success");
     } catch (e) {
       error.set(e.message);
     }
@@ -491,6 +454,20 @@ const OrderContent = ({
         },
       ];
 
+  const onDisputeOpened = async ({ createDisputeData, disputeId }) => {
+    setOrder((prev) => ({
+      ...prev,
+      disputeId,
+      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
+      disputeType: createDisputeData.type,
+      disputeDescription: createDisputeData.description,
+    }));
+
+    orderPopupsData.setActiveDisputeWindow(false);
+
+    success.set("Dispute created success");
+  };
+
   const orderPopupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -501,6 +478,7 @@ const OrderContent = ({
     onPayedFastCancel,
     setError: error.set,
     onExtendOrder,
+    onDisputeOpened,
   });
 
   const onMakeExtend = ({ price, fromDate, toDate }) => {
@@ -537,11 +515,11 @@ const OrderContent = ({
     return (
       <>
         <CreateDisputeSection
-          {...createDisputeData}
+          {...orderPopupsData.createDisputeData}
           onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
           setCurrentOpenImg={setCurrentOpenImg}
           needWrapping={false}
-          onSubmit={handleCreateDispute}
+          onSubmit={orderPopupsData.handleOpenDispute}
         />
         <ImagePopup
           photoUrl={currentOpenImg}
@@ -1594,7 +1572,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/chat/${order.chatId}`}
+                href={`/dashboard/chats/${order.chatId}`}
               >
                 Chat
               </Link>

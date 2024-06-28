@@ -18241,7 +18241,7 @@ input[type="number"] {
 }
 
 .order-info-widget {
-  padding: "15px 30px 15px";
+  padding: 15px 30px 15px;
 }
 
 .status-background-red {
@@ -19095,4 +19095,21 @@ span.flatpickr-weekday {
 
 .message-content-action:hover {
   background: #c0baca !important;
+}
+
+.popup-date-fee-switch-widget .form-group,
+.popup-date-fee-switch-widget .date-fee-switch,
+.popup-date-fee-switch-widget .date-fee-switch .box {
+  margin-bottom: 0 !important;
+}
+
+.popup-date-fee-switch-widget .date-fee-switch {
+  margin-top: 0 !important;
+}
+
+.popup-widget-textarea {
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 5px !important;
+  background: #fbfbfb !important;
+  padding: 15px 20px !important;
 }
