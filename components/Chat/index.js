@@ -31,6 +31,7 @@ const Chat = ({
             setListWindow={windowProps.setListWindow}
             actions={actions}
             handleSelectChat={handleSelectChat}
+            windowProps={windowProps}
           />
         </div>
       </div>

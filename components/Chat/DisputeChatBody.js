@@ -14,6 +14,7 @@ const DisputeChatBody = ({
   setListWindow,
   selectedChat,
   actions,
+  windowProps
 }) => {
   return (
     <>
@@ -74,7 +75,7 @@ const DisputeChatBody = ({
                 />
               );
             })}
-            <div className="right-sidebar-bottom"></div>
+            <div ref={windowProps.bodyTriggerRef} className="right-sidebar-bottom"></div>
           </div>
         </div>
 

@@ -50,7 +50,7 @@ const LeftSidebar = ({
 
             {loading && <SmallLoader />}
 
-            {!loading && filter.length ? (
+            {!loading && filter.length > 0 && (
               <>
                 {filterChats.length > 0 ? (
                   <ul className="list-group list-group-user list-unstyled mb-0">
@@ -74,7 +74,9 @@ const LeftSidebar = ({
                   </div>
                 )}
               </>
-            ) : (
+            )}
+
+            {!loading && filter.length < 1 && (
               <>
                 {chats.length > 0 ? (
                   <>

@@ -1,6 +1,7 @@
 import React from "react";
 import ErrorSpan from "../ErrorSpan";
 import SendFileButton from "./SendFileButton";
+import {useChatSenderPanel} from "../../../hooks";
 
 function ChatFooter(props) {
   const {

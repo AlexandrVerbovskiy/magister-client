@@ -5,7 +5,6 @@ const SmallLoader = () => {
         className="spinner-border"
         role="status"
         style={{
-          color: "var(--mainColor)",
           width: "1rem",
           height: "1rem",
           borderWidth: "2px",

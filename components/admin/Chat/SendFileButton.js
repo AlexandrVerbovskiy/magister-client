@@ -29,7 +29,7 @@ const SendFileButton = ({ handleSendMedia }) => {
         onChange={handleFileInputChange}
         type="file"
         accept={STATIC.FILE_ACCEPT}
-        className="d-none"
+        className="hidden"
       />
 
       <SendFileModal

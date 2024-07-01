@@ -3,12 +3,44 @@ import { getFilePath } from "../../../utils";
 import LinkIcon from "../Icons/LinkIcon";
 import ActiveSpan from "../Disputes/ActiveSpan";
 
+const HeaderTab = ({ user, chatId, selectedChatId, onSelectSubChat }) => {
+
+  return (
+    <button
+      key={user.id}
+      type="button"
+      className={`flex items-center border-r border-slate-200 h-full px-2 ${
+        chatId == selectedChatId ? "bg-slate-100" : "bg-white"
+      }`}
+      href={"/admin/users/edit/" + user.id}
+      style={{ width: "200px" }}
+      onClick={() => onSelectSubChat(chatId)}
+    >
+      <img
+        className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+        src={getFilePath(user.photo)}
+        width="32"
+        height="32"
+        style={{ width: "32px", height: "32px" }}
+      />
+
+      <div className="truncate">
+        <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+          {user.name}
+        </span>
+      </div>
+    </button>
+  );
+};
+
 const ChatHeader = ({
   msgSidebarOpen,
   setMsgSidebarOpen,
   order,
   dispute,
   selectedChat,
+  selectedChatId,
+  onSelectSubChat,
 }) => {
   const tenant = {
     id: order.tenantId,
@@ -62,9 +94,13 @@ const ChatHeader = ({
       <div className="flex items-center justify-between border-b border-slate-200 h-12 bg-white">
         <div className="flex items-center h-full">
           <div className="flex h-full ">
-            <a
-              className="flex items-center border-r border-slate-200 h-full px-4 sm:px-6 md:px-5 bg-slate-100"
+            <button
+              type="button"
+              className={`flex items-center border-r border-slate-200 h-full px-4 sm:px-6 md:px-5 ${
+                selectedChat.id == selectedChatId ? "bg-slate-100" : "bg-white"
+              }`}
               style={{ width: "240px" }}
+              onClick={() => onSelectSubChat(selectedChat.id)}
             >
               <img
                 className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
@@ -87,29 +123,19 @@ const ChatHeader = ({
                   Inner Chat
                 </span>
               </div>
-            </a>
-            {[tenant, owner].map((user) => (
-              <a
-                key={user.id}
-                className="flex items-center border-r border-slate-200 h-full px-2 bg-white"
-                href={"/admin/users/edit/" + user.id}
-                style={{ width: "200px" }}
-              >
-                <img
-                  className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-                  src={getFilePath(user.photo)}
-                  width="32"
-                  height="32"
-                  style={{ width: "32px", height: "32px" }}
-                />
-
-                <div className="truncate">
-                  <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                    {user.name}
-                  </span>
-                </div>
-              </a>
-            ))}
+            </button>
+            <HeaderTab
+              user={tenant}
+              chatId={selectedChat.tenantChatId}
+              selectedChatId={selectedChatId}
+              onSelectSubChat={onSelectSubChat}
+            />
+            <HeaderTab
+              user={owner}
+              chatId={selectedChat.ownerChatId}
+              selectedChatId={selectedChatId}
+              onSelectSubChat={onSelectSubChat}
+            />
           </div>
         </div>
       </div>

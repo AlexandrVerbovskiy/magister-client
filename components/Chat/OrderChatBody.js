@@ -26,6 +26,7 @@ const OrderChatBody = ({
   actions,
   dopEntityInfo: dopOrderInfo,
   handleSelectChat,
+  windowProps,
 }) => {
   const currentActionButtons = useOrderActions({
     order,
@@ -234,7 +235,10 @@ const OrderChatBody = ({
                 />
               );
             })}
-            <div className="right-sidebar-bottom"></div>
+            <div
+              ref={windowProps.bodyTriggerRef}
+              className="right-sidebar-bottom"
+            ></div>
           </div>
         </div>
 

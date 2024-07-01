@@ -1,6 +1,6 @@
 import SendFileButton from "./SendFileButton";
 import ErrorSpan from "../ErrorSpan";
-import useChatSenderPanel from "../../hooks/useChatSenderPanel";
+import { useChatSenderPanel } from "../../hooks";
 
 const SenderPanel = (props) => {
   const { stopUpdatingMessage, updatingMessage } = props;

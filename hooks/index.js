@@ -21,3 +21,4 @@ export { default as useSocketInit } from "./useSocketInit";
 export { default as useChatList } from "./useChatList";
 export { default as useChatWindowsChanger } from "./useChatWindowsChanger";
 export { default as useSingleOrderActions } from "./useSingleOrderActions";
+export { default as useChatSenderPanel } from "./useChatSenderPanel";

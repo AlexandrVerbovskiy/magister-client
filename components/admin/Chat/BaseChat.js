@@ -20,11 +20,22 @@ const BaseChat = ({
   chatBodyTriggerRef,
   order,
   dispute,
+  selectedChatId,
+  handleSelectSubChat,
+  actions,
 }) => {
   const onSelectChat = (chatId) => {
     setMsgSidebarOpen(false);
     handleSelectChat(chatId);
   };
+
+  const onSelectSubChat = (chatId) => {
+    setMsgSidebarOpen(false);
+    handleSelectSubChat(chatId);
+  };
+
+  const handleStartTyping = () => {};
+  const handleFinishTyping = () => {};
 
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
@@ -95,6 +106,10 @@ const BaseChat = ({
               selectedChat={selectedChat}
               chats={listProps.chats}
               handleSelectChat={onSelectChat}
+              filter={listProps.filter}
+              setFilter={listProps.setFilter}
+              loading={listProps.loading}
+              filterChats={listProps.filterChats}
             />
 
             <div
@@ -110,6 +125,8 @@ const BaseChat = ({
                     order={order}
                     dispute={dispute}
                     selectedChat={selectedChat}
+                    selectedChatId={selectedChatId}
+                    onSelectSubChat={onSelectSubChat}
                   />
                   <div className="grow px-4 sm:px-6 md:px-5 py-6 z-0">
                     {messagesToView.map((message) => {
@@ -135,9 +152,14 @@ const BaseChat = ({
                         />
                       );
                     })}
-                    <div ref={chatBodyTriggerRef} />
+                    <div
+                      ref={chatBodyTriggerRef}
+                      className="right-sidebar-bottom"
+                    />
                   </div>
-                  {/*<ChatFooter />*/}
+                  {bodyProps.canSendMessage && (
+                    <ChatFooter {...actions} chatId={selectedChatId} />
+                  )}
                 </>
               ) : (
                 <>
