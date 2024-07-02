@@ -41,7 +41,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   if (type == STATIC.MESSAGE_TYPES.TEXT) {
     return (
       <div
-        className={messageClassName}
+        className={`${messageClassName} w-max`}
         dangerouslySetInnerHTML={{ __html: content.text }}
       ></div>
     );
@@ -65,7 +65,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.IMAGE) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <img
           style={{ maxWidth: "200px", maxHeight: "200px" }}
           className="rounded-lg shadow-md mb-1"
@@ -79,7 +79,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.VIDEO) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <video
           className="rounded-lg shadow-md mb-1"
           height="200px"
@@ -94,7 +94,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.AUDIO) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <audio className="rounded-lg shadow-md mb-1" controls src={src} />
         <DownloadButton src={src} />
       </div>
@@ -103,13 +103,9 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.FILE) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <div className={messageClassName}>
-          <a
-            style={{ color: "inherit" }}
-            href={src}
-            download
-          >
+          <a style={{ color: "inherit" }} href={src} download>
             <div className="me-1"></div>
             {content.filename}
           </a>
@@ -242,7 +238,7 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
     return (
-      <div className={`flex flex-col ${messageClassName}`}>
+      <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
           <b>Started dispute</b>
         </div>
@@ -262,7 +258,7 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.LISTING_REVIEW == type) {
     return (
-      <div className={`flex flex-col items-center ${messageClassName}`}>
+      <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
           <b>Listing review</b>
         </div>
@@ -294,7 +290,7 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
     return (
-      <div className={`flex flex-col items-center ${messageClassName}`}>
+      <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
           <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
         </div>
@@ -361,7 +357,7 @@ const ChatMessageContent = ({
   }
 
   if (!messageContent) {
-    messageContent = <div>Unpredictable message</div>;
+    messageContent = <div className="w-max">Unpredictable message</div>;
   }
 
   return messageContent;

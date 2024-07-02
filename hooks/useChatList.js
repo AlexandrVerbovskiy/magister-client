@@ -13,6 +13,8 @@ const useChatList = (props) => {
     getDopOptions: () => ({ chatType: typeRef.current }),
     chatHasRelationToOther: (chat, chatId) => chat.id === chatId,
     checkMainRelationToOther: (chat, chatId) => chat.id === chatId,
+    ignoreNewMessageCondition: (message) =>
+      message.entityType != typeRef.current,
   });
 
   const {
@@ -80,8 +82,6 @@ const useChatList = (props) => {
     opponentOnline,
     opponentOffline,
     ...chatListActions,
-    ignoreNewMessageCondition: (message) =>
-      message.entityType != typeRef.current,
   };
 };
 

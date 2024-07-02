@@ -26,6 +26,7 @@ const MessageLi = ({
   entity,
   popupsData,
   adminSend,
+  needUserPhoto,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const isAuthor = senderId == sessionUser?.id;

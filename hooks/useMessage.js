@@ -13,7 +13,9 @@ const useMessage = ({
   messageRef,
   messageParentRef,
   popupMarginRight = 21.28,
+  popupMarginLeft = 21.28,
   popupMarginBottom = 15,
+  authorMessageLocation = STATIC.AUTHOR_MESSAGE_LOCATIONS.RIGHT,
 }) => {
   const [activePopup, setActivePopup] = useState(false);
   const [popupCoords, setPopupCoords] = useState({ bottom: 0, left: 0 });
@@ -43,13 +45,24 @@ const useMessage = ({
       messageRef.current,
       messageParentRef.current
     );
-    const popupRight = messageCoords.right - popupMarginRight;
 
-    setPopupCoords({
-      bottom: `${popupMarginBottom}px`,
-      right: popupRight + "px",
-      transform: "translate(-100%, 100%)",
-    });
+    if (authorMessageLocation == STATIC.AUTHOR_MESSAGE_LOCATIONS.RIGHT) {
+      const popupRight = messageCoords.right - popupMarginRight;
+
+      setPopupCoords({
+        bottom: `${popupMarginBottom}px`,
+        right: popupRight + "px",
+        transform: "translate(-100%, 100%)",
+      });
+    } else {
+      const popupLeft = messageCoords.left - popupMarginLeft;
+
+      setPopupCoords({
+        bottom: `${popupMarginBottom}px`,
+        left: popupLeft + "px",
+        transform: "translate(0, 100%)",
+      });
+    }
 
     setActivePopup(true);
   };

@@ -16,6 +16,18 @@ const SenderPanel = (props) => {
     handleFinishTyping,
   } = useChatSenderPanel(props);
 
+  const onFocusInput = () => {
+    if (!updatingMessage) {
+      handleStartTyping();
+    }
+  };
+
+  const onBlurInput = () => {
+    if (!updatingMessage) {
+      handleFinishTyping();
+    }
+  };
+
   return (
     <>
       {updatingMessage && (
@@ -73,8 +85,8 @@ const SenderPanel = (props) => {
             value={message}
             onInput={handleInputMessage}
             onKeyDown={handleInputKeyPress}
-            onFocus={handleStartTyping}
-            onBlur={handleFinishTyping}
+            onFocus={onFocusInput}
+            onBlur={onBlurInput}
           />
 
           <ErrorSpan error={messageError} />

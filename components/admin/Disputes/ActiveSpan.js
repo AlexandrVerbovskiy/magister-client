@@ -1,7 +1,7 @@
 import Tooltip from "../Tooltip";
 import STATIC from "../../../static";
 
-const ActiveSpan = ({ status, needToolTip = true }) => {
+const ActiveSpan = ({ status, needToolTip = true, onClick = null }) => {
   const text =
     status == STATIC.DISPUTE_STATUSES.OPEN
       ? "OPEN"
@@ -18,7 +18,10 @@ const ActiveSpan = ({ status, needToolTip = true }) => {
 
   return (
     <div
-      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1`}
+      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1 ${
+        onClick ? "cursor-pointer" : ""
+      }`}
+      onClick={onClick ? onClick : () => {}}
     >
       {needToolTip ? (
         <Tooltip

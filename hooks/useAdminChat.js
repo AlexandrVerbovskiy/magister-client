@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import useAdminChatList from "./useAdminChatList";
 import { changeLocation, indicateMediaTypeByExtension } from "../utils";
 import { IndiceContext } from "../contexts";
-import useMediaActions from "./useMediaActions";
 import useAdminChatMessageList from "./useAdminChatMessageList";
 import useChatBase from "./useChatBase";
 
@@ -79,6 +78,11 @@ const useAdminChat = ({
     prefix: "admin-",
   });
 
+  const updateDisputeStatus = (status) => {
+    bodyProps.handleDisputeUpdate({ status });
+    listProps.updateChatInfo(mainSelectedChatId, { disputeStatus: status });
+  };
+
   const selectedChat =
     listProps.chats.find((chat) => chat.id === mainSelectedChatId) ?? null;
 
@@ -93,6 +97,7 @@ const useAdminChat = ({
     dispute: bodyProps.dispute,
     selectedChatId,
     actions: { ...chatActions },
+    updateDisputeStatus,
   };
 };
 

@@ -18,7 +18,7 @@ const useAdminChatMessageList = (props) => {
   const [dispute, setDispute] = useState(baseDispute);
   const [dopInfo, setDopInfo] = useState(baseDopInfo);
 
-  const [canSendMessage, setCanSendMessage] = useState(
+  const [isSubChat, setIsSubChat] = useState(
     baseSearchChatType == STATIC.CHAT_TYPES.DISPUTE
   );
 
@@ -26,14 +26,14 @@ const useAdminChatMessageList = (props) => {
     setOrder(result.order);
     setDispute(result.dispute);
     setDopInfo(result.dopInfo);
-    setCanSendMessage(result.searchChatType == STATIC.CHAT_TYPES.DISPUTE);
+    setIsSubChat(result.searchChatType == STATIC.CHAT_TYPES.DISPUTE);
   };
 
   const onReset = () => {
     setOrder(null);
     setDispute(null);
     setDopInfo(null);
-    setCanSendMessage(false);
+    setIsSubChat(false);
   };
 
   const baseMessageListOptions = useChatMessageListBase({
@@ -60,7 +60,7 @@ const useAdminChatMessageList = (props) => {
     order,
     dispute,
     dopInfo,
-    canSendMessage,
+    isSubChat,
     handleOrderUpdate,
     handleDisputeUpdate,
     ...baseMessageListOptions,

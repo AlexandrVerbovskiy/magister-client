@@ -2,9 +2,10 @@ import Link from "next/link";
 import { getFilePath } from "../../../utils";
 import LinkIcon from "../Icons/LinkIcon";
 import ActiveSpan from "../Disputes/ActiveSpan";
+import STATIC from "../../../static";
+import { useState } from "react";
 
 const HeaderTab = ({ user, chatId, selectedChatId, onSelectSubChat }) => {
-
   return (
     <button
       key={user.id}
@@ -41,6 +42,10 @@ const ChatHeader = ({
   selectedChat,
   selectedChatId,
   onSelectSubChat,
+  activateUnsolvePopup,
+  activateSolvePopup,
+  statusPopupActive,
+  setStatusPopupActive,
 }) => {
   const tenant = {
     id: order.tenantId,
@@ -84,10 +89,54 @@ const ChatHeader = ({
               <LinkIcon color="var(--mainColor)" />
             </Link>
 
-            <ActiveSpan
-              status={selectedChat.disputeStatus}
-              needToolTip={false}
-            />
+            <div>
+              <ActiveSpan
+                status={selectedChat.disputeStatus}
+                needToolTip={false}
+                onClick={() => setStatusPopupActive(true)}
+              />
+
+              <div
+                className={`right-0 table-change-role-popup bg-white dark:bg-slate-800 shadow-lg rounded-sm px-2 py-1 ${
+                  statusPopupActive ? "active" : ""
+                }`}
+              >
+                {selectedChat.disputeStatus !=
+                  STATIC.DISPUTE_STATUSES.SOLVED && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      activateSolvePopup();
+                    }}
+                    className="text-xs inline-flex font-medium bg-emerald-100 text-emerald-500 rounded-full text-center px-2.5 py-1 cursor-pointer"
+                  >
+                    Solve
+                  </button>
+                )}
+
+                {selectedChat.disputeStatus ===
+                  STATIC.DISPUTE_STATUSES.OPEN && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      activateUnsolvePopup();
+                    }}
+                    className="text-xs inline-flex font-medium bg-rose-100 text-rose-500 rounded-full text-center px-2.5 py-1 cursor-pointer"
+                  >
+                    Unsolve
+                  </button>
+                )}
+              </div>
+
+              {statusPopupActive && (
+                <div
+                  className="hidden-popup"
+                  onClick={() => setStatusPopupActive(false)}
+                ></div>
+              )}
+            </div>
           </div>
         </div>
       </div>

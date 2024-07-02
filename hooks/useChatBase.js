@@ -20,9 +20,7 @@ const useChatBase = ({
     }
 
     io.on(prefix + "file-part-uploaded", async (data) => {
-      const nextPartData = await chatActions.onSuccessSendBlobPart(
-        data.tempKey
-      );
+      const nextPartData = await onSuccessSendBlobPart(data.tempKey);
 
       if (!nextPartData) {
         return;
@@ -34,7 +32,12 @@ const useChatBase = ({
         return;
       }
 
-      bodyProps.onUpdateMessagePercent(nextPartData["percent"], data.tempKey);
+      bodyProps.onUpdateMessagePercent({
+        percent: nextPartData["percent"],
+        chatId: nextPartData["chatId"],
+        tempKey: data.tempKey,
+      });
+
       io.emit(prefix + "file-part-upload", { ...nextPartData });
     });
 
@@ -48,7 +51,6 @@ const useChatBase = ({
     );
 
     io.on(prefix + "get-message", (data) => {
-      console.log("test");
       bodyProps.appendMessageToChat(data.message);
       listProps.onGetMessage(data.message, data.opponent);
     });

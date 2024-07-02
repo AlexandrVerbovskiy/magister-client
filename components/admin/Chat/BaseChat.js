@@ -4,8 +4,16 @@ import ChatHeader from "./ChatHeader";
 import ChatFooter from "./ChatFooter";
 import ChatMessage from "./ChatMessage";
 import InboxSidebar from "./InboxSidebar";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { dateConverter } from "../../../utils";
+import SendFileModal from "./SendFileModal";
+import { useChatSenderPanel, useSendFileButton } from "../../../hooks";
+import ContentStoryModal from "./ContentStoryModal";
+import UnsolveModal from "../Disputes/UnsolveModal";
+import SolveModal from "../Disputes/SolveModal";
+import { solveDispute, unsolveDispute } from "../../../services";
+import { IndiceContext } from "../../../contexts";
+import STATIC from "../../../static";
 
 const BaseChat = ({
   listProps,
@@ -23,7 +31,17 @@ const BaseChat = ({
   selectedChatId,
   handleSelectSubChat,
   actions,
+  updateDisputeStatus,
 }) => {
+  const { authToken } = useContext(IndiceContext);
+  const [messagesToView, setMessagesToView] = useState([]);
+  const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
+  const [updatingMessage, setUpdatingMessage] = useState(null);
+  const [currentContentStory, setCurrentContentStory] = useState(null);
+  const [solvePopupActive, setSolvePopupActive] = useState(null);
+  const [unsolvePopupActive, setUnsolvePopupActive] = useState(null);
+  const [statusPopupActive, setStatusPopupActive] = useState(false);
+
   const onSelectChat = (chatId) => {
     setMsgSidebarOpen(false);
     handleSelectChat(chatId);
@@ -34,12 +52,42 @@ const BaseChat = ({
     handleSelectSubChat(chatId);
   };
 
-  const handleStartTyping = () => {};
-  const handleFinishTyping = () => {};
+  const closeContentStoryPopup = () => setCurrentContentStory(null);
 
-  const [messagesToView, setMessagesToView] = useState([]);
-  const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
-  const [updatingMessage, setUpdatingMessage] = useState(null);
+  const handleOpenContentStoryPopup = (e, story) => {
+    e.stopPropagation();
+    setCurrentContentStory(story);
+  };
+
+  const handleChangeUpdatingMessageId = (messageId) => {
+    const message = bodyProps.messages.find(
+      (message) => message.id === messageId
+    );
+    setUpdatingMessage(message);
+  };
+
+  const stopUpdatingMessage = () => {
+    setUpdatingMessage(null);
+  };
+
+  const chatSenderPanelProps = useChatSenderPanel({
+    chatId: selectedChatId,
+    ...actions,
+    updatingMessage,
+    stopUpdatingMessage,
+  });
+  const { handleSendMedia } = chatSenderPanelProps;
+
+  const {
+    file,
+    close,
+    active,
+    fileInputRef,
+    handleFileInputChange,
+    handleSend,
+  } = useSendFileButton({
+    handleSendMedia,
+  });
 
   useEffect(() => {
     const newMessagesToView = [];
@@ -81,16 +129,48 @@ const BaseChat = ({
   }, [JSON.stringify(bodyProps.messages)]);
 
   const handleScrollBody = (e) => {
-    if (e.target.scrollTop === 0) {
+    if (e.target.scrollTop === 0 && bodyProps.canShowMore) {
       setLastShowedMessageId(bodyProps.messages[0].id);
       bodyProps.handleShowMore();
+    }
+  };
+
+  const activateUnsolvePopup = () => {
+    setUnsolvePopupActive(true);
+  };
+
+  const activateSolvePopup = () => {
+    setSolvePopupActive(true);
+  };
+
+  const handleApproveUnsolveClick = async () => {
+    await unsolveDispute(dispute.id, authToken);
+    updateDisputeStatus(STATIC.DISPUTE_STATUSES.UNSOLVED);
+    setUnsolvePopupActive(false);
+    setStatusPopupActive(false);
+  };
+
+  const handleApproveSolveClick = async (solution) => {
+    const result = await solveDispute(
+      { solution, disputeId: dispute.id },
+      authToken
+    );
+    updateDisputeStatus(STATIC.DISPUTE_STATUSES.SOLVED);
+    setSolvePopupActive(false);
+    setStatusPopupActive(false);
+
+    const createdMessage = result.messages.find(
+      (message) => message.chatId === selectedChatId
+    );
+
+    if (createdMessage) {
+      bodyProps.appendMessageToChat(createdMessage);
     }
   };
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
       <div
         className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden"
         onScroll={handleScrollBody}
@@ -127,6 +207,11 @@ const BaseChat = ({
                     selectedChat={selectedChat}
                     selectedChatId={selectedChatId}
                     onSelectSubChat={onSelectSubChat}
+                    updateDisputeStatus={updateDisputeStatus}
+                    activateUnsolvePopup={activateUnsolvePopup}
+                    activateSolvePopup={activateSolvePopup}
+                    statusPopupActive={statusPopupActive}
+                    setStatusPopupActive={setStatusPopupActive}
                   />
                   <div className="grow px-4 sm:px-6 md:px-5 py-6 z-0">
                     {messagesToView.map((message) => {
@@ -136,8 +221,23 @@ const BaseChat = ({
                             key={message.tempKey}
                             className="w-full flex items-center justify-center"
                           >
-                            <div className="w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-emerald-100 text-emerald-500 duration-150 ease-in-out">
+                            <div className="w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-emerald-100 text-emerald-500 duration-150 ease-in-out mb-4">
                               {message.content}
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      if (
+                        message.type == STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE
+                      ) {
+                        return (
+                          <div
+                            key={message.id}
+                            className="w-full flex items-center justify-center"
+                          >
+                            <div className="w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-slate-200 text-slate-500 duration-150 ease-in-out mb-4">
+                              Dispute Resolved
                             </div>
                           </div>
                         );
@@ -149,6 +249,14 @@ const BaseChat = ({
                           {...message}
                           order={order}
                           dispute={dispute}
+                          handleChangeUpdatingMessageId={
+                            handleChangeUpdatingMessageId
+                          }
+                          handleDeleteMessage={actions.deleteMessage}
+                          handleOpenContentStoryPopup={
+                            handleOpenContentStoryPopup
+                          }
+                          isSubChat={bodyProps.isSubChat}
                         />
                       );
                     })}
@@ -157,8 +265,14 @@ const BaseChat = ({
                       className="right-sidebar-bottom"
                     />
                   </div>
-                  {bodyProps.canSendMessage && (
-                    <ChatFooter {...actions} chatId={selectedChatId} />
+                  {bodyProps.isSubChat && (
+                    <ChatFooter
+                      {...chatSenderPanelProps}
+                      fileInputRef={fileInputRef}
+                      handleFileInputChange={handleFileInputChange}
+                      updatingMessage={updatingMessage}
+                      stopUpdatingMessage={stopUpdatingMessage}
+                    />
                   )}
                 </>
               ) : (
@@ -174,6 +288,31 @@ const BaseChat = ({
           </div>
         </main>
       </div>
+
+      <SendFileModal
+        handleSendClick={handleSend}
+        file={file}
+        modalOpen={active}
+        handleCloseModal={close}
+      />
+
+      <ContentStoryModal
+        story={currentContentStory}
+        modalOpen={!!currentContentStory}
+        handleCloseModal={closeContentStoryPopup}
+      />
+
+      <UnsolveModal
+        active={unsolvePopupActive}
+        close={() => setUnsolvePopupActive(false)}
+        onAcceptClick={handleApproveUnsolveClick}
+      />
+
+      <SolveModal
+        active={solvePopupActive}
+        close={() => setSolvePopupActive(false)}
+        onAcceptClick={handleApproveSolveClick}
+      />
     </div>
   );
 };

@@ -124,4 +124,5 @@ export default {
   },
   CHAT_TYPES: { DISPUTE: "dispute", ORDER: "order" },
   ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
+  AUTHOR_MESSAGE_LOCATIONS: { RIGHT: "right", LEFT: "left" },
 };

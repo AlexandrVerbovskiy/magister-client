@@ -14,7 +14,7 @@ const DisputeChatBody = ({
   setListWindow,
   selectedChat,
   actions,
-  windowProps
+  windowProps,
 }) => {
   return (
     <>
@@ -30,35 +30,43 @@ const DisputeChatBody = ({
             {messagesToView.map((message) => {
               if (message.type == "date") {
                 return (
-                  <div
-                    key={message.tempKey}
-                    className="badge badge-pill badge-light my-3"
-                  >
-                    {dateName(message.content)}
+                  <div className="w-100 my-3" key={message.tempKey}>
+                    <div className="badge badge-pill badge-light">
+                      {dateName(message.content)}
+                    </div>
+                  </div>
+                );
+              }
+
+              if (message.type == STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE) {
+                return (
+                  <div className="w-100 my-3" key={message.id}>
+                    <div className="badge badge-light gray badge-pill chat-message">
+                      Dispute resolved
+                    </div>
                   </div>
                 );
               }
 
               if (message.type == STATIC.MESSAGE_TYPES.STARTED_DISPUTE) {
                 return (
-                  <div
-                    key={message.id}
-                    className="badge badge-light gray badge-pill chat-message my-3"
-                  >
-                    <div className="mb-2">
-                      <b>Dispute created</b>
-                    </div>
-                    <div className="w-100 text-start mb-1">
-                      <b>Created by: </b>
-                      {message.content.senderName}
-                    </div>
-                    <div className="w-100 text-start mb-1">
-                      <b>Type: </b>
-                      {message.content.type}
-                    </div>
-                    <div className="w-100 text-start mb-1">
-                      <b>Description: </b>
-                      {message.content.description}
+                  <div className="w-100 my-3" key={message.id}>
+                    <div className="badge badge-light gray badge-pill chat-message">
+                      <div className="mb-2">
+                        <b>Dispute created</b>
+                      </div>
+                      <div className="w-100 text-start mb-1">
+                        <b>Created by: </b>
+                        {message.content.senderName}
+                      </div>
+                      <div className="w-100 text-start mb-1">
+                        <b>Type: </b>
+                        {message.content.type}
+                      </div>
+                      <div className="w-100 text-start mb-1">
+                        <b>Description: </b>
+                        {message.content.description}
+                      </div>
                     </div>
                   </div>
                 );
@@ -75,7 +83,10 @@ const DisputeChatBody = ({
                 />
               );
             })}
-            <div ref={windowProps.bodyTriggerRef} className="right-sidebar-bottom"></div>
+            <div
+              ref={windowProps.bodyTriggerRef}
+              className="right-sidebar-bottom"
+            ></div>
           </div>
         </div>
 

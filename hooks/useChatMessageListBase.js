@@ -92,13 +92,17 @@ const useChatMessageListBase = ({
       return;
     }
 
-    setMessages((prevMessages) =>
-      prevMessages.map((prevMessage) =>
-        prevMessage[field] === fieldValue
-          ? { ...prevMessage, ...message }
-          : prevMessage
-      )
-    );
+    setMessages((prevMessages) => {
+      return prevMessages.map((prevMessage) => {
+        let newMessage = { ...prevMessage };
+
+        if (prevMessage[field] === fieldValue) {
+          newMessage = { ...prevMessage, ...message };
+        }
+
+        return newMessage;
+      });
+    });
   };
 
   const updateMessageByTempKey = (message, tempKey) => {
@@ -113,8 +117,8 @@ const useChatMessageListBase = ({
     updateMessageByTempKey({ ...message, tempKey: null }, tempKey);
   };
 
-  const onUpdateMessagePercent = (percent, tempKey) => {
-    updateMessageByTempKey({ percent }, tempKey);
+  const onUpdateMessagePercent = ({ percent, chatId, tempKey }) => {
+    updateMessageByTempKey({ percent, chatId }, tempKey);
   };
 
   const onCancelledMessage = (tempKey) => {
