@@ -2,14 +2,14 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import { useOrderActions } from "../../hooks";
 import OrderPopups from "../Order/OrderPopups";
-import STATIC from "../../static";
 
 const OrderModals = ({
   tenantBaseCommission,
   order,
-  updateOrder,
   orderPopupsData,
   bankInfo,
+  onTenantPayed,
+  onMakeExtend,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -19,23 +19,6 @@ const OrderModals = ({
   const currentActionButtons = useOrderActions({
     order,
   });
-
-  const onMakeExtend = ({ price, fromDate, toDate }) => {
-    orderPopupsData.setExtendPopupActive(false);
-    orderPopupsData.setExtendApproveData({
-      price,
-      fromDate,
-      toDate,
-    });
-  };
-
-  const onTenantPayed = () => {
-    setTimeout(() => {
-      updateOrder({
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-      });
-    }, 100);
-  };
 
   return (
     <OrderPopups

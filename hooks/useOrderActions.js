@@ -7,19 +7,23 @@ const useOrderActions = ({ order }) => {
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
 
   useEffect(() => {
+    const newActionButtons = [];
+
+    if (order.chatId) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT);
+    }
+
     if (order.disputeId != null) {
-      setCurrentActionButtons([]);
+      if (order.disputeChatId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT);
+      }
+
+      setCurrentActionButtons(newActionButtons);
       return;
     }
 
     const isOwner = order.ownerId == sessionUser?.id;
     const isTenant = order.tenantId == sessionUser?.id;
-
-    const newActionButtons = [];
-
-    if(order.chatId){
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT)
-    }
 
     if (order.cancelStatus == null) {
       if (

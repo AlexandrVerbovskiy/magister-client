@@ -13,7 +13,17 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
   const isOwner = sessionUser.id == order.ownerId;
   const isTenant = sessionUser.id == order.tenantId;
 
-  if (!order.disputeStatus) {
+  if (order.disputeStatus) {
+    if (
+      [
+        STATIC.MESSAGE_TYPES.STARTED_DISPUTE,
+        STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE,
+      ].includes(type) &&
+      order.disputeChatId
+    ) {
+      canActions = true;
+    }
+  } else {
     if (order.cancelStatus) {
       if (
         isOwner &&

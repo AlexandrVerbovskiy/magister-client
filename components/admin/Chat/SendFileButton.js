@@ -1,16 +1,13 @@
-import SendFileModal from "./SendFileModal";
 import STATIC from "../../../static";
-import useSendFileButton from "../../../hooks/useSendFileButton";
 
-const SendFileButton = ({ handleSendMedia }) => {
-  const {
-    file,
-    close,
-    active,
-    fileInputRef,
-    handleFileInputChange,
-    handleSend,
-  } = useSendFileButton({ handleSendMedia });
+const SendFileButton = ({
+  fileInputRef,
+  handleFileInputChange,
+}) => {
+  const onInputFile = (e) => {
+    e.stopPropagation();
+    handleFileInputChange(e);
+  };
 
   return (
     <>
@@ -26,17 +23,10 @@ const SendFileButton = ({ handleSendMedia }) => {
 
       <input
         ref={fileInputRef}
-        onChange={handleFileInputChange}
+        onChange={onInputFile}
         type="file"
         accept={STATIC.FILE_ACCEPT}
-        className="d-none"
-      />
-
-      <SendFileModal
-        handleSendClick={handleSend}
-        file={file}
-        active={active}
-        close={close}
+        className="hidden"
       />
     </>
   );

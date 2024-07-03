@@ -1,15 +1,27 @@
 import { useRef } from "react";
 import useChatFileSendAccept from "./useChatFileSendAccept";
-import { getFileData } from "../utils";
+import { byteConverter, getFileData } from "../utils";
+import STATIC from "../static";
 
-const useSendFileButton = ({ handleSendMedia }) => {
+const useSendFileButton = ({ handleSendMedia, setError }) => {
   const fileInputRef = useRef(null);
   const { file, handleSetFile, close, active } = useChatFileSendAccept();
 
   const handleFileInputChange = (e) => {
-    if (!e.target.files[0]) return;
+    const file = e.target.files[0];
+    const maxFileSize = STATIC.MAX_CHAT_FILE_SIZE;
 
-    getFileData(e.target.files[0], (newFile) => {
+    if (!file) {
+      return;
+    }
+
+    if (file.size > maxFileSize) {
+      return setError(
+        "File can't be larger than " + byteConverter(maxFileSize)
+      );
+    }
+
+    getFileData(file, (newFile) => {
       handleSetFile(newFile);
       fileInputRef.current.value = "";
     });

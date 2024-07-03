@@ -1,6 +1,6 @@
 import SendFileButton from "./SendFileButton";
 import ErrorSpan from "../ErrorSpan";
-import useChatSenderPanel from "../../hooks/useChatSenderPanel";
+import { useChatSenderPanel } from "../../hooks";
 
 const SenderPanel = (props) => {
   const { stopUpdatingMessage, updatingMessage } = props;
@@ -15,6 +15,18 @@ const SenderPanel = (props) => {
     handleStartTyping,
     handleFinishTyping,
   } = useChatSenderPanel(props);
+
+  const onFocusInput = () => {
+    if (!updatingMessage) {
+      handleStartTyping();
+    }
+  };
+
+  const onBlurInput = () => {
+    if (!updatingMessage) {
+      handleFinishTyping();
+    }
+  };
 
   return (
     <>
@@ -73,8 +85,8 @@ const SenderPanel = (props) => {
             value={message}
             onInput={handleInputMessage}
             onKeyDown={handleInputKeyPress}
-            onFocus={handleStartTyping}
-            onBlur={handleFinishTyping}
+            onFocus={onFocusInput}
+            onBlur={onBlurInput}
           />
 
           <ErrorSpan error={messageError} />

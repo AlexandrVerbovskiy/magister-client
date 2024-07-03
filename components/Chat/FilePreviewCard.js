@@ -10,7 +10,7 @@ export default ({ file }) => {
         src={file.src}
         className="d-block w-100"
         alt="..."
-        style={{ objectFit: "contain" }}
+        style={{ objectFit: "contain"}}
       />
     );
   }
@@ -19,7 +19,7 @@ export default ({ file }) => {
 
   if (videoType) {
     FileElem = () => (
-      <video style={{ objectFit: "contain" }} className="w-100" controls>
+      <video style={{ objectFit: "contain" }} controls>
         <source src={file.src} type={"video/" + videoType} />
         Your browser does not support the video tag.
       </video>

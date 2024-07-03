@@ -46,6 +46,7 @@ export default {
     OWNER_REVIEW: "owner-review",
     OPEN_DISPUTE: "open-dispute",
     ORDER_CHAT: "order-chat",
+    VIEW_DISPUTE_CHAT: "view-dispute-chat",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],
@@ -116,7 +117,6 @@ export default {
     FINISHED: "finished",
     CREATED_CANCEL_REQUEST: "created-cancel",
     ACCEPTED_CANCEL_REQUEST: "accepted-cancel",
-
     LISTING_REVIEW: "listing-review",
     USER_REVIEW: "user-review",
     STARTED_DISPUTE: "started-dispute",
@@ -124,4 +124,6 @@ export default {
   },
   CHAT_TYPES: { DISPUTE: "dispute", ORDER: "order" },
   ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
+  AUTHOR_MESSAGE_LOCATIONS: { RIGHT: "right", LEFT: "left" },
+  MAX_CHAT_FILE_SIZE: 1 * 1024 * 1024 * 1024,
 };

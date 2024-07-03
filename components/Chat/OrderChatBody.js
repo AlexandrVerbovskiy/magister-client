@@ -26,6 +26,7 @@ const OrderChatBody = ({
   actions,
   dopEntityInfo: dopOrderInfo,
   handleSelectChat,
+  windowProps,
 }) => {
   const currentActionButtons = useOrderActions({
     order,
@@ -104,8 +105,8 @@ const OrderChatBody = ({
     }
 
     updateOrder(newOrderPart);
-
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
   };
 
   const onCancel = ({ chatMessage }) => {
@@ -121,6 +122,7 @@ const OrderChatBody = ({
     }
 
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
   };
 
   const onPayedFastCancel = ({ chatMessage }) => {
@@ -129,6 +131,42 @@ const OrderChatBody = ({
     });
 
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onAcceptOrder = ({ chatMessage, status }) => {
+    updateOrder({ status });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
+    updateOrder({ status, cancelStatus });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onDisputeOpened = async ({ chatMessage, orderPart }) => {
+    updateOrder(orderPart);
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onTenantPayed = async ({ chatMessage, orderPart }) => {
+    setTimeout(() => {
+      actions.appendMessage(chatMessage);
+      updateOrder(orderPart);
+      windowProps.scrollBodyBottom();
+    }, 100);
+  };
+
+  const onMakeExtend = ({ price, fromDate, toDate }) => {
+    popupsData.setExtendPopupActive(false);
+    popupsData.setExtendApproveData({
+      price,
+      fromDate,
+      toDate,
+    });
   };
 
   const onExtendOrder = ({ id, chatMessage, opponent }) => {
@@ -138,31 +176,6 @@ const OrderChatBody = ({
     success.set(
       "Order extended successfully. You can discuss the new terms in a new chat"
     );
-  };
-
-  const onAcceptOrder = ({ chatMessage, status }) => {
-    updateOrder({ status });
-    actions.appendMessage(chatMessage);
-  };
-
-  const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
-    updateOrder({ status, cancelStatus });
-    actions.appendMessage(chatMessage);
-  };
-
-  const onDisputeOpened = async ({
-    chatMessage,
-    createDisputeData,
-    disputeId,
-  }) => {
-    updateOrder({
-      disputeId,
-      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-      disputeType: createDisputeData.type,
-      disputeDescription: createDisputeData.description,
-    });
-
-    actions.appendMessage(chatMessage);
   };
 
   const popupsData = useSingleOrderActions({
@@ -202,22 +215,20 @@ const OrderChatBody = ({
             {messagesToView.map((message) => {
               if (message.type == "date") {
                 return (
-                  <div
-                    key={message.tempKey}
-                    className="badge badge-pill badge-light my-3"
-                  >
-                    {dateName(message.content)}
+                  <div className="w-100 my-3" key={message.tempKey}>
+                    <div className="badge badge-pill badge-light">
+                      {dateName(message.content)}
+                    </div>
                   </div>
                 );
               }
 
               if (message.type == STATIC.MESSAGE_TYPES.RESOLVED_DISPUTE) {
                 return (
-                  <div
-                    key={message.id}
-                    className="badge badge-light gray badge-pill chat-message my-3"
-                  >
-                    Dispute resolved
+                  <div className="w-100 my-3" key={message.id}>
+                    <div className="badge badge-light gray badge-pill chat-message">
+                      Dispute resolved
+                    </div>
                   </div>
                 );
               }
@@ -234,7 +245,10 @@ const OrderChatBody = ({
                 />
               );
             })}
-            <div className="right-sidebar-bottom"></div>
+            <div
+              ref={windowProps.bodyTriggerRef}
+              className="right-sidebar-bottom"
+            ></div>
           </div>
         </div>
 
@@ -252,7 +266,8 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
-        updateOrder={updateOrder}
+        onTenantPayed={onTenantPayed}
+        onMakeExtend={onMakeExtend}
       />
 
       {currentActionButtons.includes(

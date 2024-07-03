@@ -1,6 +1,7 @@
 import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
+import { useRouter } from "next/router";
 
 const OrderActions = ({
   currentActionButtons,
@@ -11,9 +12,18 @@ const OrderActions = ({
   popupsData,
   canActions = true,
 }) => {
+  const router = useRouter();
+
   const { checkErrorData } = useOrderDateError({
     order,
   });
+
+  const handleDisputeChatClick = (e) => {
+    e.preventDefault();
+    router
+      .push(`/dashboard/chats/${order.disputeChatId}`)
+      .then(() => window.location.reload());
+  };
 
   return (
     <>
@@ -127,6 +137,18 @@ const OrderActions = ({
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review
             </Link>
+          )}
+
+          {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
+          ) && (
+            <button
+              className={actionClass}
+              type="button"
+              onClick={handleDisputeChatClick}
+            >
+              {needIcon && <i className="bx bx-chat"></i>} Dispute Chat
+            </button>
           )}
 
           {currentActionButtons.includes(

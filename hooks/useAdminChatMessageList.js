@@ -3,95 +3,67 @@ import {
   getAdminChatBaseInfo,
   getAdminChatMessageList,
 } from "../services/chat";
+import useChatMessageListBase from "./useChatMessageListBase";
+import STATIC from "../static";
 
-const useAdminChatMessageList = ({
-  messages: baseMessages,
-  canShowMore: baseCanShowMore,
-  chatId: baseChatId,
-  authToken,
-  order: baseOrder = null,
-  dispute: baseDispute = null,
-  dopInfo: baseDopInfo = null,
-}) => {
-  const [messages, setMessages] = useState(baseMessages);
-  const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
+const useAdminChatMessageList = (props) => {
+  const {
+    order: baseOrder = null,
+    dispute: baseDispute = null,
+    dopInfo: baseDopInfo = null,
+    searchChatType: baseSearchChatType = null,
+  } = props;
+
   const [order, setOrder] = useState(baseOrder);
   const [dispute, setDispute] = useState(baseDispute);
   const [dopInfo, setDopInfo] = useState(baseDopInfo);
-  const [loading, setLoading] = useState(false);
-  const chatIdRef = useRef(baseChatId);
 
-  useEffect(() => {
-    chatIdRef.current = baseChatId;
-  }, [baseChatId]);
+  const [isSubChat, setIsSubChat] = useState(
+    baseSearchChatType == STATIC.CHAT_TYPES.DISPUTE
+  );
 
-  const handleShowMore = async () => {
-    if (loading || !canShowMore) {
-      return;
-    }
+  const onChangeChat = (result) => {
+    setOrder(result.order);
+    setDispute(result.dispute);
+    setDopInfo(result.dopInfo);
+    setIsSubChat(result.searchChatType == STATIC.CHAT_TYPES.DISPUTE);
+  };
 
-    setLoading(true);
+  const onReset = () => {
+    setOrder(null);
+    setDispute(null);
+    setDopInfo(null);
+    setIsSubChat(false);
+  };
 
-    try {
-      if (!messages.length) {
-        return;
-      }
+  const baseMessageListOptions = useChatMessageListBase({
+    ...props,
+    getMessageList: getAdminChatMessageList,
+    getChatInfo: getAdminChatBaseInfo,
+    onChangeChat,
+    onReset,
+  });
 
-      const lastMessageId = messages[0].id;
-
-      const result = await getAdminChatMessageList(
-        {
-          chatId: chatIdRef.current,
-          lastMessageId,
-        },
-        authToken
-      );
-
-      setCanShowMore(result.messagesCanShowMore);
-      setMessages([...result.messages, ...messages]);
-    } catch (e) {
-      // Обробка помилок
-    } finally {
-      setLoading(false);
+  const handleOrderUpdate = (orderPart) => {
+    if (orderPart.id === order?.id) {
+      setOrder((prevOrder) => ({ ...prevOrder, ...orderPart }));
     }
   };
 
-  const handleChangeChat = async (newChatId) => {
-    if (newChatId === chatIdRef.current) {
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const result = await getAdminChatBaseInfo(
-        {
-          chatId: newChatId,
-        },
-        authToken
-      );
-
-      setCanShowMore(result.messagesCanShowMore);
-      setMessages([...result.messages]);
-      setOrder(result.order);
-      setDispute(result.dispute);
-      setDopInfo(result.dopInfo);
-    } catch (e) {
-      // Обробка помилок
-    } finally {
-      setLoading(false);
+  const handleDisputeUpdate = (disputePart) => {
+    if (disputePart.id === dispute?.id) {
+      setDispute((prevDispute) => ({ ...prevDispute, ...disputePart }));
     }
   };
 
   return {
-    loading,
     order,
     dispute,
-    messages,
-    canShowMore,
     dopInfo,
-    handleShowMore,
-    handleChangeChat,
+    isSubChat,
+    handleOrderUpdate,
+    handleDisputeUpdate,
+    ...baseMessageListOptions,
   };
 };
 

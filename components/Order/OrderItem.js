@@ -333,6 +333,17 @@ const OrderInfo = ({
             <i className="bx bx-chat"></i> Chat
           </Link>
         )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/chats/${order.disputeChatId}`}
+          >
+            <i className="bx bx-chat"></i> Dispute Chat
+          </Link>
+        )}
       </td>
     </>
   );
@@ -385,9 +396,14 @@ const OrderItem = ({
                 </Link>
               </li>
             </ul>
-            <Link href={`/chat/${userId}`} className="default-btn">
-              <i className="bx bx-envelope"></i> Send Message
-            </Link>
+            {order.chatId && (
+              <Link
+                href={`/dashboard/chats/${order.chatId}`}
+                className="default-btn"
+              >
+                <i className="bx bx-envelope"></i> Send Message
+              </Link>
+            )}
           </div>
         </td>
 

@@ -28,7 +28,7 @@ const DownloadButton = ({ src }) => {
 
 const PointStarInfo = ({ label, value }) => {
   return (
-    <div>
+    <div style={{ width: "150px" }}>
       <label>{label}</label>
       <SingleRatingStar value={value} />
     </div>
@@ -41,7 +41,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   if (type == STATIC.MESSAGE_TYPES.TEXT) {
     return (
       <div
-        className={messageClassName}
+        className={`${messageClassName} w-max`}
         dangerouslySetInnerHTML={{ __html: content.text }}
       ></div>
     );
@@ -65,7 +65,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.IMAGE) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <img
           style={{ maxWidth: "200px", maxHeight: "200px" }}
           className="rounded-lg shadow-md mb-1"
@@ -79,7 +79,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.VIDEO) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <video
           className="rounded-lg shadow-md mb-1"
           height="200px"
@@ -94,7 +94,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.AUDIO) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <audio className="rounded-lg shadow-md mb-1" controls src={src} />
         <DownloadButton src={src} />
       </div>
@@ -103,13 +103,9 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
 
   if (type === STATIC.MESSAGE_TYPES.FILE) {
     return (
-      <div className="flex items-center">
+      <div className="flex items-center w-max">
         <div className={messageClassName}>
-          <a
-            style={{ color: "inherit" }}
-            href={src}
-            download
-          >
+          <a style={{ color: "inherit" }} href={src} download>
             <div className="me-1"></div>
             {content.filename}
           </a>
@@ -242,17 +238,17 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
     return (
-      <div className={`flex flex-col ${messageClassName}`}>
+      <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
           <b>Started dispute</b>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Type: </b>
           {STATIC.DISPUTE_TYPE_TITLE[content.type]}
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
@@ -262,29 +258,29 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.LISTING_REVIEW == type) {
     return (
-      <div className={`flex flex-col items-center ${messageClassName}`}>
+      <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
           <b>Listing review</b>
         </div>
 
-        <div>
-          <div>
-            <PointStarInfo label="Punctuality" value={punctuality} />
+        <div className="mb-1">
+          <div className="flex">
+            <PointStarInfo label="Punctuality" value={content.punctuality} />
+            <PointStarInfo label="General" value={content.generalExperience} />
             <PointStarInfo
-              label="General Experience"
-              value={generalExperience}
+              label="Communication"
+              value={content.communication}
             />
-            <PointStarInfo label="Communication" value={communication} />
           </div>
 
-          <div>
-            <PointStarInfo label="Reliability" value={reliability} />
-            <PointStarInfo label="Kindness" value={kindness} />
-            <PointStarInfo label="Flexibility" value={flexibility} />
+          <div className="flex">
+            <PointStarInfo label="Reliability" value={content.reliability} />
+            <PointStarInfo label="Kindness" value={content.kindness} />
+            <PointStarInfo label="Flexibility" value={content.flexibility} />
           </div>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
@@ -294,36 +290,31 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
     return (
-      <div className={`flex flex-col items-center ${messageClassName}`}>
+      <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
           <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div>
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full sm:w-1/2">
-              <PointStarInfo label="Quality" value={content.quality} />
-              <PointStarInfo
-                label="Listing Accuracy"
-                value={content.listingAccuracy}
-              />
-              <PointStarInfo label="Utility" value={content.utility} />
-            </div>
-            <div className="w-full sm:w-1/2">
-              <PointStarInfo label="Condition" value={content.condition} />
-              <PointStarInfo label="Performance" value={content.performance} />
-              <PointStarInfo label="Location" value={content.location} />
-            </div>
+        <div className="mb-1">
+          <div className="flex">
+            <PointStarInfo label="Quality" value={content.quality} />
+            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
+            <PointStarInfo label="Utility" value={content.utility} />
+          </div>
+          <div className="flex">
+            <PointStarInfo label="Condition" value={content.condition} />
+            <PointStarInfo label="Performance" value={content.performance} />
+            <PointStarInfo label="Location" value={content.location} />
           </div>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
 
         {content.leaveFeedback && (
-          <div>
+          <div className="w-full mt-1">
             <b>Private feedback: </b>
             {content.leaveFeedback}
           </div>
@@ -361,7 +352,7 @@ const ChatMessageContent = ({
   }
 
   if (!messageContent) {
-    messageContent = <div>Unpredictable message</div>;
+    messageContent = <div className="w-max">Unpredictable message</div>;
   }
 
   return messageContent;

@@ -1,4 +1,51 @@
-import { generateProfileFilePath, getFilePath } from "../../../utils";
+import { generateProfileFilePath } from "../../../utils";
+import SmallLoader from "../SmallLoader";
+
+const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
+  return (
+    <li className="-mx-2">
+      <button
+        className={`flex items-center justify-between w-full p-2 rounded ${
+          selectedChat?.id == chat.id
+            ? "bg-indigo-500/30"
+            : "border-b border-slate-300"
+        }`}
+        onClick={() => handleSelectChat(chat.id)}
+      >
+        <div className="flex items-center truncate">
+          <div className="flex -space-x-3 -ml-px mr-2">
+            <a className="block" href="#0">
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                src={generateProfileFilePath(chat.tenantPhoto)}
+                width="32"
+                height="32"
+                alt={chat.tenantName}
+                style={{ width: "32px", height: "32px" }}
+              />
+            </a>
+            <a className="block" href="#0">
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content"
+                src={generateProfileFilePath(chat.ownerPhoto)}
+                width="32"
+                height="32"
+                alt={chat.ownerName}
+                style={{ width: "32px", height: "32px" }}
+              />
+            </a>
+          </div>
+
+          <div className="truncate">
+            <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+              Issue #{chat.disputeId}
+            </span>
+          </div>
+        </div>
+      </button>
+    </li>
+  );
+};
 
 const InboxSidebar = ({
   msgSidebarOpen,
@@ -6,6 +53,10 @@ const InboxSidebar = ({
   selectedChat,
   chats,
   handleSelectChat,
+  filter,
+  setFilter,
+  loading,
+  filterChats,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,6 +80,8 @@ const InboxSidebar = ({
               className="form-input w-full pl-9 bg-white dark:bg-slate-800"
               type="search"
               placeholder="Search…"
+              value={filter}
+              onInput={(e) => setFilter(e.target.value)}
             />
             <button
               className="absolute inset-0 right-auto group"
@@ -46,51 +99,43 @@ const InboxSidebar = ({
             </button>
           </form>
           <div className="mt-4">
-            <ul className="mb-6">
-              {chats.map((chat) => (
-                <li key={chat.id} className="-mx-2">
-                  <button
-                    className={`flex items-center justify-between w-full p-2 rounded ${
-                      selectedChat?.id == chat.id
-                        ? "bg-indigo-500/30"
-                        : "border-b border-slate-300"
-                    }`}
-                    onClick={() => handleSelectChat(chat.id)}
-                  >
-                    <div className="flex items-center truncate">
-                      <div className="flex -space-x-3 -ml-px mr-2">
-                        <a className="block" href="#0">
-                          <img
-                            className="rounded-full border-2 border-white dark:border-slate-800 box-content"
-                            src={generateProfileFilePath(chat.tenantPhoto)}
-                            width="32"
-                            height="32"
-                            alt={chat.tenantName}
-                            style={{ width: "32px", height: "32px" }}
-                          />
-                        </a>
-                        <a className="block" href="#0">
-                          <img
-                            className="rounded-full border-2 border-white dark:border-slate-800 box-content"
-                            src={generateProfileFilePath(chat.ownerPhoto)}
-                            width="32"
-                            height="32"
-                            alt={chat.ownerName}
-                            style={{ width: "32px", height: "32px" }}
-                          />
-                        </a>
-                      </div>
+            {loading && <SmallLoader />}
 
-                      <div className="truncate">
-                        <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                          Issue #{chat.disputeId}
-                        </span>
-                      </div>
+            {!loading && filter.length > 0 && (
+              <>
+                {filterChats.length > 0 ? (
+                  <ul className="list-group list-group-user list-unstyled mb-0">
+                    {filterChats.map((chat) => (
+                      <ChatLi
+                        key={chat.id}
+                        selectedChat={selectedChat}
+                        chat={chat}
+                        handleSelectChat={handleSelectChat}
+                      />
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <div className="bg-gray-100 text-gray-600 rounded-full px-4 py-2 mb-3 text-sm">
+                      No chat found
                     </div>
-                  </button>
-                </li>
-              ))}
-            </ul>
+                  </div>
+                )}
+              </>
+            )}
+
+            {!loading && filter.length < 1 && (
+              <ul className="mb-6">
+                {chats.map((chat) => (
+                  <ChatLi
+                    key={chat.id}
+                    selectedChat={selectedChat}
+                    chat={chat}
+                    handleSelectChat={handleSelectChat}
+                  />
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

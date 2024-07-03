@@ -2,10 +2,6 @@ import FilePreviewCard from "./FilePreviewCard";
 import ModalBlank from "../ModalBlank";
 
 const FileModal = ({ handleSendClick, file, modalOpen, handleCloseModal }) => {
-  if (!modalOpen) {
-    return;
-  }
-
   return (
     <ModalBlank
       id="file-send-modal"
@@ -13,7 +9,7 @@ const FileModal = ({ handleSendClick, file, modalOpen, handleCloseModal }) => {
       setModalOpen={handleCloseModal}
     >
       <div className="p-5 flex space-x-4">
-        <div>
+        <div className="w-full">
           <div className="mb-2">
             <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
               <span>Are you sure you want to send this file?</span>
@@ -21,7 +17,7 @@ const FileModal = ({ handleSendClick, file, modalOpen, handleCloseModal }) => {
           </div>
           <div className="text-sm mb-10">
             <div className="space-y-2">
-              <FilePreviewCard file={file} />
+              {file && <FilePreviewCard file={file} />}
             </div>
           </div>
           <div className="flex flex-wrap justify-end space-x-2">

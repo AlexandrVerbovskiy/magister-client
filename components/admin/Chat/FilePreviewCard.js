@@ -10,7 +10,7 @@ export default ({ file }) => {
         src={file.src}
         className="full block"
         alt="..."
-        style={{ objectFit: "contain" }}
+        style={{ objectFit: "contain", maxHeight: "400px", maxWidth: "100%" }}
       />
     );
   }
@@ -19,7 +19,11 @@ export default ({ file }) => {
 
   if (videoType) {
     FileElem = () => (
-      <video className="full object-contain" controls>
+      <video
+        className="full object-contain"
+        style={{ maxHeight: "400px", maxWidth: "100%" }}
+        controls
+      >
         <source src={file.src} type={"video/" + videoType} />
         Your browser does not support the video tag.
       </video>
@@ -39,7 +43,7 @@ export default ({ file }) => {
 
   return (
     <div style={{ maxWidth: "100%", maxHeight: "400px" }}>
-      <div className="text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 p-3 rounded-lg rounded-tl-none border border-slate-200 dark:border-slate-700 shadow-md mb-1">
+      <div className="text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 p-3 rounded-lg rounded-tl-none border border-slate-200 dark:border-slate-700 shadow-md mb-1 flex items-center justify-center">
         <FileElem />
       </div>
     </div>
