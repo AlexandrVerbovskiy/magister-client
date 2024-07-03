@@ -19,6 +19,7 @@ import {
   validatePassword,
   validatePhoneNumber,
   validateUrl,
+  changeLocation,
 } from "../../utils";
 import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
@@ -29,9 +30,10 @@ import {
   ProfileSection,
   SecuritySection,
   DocumentVerificationSection,
+  PaypalSection,
 } from "../../components/ProfileEdit";
 
-const ProfileEdit = () => {
+const ProfileEdit = ({ newPaypalId }) => {
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
@@ -43,6 +45,14 @@ const ProfileEdit = () => {
     sessionUser,
     authToken,
   } = useContext(IndiceContext);
+
+  useEffect(() => {
+    if (newPaypalId) {
+      updateUserFields({ paypalId: newPaypalId });
+    }
+
+    changeLocation("/dashboard/profile-edit");
+  }, []);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
   const toggleVerifyPhoneModal = () =>
@@ -97,9 +107,6 @@ const ProfileEdit = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
   const [currentPasswordError, setCurrentPasswordError] = useState(null);
 
-  const [paypalId, setPaypalId] = useState(sessionUser?.paypalId ?? "");
-  const [paypalIdError, setPaypalIdError] = useState(null);
-
   const objectToSave = () => ({
     name: name.trim(),
     phone: phone.trim(),
@@ -110,7 +117,6 @@ const ProfileEdit = () => {
     briefBio: briefBio.trim(),
     contactDetails: contactDetails.trim(),
     placeWork: placeWork.trim(),
-    paypalId: paypalId.trim(),
   });
 
   const userToState = () => ({
@@ -123,7 +129,6 @@ const ProfileEdit = () => {
     briefBio: sessionUser?.briefBio ?? "",
     contactDetails: sessionUser?.contactDetails ?? "",
     placeWork: sessionUser?.placeWork ?? "",
-    paypalId: sessionUser?.paypalId ?? "",
   });
 
   const hasChanges = () => {
@@ -153,7 +158,6 @@ const ProfileEdit = () => {
     setBriefBio(userInfo.briefBio);
     setContactDetails(userInfo.contactDetails);
     setPlaceWork(userInfo.placeWork);
-    setPaypalId(userInfo.paypalId);
   };
 
   const handlePhotoChange = (e) => {
@@ -177,18 +181,6 @@ const ProfileEdit = () => {
 
     if (resNameValidation !== true) {
       setNameError(resNameValidation);
-      hasError = true;
-    }
-
-    if (!paypalId.trim()) {
-      setPaypalIdError("Required field");
-      hasError = true;
-    }
-
-    const resPaypalIdValidation = validateSmallText(paypalId);
-
-    if (resPaypalIdValidation !== true) {
-      setPaypalIdError(resPaypalIdValidation);
       hasError = true;
     }
 
@@ -461,10 +453,6 @@ const ProfileEdit = () => {
         setBriefBioError,
         placeWorkError,
         setPlaceWorkError,
-        paypalId,
-        setPaypalId,
-        paypalIdError,
-        setPaypalIdError,
       }}
     />
   );
@@ -489,6 +477,8 @@ const ProfileEdit = () => {
       }}
     />
   );
+
+  const paypalFormSection = <PaypalSection />;
 
   const securityFormSection = (
     <SecuritySection
@@ -572,6 +562,7 @@ const ProfileEdit = () => {
               <>
                 {securityFormSection}
                 {passwordFormSection}
+                {paypalFormSection}
               </>
             )}
             {verifyDocumentsSection}
@@ -582,12 +573,17 @@ const ProfileEdit = () => {
   );
 };
 
-const boostServerSideProps = async ({ baseSideProps }) => {
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const paypalCode = context.query["code"] ?? null;
+
   if (baseSideProps.sessionUser.needRegularViewInfoForm) {
     noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
 
-  const options = await getUserProfileEditPageOptions(baseSideProps.authToken);
+  const options = await getUserProfileEditPageOptions(
+    paypalCode,
+    baseSideProps.authToken
+  );
   return { ...options };
 };
 

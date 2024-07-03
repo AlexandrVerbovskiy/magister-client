@@ -47,10 +47,6 @@ const ProfileSection = ({ formInfo }) => {
     setBriefBioError,
     placeWorkError,
     setPlaceWorkError,
-    paypalId,
-    setPaypalId,
-    paypalIdError,
-    setPaypalIdError,
   } = formInfo;
 
   return (
@@ -211,19 +207,6 @@ const ProfileSection = ({ formInfo }) => {
               error={instagramUrlError}
               setError={setInstagramUrlError}
               name="instagramUrl"
-            />
-          </div>
-
-          <div className="col-lg-12 col-md-12">
-            <Input
-              label="Paypal Id"
-              type="text"
-              setValue={setPaypalId}
-              error={paypalIdError}
-              setError={setPaypalIdError}
-              name="paypal-id"
-              value={paypalId}
-              placeholder="Paypal id"
             />
           </div>
 

@@ -200,8 +200,12 @@ export const getUserDocumentsPageOption = async (userId, authToken) => {
   return data.body;
 };
 
-export const getUserProfileEditPageOptions = async (authToken) => {
-  const data = await get(`/user-profile-edit-options`, authToken);
+export const getUserProfileEditPageOptions = async (paypalCode, authToken) => {
+  const data = await post(
+    `/user-profile-edit-options`,
+    { paypalCode },
+    authToken
+  );
   return data.body;
 };
 
@@ -342,10 +346,7 @@ export const getUserChatOptions = async (
   return data.body;
 };
 
-export const getAdminChatOptions = async (
-  { id = null },
-  authToken
-) => {
+export const getAdminChatOptions = async ({ id = null }, authToken) => {
   const data = await post(`/admin-chat-options`, { id }, authToken);
   return data.body;
 };

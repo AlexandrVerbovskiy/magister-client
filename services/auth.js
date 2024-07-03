@@ -1,6 +1,6 @@
 import { initAxios } from "../utils";
 
-const { get, post } = initAxios("/auth");
+const { get, post, generateFullUrl } = initAxios("/auth");
 
 export const login = async (userInfo) => {
   const data = await post("/login", userInfo);
@@ -108,3 +108,6 @@ export const authByProvider = async (body) => {
   const data = await post("/auth-by-provider", body);
   return data.body;
 };
+
+export const generateUpdatePaypalIdLink = () =>
+  generateFullUrl("paypal-connect");

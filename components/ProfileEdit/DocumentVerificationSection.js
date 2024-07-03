@@ -17,7 +17,7 @@ const DocumentVerificationSection = () => {
         </h3>
       )}
 
-      <form method="get">
+      <form method="get" onSubmit={(e) => e.preventDefault()}>
         <div className="row">
           <div className="col-lg-12 col-md-12">
             <div className="form-group">

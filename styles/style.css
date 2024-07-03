@@ -19113,3 +19113,49 @@ span.flatpickr-weekday {
   background: #fbfbfb !important;
   padding: 15px 20px !important;
 }
+
+#paypal-connect {
+  padding: 0 !important;
+  display: flex !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+#paypal-connect a {
+  width: 100% !important;
+  background: #847bdd !important;
+  transition: var(--transition) !important;
+  display: block !important;
+  height: 48px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  max-width: unset !important;
+}
+
+#paypal-connect a:hover {
+  background: var(--mainColor) !important;
+  border: 0 !important;
+}
+
+#paypal-connect a > * {
+  display: none !important;
+}
+
+#paypal-connect.update-paypal a::before {
+  content: "Update PayPal Connection";
+}
+
+#paypal-connect.connect-paypal a::before {
+  content: "Connect with PayPal";
+}
+
+#paypal-connect a::before{
+  color: white !important;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
