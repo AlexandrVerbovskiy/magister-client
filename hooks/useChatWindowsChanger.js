@@ -38,13 +38,14 @@ const useChatWindowsChanger = (chatId) => {
   };
 
   const scrollBodyBottom = () => {
-    const interval = setInterval(() => {
-
-      if (bodyTriggerRef.current) {
-        bodyTriggerRef.current.scrollIntoView({ behavior: "smooth" });
-        clearInterval(interval);
-      }
-    }, 100);
+    setTimeout(() => {
+      const interval = setInterval(() => {
+        if (bodyTriggerRef.current) {
+          bodyTriggerRef.current.scrollIntoView({ behavior: "smooth" });
+          clearInterval(interval);
+        }
+      }, 100);
+    }, 0);
   };
 
   return {

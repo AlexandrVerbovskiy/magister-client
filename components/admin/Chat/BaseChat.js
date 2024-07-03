@@ -33,7 +33,7 @@ const BaseChat = ({
   actions,
   updateDisputeStatus,
 }) => {
-  const { authToken } = useContext(IndiceContext);
+  const { authToken, error } = useContext(IndiceContext);
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
   const [updatingMessage, setUpdatingMessage] = useState(null);
@@ -87,6 +87,7 @@ const BaseChat = ({
     handleSend,
   } = useSendFileButton({
     handleSendMedia,
+    setError: error.set,
   });
 
   useEffect(() => {

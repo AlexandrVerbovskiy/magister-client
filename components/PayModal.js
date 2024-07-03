@@ -27,10 +27,10 @@ const PayModal = ({
 
   const onApprove = async (data) => {
     try {
-      await paypalOrderPayed(data.orderID, authToken);
+      const result = await paypalOrderPayed(data.orderID, authToken);
 
       setTimeout(() => {
-        onTenantPayed();
+        onTenantPayed(result);
         closeModal();
       }, 100);
     } catch (e) {

@@ -12,7 +12,7 @@ import StarRating from "../StarRating";
 
 const PointStarInfo = ({ label, value }) => {
   return (
-    <div>
+    <div style={{ width: "120px" }}>
       <label>{label}</label>
       <StarRating
         averageRating={value}
@@ -203,12 +203,12 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
           <b>Started dispute</b>
         </div>
 
-        <div className="my-1">
+        <div className="my-1 text-start w-100">
           <b>Type: </b>
           {STATIC.DISPUTE_TYPE_TITLE[content.type]}
         </div>
 
-        <div className="my-1">
+        <div className="my-1 text-start w-100">
           <b>Description: </b>
           {content.description}
         </div>
@@ -236,23 +236,26 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         </div>
 
         <div className="my-1">
-          <div>
-            <PointStarInfo label="Punctuality" value={punctuality} />
+          <div className="d-flex">
+            <PointStarInfo label="Punctuality" value={content.punctuality} />
             <PointStarInfo
-              label="General Experience"
-              value={generalExperience}
+              label="General"
+              value={content.generalExperience}
             />
-            <PointStarInfo label="Communication" value={communication} />
+            <PointStarInfo
+              label="Communication"
+              value={content.communication}
+            />
           </div>
 
-          <div>
-            <PointStarInfo label="Reliability" value={reliability} />
-            <PointStarInfo label="Kindness" value={kindness} />
-            <PointStarInfo label="Flexibility" value={flexibility} />
+          <div className="d-flex">
+            <PointStarInfo label="Reliability" value={content.reliability} />
+            <PointStarInfo label="Kindness" value={content.kindness} />
+            <PointStarInfo label="Flexibility" value={content.flexibility} />
           </div>
         </div>
 
-        <div className="my-1">
+        <div className="my-1 text-start w-100">
           <b>Description: </b>
           {content.description}
         </div>
@@ -268,29 +271,29 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         </div>
 
         <div className="my-1">
-          <div>
+          <div className="d-flex">
             <PointStarInfo label="Quality" value={content.quality} />
             <PointStarInfo
-              label="Listing Accuracy"
+              label="Accuracy"
               value={content.listingAccuracy}
             />
             <PointStarInfo label="Utility" value={content.utility} />
           </div>
 
-          <div>
+          <div className="d-flex">
             <PointStarInfo label="Condition" value={content.condition} />
             <PointStarInfo label="Performance" value={content.performance} />
             <PointStarInfo label="Location" value={content.location} />
           </div>
         </div>
 
-        <div className="my-1">
+        <div className="my-1 text-start w-100">
           <b>Description: </b>
           {content.description}
         </div>
 
         {content.leaveFeedback && (
-          <div className="my-1">
+          <div className="my-1 text-start w-100">
             <b>Private feedback: </b>
             {content.leaveFeedback}
           </div>

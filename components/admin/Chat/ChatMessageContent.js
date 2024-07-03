@@ -28,7 +28,7 @@ const DownloadButton = ({ src }) => {
 
 const PointStarInfo = ({ label, value }) => {
   return (
-    <div>
+    <div style={{ width: "150px" }}>
       <label>{label}</label>
       <SingleRatingStar value={value} />
     </div>
@@ -243,12 +243,12 @@ const orderMessageContent = ({
           <b>Started dispute</b>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Type: </b>
           {STATIC.DISPUTE_TYPE_TITLE[content.type]}
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
@@ -263,24 +263,24 @@ const orderMessageContent = ({
           <b>Listing review</b>
         </div>
 
-        <div>
-          <div>
-            <PointStarInfo label="Punctuality" value={punctuality} />
+        <div className="mb-1">
+          <div className="flex">
+            <PointStarInfo label="Punctuality" value={content.punctuality} />
+            <PointStarInfo label="General" value={content.generalExperience} />
             <PointStarInfo
-              label="General Experience"
-              value={generalExperience}
+              label="Communication"
+              value={content.communication}
             />
-            <PointStarInfo label="Communication" value={communication} />
           </div>
 
-          <div>
-            <PointStarInfo label="Reliability" value={reliability} />
-            <PointStarInfo label="Kindness" value={kindness} />
-            <PointStarInfo label="Flexibility" value={flexibility} />
+          <div className="flex">
+            <PointStarInfo label="Reliability" value={content.reliability} />
+            <PointStarInfo label="Kindness" value={content.kindness} />
+            <PointStarInfo label="Flexibility" value={content.flexibility} />
           </div>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
@@ -295,31 +295,26 @@ const orderMessageContent = ({
           <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div>
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full sm:w-1/2">
-              <PointStarInfo label="Quality" value={content.quality} />
-              <PointStarInfo
-                label="Listing Accuracy"
-                value={content.listingAccuracy}
-              />
-              <PointStarInfo label="Utility" value={content.utility} />
-            </div>
-            <div className="w-full sm:w-1/2">
-              <PointStarInfo label="Condition" value={content.condition} />
-              <PointStarInfo label="Performance" value={content.performance} />
-              <PointStarInfo label="Location" value={content.location} />
-            </div>
+        <div className="mb-1">
+          <div className="flex">
+            <PointStarInfo label="Quality" value={content.quality} />
+            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
+            <PointStarInfo label="Utility" value={content.utility} />
+          </div>
+          <div className="flex">
+            <PointStarInfo label="Condition" value={content.condition} />
+            <PointStarInfo label="Performance" value={content.performance} />
+            <PointStarInfo label="Location" value={content.location} />
           </div>
         </div>
 
-        <div>
+        <div className="w-full">
           <b>Description: </b>
           {content.description}
         </div>
 
         {content.leaveFeedback && (
-          <div>
+          <div className="w-full mt-1">
             <b>Private feedback: </b>
             {content.leaveFeedback}
           </div>

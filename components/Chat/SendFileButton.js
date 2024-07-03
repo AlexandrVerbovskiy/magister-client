@@ -1,8 +1,12 @@
 import SendFilePopup from "./SendFilePopup";
 import useSendFileButton from "../../hooks/useSendFileButton";
 import STATIC from "../../static";
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
 
 const SendFileButton = ({ handleSendMedia }) => {
+  const { error } = useContext(IndiceContext);
+
   const {
     file,
     close,
@@ -10,7 +14,7 @@ const SendFileButton = ({ handleSendMedia }) => {
     fileInputRef,
     handleFileInputChange,
     handleSend,
-  } = useSendFileButton({ handleSendMedia });
+  } = useSendFileButton({ handleSendMedia, setError: error.set });
 
   return (
     <>

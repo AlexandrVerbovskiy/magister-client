@@ -105,8 +105,8 @@ const OrderChatBody = ({
     }
 
     updateOrder(newOrderPart);
-
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
   };
 
   const onCancel = ({ chatMessage }) => {
@@ -122,6 +122,7 @@ const OrderChatBody = ({
     }
 
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
   };
 
   const onPayedFastCancel = ({ chatMessage }) => {
@@ -130,6 +131,42 @@ const OrderChatBody = ({
     });
 
     actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onAcceptOrder = ({ chatMessage, status }) => {
+    updateOrder({ status });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
+    updateOrder({ status, cancelStatus });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onDisputeOpened = async ({ chatMessage, orderPart }) => {
+    updateOrder(orderPart);
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onTenantPayed = async ({ chatMessage, orderPart }) => {
+    setTimeout(() => {
+      actions.appendMessage(chatMessage);
+      updateOrder(orderPart);
+      windowProps.scrollBodyBottom();
+    }, 100);
+  };
+
+  const onMakeExtend = ({ price, fromDate, toDate }) => {
+    popupsData.setExtendPopupActive(false);
+    popupsData.setExtendApproveData({
+      price,
+      fromDate,
+      toDate,
+    });
   };
 
   const onExtendOrder = ({ id, chatMessage, opponent }) => {
@@ -139,31 +176,6 @@ const OrderChatBody = ({
     success.set(
       "Order extended successfully. You can discuss the new terms in a new chat"
     );
-  };
-
-  const onAcceptOrder = ({ chatMessage, status }) => {
-    updateOrder({ status });
-    actions.appendMessage(chatMessage);
-  };
-
-  const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
-    updateOrder({ status, cancelStatus });
-    actions.appendMessage(chatMessage);
-  };
-
-  const onDisputeOpened = async ({
-    chatMessage,
-    createDisputeData,
-    disputeId,
-  }) => {
-    updateOrder({
-      disputeId,
-      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-      disputeType: createDisputeData.type,
-      disputeDescription: createDisputeData.description,
-    });
-
-    actions.appendMessage(chatMessage);
   };
 
   const popupsData = useSingleOrderActions({
@@ -254,7 +266,8 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
-        updateOrder={updateOrder}
+        onTenantPayed={onTenantPayed}
+        onMakeExtend={onMakeExtend}
       />
 
       {currentActionButtons.includes(

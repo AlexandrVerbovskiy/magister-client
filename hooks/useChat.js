@@ -44,7 +44,7 @@ const useChat = ({
       return;
     }
 
-    setTimeout(() => windowProps.scrollBodyBottom(), 0);
+    windowProps.scrollBodyBottom();
   }, [selectedChatId]);
 
   const handleSelectChat = async (chatId) => {
@@ -59,8 +59,7 @@ const useChat = ({
     setSelectedChatId(null);
   };
 
-  const scrollBodyBottom = () =>
-    setTimeout(() => windowProps.scrollBodyBottom(), 0);
+  const scrollBodyBottom = () => windowProps.scrollBodyBottom();
 
   const chatActions = useChatBase({
     bodyProps,

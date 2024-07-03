@@ -41,7 +41,7 @@ const OrderInfoMessageContent = ({
         {dateConverter(content.offerDateStart)} -{" "}
         {dateConverter(content.offerDateEnd)})
       </div>
-      <div className="mb-1">
+      <div className="my-2">
         {order.cancelStatus ? (
           <CancelStatus
             status={order.cancelStatus}

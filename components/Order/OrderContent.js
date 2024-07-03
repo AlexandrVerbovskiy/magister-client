@@ -454,13 +454,10 @@ const OrderContent = ({
         },
       ];
 
-  const onDisputeOpened = async ({ createDisputeData, disputeId }) => {
+  const onDisputeOpened = async ({ orderPart }) => {
     setOrder((prev) => ({
       ...prev,
-      disputeId,
-      disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-      disputeType: createDisputeData.type,
-      disputeDescription: createDisputeData.description,
+      ...orderPart,
     }));
 
     orderPopupsData.setActiveDisputeWindow(false);
@@ -1575,6 +1572,18 @@ const OrderContent = ({
                 href={`/dashboard/chats/${order.chatId}`}
               >
                 Chat
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
+            ) && (
+              <Link
+                href={`/dashboard/chats/${order.disputeChatId}`}
+                className="default-btn"
+                type="button"
+              >
+                Dispute Chat
               </Link>
             )}
 
