@@ -19159,3 +19159,32 @@ span.flatpickr-weekday {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.chart-card{
+  margin-bottom: 30px!important;
+  background-color: var(--whiteColor)!important;
+  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05)!important;
+  border-radius: 5px!important;
+  display: flex!important;
+  flex-direction: column!important;
+}
+
+.chart-card h3{
+  margin-bottom: 0;
+  padding: 20px 25px 19px;
+  border-bottom: 1px dashed #eeeeee;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.doughnut-chart-legend{
+  list-style-type:none;
+  display: flex;
+  padding: 0;
+  justify-content: center;
+}
+
+.doughnut-chart-legend button{
+  display: flex;
+  align-items: center;
+}

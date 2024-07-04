@@ -209,8 +209,13 @@ export const getUserProfileEditPageOptions = async (paypalCode, authToken) => {
   return data.body;
 };
 
-export const getSettingsPageOptions = async (authToken) => {
-  const data = await get(`/settings-options`, authToken);
+export const getDashboardPageOptions = async (body, authToken) => {
+  const data = await post(`/dashboard-page-options`, body, authToken);
+  return data.body;
+};
+
+export const getDashboardOptions = async (body, authToken) => {
+  const data = await post(`/dashboard-options`, body, authToken);
   return data.body;
 };
 
@@ -267,8 +272,13 @@ export const getWaitingRefundOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminIndexPageOptions = async (body, authToken) => {
-  const data = await post(`/get-admin-index-page-option`, body, authToken);
+export const getAdminDashboardPageOptions = async (body, authToken) => {
+  const data = await post(`/get-admin-dashboard-page-option`, body, authToken);
+  return data.body;
+};
+
+export const getAdminDashboardOptions = async (body, authToken) => {
+  const data = await post(`/get-admin-dashboard-option`, body, authToken);
   return data.body;
 };
 

@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import WelcomeBanner from "../../partials/admin/dashboard/WelcomeBanner";
 import { useAdminPage } from "../../hooks";
 import { supportSideProps } from "../../middlewares";
-import { getAdminIndexPageOptions } from "../../services";
+import {
+  getAdminDashboardPageOptions,
+  getAdminDashboardOptions,
+} from "../../services";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import DateSelect from "../../components/admin/DateSelect";
 import DashboardLineChart from "../../components/admin/Charts/DashboardLineChart";
 import TransactionAnalyticsTable from "../../components/admin/Charts/TransactionAnalyticsTable";
 import DashboardDoughnutChart from "../../components/admin/Charts/DashboardDoughnutChart";
-import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 import { baseTimeTypePageParams } from "../../utils";
 
@@ -32,20 +35,23 @@ const AdminIndex = (props) => {
     rentListingCounts: props.rentListingCounts,
     totalNewInactiveUsers: 0,
     totalNewUsers: 0,
+    disputeTotalDatesCount: props.disputeTotalDatesCount,
+    disputeStatisticInfo: props.disputeStatisticInfo,
   });
 
   const calculableInfos = (
     userInactiveRegisterDatesCount,
     userRegisterDatesCount
   ) => {
-    const totalNewInactiveUsers = Object.keys(
-      userInactiveRegisterDatesCount
-    ).reduce((prev, date) => (prev += userInactiveRegisterDatesCount[date]), 0);
+    const newInactiveKeys = Object.keys(userInactiveRegisterDatesCount);
+    const totalNewInactiveUsers =
+      userInactiveRegisterDatesCount[
+        newInactiveKeys[newInactiveKeys.length - 1]
+      ];
 
-    const totalNewUsers = Object.keys(userRegisterDatesCount).reduce(
-      (prev, date) => (prev += userRegisterDatesCount[date]),
-      0
-    );
+    const newUserKeys = Object.keys(userRegisterDatesCount);
+    const totalNewUsers =
+      userRegisterDatesCount[newUserKeys[newUserKeys.length - 1]];
 
     return { totalNewInactiveUsers, totalNewUsers };
   };
@@ -59,7 +65,7 @@ const AdminIndex = (props) => {
       setFilterType(value);
       setDisabled(true);
 
-      const res = await getAdminIndexPageOptions(
+      const res = await getAdminDashboardOptions(
         {
           clientTime: Date.now(),
           timeFilterType: value,
@@ -207,6 +213,7 @@ const AdminIndex = (props) => {
                   title="New Users"
                   data={[statistic.userRegisterDatesCount]}
                   timeType={timeType}
+                  getTotalType="last"
                 />
               </div>
               <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
@@ -214,6 +221,7 @@ const AdminIndex = (props) => {
                   title="Inactive Users"
                   data={[statistic.userInactiveRegisterDatesCount]}
                   timeType={timeType}
+                  getTotalType="last"
                 />
               </div>
             </div>
@@ -228,14 +236,20 @@ const AdminIndex = (props) => {
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-5 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardDoughnutChart
                   title="Total Disputes"
-                  data={{ "12-01-2020": 12, "01-01-2021": 8 }}
+                  data={{
+                    "Active Disputes":
+                      statistic.disputeStatisticInfo.allActiveDisputes,
+                    "Solved Disputes":
+                      statistic.disputeStatisticInfo.allSolvedDisputes,
+                  }}
                 />
               </div>
               <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-7 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardLineChart
                   title="Active Disputes"
-                  data={[{ "12-01-2020": 12, "01-01-2021": 8 }]}
+                  data={[statistic.disputeTotalDatesCount]}
                   timeType={timeType}
+                  getTotalType="last"
                 />
               </div>
             </div>
@@ -247,7 +261,7 @@ const AdminIndex = (props) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const data = await getAdminIndexPageOptions(
+  const data = await getAdminDashboardPageOptions(
     baseTimeTypePageParams(context.query),
     baseSideProps.authToken
   );

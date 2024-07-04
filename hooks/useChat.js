@@ -65,6 +65,7 @@ const useChat = ({
     bodyProps,
     listProps,
     scrollBodyBottom,
+    selectedChatId
   });
 
   const selectedChat =
