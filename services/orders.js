@@ -61,8 +61,8 @@ export const acceptOrder = async (id, authToken) => {
   return data.body;
 };
 
-export const paypalOrderPayed = async (orderId, authToken) => {
-  const data = await post(`/paypal-order-payed`, { orderId }, authToken);
+export const paypalOrderPayed = async ({orderId, type}, authToken) => {
+  const data = await post(`/paypal-order-payed`, { orderId, type }, authToken);
   return data.body;
 };
 
@@ -133,7 +133,7 @@ export const finishedByOwner = async (token, questions, authToken) => {
 
 export const unpaidOrderTransactionByCreditCard = async (body, authToken) => {
   const data = await post(
-    "/unpaid-order-transaction-credit-card",
+    "/unpaid-order-transaction-bank-transfer",
     body,
     authToken
   );

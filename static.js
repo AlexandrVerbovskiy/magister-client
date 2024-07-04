@@ -126,4 +126,9 @@ export default {
   ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
   AUTHOR_MESSAGE_LOCATIONS: { RIGHT: "right", LEFT: "left" },
   MAX_CHAT_FILE_SIZE: 1 * 1024 * 1024 * 1024,
+  PAYMENT_TYPES: {
+    PAYPAL: "paypal",
+    CREDIT_CARD: "credit-card",
+    BANK_TRANSFER: "bank-transfer",
+  },
 };

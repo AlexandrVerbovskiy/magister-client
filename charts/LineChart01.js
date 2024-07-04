@@ -34,7 +34,7 @@ function LineChart01({
   timeType = "days",
 }) {
   const [chart, setChart] = useState(null);
-  const canvas = useRef(null);
+  const canvasRef = useRef(null);
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === "dark";
   const { tooltipBodyColor, tooltipBgColor, tooltipBorderColor, chartAreaBg } =
@@ -51,7 +51,7 @@ function LineChart01({
   }
 
   useEffect(() => {
-    const ctx = canvas.current;
+    const ctx = canvasRef.current;
     // eslint-disable-next-line no-unused-vars
     const newChart = new Chart(ctx, {
       type: "line",
@@ -130,7 +130,7 @@ function LineChart01({
     chart.update("none");
   }, [currentTheme]);
 
-  return <canvas ref={canvas} width={width} height={height}></canvas>;
+  return <canvas ref={canvasRef} width={width} height={height}></canvas>;
 }
 
 export default LineChart01;

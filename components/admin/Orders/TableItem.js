@@ -1,16 +1,16 @@
 import { useContext, useState } from "react";
-import Delete from "../FastActions/Delete";
 import View from "../FastActions/View";
 import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
-import { getDaysDifference } from "../../../utils";
+import { getDaysDifference, getPaymentNameByType } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import STATIC from "../../../static";
 
 const TableItem = (props) => {
   const {
@@ -41,7 +41,7 @@ const TableItem = (props) => {
     tenantAverageRating,
     ownerAverageRating,
     listingAverageRating,
-    payedId
+    payedId,
   } = props;
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
@@ -176,16 +176,7 @@ const TableItem = (props) => {
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
             <div className="font-semibold">Payment</div>
-            <SubInfoRow
-              label="Method"
-              value={
-                payedType == "paypal"
-                  ? "Paypal"
-                  : payedType == "credit-card"
-                  ? "Transfer"
-                  : "-"
-              }
-            />
+            <SubInfoRow label="Method" value={getPaymentNameByType(payedType)} />
             <div className="mt-1 flex">
               <span className="text-black">Status: </span>{" "}
               {payedAdminApproved ? (

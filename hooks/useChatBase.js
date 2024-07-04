@@ -9,6 +9,7 @@ const useChatBase = ({
   scrollBodyBottom,
   prefix = "",
   senderAdmin = false,
+  selectedChatId,
 }) => {
   const { io, sessionUser } = useContext(IndiceContext);
   const { createMediaActions, onSuccessSendBlobPart, onStopSendMedia } =
@@ -147,7 +148,7 @@ const useChatBase = ({
 
   const updateMessage = (messageId, text) => {
     bodyProps.updateMessage(
-      { content: { text }, chatId: bodyProps.chatId },
+      { content: { text }, chatId: selectedChatId },
       messageId
     );
 

@@ -238,10 +238,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         <div className="my-1">
           <div className="d-flex">
             <PointStarInfo label="Punctuality" value={content.punctuality} />
-            <PointStarInfo
-              label="General"
-              value={content.generalExperience}
-            />
+            <PointStarInfo label="General" value={content.generalExperience} />
             <PointStarInfo
               label="Communication"
               value={content.communication}
@@ -273,10 +270,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         <div className="my-1">
           <div className="d-flex">
             <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo
-              label="Accuracy"
-              value={content.listingAccuracy}
-            />
+            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
             <PointStarInfo label="Utility" value={content.utility} />
           </div>
 

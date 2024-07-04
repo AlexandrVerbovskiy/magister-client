@@ -4,7 +4,7 @@ import StatusBlock from "../Listings/StatusBlock";
 import {
   generateProfileFilePath,
   getDaysDifference,
-  getFilePath,
+  getPaymentNameByType,
   moneyFormat,
   objDateSort,
 } from "../../utils";
@@ -104,7 +104,7 @@ const OrderInfo = ({
               ].includes(order.status) && paymentType ? (
                 <>
                   <strong className="paid">Paid</strong> using{" "}
-                  {paymentType == "credit-card" ? "Bank Transfer" : "Paypal"}
+                  {getPaymentNameByType(paymentType)}
                 </>
               ) : (
                 <strong className="unpaid">Unpaid</strong>
@@ -215,7 +215,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/pay-by-credit-card/` + order.id}
+            href={`/dashboard/pay-by-bank-transfer/` + order.id}
           >
             <i className="bx bx-wallet"></i> Update payment
           </Link>

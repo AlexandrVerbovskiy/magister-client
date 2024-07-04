@@ -7,23 +7,24 @@ import {
   moneyFormat,
   tenantPaymentCalculate,
   dateConverter,
+  getPaymentNameByType,
+  isPayedUsedPaypal,
 } from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
 import Input from "./Form/Input";
-import YesNoModal from "./YesNoModal";
 import AcceptModal from "./RecipientPayments/AcceptModal";
+import STATIC from "../../static";
 
 const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const { authToken } = useContext(IndiceContext);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const [disabled, setDisabled] = useState(false);
   const router = useRouter();
   const [paymentNumber, setPaymentNumber] = useState(
-    recipient.type == "paypal"
+    isPayedUsedPaypal(recipient.type)
       ? recipient.data?.paypalId ?? "-"
       : recipient.data?.cardNumber ?? "-"
   );
@@ -276,11 +277,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="flex w-full gap-2">
                               <div className="w-full sm:w-1/2">
                                 <InputView
-                                  value={
-                                    recipient.type == "paypal"
-                                      ? "Paypal"
-                                      : "Transfer to Card"
-                                  }
+                                  value={getPaymentNameByType(recipient.type)}
                                   label="Transfer Type"
                                   name="transfer-type"
                                   placeholder="Transfer Type"
@@ -292,7 +289,8 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               <div className="w-full sm:w-1/2">
                                 {recipient.status == "failed" &&
                                 recipient.receivedType == "rental" &&
-                                recipient.type == "paypal" ? (
+                                recipient.type ==
+                                  STATIC.PAYMENT_TYPES.PAYPAL ? (
                                   <Input
                                     value={paymentNumber}
                                     label="Payment Number(editable)"
@@ -346,24 +344,23 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                     </div>
 
                     {recipient.status != "completed" && (
-                        <footer>
-                          <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
-                            <div className="flex self-end">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setDoneAcceptModalOpen(true);
-                                }}
-                                className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
-                                disabled={disabled}
-                              >
-                                Mark as Done
-                              </button>
-                            </div>
+                      <footer>
+                        <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                          <div className="flex self-end">
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDoneAcceptModalOpen(true);
+                              }}
+                              className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                            >
+                              Mark as Done
+                            </button>
                           </div>
-                        </footer>
-                      )}
+                        </div>
+                      </footer>
+                    )}
                   </div>
                 </div>
               </div>

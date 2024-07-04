@@ -85,3 +85,21 @@ export const calculateCurrentTotalPrice = ({
 
   return calculationFunc(startDate, endDate, fee, pricePerDay);
 };
+
+export const getPaymentNameByType = (type) => {
+  switch (type) {
+    case STATIC.PAYMENT_TYPES.PAYPAL:
+      return "Paypal";
+    case STATIC.PAYMENT_TYPES.BANK_TRANSFER:
+      return "Bank Transfer";
+    case STATIC.PAYMENT_TYPES.CREDIT_CARD:
+      return "Credit Card";
+    default:
+      return "-";
+  }
+};
+
+export const isPayedUsedPaypal = (type) =>
+  [STATIC.PAYMENT_TYPES.PAYPAL, STATIC.PAYMENT_TYPES.CREDIT_CARD].includes(
+    type
+  );

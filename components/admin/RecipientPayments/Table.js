@@ -4,6 +4,8 @@ import TableItem from "./TableItem";
 import { failedRecipientMarkAsDone } from "../../../services";
 import AcceptModal from "../SenderPayments/AcceptModal";
 import { IndiceContext } from "../../../contexts";
+import STATIC from "../../../static";
+import { isPayedUsedPaypal } from "../../../utils";
 
 const RecipientPaymentsTable = ({
   payments,
@@ -34,10 +36,9 @@ const RecipientPaymentsTable = ({
   const handleAccept = async () => {
     const payment = payments.find((payment) => payment.id === popupApproveId);
 
-    const paymentNumber =
-      payment.type == "paypal"
-        ? payment.data?.paypalId ?? "-"
-        : payment.data?.cardNumber ?? "-";
+    const paymentNumber = isPayedUsedPaypal(payment.type)
+      ? payment.data?.paypalId ?? "-"
+      : payment.data?.cardNumber ?? "-";
 
     await failedRecipientMarkAsDone(
       { id: payment.id, paymentNumber },

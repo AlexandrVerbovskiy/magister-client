@@ -1,5 +1,5 @@
 import React from "react";
-import { moneyFormat, transactionTableOptions } from "../../../utils";
+import { moneyFormat, transactionTableOptions } from "../../utils";
 
 const TransactionAnalyticsTable = ({ title, data }) => {
   const { paypalInfo, bankTransferInfo } = transactionTableOptions({
@@ -7,40 +7,39 @@ const TransactionAnalyticsTable = ({ title, data }) => {
   });
 
   return (
-    <>
-      <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
-        <h2 className="font-semibold text-slate-800 dark:text-slate-100">
-          {title}
-        </h2>
-      </header>
-      <div className="p-3">
+    <div className="chart-card">
+      <h3 className="align-items-center text-lg font-semibold d-flex justify-content-between">
+        <div>{title}</div>
+      </h3>
+
+      <div className="px-3">
         {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full dark:text-slate-300">
+        <div className="table-responsive">
+          <table className="table table-auto w-100 text-light">
             {/* Table header */}
-            <thead className="text-xs uppercase text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-slate-700 dark:bg-opacity-50 rounded-sm">
+            <thead className="text-uppercase text-secondary bg-light bg-opacity-50 rounded-sm">
               <tr>
                 <th className="px-2 py-4">
-                  <div className="font-semibold text-left">Payment method</div>
+                  <div className="fw-semibold text-start">Payment method</div>
                 </th>
                 <th className="px-2 py-4">
-                  <div className="font-semibold text-center">Transactions</div>
+                  <div className="fw-semibold text-center">Transactions</div>
                 </th>
                 <th className="px-2 py-4">
-                  <div className="font-semibold text-center">Amount</div>
+                  <div className="fw-semibold text-center">Amount</div>
                 </th>
                 <th className="px-2 py-4">
-                  <div className="font-semibold text-center">Total</div>
+                  <div className="fw-semibold text-center">Total</div>
                 </th>
               </tr>
             </thead>
             {/* Table body */}
-            <tbody className="text-sm font-medium divide-y divide-slate-100 dark:divide-slate-700">
+            <tbody className="text-body font-medium">
               {/* Row */}
-              <tr>
+              <tr className="border-bottom">
                 <td className="px-2 py-4">
-                  <div className="flex items-center">
-                    <div className="text-slate-800 dark:text-slate-100 flex">
+                  <div className="d-flex align-items-center">
+                    <div className="text-dark d-flex">
                       <svg
                         width="24"
                         height="24"
@@ -66,21 +65,21 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                   <div className="text-center">{paypalInfo["count"]}</div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-emerald-500">
+                  <div className="text-center text-success">
                     ${moneyFormat(paypalInfo["amount"])}
                   </div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-indigo-500">
+                  <div className="text-center text-primary">
                     {paypalInfo["total"]}%
                   </div>
                 </td>
               </tr>
               {/* Row */}
-              <tr>
+              <tr className="border-bottom">
                 <td className="px-2 py-4">
-                  <div className="flex items-center">
-                    <div className="text-slate-800 dark:text-slate-100 flex">
+                  <div className="d-flex align-items-center">
+                    <div className="text-dark d-flex">
                       <svg
                         width="19"
                         height="20"
@@ -102,12 +101,12 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                   <div className="text-center">{bankTransferInfo["count"]}</div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-emerald-500">
+                  <div className="text-center text-success">
                     ${moneyFormat(bankTransferInfo["amount"])}
                   </div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-indigo-500">
+                  <div className="text-center text-primary">
                     {bankTransferInfo["total"]}%
                   </div>
                 </td>
@@ -116,7 +115,7 @@ const TransactionAnalyticsTable = ({ title, data }) => {
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

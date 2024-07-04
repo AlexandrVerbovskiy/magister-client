@@ -160,14 +160,6 @@ const EditForm = ({
 
   const [mainError, setMainError] = useState(null);
 
-  useEffect(() => {
-    if (!canChange) {
-      setMainError(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
-    }
-  }, [canChange]);
-
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
   const handleChangeName = (e) => {
@@ -210,9 +202,6 @@ const EditForm = ({
   const handleChangeActive = async () => {
     try {
       if (!canChange) {
-        error.set(
-          "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-        );
         return;
       }
 
@@ -619,9 +608,6 @@ const EditForm = ({
 
   const handleSubmit = async (needShowMessage = true) => {
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -688,9 +674,6 @@ const EditForm = ({
     e.preventDefault();
 
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -715,9 +698,6 @@ const EditForm = ({
     e.preventDefault();
 
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -990,7 +970,7 @@ const EditForm = ({
                 <ErrorSpan
                   error={backgroundPhotoError}
                   className="d-block mb-3"
-                  style={{marginTop: "-24px"}}
+                  style={{ marginTop: "-24px" }}
                 />
               </div>
             </div>
@@ -1069,6 +1049,16 @@ const EditForm = ({
             </div>
           </div>
         </div>
+
+        {!canChange && (
+          <div
+            className="alert-dismissible fade show alert alert-danger"
+            role="alert"
+          >
+            The listing has a unfinished booking or order. Please finish all
+            listing orders and bookings before updating
+          </div>
+        )}
 
         {mainError && (
           <div

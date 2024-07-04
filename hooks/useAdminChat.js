@@ -75,6 +75,7 @@ const useAdminChat = ({
     bodyProps,
     listProps,
     scrollBodyBottom,
+    selectedChatId,
     prefix: "admin-",
   });
 

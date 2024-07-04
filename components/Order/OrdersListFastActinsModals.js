@@ -214,6 +214,7 @@ const OrdersListFastActinsModals = ({
             ? increaseDateByOneDay(extendModalActiveOrder.offerEndDate)
             : null
         }
+        fullVersion={true}
       />
     </>
   );
