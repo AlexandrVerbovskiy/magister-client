@@ -13,6 +13,7 @@ import {
   getFilePath,
   moneyFormat,
   dateConverter,
+  isPayedUsedPaypal,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -20,6 +21,7 @@ import { useRouter } from "next/router";
 import ImageView from "../Form/ImageView";
 import RejectModal from "./RejectModal";
 import AcceptModal from "./AcceptModal";
+import STATIC from "../../../static";
 
 const BaseSenderView = ({ parentType = "senders", payment }) => {
   const router = useRouter();
@@ -250,7 +252,8 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             Payment proof {payment.type}
                           </h2>
 
-                          {payment.type == "credit-card" && (
+                          {payment.type ==
+                            STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
                             <div className="flex flex-col gap-2">
                               <div className="flex w-full gap-2">
                                 <div className="w-full sm:w-1/2">
@@ -278,7 +281,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             </div>
                           )}
 
-                          {payment.type == "paypal" && (
+                          {isPayedUsedPaypal(payment.type) && (
                             <div className="flex flex-col gap-2">
                               <div className="flex w-full gap-2">
                                 <div className="w-full sm:w-1/3">

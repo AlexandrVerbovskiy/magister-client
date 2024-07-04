@@ -85,7 +85,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/pay-by-credit-card/` + order.id}
+              href={`/dashboard/pay-by-bank-transfer/` + order.id}
             >
               {needIcon && <i className="bx bx-wallet"></i>} Update payment
             </Link>

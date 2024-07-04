@@ -5370,42 +5370,42 @@ Listings Details Area CSS
   font-size: var(--fontSize);
 }
 
-.listings-details-desc .review-form-wrapper .form button[type="button"].submit,
-.listings-details-desc
-  .review-form-wrapper
-  .form
-  button[type="submit"]
-  .listings-details-desc
-  .review-form-wrapper
-  form
-  button[type="button"].submit,
-.listings-details-desc .review-form-wrapper form button[type="submit"] {
-  color: var(--whiteColor);
-  background-color: #847bdd;
-}
-
 .listings-details-desc .review-form-wrapper .form button[type="button"],
 .listings-details-desc .review-form-wrapper form button[type="button"] {
   background-color: #ede7f6;
   color: #666666;
 }
 
+.listings-details-desc .review-form-wrapper .form button[type="button"]:hover,
+.listings-details-desc .review-form-wrapper form button[type="button"]:hover {
+  color: var(--whiteColor);
+  background-color: #847bdd;
+}
+
 .listings-details-desc
   .review-form-wrapper
   .form
   button[type="button"].submit:hover,
-.listings-details-desc .review-form-wrapper .form button[type="submit"]:hover,
+.listings-details-desc .review-form-wrapper .form button[type="submit"],
 .listings-details-desc
   .review-form-wrapper
   form
   button[type="button"].submit:hover,
-.listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
+.listings-details-desc .review-form-wrapper form button[type="submit"]{
   background-color: #ede7f6;
   color: #666666;
 }
 
-.listings-details-desc .review-form-wrapper .form button[type="button"]:hover,
-.listings-details-desc .review-form-wrapper form button[type="button"]:hover {
+.listings-details-desc
+  .review-form-wrapper
+  .form
+  button[type="button"].submit,
+.listings-details-desc .review-form-wrapper .form button[type="submit"]:hover,
+.listings-details-desc
+  .review-form-wrapper
+  form
+  button[type="button"].submit,
+.listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   color: var(--whiteColor);
   background-color: #847bdd;
 }
@@ -18936,10 +18936,10 @@ span.flatpickr-weekday {
 }
 
 .icon-popup-body-button,
-.pay-by-credit-card-paypal-form,
+.pay-by-bank-transfer-paypal-form,
 .pay-download-invoice,
 .pay-by-card-btn,
-.pay-by-credit-card-link {
+.pay-by-bank-transfer-link {
   border: none;
   text-align: center;
   overflow: hidden;
@@ -18962,10 +18962,10 @@ span.flatpickr-weekday {
   margin-top: 22px;
 }
 
-.pay-by-credit-card-paypal-form:hover,
+.pay-by-bank-transfer-paypal-form:hover,
 .pay-download-invoice:hover,
 .pay-by-card-btn:hover,
-.pay-by-credit-card-link:hover {
+.pay-by-bank-transfer-link:hover {
   border-radius: 5px;
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -18995,7 +18995,7 @@ span.flatpickr-weekday {
   margin-top: 30px;
 }
 
-.pay-by-credit-card-paypal-form:disabled {
+.pay-by-bank-transfer-paypal-form:disabled {
   background-color: var(--mainColor2);
 }
 
@@ -19187,4 +19187,9 @@ span.flatpickr-weekday {
 .doughnut-chart-legend button{
   display: flex;
   align-items: center;
+}
+
+.chat-left .time{
+  left: 0!important;
+  right: auto!important;
 }

@@ -2,7 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import BaseModal from "../_App/BaseModal";
 import ErrorSpan from "../ErrorSpan";
-import { cardFormat, validateCardNumber, validateSmallText } from "../../utils";
+import {
+  cardFormat,
+  isPayedUsedPaypal,
+  validateCardNumber,
+  validateSmallText,
+} from "../../utils";
+import STATIC from "../../static";
 
 const PayedCancelModal = ({
   modalActive,
@@ -12,7 +18,7 @@ const PayedCancelModal = ({
   handleCancel,
 }) => {
   const { error, sessionUser } = useContext(IndiceContext);
-  const [type, setType] = useState("paypal");
+  const [type, setType] = useState(STATIC.PAYMENT_TYPES.PAYPAL);
 
   const [paypalId, setPaypalId] = useState("");
   const [paypalIdError, setPaypalIdError] = useState(null);
@@ -30,7 +36,7 @@ const PayedCancelModal = ({
 
     let hasError = false;
 
-    if (type == "paypal") {
+    if (isPayedUsedPaypal(type)) {
       if (!paypalId) {
         setPaypalIdError("Required field!");
         hasError = true;
@@ -73,7 +79,7 @@ const PayedCancelModal = ({
 
   const handleInputCardNumber = (e) => {
     const newValue = e.target.value.replaceAll(" ", "");
-    
+
     if (newValue.length > 16) {
       return;
     }
@@ -129,8 +135,8 @@ const PayedCancelModal = ({
                 type="radio"
                 id="paypal-radio"
                 name="radio-group"
-                onChange={() => handleChangeType("paypal")}
-                checked={type === "paypal"}
+                onChange={() => handleChangeType(STATIC.PAYMENT_TYPES.PAYPAL)}
+                checked={type === STATIC.PAYMENT_TYPES.PAYPAL}
               />
               <label
                 style={{
@@ -154,8 +160,10 @@ const PayedCancelModal = ({
                 type="radio"
                 id="bank-card-radio"
                 name="radio-group"
-                onChange={() => handleChangeType("card")}
-                checked={type === "card"}
+                onChange={() =>
+                  handleChangeType(STATIC.PAYMENT_TYPES.BANK_TRANSFER)
+                }
+                checked={type === STATIC.PAYMENT_TYPES.BANK_TRANSFER}
               />
               <label
                 style={{
@@ -170,7 +178,7 @@ const PayedCancelModal = ({
           </div>
         </div>
 
-        {type == "paypal" && (
+        {type == STATIC.PAYMENT_TYPES.PAYPAL && (
           <div className={`form-group`}>
             <label>Paypal ID</label>
             <input
@@ -185,9 +193,9 @@ const PayedCancelModal = ({
           </div>
         )}
 
-        {type == "card" && (
+        {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
           <div className={`form-group`}>
-            <label>Card Number</label>
+            <label>Bank Transfer</label>
             <input
               name="card-number"
               value={cardFormat(cardNumber)}

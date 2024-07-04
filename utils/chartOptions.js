@@ -1,5 +1,6 @@
 import { tailwindConfig, hexToRGB, fixedColors } from "./tailwindCharts/Utils";
 import { stringSort, dateSort } from "./sort";
+import STATIC from "../static";
 
 export const doughnutChartOptions = ({ title, data, labelPrefix = "" }) => {
   const labels = stringSort(Object.keys(data));
@@ -109,10 +110,10 @@ export const lineChartOptions = ({ data, getTotalType = "sum" }) => {
 };
 
 export const transactionTableOptions = ({ data }) => {
-  const paypalInfo = data["paypal"];
-  const bankTransferInfo = data["bankTransfer"];
+  const paypalInfo = data[STATIC.PAYMENT_TYPES.PAYPAL];
+  const bankTransferInfo = data[STATIC.PAYMENT_TYPES.BANK_TRANSFER];
 
-  const total = data["paypal"]["amount"] + data["bankTransfer"]["amount"];
+  const total = paypalInfo["amount"] + bankTransferInfo["amount"];
 
   if (total > 0) {
     paypalInfo["total"] = ((paypalInfo["amount"] * 100) / total).toFixed(0);

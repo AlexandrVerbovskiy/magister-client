@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-
-import Link from "next/link";
 import { IndiceContext } from "../../../contexts";
 import InputView from "../../FormComponents/InputView";
 import {
@@ -10,14 +8,14 @@ import {
   ownerGetsCalculate,
   tenantPaymentCalculate,
   dateConverter,
+  getPaymentNameByType,
+  isPayedUsedPaypal,
 } from "../../../utils";
 import PayedCancelModal from "../../Order/PayedCancelModal";
 import SuccessIconPopup from "../../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
-import {
-  orderFullCancelPayed,
-  updateRecipientPaymentData,
-} from "../../../services";
+import { updateRecipientPaymentData } from "../../../services";
+import STATIC from "../../../static";
 
 const Status = ({ status, receivedType }) => {
   let statusName = "Unknown";
@@ -94,20 +92,22 @@ const EarningTable = ({
   let recipientNumber = "-";
 
   if (data) {
-    if (type == "paypal") {
-      recipientNumber = data.paypalId;
-      typeText = "Paypal";
-    }
+    typeText = getPaymentNameByType(type);
 
-    if (type == "card") {
+    if (isPayedUsedPaypal(type)) {
+      recipientNumber = data.paypalId;
+    }else{
       recipientNumber = data.cardNumber;
-      typeText = "Card";
+
     }
   }
 
   const onPayedFastCancel = async ({ type, paypalId, cardNumber }) => {
     try {
-      await updateRecipientPaymentData({id, type, paypalId, cardNumber}, authToken);
+      await updateRecipientPaymentData(
+        { id, type, paypalId, cardNumber },
+        authToken
+      );
 
       setUpdatePopupActive(false);
       activateSuccessOrderPopup();

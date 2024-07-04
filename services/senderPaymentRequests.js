@@ -27,7 +27,7 @@ export const approveSenderPaymentTransaction = async (
   authToken
 ) => {
   const data = await post(
-    "/approve-credit-card-transaction",
+    "/approve-bank-transfer-transaction",
     { orderId },
     authToken
   );
@@ -39,7 +39,7 @@ export const rejectSenderPaymentTransaction = async (
   authToken
 ) => {
   const data = await post(
-    "/reject-credit-card-transaction",
+    "/reject-bank-transfer-transaction",
     { orderId, description },
     authToken
   );

@@ -4,7 +4,9 @@ import {
   fullDateConverter,
   generateProfileFilePath,
   getFilePath,
+  getPaymentNameByType,
   moneyFormat,
+  isPayedUsedPaypal,
 } from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
@@ -43,7 +45,7 @@ const TableItem = (props) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const fullPayerPhotoPath = generateProfileFilePath(payerPhoto);
-  
+
   const proofPath = payedProof
     ? getFilePath(payedProof)
     : STATIC.DEFAULT_PHOTO_LINK;
@@ -73,7 +75,7 @@ const TableItem = (props) => {
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {type == "paypal" ? "Paypal" : "Bank Transfer"}
+          {getPaymentNameByType(type)}
         </td>
         <td
           className="first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate text-center"
@@ -174,7 +176,7 @@ const TableItem = (props) => {
                     Receipt Uploaded:
                   </div>
 
-                  {type == "paypal" && (
+                  {isPayedUsedPaypal(type) && (
                     <div
                       className="mt-2 p-1 outline-gray-200 outline-dashed"
                       style={{ width: "150px" }}
@@ -206,7 +208,8 @@ const TableItem = (props) => {
                       </div>
                     </div>
                   )}
-                  {type != "paypal" && (
+
+                  {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
                     <div
                       className="mt-2 p-1 outline-gray-200 outline-dashed"
                       style={{ width: "150px", height: "200px" }}

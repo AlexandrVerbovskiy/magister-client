@@ -330,7 +330,7 @@ const OrderContent = ({
   };
 
   const validateQuestions = () => {
-    let hasError = true;
+    let hasError = false;
 
     const updateQuestions = [];
 
@@ -338,7 +338,7 @@ const OrderContent = ({
       const updateQuestion = { ...questionAnswerInfos[i] };
 
       if (updateQuestion.answer && !updateQuestion.description) {
-        hasError = false;
+        hasError = true;
         updateQuestion["error"] = "Required for damaged";
       }
 
@@ -352,10 +352,6 @@ const OrderContent = ({
 
   const handleTenantGotListingApprove = async () => {
     try {
-      if (!validateQuestions()) {
-        return;
-      }
-
       const res = await approveClientGotListing(
         order.acceptListingTenantToken,
         questionAnswerInfos,
@@ -378,10 +374,6 @@ const OrderContent = ({
 
   const handleFinishOrder = async () => {
     try {
-      if (!validateQuestions()) {
-        return;
-      }
-
       await finishedByOwner(
         order.acceptListingOwnerToken,
         questionAnswerInfos,
@@ -485,6 +477,22 @@ const OrderContent = ({
       fromDate,
       toDate,
     });
+  };
+
+  const triggerFinishClick = () => {
+    if (!validateQuestions()) {
+      return;
+    }
+
+    setTenantGotListingApproveModalActive(true);
+  };
+
+  const triggerTenantQotListingClick = () => {
+    if (!validateQuestions()) {
+      return;
+    }
+
+    setFinishOrderModalActive(true);
   };
 
   if (orderPopupsData.extendApproveData) {
@@ -1214,7 +1222,7 @@ const OrderContent = ({
             {questionAnswerInfos.map((question) => {
               return (
                 <React.Fragment key={question.id}>
-                  <p>{question.question}</p>
+                  <p style={{ marginBottom: "16px" }}>{question.question}</p>
 
                   <div className="form-group">
                     <ul className="facilities-list">
@@ -1464,7 +1472,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/pay-by-credit-card/` + order.id}
+                href={`/dashboard/pay-by-bank-transfer/` + order.id}
               >
                 Update payment
               </Link>
@@ -1498,7 +1506,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => setTenantGotListingApproveModalActive(true)}
+                onClick={triggerTenantQotListingClick}
               >
                 Approve
               </button>
@@ -1510,7 +1518,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => setFinishOrderModalActive(true)}
+                onClick={triggerFinishClick}
               >
                 Finish
               </button>
