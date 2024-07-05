@@ -3,10 +3,8 @@ import { getChatBaseInfo, getChatMessageList } from "../services/chat";
 import useChatMessageListBase from "./useChatMessageListBase";
 
 const useChatMessageList = (props) => {
-  const {
-    entity: baseEntity = null,
-    dopEntityInfo: baseDopEntityInfo = null,
-  } = props;
+  const { entity: baseEntity = null, dopEntityInfo: baseDopEntityInfo = null } =
+    props;
 
   const [entity, setEntity] = useState(baseEntity);
   const [dopEntityInfo, setDopEntityInfo] = useState(baseDopEntityInfo);

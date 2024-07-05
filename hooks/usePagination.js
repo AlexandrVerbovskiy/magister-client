@@ -146,6 +146,7 @@ const usePagination = ({
 
   const onChangeOptions = async (dopBody = {}) => {
     try {
+      setItems([]);
       const props = getFullProps(dopBody);
       const res = await getItemsFunc(props);
 
