@@ -12,8 +12,8 @@ const PaypalCheck = ({
 }) => {
   let paidWith =
     data.payerCardLastDigits && data.payerCardLastBrand
-      ? `${capitalizeFirstLetter(data.payerCardLastDigits)} x-${
-          data.payerCardLastBrand
+      ? `${capitalizeFirstLetter(data.payerCardLastBrand)} x-${
+          data.payerCardLastDigits
         }`
       : null;
 

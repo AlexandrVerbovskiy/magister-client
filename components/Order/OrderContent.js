@@ -337,7 +337,7 @@ const OrderContent = ({
     for (let i = 0; i < questionAnswerInfos.length; i++) {
       const updateQuestion = { ...questionAnswerInfos[i] };
 
-      if (updateQuestion.answer && !updateQuestion.description) {
+      if (updateQuestion.answer && !updateQuestion.description.trim()) {
         hasError = true;
         updateQuestion["error"] = "Required for damaged";
       }
@@ -485,7 +485,6 @@ const OrderContent = ({
     }
 
     setFinishOrderModalActive(true);
-
   };
 
   const triggerTenantQotListingClick = () => {
@@ -502,11 +501,16 @@ const OrderContent = ({
         handleApprove={orderPopupsData.handleMakeBooking}
         setCurrentOpenImg={setCurrentOpenImg}
         listing={{
-          listingImages: order.listingImages,
+          id: order.listingId,
           name: order.listingName,
           userName: order.ownerName,
           userPhoto: order.ownerPhoto,
+          listingImages: order.listingImages,
           userCountItems: order.listingCountStoredItems,
+          averageRating: order.listingAverageRating,
+          commentCount: order.listingCommentCount,
+          ownerAverageRating: order.ownerAverageRating,
+          ownerCommentCount: order.ownerCommentCount,
         }}
         handleGoBack={() => orderPopupsData.setExtendApproveData(null)}
         fromDate={orderPopupsData.extendApproveData.fromDate}

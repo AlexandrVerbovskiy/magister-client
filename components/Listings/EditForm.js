@@ -33,7 +33,6 @@ import {
 import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
 import ENV from "../../env";
-import ImageInput from "../DashboardComponents/ImageInput";
 import ErrorSpan from "../ErrorSpan";
 import { useDropzone } from "react-dropzone";
 
@@ -1129,7 +1128,7 @@ const EditForm = ({
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
               : "When you create a listing, you should send request to verify it. Users will not be able to rent the tool until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
           }
-          acceptText={listing.id ? "Create" : "Update"}
+          acceptText={listing.id ? "Update" : "Create"}
           actionsParentClass="mt-4"
         />
         <YesNoModal

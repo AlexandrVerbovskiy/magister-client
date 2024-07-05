@@ -209,7 +209,7 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
                 Accept
               </label>{" "}
               <span className="dont-account">
-                <Link href="#">conditions</Link>
+                <Link href="/terms-of-service">conditions</Link>
               </span>
             </span>
 

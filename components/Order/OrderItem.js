@@ -149,7 +149,7 @@ const OrderInfo = ({
         </ul>
       </td>
 
-      <td className="action d-flex">
+      <td className="action d-flex flex-column align-items-start">
         <Link href={link + "/" + order.id} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
@@ -270,7 +270,9 @@ const OrderInfo = ({
         ) && (
           <button
             className="default-btn"
-            onClick={() => handleDisputeCreate(order.id)}
+            onClick={() => {
+              handleDisputeCreate(order.id);
+            }}
             type="button"
           >
             <i className="bx bx-transfer-alt"></i>
@@ -442,6 +444,7 @@ const OrderItem = ({
               handleClickAccept={handleClickAccept}
               handleClickPay={handleClickPay}
               handleClickExtend={handleClickExtend}
+              handleDisputeCreate={handleDisputeCreate}
               link={link}
               extension={true}
             />

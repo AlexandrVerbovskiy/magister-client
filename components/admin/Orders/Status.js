@@ -57,7 +57,7 @@ const Status = ({
     }
   }
 
-  return <div className={`max-w-full text-center ${baseClass} ${dopClassName}`}>{text}</div>;
+  return <div className={`min-w-fit max-w-full text-center ${baseClass} ${dopClassName}`}>{text}</div>;
 };
 
 export default Status;
