@@ -10,7 +10,7 @@ import STATIC from "../static";
 
 const getPaymentFormStyles = (type) => {
   switch (type) {
-    case STATIC.PAYMENT_TYPES.BANK_TRANSFER:
+    case STATIC.PAYMENT_TYPES.CREDIT_CARD:
       return { height: "140px", overflow: "hidden" };
     case STATIC.PAYMENT_TYPES.PAYPAL:
       return { height: "50px" };
