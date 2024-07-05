@@ -347,7 +347,7 @@ const OrderContent = ({
 
     setQuestionAnswerInfos(updateQuestions);
 
-    return hasError;
+    return !hasError;
   };
 
   const handleTenantGotListingApprove = async () => {
@@ -484,7 +484,8 @@ const OrderContent = ({
       return;
     }
 
-    setTenantGotListingApproveModalActive(true);
+    setFinishOrderModalActive(true);
+
   };
 
   const triggerTenantQotListingClick = () => {
@@ -492,7 +493,7 @@ const OrderContent = ({
       return;
     }
 
-    setFinishOrderModalActive(true);
+    setTenantGotListingApproveModalActive(true);
   };
 
   if (orderPopupsData.extendApproveData) {
