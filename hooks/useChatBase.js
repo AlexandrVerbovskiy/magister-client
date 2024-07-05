@@ -1,6 +1,5 @@
 import { useContext, useEffect } from "react";
 import { IndiceContext } from "../contexts";
-import useMediaActions from "./useMediaActions";
 import { indicateMediaTypeByExtension } from "../utils";
 
 const useChatBase = ({
@@ -8,12 +7,9 @@ const useChatBase = ({
   listProps,
   scrollBodyBottom,
   prefix = "",
-  senderAdmin = false,
   selectedChatId,
 }) => {
   const { io, sessionUser } = useContext(IndiceContext);
-  const { createMediaActions, onSuccessSendBlobPart, onStopSendMedia } =
-    useMediaActions();
 
   useEffect(() => {
     if (!io) {
@@ -21,7 +17,7 @@ const useChatBase = ({
     }
 
     io.on(prefix + "file-part-uploaded", async (data) => {
-      const nextPartData = await onSuccessSendBlobPart(data.tempKey);
+      const nextPartData = await bodyProps.onSuccessSendBlobPart(data.tempKey);
 
       if (!nextPartData) {
         return;
@@ -110,6 +106,11 @@ const useChatBase = ({
     io.on(prefix + "opponent-offline", (data) =>
       listProps.opponentOffline(data.chatId)
     );
+
+    return () => {
+      io.emit(prefix + "stop-actions");
+      bodyProps.stopAllSendMedia();
+    };
   }, [io]);
 
   const sendTextMessage = ({ chatId, text, dop = {} }) => {
@@ -129,7 +130,7 @@ const useChatBase = ({
       content: { text },
       senderId: sessionUser.id,
       senderPhoto: sessionUser.photo,
-      isAdminSender: senderAdmin,
+      isAdminSender: false,
       createdAt,
       ...dop,
     };
@@ -185,7 +186,7 @@ const useChatBase = ({
     filetype,
     filename,
   }) => {
-    const dataToSend = await createMediaActions({
+    const dataToSend = await bodyProps.createMediaActions({
       chatId,
       data,
       dataType,
@@ -202,7 +203,7 @@ const useChatBase = ({
       senderId: sessionUser.id,
       tempKey: dataToSend["tempKey"],
       senderPhoto: sessionUser.photo,
-      isAdminSender: senderAdmin,
+      isAdminSender: false,
       createdAt,
     };
 
@@ -220,7 +221,7 @@ const useChatBase = ({
   };
 
   const stopSendMediaMessage = (tempKey) => {
-    onStopSendMedia(tempKey);
+    bodyProps.onStopSendMedia(tempKey);
     io.emit(prefix + "stop-file-upload", { tempKey });
   };
 
@@ -232,7 +233,6 @@ const useChatBase = ({
     deleteMessage,
     updateMessage,
     sendTextMessage,
-    onSuccessSendBlobPart,
   };
 };
 

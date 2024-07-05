@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import useMediaActions from "./useMediaActions";
+import { IndiceContext } from "../contexts";
+import { indicateMediaTypeByExtension } from "../utils";
 
 const useChatMessageListBase = ({
   messages: baseMessages,
@@ -14,6 +17,15 @@ const useChatMessageListBase = ({
   const [canShowMore, setCanShowMore] = useState(baseCanShowMore);
   const [loading, setLoading] = useState(false);
   const chatIdRef = useRef(baseChatId);
+  const { sessionUser } = useContext(IndiceContext);
+
+  const {
+    createMediaActions,
+    onSuccessSendBlobPart,
+    onStopSendMedia,
+    getChatMessages: getChatLoadingMessages,
+    stopAllSendMedia,
+  } = useMediaActions();
 
   useEffect(() => {
     chatIdRef.current = baseChatId;
@@ -64,10 +76,28 @@ const useChatMessageListBase = ({
         authToken
       );
 
+      const loadingMessagesParts = getChatLoadingMessages(newChatId);
+
+      const loadingMessages = loadingMessagesParts.map((message) => {
+        const messageType = indicateMediaTypeByExtension(message.filetype);
+
+        return {
+          chatId: message.chatId,
+          type: messageType,
+          content: { filename: message.filename, path: message.contentPath },
+          senderId: sessionUser.id,
+          tempKey: message.tempKey,
+          senderPhoto: sessionUser.photo,
+          isAdminSender: false,
+          createdAt: message.createdAt.toISOString(),
+        };
+      });
+
       setCanShowMore(result.messagesCanShowMore);
-      setMessages([...result.messages]);
+      setMessages([...result.messages, ...loadingMessages]);
       onChangeChat(result);
     } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }
@@ -167,6 +197,10 @@ const useChatMessageListBase = ({
     onCancelledMessage,
     deleteMessage,
     appendMessageToChat,
+    createMediaActions,
+    onSuccessSendBlobPart,
+    onStopSendMedia,
+    stopAllSendMedia,
   };
 };
 
