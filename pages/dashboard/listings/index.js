@@ -107,6 +107,7 @@ const TabHeaderSection = ({
 );
 
 const StatusBlock = ({ requestId, requestApproved }) => {
+  const { sessionUser } = useContext(IndiceContext);
   let listingStatus = "unapproved";
   let icon = "bx bx-x-circle";
   let tooltip =
@@ -122,7 +123,9 @@ const StatusBlock = ({ requestId, requestApproved }) => {
   if (requestApproved) {
     listingStatus = "approved";
     icon = "bx bx-check-circle";
-    tooltip = "The tool has been approved. Users can interact with the tool";
+    tooltip = sessionUser?.verified
+      ? "The tool has been approved. Users can interact with the tool"
+      : "Account still unverified and item cannot be rented";
   }
 
   return (
@@ -374,7 +377,9 @@ const ListingList = (pageProps) => {
                                   href={`/listing-list/?categories=${listing.categoryName}`}
                                 >
                                   <i className="flaticon-furniture-and-household"></i>
-                                  <span className="row-dots-end">{listing.categoryName}</span>
+                                  <span className="row-dots-end">
+                                    {listing.categoryName}
+                                  </span>
                                 </Link>
                               </li>
                               <li>
@@ -382,12 +387,17 @@ const ListingList = (pageProps) => {
                                   href={`/listing-list/?city=${listing.city}`}
                                 >
                                   <i className="flaticon-pin"></i>
-                                  <span className="row-dots-end">{listing.city}</span>
+                                  <span className="row-dots-end">
+                                    {listing.city}
+                                  </span>
                                 </Link>
                               </li>
                             </ul>
                             <h3 className="row-dots-end">
-                              <Link className="row-dots-end" href={`/listing/${listing.id}`}>
+                              <Link
+                                className="row-dots-end"
+                                href={`/listing/${listing.id}`}
+                              >
                                 {listing.name}
                               </Link>
                             </h3>

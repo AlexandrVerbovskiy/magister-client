@@ -6,6 +6,7 @@ import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
+  calculateCurrentTotalPrice,
   getDaysDifference,
   getListingImageByType,
   moneyFormat,
@@ -599,9 +600,16 @@ const Order = (order) => {
                             prevPricePerDay={
                               order.prevPricePerDay ?? order.offerPricePerDay
                             }
-                            prevTotalPrice={
-                              order.prevFactTotalPrice ?? order.factTotalPrice
-                            }
+                            prevTotalPrice={calculateCurrentTotalPrice({
+                              isOwner: false,
+                              startDate:
+                                order.prevStartDate ?? order.offerStartDate,
+                              endDate: order.prevEndDate ?? order.offerEndDate,
+                              pricePerDay:
+                                order.prevPricePerDay ?? order.offerPricePerDay,
+                              ownerFee: order.ownerFee,
+                              tenantFee: order.tenantFee,
+                            })}
                             prevSenderName={order.tenantName}
                             prevGetterName={order.ownerName}
                             needBottomMargin={true}
@@ -614,7 +622,14 @@ const Order = (order) => {
                               prevStartDate={request.newStartDate}
                               prevEndDate={request.newEndDate}
                               prevPricePerDay={request.newPricePerDay}
-                              prevTotalPrice={request.newFactTotalPrice}
+                              prevTotalPrice={calculateCurrentTotalPrice({
+                                isOwner: false,
+                                startDate: request.newStartDate,
+                                endDate: request.newEndDate,
+                                pricePerDay: request.newPricePerDay,
+                                ownerFee: order.ownerFee,
+                                tenantFee: request.newFee,
+                              })}
                               prevSenderName={
                                 request.senderId == order.tenantId
                                   ? order.tenantName

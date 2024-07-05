@@ -39,6 +39,8 @@ const OrderExtendApprovementSection = ({
                   userName: listing.userName,
                   userPhoto: listing.userPhoto,
                   userCountItems: listing.userCountItems,
+                  userAverageRating: listing.ownerAverageRating,
+                  userCommentCount: listing.ownerCommentCount,
                 }}
               />
             </div>

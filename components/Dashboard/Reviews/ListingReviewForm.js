@@ -82,8 +82,11 @@ const ListingReviewForm = ({
           <ItemInfo
             setCurrentOpenImg={setCurrentOpenImg}
             listing={{
+              id: order.listingId,
               name: order.listingName,
               listingImages: order.listingImages,
+              averageRating: order.listingAverageRating,
+              commentCount: order.listingCommentCount,
             }}
           />
         </div>

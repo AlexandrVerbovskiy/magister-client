@@ -38,10 +38,6 @@ const YourBusiness = () => {
     <>
       <section className="features-area ptb-100">
         <div className="container">
-          <div className="section-title">
-            <h2>Your business (Key Brand Messaging)</h2>
-          </div>
-
           <div className="row justify-content-center">
             {items.map((item) => (
               <div key={item.id} className="col-lg-4 col-md-6 col-sm-6 d-flex">
