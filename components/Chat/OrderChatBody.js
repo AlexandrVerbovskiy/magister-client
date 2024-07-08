@@ -96,6 +96,7 @@ const OrderChatBody = ({
         newEndDate: toDate,
         newPricePerDay: price,
       },
+      conflictOrders: [],
     };
 
     if (isOwner) {

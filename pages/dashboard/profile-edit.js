@@ -562,9 +562,9 @@ const ProfileEdit = ({ newPaypalId }) => {
               <>
                 {securityFormSection}
                 {passwordFormSection}
-                {paypalFormSection}
               </>
             )}
+            {paypalFormSection}
             {verifyDocumentsSection}
           </div>
         </div>

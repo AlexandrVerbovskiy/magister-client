@@ -207,7 +207,7 @@ const OrdersListFastActinsModals = ({
         createOrderModalActive={extendModalActive}
         closeModal={closeExtendOrder}
         listingName={extendModalActiveOrder.listingName ?? ""}
-        blockedDates={extendModalActiveOrder.blockedForRentalDates ?? []}
+        blockedDates={extendModalActiveOrder.blockedDates ?? []}
         title="Extend Now"
         startDate={
           extendModalActiveOrder.offerEndDate
