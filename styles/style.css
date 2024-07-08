@@ -69,6 +69,7 @@ Default CSS
   --optionalColor: #666666;
   --whiteColor: #ffffff;
   --blackColor: #221638;
+  --yellowColor: #D6E30F;
   --fontSize: 15px;
   --transition: 0.5s;
   --listing-categories-popup-width: 220px;
@@ -179,8 +180,8 @@ p:last-child {
   color: var(--blackColor);
 }
 
-.color-0ec6c6 {
-  color: var(--mainColor);
+.color-d6e30f {
+  color: var(--yellowColor);
 }
 
 .form-group {
@@ -2222,14 +2223,13 @@ Main Banner Area CSS
 }
 .main-banner-content p {
   line-height: initial;
-  color: #bcbcbc;
+  color: var(--whiteColor);
   font-size: 18px;
   margin: 0;
 }
 .main-banner-content form {
   margin-top: 40px;
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px #847bdd;
   border-radius: 100px;
   padding-left: 20px;
   padding-right: 12px;
@@ -3255,7 +3255,7 @@ Features Area CSS
 .single-features-box {
   margin-bottom: 30px;
   text-align: center;
-  border: 1px solid #f5f5f5;
+  border: 1px solid #E8E8E8;
   transition: var(--transition);
   padding: 40px 20px;
   border-radius: 5px;
@@ -3275,7 +3275,7 @@ Features Area CSS
   padding-top: 12px;
   padding-left: 12px;
 }
-.single-features-box .icon::before {
+/*.single-features-box .icon::before {
   content: "";
   position: absolute;
   left: 0;
@@ -3285,7 +3285,7 @@ Features Area CSS
   height: 55px;
   border-radius: 50%;
   background-color: #ededed;
-}
+}*/
 .single-features-box h3 {
   font-size: 20px;
   margin-bottom: 15px;
@@ -3309,7 +3309,7 @@ Features Area CSS
   transform: scaleX(0);
   z-index: -1;
 }
-.single-features-box .link-btn:hover {
+/*.single-features-box .link-btn:hover {
   color: var(--blackColor);
 }
 .single-features-box .link-btn:hover::before {
@@ -3317,7 +3317,7 @@ Features Area CSS
 }
 .single-features-box:hover {
   border-color: var(--mainColor);
-}
+}*/
 
 .divider {
   width: 100%;
@@ -5391,20 +5391,14 @@ Listings Details Area CSS
   .review-form-wrapper
   form
   button[type="button"].submit:hover,
-.listings-details-desc .review-form-wrapper form button[type="submit"]{
+.listings-details-desc .review-form-wrapper form button[type="submit"] {
   background-color: #ede7f6;
   color: #666666;
 }
 
-.listings-details-desc
-  .review-form-wrapper
-  .form
-  button[type="button"].submit,
+.listings-details-desc .review-form-wrapper .form button[type="button"].submit,
 .listings-details-desc .review-form-wrapper .form button[type="submit"]:hover,
-.listings-details-desc
-  .review-form-wrapper
-  form
-  button[type="button"].submit,
+.listings-details-desc .review-form-wrapper form button[type="button"].submit,
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover {
   color: var(--whiteColor);
   background-color: #847bdd;
@@ -6160,27 +6154,33 @@ Category Area CSS
 =================================================*/
 .single-category-box {
   margin-bottom: 35px;
-  box-shadow: 5px 5px var(--mainColorShadow);
-  border: 1px solid var(--mainColorBorder);
+  border: 1px solid #E9E9E9;
   border-radius: 5px;
   position: relative;
   transition: var(--transition);
   text-align: center;
   background-color: var(--whiteColor);
-  padding: 25px 14px;
+  padding-bottom: 25px;
+  width: 100%;
+  justify-content: space-between;
 }
 .single-category-box .icon {
+  border-radius: 5px;
   margin-bottom: 15px;
-  width: 55px;
-  height: 55px;
+  width: 100%;
+  height: 330px;
   line-height: 55px;
   color: var(--mainColor);
-  border-radius: 50%;
   transition: var(--transition);
-  background-color: #ededed;
+  background-color: #E9E9E9;
   display: inline-block;
   font-size: 27px;
 }
+
+.single-category-box:hover{
+  border: 1px solid var(--mainColor);
+}
+
 .single-category-box h3 {
   font-size: 18px;
   margin-bottom: 6px;
@@ -6201,31 +6201,14 @@ Category Area CSS
   z-index: 2;
 }
 .single-category-box.more-categories {
-  background-color: var(--mainColor);
-  border-color: var(--mainColor);
-  color: var(--whiteColor);
-  box-shadow: 5px 5px var(--mainColor);
-  height: calc(100% - 35px);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-.single-category-box.more-categories .icon {
-  margin-top: 14px;
-  background-color: var(--whiteColor) !important;
-  color: var(--mainColor) !important;
-}
+
 .single-category-box.more-categories h3 {
   margin-bottom: 14px;
-}
-.single-category-box:hover {
-  border-color: var(--mainColor);
-  box-shadow: 5px 5px var(--mainColor);
-}
-.single-category-box:hover .icon {
-  background-color: var(--mainColor);
-  color: var(--whiteColor);
 }
 
 .single-category-item {
@@ -6351,28 +6334,17 @@ Destinations Area CSS
   border-radius: 10px;
   display: block;
 }
-.single-destinations-box::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  transition: var(--transition);
-  border-radius: 10px;
-  z-index: 1;
-  background-color: #000000;
-  opacity: 0.45;
-}
+
 .single-destinations-box .country {
   right: 0;
   position: absolute;
   padding: 25px;
   z-index: 2;
-  color: var(--whiteColor);
+  color: #221638;
   font-weight: 600;
   left: 0;
   top: 0;
+  font-size: 18px;
 }
 .single-destinations-box .content {
   position: absolute;
@@ -6411,12 +6383,6 @@ Destinations Area CSS
 }
 .single-destinations-box.color-box-shadow:hover {
   box-shadow: 5px 5px var(--mainColor);
-}
-.single-destinations-box:hover::before {
-  opacity: 0.3;
-}
-.single-destinations-box:hover img {
-  transform: scale(1.12);
 }
 
 /*================================================
@@ -6532,8 +6498,7 @@ Feedback Area CSS
 }
 
 .single-feedback-box {
-  box-shadow: 5px 5px var(--mainColor);
-  border: 1px solid #f9f9f9;
+  border: 2px solid #e8e8e8;
   border-radius: 5px;
   position: relative;
   z-index: 1;
@@ -6542,6 +6507,9 @@ Feedback Area CSS
   padding: 35px 30px;
   margin-bottom: 35px;
   margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .single-feedback-box .rating {
   margin-bottom: 8px;
@@ -6570,9 +6538,7 @@ Feedback Area CSS
   height: 60px;
   border-radius: 50%;
 }
-.single-feedback-box .client-info .title {
-  margin-left: 13px;
-}
+
 .single-feedback-box .client-info .title h3 {
   margin-bottom: 5px;
   font-size: 17px;
@@ -16962,29 +16928,37 @@ Preloader Area CSS
   margin-left: -1.5rem !important;
 }
 
-.main-site-alert {
+.message-site-success-alert-list{
   margin: 0;
   position: fixed !important;
   bottom: 20px;
   right: 20px;
   z-index: 9999999999;
+  max-width: 40%;
+}
+
+.main-site-alert {
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 0.375rem;
   padding-right: 3rem;
-  max-width: 40%;
 }
 
-.message-site-alert {
+.message-site-warning-alert-list{
   margin: 0;
   position: fixed !important;
   bottom: 20px;
   left: 20px;
   z-index: 9999;
+  max-width: 40%;
+}
+
+.message-site-alert {
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 0.375rem;
   max-width: 500px;
+  text-align: justify !important;
 }
 
 .message-site-alert .title {
@@ -19152,7 +19126,7 @@ span.flatpickr-weekday {
   content: "Connect with PayPal";
 }
 
-#paypal-connect a::before{
+#paypal-connect a::before {
   color: white !important;
   position: absolute;
   top: 50%;
@@ -19160,16 +19134,16 @@ span.flatpickr-weekday {
   transform: translate(-50%, -50%);
 }
 
-.chart-card{
-  margin-bottom: 30px!important;
-  background-color: var(--whiteColor)!important;
-  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05)!important;
-  border-radius: 5px!important;
-  display: flex!important;
-  flex-direction: column!important;
+.chart-card {
+  margin-bottom: 30px !important;
+  background-color: var(--whiteColor) !important;
+  box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05) !important;
+  border-radius: 5px !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-.chart-card h3{
+.chart-card h3 {
   margin-bottom: 0;
   padding: 20px 25px 19px;
   border-bottom: 1px dashed #eeeeee;
@@ -19177,19 +19151,42 @@ span.flatpickr-weekday {
   font-weight: 600;
 }
 
-.doughnut-chart-legend{
-  list-style-type:none;
+.doughnut-chart-legend {
+  list-style-type: none;
   display: flex;
   padding: 0;
   justify-content: center;
 }
 
-.doughnut-chart-legend button{
+.doughnut-chart-legend button {
   display: flex;
   align-items: center;
 }
 
-.chat-left .time{
-  left: 0!important;
-  right: auto!important;
+.chat-left .time {
+  left: 0 !important;
+  right: auto !important;
+}
+
+.client-info .sub-title {
+  color: #666666;
+}
+
+#paypal-connect.update-paypal, #paypal-connect.update-paypal *{
+  font-family: var(--fontFamily)!important;
+}
+
+.cookie-banner button{
+color: var(--bs-warning-text-emphasis)!important;
+background: transparent!important;
+border: 0!important;
+font-weight: 600;
+}
+
+.cookie-banner button:hover{
+  font-weight: 700;
+}
+
+.message-site-success-alert-list{
+
 }

@@ -17,10 +17,8 @@ import { IndiceContext } from "../../../contexts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { baseListPageParams, getListingImageByType } from "../../../utils";
 
-import EmptyTable from "../../../components/DashboardComponents/Table/EmptyTable";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
-import { useRouter } from "next/router";
 import STATIC from "../../../static";
 import StarRating from "../../../components/StarRating";
 
@@ -111,20 +109,20 @@ const StatusBlock = ({ requestId, requestApproved }) => {
   let listingStatus = "unapproved";
   let icon = "bx bx-x-circle";
   let tooltip =
-    "The tool has not been approved. Update it and send a confirmation request";
+    "The item has not been approved. Update it and send a confirmation request";
 
   if (requestId && requestApproved === null) {
     listingStatus = "not_processed";
     icon = "bx bx-time";
     tooltip =
-      "The tool is waiting for confirmation. An administrator will review your request shortly";
+      "The item is awaiting confirmation and other users cannot see it. It will take a maximum of 72 hours.";
   }
 
   if (requestApproved) {
     listingStatus = "approved";
     icon = "bx bx-check-circle";
     tooltip = sessionUser?.verified
-      ? "The tool has been approved. Users can interact with the tool"
+      ? "The item has been approved. Users can now view and submit rental requests for your item"
       : "Account still unverified and item cannot be rented";
   }
 
@@ -138,7 +136,6 @@ const StatusBlock = ({ requestId, requestApproved }) => {
 };
 
 const ListingList = (pageProps) => {
-  const router = useRouter();
   const { error, success, authToken, sessionUser } = useContext(IndiceContext);
 
   const [listingIdToDelete, setListingIdToDelete] = useState(null);

@@ -7,6 +7,8 @@ const YesNoModal = ({
   acceptText = "Save",
   actionsParentClass = "mt-4",
   closeModalText = "Cancel",
+  closeModalClassName = "button-danger",
+  acceptModalClassName = "",
 }) => {
   const handleAccept = () => {
     onAccept();
@@ -44,12 +46,16 @@ const YesNoModal = ({
                   >
                     <button
                       type="button"
-                      className="button-danger"
+                      className={closeModalClassName}
                       onClick={closeModal}
                     >
                       {closeModalText}
                     </button>
-                    <button type="button" onClick={handleAccept}>
+                    <button
+                      type="button"
+                      onClick={handleAccept}
+                      className={acceptModalClassName}
+                    >
                       {acceptText}
                     </button>
                   </form>

@@ -8,7 +8,7 @@ import { generateTwoFactorCode, checkTwoFactorCode } from "../../services";
 import { IndiceContext } from "../../contexts";
 import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
 import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
@@ -16,6 +16,7 @@ import ListingLi from "./Navbar/ListingLi";
 import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
+import SignOutModal from "./SignOutModal";
 
 const NavbarTwo = ({ canShowSearch = true }) => {
   const {
@@ -23,12 +24,10 @@ const NavbarTwo = ({ canShowSearch = true }) => {
     success: mainSuccess,
     isSupport,
     onLogin,
-    error: mainError,
   } = useContext(IndiceContext);
 
   const {
     navbarCategories,
-    handleChangeCategory: handleChangePopupCategory,
     handleListingClick,
     categoriesLength,
     activePopup,
@@ -37,6 +36,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
 
   const {
     categoryTipsPopupActive,
@@ -114,14 +114,6 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
   const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ redirect: false });
-    } catch (e) {
-      mainError.set(e.message);
-    }
-  };
 
   const [userToAuth, setUserToAuth] = useState(null);
 
@@ -342,7 +334,10 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     <div className="option-item">
                       <span
                         data-toggle="modal"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                         className="auth-one sign-out-trigger"
                       >
                         <i className="bx bx-log-out"></i> Sign out
@@ -416,7 +411,10 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         className="sign-out-trigger"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                       >
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
@@ -440,6 +438,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
       {!isAuth && (
         <AuthCodeModal
+          type={type}
           codeModalActive={codeModalActive}
           code={code}
           handleChangeCode={handleChangeCode}
@@ -529,6 +528,13 @@ const NavbarTwo = ({ canShowSearch = true }) => {
           active={activePopup}
           setActive={setActivePopup}
           categories={navbarCategories}
+        />
+      )}
+
+      {isAuth && (
+        <SignOutModal
+          active={signOutModalActive}
+          closeModal={() => setSignOutModalActive(false)}
         />
       )}
     </>

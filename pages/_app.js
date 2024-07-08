@@ -14,6 +14,7 @@ import {
   useTawkScript,
   useSocketInit,
 } from "../hooks";
+import CookieBanner from "../components/_App/CookieAlert";
 
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
@@ -151,9 +152,15 @@ function MyApp({ Component, pageProps }) {
 
           <Loader loading={loading} />
 
-          <MainErrorAlert {...pageProps} />
-          <MainSuccessAlert {...pageProps} />
-          <UnverifiedAlert {...pageProps} />
+          <div className="message-site-warning-alert-list">
+            <UnverifiedAlert {...pageProps} />
+            <CookieBanner />
+          </div>
+
+          <div className="message-site-success-alert-list">
+            <MainErrorAlert {...pageProps} />
+            <MainSuccessAlert {...pageProps} />
+          </div>
         </Layout>
       </IndiceProvider>
     </SessionProvider>

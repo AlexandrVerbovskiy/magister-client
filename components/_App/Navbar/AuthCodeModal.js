@@ -7,6 +7,7 @@ const AuthCodeModal = ({
   codeModalError,
   handleCheckCode,
   handleClose,
+  type,
 }) => {
   return (
     <BaseModal active={codeModalActive} closeModal={handleClose}>
@@ -15,8 +16,9 @@ const AuthCodeModal = ({
       </span>
 
       <form method="get" onSubmit={(e) => e.preventDefault}>
-        You received a verification code on your email. Copy and paste it in the
-        field below
+        You received a verification code on your{" "}
+        {type == "email" ? "email" : "mobile phone"}. Copy and paste it in the field
+        below
         <div className="form-group mt-1">
           <input
             name="verifyCode"

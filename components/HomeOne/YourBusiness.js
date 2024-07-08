@@ -11,8 +11,8 @@ const YourBusiness = () => {
   const items = [
     {
       id: 1,
-      title: `Unlock value. Earn a passive income.`,
-      image: "/images/home/icons-how_it_works.png",
+      title: `Unlock value. Start earning.`,
+      image: "/images/home/icons-value.png",
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ const YourBusiness = () => {
     {
       id: 3,
       title: `Open access. Access on demand.`,
-      image: "/images/home/icons-on_demand.png",
+      image: "/images/home/icons-how_it_works-2_contact.png",
     },
   ];
 

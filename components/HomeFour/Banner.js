@@ -36,23 +36,23 @@ const Banner = () => {
               modules={[Autoplay]}
             >
               <SwiperSlide>
-                Find Near by <span className="color-0ec6c6">Hotels</span>
+                Find Near by <span className="color-d6e30f">Hotels</span>
               </SwiperSlide>
 
               <SwiperSlide>
-                Find Near by <span className="color-0ec6c6">Restaurants</span>
+                Find Near by <span className="color-d6e30f">Restaurants</span>
               </SwiperSlide>
 
               <SwiperSlide>
-                Find Near by <span className="color-0ec6c6">Beauty</span>
+                Find Near by <span className="color-d6e30f">Beauty</span>
               </SwiperSlide>
 
               <SwiperSlide>
-                Find Near by <span className="color-0ec6c6">Fitness</span>
+                Find Near by <span className="color-d6e30f">Fitness</span>
               </SwiperSlide>
 
               <SwiperSlide>
-                Find Near by <span className="color-0ec6c6">Shopping</span>
+                Find Near by <span className="color-d6e30f">Shopping</span>
               </SwiperSlide>
             </Swiper>
           </h1>

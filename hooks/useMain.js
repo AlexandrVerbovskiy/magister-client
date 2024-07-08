@@ -95,13 +95,15 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
 
   useEffect(() => {
     setAuthToken(session?.user.authToken);
+    console.log("test");
 
     if (session === undefined) {
       return;
     }
+    console.log("test 1");
 
     if (prevSessionUser === undefined) {
-      setPrevSessionUser(session?.user);
+      setPrevSessionUser(session?.user ?? null);
       return;
     }
 
@@ -110,11 +112,14 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       (prevSessionUser == null && session == null)
     )
       return;
+    console.log("test 3");
 
     let redirectLink = "/";
 
     if (session?.user) {
       setIsAuth(true);
+
+      redirectLink = "/dashboard";
 
       if (session.user.needRegularViewInfoForm) {
         redirectLink = "/dashboard/profile-edit";
@@ -129,7 +134,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       handleSetSuccess("Successfully logged out");
     }
 
-    setPrevSessionUser(session?.user);
+    setPrevSessionUser(session?.user ?? null);
 
     router.push(redirectLink);
   }, [session]);

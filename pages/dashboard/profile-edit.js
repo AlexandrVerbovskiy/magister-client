@@ -509,6 +509,8 @@ const ProfileEdit = ({ newPaypalId }) => {
         </span>
 
         <form method="get">
+          You received a verification code on your mobile phone. Copy and paste it in
+          the field below
           <div className="form-group">
             <input
               value={phoneCode}
@@ -519,7 +521,6 @@ const ProfileEdit = ({ newPaypalId }) => {
               className="form-control"
             />
           </div>
-
           {verifyFormError && (
             <div className="col-12">
               <div
@@ -530,7 +531,6 @@ const ProfileEdit = ({ newPaypalId }) => {
               </div>
             </div>
           )}
-
           <button type="button" onClick={handleVerifyCode}>
             Verify
           </button>

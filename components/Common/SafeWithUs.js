@@ -38,11 +38,7 @@ const SafeWithUs = ({ bgColor }) => {
                 <div className="icon safe-with-us-img">
                   <img src="/images/home/icons-insurance_guarantee.png" />
                 </div>
-                <h3>RentAbout Has an Insurance Guarantee</h3>
-                <p>
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis.
-                </p>
+                <h3>RentAbout Has an Owner Guarantee</h3>
               </div>
             </div>
           </div>

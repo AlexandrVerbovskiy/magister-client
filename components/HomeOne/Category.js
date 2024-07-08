@@ -12,10 +12,13 @@ const Category = ({ topCategories, needShowMore }) => {
             </h2>
           </div>
 
-          <div className="row" style={{ height: "100%" }}>
+          <div
+            className="row"
+            style={{ height: "100%", justifyContent: "center" }}
+          >
             {topCategories.map((info) => (
               <div
-                className="col-lg-2 col-sm-6 col-md-4"
+                className="col-lg-4 col-sm-12 col-md-6"
                 key={info.id}
                 style={{
                   display: "flex",
@@ -23,10 +26,7 @@ const Category = ({ topCategories, needShowMore }) => {
                   flexDirection: "row",
                 }}
               >
-                <div
-                  className="single-category-box d-flex flex-column align-items-center"
-                  style={{ width: "100%", justifyContent: "center" }}
-                >
+                <div className="single-category-box d-flex flex-column align-items-center">
                   <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
                   </div>
@@ -43,12 +43,13 @@ const Category = ({ topCategories, needShowMore }) => {
             ))}
 
             {needShowMore && (
-              <div className="col-lg-2 col-sm-6 col-md-4">
+              <div className="col-lg-4 col-sm-12 col-md-6">
                 <div className="single-category-box more-categories">
-                  <div className="icon">
-                    <i className="flaticon-more-1"></i>
+                  <div className="icon overflow-hidden d-flex justify-content-center"></div>
+                  <div>
+                    <h3>More Categories</h3>
+                    <span>0 Listings</span>
                   </div>
-                  <h3>More Categories</h3>
                   <Link href="/listing-list" className="link-btn"></Link>
                 </div>
               </div>

@@ -11,11 +11,10 @@ import AuthTypeModal from "./AuthTypeModal";
 import { signIn, signOut } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
-import { getListingSearchLink } from "../../../utils";
+import { getListingSearchLink, activateAuthPopup } from "../../../utils";
 import ListingLi from "./ListingLi";
-import useNavListingCategories from "../../../hooks/useNavListingCategories";
-import ListingPopup from "./ListingPopup";
 import STATIC from "../../../static";
+import SignOutModal from "../SignOutModal";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -24,10 +23,12 @@ const Navbar = ({ canShowSearch = true }) => {
     isSupport,
     onLogin,
     error: mainError,
+    sessionUser,
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
 
   const {
     categoryTipsPopupActive,
@@ -37,14 +38,6 @@ const Navbar = ({ canShowSearch = true }) => {
     updateCategoryTips,
   } = useSearchCategory();
 
-  const {
-    navbarCategories,
-    handleListingClick,
-    categoriesLength,
-    activePopup,
-    setActivePopup,
-  } = useNavListingCategories();
-
   const [searchCategory, setSearchCategory] = useState("");
 
   const router = useRouter();
@@ -52,8 +45,6 @@ const Navbar = ({ canShowSearch = true }) => {
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [sticky, setSticky] = useState(false);
-
-  //sticky menu
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
@@ -109,14 +100,6 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ redirect: false });
-    } catch (e) {
-      mainError.set(e.message);
-    }
-  };
 
   const [userToAuth, setUserToAuth] = useState(null);
 
@@ -212,6 +195,14 @@ const Navbar = ({ canShowSearch = true }) => {
     router.push(link);
   };
 
+  const handleListingClick = () => {
+    if (sessionUser) {
+      router.push("/listing-list");
+    } else {
+      activateAuthPopup();
+    }
+  };
+
   return (
     <>
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
@@ -297,7 +288,7 @@ const Navbar = ({ canShowSearch = true }) => {
                   </li>
 
                   <ListingLi
-                    categoriesLength={categoriesLength}
+                    categoriesLength={0}
                     handleListingClick={handleListingClick}
                   />
 
@@ -341,7 +332,10 @@ const Navbar = ({ canShowSearch = true }) => {
                     <div className="option-item">
                       <span
                         data-toggle="modal"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                         className="auth-one sign-out-trigger"
                       >
                         <i className="bx bx-log-out"></i> Sign out
@@ -418,7 +412,10 @@ const Navbar = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         className="sign-out-trigger"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                       >
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
@@ -449,20 +446,13 @@ const Navbar = ({ canShowSearch = true }) => {
 
       {!isAuth && (
         <AuthCodeModal
+          type={type}
           codeModalActive={codeModalActive}
           code={code}
           handleChangeCode={handleChangeCode}
           codeModalError={codeModalError}
           handleCheckCode={handleCheckCode}
           handleClose={handleCloseCodeModal}
-        />
-      )}
-
-      {categoriesLength > 0 && (
-        <ListingPopup
-          active={activePopup}
-          setActive={setActivePopup}
-          categories={navbarCategories}
         />
       )}
 
@@ -539,6 +529,13 @@ const Navbar = ({ canShowSearch = true }) => {
             </div>
           </div>
         </>
+      )}
+
+      {isAuth && (
+        <SignOutModal
+          active={signOutModalActive}
+          closeModal={() => setSignOutModalActive(false)}
+        />
       )}
     </>
   );
