@@ -78,9 +78,8 @@ const Footer = ({ bgColor }) => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/insurance-guarantee">
-                      <i className="flaticon-left-chevron"></i> Insurance
-                      guarantee
+                    <Link href="/owner-guarantee">
+                      <i className="flaticon-left-chevron"></i> Owner guarantee
                     </Link>
                   </li>
                   <li>
@@ -110,19 +109,6 @@ const Footer = ({ bgColor }) => {
               </div>
             </div>
           </div>
-
-          <div className="copyright-area">
-            <p>
-              Copyright <span>Indice</span> is Proudly Owned by{" "}
-              <a href="https://envytheme.com/" target="_blank" rel="noreferrer">
-                EnvyTheme
-              </a>
-            </p>
-          </div>
-        </div>
-
-        <div className="footer-image text-center">
-          <img src="/images/footer-image.png" alt="image" />
         </div>
       </footer>
     </>

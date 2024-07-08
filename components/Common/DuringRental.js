@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
+import { activateAuthPopup } from "../../utils";
 
 const DuringRental = () => {
   const { sessionUser } = useContext(IndiceContext);
@@ -23,14 +24,17 @@ const DuringRental = () => {
           </div>
           <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
             <div className="d-flex flex-column justify-content-between h-100">
-              <h2>Start Earning</h2>
+              <h2 className="mb-4">Start Earning</h2>
 
               <div>
                 <div>
-                  <h4 className="mb-0">Share your things, earn cash!</h4>
+                  <h4 className="mb-2">
+                    Start earning by renting out your hardly used things!
+                  </h4>
                   <p className="mb-4">
-                    Earn by renting out your stuff locally when you're not using
-                    it. Relax with verified renters and an insurance guarantee.
+                    Share your things, earn cash! Earn by renting out your stuff
+                    locally when you're not using it. Relax with verified
+                    renters and an insurance guarantee.
                   </p>
                 </div>
               </div>

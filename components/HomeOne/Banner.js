@@ -7,7 +7,7 @@ import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
 
-const Banner = ({ popularCategories }) => {
+const Banner = () => {
   const {
     handleChangeCity,
     handleCategoryTipClick,
@@ -39,6 +39,15 @@ const Banner = ({ popularCategories }) => {
     "/images/main-banner-bg4.jpg",
     "/images/main-banner-bg5.jpg",
     "/images/main-banner-bg6.jpg",
+  ];
+
+  const categories = [
+    "Ladders",
+    "Tools",
+    "Tents",
+    "Trailers",
+    "Cameras",
+    "Bikes",
   ];
 
   return (
@@ -76,16 +85,9 @@ const Banner = ({ popularCategories }) => {
                   }}
                   modules={[Autoplay]}
                 >
-                  {popularCategories.map((category) => (
+                  {categories.map((category) => (
                     <SwiperSlide key={category}>
-                      <span>
-                        <Link
-                          href={`/listing-list?categories=${category}`}
-                          className="color-0ec6c6"
-                        >
-                          {category}
-                        </Link>
-                      </span>
+                      <span className="color-d6e30f">{category}</span>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -152,10 +154,7 @@ const Banner = ({ popularCategories }) => {
               </div>
 
               <div className="col-lg-3 col-md-12 p-0">
-                <div
-                  id="filter-search-btn"
-                  className="submit-btn"
-                >
+                <div id="filter-search-btn" className="submit-btn">
                   <Link
                     href={getFullListingSearchLink(searchCity, searchCategory)}
                   >

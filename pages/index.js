@@ -19,7 +19,7 @@ import HowItWorks from "../components/HomeOne/HowItWorks";
 const Index = ({ categories }) => {
   const popularCategories = [];
   let topCategories = [];
-  const maxTopCategoriesSectionView = 11;
+  const maxTopCategoriesSectionView = 8;
 
   Object.keys(categories).forEach((level) => {
     categories[level].map((category) => {
@@ -38,15 +38,15 @@ const Index = ({ categories }) => {
 
   return (
     <>
-      <Navbar canShowSearch={true} />
+      <Navbar canShowSearch={false} />
 
       <Banner popularCategories={popularCategories} />
 
-      <Feedback />
-
-      <SafeWithUs bgColor="bg-f9f9f9" />
-
       <YourBusiness />
+
+      <Feedback bgColor="bg-f9f9f9" />
+
+      <SafeWithUs />
 
       <Category
         topCategories={topCategories}
@@ -59,7 +59,7 @@ const Index = ({ categories }) => {
 
       {/*<ListingArea listings={topListings} />*/}
 
-      <DestinationsTwo />
+      <DestinationsTwo bgColor="bg-f9f9f9" />
 
       <Footer />
     </>

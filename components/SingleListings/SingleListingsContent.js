@@ -591,10 +591,7 @@ const SingleListingsContent = ({
                             </h4>
                             <span>
                               {listing.userCountItems}{" "}
-                              {autoMultiEnding(
-                                listing.userCountItems,
-                                "Item"
-                              )}{" "}
+                              {autoMultiEnding(listing.userCountItems, "Item")}{" "}
                               for rental
                             </span>
                           </div>

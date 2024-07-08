@@ -106,7 +106,6 @@
 }
 [dir="rtl"] .single-feedback-box .client-info .title {
   margin-left: 0;
-  margin-right: 13px;
 }
 [dir="rtl"] .single-how-it-works-box::before {
   right: auto;
