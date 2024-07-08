@@ -103,7 +103,7 @@ const OrderPopups = ({
           price={order.offerPricePerDay}
           minRentalDays={order.listingMinRentalDays}
           listingName={order.listingName}
-          blockedDates={order.blockedForRentalDates}
+          blockedDates={order.blockedDates}
           title="Extend Now"
           startDate={
             order.offerEndDate ? increaseDateByOneDay(order.offerEndDate) : null

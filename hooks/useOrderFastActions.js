@@ -448,6 +448,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         newEndDate: toDate,
         status,
         requestId,
+        conflictOrders: [],
       },
       orderId
     );

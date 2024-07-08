@@ -227,11 +227,13 @@ const OrderContent = ({
       setOrder((prev) => ({
         ...prev,
         status: STATIC.ORDER_STATUSES.PENDING_TENANT,
+        conflictOrders: [],
       }));
     } else {
       setOrder((prev) => ({
         ...prev,
         status: STATIC.ORDER_STATUSES.PENDING_OWNER,
+        conflictOrders: [],
       }));
     }
 
