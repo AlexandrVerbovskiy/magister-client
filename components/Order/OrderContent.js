@@ -6,8 +6,8 @@ import {
   generateProfileFilePath,
   getDaysDifference,
   getListingImageByType,
-  increaseDateByOneDay,
   moneyFormat,
+  validateBigText,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -22,7 +22,7 @@ import {
   useOrderDateError,
   useSingleOrderActions,
 } from "../../hooks";
-import InputWithIcon from "../FormComponents/InputWithIcon";
+import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
@@ -43,7 +43,6 @@ const bookingStatuses = [
 const OrderContent = ({
   order: baseOrder,
   authToken,
-  questions,
   ownerBaseCommission,
   tenantBaseCommission,
   bankInfo,
@@ -71,7 +70,10 @@ const OrderContent = ({
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
-  const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
+
+  const [hasDefect, setHasDefect] = useState(false);
+  const [defectError, setDefectError] = useState(null);
+  const [defectDescription, setDefectDescription] = useState("");
 
   const isBookingWithoutAgreement =
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
@@ -81,22 +83,6 @@ const OrderContent = ({
     useOrderDateError({
       order,
     });
-
-  useEffect(() => {
-    if (questions) {
-      const convertedQuestions = questions.map((question) => ({
-        ...question,
-        answer: false,
-        description: "",
-        question: question.name,
-        error: null,
-      }));
-
-      setQuestionAnswerInfos(convertedQuestions);
-    } else {
-      setQuestionAnswerInfos([]);
-    }
-  }, [questions]);
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
@@ -158,6 +144,23 @@ const OrderContent = ({
     });
   };
 
+  const validateDefect = () => {
+    let hasError = false;
+
+    if (hasDefect) {
+      if (defectDescription.trim()) {
+        if (validateBigText(defectDescription) !== true) {
+          setDefectError(validateBigText(defectDescription));
+        }
+      } else {
+        setDefectError("Required field");
+        hasError = true;
+      }
+    }
+
+    return !hasError;
+  };
+
   const localCalculateCurrentTotalPrice = ({
     type = null,
     startDate,
@@ -173,31 +176,6 @@ const OrderContent = ({
       ownerFee: order.ownerFee,
       tenantFee: order.tenantFee,
     });
-
-  const handleUpdateQuestionDescription = (e, id) => {
-    setQuestionAnswerInfos((questions) => {
-      return questions.map((question) => {
-        if (question.id == id) {
-          question["description"] = e.target.value;
-          question["error"] = null;
-        }
-
-        return question;
-      });
-    });
-  };
-
-  const handleUpdateQuestionAnswer = (e, id) => {
-    setQuestionAnswerInfos((questions) => {
-      return questions.map((question) => {
-        if (question.id == id) {
-          question["answer"] = e.target.value == "yes";
-        }
-
-        return question;
-      });
-    });
-  };
 
   const onCreateUpdateRequest = ({ price, fromDate, toDate }) => {
     if (actualUpdateRequest) {
@@ -331,40 +309,26 @@ const OrderContent = ({
     router.push("/dashboard/orders");
   };
 
-  const validateQuestions = () => {
-    let hasError = false;
-
-    const updateQuestions = [];
-
-    for (let i = 0; i < questionAnswerInfos.length; i++) {
-      const updateQuestion = { ...questionAnswerInfos[i] };
-
-      if (updateQuestion.answer && !updateQuestion.description.trim()) {
-        hasError = true;
-        updateQuestion["error"] = "Required for damaged";
-      }
-
-      updateQuestions.push(updateQuestion);
-    }
-
-    setQuestionAnswerInfos(updateQuestions);
-
-    return !hasError;
-  };
-
   const handleTenantGotListingApprove = async () => {
     try {
       const res = await approveClientGotListing(
-        order.acceptListingTenantToken,
-        questionAnswerInfos,
+        {
+          token: order.acceptListingTenantToken,
+          defectDescription: defectDescription.trim(),
+        },
         authToken
       );
 
       setOrder((prev) => ({
         ...prev,
         ownerAcceptListingQrcode: res.qrCode,
+        hasDefectByOwner: hasDefect,
+        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
       }));
+
+      setHasDefect(false);
+      setDefectDescription("");
 
       activateSuccessOrderPopup({
         text: "Approved successfully",
@@ -377,19 +341,26 @@ const OrderContent = ({
   const handleFinishOrder = async () => {
     try {
       await finishedByOwner(
-        order.acceptListingOwnerToken,
-        questionAnswerInfos,
+        {
+          token: order.acceptListingOwnerToken,
+          defectDescription: defectDescription.trim(),
+        },
         authToken
-      );
-
-      success.set(
-        `Order finished successfully. Thank you for using the platform`
       );
 
       setOrder((prev) => ({
         ...prev,
+        hasDefectByOwner: hasDefect,
+        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.FINISHED,
       }));
+
+      setHasDefect(false);
+      setDefectDescription("");
+
+      activateSuccessOrderPopup({
+        text: "Finished successfully",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -482,7 +453,7 @@ const OrderContent = ({
   };
 
   const triggerFinishClick = () => {
-    if (!validateQuestions()) {
+    if (!validateDefect()) {
       return;
     }
 
@@ -490,11 +461,20 @@ const OrderContent = ({
   };
 
   const triggerTenantQotListingClick = () => {
-    if (!validateQuestions()) {
+    if (!validateDefect()) {
       return;
     }
 
     setTenantGotListingApproveModalActive(true);
+  };
+
+  const handleDefectInactive = () => setHasDefect(false);
+
+  const handleDefectActive = () => setHasDefect(true);
+
+  const handleDefectUpdate = (e) => {
+    setDefectDescription(e.target.value);
+    setDefectError(null);
   };
 
   if (orderPopupsData.extendApproveData) {
@@ -689,26 +669,6 @@ const OrderContent = ({
         </div>
       </div>
 
-      {(order.defects.length > 0 || order.listingDopDefect) && (
-        <div className="add-listings-box">
-          <h3>Defects</h3>
-
-          <div className="row">
-            {order.defects.map((defect) => (
-              <div className="col-12" key={defect.defectId}>
-                <InputView value={defect.defectName} />
-              </div>
-            ))}
-
-            {order.listingDopDefect && (
-              <div className="col-12">
-                <InputView value={order.listingDopDefect} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {isTenant && (
         <div id="user-info" className="add-listings-box">
           <h3>Listing Owner Details</h3>
@@ -818,7 +778,7 @@ const OrderContent = ({
       {(order.cancelStatus != null || !actualUpdateRequest) && (
         <div className="row listings-sidebar" style={{ marginTop: 0 }}>
           <div className="col form-group">
-            <div className="listings-widget order_widget  order-proposal-info">
+            <div className="listings-widget order_widget order-proposal-info">
               <h3>Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
@@ -1214,69 +1174,55 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {questions &&
-        questions.length > 0 &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
-          <div className="order_widget add-listings-box">
-            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
-              <h3>Rental checklist</h3>
-            )}
-            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
-              <h3>Owner checklist</h3>
-            )}
+      {(order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
+        <div className="order_widget add-listings-box">
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+            <h3>Any defects</h3>
+          )}
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+            <h3>New defects</h3>
+          )}
 
-            {questionAnswerInfos.map((question) => {
-              return (
-                <React.Fragment key={question.id}>
-                  <p style={{ marginBottom: "16px" }}>{question.question}</p>
-
-                  <div className="form-group">
-                    <ul className="facilities-list">
-                      <li>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            name={`question[${question.id}]["yes"]`}
-                            value="yes"
-                            checked={question.answer}
-                            onChange={(e) =>
-                              handleUpdateQuestionAnswer(e, question.id)
-                            }
-                          />
-                          <span>Yes</span>
-                        </label>
-                      </li>
-                      <li>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            name={`question[${question.id}]["no"]`}
-                            value="no"
-                            checked={!question.answer}
-                            onChange={(e) =>
-                              handleUpdateQuestionAnswer(e, question.id)
-                            }
-                          />
-                          <span>No</span>
-                        </label>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <InputWithIcon
-                    placeholder="Describe the damage"
-                    value={question.description}
-                    onInput={(e) =>
-                      handleUpdateQuestionDescription(e, question.id)
-                    }
-                    error={question.error}
+          <div className="form-group">
+            <ul className="facilities-list">
+              <li>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="defect_yes"
+                    value="yes"
+                    checked={hasDefect}
+                    onChange={(e) => handleDefectActive(e)}
                   />
-                </React.Fragment>
-              );
-            })}
+                  <span>Yes</span>
+                </label>
+              </li>
+              <li>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="defect_no"
+                    value="no"
+                    checked={!hasDefect}
+                    onChange={(e) => handleDefectInactive(e)}
+                  />
+                  <span>No</span>
+                </label>
+              </li>
+            </ul>
           </div>
-        )}
+
+          {hasDefect && (
+            <TextareaWithIcon
+              placeholder="Describe the defect"
+              value={defectDescription}
+              onChange={handleDefectUpdate}
+              error={defectError}
+            />
+          )}
+        </div>
+      )}
 
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
