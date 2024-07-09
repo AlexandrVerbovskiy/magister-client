@@ -1195,6 +1195,12 @@ Navbar Area CSS
   color: var(--mainColor);
 }
 
+.is-sticky.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a:hover,
+.is-sticky.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a:focus,
+.is-sticky.navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a.active{
+  color: var(--yellowColor);
+}
+
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item .dropdown-menu li a {
   color: var(--blackColor);
 }
