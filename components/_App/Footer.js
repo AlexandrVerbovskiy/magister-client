@@ -3,9 +3,11 @@ import LangDropdown from "./LangDropdown";
 import { activateAuthPopup } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
+import { useListingListClick } from "../../hooks";
 
 const Footer = ({ bgColor }) => {
   const { sessionUser } = useContext(IndiceContext);
+  const { handleClick: handleListingListClick } = useListingListClick();
 
   const handleSignInClick = (e) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ const Footer = ({ bgColor }) => {
   return (
     <>
       <footer className={`footer-area ${bgColor ?? ""}`}>
-        <div className="container">
+        <div className="container" style={{ paddingBottom: "3rem" }}>
           <div className="row">
             <div className="col-lg-3 col-sm-6 col-md-6">
               <div className="single-footer-widget">
@@ -35,7 +37,13 @@ const Footer = ({ bgColor }) => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/listing-list">
+                    <Link
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleListingListClick();
+                      }}
+                    >
                       <i className="flaticon-left-chevron"></i> List item
                     </Link>
                   </li>
