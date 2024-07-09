@@ -95,12 +95,10 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
 
   useEffect(() => {
     setAuthToken(session?.user.authToken);
-    console.log("test");
 
     if (session === undefined) {
       return;
     }
-    console.log("test 1");
 
     if (prevSessionUser === undefined) {
       setPrevSessionUser(session?.user ?? null);
@@ -110,9 +108,9 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
     if (
       (prevSessionUser != null && session != null) ||
       (prevSessionUser == null && session == null)
-    )
+    ) {
       return;
-    console.log("test 3");
+    }
 
     let redirectLink = "/";
 

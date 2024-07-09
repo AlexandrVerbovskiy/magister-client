@@ -1763,7 +1763,7 @@ Navbar Area CSS
   border-color: var(--mainColor);
 }
 .navbar-style-two.is-sticky {
-  background-color: var(--blackColor) !important;
+  background-color: var(--mainColor) !important;
 }
 .navbar-style-two .others-option-for-responsive .dot-menu .inner .circle {
   background-color: var(--whiteColor);
@@ -19187,6 +19187,143 @@ font-weight: 600;
   font-weight: 700;
 }
 
-.message-site-success-alert-list{
+.about-us-card{
+  border-radius: 8px;
+  padding: 25px;
+  background-color: white;
+}
 
+.about-us-card h3{
+  margin-top: 30px;
+  margin-bottom: 25px;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.about-us-card p{
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.about-us-image{
+  width: 80%;
+  border-radius: 8px;
+  max-width: 592px;
+  height: 394px;
+}
+
+.about-us-image.margin-left{
+  margin-left: -50px;
+}
+
+.about-us-image.margin-right{
+  margin-right: -50px;
+}
+
+.about-us-image img{
+  width: 100%;
+  height: 100%;
+}
+
+.z-index-1{
+  z-index: 1;
+}
+
+.z-index-9999{
+  z-index: 9999;
+}
+
+.mb-6{
+  margin-bottom: 2rem;
+}
+
+.mb-8{
+  margin-bottom: 3rem;
+}
+
+.about-us-goals .main-goal-card{
+  max-width: 370px;
+}
+
+.about-us-goals .main-goal-card h4{
+  font-size: 24px;
+  line-height: 28.15px;
+  font-weight: 400;
+}
+
+
+.about-us-goals .main-goal-card p{
+  font-size: 16px;
+  line-height: 18.77px;
+  color: #6F6F6F;
+}
+
+.about-us-goals .first-goals-row{
+  height: 175px;
+}
+
+.about-us-goals .second-goals-row{
+  height: 120px;
+}
+
+.about-us-goals .first-goals-row>div:nth-of-type(1),
+.about-us-goals .second-goals-row>div:nth-of-type(1){
+  justify-content: end;
+  text-align: end;
+}
+
+.about-us-goals .first-goals-row>div:nth-of-type(2),
+.about-us-goals .second-goals-row>div:nth-of-type(2){
+  justify-content: start;
+}
+
+.about-us-goals .first-goals-row>div:nth-of-type(1) .circle-icon{
+  margin-right: 50px;
+  margin-left: 10px;
+}
+
+.about-us-goals .first-goals-row>div:nth-of-type(2) .circle-icon{
+  margin-left: 50px;
+  margin-right: 10px;
+}
+
+.about-us-goals .second-goals-row>div:nth-of-type(1) .circle-icon{
+  margin-right: 100px;
+  margin-left: 10px;
+}
+
+.about-us-goals .second-goals-row>div:nth-of-type(2) .circle-icon{
+  margin-left: 100px;
+  margin-right: 10px;
+}
+
+.about-us-goals .third-goals-row>div .circle-icon{
+  margin-bottom: 10px;
+}
+
+.about-us-goals .third-goals-row>div{
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-us-goals .circle-border{
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.about-us-thanks-for-visiting{
+  background-color: #DEE01F;
+  font-size: 28px;
+  line-height: 36px;
+  position: relative;
+  height: 152px;
+}
+
+.thanks-for-visiting-icon{
+  position: absolute;
+  top: 0;
+  left: 0;
 }

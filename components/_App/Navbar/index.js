@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RegisterTab from "./RegisterTab";
@@ -8,13 +8,14 @@ import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
-import { getListingSearchLink, activateAuthPopup } from "../../../utils";
+import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
+import {useListingListClick} from "../../../hooks";
 
 const Navbar = ({ canShowSearch = true }) => {
   const {
@@ -22,8 +23,6 @@ const Navbar = ({ canShowSearch = true }) => {
     success: mainSuccess,
     isSupport,
     onLogin,
-    error: mainError,
-    sessionUser,
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -185,7 +184,10 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!searchCategory) return;
+    
+    if (!searchCategory) {
+      return;
+    }
 
     handleSearchClick();
   };
@@ -195,13 +197,7 @@ const Navbar = ({ canShowSearch = true }) => {
     router.push(link);
   };
 
-  const handleListingClick = () => {
-    if (sessionUser) {
-      router.push("/listing-list");
-    } else {
-      activateAuthPopup();
-    }
-  };
+  const {handleClick: handleListingClick} = useListingListClick();
 
   return (
     <>

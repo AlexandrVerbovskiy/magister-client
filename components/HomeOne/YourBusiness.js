@@ -1,8 +1,7 @@
-import React, { useCallback, useContext } from "react";
-import Link from "next/link";
+import React, { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
-import { activateAuthPopup } from "../../utils";
+import { useListingListClick } from "../../hooks";
 
 const YourBusiness = () => {
   const { sessionUser } = useContext(IndiceContext);
@@ -26,13 +25,7 @@ const YourBusiness = () => {
     },
   ];
 
-  const handleStartEarningClick = () => {
-    if (sessionUser) {
-      router.push("/listing-list");
-    } else {
-      activateAuthPopup();
-    }
-  };
+  const { handleClick: handleStartEarningClick } = useListingListClick();
 
   return (
     <>

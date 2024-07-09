@@ -1,19 +1,7 @@
-import { useContext } from "react";
-import { IndiceContext } from "../../contexts";
-import { useRouter } from "next/router";
-import { activateAuthPopup } from "../../utils";
+import {useListingListClick} from "../../hooks";
 
 const DuringRental = () => {
-  const { sessionUser } = useContext(IndiceContext);
-  const router = useRouter();
-
-  const handleStartEarningClick = () => {
-    if (sessionUser) {
-      router.push("/listing-list");
-    } else {
-      activateAuthPopup();
-    }
-  };
+  const { handleClick: handleStartEarningClick } = useListingListClick();
 
   return (
     <section className="category-area pt-100 pb-100">
