@@ -20,9 +20,9 @@ const Circle = ({ color }) => (
 const AboutUs = () => {
   return (
     <>
-      <Navbar canShowSearch={false} />
-      <div className="listings-area ptb-100 bg-f9f9f9">
-        <div className="container mt-4 position-relative">
+      <Navbar canShowSearch={false} alwaysSticky={true}/>
+      <div className="listings-area ptb-100 bg-f1f1f1">
+        <div className="container mt-8 position-relative">
           <div className="row justify-center align-items-center mb-8">
             <div className="col-12 col-lg-6 z-index-1 px-0 d-flex justify-content-end mb-8 mb-lg-0">
               <div className="about-us-card">
@@ -195,7 +195,7 @@ const AboutUs = () => {
             </svg>
           </div>
         </div>
-        <div className="divider2"></div>
+        <div className="divider3"></div>
       </div>
 
       <div className="listings-area ptb-100 b-0 about-us-goals position-relative">

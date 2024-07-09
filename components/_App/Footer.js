@@ -32,7 +32,13 @@ const Footer = ({ bgColor }) => {
                     </li>
                   )}
                   <li>
-                    <Link href="/listing-list">
+                    <Link
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleListingListClick();
+                      }}
+                    >
                       <i className="flaticon-left-chevron"></i> Search Items
                     </Link>
                   </li>

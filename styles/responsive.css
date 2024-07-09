@@ -1,5 +1,9 @@
 /* Max width 767px */
 @media only screen and (max-width: 768px) {
+  .how-it-works-box .icon{
+    height: 220px!important;
+  }
+
   .listing-area {
     min-height: 400px;
   }
@@ -564,6 +568,11 @@
   .divider2 {
     display: none;
   }
+
+  .divider3{
+    display: none;
+  }
+
   .single-listings-box .listings-image .bookmark-save {
     top: 10px;
     right: 10px;
@@ -3077,7 +3086,8 @@
     padding-bottom: 50px;
   }
   .divider,
-  .divider2 {
+  .divider2,
+  .divider3 {
     display: none;
   }
   .single-listings-box .listings-content {
