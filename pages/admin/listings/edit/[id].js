@@ -6,7 +6,7 @@ import {
 import { adminSideProps } from "../../../../middlewares";
 import EditForm from "../../../../components/admin/Listings/EditForm";
 
-const ListingEdit = ({ categories, listing: baseListing, id, defects }) => {
+const ListingEdit = ({ categories, listing: baseListing, id }) => {
   const [listing, setListing] = useState(baseListing);
 
   const save = async (formData, authToken) => {
@@ -22,7 +22,6 @@ const ListingEdit = ({ categories, listing: baseListing, id, defects }) => {
       categories={categories}
       listing={listing}
       save={save}
-      defects={defects}
     />
   );
 };

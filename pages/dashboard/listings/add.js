@@ -11,7 +11,7 @@ import EditForm from "../../../components/Listings/EditForm";
 import { useRouter } from "next/router";
 import { changeLocation } from "../../../utils";
 
-const AddListing = ({ categories, defects }) => {
+const AddListing = ({ categories }) => {
   const [listing, setListing] = useState({});
   const [canSendRequest, setCanSendRequest] = useState(false);
 
@@ -52,7 +52,6 @@ const AddListing = ({ categories, defects }) => {
       canSendRequest={canSendRequest}
       setCanSendRequest={setCanSendRequest}
       canChange={true}
-      defects={defects}
     />
   );
 };

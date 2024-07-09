@@ -37,7 +37,6 @@ const TableItem = (props) => {
     payedAdminApproved,
     payedWaitingApproved,
     listingRentalCount,
-    orderCheckLists,
     tenantAverageRating,
     ownerAverageRating,
     listingAverageRating,
@@ -153,23 +152,6 @@ const TableItem = (props) => {
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar value={tenantAverageRating} />
             </SubInfoRowWithChild>
-          </div>
-        </td>
-
-        <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
-          <div>
-            <div className="font-semibold">Item checklist</div>
-
-            <div
-              className="mt-1"
-              style={{ overflow: "hidden", textOverflow: "ellipsis" }}
-            >
-              <span className="text-gray-400" style={{ textWrap: "wrap" }}>
-                {orderCheckLists.length
-                  ? orderCheckLists.map((check) => check).join(", ")
-                  : "-"}
-              </span>
-            </div>
           </div>
         </td>
 

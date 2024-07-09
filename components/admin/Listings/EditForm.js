@@ -41,7 +41,7 @@ const cityOptions = [
 
 const baseCity = cityOptions[0]["value"];
 
-const EditForm = ({ listing, categories, defects, save }) => {
+const EditForm = ({ listing, categories, save }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
   const [prevListing, setPrevListing] = useState(listing);
@@ -98,8 +98,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [listingDefects, setListingDefects] = useState([]);
-
   const [category, setCategory] = useState(baseCategoryId);
   const [categoryError, setCategoryError] = useState(null);
 
@@ -108,9 +106,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
-
-  const [rentalTerms, setRentalTerms] = useState("");
-  const [rentalTermsError, setRentalTermsError] = useState(null);
 
   const [postcode, setPostcode] = useState("");
   const [postcodeError, setPostcodeError] = useState(null);
@@ -132,9 +127,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
   const [backgroundPhoto, setBackgroundPhoto] = useState(null);
   const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
   const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
-
-  const [defect, setDefect] = useState("");
-  const [defectError, setDefectError] = useState(null);
 
   const [center, setCenter] = useState({
     lat: STATIC.CITY_COORDS[baseCity].lat,
@@ -177,14 +169,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
     }
   };
 
-  const handleChangeListingDefectActive = (defectId) => {
-    if (listingDefects.includes(defectId)) {
-      setListingDefects((prev) => prev.filter((id) => id != defectId));
-    } else {
-      setListingDefects((prev) => [...prev, defectId]);
-    }
-  };
-
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
     try {
       setLat(newLat);
@@ -206,7 +190,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
     setName(data.name);
     setCategory(data.categoryId);
     setDescription(data.description);
-    setRentalTerms(data.rentalTerms);
     setPostcode(data.postcode);
     setCity(data.city);
     setCompensationCost(data.compensationCost);
@@ -222,8 +205,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
     setOwnerName(prevListing.userName);
     setAddress(data.address);
     setActive(data.active);
-    setListingDefects(data.defects);
-    setDefect(data.dopDefect);
     setBackgroundPhotoUrl(data.backgroundPhotoUrl);
 
     const adaptedImages = data.listingImages.map((image) => ({
@@ -252,14 +233,10 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
     const categoryId = prevListing.categoryId ?? baseCategoryId;
 
-    const listingDefects = prevListing.defects ?? [];
-    const listingDefectIds = listingDefects.map((defect) => defect.defectId);
-
     return {
       name: prevListing.name ?? "",
       categoryId: categoryId,
       description: prevListing.description ?? "",
-      rentalTerms: prevListing.rentalTerms ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
       compensationCost: prevListing.compensationCost ?? "",
@@ -274,8 +251,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
       ownerId: prevListing.ownerId,
       address: prevListing.address ?? "",
       active: prevListing.active ?? true,
-      defects: listingDefectIds,
-      dopDefect: prevListing.dopDefect ?? "",
       backgroundPhotoUrl: prevListing.backgroundPhoto
         ? getFilePath(prevListing.backgroundPhoto)
         : null,
@@ -337,7 +312,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
       address: address.trim(),
       categoryId: category,
       description: description.trim(),
-      rentalTerms: rentalTerms.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
       compensationCost,
@@ -351,8 +325,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
       approved,
       ownerId,
       active,
-      defects: listingDefects,
-      dopDefect: defect.trim(),
     };
   };
 
@@ -427,11 +399,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
         hasError = true;
       }
 
-      if (rentalTerms && validateBigText(rentalTerms) !== true) {
-        setRentalTermsError(validateBigText(rentalTerms));
-        hasError = true;
-      }
-
       if (!pricePerDay) {
         setPricePerDayError("Required field");
         hasError = true;
@@ -459,11 +426,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
 
       if (files.length + linkFiles.length < 1) {
         setFileError("At least one photo is required");
-        hasError = true;
-      }
-
-      if (defect.length && validateBigText(defect) !== true) {
-        setDefectError(validateBigText(defect));
         hasError = true;
       }
 
@@ -506,7 +468,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
         }
 
         info["listingImages"] = JSON.stringify(info["listingImages"]);
-        info["defects"] = JSON.stringify(info["defects"]);
 
         Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
@@ -863,58 +824,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
                         </div>
                       </section>
 
-                      {defects.length > 0 && (
-                        <section style={{ marginTop: "0" }}>
-                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                            Defects
-                          </h2>
-
-                          <div className="w-full">
-                            {defects
-                              .sort((a, b) => a.orderIndex - b.orderIndex)
-                              .map((defect) => {
-                                return (
-                                  <div
-                                    key={defect.id}
-                                    className="form-input flex flex-wrap mt-2 justify-between"
-                                  >
-                                    <div className="mr-2">
-                                      <label
-                                        className="block text-sm font-medium mb-1"
-                                        htmlFor="suspicious"
-                                      >
-                                        {defect.name}
-                                      </label>
-                                    </div>
-                                    <Switch
-                                      id={uniqueId()}
-                                      checked={listingDefects.includes(
-                                        defect.id
-                                      )}
-                                      changeChecked={() =>
-                                        handleChangeListingDefectActive(
-                                          defect.id
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                );
-                              })}
-
-                            <Input
-                              name="dop_defect"
-                              placeholder="Other defects..."
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={defect}
-                              setValue={setDefect}
-                              error={defectError}
-                              setError={setDefectError}
-                              inputClassName="form-input w-full mt-2"
-                            />
-                          </div>
-                        </section>
-                      )}
-
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                           Details
@@ -929,24 +838,6 @@ const EditForm = ({ listing, categories, defects, save }) => {
                             error={descriptionError}
                             setError={setDescriptionError}
                             placeholder="Details..."
-                          />
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Rental Terms
-                        </h2>
-
-                        <div className="w-full">
-                          <Textarea
-                            name="rentalTerms"
-                            value={rentalTerms}
-                            setValue={setRentalTerms}
-                            row="7"
-                            error={rentalTermsError}
-                            setError={setRentalTermsError}
-                            placeholder="Rental Terms..."
                           />
                         </div>
                       </section>

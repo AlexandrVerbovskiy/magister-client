@@ -9,8 +9,7 @@ import EditForm from "../../../components/admin/Listings/EditForm";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../contexts";
 
-const ListingCreate = ({ categories, defects }) => {
-  const { error, sessionUser } = useContext(IndiceContext);
+const ListingCreate = ({ categories }) => {
   const [listing, setListing] = useState({});
   const router = useRouter();
 
@@ -37,7 +36,6 @@ const ListingCreate = ({ categories, defects }) => {
       categories={categories}
       listing={listing}
       save={save}
-      defects={defects}
     />
   );
 };

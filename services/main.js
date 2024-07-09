@@ -244,19 +244,6 @@ export const getOrderInvoiceOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminListingDefectsEditOptions = async (authToken) => {
-  const data = await get(`/admin-listing-defects-edit-options`, authToken);
-  return data.body.defects;
-};
-
-export const getAdminListingDefectQuestionsEditOptions = async (authToken) => {
-  const data = await get(
-    `/admin-listing-defect-questions-edit-options`,
-    authToken
-  );
-  return data.body.questions;
-};
-
 export const getWalletInfoOptions = async (authToken) => {
   const data = await get(`/get-wallet-info-options`, authToken);
   return data.body;

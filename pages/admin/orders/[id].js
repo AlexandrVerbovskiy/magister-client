@@ -504,36 +504,6 @@ const Order = (order) => {
                         </div>
                       </section>
 
-                      {(order.defects.length > 0 || order.listingDopDefect) && (
-                        <section>
-                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                            Defects
-                          </h2>
-
-                          <div className="flex flex-col gap-2">
-                            {order.defects.map((defect) => (
-                              <div className="w-full" key={defect.defectId}>
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={defect.defectName}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            ))}
-
-                            {order.listingDopDefect && (
-                              <div className="col-12">
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={order.listingDopDefect}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </section>
-                      )}
-
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                           Photos
@@ -571,13 +541,27 @@ const Order = (order) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Listing Rental Terms
+                          Defects By Tenant
                         </h2>
 
                         <div className="w-full">
                           <TextareaView
-                            name="rentalTerms"
-                            value={order.listingRentalTerms}
+                            name="defect-by-tenant"
+                            value={order.defectDescriptionByTenant ?? "-"}
+                            row="7"
+                          />
+                        </div>
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Defects By Owner
+                        </h2>
+
+                        <div className="w-full">
+                          <TextareaView
+                            name="defect-by-owner"
+                            value={order.defectDescriptionByOwner ?? "-"}
                             row="7"
                           />
                         </div>

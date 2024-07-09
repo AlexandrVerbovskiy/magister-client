@@ -281,36 +281,6 @@ const ListingApprovalRequest = ({
                       </div>
                     </section>
 
-                    {(listing.defects.length > 0 || listing.dopDefect) && (
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Defects
-                        </h2>
-
-                        <div className="flex flex-col gap-2">
-                          {listing.defects.map((defect) => (
-                            <div className="w-full" key={defect.defectId}>
-                              <InputView
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={defect.defectName}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          ))}
-
-                          {listing.dopDefect && (
-                            <div className="col-12">
-                              <InputView
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={listing.dopDefect}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </section>
-                    )}
-
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                         Photos
@@ -373,20 +343,6 @@ const ListingApprovalRequest = ({
                         <TextareaView
                           name="description"
                           value={listing.description}
-                          row="7"
-                        />
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Rental Terms
-                      </h2>
-
-                      <div className="w-full">
-                        <TextareaView
-                          name="rentalTerms"
-                          value={listing.rentalTerms}
                           row="7"
                         />
                       </div>
