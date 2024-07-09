@@ -1376,6 +1376,14 @@
     margin-bottom: 3rem;
   }
 
+  .mt-lg-6 {
+    margin-top: 2rem;
+  }
+
+  .mt-lg-8 {
+    margin-top: 3rem;
+  }
+
   .about-us-goals .first-goals-row,
   .about-us-goals .second-goals-row {
     height: auto !important;

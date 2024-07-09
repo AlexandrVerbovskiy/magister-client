@@ -15,9 +15,9 @@ import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
-import {useListingListClick} from "../../../hooks";
+import { useListingListClick } from "../../../hooks";
 
-const Navbar = ({ canShowSearch = true }) => {
+const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const {
     isAuth,
     success: mainSuccess,
@@ -43,7 +43,7 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [sticky, setSticky] = useState(false);
+  const [sticky, setSticky] = useState(alwaysSticky);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
@@ -61,10 +61,14 @@ const Navbar = ({ canShowSearch = true }) => {
   };
 
   const showStickyMenu = () => {
-    if (window.scrollY >= 80) {
-      setSticky(true);
+    if (!alwaysSticky) {
+      if (window.scrollY >= 80) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
     } else {
-      setSticky(false);
+      setSticky(true);
     }
   };
 
@@ -184,7 +188,7 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!searchCategory) {
       return;
     }
@@ -197,7 +201,7 @@ const Navbar = ({ canShowSearch = true }) => {
     router.push(link);
   };
 
-  const {handleClick: handleListingClick} = useListingListClick();
+  const { handleClick: handleListingClick } = useListingListClick();
 
   return (
     <>
