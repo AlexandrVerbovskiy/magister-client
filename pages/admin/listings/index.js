@@ -24,7 +24,7 @@ import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHead
 
 const Listings = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, sessionUser, authToken } = useContext(IndiceContext);
+  const { error, success, authToken } = useContext(IndiceContext);
 
   const [dangerModalOpen, setDangerModalOpen] = useState(false);
   const [toDeleteUserInfo, setToDeleteUserInfo] = useState({});

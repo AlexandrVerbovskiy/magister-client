@@ -250,6 +250,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       title: "Approval Requests",
                     },
                     { href: "listing-categories", title: "Categories" },
+                    {
+                      href: "others-listing-categories",
+                      title: "Others Categories",
+                    },
                   ]}
                   SVG={({ current }) => (
                     <svg

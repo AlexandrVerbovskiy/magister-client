@@ -95,8 +95,6 @@ const Banner = () => {
             </h1>
           </div>
 
-          <p>Expolore top-rated attractions, activities and more...</p>
-
           <form>
             <div className="row m-0 align-items-center">
               <div className="col-lg-6 col-md-6 p-0">

@@ -347,3 +347,20 @@ export const getAdminChatOptions = async ({ id = null }, authToken) => {
   const data = await post(`/admin-chat-options`, { id }, authToken);
   return data.body;
 };
+
+export const getAdminOthersListingCategoriesOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-searched-others-categories-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminCreateCategoryByOthersOptions = async (authToken) => {
+  const data = await get(`/admin-create-category-by-others-options`, authToken);
+  return data.body;
+};

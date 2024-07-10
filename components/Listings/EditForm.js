@@ -25,6 +25,7 @@ import { IndiceContext } from "../../contexts";
 import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
+import DeleteModal from "./DeleteModal";
 import {
   createListingApprovalRequest,
   deleteListing,
@@ -107,6 +108,8 @@ const EditForm = ({
   const [nameError, setNameError] = useState(null);
 
   const [category, setCategory] = useState(null);
+  const [otherCategory, setOtherCategory] = useState("");
+  const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -134,6 +137,7 @@ const EditForm = ({
   const [backgroundPhoto, setBackgroundPhoto] = useState(null);
   const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
   const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
+  const [changePopupActive, setChangePopupActive] = useState(null);
 
   const [active, setActive] = useState(true);
 
@@ -154,6 +158,12 @@ const EditForm = ({
   const handleChangeName = (e) => {
     setName(e.target.value);
     setNameError(null);
+    setMainError(null);
+  };
+
+  const handleChangeOtherCategory = (e) => {
+    setOtherCategory(e.target.value);
+    setCategoryError(null);
     setMainError(null);
   };
 
@@ -183,6 +193,7 @@ const EditForm = ({
       setLng(newLng);
       const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
       setAddress(newAddress);
+      setActiveDeletePopup(false);
     } catch (e) {
       error.set(e.message);
     }
@@ -207,6 +218,7 @@ const EditForm = ({
 
   const handleChangeCategory = (categoryId) => {
     setCategory(categoryId);
+    setIsOtherCategory(categoryId == "-");
     setCategoryError(null);
     setMainError(null);
   };
@@ -216,7 +228,6 @@ const EditForm = ({
     setDescriptionError(null);
     setMainError(null);
   };
-
 
   const handleChangeCity = (e) => {
     const city = e.value;
@@ -288,10 +299,13 @@ const EditForm = ({
       id: elem.id,
     }));
 
-    return {
+    const categoryId = !!listing.otherCategory
+      ? undefined
+      : listing.categoryId ?? null;
+
+    const data = {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      categoryId: listing.categoryId ?? null,
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
@@ -307,7 +321,14 @@ const EditForm = ({
       backgroundPhotoUrl: listing.backgroundPhoto
         ? getFilePath(listing.backgroundPhoto)
         : null,
+      otherCategory: listing.otherCategory ?? "",
     };
+
+    if (categoryId) {
+      data["categoryId"] = categoryId;
+    }
+
+    return data;
   };
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
@@ -360,10 +381,9 @@ const EditForm = ({
       id: elem.id,
     }));
 
-    return {
+    const dataToSave = {
       address: address.trim(),
       name: name.trim(),
-      categoryId: category,
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
@@ -377,12 +397,20 @@ const EditForm = ({
       listingImages,
       active,
     };
+
+    if (isOtherCategory) {
+      dataToSave["otherCategory"] = otherCategory.trim();
+    } else {
+      dataToSave["categoryId"] = category;
+    }
+
+    return dataToSave;
   };
 
   useEffect(() => {
     const data = listingToState();
     setName(data.name);
-    setCategory(data.categoryId);
+    setCategory(data.categoryId ?? "-");
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
@@ -396,6 +424,8 @@ const EditForm = ({
     setAddress(data.address);
     setActive(data.active);
     setBackgroundPhotoUrl(data.backgroundPhotoUrl);
+    setIsOtherCategory(!!data.otherCategory);
+    setOtherCategory(data.otherCategory);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -413,6 +443,7 @@ const EditForm = ({
 
     const dataToSave = objectToSave();
     const listingToCheck = listingToState();
+    delete listingToCheck["backgroundPhotoUrl"];
     return !lodash.isEqual(listingToCheck, dataToSave);
   };
 
@@ -469,9 +500,21 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!category) {
-      setCategoryError("Required field");
-      hasError = true;
+    if (isOtherCategory) {
+      if (!otherCategory.trim()) {
+        setCategoryError("required field");
+        hasError = true;
+      }
+
+      if (validateSmallText(otherCategory) !== true) {
+        setCategoryError(validateSmallText(otherCategory));
+        hasError = true;
+      }
+    } else {
+      if (!category) {
+        setCategoryError("Required field");
+        hasError = true;
+      }
     }
 
     if (!postcode.trim()) {
@@ -710,7 +753,7 @@ const EditForm = ({
           <h3>Basic Informations</h3>
 
           <div className="row">
-            <div className="col-lg-6 col-md-6">
+            <div className={isOtherCategory ? "" : "col-lg-6 col-md-6"}>
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
@@ -731,11 +774,25 @@ const EditForm = ({
                 <CategorySelect
                   categories={categories}
                   selectedCategoryId={category}
-                  categoryError={categoryError}
+                  categoryError={isOtherCategory ? null : categoryError}
                   handleChangeCategory={handleChangeCategory}
                 />
               </ErrorIconWrapper>
             </div>
+
+            {isOtherCategory && (
+              <div className="col-lg-6 col-md-6">
+                <InputWithIcon
+                  label="Category Name:"
+                  icon="bx bx-duplicate"
+                  placeholder="Describe category..."
+                  value={otherCategory}
+                  onInput={handleChangeOtherCategory}
+                  error={categoryError}
+                  name="category_name"
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="add-listings-box">
@@ -767,7 +824,7 @@ const EditForm = ({
 
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label="Min rental days(not required):"
+                label="Minimum rental days:"
                 icon="bx bx-menu-alt-left"
                 placeholder="0"
                 value={minRentalDays}
@@ -791,7 +848,18 @@ const EditForm = ({
           </div>
         </div>
         <div className="add-listings-box">
-          <h3>Location</h3>
+          <h3>
+            Collection Location{" "}
+            <div
+              style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
+            >
+              The location is where you plan to hand over the item to the
+              renter. It could be your home, workplace, or any other convenient
+              place. <br />
+              <b>Note:</b> Your safety is our priority. The exact location will
+              only be shared with the renter once you approve the rental.
+            </div>
+          </h3>
 
           <div className="row">
             <div className="col-lg-6 col-md-6">
@@ -925,7 +993,7 @@ const EditForm = ({
         </div>
 
         <div className="add-listings-box">
-          <h3>Details</h3>
+          <h3>Item Description</h3>
 
           <div className="row">
             <div className="col-lg-12 col-md-12">
@@ -934,9 +1002,9 @@ const EditForm = ({
                 value={description}
                 onChange={handleChangeDescription}
                 icon="bx bx-text"
-                label="How Item Is Stored:"
+                label="Describe your Item:"
                 error={descriptionError}
-                placeholder="Details..."
+                placeholder="DETAILS"
               />
             </div>
           </div>
@@ -985,8 +1053,12 @@ const EditForm = ({
               {listing.id && (
                 <button
                   type="button"
-                  onClick={handleChangeActive}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setChangePopupActive(true);
+                  }}
                   disabled={changeActiveDisabled}
+                  className={active ? "button-danger" : ""}
                 >
                   {active ? "Delete" : "Restore"}
                 </button>
@@ -1040,6 +1112,13 @@ const EditForm = ({
           body={`Confirmation is required to continue. Are you sure you want to delete listing "${listing.name}"?`}
           acceptText="Send"
         />*/}
+        <DeleteModal
+          active={changePopupActive}
+          onAccept={handleChangeActive}
+          closeModal={() => setChangePopupActive(false)}
+          activeListing={active}
+          listingName={listing.name}
+        />
       </div>
     </>
   );

@@ -563,7 +563,7 @@ const OrderContent = ({
               label="Listing Category:"
               icon="bx bx-duplicate"
               placeholder="Category name of tool"
-              value={order.listingCategoryName}
+              value={order.listingCategoryName ?? order.listingOtherCategory}
             />
           </div>
 
@@ -612,7 +612,7 @@ const OrderContent = ({
       )}
 
       <div className="add-listings-box">
-        <h3>Listing Location</h3>
+        <h3>Collection Location</h3>
 
         <div className="row">
           <div className="col-lg-6 col-md-6">

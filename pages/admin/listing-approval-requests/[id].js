@@ -146,7 +146,9 @@ const ListingApprovalRequest = ({
 
                           <div className="w-1/2">
                             <InputView
-                              value={listing.categoryName}
+                              value={
+                                listing.categoryName ?? listing.otherCategory
+                              }
                               label="Category"
                               placeholder="category"
                               name="categoryName"
@@ -193,7 +195,7 @@ const ListingApprovalRequest = ({
                             <InputView
                               value={listing.minRentalDays}
                               name="minRentalDays"
-                              label="Min rental days"
+                              label="Minimum rental days"
                               placeholder="0"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -216,7 +218,7 @@ const ListingApprovalRequest = ({
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Location
+                        Collection Location
                       </h2>
 
                       <div className="flex flex-col gap-2">
@@ -336,7 +338,7 @@ const ListingApprovalRequest = ({
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Details
+                        Item Description
                       </h2>
 
                       <div className="w-full">
@@ -344,6 +346,7 @@ const ListingApprovalRequest = ({
                           name="description"
                           value={listing.description}
                           row="7"
+                          placeholder="Details..."
                         />
                       </div>
                     </section>

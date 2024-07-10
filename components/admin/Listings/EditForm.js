@@ -41,6 +41,70 @@ const cityOptions = [
 
 const baseCity = cityOptions[0]["value"];
 
+const OwnerSection = ({
+  ownerId,
+  ownerName,
+  handleChangeOwner,
+  ownerIdError,
+  isOtherCategory,
+}) => (
+  <div className={isOtherCategory ? "w-full" : "w-full sm:w-1/2"}>
+    <label className="block text-sm font-medium mb-1" htmlFor="role">
+      Owner
+    </label>
+    <DropdownClassicAjax
+      fetchOptions={(page, filter) => getUserNameIdList({ page, filter })}
+      selected={ownerId}
+      onChange={handleChangeOwner}
+      selectedTitle={ownerName}
+      disabledText="You can't select not verified user"
+      placeholder="Select Owner"
+    />
+    <ErrorSpan error={ownerIdError} />
+  </div>
+);
+
+const CategorySection = ({
+  categories,
+  category,
+  isOtherCategory,
+  categoryError,
+  handleChangeCategory,
+}) => (
+  <div className="w-full sm:w-1/2">
+    <label className="block text-sm font-medium mb-1" htmlFor="role">
+      Category
+    </label>
+    <CategorySelect
+      categories={categories}
+      selectedCategoryId={category}
+      categoryError={isOtherCategory ? null : categoryError}
+      handleChangeCategory={handleChangeCategory}
+    />
+  </div>
+);
+
+const OtherCategorySection = ({
+  otherCategory,
+  setOtherCategory,
+  categoryError,
+  setCategoryError,
+}) => (
+  <div className="w-full sm:w-1/2">
+    <Input
+      name="otherCategory"
+      value={otherCategory}
+      setValue={setOtherCategory}
+      error={categoryError}
+      setError={setCategoryError}
+      label="Category Name"
+      placeholder="Describe category..."
+      labelClassName="block text-sm font-medium mb-1"
+      inputClassName="form-input w-full"
+    />
+  </div>
+);
+
 const EditForm = ({ listing, categories, save }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, success, authToken } = useContext(IndiceContext);
@@ -99,6 +163,8 @@ const EditForm = ({ listing, categories, save }) => {
   const [nameError, setNameError] = useState(null);
 
   const [category, setCategory] = useState(baseCategoryId);
+  const [otherCategory, setOtherCategory] = useState("");
+  const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -169,6 +235,12 @@ const EditForm = ({ listing, categories, save }) => {
     }
   };
 
+  const handleChangeOtherCategory = (e) => {
+    setOtherCategory(e.target.value);
+    setCategoryError(null);
+    setMainError(null);
+  };
+
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
     try {
       setLat(newLat);
@@ -182,13 +254,14 @@ const EditForm = ({ listing, categories, save }) => {
 
   const handleChangeCategory = (newCategoryId) => {
     setCategory(newCategoryId);
+    setIsOtherCategory(newCategoryId == "-");
     setCategoryError(null);
   };
 
   useEffect(() => {
     const data = listingToState();
     setName(data.name);
-    setCategory(data.categoryId);
+    setCategory(data.categoryId ?? "-");
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
@@ -206,6 +279,8 @@ const EditForm = ({ listing, categories, save }) => {
     setAddress(data.address);
     setActive(data.active);
     setBackgroundPhotoUrl(data.backgroundPhotoUrl);
+    setIsOtherCategory(!!data.otherCategory);
+    setOtherCategory(data.otherCategory);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -231,11 +306,12 @@ const EditForm = ({ listing, categories, save }) => {
       id: elem.id,
     }));
 
-    const categoryId = prevListing.categoryId ?? baseCategoryId;
+    const categoryId = !!listing.otherCategory
+      ? undefined
+      : listing.categoryId ?? null;
 
-    return {
+    const data = {
       name: prevListing.name ?? "",
-      categoryId: categoryId,
       description: prevListing.description ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
@@ -254,7 +330,14 @@ const EditForm = ({ listing, categories, save }) => {
       backgroundPhotoUrl: prevListing.backgroundPhoto
         ? getFilePath(prevListing.backgroundPhoto)
         : null,
+      otherCategory: prevListing.otherCategory ?? "",
     };
+
+    if (categoryId) {
+      data["categoryId"] = categoryId;
+    }
+
+    return data;
   };
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
@@ -307,10 +390,9 @@ const EditForm = ({ listing, categories, save }) => {
       id: elem.id,
     }));
 
-    return {
+    const dataToSave = {
       name: name.trim(),
       address: address.trim(),
-      categoryId: category,
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
@@ -326,6 +408,14 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId,
       active,
     };
+
+    if (isOtherCategory) {
+      dataToSave["otherCategory"] = otherCategory.trim();
+    } else {
+      dataToSave["categoryId"] = category;
+    }
+
+    return dataToSave;
   };
 
   const hasChanges = () => {
@@ -335,6 +425,7 @@ const EditForm = ({ listing, categories, save }) => {
 
     const dataToSave = objectToSave();
     const listingToCheck = listingToState();
+    delete listingToCheck["backgroundPhotoUrl"];
     return !lodash.isEqual(listingToCheck, dataToSave);
   };
 
@@ -355,9 +446,21 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (!category) {
-        setCategoryError("Required field");
-        hasError = true;
+      if (isOtherCategory) {
+        if (!otherCategory.trim()) {
+          setCategoryError("required field");
+          hasError = true;
+        }
+
+        if (validateSmallText(otherCategory) !== true) {
+          setCategoryError(validateSmallText(otherCategory));
+          hasError = true;
+        }
+      } else {
+        if (!category) {
+          setCategoryError("Required field");
+          hasError = true;
+        }
       }
 
       if (!postcode.trim()) {
@@ -553,42 +656,41 @@ const EditForm = ({ listing, categories, save }) => {
                           </div>
 
                           <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <label
-                                className="block text-sm font-medium mb-1"
-                                htmlFor="role"
-                              >
-                                Owner
-                              </label>
-                              <DropdownClassicAjax
-                                fetchOptions={(page, filter) =>
-                                  getUserNameIdList({ page, filter })
-                                }
-                                selected={ownerId}
-                                onChange={handleChangeOwner}
-                                selectedTitle={ownerName}
-                                disabledText="You can't select not verified user"
-                                placeholder="Select Owner"
-                              />
-                              <ErrorSpan error={ownerIdError} />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <label
-                                className="block text-sm font-medium mb-1"
-                                htmlFor="role"
-                              >
-                                Category
-                              </label>
-
-                              <CategorySelect
+                            <OwnerSection
+                              ownerId={ownerId}
+                              ownerName={ownerName}
+                              handleChangeOwner={handleChangeOwner}
+                              ownerIdError={ownerIdError}
+                              isOtherCategory={isOtherCategory}
+                            />
+                            {!isOtherCategory && (
+                              <CategorySection
                                 categories={categories}
-                                selectedCategoryId={category}
+                                category={category}
+                                isOtherCategory={isOtherCategory}
                                 categoryError={categoryError}
                                 handleChangeCategory={handleChangeCategory}
                               />
-                            </div>
+                            )}
                           </div>
+
+                          {isOtherCategory && (
+                            <div className="flex w-full gap-2">
+                              <CategorySection
+                                categories={categories}
+                                category={category}
+                                isOtherCategory={isOtherCategory}
+                                categoryError={categoryError}
+                                handleChangeCategory={handleChangeCategory}
+                              />
+                              <OtherCategorySection
+                                otherCategory={otherCategory}
+                                setOtherCategory={setOtherCategory}
+                                categoryError={categoryError}
+                                setCategoryError={setCategoryError}
+                              />
+                            </div>
+                          )}
                         </div>
                       </section>
 
@@ -636,7 +738,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 setValue={setMinRentalDays}
                                 error={minRentalDaysError}
                                 setError={setMinRentalDaysError}
-                                label="Min rental days(not required)"
+                                label="Minimum rental days"
                                 placeholder="0"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
@@ -662,7 +764,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Location
+                          Collection Location
                         </h2>
 
                         <div className="flex flex-col gap-2">
@@ -826,7 +928,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Details
+                          Item Description
                         </h2>
 
                         <div className="w-full">

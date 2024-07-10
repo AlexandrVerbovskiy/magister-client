@@ -171,7 +171,9 @@ const ListingsWithMap = ({
 
   const [selectedCities, setSelectedCities] = useState(initCities());
   const [selectedDistance, setSelectedDistance] = useState(initDistance());
-
+  const [othersCategories, setOthersCategories] = useState(
+    basePageProps.options.othersCategories
+  );
   const [searchCategory, setSearchCategory] = useState(
     basePageProps.options.searchCategory
   );
@@ -223,6 +225,11 @@ const ListingsWithMap = ({
       categories: {
         value: selectedCategories.length > 0 ? selectedCategories : null,
         hidden: (newValue) => newValue.length == 0,
+      },
+      othersCategories: {
+        value: othersCategories,
+        hidden: (newValue) => !newValue,
+        name: "others-categories",
       },
       cities: {
         value: selectedCities.length > 0 ? selectedCities : null,
@@ -285,6 +292,11 @@ const ListingsWithMap = ({
     }
 
     rebuild(rebuildProps);
+  };
+
+  const handleChangeOthersCategories = (value) => {
+    setOthersCategories(value);
+    rebuild({ othersCategories: value });
   };
 
   const handleChangeMinPrice = (value) => {
@@ -482,6 +494,8 @@ const ListingsWithMap = ({
                     handleChangePrices={handleChangePrices}
                     minLimitPrice={minLimitPrice}
                     maxLimitPrice={maxLimitPrice}
+                    othersCategories={othersCategories}
+                    setOthersCategories={handleChangeOthersCategories}
                   />
                 </div>
 

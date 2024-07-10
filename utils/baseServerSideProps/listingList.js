@@ -27,6 +27,7 @@ const listingList = (context) => {
   const maxPrice = context.query["max-price"];
   const searchCity = context.query["search-city"];
   const searchCategory = context.query["search-category"];
+  const othersCategories = !!context.query["others-categories"];
   const distance = context.query["distance"];
 
   return {
@@ -40,6 +41,7 @@ const listingList = (context) => {
     distance,
     minPrice,
     maxPrice,
+    othersCategories,
   };
 };
 

@@ -233,7 +233,7 @@ const TableItem = ({
                     value={listingPricePerDay}
                   />
                   <SubInfoRow
-                    label="Min Rental Days"
+                    label="Minimum Rental Days"
                     value={listingMinRentalDays}
                   />
                   <SubInfoRow

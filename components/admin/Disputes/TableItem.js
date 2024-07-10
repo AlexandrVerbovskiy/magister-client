@@ -97,7 +97,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/listing/${listingId}`}
+            href={`/listings/${listingId}`}
             className="flex items-center"
             onClick={(e) => (isAdmin ? {} : e.preventDefault())}
             style={isAdmin ? {} : { cursor: "auto" }}

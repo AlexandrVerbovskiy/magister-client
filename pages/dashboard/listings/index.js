@@ -21,6 +21,7 @@ import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import STATIC from "../../../static";
 import StarRating from "../../../components/StarRating";
+import DeleteModal from "../../../components/Listings/DeleteModal";
 
 const Tooltip = ({ text, children }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -143,6 +144,7 @@ const ListingList = (pageProps) => {
   const baseStatusFilter = pageProps.options.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
   const [hasMore, setHasMore] = useState(pageProps.items.length > 0);
+  const [changeActiveData, setChangeActiveData] = useState(null);
 
   const {
     page,
@@ -196,12 +198,19 @@ const ListingList = (pageProps) => {
     setListingIdToDelete(id);
   };
 
-  const handleChangeActiveItem = async (e, id, name) => {
-    e.preventDefault();
+  const handleChangeActiveItem = async () => {
     try {
-      const { active } = await changeActiveListing(id, authToken);
-      setItemFields({ active }, id);
-      success.set(`${name} ${active ? "restored" : "deleted"} successfully`);
+      const { active } = await changeActiveListing(
+        changeActiveData?.id,
+        authToken
+      );
+      setItemFields({ active }, changeActiveData?.id);
+      success.set(
+        `${changeActiveData?.name} ${
+          active ? "restored" : "deleted"
+        } successfully`
+      );
+      setChangeActiveData(false);
     } catch (e) {
       error.set(e.message);
     }
@@ -307,7 +316,7 @@ const ListingList = (pageProps) => {
                           <div className="listings-image">
                             {listing.images.length < 1 && (
                               <Link
-                                href={`/listing/${listing.id}`}
+                                href={`/listings/${listing.id}`}
                                 className="link-btn"
                               ></Link>
                             )}
@@ -322,7 +331,7 @@ const ListingList = (pageProps) => {
                                   alt={listing.name}
                                 />
                                 <Link
-                                  href={`/listing/${listing.id}`}
+                                  href={`/listings/${listing.id}`}
                                   className="link-btn"
                                 ></Link>
                               </>
@@ -346,7 +355,7 @@ const ListingList = (pageProps) => {
                                         alt={listing.name}
                                       />
                                       <Link
-                                        href={`/listing/${listing.id}`}
+                                        href={`/listings/${listing.id}`}
                                         className="link-btn"
                                       ></Link>
                                     </div>
@@ -371,11 +380,15 @@ const ListingList = (pageProps) => {
                             <ul className="listings-meta">
                               <li>
                                 <Link
-                                  href={`/listing-list/?categories=${listing.categoryName}`}
+                                  href={`/listing-list/?categories=${
+                                    listing.categoryName ??
+                                    listing.otherCategory
+                                  }`}
                                 >
                                   <i className="flaticon-furniture-and-household"></i>
                                   <span className="row-dots-end">
-                                    {listing.categoryName}
+                                    {listing.categoryName ??
+                                      listing.otherCategory}
                                   </span>
                                 </Link>
                               </li>
@@ -393,7 +406,7 @@ const ListingList = (pageProps) => {
                             <h3 className="row-dots-end">
                               <Link
                                 className="row-dots-end"
-                                href={`/listing/${listing.id}`}
+                                href={`/listings/${listing.id}`}
                               >
                                 {listing.name}
                               </Link>
@@ -424,15 +437,19 @@ const ListingList = (pageProps) => {
                               </button>*/}
 
                               <Link
-                                onClick={(e) =>
-                                  handleChangeActiveItem(
-                                    e,
-                                    listing.id,
-                                    listing.name
-                                  )
-                                }
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  setChangeActiveData({
+                                    id: listing.id,
+                                    name: listing.name,
+                                    active: listing.active,
+                                  });
+                                }}
                                 href="/"
-                                className="default-btn"
+                                className={`default-btn ${
+                                  listing.active ? "error-btn" : ""
+                                }`}
                               >
                                 {listing.active ? "Delete" : "Restore"}
                               </Link>
@@ -467,6 +484,14 @@ const ListingList = (pageProps) => {
           listings.filter((listing) => listing.id === listingIdToDelete)[0]
             ?.name
         }"?`}
+      />
+
+      <DeleteModal
+        active={changeActiveData}
+        onAccept={handleChangeActiveItem}
+        closeModal={() => setChangeActiveData(null)}
+        activeListing={changeActiveData?.active}
+        listingName={changeActiveData?.name}
       />
     </>
   );

@@ -7,7 +7,11 @@ import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+} from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
@@ -47,6 +51,7 @@ const TableItem = ({
   ownerPhoto,
   ownerPhone,
   categoryName,
+  otherCategory,
   countStoredItems,
   pricePerDay,
   approved,
@@ -103,7 +108,7 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {categoryName}
+          {categoryName ?? otherCategory}
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -151,11 +156,17 @@ const TableItem = ({
               href={"/admin/listings/edit/" + id}
             />
             <SubInfoRow label="Name" value={name} />
-            <SubInfoRow label="Category" value={categoryName} />
+            <SubInfoRow
+              label="Category"
+              value={categoryName ?? otherCategory}
+            />
             <SubInfoRow label="Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays || "-"} />
+            <SubInfoRow
+              label="Minimum Rental Days"
+              value={minRentalDays || "-"}
+            />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar value={averageRating} />
             </SubInfoRowWithChild>
@@ -212,7 +223,7 @@ const TableItem = ({
           className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
-            <View href={`/listing/${id}`} />
+            <View href={`/listings/${id}`} />
             <Edit href={`/admin/listings/edit/${id}`} />
           </div>
         </td>

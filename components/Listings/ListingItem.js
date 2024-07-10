@@ -62,7 +62,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
                     alt="image"
                   />
                   <Link
-                    href={`/listing/${listing.id}`}
+                    href={`/listings/${listing.id}`}
                     className="link-btn"
                   ></Link>
                 </div>
@@ -72,7 +72,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         )}
 
         {images.length <= 1 && (
-          <Link href={`/listing/${listing.id}`} className="link-btn"></Link>
+          <Link href={`/listings/${listing.id}`} className="link-btn"></Link>
         )}
 
         <a
@@ -101,9 +101,13 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         </div>
         <ul className="listings-meta">
           <li>
-            <Link href={`/listing-list?categories=${listing.categoryName}`}>
+            <Link
+              href={`/listing-list?categories=${
+                listing.categoryName ?? listing.otherCategory
+              }`}
+            >
               <i className="flaticon-furniture-and-household"></i>
-              <span>{listing.categoryName}</span>
+              <span>{listing.categoryName ?? listing.otherCategory}</span>
             </Link>
           </li>
           <li>
@@ -115,7 +119,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         </ul>
 
         <h3 className="row-dots-end">
-          <Link className="row-dots-end" href={`/listing/${listing.id}`}>
+          <Link className="row-dots-end" href={`/listings/${listing.id}`}>
             {listing.name}
           </Link>
         </h3>
