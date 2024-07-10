@@ -33,7 +33,6 @@ import {
 import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
 import ENV from "../../env";
-import ImageInput from "../DashboardComponents/ImageInput";
 import ErrorSpan from "../ErrorSpan";
 import { useDropzone } from "react-dropzone";
 
@@ -54,7 +53,6 @@ const EditForm = ({
   rejectDescription,
   clearRejectDescription,
   canChange,
-  defects,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
   const router = useRouter();
@@ -108,11 +106,6 @@ const EditForm = ({
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [defect, setDefect] = useState("");
-  const [defectError, setDefectError] = useState(null);
-
-  const [listingDefects, setListingDefects] = useState([]);
-
   const [category, setCategory] = useState(null);
   const [categoryError, setCategoryError] = useState(null);
 
@@ -121,10 +114,6 @@ const EditForm = ({
 
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
-
-  const [rentalTerms, setRentalTerms] = useState("");
-  const [rentalTermsError, setRentalTermsError] = useState(null);
-
   const [postcode, setPostcode] = useState("");
   const [postcodeError, setPostcodeError] = useState(null);
 
@@ -159,14 +148,6 @@ const EditForm = ({
   const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
 
   const [mainError, setMainError] = useState(null);
-
-  useEffect(() => {
-    if (!canChange) {
-      setMainError(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
-    }
-  }, [canChange]);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
@@ -210,9 +191,6 @@ const EditForm = ({
   const handleChangeActive = async () => {
     try {
       if (!canChange) {
-        error.set(
-          "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-        );
         return;
       }
 
@@ -239,11 +217,6 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeRentalTerms = (e) => {
-    setRentalTerms(e.target.value);
-    setRentalTermsError(null);
-    setMainError(null);
-  };
 
   const handleChangeCity = (e) => {
     const city = e.value;
@@ -261,12 +234,6 @@ const EditForm = ({
   const handleChangePostcode = (e) => {
     setPostcode(e.target.value);
     setPostcodeError(null);
-    setMainError(null);
-  };
-
-  const handleChangeDopDefect = (e) => {
-    setDefect(e.target.value);
-    setDefectError(null);
     setMainError(null);
   };
 
@@ -292,14 +259,6 @@ const EditForm = ({
     setMinRentalDays(e.target.value);
     setMinRentalDaysError(null);
     setMainError(null);
-  };
-
-  const handleChangeListingDefectActive = (defectId) => {
-    if (listingDefects.includes(defectId)) {
-      setListingDefects((prev) => prev.filter((id) => id != defectId));
-    } else {
-      setListingDefects((prev) => [...prev, defectId]);
-    }
   };
 
   useEffect(() => {
@@ -329,15 +288,11 @@ const EditForm = ({
       id: elem.id,
     }));
 
-    const listingDefects = listing.defects ?? [];
-    const listingDefectIds = listingDefects.map((defect) => defect.defectId);
-
     return {
       address: listing.address ?? "",
       name: listing.name ?? "",
       categoryId: listing.categoryId ?? null,
       description: listing.description ?? "",
-      rentalTerms: listing.rentalTerms ?? "",
       postcode: listing.postcode ?? "",
       city: city,
       compensationCost: listing.compensationCost ?? "",
@@ -349,8 +304,6 @@ const EditForm = ({
       rentalRadius: listing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
-      defects: listingDefectIds,
-      dopDefect: listing.dopDefect ?? "",
       backgroundPhotoUrl: listing.backgroundPhoto
         ? getFilePath(listing.backgroundPhoto)
         : null,
@@ -369,8 +322,6 @@ const EditForm = ({
           img.src = URL.createObjectURL(newFile);
 
           img.onload = () => {
-            console.log(img.height, img.width);
-
             if (3 * img.height > img.width) {
               setBackgroundPhotoError("Need more wider photo");
               return;
@@ -414,7 +365,6 @@ const EditForm = ({
       name: name.trim(),
       categoryId: category,
       description: description.trim(),
-      rentalTerms: rentalTerms.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
       compensationCost,
@@ -426,8 +376,6 @@ const EditForm = ({
       rentalRadius: radius,
       listingImages,
       active,
-      defects: listingDefects,
-      dopDefect: defect.trim(),
     };
   };
 
@@ -436,7 +384,6 @@ const EditForm = ({
     setName(data.name);
     setCategory(data.categoryId);
     setDescription(data.description);
-    setRentalTerms(data.rentalTerms);
     setPostcode(data.postcode);
     setCity(data.city);
     setCompensationCost(data.compensationCost);
@@ -448,8 +395,6 @@ const EditForm = ({
     setRadius(data.rentalRadius);
     setAddress(data.address);
     setActive(data.active);
-    setListingDefects(data.defects);
-    setDefect(data.dopDefect);
     setBackgroundPhotoUrl(data.backgroundPhotoUrl);
 
     const adaptedImages = data.listingImages.map((image) => ({
@@ -505,7 +450,6 @@ const EditForm = ({
 
     const info = objectToSave();
     info["listingImages"] = JSON.stringify(info["listingImages"]);
-    info["defects"] = JSON.stringify(info["defects"]);
 
     Object.keys(info).forEach((key) => formData.append(key, info[key]));
 
@@ -581,11 +525,6 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (rentalTerms && validateBigText(rentalTerms) !== true) {
-      setRentalTermsError(validateBigText(rentalTerms));
-      hasError = true;
-    }
-
     if (!pricePerDay) {
       setPricePerDayError("Required field");
       hasError = true;
@@ -598,11 +537,6 @@ const EditForm = ({
 
     if (!compensationCost) {
       setCompensationCostError("Required field");
-      hasError = true;
-    }
-
-    if (defect.trim().length && validateBigText(defect) !== true) {
-      setDefectError(validateBigText(defect));
       hasError = true;
     }
 
@@ -621,9 +555,6 @@ const EditForm = ({
 
   const handleSubmit = async (needShowMessage = true) => {
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -690,9 +621,6 @@ const EditForm = ({
     e.preventDefault();
 
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -717,9 +645,6 @@ const EditForm = ({
     e.preventDefault();
 
     if (!canChange) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
       return;
     }
 
@@ -992,50 +917,12 @@ const EditForm = ({
                 <ErrorSpan
                   error={backgroundPhotoError}
                   className="d-block mb-3"
-                  style={{marginTop: "-24px"}}
+                  style={{ marginTop: "-24px" }}
                 />
               </div>
             </div>
           </div>
         </div>
-
-        {defects.length > 0 && (
-          <div className="add-listings-box">
-            <h3>Defects</h3>
-
-            <div className="row">
-              <div className="col-lg-12 col-md-12">
-                {defects
-                  .sort((a, b) => a.orderIndex - b.orderIndex)
-                  .map((defect) => (
-                    <Switch
-                      key={defect.id}
-                      title={defect.name}
-                      active={listingDefects.includes(defect.id)}
-                      onChange={() =>
-                        handleChangeListingDefectActive(defect.id)
-                      }
-                    />
-                  ))}
-
-                <div className="form-group switch-form-group">
-                  <div className="sidebar-widgets">
-                    <div className="box" style={{ padding: "0" }}>
-                      <InputWithIcon
-                        placeholder="Other defects..."
-                        value={defect}
-                        onInput={handleChangeDopDefect}
-                        error={defectError}
-                        name="dopDefect"
-                        dopGroupClass="mb-0"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         <div className="add-listings-box">
           <h3>Details</h3>
@@ -1054,23 +941,16 @@ const EditForm = ({
             </div>
           </div>
         </div>
-        <div className="add-listings-box">
-          <h3>Rental Terms</h3>
 
-          <div className="row">
-            <div className="col-lg-12 col-md-12">
-              <TextareaWithIcon
-                name="rentalTerms"
-                value={rentalTerms}
-                onChange={handleChangeRentalTerms}
-                icon="bx bx-text"
-                label="Rental Terms:"
-                error={rentalTermsError}
-                placeholder="Terms..."
-              />
-            </div>
+        {!canChange && (
+          <div
+            className="alert-dismissible fade show alert alert-danger"
+            role="alert"
+          >
+            The listing has a unfinished booking or order. Please finish all
+            listing orders and bookings before updating
           </div>
-        </div>
+        )}
 
         {mainError && (
           <div
@@ -1141,7 +1021,7 @@ const EditForm = ({
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
               : "When you create a listing, you should send request to verify it. Users will not be able to rent the tool until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
           }
-          acceptText={listing.id ? "Create" : "Update"}
+          acceptText="Confirm"
           actionsParentClass="mt-4"
         />
         <YesNoModal

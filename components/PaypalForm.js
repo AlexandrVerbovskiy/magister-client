@@ -69,7 +69,7 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
   return (
     <button
       type="button"
-      className="pay-by-credit-card-paypal-form"
+      className="pay-by-bank-transfer-paypal-form"
       onClick={submitHandler}
       disabled={disabled}
     >

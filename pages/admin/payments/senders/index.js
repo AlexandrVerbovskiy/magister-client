@@ -17,6 +17,7 @@ import Sidebar from "../../../../partials/admin/Sidebar";
 import { baseAdminTimeListPageParams } from "../../../../utils";
 import SenderPaymentsTable from "../../../../components/admin/SenderPayments/Table";
 import BaseListSubHeader from "../../../../components/admin/BaseListSubHeader";
+import STATIC from "../../../../static";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -29,7 +30,7 @@ const SenderPayments = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps });
 
   const onRebuild = (data) => {
     setTypeCount(data.typesCount);
@@ -96,12 +97,12 @@ const SenderPayments = (pageProps) => {
                     count: typeCount["allCount"],
                   },
                   {
-                    value: "paypal",
+                    value: STATIC.PAYMENT_TYPES.PAYPAL,
                     title: "Paypal",
                     count: typeCount["paypalCount"],
                   },
                   {
-                    value: "bank-transfer",
+                    value: STATIC.PAYMENT_TYPES.BANK_TRANSFER,
                     title: "Bank Transfer",
                     count: typeCount["bankTransferCount"],
                   },

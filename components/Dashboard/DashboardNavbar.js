@@ -2,11 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
-import { signOut } from "next-auth/react";
+import SignOutModal from "../_App/SignOutModal";
 
 const DashboardNavbar = () => {
   // Add active class
   const [currentPath, setCurrentPath] = useState("");
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -21,14 +23,6 @@ const DashboardNavbar = () => {
       e.preventDefault();
       error.set(`You need to be verified and have a PayPal ID linked to your profile to rent and rent out tools. To verify, send the
       necessary data via the "Documents Verification" page`);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ redirect: false });
-    } catch (e) {
-      error.set(e.message);
     }
   };
 
@@ -156,7 +150,7 @@ const DashboardNavbar = () => {
                 className={`nav-link`}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleSignOut();
+                  setSignOutModalActive(true);
                 }}
               >
                 <span className="icon">
@@ -168,6 +162,13 @@ const DashboardNavbar = () => {
           </ul>
         </div>
       </div>
+
+      {isAuth && (
+        <SignOutModal
+          active={signOutModalActive}
+          closeModal={() => setSignOutModalActive(false)}
+        />
+      )}
     </>
   );
 };

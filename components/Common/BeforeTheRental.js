@@ -1,18 +1,7 @@
-import { useRouter } from "next/router";
-import { IndiceContext } from "../../contexts";
-import { useContext } from "react";
+import { useListingListClick } from "../../hooks";
 
 const BeforeTheRental = () => {
-  const { sessionUser } = useContext(IndiceContext);
-  const router = useRouter();
-
-  const handleStartEarningClick = () => {
-    if (sessionUser) {
-      router.push("/listing-list");
-    } else {
-      activateAuthPopup();
-    }
-  };
+  const { handleClick: handleStartEarningClick } = useListingListClick();
 
   return (
     <section className="category-area pt-100 pb-100 bg-f9f9f9">
@@ -20,11 +9,11 @@ const BeforeTheRental = () => {
         <div className="row flex-column-reverse flex-lg-row">
           <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
             <div className="d-flex flex-column justify-content-between h-100">
-              <h2>Unlock Access</h2>
+              <h2 className="mb-4">Unlock Access</h2>
 
               <div>
                 <div>
-                  <h4 className="mb-0">Save money and reduce waste!</h4>
+                  <h4 className="mb-2">Save money and reduce waste!</h4>
                   <p className="mb-4">
                     Get access to almost anything! Why buy stuff you'll only use
                     occasionally when you can rent it for a fraction of the

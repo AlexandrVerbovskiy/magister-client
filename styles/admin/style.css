@@ -1,3 +1,7 @@
+:root {
+  --mainColor: #818cf8;
+}
+
 .main-site-alert {
   margin: 0;
   position: fixed !important;
@@ -57,6 +61,10 @@
 
 .table-change-role-popup.active {
   max-height: 100%;
+}
+
+.table-change-role-popup:not(.active) {
+  padding: 0;
 }
 
 .hidden-popup {
@@ -528,4 +536,17 @@ div.add-listings-box.dropzone > .gallery-flex {
 
 #__next-build-watcher {
   z-index: 9999999999 !important;
+}
+
+.message-actions {
+  position: absolute;
+  width: 100px;
+}
+
+.message-actions:not(.show) {
+  display: none;
+}
+
+.chat-message:has(+ .right-sidebar-bottom):has(.message-actions.show) {
+  margin-bottom: 60px !important;
 }

@@ -6,32 +6,23 @@ import {
   generateProfileFilePath,
   getDaysDifference,
   getListingImageByType,
-  increaseDateByOneDay,
   moneyFormat,
+  validateBigText,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
-import {
-  approveClientGotListing,
-  finishedByOwner,
-  orderFullCancel,
-  orderFullCancelPayed,
-  rejectOrder,
-  extendOrder,
-  createDispute,
-} from "../../services";
+import { approveClientGotListing, finishedByOwner } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
 import TextareaView from "../../components/FormComponents/TextareaView";
 import {
-  useCreateDispute,
   useOrderActions,
   useOrderDateError,
   useSingleOrderActions,
 } from "../../hooks";
-import InputWithIcon from "../FormComponents/InputWithIcon";
+import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
@@ -52,7 +43,6 @@ const bookingStatuses = [
 const OrderContent = ({
   order: baseOrder,
   authToken,
-  questions,
   ownerBaseCommission,
   tenantBaseCommission,
   bankInfo,
@@ -71,7 +61,6 @@ const OrderContent = ({
   const [finishOrderModalActive, setFinishOrderModalActive] = useState(false);
 
   const router = useRouter();
-  const createDisputeData = useCreateDispute({ order });
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
@@ -81,7 +70,10 @@ const OrderContent = ({
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
-  const [questionAnswerInfos, setQuestionAnswerInfos] = useState([]);
+
+  const [hasDefect, setHasDefect] = useState(false);
+  const [defectError, setDefectError] = useState(null);
+  const [defectDescription, setDefectDescription] = useState("");
 
   const isBookingWithoutAgreement =
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
@@ -91,22 +83,6 @@ const OrderContent = ({
     useOrderDateError({
       order,
     });
-
-  useEffect(() => {
-    if (questions) {
-      const convertedQuestions = questions.map((question) => ({
-        ...question,
-        answer: false,
-        description: "",
-        question: question.name,
-        error: null,
-      }));
-
-      setQuestionAnswerInfos(convertedQuestions);
-    } else {
-      setQuestionAnswerInfos([]);
-    }
-  }, [questions]);
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
@@ -168,6 +144,23 @@ const OrderContent = ({
     });
   };
 
+  const validateDefect = () => {
+    let hasError = false;
+
+    if (hasDefect) {
+      if (defectDescription.trim()) {
+        if (validateBigText(defectDescription) !== true) {
+          setDefectError(validateBigText(defectDescription));
+        }
+      } else {
+        setDefectError("Required field");
+        hasError = true;
+      }
+    }
+
+    return !hasError;
+  };
+
   const localCalculateCurrentTotalPrice = ({
     type = null,
     startDate,
@@ -183,31 +176,6 @@ const OrderContent = ({
       ownerFee: order.ownerFee,
       tenantFee: order.tenantFee,
     });
-
-  const handleUpdateQuestionDescription = (e, id) => {
-    setQuestionAnswerInfos((questions) => {
-      return questions.map((question) => {
-        if (question.id == id) {
-          question["description"] = e.target.value;
-          question["error"] = null;
-        }
-
-        return question;
-      });
-    });
-  };
-
-  const handleUpdateQuestionAnswer = (e, id) => {
-    setQuestionAnswerInfos((questions) => {
-      return questions.map((question) => {
-        if (question.id == id) {
-          question["answer"] = e.target.value == "yes";
-        }
-
-        return question;
-      });
-    });
-  };
 
   const onCreateUpdateRequest = ({ price, fromDate, toDate }) => {
     if (actualUpdateRequest) {
@@ -237,11 +205,13 @@ const OrderContent = ({
       setOrder((prev) => ({
         ...prev,
         status: STATIC.ORDER_STATUSES.PENDING_TENANT,
+        conflictOrders: [],
       }));
     } else {
       setOrder((prev) => ({
         ...prev,
         status: STATIC.ORDER_STATUSES.PENDING_OWNER,
+        conflictOrders: [],
       }));
     }
 
@@ -252,7 +222,7 @@ const OrderContent = ({
     });
   };
 
-  const setUpdatedOffer = ({ status, cancelStatus = null }, orderId = null) => {
+  const setUpdatedOffer = ({ status, cancelStatus = null }) => {
     const offerPricePerDay = actualUpdateRequest
       ? actualUpdateRequest.newPricePerDay
       : order.offerPricePerDay;
@@ -334,49 +304,31 @@ const OrderContent = ({
     }));
   };
 
-  const onExtendOrder = () => {
+  const onExtendOrder = ({ id }) => {
     success.set("Order extended successfully");
     router.push("/dashboard/orders");
   };
 
-  const validateQuestions = () => {
-    let hasError = true;
-
-    const updateQuestions = [];
-
-    for (let i = 0; i < questionAnswerInfos.length; i++) {
-      const updateQuestion = { ...questionAnswerInfos[i] };
-
-      if (updateQuestion.answer && !updateQuestion.description) {
-        hasError = false;
-        updateQuestion["error"] = "Required for damaged";
-      }
-
-      updateQuestions.push(updateQuestion);
-    }
-
-    setQuestionAnswerInfos(updateQuestions);
-
-    return hasError;
-  };
-
   const handleTenantGotListingApprove = async () => {
     try {
-      if (!validateQuestions()) {
-        return;
-      }
-
       const res = await approveClientGotListing(
-        order.acceptListingTenantToken,
-        questionAnswerInfos,
+        {
+          token: order.acceptListingTenantToken,
+          defectDescription: defectDescription.trim(),
+        },
         authToken
       );
 
       setOrder((prev) => ({
         ...prev,
         ownerAcceptListingQrcode: res.qrCode,
+        hasDefectByOwner: hasDefect,
+        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
       }));
+
+      setHasDefect(false);
+      setDefectDescription("");
 
       activateSuccessOrderPopup({
         text: "Approved successfully",
@@ -386,53 +338,29 @@ const OrderContent = ({
     }
   };
 
-  const handleCreateDispute = async () => {
+  const handleFinishOrder = async () => {
     try {
-      const disputeId = await createDispute(
+      await finishedByOwner(
         {
-          orderId: order.id,
-          type: createDisputeData.type,
-          description: createDisputeData.description,
+          token: order.acceptListingOwnerToken,
+          defectDescription: defectDescription.trim(),
         },
         authToken
       );
 
       setOrder((prev) => ({
         ...prev,
-        disputeId,
-        disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
-        disputeType: createDisputeData.type,
-        disputeDescription: createDisputeData.description,
-      }));
-
-      orderPopupsData.setActiveDisputeWindow(false);
-
-      success.set("Dispute created success");
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const handleFinishOrder = async () => {
-    try {
-      if (!validateQuestions()) {
-        return;
-      }
-
-      await finishedByOwner(
-        order.acceptListingOwnerToken,
-        questionAnswerInfos,
-        authToken
-      );
-
-      success.set(
-        `Order finished successfully. Thank you for using the platform`
-      );
-
-      setOrder((prev) => ({
-        ...prev,
+        hasDefectByOwner: hasDefect,
+        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.FINISHED,
       }));
+
+      setHasDefect(false);
+      setDefectDescription("");
+
+      activateSuccessOrderPopup({
+        text: "Finished successfully",
+      });
     } catch (e) {
       error.set(e.message);
     }
@@ -491,6 +419,17 @@ const OrderContent = ({
         },
       ];
 
+  const onDisputeOpened = async ({ orderPart }) => {
+    setOrder((prev) => ({
+      ...prev,
+      ...orderPart,
+    }));
+
+    orderPopupsData.setActiveDisputeWindow(false);
+
+    success.set("Dispute created success");
+  };
+
   const orderPopupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -501,6 +440,7 @@ const OrderContent = ({
     onPayedFastCancel,
     setError: error.set,
     onExtendOrder,
+    onDisputeOpened,
   });
 
   const onMakeExtend = ({ price, fromDate, toDate }) => {
@@ -512,17 +452,47 @@ const OrderContent = ({
     });
   };
 
+  const triggerFinishClick = () => {
+    if (!validateDefect()) {
+      return;
+    }
+
+    setFinishOrderModalActive(true);
+  };
+
+  const triggerTenantQotListingClick = () => {
+    if (!validateDefect()) {
+      return;
+    }
+
+    setTenantGotListingApproveModalActive(true);
+  };
+
+  const handleDefectInactive = () => setHasDefect(false);
+
+  const handleDefectActive = () => setHasDefect(true);
+
+  const handleDefectUpdate = (e) => {
+    setDefectDescription(e.target.value);
+    setDefectError(null);
+  };
+
   if (orderPopupsData.extendApproveData) {
     return (
       <OrderExtendApprovementSection
         handleApprove={orderPopupsData.handleMakeBooking}
         setCurrentOpenImg={setCurrentOpenImg}
         listing={{
-          listingImages: order.listingImages,
+          id: order.listingId,
           name: order.listingName,
           userName: order.ownerName,
           userPhoto: order.ownerPhoto,
+          listingImages: order.listingImages,
           userCountItems: order.listingCountStoredItems,
+          averageRating: order.listingAverageRating,
+          commentCount: order.listingCommentCount,
+          ownerAverageRating: order.ownerAverageRating,
+          ownerCommentCount: order.ownerCommentCount,
         }}
         handleGoBack={() => orderPopupsData.setExtendApproveData(null)}
         fromDate={orderPopupsData.extendApproveData.fromDate}
@@ -537,11 +507,11 @@ const OrderContent = ({
     return (
       <>
         <CreateDisputeSection
-          {...createDisputeData}
+          {...orderPopupsData.createDisputeData}
           onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
           setCurrentOpenImg={setCurrentOpenImg}
           needWrapping={false}
-          onSubmit={handleCreateDispute}
+          onSubmit={orderPopupsData.handleOpenDispute}
         />
         <ImagePopup
           photoUrl={currentOpenImg}
@@ -699,26 +669,6 @@ const OrderContent = ({
         </div>
       </div>
 
-      {(order.defects.length > 0 || order.listingDopDefect) && (
-        <div className="add-listings-box">
-          <h3>Defects</h3>
-
-          <div className="row">
-            {order.defects.map((defect) => (
-              <div className="col-12" key={defect.defectId}>
-                <InputView value={defect.defectName} />
-              </div>
-            ))}
-
-            {order.listingDopDefect && (
-              <div className="col-12">
-                <InputView value={order.listingDopDefect} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {isTenant && (
         <div id="user-info" className="add-listings-box">
           <h3>Listing Owner Details</h3>
@@ -828,7 +778,7 @@ const OrderContent = ({
       {(order.cancelStatus != null || !actualUpdateRequest) && (
         <div className="row listings-sidebar" style={{ marginTop: 0 }}>
           <div className="col form-group">
-            <div className="listings-widget order_widget  order-proposal-info">
+            <div className="listings-widget order_widget order-proposal-info">
               <h3>Proposal Info</h3>
 
               <ul style={{ listStyle: "none", padding: "0" }}>
@@ -1224,69 +1174,55 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {questions &&
-        questions.length > 0 &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
-          <div className="order_widget add-listings-box">
-            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
-              <h3>Rental checklist</h3>
-            )}
-            {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
-              <h3>Owner checklist</h3>
-            )}
+      {(order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
+        <div className="order_widget add-listings-box">
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+            <h3>Any defects</h3>
+          )}
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
+            <h3>New defects</h3>
+          )}
 
-            {questionAnswerInfos.map((question) => {
-              return (
-                <React.Fragment key={question.id}>
-                  <p>{question.question}</p>
-
-                  <div className="form-group">
-                    <ul className="facilities-list">
-                      <li>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            name={`question[${question.id}]["yes"]`}
-                            value="yes"
-                            checked={question.answer}
-                            onChange={(e) =>
-                              handleUpdateQuestionAnswer(e, question.id)
-                            }
-                          />
-                          <span>Yes</span>
-                        </label>
-                      </li>
-                      <li>
-                        <label className="checkbox">
-                          <input
-                            type="checkbox"
-                            name={`question[${question.id}]["no"]`}
-                            value="no"
-                            checked={!question.answer}
-                            onChange={(e) =>
-                              handleUpdateQuestionAnswer(e, question.id)
-                            }
-                          />
-                          <span>No</span>
-                        </label>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <InputWithIcon
-                    placeholder="Describe the damage"
-                    value={question.description}
-                    onInput={(e) =>
-                      handleUpdateQuestionDescription(e, question.id)
-                    }
-                    error={question.error}
+          <div className="form-group">
+            <ul className="facilities-list">
+              <li>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="defect_yes"
+                    value="yes"
+                    checked={hasDefect}
+                    onChange={(e) => handleDefectActive(e)}
                   />
-                </React.Fragment>
-              );
-            })}
+                  <span>Yes</span>
+                </label>
+              </li>
+              <li>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    name="defect_no"
+                    value="no"
+                    checked={!hasDefect}
+                    onChange={(e) => handleDefectInactive(e)}
+                  />
+                  <span>No</span>
+                </label>
+              </li>
+            </ul>
           </div>
-        )}
+
+          {hasDefect && (
+            <TextareaWithIcon
+              placeholder="Describe the defect"
+              value={defectDescription}
+              onChange={handleDefectUpdate}
+              error={defectError}
+            />
+          )}
+        </div>
+      )}
 
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
@@ -1489,7 +1425,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/pay-by-credit-card/` + order.id}
+                href={`/dashboard/pay-by-bank-transfer/` + order.id}
               >
                 Update payment
               </Link>
@@ -1523,7 +1459,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => setTenantGotListingApproveModalActive(true)}
+                onClick={triggerTenantQotListingClick}
               >
                 Approve
               </button>
@@ -1535,7 +1471,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => setFinishOrderModalActive(true)}
+                onClick={triggerFinishClick}
               >
                 Finish
               </button>
@@ -1594,9 +1530,21 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/chat/${order.chatId}`}
+                href={`/dashboard/chats/${order.chatId}`}
               >
                 Chat
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
+            ) && (
+              <Link
+                href={`/dashboard/chats/${order.disputeChatId}`}
+                className="default-btn"
+                type="button"
+              >
+                Dispute Chat
               </Link>
             )}
 

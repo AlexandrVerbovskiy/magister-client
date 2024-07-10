@@ -106,7 +106,6 @@
 }
 [dir="rtl"] .single-feedback-box .client-info .title {
   margin-left: 0;
-  margin-right: 13px;
 }
 [dir="rtl"] .single-how-it-works-box::before {
   right: auto;
@@ -1356,10 +1355,120 @@
     flex-basis: unset;
     overflow-x: hidden;
   }
+
+  .about-us-image {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: auto!important;
+  }
+
+  .about-us-image,
+  .about-us-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .mb-lg-6 {
+    margin-bottom: 2rem;
+  }
+
+  .mb-lg-8 {
+    margin-bottom: 3rem;
+  }
+
+  .mt-lg-6 {
+    margin-top: 2rem;
+  }
+
+  .mt-lg-8 {
+    margin-top: 3rem;
+  }
+
+  .about-us-goals .first-goals-row,
+  .about-us-goals .second-goals-row {
+    height: auto !important;
+  }
+
+  .about-us-goals .third-goals-row > div .circle-icon {
+    margin-bottom: 0;
+  }
+
+  .about-us-goals .third-goals-row > div{
+    flex-direction: row!important;
+  }
+
+  .about-us-goals .second-goals-row>div:nth-of-type(1) .circle-icon{
+    margin-right: 0;
+    margin-left: 50px;
+  }
+
+  .about-us-goals .second-goals-row>div:nth-of-type(2) .circle-icon{
+    margin-left: 0;
+    margin-right: 50px;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(1),
+  .about-us-goals .first-goals-row>div:nth-of-type(2),
+  .about-us-goals .second-goals-row>div:nth-of-type(1),
+  .about-us-goals .second-goals-row>div:nth-of-type(2){
+    flex-direction: row-reverse!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(1),
+  .about-us-goals .second-goals-row>div:nth-of-type(1){
+    text-align: start!important;
+    justify-content: start!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(2),
+  .about-us-goals .second-goals-row>div:nth-of-type(2){
+    text-align: end!important;
+    justify-content: end!important;
+  }
+
+  .about-us-goals .third-goals-row>div:nth-of-type(1){
+    justify-content: start!important;
+    text-align: start!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(1),
+  .about-us-goals .second-goals-row>div:nth-of-type(1),
+  .about-us-goals .third-goals-row>div:nth-of-type(1){
+    margin-left: 0!important;
+    margin-right: 0!important;
+    padding: 0 0 0 50px!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(2),
+  .about-us-goals .second-goals-row>div:nth-of-type(2){
+    margin-left: 0!important;
+    margin-right: 0!important;
+    padding: 0 50px 0 0!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(1) .circle-icon,
+  .about-us-goals .second-goals-row>div:nth-of-type(1) .circle-icon,
+  .about-us-goals .third-goals-row>div:nth-of-type(1) .circle-icon{
+    margin-left: 0!important;
+    margin-right: 10px!important;
+  }
+
+  .about-us-goals .first-goals-row>div:nth-of-type(2) .circle-icon,
+  .about-us-goals .second-goals-row>div:nth-of-type(2) .circle-icon{
+    margin-left: 10px!important;
+    margin-right: 0!important;
+  }
 }
+
 
 @media (min-width: 992px) {
   .chat-toggle-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 1280px) {
+  .thanks-for-visiting-icon {
     display: none;
   }
 }

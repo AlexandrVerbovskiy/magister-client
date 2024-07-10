@@ -101,20 +101,23 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
     }
 
     if (prevSessionUser === undefined) {
-      setPrevSessionUser(session?.user);
+      setPrevSessionUser(session?.user ?? null);
       return;
     }
 
     if (
       (prevSessionUser != null && session != null) ||
       (prevSessionUser == null && session == null)
-    )
+    ) {
       return;
+    }
 
     let redirectLink = "/";
 
     if (session?.user) {
       setIsAuth(true);
+
+      redirectLink = "/dashboard";
 
       if (session.user.needRegularViewInfoForm) {
         redirectLink = "/dashboard/profile-edit";
@@ -129,7 +132,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       handleSetSuccess("Successfully logged out");
     }
 
-    setPrevSessionUser(session?.user);
+    setPrevSessionUser(session?.user ?? null);
 
     router.push(redirectLink);
   }, [session]);

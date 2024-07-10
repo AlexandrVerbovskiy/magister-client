@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RegisterTab from "./RegisterTab";
@@ -8,26 +8,26 @@ import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
 import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
-import useNavListingCategories from "../../../hooks/useNavListingCategories";
-import ListingPopup from "./ListingPopup";
 import STATIC from "../../../static";
+import SignOutModal from "../SignOutModal";
+import { useListingListClick } from "../../../hooks";
 
-const Navbar = ({ canShowSearch = true }) => {
+const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const {
     isAuth,
     success: mainSuccess,
     isSupport,
     onLogin,
-    error: mainError,
   } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
 
   const {
     categoryTipsPopupActive,
@@ -37,23 +37,13 @@ const Navbar = ({ canShowSearch = true }) => {
     updateCategoryTips,
   } = useSearchCategory();
 
-  const {
-    navbarCategories,
-    handleListingClick,
-    categoriesLength,
-    activePopup,
-    setActivePopup,
-  } = useNavListingCategories();
-
   const [searchCategory, setSearchCategory] = useState("");
 
   const router = useRouter();
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [sticky, setSticky] = useState(false);
-
-  //sticky menu
+  const [sticky, setSticky] = useState(alwaysSticky);
 
   const handleChangeCategory = (e) => {
     const newValue = e.target.value;
@@ -71,10 +61,14 @@ const Navbar = ({ canShowSearch = true }) => {
   };
 
   const showStickyMenu = () => {
-    if (window.scrollY >= 80) {
-      setSticky(true);
+    if (!alwaysSticky) {
+      if (window.scrollY >= 80) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
     } else {
-      setSticky(false);
+      setSticky(true);
     }
   };
 
@@ -109,14 +103,6 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ redirect: false });
-    } catch (e) {
-      mainError.set(e.message);
-    }
-  };
 
   const [userToAuth, setUserToAuth] = useState(null);
 
@@ -202,7 +188,10 @@ const Navbar = ({ canShowSearch = true }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!searchCategory) return;
+
+    if (!searchCategory) {
+      return;
+    }
 
     handleSearchClick();
   };
@@ -211,6 +200,8 @@ const Navbar = ({ canShowSearch = true }) => {
     const link = getListingSearchLink(searchCategory);
     router.push(link);
   };
+
+  const { handleClick: handleListingClick } = useListingListClick();
 
   return (
     <>
@@ -297,7 +288,7 @@ const Navbar = ({ canShowSearch = true }) => {
                   </li>
 
                   <ListingLi
-                    categoriesLength={categoriesLength}
+                    categoriesLength={0}
                     handleListingClick={handleListingClick}
                   />
 
@@ -341,7 +332,10 @@ const Navbar = ({ canShowSearch = true }) => {
                     <div className="option-item">
                       <span
                         data-toggle="modal"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                         className="auth-one sign-out-trigger"
                       >
                         <i className="bx bx-log-out"></i> Sign out
@@ -418,7 +412,10 @@ const Navbar = ({ canShowSearch = true }) => {
                       <span
                         data-toggle="modal"
                         className="sign-out-trigger"
-                        onClick={handleSignOut}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
                       >
                         <i className="bx bx-log-out"></i> Sign out
                       </span>
@@ -449,20 +446,13 @@ const Navbar = ({ canShowSearch = true }) => {
 
       {!isAuth && (
         <AuthCodeModal
+          type={type}
           codeModalActive={codeModalActive}
           code={code}
           handleChangeCode={handleChangeCode}
           codeModalError={codeModalError}
           handleCheckCode={handleCheckCode}
           handleClose={handleCloseCodeModal}
-        />
-      )}
-
-      {categoriesLength > 0 && (
-        <ListingPopup
-          active={activePopup}
-          setActive={setActivePopup}
-          categories={navbarCategories}
         />
       )}
 
@@ -539,6 +529,13 @@ const Navbar = ({ canShowSearch = true }) => {
             </div>
           </div>
         </>
+      )}
+
+      {isAuth && (
+        <SignOutModal
+          active={signOutModalActive}
+          closeModal={() => setSignOutModalActive(false)}
+        />
       )}
     </>
   );

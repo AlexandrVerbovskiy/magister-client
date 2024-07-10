@@ -2,23 +2,16 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Transition from "../../utils/transition";
 import { IndiceContext } from "../../contexts";
-import { generateProfileFilePath, getFilePath } from "../../utils";
-import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
-import STATIC from "../../static";
+import { generateProfileFilePath } from "../../utils";
+import SignOutModal from "./SignOutModal";
 
 function DropdownProfile({ align }) {
-  const router = useRouter();
-  const {
-    success: mainSuccess,
-    sessionUser,
-    error: mainError,
-    isAdmin,
-  } = useContext(IndiceContext);
+  const { sessionUser, isAdmin, isAuth } = useContext(IndiceContext);
   const name = sessionUser?.name ?? "";
   const photo = generateProfileFilePath(sessionUser?.photo);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -47,14 +40,6 @@ function DropdownProfile({ align }) {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ redirect: false });
-    } catch (e) {
-      mainError.set(e.message);
-    }
-  };
 
   return (
     <div className="relative inline-flex">
@@ -125,7 +110,10 @@ function DropdownProfile({ align }) {
             <li>
               <button
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center py-1 px-3"
-                onClick={() => handleSignOut()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSignOutModalActive(true);
+                }}
               >
                 Sign Out
               </button>
@@ -133,6 +121,13 @@ function DropdownProfile({ align }) {
           </ul>
         </div>
       </Transition>
+
+      {isAuth && (
+        <SignOutModal
+          handleCloseModal={() => setSignOutModalActive(false)}
+          modalOpen={signOutModalActive}
+        />
+      )}
     </div>
   );
 }

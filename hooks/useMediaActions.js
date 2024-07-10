@@ -24,12 +24,15 @@ const useMediaActions = () => {
     }
 
     mediaActionsRef.current[tempFileKey] = {
+      tempKey: tempFileKey,
       data: arr,
       percent: 0,
       inQueue: [...arr],
       filetype,
       filename,
       chatId,
+      contentPath: data,
+      createdAt: new Date(),
     };
 
     const blobToSend = mediaActionsRef.current[tempFileKey]["inQueue"][0];
@@ -81,13 +84,37 @@ const useMediaActions = () => {
     };
   }
 
-  async function onStopSendMedia(key) {
+  function onStopSendMedia(key) {
     if (mediaActionsRef.current[key]) {
       delete mediaActionsRef.current[key];
     }
   }
 
-  return { createMediaActions, onSuccessSendBlobPart, onStopSendMedia };
+  function stopAllSendMedia() {
+    Object.keys(mediaActionsRef.current).forEach(
+      (key) => delete mediaActionsRef.current[key]
+    );
+  }
+
+  function getChatMessages(chatId) {
+    const result = [];
+
+    Object.keys(mediaActionsRef.current).forEach((key) => {
+      if (mediaActionsRef.current[key].chatId === chatId) {
+        result.push(mediaActionsRef.current[key]);
+      }
+    });
+
+    return result.sort((a, b) => a.createdAt - b.createdAt);
+  }
+
+  return {
+    createMediaActions,
+    onSuccessSendBlobPart,
+    onStopSendMedia,
+    getChatMessages,
+    stopAllSendMedia,
+  };
 };
 
 export default useMediaActions;

@@ -200,13 +200,22 @@ export const getUserDocumentsPageOption = async (userId, authToken) => {
   return data.body;
 };
 
-export const getUserProfileEditPageOptions = async (authToken) => {
-  const data = await get(`/user-profile-edit-options`, authToken);
+export const getUserProfileEditPageOptions = async (paypalCode, authToken) => {
+  const data = await post(
+    `/user-profile-edit-options`,
+    { paypalCode },
+    authToken
+  );
   return data.body;
 };
 
-export const getSettingsPageOptions = async (authToken) => {
-  const data = await get(`/settings-options`, authToken);
+export const getDashboardPageOptions = async (body, authToken) => {
+  const data = await post(`/dashboard-page-options`, body, authToken);
+  return data.body;
+};
+
+export const getDashboardOptions = async (body, authToken) => {
+  const data = await post(`/dashboard-options`, body, authToken);
   return data.body;
 };
 
@@ -235,19 +244,6 @@ export const getOrderInvoiceOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminListingDefectsEditOptions = async (authToken) => {
-  const data = await get(`/admin-listing-defects-edit-options`, authToken);
-  return data.body.defects;
-};
-
-export const getAdminListingDefectQuestionsEditOptions = async (authToken) => {
-  const data = await get(
-    `/admin-listing-defect-questions-edit-options`,
-    authToken
-  );
-  return data.body.questions;
-};
-
 export const getWalletInfoOptions = async (authToken) => {
   const data = await get(`/get-wallet-info-options`, authToken);
   return data.body;
@@ -263,8 +259,13 @@ export const getWaitingRefundOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminIndexPageOptions = async (body, authToken) => {
-  const data = await post(`/get-admin-index-page-option`, body, authToken);
+export const getAdminDashboardPageOptions = async (body, authToken) => {
+  const data = await post(`/get-admin-dashboard-page-option`, body, authToken);
+  return data.body;
+};
+
+export const getAdminDashboardOptions = async (body, authToken) => {
+  const data = await post(`/get-admin-dashboard-option`, body, authToken);
   return data.body;
 };
 
@@ -311,7 +312,7 @@ export const createRenterReview = async (
 ) => {
   const data = await post(
     `/create-tenant-review`,
-    { tenantCommentInfo, orderId },
+    { userCommentInfo: tenantCommentInfo, orderId },
     authToken
   );
   return data.body;
@@ -323,7 +324,7 @@ export const createOwnerReview = async (
 ) => {
   const data = await post(
     `/create-owner-review`,
-    { ownerCommentInfo, listingCommentInfo, orderId },
+    { userCommentInfo: ownerCommentInfo, listingCommentInfo, orderId },
     authToken
   );
   return data.body;
@@ -339,5 +340,10 @@ export const getUserChatOptions = async (
   authToken
 ) => {
   const data = await post(`/user-chat-options`, { chatType, id }, authToken);
+  return data.body;
+};
+
+export const getAdminChatOptions = async ({ id = null }, authToken) => {
+  const data = await post(`/admin-chat-options`, { id }, authToken);
   return data.body;
 };

@@ -4,7 +4,7 @@ import StatusBlock from "../Listings/StatusBlock";
 import {
   generateProfileFilePath,
   getDaysDifference,
-  getFilePath,
+  getPaymentNameByType,
   moneyFormat,
   objDateSort,
 } from "../../utils";
@@ -104,7 +104,7 @@ const OrderInfo = ({
               ].includes(order.status) && paymentType ? (
                 <>
                   <strong className="paid">Paid</strong> using{" "}
-                  {paymentType == "credit-card" ? "Bank Transfer" : "Paypal"}
+                  {getPaymentNameByType(paymentType)}
                 </>
               ) : (
                 <strong className="unpaid">Unpaid</strong>
@@ -149,7 +149,7 @@ const OrderInfo = ({
         </ul>
       </td>
 
-      <td className="action d-flex">
+      <td className="action d-flex flex-column align-items-start">
         <Link href={link + "/" + order.id} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
@@ -215,7 +215,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/pay-by-credit-card/` + order.id}
+            href={`/dashboard/pay-by-bank-transfer/` + order.id}
           >
             <i className="bx bx-wallet"></i> Update payment
           </Link>
@@ -270,7 +270,9 @@ const OrderInfo = ({
         ) && (
           <button
             className="default-btn"
-            onClick={() => handleDisputeCreate(order.id)}
+            onClick={() => {
+              handleDisputeCreate(order.id);
+            }}
             type="button"
           >
             <i className="bx bx-transfer-alt"></i>
@@ -324,13 +326,24 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
+          STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chat/${order.chatId}`}
+            href={`/dashboard/chats/${order.chatId}`}
           >
             <i className="bx bx-chat"></i> Chat
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/chats/${order.disputeChatId}`}
+          >
+            <i className="bx bx-chat"></i> Dispute Chat
           </Link>
         )}
       </td>
@@ -385,9 +398,14 @@ const OrderItem = ({
                 </Link>
               </li>
             </ul>
-            <Link href={`/chat/${userId}`} className="default-btn">
-              <i className="bx bx-envelope"></i> Send Message
-            </Link>
+            {order.chatId && (
+              <Link
+                href={`/dashboard/chats/${order.chatId}`}
+                className="default-btn"
+              >
+                <i className="bx bx-envelope"></i> Send Message
+              </Link>
+            )}
           </div>
         </td>
 
@@ -426,6 +444,7 @@ const OrderItem = ({
               handleClickAccept={handleClickAccept}
               handleClickPay={handleClickPay}
               handleClickExtend={handleClickExtend}
+              handleDisputeCreate={handleDisputeCreate}
               link={link}
               extension={true}
             />

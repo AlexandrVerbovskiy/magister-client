@@ -4,14 +4,78 @@ import { IndiceContext } from "../../contexts";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
 import { authSideProps } from "../../middlewares";
-import { getSettingsPageOptions } from "../../services";
+import { getDashboardPageOptions, getDashboardOptions } from "../../services";
+import DashboardLineChart from "../../components/Charts/DashboardLineChart";
+import { baseTimeTypePageParams } from "../../utils";
+import { useRouter } from "next/router";
+import TransactionAnalyticsTable from "../../components/Charts/TransactionAnalyticsTable";
+import DashboardDoughnutChart from "../../components/Charts/DashboardDoughnutChart";
 
-const Dashboard = () => {
-  const { setLoading, sessionUser } = useContext(IndiceContext);
+const Dashboard = (props) => {
+  const router = useRouter();
+  const { setLoading, sessionUser, authToken, error } =
+    useContext(IndiceContext);
+  const [durationFilter, setDurationFilter] = useState("last-month");
+  const [disabled, setDisabled] = useState(false);
+
+  const [statistic, setStatistic] = useState({
+    transactionsDetailInfo: props.transactionsDetailInfo,
+    transactionDatesCount: props.transactionDatesCount,
+    transactionDatesSum: props.transactionDatesSum,
+    rentListingCounts: props.rentListingCounts,
+    disputeTotalDatesCount: props.disputeTotalDatesCount,
+    disputeStatisticInfo: props.disputeStatisticInfo,
+  });
 
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  const handleChangeFilterDuration = async (duration) => {
+    if (disabled) {
+      return;
+    }
+
+    try {
+      setDisabled(true);
+      setDurationFilter(duration);
+
+      const data = await getDashboardOptions(
+        {
+          clientTime: Date.now(),
+          timeFilterType: duration,
+        },
+        authToken
+      );
+
+      const currentLink = window.location.href;
+
+      const newLinkPart =
+        window.location.origin +
+        window.location.pathname +
+        (duration != "last-month" ? `?time-filter-type=${duration}` : "");
+
+      if (currentLink !== newLinkPart) {
+        router.replace(newLinkPart, undefined, { shallow: true });
+      }
+
+      setStatistic(data);
+    } catch (e) {
+      error.set(e.message);
+    } finally {
+      setDisabled(false);
+    }
+  };
+
+  let timeType = "days";
+
+  if (durationFilter == "last-day") {
+    timeType = "hours";
+  }
+
+  if (durationFilter == "last-year") {
+    timeType = "months";
+  }
 
   return (
     <>
@@ -19,13 +83,44 @@ const Dashboard = () => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>Dashboard</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/dashboard/">Home</Link>
-            </li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-lg-6 col-md-6 result-count">
+            <div className="breadcrumb-area">
+              <h1>Dashboard</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/dashboard/">Home</Link>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <div className="col-lg-6 col-md-6 ordering">
+            <div className="select-box">
+              <label htmlFor="duration-filter">Sort By:</label>
+              <select
+                id="duration-filter"
+                className="shop-select cursor-pointer"
+                value={durationFilter}
+                onChange={(e) => handleChangeFilterDuration(e.target.value)}
+              >
+                {[
+                  { value: "last-year", title: "Last Year" },
+                  { value: "last-month", title: "Last Month" },
+                  { value: "last-week", title: "Last Week" },
+                  { value: "last-day", title: "Last Day" },
+                ].map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="cursor-pointer"
+                  >
+                    {option.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         <div
@@ -36,23 +131,62 @@ const Dashboard = () => {
         </div>
 
         <div className="row">
-          <div className="col-12">
-            <div className="recent-activities-box">
-              <h3>Some Main Options</h3>
+          <div className="col-12 col-sm-6">
+            <DashboardLineChart
+              title="Total transactions"
+              data={[statistic.transactionDatesCount]}
+              timeType={timeType}
+            />
+          </div>
 
-              <ul>
-                <li className="alert alert-dismissible fade show" role="alert">
-                  <div className="icon">
-                    <i className="bx bx-layer"></i>
-                  </div>
-                  Your listing{" "}
-                  <strong>
-                    <a href="#">Hills Hotel</a>
-                  </strong>{" "}
-                  has been approved!
-                </li>
-              </ul>
-            </div>
+          <div className="col-12 col-sm-6">
+            <DashboardLineChart
+              title="Total items listed"
+              data={[statistic.rentListingCounts]}
+              timeType={timeType}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <DashboardLineChart
+              title="Amount of total transactions"
+              data={[statistic.transactionDatesSum]}
+              timeType={timeType}
+              valueType="money"
+            />
+          </div>
+
+          <div className="col-12 col-sm-6">
+            <TransactionAnalyticsTable
+              title="Total amount ($) by type of payment"
+              data={statistic.transactionsDetailInfo}
+            />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-12 col-sm-6">
+            <DashboardDoughnutChart
+              title="Total Disputes"
+              data={{
+                "Active Disputes":
+                  statistic.disputeStatisticInfo.allActiveDisputes,
+                "Solved Disputes":
+                  statistic.disputeStatisticInfo.allSolvedDisputes,
+              }}
+            />
+          </div>
+
+          <div className="col-12 col-sm-6">
+            <DashboardLineChart
+              title="Active Disputes"
+              data={[statistic.disputeTotalDatesCount]}
+              timeType={timeType}
+              getTotalType="last"
+              height={312}
+            />
           </div>
         </div>
       </div>
@@ -60,8 +194,11 @@ const Dashboard = () => {
   );
 };
 
-const boostServerSideProps = async ({ baseSideProps }) => {
-  const options = await getSettingsPageOptions(baseSideProps.authToken);
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const options = await getDashboardPageOptions(
+    baseTimeTypePageParams(context.query),
+    baseSideProps.authToken
+  );
   return { ...options };
 };
 

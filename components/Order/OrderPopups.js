@@ -7,6 +7,7 @@ import PayModal from "../PayModal";
 import { calculateCurrentTotalPrice, increaseDateByOneDay } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
+import DisputeModal from "./DisputeModal";
 
 const OrderPopups = ({
   order,
@@ -17,7 +18,7 @@ const OrderPopups = ({
 
   extendPopupActive,
   setExtendPopupActive,
-  onMakeExtend,
+  handleMakeBooking,
 
   handleCancelApprove,
   cancelModalActive,
@@ -48,22 +49,6 @@ const OrderPopups = ({
   const { authToken, sessionUser } = useContext(IndiceContext);
 
   const isOwner = sessionUser.id == order.ownerId;
-
-  const localCalculateCurrentTotalPrice = ({
-    type = null,
-    startDate,
-    endDate,
-    pricePerDay,
-  }) =>
-    calculateCurrentTotalPrice({
-      startDate,
-      endDate,
-      pricePerDay,
-      type,
-      isOwner,
-      ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
-    });
 
   return (
     <>
@@ -113,16 +98,17 @@ const OrderPopups = ({
         <BookingModal
           createOrderModalActive={extendPopupActive}
           closeModal={() => setExtendPopupActive(false)}
-          handleMakeBooking={onMakeExtend}
+          handleMakeBooking={handleMakeBooking}
           fee={tenantBaseCommission}
           price={order.offerPricePerDay}
           minRentalDays={order.listingMinRentalDays}
           listingName={order.listingName}
-          blockedDates={order.blockedForRentalDates}
+          blockedDates={order.blockedDates}
           title="Extend Now"
           startDate={
             order.offerEndDate ? increaseDateByOneDay(order.offerEndDate) : null
           }
+          fullVersion={true}
         />
       )}
 
@@ -149,10 +135,13 @@ const OrderPopups = ({
       <PayModal
         modalActive={paypalModalActive}
         closeModal={() => setPaypalModalActive(false)}
-        amount={localCalculateCurrentTotalPrice({
+        amount={calculateCurrentTotalPrice({
+          isOwner,
           startDate: order.offerStartDate,
           endDate: order.offerEndDate,
           pricePerDay: order.offerPricePerDay,
+          ownerFee: order.ownerFee,
+          tenantFee: order.tenantFee,
           type: "tenant",
         })}
         orderId={order.id}

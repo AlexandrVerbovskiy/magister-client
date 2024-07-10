@@ -31,3 +31,4 @@ export * from "./priceCalculations";
 export * from "./baseServerSideProps";
 export * from "./sort";
 export * from "./helpers";
+export * from "./chartOptions";

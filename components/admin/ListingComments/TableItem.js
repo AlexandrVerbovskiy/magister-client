@@ -68,7 +68,7 @@ const TableItem = ({
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div>
-            <Link href={`/admin/listings/edit/${id}`}>{listingName}</Link>
+            <Link href={`/admin/listings/edit/${listingId}`}>{listingName}</Link>
           </div>
         </td>
 

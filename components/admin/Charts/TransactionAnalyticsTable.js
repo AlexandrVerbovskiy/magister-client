@@ -1,22 +1,10 @@
 import React from "react";
-import { moneyFormat } from "../../../utils";
+import { moneyFormat, transactionTableOptions } from "../../../utils";
 
 const TransactionAnalyticsTable = ({ title, data }) => {
-  const paypalInfo = data["paypal"];
-  const bankTransferInfo = data["bankTransfer"];
-
-  const total = data["paypal"]["amount"] + data["bankTransfer"]["amount"];
-
-  if (total > 0) {
-    paypalInfo["total"] = ((paypalInfo["amount"] * 100) / total).toFixed(0);
-    bankTransferInfo["total"] = (
-      (bankTransferInfo["amount"] * 100) /
-      total
-    ).toFixed(0);
-  }else{
-    paypalInfo["total"] = 0;
-    bankTransferInfo["total"] = 0;
-  }
+  const { paypalInfo, bankTransferInfo } = transactionTableOptions({
+    data,
+  });
 
   return (
     <>

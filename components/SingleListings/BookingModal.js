@@ -16,6 +16,8 @@ import {
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
 import "flatpickr/dist/flatpickr.min.css";
+import Switch from "../FormComponents/Switch";
+import ErrorSpan from "../ErrorSpan";
 
 const BookingModal = ({
   handleMakeBooking,
@@ -27,6 +29,7 @@ const BookingModal = ({
   blockedDates,
   title = "Book Now",
   startDate = null,
+  fullVersion = false,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
@@ -35,6 +38,9 @@ const BookingModal = ({
   const calendarRef = useRef(null);
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [feeActive, setFeeActive] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState("");
+  const [sendingMessageError, setSendingMessageError] = useState("");
 
   /*const [fromDate, setFromDate] = useState(new Date(getDateByCurrentAdd(0)));
   const [toDate, setToDate] = useState(
@@ -153,6 +159,13 @@ const BookingModal = ({
       hasError = true;
     }
 
+    if (fullVersion) {
+      if (!sendingMessage.trim()) {
+        setSendingMessageError("Required field");
+        hasError = true;
+      }
+    }
+
     if (hasError) {
       return;
     }
@@ -161,7 +174,11 @@ const BookingModal = ({
       price,
       fromDate: separateDate(fromDate),
       toDate: separateDate(toDate),
+      feeActive,
+      sendingMessage: sendingMessage.trim(),
     });
+
+    closeModal();
   };
 
   const handleOfferYourPrice = (e) => {
@@ -183,7 +200,6 @@ const BookingModal = ({
         <div className="flatpickr-parent-wrapper popup-widget">
           <div ref={calendarContainer}></div>
         </div>
-
         <div className="popup-widget order-info-widget">
           <div className="d-flex align-items-center">
             Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
@@ -206,13 +222,13 @@ const BookingModal = ({
             </div>
           )}
           {fee && <div>Fee: {fee}%</div>}
-          {(minRentalDays > 0) &&
-          <div>Minimal Count Rental Days: {minRentalDays}</div>}
+          {minRentalDays > 0 && (
+            <div>Minimal Count Rental Days: {minRentalDays}</div>
+          )}
           {fee && <div>Price: ${totalPrice}</div>}
           {fee && <div>Total Fee: ${totalFee}</div>}
           <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
         </div>
-
         {calendarError && (
           <div className="form-group">
             <div
@@ -223,6 +239,53 @@ const BookingModal = ({
             </div>
           </div>
         )}
+        {fullVersion && (
+          <>
+            <div className="popup-widget order-info-widget popup-date-fee-switch-widget">
+              <div className="form-group">
+                <div className="date-fee-switch">
+                  <Switch
+                    title="Fee-free option"
+                    active={feeActive}
+                    onChange={setFeeActive}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group mb-0">
+              <span className="sub-title mb-2">
+                <span>Message the owner</span>
+              </span>
+
+              <div className="row">
+                <div className="col-lg-12 col-md-12">
+                  <div className="form-group mb-0">
+                    <div
+                      className={`${sendingMessageError ? "is-invalid" : ""}`}
+                    >
+                      <textarea
+                        placeholder="Send any other details about your request including pickup times."
+                        className="form-control popup-widget-textarea"
+                        cols="30"
+                        rows="6"
+                        value={sendingMessage}
+                        onInput={(e) => {
+                          setSendingMessageError(null);
+                          setSendingMessage(e.target.value);
+                        }}
+                      ></textarea>
+                      <ErrorSpan
+                        className="text-end"
+                        error={sendingMessageError}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <button
           className="mt-4 default-modal-button"
@@ -231,7 +294,6 @@ const BookingModal = ({
         >
           Send Request
         </button>
-
         <OfferOwnPrice
           offerPriceActive={offerPriceActive}
           setOfferPriceActive={setOfferPriceActive}

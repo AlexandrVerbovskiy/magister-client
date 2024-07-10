@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   formatTimeWithAmPm,
@@ -7,13 +7,15 @@ import {
 } from "../../utils";
 import MessageContent from "./MessageContent";
 import DropdownMenu from "../_App/DropdownMenu";
+import STATIC from "../../static";
+import useMessage from "../../hooks/useMessage";
 
 const MessageLi = ({
   id,
   tempKey = null,
   type,
   content,
-  senderPhoto,
+  senderPhoto = null,
   createdAt,
   senderId,
   percent = 0,
@@ -22,76 +24,55 @@ const MessageLi = ({
   handleDeleteMessage,
   chatId,
   entity,
-  popupsData
+  popupsData,
+  adminSend,
+  needUserPhoto,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
-  const [activePopup, setActivePopup] = useState(false);
-  const [popupCoords, setPopupCoords] = useState({ bottom: 0, left: 0 });
-
   const isAuthor = senderId == sessionUser?.id;
-
   const chatClassName = `chat dropdown${isAuthor ? "" : " chat-left"}`;
+  const messageRef = useRef(null);
+  const messageParentRef = useRef(null);
 
-  const isTemp = !!tempKey;
-  const isText = type == "text";
-
-  const isManuallySent = ["text", "image", "file", "video", "audio"].includes(
-    type
-  );
-
-  const closePopup = () => setActivePopup(false);
-
-  const handleActivateEditPopup = (e) => {
-    if (!isAuthor || isTemp || !isManuallySent) {
-      return;
-    }
-
-    e.preventDefault();
-    e.stopPropagation();
-    const parent = document.querySelector(`#message-${id}`);
-
-    let chatMessage = e.target;
-
-    if (!chatMessage.classList.contains("chat-message")) {
-      chatMessage = chatMessage.closest(".chat-message");
-    }
-
-    if (!chatMessage) {
-      return;
-    }
-
-    const messageCoords = getRelativeCoordinates(chatMessage, parent);
-    const popupRight = messageCoords.right - 21.28;
-
-    setPopupCoords({
-      bottom: "15px",
-      right: popupRight + "px",
-      transform: "translate(-100%, 100%)",
-    });
-
-    setActivePopup(true);
-  };
-
-  const handleEditClick = () => {
-    handleChangeUpdatingMessageId(id);
-    closePopup();
-  };
-
-  const handleDeleteClick = () => {
-    handleDeleteMessage({ messageId: id, chatId });
-    closePopup();
-  };
+  const {
+    activePopup,
+    popupCoords,
+    isTemp,
+    isText,
+    isManuallySent,
+    closePopup,
+    handleActivateEditPopup,
+    handleEditClick,
+    handleDeleteClick,
+  } = useMessage({
+    id,
+    type,
+    tempKey,
+    chatId,
+    handleDeleteMessage,
+    handleChangeUpdatingMessageId,
+    isAuthor,
+    messageRef,
+    messageParentRef,
+    popupMarginRight: 21.28,
+    popupMarginBottom: 15,
+  });
 
   return (
-    <div id={`message-${id}`} className={chatClassName}>
+    <div id={`message-${id}`} className={chatClassName} ref={messageParentRef}>
       <div className="chat-avatar">
         <a className="d-inline-block">
           <img
-            src={generateProfileFilePath(senderPhoto)}
-            width="50"
-            height="50"
+            src={
+              adminSend
+                ? STATIC.ADMIN_CHAT_LOGO
+                : generateProfileFilePath(senderPhoto)
+            }
+            width="40"
+            height="40"
             className="rounded-circle"
-            alt="image"
+            alt="User photo"
+            style={{ width: "40px", height: "40px" }}
           />
         </a>
       </div>
@@ -103,6 +84,7 @@ const MessageLi = ({
           aria-haspopup="true"
           aria-expanded="false"
           onContextMenu={handleActivateEditPopup}
+          ref={messageRef}
         >
           <MessageContent
             entity={entity}
@@ -144,6 +126,7 @@ const MessageLi = ({
         >
           {isText && (
             <button
+              type="button"
               className="dropdown-item d-flex align-items-center"
               onClick={handleEditClick}
             >
@@ -151,6 +134,7 @@ const MessageLi = ({
             </button>
           )}
           <button
+            type="button"
             className="dropdown-item d-flex align-items-center"
             onClick={handleDeleteClick}
           >

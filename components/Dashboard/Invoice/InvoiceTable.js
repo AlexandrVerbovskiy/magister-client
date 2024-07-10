@@ -226,7 +226,7 @@ const InvoiceTable = ({
           <div className="invoice-btn-box d-flex justify-content-between">
             <a
               className="default-btn"
-              href={`/dashboard/pay-by-credit-card/${purchaseOrderId}`}
+              href={`/dashboard/pay-by-bank-transfer/${purchaseOrderId}`}
               disabled={disabled}
             >
               <i className="bx bx-upload" style={{ fontSize: "16px" }}></i>{" "}

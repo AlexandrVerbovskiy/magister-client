@@ -8,6 +8,8 @@ const YesNoModal = ({
   modalOpen,
   disabled = false,
   type = "danger",
+  acceptText = "Yes",
+  cancelText = "No",
 }) => {
   const Svg = () =>
     type == "success" ? (
@@ -44,7 +46,7 @@ const YesNoModal = ({
       <div className="p-5 flex space-x-4">
         <Svg />
 
-        <div>
+        <div className="w-full">
           <div className="mb-2">
             <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
               {title}
@@ -64,14 +66,14 @@ const YesNoModal = ({
                 handleCloseModal();
               }}
             >
-              No
+              {cancelText}
             </button>
             <button
               disabled={disabled}
               onClick={onAccept}
               className={acceptButtonClasses}
             >
-              Yes
+              {acceptText}
             </button>
           </div>
         </div>

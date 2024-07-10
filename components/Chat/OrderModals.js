@@ -6,9 +6,10 @@ import OrderPopups from "../Order/OrderPopups";
 const OrderModals = ({
   tenantBaseCommission,
   order,
-  setOrder,
   orderPopupsData,
   bankInfo,
+  onTenantPayed,
+  onMakeExtend,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -18,23 +19,6 @@ const OrderModals = ({
   const currentActionButtons = useOrderActions({
     order,
   });
-
-  const onMakeExtend = ({ price, fromDate, toDate }) => {
-    orderPopupsData.setExtendPopupActive(false);
-    orderPopupsData.setExtendApproveData({
-      price,
-      fromDate,
-      toDate,
-    });
-  };
-
-  const onTenantPayed = () => {
-    setTimeout(() => {
-      setOrder({
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
-      });
-    }, 100);
-  };
 
   return (
     <OrderPopups

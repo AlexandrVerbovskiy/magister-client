@@ -1,8 +1,7 @@
-import React, { useCallback, useContext } from "react";
-import Link from "next/link";
+import React, { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
-import { activateAuthPopup } from "../../utils";
+import { useListingListClick } from "../../hooks";
 
 const YourBusiness = () => {
   const { sessionUser } = useContext(IndiceContext);
@@ -11,8 +10,8 @@ const YourBusiness = () => {
   const items = [
     {
       id: 1,
-      title: `Unlock value. Earn a passive income.`,
-      image: "/images/home/icons-how_it_works.png",
+      title: `Unlock value. Start earning.`,
+      image: "/images/home/icons-value.png",
     },
     {
       id: 2,
@@ -22,26 +21,16 @@ const YourBusiness = () => {
     {
       id: 3,
       title: `Open access. Access on demand.`,
-      image: "/images/home/icons-on_demand.png",
+      image: "/images/home/icons-how_it_works-2_contact.png",
     },
   ];
 
-  const handleStartEarningClick = () => {
-    if (sessionUser) {
-      router.push("/listing-list");
-    } else {
-      activateAuthPopup();
-    }
-  };
+  const { handleClick: handleStartEarningClick } = useListingListClick();
 
   return (
     <>
       <section className="features-area ptb-100">
         <div className="container">
-          <div className="section-title">
-            <h2>Your business (Key Brand Messaging)</h2>
-          </div>
-
           <div className="row justify-content-center">
             {items.map((item) => (
               <div key={item.id} className="col-lg-4 col-md-6 col-sm-6 d-flex">

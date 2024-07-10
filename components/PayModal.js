@@ -6,6 +6,18 @@ import PaypalButton from "./PaypalButton";
 import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
 import Link from "next/link";
+import STATIC from "../static";
+
+const getPaymentFormStyles = (type) => {
+  switch (type) {
+    case STATIC.PAYMENT_TYPES.CREDIT_CARD:
+      return { height: "140px", overflow: "hidden" };
+    case STATIC.PAYMENT_TYPES.PAYPAL:
+      return { height: "50px" };
+    default: {
+    }
+  }
+};
 
 const PayModal = ({
   amount,
@@ -22,15 +34,18 @@ const PayModal = ({
   bankInfo,
 }) => {
   const { error } = useContext(IndiceContext);
-  const [type, setType] = useState("paypal");
+  const [type, setType] = useState(STATIC.PAYMENT_TYPES.PAYPAL);
   const [disabled, setDisabled] = useState(false);
 
   const onApprove = async (data) => {
     try {
-      await paypalOrderPayed(data.orderID, authToken);
+      const result = await paypalOrderPayed(
+        { orderId: data.orderID, type },
+        authToken
+      );
 
       setTimeout(() => {
-        onTenantPayed();
+        onTenantPayed(result);
         closeModal();
       }, 100);
     } catch (e) {
@@ -121,7 +136,7 @@ const PayModal = ({
                   type="radio"
                   id="paypal-radio"
                   name="radio-group"
-                  checked={type === "paypal"}
+                  checked={type === STATIC.PAYMENT_TYPES.PAYPAL}
                   readOnly={true}
                 />
                 <label
@@ -129,7 +144,7 @@ const PayModal = ({
                     marginBottom: 0,
                     display: "inline",
                   }}
-                  onClick={() => handleChangeType("paypal")}
+                  onClick={() => handleChangeType(STATIC.PAYMENT_TYPES.PAYPAL)}
                   htmlFor="paypal-radio"
                 >
                   PayPal
@@ -147,7 +162,7 @@ const PayModal = ({
                   type="radio"
                   id="bank-card-radio"
                   name="radio-group"
-                  checked={type === "card"}
+                  checked={type === STATIC.PAYMENT_TYPES.CREDIT_CARD}
                   readOnly={true}
                 />
                 <label
@@ -155,7 +170,9 @@ const PayModal = ({
                     marginBottom: 0,
                     display: "inline",
                   }}
-                  onClick={() => handleChangeType("card")}
+                  onClick={() =>
+                    handleChangeType(STATIC.PAYMENT_TYPES.CREDIT_CARD)
+                  }
                   htmlFor="bank-card-radio"
                 >
                   Bank Card
@@ -173,7 +190,7 @@ const PayModal = ({
                   type="radio"
                   id="direct-bank-transfer-radio"
                   name="radio-group"
-                  checked={type === "bank-transfer"}
+                  checked={type === STATIC.PAYMENT_TYPES.BANK_TRANSFER}
                   readOnly={true}
                 />
                 <label
@@ -181,7 +198,9 @@ const PayModal = ({
                     marginBottom: 0,
                     display: "inline",
                   }}
-                  onClick={() => handleChangeType("bank-transfer")}
+                  onClick={() =>
+                    handleChangeType(STATIC.PAYMENT_TYPES.BANK_TRANSFER)
+                  }
                   htmlFor="direct-bank-transfer-radio"
                 >
                   Direct Bank Transfer
@@ -192,33 +211,33 @@ const PayModal = ({
 
           <div
             className="paypal-payment-form"
-            style={
-              type == "card"
-                ? { height: "140px", overflow: "hidden" }
-                : type == "paypal"
-                ? { height: "50px" }
-                : {}
-            }
+            style={getPaymentFormStyles(type)}
           >
-            {type == "paypal" && amount && orderId && authToken && (
-              <PaypalButton
-                createOrder={createOrder}
-                onApprove={onApprove}
-                amount={amount}
-                orderId={orderId}
-              />
-            )}
+            {type == STATIC.PAYMENT_TYPES.PAYPAL &&
+              amount &&
+              orderId &&
+              authToken && (
+                <PaypalButton
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  amount={amount}
+                  orderId={orderId}
+                />
+              )}
 
-            {type == "card" && amount && orderId && authToken && (
-              <PaypalForm
-                disabled={disabled}
-                setDisabled={setDisabled}
-                createOrder={createOrder}
-                onApprove={onApprove}
-              />
-            )}
+            {type == STATIC.PAYMENT_TYPES.CREDIT_CARD &&
+              amount &&
+              orderId &&
+              authToken && (
+                <PaypalForm
+                  disabled={disabled}
+                  setDisabled={setDisabled}
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                />
+              )}
 
-            {type == "bank-transfer" && (
+            {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
               <div className="payment-form">
                 <div className="earnings-box" style={{ marginBottom: "0" }}>
                   <h3
@@ -312,8 +331,8 @@ const PayModal = ({
                 </div>
 
                 <Link
-                  className="pay-by-credit-card-link"
-                  href={"/dashboard/pay-by-credit-card/" + orderId}
+                  className="pay-by-bank-transfer-link"
+                  href={"/dashboard/pay-by-bank-transfer/" + orderId}
                   type="button"
                 >
                   Attach Confirmation

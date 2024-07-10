@@ -209,12 +209,17 @@ const Orders = (pageProps) => {
           handleApprove={acceptApproveExtendOrder}
           setCurrentOpenImg={setCurrentOpenImg}
           listing={{
+            id: extendModalApproveData.order.listingId,
             listingImages: extendModalApproveData.order.images,
             name: extendModalApproveData.order.listingName,
             userName: extendModalApproveData.order.ownerName,
             userPhoto: extendModalApproveData.order.ownerPhoto,
             userCountItems:
               extendModalApproveData.order.listingCountStoredItems,
+            averageRating: extendModalApproveData.order.listingAverageRating,
+            commentCount: extendModalApproveData.order.listingCommentCount,
+            ownerAverageRating: extendModalApproveData.order.ownerAverageRating,
+            ownerCommentCount: extendModalApproveData.order.ownerCommentCount,
           }}
           handleGoBack={closeApproveExtendOrder}
           fromDate={extendModalApproveData.fromDate}

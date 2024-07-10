@@ -304,21 +304,6 @@ const SingleListingsContent = ({
                     />
                   </div>
 
-                  {((listing.defects && listing.defects.length > 0) ||
-                    listing.dopDefect) && (
-                    <>
-                      <h3>Defects</h3>
-                      <div>
-                        <ul className="pricing-list">
-                          {listing.defects.map((defect) => (
-                            <li key={defect.defectId}>{defect.defectName}</li>
-                          ))}
-                          {listing.dopDefect && <li>{listing.dopDefect}</li>}
-                        </ul>
-                      </div>
-                    </>
-                  )}
-
                   {comments.length > 0 && (
                     <>
                       <h3>Review</h3>
@@ -590,11 +575,8 @@ const SingleListingsContent = ({
                               </a>
                             </h4>
                             <span>
-                              {listing.countStoredItems}{" "}
-                              {autoMultiEnding(
-                                listing.countStoredItems,
-                                "Item"
-                              )}{" "}
+                              {listing.userCountItems}{" "}
+                              {autoMultiEnding(listing.userCountItems, "Item")}{" "}
                               for rental
                             </span>
                           </div>

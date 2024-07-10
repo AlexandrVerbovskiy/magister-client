@@ -82,6 +82,8 @@ const UserReviewForm = ({
               userName: data.userName,
               userPhoto: data.userPhoto,
               userCountItems: +data.userCountItems,
+              userAverageRating: data.userAverageRating,
+              userCommentCount: data.userCommentCount,
             }}
           />
         </div>

@@ -6,6 +6,7 @@ import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
+  calculateCurrentTotalPrice,
   getDaysDifference,
   getListingImageByType,
   moneyFormat,
@@ -503,36 +504,6 @@ const Order = (order) => {
                         </div>
                       </section>
 
-                      {(order.defects.length > 0 || order.listingDopDefect) && (
-                        <section>
-                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                            Defects
-                          </h2>
-
-                          <div className="flex flex-col gap-2">
-                            {order.defects.map((defect) => (
-                              <div className="w-full" key={defect.defectId}>
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={defect.defectName}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            ))}
-
-                            {order.listingDopDefect && (
-                              <div className="col-12">
-                                <InputView
-                                  labelClassName="block text-sm font-medium mb-1"
-                                  value={order.listingDopDefect}
-                                  inputClassName="form-input w-full"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </section>
-                      )}
-
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                           Photos
@@ -570,13 +541,27 @@ const Order = (order) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Listing Rental Terms
+                          Defects By Tenant
                         </h2>
 
                         <div className="w-full">
                           <TextareaView
-                            name="rentalTerms"
-                            value={order.listingRentalTerms}
+                            name="defect-by-tenant"
+                            value={order.defectDescriptionByTenant ?? "-"}
+                            row="7"
+                          />
+                        </div>
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Defects By Owner
+                        </h2>
+
+                        <div className="w-full">
+                          <TextareaView
+                            name="defect-by-owner"
+                            value={order.defectDescriptionByOwner ?? "-"}
                             row="7"
                           />
                         </div>
@@ -599,9 +584,16 @@ const Order = (order) => {
                             prevPricePerDay={
                               order.prevPricePerDay ?? order.offerPricePerDay
                             }
-                            prevTotalPrice={
-                              order.prevFactTotalPrice ?? order.factTotalPrice
-                            }
+                            prevTotalPrice={calculateCurrentTotalPrice({
+                              isOwner: false,
+                              startDate:
+                                order.prevStartDate ?? order.offerStartDate,
+                              endDate: order.prevEndDate ?? order.offerEndDate,
+                              pricePerDay:
+                                order.prevPricePerDay ?? order.offerPricePerDay,
+                              ownerFee: order.ownerFee,
+                              tenantFee: order.tenantFee,
+                            })}
                             prevSenderName={order.tenantName}
                             prevGetterName={order.ownerName}
                             needBottomMargin={true}
@@ -614,7 +606,14 @@ const Order = (order) => {
                               prevStartDate={request.newStartDate}
                               prevEndDate={request.newEndDate}
                               prevPricePerDay={request.newPricePerDay}
-                              prevTotalPrice={request.newFactTotalPrice}
+                              prevTotalPrice={calculateCurrentTotalPrice({
+                                isOwner: false,
+                                startDate: request.newStartDate,
+                                endDate: request.newEndDate,
+                                pricePerDay: request.newPricePerDay,
+                                ownerFee: order.ownerFee,
+                                tenantFee: request.newFee,
+                              })}
                               prevSenderName={
                                 request.senderId == order.tenantId
                                   ? order.tenantName
