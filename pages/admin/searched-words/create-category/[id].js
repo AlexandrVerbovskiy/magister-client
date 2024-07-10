@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   createCategoryBySearchWord,
   getSearchedWordById,
@@ -17,6 +17,7 @@ import ImageView from "../../../../components/admin/Form/ImageView";
 import STATIC from "../../../../static";
 import ENV from "../../../../env";
 import { getFilePath } from "../../../../utils";
+import YesNoModal from "../../../../components/admin/YesNoModal";
 
 const createCategoryBySearch = ({
   searchedWord,
@@ -31,6 +32,7 @@ const createCategoryBySearch = ({
     prevCategory?.image ? getFilePath(prevCategory.image) : null
   );
   const [openImage, setOpenImage] = useState(false);
+  const [confirmModalActive, setConfirmModalActive] = useState(true);
 
   const handlePhotoChange = (e) => {
     const img = e.target.files[0];
@@ -54,7 +56,7 @@ const createCategoryBySearch = ({
       default: index === 0,
     }));
 
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { success, authToken } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [level, setLevel] = useState(baseLevel);
   const [name, setName] = useState(baseName);
@@ -352,7 +354,10 @@ const createCategoryBySearch = ({
                       {!prevCategory && (
                         <button
                           type="button"
-                          onClick={handleSaveClick}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmModalActive(true);
+                          }}
                           className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
                         >
                           Create
@@ -365,6 +370,16 @@ const createCategoryBySearch = ({
             </div>
           </div>
         </main>
+
+        <YesNoModal
+          title="Confirm action"
+          body={`Confirmation is required to continue. Are you sure you want to create category "${name}"?`}
+          modalOpen={confirmModalActive}
+          handleCloseModal={() => setConfirmModalActive(false)}
+          onAccept={handleSaveClick}
+          acceptText="Confirm"
+          cancelText="Cancel"
+        />
       </div>
     </div>
   );

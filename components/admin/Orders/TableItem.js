@@ -32,7 +32,8 @@ const TableItem = (props) => {
     offerEndDate,
     offerPricePerDay,
     listingAddress,
-    listingCategoryName,
+    listingCategoryName = null,
+    listingOtherCategory = null,
     payedType,
     payedAdminApproved,
     payedWaitingApproved,
@@ -108,7 +109,7 @@ const TableItem = (props) => {
               canMove={isAdmin}
             />
             <SubInfoRow label="Name" value={listingName} />
-            <SubInfoRow label="Category" value={listingCategoryName} />
+            <SubInfoRow label="Category" value={listingCategoryName ?? listingOtherCategory} />
             <SubInfoRow label="Location" value={listingAddress} />
             <SubInfoRow label="Times rented" value={listingRentalCount} />
             <SubInfoRowWithChild label="Rating">

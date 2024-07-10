@@ -1,18 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
-import Sidebar from "../../partials/admin/Sidebar";
-import Header from "../../partials/admin/Header";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import { adminSideProps } from "../../middlewares";
-import { useAdminPage } from "../../hooks";
-import { IndiceContext } from "../../contexts";
+import Sidebar from "../../../partials/admin/Sidebar";
+import Header from "../../../partials/admin/Header";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import { adminSideProps } from "../../../middlewares";
+import { useAdminPage } from "../../../hooks";
+import { IndiceContext } from "../../../contexts";
 import {
   getListingCategoriesList,
   saveListingCategories,
-} from "../../services/listingCategories";
-import CategoryList from "../../partials/admin/listingCategories/CategoryList";
-import { byteConverter, uniqueId } from "../../utils";
+} from "../../../services/listingCategories";
+import CategoryList from "../../../partials/admin/listingCategories/CategoryList";
+import { byteConverter, uniqueId } from "../../../utils";
 import lodash from "lodash";
-import env from "../../env";
+import env from "../../../env";
 
 const ListingCategories = ({ categories: baseCategories }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();

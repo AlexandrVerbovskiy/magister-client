@@ -8,7 +8,11 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  getListingImageByType,
+} from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -38,7 +42,8 @@ const TableItem = ({
   listingMinRentalDays,
   listingCountStoredItems,
   listingCategoryId,
-  listingCategoryName,
+  listingCategoryName = null,
+  listingOtherCategory = null,
   images,
   openPopupImage,
   handleApproveClick,
@@ -68,7 +73,9 @@ const TableItem = ({
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div>
-            <Link href={`/admin/listings/edit/${listingId}`}>{listingName}</Link>
+            <Link href={`/admin/listings/edit/${listingId}`}>
+              {listingName}
+            </Link>
           </div>
         </td>
 
@@ -155,10 +162,13 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Item Details"
-                      href={"/listing/" + listingId}
+                      href={"/listings/" + listingId}
                     />
                     <SubInfoRow label="Name" value={listingName} />
-                    <SubInfoRow label="Category" value={listingCategoryName} />
+                    <SubInfoRow
+                      label="Category"
+                      value={listingCategoryName ?? listingOtherCategory}
+                    />
                     <SubInfoRow
                       label="Price Per Day"
                       value={listingPricePerDay}
@@ -168,7 +178,7 @@ const TableItem = ({
                       value={listingCountStoredItems}
                     />
                     <SubInfoRow
-                      label="Min Rental Days"
+                      label="Minimum Rental Days"
                       value={listingMinRentalDays ?? "-"}
                     />
 

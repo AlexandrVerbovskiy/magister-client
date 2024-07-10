@@ -1,10 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import DateInput from "../FormComponents/DateInput";
-import {
-  dateToInputString,
-  leveliseCategories,
-  separateDate,
-} from "../../utils";
+import { leveliseCategories } from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 import PriceRangeSlider from "../FormComponents/PriceRangeSlider";
 
@@ -16,10 +11,6 @@ const Sidebar = ({
   setSelectedCategories,
   selectedDistance,
   setSelectedDistance,
-  fromDateFilter,
-  setFromDateFilter,
-  toDateFilter,
-  setToDateFilter,
   cities: baseCities,
   searchCity,
   searchCategory,
@@ -31,6 +22,8 @@ const Sidebar = ({
   handleChangePrices,
   minLimitPrice,
   maxLimitPrice,
+  othersCategories,
+  setOthersCategories,
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -59,7 +52,6 @@ const Sidebar = ({
 
   const categories = leveliseCategories(baseCategories);
 
-  const [mainFilterOpen, setMainFilterOpen] = useState(true);
   const [priceFilterOpen, setPriceFilterOpen] = useState(true);
   const [categoriesOpen, setCategoriesOpen] = useState(true);
   const [cityOpen, setCityOpen] = useState(true);
@@ -93,26 +85,31 @@ const Sidebar = ({
     setInterval(updateTimeFilterHeight, 250);
   }, []);
 
-  const handleChangeCheckedCategory = (value) => {
-    let newSelectedCategories = selectedCategories;
-    let needRemoveSearch = false;
-
-    if (
-      selectedCategories.includes(value) ||
-      (searchCategory && value.toLowerCase() === searchCategory.toLowerCase())
-    ) {
-      newSelectedCategories = newSelectedCategories.filter(
-        (category) => category != value
-      );
-
-      if (searchCategory) {
-        needRemoveSearch = value.toLowerCase() === searchCategory.toLowerCase();
-      }
+  const handleChangeCheckedCategory = (value, id) => {
+    if (id === "-") {
+      setOthersCategories(!othersCategories);
     } else {
-      newSelectedCategories = [...newSelectedCategories, value];
-    }
+      let newSelectedCategories = selectedCategories;
+      let needRemoveSearch = false;
 
-    setSelectedCategories(newSelectedCategories, needRemoveSearch);
+      if (
+        selectedCategories.includes(value) ||
+        (searchCategory && value.toLowerCase() === searchCategory.toLowerCase())
+      ) {
+        newSelectedCategories = newSelectedCategories.filter(
+          (category) => category != value
+        );
+
+        if (searchCategory) {
+          needRemoveSearch =
+            value.toLowerCase() === searchCategory.toLowerCase();
+        }
+      } else {
+        newSelectedCategories = [...newSelectedCategories, value];
+      }
+
+      setSelectedCategories(newSelectedCategories, needRemoveSearch);
+    }
   };
 
   const handleChangeCheckedCity = (value) => {
@@ -143,31 +140,28 @@ const Sidebar = ({
     }
   };
 
-  const handleFromDateFilterChange = (value) => {
-    setFromDateFilter(value);
+  const CategoryLi = ({ category, style = {} }) => {
+    const checked =
+      category.id === "-"
+        ? othersCategories
+        : selectedCategoriesLower.includes(category.name.toLowerCase());
 
-    if (!toDateFilter || value > toDateFilter) {
-      setToDateFilter(value);
-    }
+    return (
+      <li key={category.name} style={style}>
+        <input
+          id={category.name}
+          type="checkbox"
+          name={`categories[${category.name}]`}
+          onChange={() =>
+            handleChangeCheckedCategory(category.name, category.id)
+          }
+          checked={checked}
+          value={category.name}
+        />
+        <label htmlFor={category.name}>{category.name} </label>
+      </li>
+    );
   };
-
-  const handleToDateFilterChange = (value) => {
-    setToDateFilter(value);
-  };
-
-  const CategoryLi = ({ category, style = {} }) => (
-    <li key={category.name} style={style}>
-      <input
-        id={category.name}
-        type="checkbox"
-        name={`categories[${category.name}]`}
-        onChange={() => handleChangeCheckedCategory(category.name)}
-        checked={selectedCategoriesLower.includes(category.name.toLowerCase())}
-        value={category.name}
-      />
-      <label htmlFor={category.name}>{category.name} </label>
-    </li>
-  );
 
   const FirstCategoryLevelLi = ({ item }) => (
     <>
@@ -326,9 +320,7 @@ const Sidebar = ({
             title="Categories"
             open={categoriesOpen}
             setOpen={setCategoriesOpen}
-            items={categories.sort((a, b) =>
-              ("" + a.name).localeCompare(b.name)
-            )}
+            items={categories}
             selectedItems={selectedCategories}
             handleChangeChecked={handleChangeCheckedCategory}
             LiItemElement={FirstCategoryLevelLi}

@@ -23,7 +23,7 @@ const BurgerIcon = () => (
 
 const CategoryOption = ({
   category,
-  onClick,
+  onClick = () => {},
   href = null,
   active = false,
   Icon = null,
@@ -163,7 +163,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
       closeModal={() => setActive(false)}
       needCloseBtn={false}
     >
-      <div className="d-flex w-100" style={{height: "max-content"}}>
+      <div className="d-flex w-100" style={{ height: "max-content" }}>
         <div className="categories-select-level-column sidebar-left">
           <CategoryOption
             key="all"
@@ -194,6 +194,13 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 }}
               />
             ))}
+
+          <CategoryOption
+            key="-"
+            category={{ image: null, name: "Others" }}
+            active={false}
+            href="/listing-list?others-categories=true"
+          />
         </div>
 
         <div className="categories-select-level-column sidebar-left">

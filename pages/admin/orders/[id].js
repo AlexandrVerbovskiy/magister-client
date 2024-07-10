@@ -178,7 +178,10 @@ const Order = (order) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={order.listingCategoryName}
+                                value={
+                                  order.listingCategoryName ??
+                                  order.listingOtherCategory
+                                }
                                 label="Category"
                                 placeholder="category"
                                 name="categoryName"
@@ -439,7 +442,7 @@ const Order = (order) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Location
+                          Collection Location
                         </h2>
 
                         <div className="flex flex-col gap-2">
@@ -527,7 +530,7 @@ const Order = (order) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Listing Details
+                          Item Description
                         </h2>
 
                         <div className="w-full">

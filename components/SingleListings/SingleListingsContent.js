@@ -135,16 +135,31 @@ const SingleListingsContent = ({
             <div className="container">
               <div className="container">
                 <div className="listings-details-content">
-                  {listing.categoryInfo.map((category, index) => (
-                    <span
-                      className="meta"
-                      key={category.name}
-                      style={index > 0 ? { marginLeft: "10px" } : {}}
-                    >
-                      <i className="flaticon-furniture-and-household"></i>
-                      {category.name}
-                    </span>
-                  ))}
+                  {listing.categoryInfo.length > 0 ? (
+                    <>
+                      {listing.categoryInfo.map((category, index) => (
+                        <span
+                          className="meta"
+                          key={category.name}
+                          style={index > 0 ? { marginLeft: "10px" } : {}}
+                        >
+                          <i className="flaticon-furniture-and-household"></i>
+                          {category.name}
+                        </span>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <span className="meta">
+                        <i className="flaticon-furniture-and-household"></i>
+                        {listing.otherCategory}
+                      </span>
+                      <span className="meta" style={{ marginLeft: "10px" }}>
+                        <i className="flaticon-furniture-and-household"></i>
+                        Others
+                      </span>
+                    </>
+                  )}
 
                   <h3
                     className="row-dots-end"
@@ -281,7 +296,7 @@ const SingleListingsContent = ({
                     </ul>
                   </div>
 
-                  <h3>Location</h3>
+                  <h3>Collection Location</h3>
                   <div style={{ height: "500px" }}>
                     <MultyMarkersMap
                       markers={[

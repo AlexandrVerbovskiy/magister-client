@@ -50,6 +50,7 @@ const TableItem = ({
   name,
   city,
   categoryName,
+  otherCategory,
   categoryId,
   approved,
   createdAt,
@@ -111,7 +112,7 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div className="font-medium">{categoryName}</div>
+          <div className="font-medium">{categoryName ?? otherCategory}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <ActiveSpan active={approved} />
@@ -147,11 +148,14 @@ const TableItem = ({
               href={"/admin/listings/edit/" + listingId}
             />
             <SubInfoRow label="Name" value={name} />
-            <SubInfoRow label="Category" value={categoryName} />
-            <SubInfoRow label="Location" value={address} />
+            <SubInfoRow
+              label="Category"
+              value={categoryName ?? otherCategory}
+            />
+            <SubInfoRow label="Collection Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays} />
+            <SubInfoRow label="Minimum Rental Days" value={minRentalDays} />
           </div>
         </td>
 

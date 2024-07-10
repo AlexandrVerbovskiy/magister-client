@@ -4816,6 +4816,16 @@ Listings Details Area CSS
   border-color: var(--mainColor);
 }
 
+.default-btn.error-btn {
+  box-shadow: 4px 4px rgb(255, 157, 157);
+  border-color: red;
+}
+
+.default-btn.error-btn:hover {
+  box-shadow: 4px 4px red;
+  border-color: red;
+}
+
 .order_widget .default-btn {
   background-color: var(--mainColor);
   color: var(--whiteColor);
@@ -6342,7 +6352,6 @@ Destinations Area CSS
   z-index: 1;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 5px 5px var(--whiteColor);
   margin-bottom: 35px;
 }
 .single-destinations-box img {
@@ -14063,7 +14072,6 @@ Dashboard CSS
 .my-profile-box form button {
   display: block;
   width: 100%;
-  background-color: #847bdd;
   color: var(--whiteColor);
   padding: 13px 30px 12.5px;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -14074,9 +14082,15 @@ Dashboard CSS
   font-weight: 600;
 }
 
-.add-listings-box.footer-section button:hover,
-.my-profile-box .form button:hover,
-.my-profile-box form button:hover {
+.add-listings-box.footer-section button:not(.button-danger),
+.my-profile-box .form button:not(.button-danger),
+.my-profile-box form button:not(.button-danger){
+  background-color: #847bdd;
+}
+
+.add-listings-box.footer-section button:not(.button-danger):hover,
+.my-profile-box .form button:not(.button-danger):hover,
+.my-profile-box form button:not(.button-danger):hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
 }
