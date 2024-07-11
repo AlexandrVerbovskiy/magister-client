@@ -615,55 +615,61 @@ const OrderContent = ({
         <h3>Collection Location</h3>
 
         <div className="row">
-          <div className="col-lg-6 col-md-6">
-            <InputView
-              value={order.listingCity}
-              label="City:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing City"
-            />
+          <div className="col-md-6">
+            <div className="row">
+              <div className="col-12 mb-1">
+                <InputView
+                  value={order.listingCity}
+                  label="City:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing City"
+                />
+              </div>
+
+              <div className="col-12 mb-1">
+                <InputView
+                  label="Postcode:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing Postcode"
+                  value={order.listingPostcode}
+                />
+              </div>
+
+              <div className="col-12 mb-1">
+                <InputView
+                  label="Address:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing Address"
+                  value={order.listingAddress}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="col-lg-6 col-md-6">
-            <InputView
-              label="Postcode:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing Postcode"
-              value={order.listingPostcode}
-            />
-          </div>
-
-          <div className="col-12 mb-1">
-            <InputView
-              label="Address:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing Address"
-              value={order.listingAddress}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <div className="form-group" style={{ height: "500px" }}>
-              <MultyMarkersMap
-                markers={[
-                  {
-                    id: 1,
-                    lat: order.listingRentalLat,
-                    lng: order.listingRentalLng,
-                    radius: order.listingRentalRadius,
-                  },
-                ]}
-                baseCenter={{
-                  lat: order.listingRentalLat,
-                  lng: order.listingRentalLng,
-                }}
-                userLocation={userLocation}
-                setUserLocation={setUserLocation}
-                center={mapCenter}
-                setCenter={setMapCenter}
-              />
+          <div className="col-md-6">
+            <div className="row">
+              <div className="col">
+                <div className="form-group mb-1" style={{ height: "300px" }}>
+                  <MultyMarkersMap
+                    markers={[
+                      {
+                        id: 1,
+                        lat: order.listingRentalLat,
+                        lng: order.listingRentalLng,
+                        radius: order.listingRentalRadius,
+                      },
+                    ]}
+                    baseCenter={{
+                      lat: order.listingRentalLat,
+                      lng: order.listingRentalLng,
+                    }}
+                    userLocation={userLocation}
+                    setUserLocation={setUserLocation}
+                    center={mapCenter}
+                    setCenter={setMapCenter}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

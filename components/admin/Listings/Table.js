@@ -21,6 +21,8 @@ const ListingsTable = ({
     { title: "", value: "actions", width: "5%", canOrder: false },
   ];
 
+  console.log(listings[0]);
+
   return (
     <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">

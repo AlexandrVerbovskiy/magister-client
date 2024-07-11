@@ -36,34 +36,9 @@ const DocumentView = ({ label, url }) => {
 const DocumentList = (documents) => {
   return (
     <div className="flex flex-row flex-wrap p-6 space-y-6 pt-0">
-      <DocumentView
-        url={documents.proofOfAddressLink}
-        label="Proof of Address"
-      />
-
-      <DocumentView
-        url={documents.reputableBankIdLink}
-        label="Reputable Bank Id"
-      />
-
-      <DocumentView url={documents.utilityLink} label="Utility" />
-
-      <DocumentView url={documents.hmrcLink} label="HMRC" />
-
-      <DocumentView
-        url={documents.councilTaxBillLink}
-        label="Council Tax Bill"
-      />
-
-      <DocumentView
-        url={documents.passportOrDrivingIdLink}
-        label="Passport Or Driving Id"
-      />
-
-      <DocumentView
-        url={documents.confirmMoneyLaunderingChecksAndComplianceLink}
-        label="Confirm Money Laundering Check And Compliance"
-      />
+      <DocumentView url={documents.userPhoto} label="User Photo" />
+      <DocumentView url={documents.documentFront} label="Document Front" />
+      <DocumentView url={documents.documentBack} label="Document Back" />
     </div>
   );
 };

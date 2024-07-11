@@ -19,6 +19,7 @@ const PointStarInfo = ({ label, value }) => {
         checked={true}
         checkedOnlyActive={true}
         uncheckedStarClassName="bxs-star"
+        commentCount={1}
       />
     </div>
   );

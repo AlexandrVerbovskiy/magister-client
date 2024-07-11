@@ -13329,6 +13329,7 @@ Dashboard CSS
   font-size: 22px;
   font-weight: 600;
 }
+
 /*.breadcrumb-area h1::before {
   content: "";
   position: absolute;
@@ -17146,10 +17147,6 @@ button.button-danger:hover {
   justify-content: center;
 }
 
-.document-verification > form {
-  padding-top: 0 !important;
-}
-
 .form-control[readonly],
 .form-control[disabled] {
   background-color: #dddddd !important;
@@ -18909,6 +18906,10 @@ span.flatpickr-weekday {
   border-radius: 50%;
 }
 
+.status-bar-step.active{
+  border-color: var(--mainColor);
+}
+
 .status-bar-title {
   font-weight: 500;
   font-size: 16px;
@@ -19499,4 +19500,97 @@ font-weight: 600;
 .listings-sidebar .order-proposal-info h3{
   font-size: 17px;
   font-weight: 600;
+}
+
+.document-verification h1 {
+  margin-bottom: 0;
+  position: relative;
+  color: var(--blackColor);
+  padding-right: 13px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.document-verification .sub-title{
+  background-color: transparent;
+  border-radius: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  padding-top: 5px;
+}
+
+.document-verification .main-section h1,
+.document-verification .main-section .sub-title{
+  text-align: center;
+}
+
+.document-verification .main-section img{
+  margin: 60px 0;
+}
+
+.document-verification button{
+  border-radius: 100px!important;
+  width: max-content!important;
+}
+
+.document-verification i{
+  font-size: 18px;
+}
+
+.document-verification .empty-photo-circle{
+  height: 400px;
+  border: 2px solid #666666;
+  border-radius: 100%;
+  max-width: 250px;
+}
+
+.document-verification .user-photo-right-section{
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 20px;
+}
+
+.document-verification .error-block{
+  color: red;
+}
+
+.document-verification .circle-section{
+  height: 300px;
+  width: 250px;
+  border-radius: 100%;
+  border: 2px solid #666666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.document-verification .document-section img{
+  margin: 40px 0 20px;
+}
+
+.document-verification .user-photo-section img{
+  height: 100%;
+}
+
+.document-verification .photo-input-section .sub-title{
+  font-size: 15px;
+  color: #666666;
+  margin-bottom: 20px;
+}
+
+.document-verification .photo-input-section img{
+  width: 135px;
+  height: 95px;
+  cursor: pointer;
+}
+
+.document-verification{
+  min-height: 400px;
+}
+
+.no-comments-rating{
+  font-size: 12px;
 }

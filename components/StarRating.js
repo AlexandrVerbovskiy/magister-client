@@ -9,7 +9,19 @@ const StarRating = ({
   centerAlign = false,
   checkedOnlyActive = false,
   uncheckedStarClassName = "bx-star",
+  emptyMaxWidth = null,
 }) => {
+  if (!commentCount) {
+    return (
+      <div
+        className="no-comments-rating"
+        style={emptyMaxWidth ? { maxWidth: emptyMaxWidth } : {}}
+      >
+        No reviews added to this item
+      </div>
+    );
+  }
+
   return (
     <div className={`rating ${centerAlign ? "d-flex align-items-center" : ""}`}>
       {[0, 1, 2, 3, 4].map((value) => {

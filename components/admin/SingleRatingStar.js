@@ -1,4 +1,20 @@
-const SingleRatingStar = ({ value, bodyColor = "rgb(248 250 252)" }) => {
+const SingleRatingStar = ({
+  value,
+  count = 0,
+  bodyColor = "rgb(248 250 252)",
+  emptyMaxWidth = null,
+}) => {
+  if (!count) {
+    return (
+      <div
+        className="no-comments-rating"
+        style={emptyMaxWidth ? { maxWidth: emptyMaxWidth } : {}}
+      >
+        No reviews added to this item
+      </div>
+    );
+  }
+
   if (!value) {
     value = 0;
   }

@@ -49,7 +49,9 @@ const TableItem = ({
   handleApproveClick,
   handleRejectClick,
   reviewerAverageRating,
+  reviewerCommentCount,
   listingAverageRating,
+  listingCommentCount,
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -154,7 +156,10 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={reviewerAverageRating} />
+                      <SingleRatingStar
+                        value={reviewerAverageRating}
+                        count={reviewerCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -183,7 +188,10 @@ const TableItem = ({
                     />
 
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={listingAverageRating} />
+                      <SingleRatingStar
+                        value={listingAverageRating}
+                        count={listingCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>

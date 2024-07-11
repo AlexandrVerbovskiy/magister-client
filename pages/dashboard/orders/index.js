@@ -7,12 +7,7 @@ import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import { authSideProps } from "../../../middlewares";
 import { useRouter } from "next/router";
-import {
-  useChangeTimeFilter,
-  useInitPaginationTimeFilter,
-  useOrderFastActions,
-  usePagination,
-} from "../../../hooks";
+import { useOrderFastActions, usePagination } from "../../../hooks";
 import OrderItem from "../../../components/Order/OrderItem";
 import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";

@@ -69,6 +69,7 @@ const TableItem = ({
   handleApproveClick,
   handleRejectClick,
   ownerAverageRating,
+  ownerCommentCount,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -210,7 +211,10 @@ const TableItem = ({
                       value={userPhone && userPhone.length ? userPhone : "-"}
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={ownerAverageRating} />
+                      <SingleRatingStar
+                        value={ownerAverageRating}
+                        count={ownerCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>

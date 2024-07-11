@@ -8,7 +8,12 @@ import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
 import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
-import { generateProfileFilePath, getFilePath, moneyFormat, dateConverter } from "../../../utils";
+import {
+  generateProfileFilePath,
+  getFilePath,
+  moneyFormat,
+  dateConverter,
+} from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -104,6 +109,8 @@ const TableItem = ({
   twitterUrl,
   ownerAverageRating,
   tenantAverageRating,
+  ownerCommentCount,
+  tenantCommentCount,
   tenantDisputesCount,
   ownerDisputesCount,
 }) => {
@@ -317,10 +324,16 @@ const TableItem = ({
                     />
 
                     <SubInfoRowWithChild label="Tenant">
-                      <SingleRatingStar value={tenantAverageRating} />
+                      <SingleRatingStar
+                        value={tenantAverageRating}
+                        count={tenantCommentCount}
+                      />
                     </SubInfoRowWithChild>
                     <SubInfoRowWithChild label="Owner">
-                      <SingleRatingStar value={ownerAverageRating} />
+                      <SingleRatingStar
+                        value={ownerAverageRating}
+                        count={ownerCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>

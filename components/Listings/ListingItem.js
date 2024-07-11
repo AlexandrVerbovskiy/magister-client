@@ -8,7 +8,6 @@ import {
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import STATIC from "../../static";
 import StarRating from "../StarRating";
 import { changeListingFavorite } from "../../services";
 import { useContext, useState } from "react";
@@ -136,6 +135,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           <StarRating
             averageRating={listing["averageRating"] ?? 0}
             commentCount={listing["commentCount"] ?? 0}
+            emptyMaxWidth="120px"
           />
 
           <div className="price">

@@ -441,13 +441,13 @@ const Order = (order) => {
                       </section>
 
                       <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Collection Location
-                        </h2>
+                        <div className="flex w-full gap-2">
+                          <div className="w-full sm:w-1/2">
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Collection Location
+                            </h2>
 
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <InputView
                                 name="city"
                                 label="City"
@@ -458,7 +458,7 @@ const Order = (order) => {
                               />
                             </div>
 
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <InputView
                                 name="postcode"
                                 label="Postcode"
@@ -468,41 +468,43 @@ const Order = (order) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+
+                            <div className="w-full mb-2">
+                              <InputView
+                                name="address"
+                                label="Address"
+                                placeholder="e.g. 55 County Laois"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={order.listingAddress}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
                           </div>
 
-                          <div className="w-full">
-                            <InputView
-                              name="address"
-                              label="Address"
-                              placeholder="e.g. 55 County Laois"
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={order.listingAddress}
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div
-                            className="flex w-full admin-map-parent"
-                            style={{ height: "500px" }}
-                          >
-                            <MultyMarkersMap
-                              userLocation={userLocation}
-                              setUserLocation={setUserLocation}
-                              markers={[
-                                {
-                                  id: 1,
+                          <div className="w-full sm:w-1/2">
+                            <div
+                              className="flex w-full admin-map-parent mb-2"
+                              style={{ height: "240px" }}
+                            >
+                              <MultyMarkersMap
+                                userLocation={userLocation}
+                                setUserLocation={setUserLocation}
+                                markers={[
+                                  {
+                                    id: 1,
+                                    lat: order.listingRentalLat,
+                                    lng: order.listingRentalLng,
+                                    radius: order.rentalRadius,
+                                  },
+                                ]}
+                                baseCenter={{
                                   lat: order.listingRentalLat,
                                   lng: order.listingRentalLng,
-                                  radius: order.rentalRadius,
-                                },
-                              ]}
-                              baseCenter={{
-                                lat: order.listingRentalLat,
-                                lng: order.listingRentalLng,
-                              }}
-                              center={mapCenter}
-                              setCenter={setMapCenter}
-                            />
+                                }}
+                                center={mapCenter}
+                                setCenter={setMapCenter}
+                              />
+                            </div>
                           </div>
                         </div>
                       </section>
