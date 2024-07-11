@@ -30,7 +30,7 @@ const PointStarInfo = ({ label, value }) => {
   return (
     <div style={{ width: "150px" }}>
       <label>{label}</label>
-      <SingleRatingStar value={value} />
+      <SingleRatingStar value={value} count={1} />
     </div>
   );
 };

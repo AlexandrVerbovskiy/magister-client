@@ -45,6 +45,8 @@ const TableItem = ({
 
   reviewerAverageRating,
   userAverageRating,
+  reviewerCommentCount,
+  userCommentCount,
 
   rejectedDescription = null,
 }) => {
@@ -159,7 +161,10 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={reviewerAverageRating} />
+                      <SingleRatingStar
+                        value={reviewerAverageRating}
+                        count={reviewerCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -179,7 +184,10 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={userAverageRating} />
+                      <SingleRatingStar
+                        value={userAverageRating}
+                        count={userCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>

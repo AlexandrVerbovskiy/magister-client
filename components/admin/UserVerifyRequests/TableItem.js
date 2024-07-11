@@ -47,20 +47,11 @@ const TableItem = ({
 
   const canMoveToUser = sessionUser?.id != userId;
 
-  let approvementPhoto = null;
-
-  for (let i = 0; i < Object.keys(documents).length; i++) {
-    const document = documents[Object.keys(documents)[i]];
-
-    if (document) {
-      approvementPhoto = document;
-      break;
-    }
-  }
-
-  const fullApprovementPhotoPath = approvementPhoto
-    ? getFilePath(approvementPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const userPhotoPath = generateProfileFilePath(documents.userPhoto);
+  const frontDocumentPhotoPath = generateProfileFilePath(
+    documents.documentFront
+  );
+  const backDocumentPhotoPath = generateProfileFilePath(documents.documentBack);
 
   return (
     <>
@@ -197,7 +188,7 @@ const TableItem = ({
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div className="h-full">
                     <div className="font-semibold flex items-center">
-                      Picture
+                      User Photo
                     </div>
 
                     <div
@@ -206,10 +197,10 @@ const TableItem = ({
                     >
                       <div
                         className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullPhotoPath)}
+                        onClick={() => openPopupImage(userPhotoPath)}
                       >
                         <img
-                          src={fullPhotoPath}
+                          src={userPhotoPath}
                           alt="image"
                           width="200px"
                           height="200px"
@@ -229,10 +220,27 @@ const TableItem = ({
                     >
                       <div
                         className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullApprovementPhotoPath)}
+                        onClick={() => openPopupImage(frontDocumentPhotoPath)}
                       >
                         <img
-                          src={fullApprovementPhotoPath}
+                          src={frontDocumentPhotoPath}
+                          alt="image"
+                          width="200px"
+                          height="200px"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px", height: "200px" }}
+                    >
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() => openPopupImage(backDocumentPhotoPath)}
+                      >
+                        <img
+                          src={backDocumentPhotoPath}
                           alt="image"
                           width="200px"
                           height="200px"

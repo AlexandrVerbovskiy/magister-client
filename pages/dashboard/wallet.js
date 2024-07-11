@@ -77,7 +77,7 @@ const Wallet = ({
           </ol>
         </div>
 
-        <div className="row jistify-content-center">
+        <div className="row justify-content-center">
           <div className="col-lg-4 col-md-6 col-sm-6">
             <div className="stats-card-box">
               <div className="icon-box">

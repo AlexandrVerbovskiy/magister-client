@@ -114,6 +114,21 @@ const DashboardNavbar = () => {
 
             <li className="nav-item">
               <Link
+                href="/dashboard/chats/"
+                className={`nav-link ${
+                  currentPath.includes("/dashboard/chats/") && "active"
+                }  ${!sessionUser?.verified ? "disabled" : ""}`}
+                onClick={needVerifyAccount}
+              >
+                <span className="icon">
+                  <i className="bx bx-message-detail"></i>
+                </span>
+                <span className="menu-title">Chat</span>
+              </Link>
+            </li>
+
+            <li className="nav-item">
+              <Link
                 href="/dashboard/wallet/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/wallet/") && "active"

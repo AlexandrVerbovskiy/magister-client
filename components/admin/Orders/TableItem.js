@@ -41,6 +41,9 @@ const TableItem = (props) => {
     tenantAverageRating,
     ownerAverageRating,
     listingAverageRating,
+    tenantCommentCount,
+    ownerCommentCount,
+    listingCommentCount,
     payedId,
   } = props;
   const { sessionUser, isAdmin } = useContext(IndiceContext);
@@ -109,11 +112,17 @@ const TableItem = (props) => {
               canMove={isAdmin}
             />
             <SubInfoRow label="Name" value={listingName} />
-            <SubInfoRow label="Category" value={listingCategoryName ?? listingOtherCategory} />
+            <SubInfoRow
+              label="Category"
+              value={listingCategoryName ?? listingOtherCategory}
+            />
             <SubInfoRow label="Location" value={listingAddress} />
             <SubInfoRow label="Times rented" value={listingRentalCount} />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={listingAverageRating} />
+              <SingleRatingStar
+                value={listingAverageRating}
+                count={listingCommentCount}
+              />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -132,7 +141,10 @@ const TableItem = (props) => {
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={ownerAverageRating} />
+              <SingleRatingStar
+                value={ownerAverageRating}
+                ownerCommentCount={ownerCommentCount}
+              />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -151,7 +163,10 @@ const TableItem = (props) => {
               value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={tenantAverageRating} />
+              <SingleRatingStar
+                value={tenantAverageRating}
+                count={tenantCommentCount}
+              />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -159,7 +174,10 @@ const TableItem = (props) => {
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
             <div className="font-semibold">Payment</div>
-            <SubInfoRow label="Method" value={getPaymentNameByType(payedType)} />
+            <SubInfoRow
+              label="Method"
+              value={getPaymentNameByType(payedType)}
+            />
             <div className="mt-1 flex">
               <span className="text-black">Status: </span>{" "}
               {payedAdminApproved ? (

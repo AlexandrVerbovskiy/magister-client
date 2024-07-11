@@ -763,13 +763,13 @@ const EditForm = ({ listing, categories, save }) => {
                       </section>
 
                       <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Collection Location
-                        </h2>
+                        <div className="flex w-full gap-2">
+                          <div className="w-full sm:w-1/2">
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Collection Location
+                            </h2>
 
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <label
                                 className="block text-sm font-medium mb-1"
                                 htmlFor="role"
@@ -784,7 +784,7 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                             </div>
 
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <Input
                                 name="postcode"
                                 label="Postcode"
@@ -797,34 +797,37 @@ const EditForm = ({ listing, categories, save }) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+
+                            <div className="w-full mb-2">
+                              <Input
+                                name="address"
+                                label="Address"
+                                placeholder="e.g. 55 County Laois"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={address}
+                                setValue={handleChangeAddress}
+                                error={addressError}
+                                setError={setAddressError}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
                           </div>
 
-                          <div className="w-full mb-2">
-                            <Input
-                              name="address"
-                              label="Address"
-                              placeholder="e.g. 55 County Laois"
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={address}
-                              setValue={handleChangeAddress}
-                              error={addressError}
-                              setError={setAddressError}
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div className="flex w-full admin-map-parent">
-                            <EditMap
-                              markerActive={markerActive}
-                              setMarkerActive={setMarkerActive}
-                              center={center}
-                              setCenter={setCenter}
-                              lat={lat}
-                              lng={lng}
-                              changeCoords={handleChangeCoords}
-                              radius={radius}
-                              setRadius={setRadius}
-                            />
+                          <div className="w-full sm:w-1/2">
+                            <div className="flex w-full admin-map-parent mb-2">
+                              <EditMap
+                                markerActive={markerActive}
+                                setMarkerActive={setMarkerActive}
+                                center={center}
+                                setCenter={setCenter}
+                                lat={lat}
+                                lng={lng}
+                                changeCoords={handleChangeCoords}
+                                radius={radius}
+                                setRadius={setRadius}
+                                height="240px"
+                              />
+                            </div>
                           </div>
                         </div>
                       </section>

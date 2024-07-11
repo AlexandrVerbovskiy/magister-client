@@ -62,7 +62,9 @@ const TableItem = ({
   address,
   minRentalDays,
   averageRating,
+  commentCount,
   ownerAverageRating,
+  ownerCommentsCount,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -168,7 +170,7 @@ const TableItem = ({
               value={minRentalDays || "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={averageRating} />
+              <SingleRatingStar value={averageRating} count={commentCount} />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -213,7 +215,10 @@ const TableItem = ({
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={ownerAverageRating} />
+              <SingleRatingStar
+                value={ownerAverageRating}
+                count={ownerCommentsCount}
+              />
             </SubInfoRowWithChild>
           </div>
         </td>

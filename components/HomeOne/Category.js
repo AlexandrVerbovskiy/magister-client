@@ -30,13 +30,13 @@ const Category = ({ topCategories, needShowMore }) => {
                   <div className="icon overflow-hidden d-flex justify-content-center">
                     {info.image && <img src={getFilePath(info.image)} />}
                   </div>
-                  <div>
-                    <h3>{info.name}</h3>
-                    <span>{info.countListings} Listings</span>
+                  <div className="row-dots-end">
+                    <h3 className="row-dots-end">{info.name}</h3>
+                    <span className="row-dots-end">{info.countListings} Listings</span>
                   </div>
                   <Link
                     href={`/listing-list/?categories=${info.name}`}
-                    className="link-btn"
+                    className="link-btn row-dots-end"
                   ></Link>
                 </div>
               </div>

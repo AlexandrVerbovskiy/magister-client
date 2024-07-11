@@ -349,7 +349,7 @@ const EditForm = ({
             }
 
             const photoWithPreview = Object.assign(newFile, {
-              preview: img.src, // Використовуємо вже створений URL
+              preview: img.src,
               localId: uniqueImageId(),
               date: Date.now(),
             });
@@ -860,56 +860,61 @@ const EditForm = ({
               only be shared with the renter once you approve the rental.
             </div>
           </h3>
-
           <div className="row">
-            <div className="col-lg-6 col-md-6">
-              <SelectWithIcon
-                onChange={handleChangeCity}
-                value={city}
-                label="City:"
-                icon="bx bx-menu-alt-left"
-                options={cityOptions}
-                isSearchable={false}
-                name="city"
-              />
-            </div>
+            <div className="col-md-6">
+              <div className="row">
+                <div className="col-12">
+                  <SelectWithIcon
+                    onChange={handleChangeCity}
+                    value={city}
+                    label="City:"
+                    icon="bx bx-menu-alt-left"
+                    options={cityOptions}
+                    isSearchable={false}
+                    name="city"
+                  />
+                </div>
 
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Postcode:"
-                icon="bx bx-menu-alt-left"
-                placeholder="WA1 1AF"
-                value={postcode}
-                onInput={handleChangePostcode}
-                error={postcodeError}
-                name="postcode"
-              />
-            </div>
+                <div className="col-12">
+                  <InputWithIcon
+                    label="Postcode:"
+                    icon="bx bx-menu-alt-left"
+                    placeholder="WA1 1AF"
+                    value={postcode}
+                    onInput={handleChangePostcode}
+                    error={postcodeError}
+                    name="postcode"
+                  />
+                </div>
 
-            <div className="col-12 mb-1">
-              <InputWithIcon
-                label="Address:"
-                icon="bx bx-menu-alt-left"
-                placeholder="e.g. 55 County Laois"
-                value={address}
-                onInput={handleChangeAddress}
-                error={addressError}
-                name="address"
+                <div className="col-12">
+                  <InputWithIcon
+                    label="Address:"
+                    icon="bx bx-menu-alt-left"
+                    placeholder="e.g. 55 County Laois"
+                    value={address}
+                    onInput={handleChangeAddress}
+                    error={addressError}
+                    name="address"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="col-md-6">
+              <EditMap
+                markerActive={markerActive}
+                setMarkerActive={setMarkerActive}
+                center={center}
+                setCenter={setCenter}
+                lat={lat}
+                changeCoords={handleChangeCoords}
+                lng={lng}
+                radius={radius}
+                setRadius={setRadius}
               />
             </div>
           </div>
-
-          <EditMap
-            markerActive={markerActive}
-            setMarkerActive={setMarkerActive}
-            center={center}
-            setCenter={setCenter}
-            lat={lat}
-            changeCoords={handleChangeCoords}
-            lng={lng}
-            radius={radius}
-            setRadius={setRadius}
-          />
         </div>
 
         <EditPhotosSection
