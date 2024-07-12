@@ -34,8 +34,11 @@ const BeforeTheRental = () => {
             </div>
           </div>
 
-          <div className="col-lg-4 col-md-12 d-flex justify-content-center">
-            <img src="/images/right-rental-info.png" />
+          <div className="col-lg-4 col-md-12 d-flex justify-content-center overflow-hidden">
+            <img
+              src="/images/right-rental-info.svg"
+              style={{ transform: "scale(2)" }}
+            />
           </div>
         </div>
       </div>

@@ -17631,7 +17631,11 @@ button.button-danger:hover {
 }
 
 .cursor-pointer {
-  cursor: pointer;
+  cursor: pointer!important;
+}
+
+.cursor-auto {
+  cursor: auto!important;
 }
 
 .no-listing-found,

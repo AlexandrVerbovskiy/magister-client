@@ -156,12 +156,8 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
       });
 
       onLogin(res.user);
-
       setCodeModalActive(false);
-
-      if (res.user.needRegularViewInfoForm) {
-        router.push("/dashboard/profile-edit");
-      }
+      router.push("/dashboard/profile-edit");
 
       mainSuccess.set("Successfully logged in");
       setCode("");
