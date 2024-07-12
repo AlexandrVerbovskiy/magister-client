@@ -7,8 +7,11 @@ const DuringRental = () => {
     <section className="category-area pt-100 pb-100">
       <div className="container">
         <div className="row">
-          <div className="col-lg-4 col-md-12 d-flex justify-content-center">
-            <img src="/images/left-rental-info.png" />
+          <div className="col-lg-4 col-md-12 d-flex justify-content-center overflow-hidden">
+            <img
+              src="/images/left-rental-info.svg"
+              style={{ transform: "scale(2)" }}
+            />
           </div>
           <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
             <div className="d-flex flex-column justify-content-between h-100">
