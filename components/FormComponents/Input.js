@@ -7,16 +7,19 @@ const Input = ({
   placeholder,
   error,
   onInput,
+  inputClassName = "form-control",
+  Icon = null,
 }) => (
   <div className="form-group">
     <input
       name={name}
       type={type}
       placeholder={placeholder}
-      className={`form-control${error ? " is-invalid" : ""}`}
+      className={`${inputClassName}${error ? " is-invalid" : ""}`}
       value={value}
       onInput={onInput}
     />
+    {Icon && <Icon />}
 
     <ErrorSpan error={error} />
   </div>

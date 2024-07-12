@@ -504,14 +504,16 @@ const ProfileEdit = ({ newPaypalId }) => {
         active={activeCodePhoneModal}
         closeModal={toggleCodePhoneModal}
       >
-        <span className="sub-title mb-2">
+        <span className="sub-title mb-0">
           <span>Enter Verified Code</span>
         </span>
 
-        <form method="get">
-          You received a verification code on your mobile phone. Copy and paste it in
-          the field below
-          <div className="form-group">
+        <form className="mt-0" method="get">
+          <span style={{ fontSize: "12px" }}>
+            You received a verification code on your mobile phone. Copy and
+            paste it in the field below
+          </span>
+          <div className="form-group mt-2">
             <input
               value={phoneCode}
               onInput={handleInputPhoneCode}
