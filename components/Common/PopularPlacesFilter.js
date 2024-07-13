@@ -12,7 +12,10 @@ const PopularPlacesFilter = ({
   cities,
   searchCity: baseSearchCity = null,
   searchCategory: baseSearchCategory = null,
+  searchListing: baseListing = null,
 }) => {
+  const router = useRouter();
+
   let notFoundCategory = "";
   let notFoundCity = "";
 
@@ -44,8 +47,6 @@ const PopularPlacesFilter = ({
     }
   });
 
-  const router = useRouter();
-
   const {
     handleChangeCity,
     handleCategoryTipClick,
@@ -63,9 +64,12 @@ const PopularPlacesFilter = ({
     closeCategoryTipsPopup,
     categoryFilterRef,
     cityFilterRef,
+    handleChangeSearchListingName,
+    searchListingName,
   } = useCategoryCity({
     baseCity: baseSearchCity ?? notFoundCity,
     baseCategory: baseSearchCategory ?? notFoundCategory,
+    baseListing: baseListing ?? "",
   });
 
   const handleKeyPress = (event) => {
@@ -74,8 +78,15 @@ const PopularPlacesFilter = ({
     }
   };
 
-  const handleSubmit = () => {
-    const link = getFullListingSearchLink(searchCity, searchCategory);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const link = getFullListingSearchLink({
+      searchCity,
+      searchCategory,
+      searchListing: searchListingName,
+    });
+
     router.push(link);
   };
 
@@ -84,32 +95,21 @@ const PopularPlacesFilter = ({
       <div className="page-title-bg">
         <div className="container">
           <h2>What would you like to rent?</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="row m-0 align-items-center">
-              <div className="col-lg-6 col-md-6 p-0">
+              <div className="col-lg-4 col-md-12 p-0">
                 <div className="form-group">
                   <label>
                     <i className="flaticon-search"></i>
                   </label>
-
                   <input
                     type="text"
-                    name="category"
                     className="form-control"
-                    placeholder="Search by category"
-                    ref={categoryFilterRef}
-                    onFocus={() => openCategoryTipsPopup(searchCategory)}
-                    onBlur={closeCategoryTipsPopup}
-                    value={searchCategory}
-                    onInput={handleChangeCategory}
+                    placeholder="What are you looking for?"
+                    name="listing"
+                    value={searchListingName}
                     maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-                    onKeyPress={handleKeyPress}
-                  />
-
-                  <SearchTipsPopup
-                    active={categoryTipsPopupActive}
-                    tips={categoryTips}
-                    handleTipClick={handleCategoryTipClick}
+                    onInput={handleChangeSearchListingName}
                   />
                 </div>
               </div>
@@ -141,11 +141,37 @@ const PopularPlacesFilter = ({
                 </div>
               </div>
 
-              <div className="col-lg-3 col-md-12 p-0 popup-places-filter">
+              <div className="col-lg-3 col-md-6 p-0">
+                <div className="form-group">
+                  <label>
+                    <i className="flaticon-category"></i>
+                  </label>
+
+                  <input
+                    type="text"
+                    name="category"
+                    className="form-control"
+                    placeholder="Search by category"
+                    ref={categoryFilterRef}
+                    onFocus={() => openCategoryTipsPopup(searchCategory)}
+                    onBlur={closeCategoryTipsPopup}
+                    value={searchCategory}
+                    onInput={handleChangeCategory}
+                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
+                  />
+
+                  <SearchTipsPopup
+                    active={categoryTipsPopupActive}
+                    tips={categoryTips}
+                    handleTipClick={handleCategoryTipClick}
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-2 col-md-12 p-0 popup-places-filter">
                 <div className="submit-btn">
-                  <button type="button" onClick={handleSubmit}>
-                    Search Now
-                  </button>
+                  <button type="submit">Search Now</button>
                 </div>
               </div>
             </div>

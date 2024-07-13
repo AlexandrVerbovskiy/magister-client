@@ -2,6 +2,9 @@ import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
 import { useRouter } from "next/router";
+import { hasPayError } from "../../utils";
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
 
 const OrderActions = ({
   currentActionButtons,
@@ -13,6 +16,7 @@ const OrderActions = ({
   canActions = true,
 }) => {
   const router = useRouter();
+  const { sessionUser, error } = useContext(IndiceContext);
 
   const { checkErrorData } = useOrderDateError({
     order,
@@ -23,6 +27,17 @@ const OrderActions = ({
     router
       .push(`/dashboard/chats/${order.disputeChatId}`)
       .then(() => window.location.reload());
+  };
+
+  const handlePayClick = (e) => {
+    e.stopPropagation();
+    const payError = hasPayError({ order, sessionUser });
+
+    if (payError) {
+      error.set(payError);
+    } else {
+      popupsData.setPaypalModalActive(true);
+    }
   };
 
   return (
@@ -74,7 +89,7 @@ const OrderActions = ({
             <button
               type="button"
               className={actionClass}
-              onClick={() => popupsData.setPaypalModalActive(true)}
+              onClick={handlePayClick}
             >
               {needIcon && <i className="bx bx-wallet"></i>} Pay
             </button>

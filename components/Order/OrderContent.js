@@ -6,6 +6,7 @@ import {
   generateProfileFilePath,
   getDaysDifference,
   getListingImageByType,
+  hasPayError,
   moneyFormat,
   validateBigText,
 } from "../../utils";
@@ -475,6 +476,17 @@ const OrderContent = ({
   const handleDefectUpdate = (e) => {
     setDefectDescription(e.target.value);
     setDefectError(null);
+  };
+
+  const handlePayClick = (e) => {
+    e.stopPropagation();
+    const payError = hasPayError({ order, sessionUser });
+
+    if (payError) {
+      error.set(payError);
+    } else {
+      orderPopupsData.setPaypalModalActive(true);
+    }
   };
 
   if (orderPopupsData.extendApproveData) {
@@ -1420,7 +1432,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => orderPopupsData.setPaypalModalActive(true)}
+                onClick={handlePayClick}
               >
                 Pay
               </button>

@@ -8,7 +8,6 @@ import {
   getFilePath,
   getListingImageByType,
   moneyFormat,
-  shakeUnverifiedAlert,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
@@ -88,11 +87,6 @@ const SingleListingsContent = ({
     e.preventDefault();
 
     if (sessionUser) {
-      if (!sessionUser?.verified) {
-        shakeUnverifiedAlert();
-        return;
-      }
-
       setCreateOrderModalActive(true);
     } else {
       const triggerBtn = document.querySelector(".sign-form-trigger");

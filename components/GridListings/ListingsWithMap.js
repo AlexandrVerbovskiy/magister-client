@@ -463,6 +463,7 @@ const ListingsWithMap = ({
         cities={cityNames}
         searchCity={searchCity}
         searchCategory={searchCategory}
+        searchListing={basePageProps.options.searchListing}
       />
 
       <div className="listings-area ptb-100">

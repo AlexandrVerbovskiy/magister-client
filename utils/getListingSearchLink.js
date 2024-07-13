@@ -1,14 +1,23 @@
-export const getFullListingSearchLink = (searchLocation, searchCategory) => {
+export const getFullListingSearchLink = ({
+  searchCity,
+  searchCategory,
+  searchListing,
+}) => {
   let searchLink = "/listing-list";
   let hasPrev = false;
 
-  if (searchLocation) {
-    searchLink += `?search-city=${searchLocation}`;
+  if (searchCity) {
+    searchLink += `?search-city=${searchCity}`;
     hasPrev = true;
   }
 
   if (searchCategory) {
     searchLink += `${hasPrev ? "&" : "?"}search-category=${searchCategory}`;
+  }
+
+  if (searchListing) {
+    searchLink += `${hasPrev ? "&" : "?"}search-listing=${searchListing}`;
+    hasPrev = true;
   }
 
   return searchLink;
