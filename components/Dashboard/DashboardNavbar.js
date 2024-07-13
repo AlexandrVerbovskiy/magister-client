@@ -18,14 +18,6 @@ const DashboardNavbar = () => {
   const { displaySideMenu, toggleSideMenu, sessionUser, error, isAuth } =
     useContext(IndiceContext);
 
-  const needVerifyAccount = (e) => {
-    if (!sessionUser?.verified || !sessionUser?.paypalId) {
-      e.preventDefault();
-      error.set(`You need to be verified and have a PayPal ID linked to your profile to rent and rent out tools. To verify, send the
-      necessary data via the "Documents Verification" page`);
-    }
-  };
-
   return (
     <>
       <div
@@ -102,8 +94,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/orders/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/orders/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
-                onClick={needVerifyAccount}
+                }`}
               >
                 <span className="icon">
                   <i className="bx bx-purchase-tag"></i>
@@ -117,8 +108,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/chats/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/chats/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
-                onClick={needVerifyAccount}
+                }`}
               >
                 <span className="icon">
                   <i className="bx bx-message-detail"></i>
@@ -132,8 +122,7 @@ const DashboardNavbar = () => {
                 href="/dashboard/wallet/"
                 className={`nav-link ${
                   currentPath.includes("/dashboard/wallet/") && "active"
-                }  ${!sessionUser?.verified ? "disabled" : ""}`}
-                onClick={needVerifyAccount}
+                }`}
               >
                 <span className="icon">
                   <i className="bx bx-wallet"></i>

@@ -103,3 +103,19 @@ export const isPayedUsedPaypal = (type) =>
   [STATIC.PAYMENT_TYPES.PAYPAL, STATIC.PAYMENT_TYPES.CREDIT_CARD].includes(
     type
   );
+
+export const hasPayError = ({ sessionUser, order }) => {
+  if (!sessionUser.verified) {
+    return "You need to be verified to make a payment";
+  }
+
+  if (!order.ownerVerified) {
+    return "To make a payment, the owner of the product must be verified";
+  }
+
+  if (!order.ownerPaypalId) {
+    return "To make a payment, the owner of the product must confirm his PayPal account";
+  }
+
+  return null;
+};

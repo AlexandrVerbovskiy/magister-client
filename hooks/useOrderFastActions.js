@@ -14,11 +14,12 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { generateDatesBetween, getDaysDifference } from "../utils";
+import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
+
   const router = useRouter();
 
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
@@ -421,8 +422,14 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleClickPay = (orderId) => {
     const order = findCurrentOrderById(orderId);
-    setActivePayOrder(order);
-    setActivePay(true);
+    const payError = hasPayError({ order, sessionUser });
+
+    if (payError) {
+      error.set(payError);
+    } else {
+      setActivePayOrder(order);
+      setActivePay(true);
+    }
   };
 
   const onCreateUpdateRequest = ({
