@@ -259,7 +259,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                       onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
-                      maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     />
                     <SearchTipsPopup
                       active={categoryTipsPopupActive}
@@ -372,7 +372,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                           onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
-                          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                          maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                         />
 
                         <SearchTipsPopup

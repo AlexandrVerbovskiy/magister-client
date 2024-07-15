@@ -4,13 +4,12 @@ import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
-import { getDaysDifference, getPaymentNameByType } from "../../../utils";
+import { getFactOrderDays, getPaymentNameByType } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
-import STATIC from "../../../static";
 
 const TableItem = (props) => {
   const {
@@ -67,8 +66,7 @@ const TableItem = (props) => {
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            $
-            {getDaysDifference(offerStartDate, offerEndDate) * offerPricePerDay}
+            ${getFactOrderDays(offerStartDate, offerEndDate) * offerPricePerDay}
           </div>
         </td>
         <td>

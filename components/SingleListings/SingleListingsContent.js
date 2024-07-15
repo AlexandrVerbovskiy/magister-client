@@ -653,6 +653,7 @@ const SingleListingsContent = ({
           listingName={listing.name}
           blockedDates={listing.blockedDates}
           title="Book Now"
+          isExtend={false}
         />
       )}
     </>

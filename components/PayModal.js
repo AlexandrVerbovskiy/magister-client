@@ -1,7 +1,7 @@
 import { IndiceContext } from "../contexts";
 import { useContext, useEffect, useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { getDaysDifference, moneyFormat, dateConverter } from "../utils";
+import { getFactOrderDays, moneyFormat, dateConverter } from "../utils";
 import PaypalButton from "./PaypalButton";
 import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
@@ -66,8 +66,7 @@ const PayModal = ({
       ? dateConverter(offerStartDate)
       : `${dateConverter(offerStartDate)} - ${dateConverter(offerEndDate)}`;
 
-  const subtotal =
-    pricePerDay * getDaysDifference(offerStartDate, offerEndDate);
+  const subtotal = pricePerDay * getFactOrderDays(offerStartDate, offerEndDate);
 
   const total = (subtotal * (100 + offerFee)) / 100;
 
@@ -264,6 +263,31 @@ const PayModal = ({
                     >
                       <b>Booking:</b> #{orderId}
                     </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Sort Code: </b>
+                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Account No: </b>
+                      {bankInfo?.bankAccountBeneficiary ?? ""}
+                    </li>
+
                     <li
                       style={{
                         padding: "10px 0",
@@ -284,34 +308,11 @@ const PayModal = ({
                         color: "black",
                       }}
                     >
-                      <b>SWIFT/BIC: </b>
+                      <b>BIC: </b>
                       {bankInfo?.bankAccountSwiftBic ?? ""}
                       {}
                     </li>
 
-                    <li
-                      style={{
-                        padding: "10px 0",
-                        background: "white",
-                        borderBottom: "0",
-                        color: "black",
-                      }}
-                    >
-                      <b>Beneficiary Name and Address: </b>
-                      {bankInfo?.bankAccountBeneficiary ?? ""}
-                    </li>
-
-                    <li
-                      style={{
-                        padding: "10px 0",
-                        background: "white",
-                        borderBottom: "0",
-                        color: "black",
-                      }}
-                    >
-                      <b>Reference/Concept Code: </b>
-                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
-                    </li>
                     <li
                       style={{
                         background: "white",

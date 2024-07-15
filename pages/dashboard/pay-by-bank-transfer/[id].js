@@ -11,7 +11,7 @@ import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByDaysCount,
   downloadFileUrl,
-  getDaysDifference,
+  getFactOrderDays,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
@@ -56,7 +56,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
     });
 
   const totalPrice = calculateFullTotalByDaysCount(
-    getDaysDifference(order.offerStartDate, order.offerEndDate),
+    getFactOrderDays(order.offerStartDate, order.offerEndDate),
     order.offerPricePerDay,
     order.tenantFee,
     "sum"
@@ -172,6 +172,31 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                 >
                   <b>Booking:</b> #{orderId}
                 </li>
+
+                <li
+                  style={{
+                    padding: "10px 25px",
+                    background: "white",
+                    borderBottom: "0",
+                    color: "black",
+                  }}
+                >
+                  <b>Sort Code: </b>
+                  {bankAccount?.bankAccountReferenceConceptCode ?? ""}
+                </li>
+
+                <li
+                  style={{
+                    padding: "10px 25px",
+                    background: "white",
+                    borderBottom: "0",
+                    color: "black",
+                  }}
+                >
+                  <b>Account No: </b>
+                  {bankAccount?.bankAccountBeneficiary ?? ""}
+                </li>
+
                 <li
                   style={{
                     padding: "10px 25px",
@@ -192,34 +217,11 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                     color: "black",
                   }}
                 >
-                  <b>SWIFT/BIC: </b>
+                  <b>BIC: </b>
                   {bankAccount?.bankAccountSwiftBic ?? ""}
                   {}
                 </li>
 
-                <li
-                  style={{
-                    padding: "10px 25px",
-                    background: "white",
-                    borderBottom: "0",
-                    color: "black",
-                  }}
-                >
-                  <b>Beneficiary Name and Address: </b>
-                  {bankAccount?.bankAccountBeneficiary ?? ""}
-                </li>
-
-                <li
-                  style={{
-                    padding: "10px 25px",
-                    background: "white",
-                    borderBottom: "0",
-                    color: "black",
-                  }}
-                >
-                  <b>Reference/Concept Code: </b>
-                  {bankAccount?.bankAccountReferenceConceptCode ?? ""}
-                </li>
                 <li
                   style={{
                     margin: "0 25px",

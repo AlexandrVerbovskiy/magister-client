@@ -1,4 +1,5 @@
 import STATIC from "../static";
+import { getMaxDate, increaseDateByOneDay } from "./dateHelpers";
 import {
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -119,3 +120,27 @@ export const hasPayError = ({ sessionUser, order }) => {
 
   return null;
 };
+
+export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
+  let lastOrderDate = offerEndDate;
+
+  if (extendOrders) {
+    const extendOrderDates = extendOrders
+      .filter(
+        (order) =>
+          [
+            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+            STATIC.ORDER_STATUSES.FINISHED,
+          ].includes(order.status) && !order.cancelStatus
+      )
+      .map((extendOrder) => extendOrder.offerEndDate);
+
+    lastOrderDate = getMaxDate(extendOrderDates);
+  }
+
+  return increaseDateByOneDay(lastOrderDate);
+};
+
+export const removeDuplicates = (arr) => [...new Set(arr)];

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import ENV from "../../env";
 import STATIC from "../../static";
-import { getDaysDifference, calculateCurrentTotalPrice } from "../../utils";
+import { getFactOrderDays, calculateCurrentTotalPrice } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
 import SuccessIcon from "../Icons/SuccessIcon";
@@ -106,7 +106,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
       tenantFee: entity.tenantFee,
     });
 
-    const duration = getDaysDifference(
+    const duration = getFactOrderDays(
       content.offerDateStart,
       content.offerDateEnd
     );

@@ -9,9 +9,8 @@ import {
 import { authSideProps } from "../../middlewares";
 import {
   calculateFeeByDaysCount,
-  calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   dateConverter,
 } from "../../utils";
@@ -124,7 +123,7 @@ const Wallet = ({
                 <ul>
                   {earnings.map((earning) => {
                     const pricePerDuration = calculateTotalPriceByDaysCount(
-                      getDaysDifference(
+                      getFactOrderDays(
                         earning.offerStartDate,
                         earning.offerEndDate
                       ),
@@ -132,7 +131,7 @@ const Wallet = ({
                     );
 
                     const feePerDuration = calculateFeeByDaysCount(
-                      getDaysDifference(
+                      getFactOrderDays(
                         earning.offerStartDate,
                         earning.offerEndDate
                       ),
@@ -216,7 +215,7 @@ const Wallet = ({
                 <ul>
                   {sendings.map((sending) => {
                     const pricePerDuration = calculateTotalPriceByDaysCount(
-                      getDaysDifference(
+                      getFactOrderDays(
                         sending.offerStartDate,
                         sending.offerEndDate
                       ),
@@ -224,7 +223,7 @@ const Wallet = ({
                     );
 
                     const feePerDuration = calculateFeeByDaysCount(
-                      getDaysDifference(
+                      getFactOrderDays(
                         sending.offerStartDate,
                         sending.offerEndDate
                       ),

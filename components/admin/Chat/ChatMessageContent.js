@@ -5,7 +5,7 @@ import SuccessIcon from "../../Icons/SuccessIcon";
 import ErrorIcon from "../../Icons/ErrorIcon";
 import SingleRatingStar from "../SingleRatingStar";
 import ENV from "../../../env";
-import { calculateCurrentTotalPrice, getDaysDifference } from "../../../utils";
+import { calculateCurrentTotalPrice, getFactOrderDays } from "../../../utils";
 
 const DownloadButton = ({ src }) => {
   return (
@@ -150,7 +150,7 @@ const orderMessageContent = ({
       tenantFee: order.tenantFee,
     });
 
-    const duration = getDaysDifference(
+    const duration = getFactOrderDays(
       content.offerDateStart,
       content.offerDateEnd
     );

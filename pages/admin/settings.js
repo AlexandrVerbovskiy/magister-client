@@ -335,9 +335,9 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Main
                       </h2>
 
@@ -360,9 +360,9 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Commission Settings
                       </h2>
 
@@ -449,13 +449,43 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Bank Account Settings
                       </h2>
 
                       <section style={{ marginTop: "0" }}>
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-5/12">
+                            <Input
+                              name="bankAccountReferenceConceptCode"
+                              value={bankAccountReferenceConceptCode}
+                              setValue={setBankAccountReferenceConceptCode}
+                              error={bankAccountReferenceConceptCodeError}
+                              setError={setBankAccountReferenceConceptCodeError}
+                              label="Sort Code"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                          <div className="sm:w-5/12">
+                            <Input
+                              name="bankAccountBeneficiary"
+                              value={bankAccountBeneficiary}
+                              setValue={setBankAccountBeneficiary}
+                              error={bankAccountBeneficiaryError}
+                              setError={setBankAccountBeneficiaryError}
+                              label="Account No"
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+                        </div>
+
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                           <div className="sm:w-5/12">
                             <Input
@@ -479,37 +509,7 @@ const Settings = ({
                               setValue={setBankAccountSwiftBic}
                               error={bankAccountSwiftBicError}
                               setError={setBankAccountSwiftBicError}
-                              label="SWIFT/BIC"
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-5/12">
-                            <Input
-                              name="bankAccountBeneficiary"
-                              value={bankAccountBeneficiary}
-                              setValue={setBankAccountBeneficiary}
-                              error={bankAccountBeneficiaryError}
-                              setError={setBankAccountBeneficiaryError}
-                              label="Beneficiary Name and Address"
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                          <div className="sm:w-5/12">
-                            <Input
-                              name="bankAccountReferenceConceptCode"
-                              value={bankAccountReferenceConceptCode}
-                              setValue={setBankAccountReferenceConceptCode}
-                              error={bankAccountReferenceConceptCodeError}
-                              setError={setBankAccountReferenceConceptCodeError}
-                              label="Reference/Concept Code"
+                              label="BIC"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />

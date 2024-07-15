@@ -48,6 +48,7 @@ const useCreateDispute = ({ order = null }) => {
       );
 
       setListing({
+        id: order.listingId,
         listingImages: order.images ?? order.listingImages,
         name: order.listingName,
         averageRating: order.listingAverageRating,

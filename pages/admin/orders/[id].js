@@ -7,7 +7,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
   calculateCurrentTotalPrice,
-  getDaysDifference,
+  getFactOrderDays,
   getListingImageByType,
   moneyFormat,
   ownerGetsCalculate,
@@ -144,7 +144,7 @@ const Order = (order) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}
@@ -280,14 +280,14 @@ const Order = (order) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                           activeRequestsToUpdate.newPricePerDay
                                       )
                                     : moneyFormat(
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) * order.offerPricePerDay
@@ -332,14 +332,14 @@ const Order = (order) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? (order.ownerFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                         activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (order.ownerFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) *
@@ -359,14 +359,14 @@ const Order = (order) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? (order.tenantFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                         activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (order.tenantFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) *

@@ -26,7 +26,7 @@ const ImageView = ({ open, imgSrc, close }) => {
           <div className="w-full h-full flex justify-center">
             <img
               onClick={handleImageClick}
-              src={imgSrc ?? STATIC.DEFAULT_PHOTO_LINK}
+              src={imgSrc ?? STATIC.DEFAULTS.PHOTO_LINK}
               alt="image"
               className="relative w-full h-full"
               style={{
@@ -36,7 +36,7 @@ const ImageView = ({ open, imgSrc, close }) => {
             <img
               ref={supportImageRef}
               className="hidden"
-              src={imgSrc ?? STATIC.DEFAULT_PHOTO_LINK}
+              src={imgSrc ?? STATIC.DEFAULTS.PHOTO_LINK}
             />
           </div>
         </div>

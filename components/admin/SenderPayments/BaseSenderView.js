@@ -9,7 +9,7 @@ import {
 } from "../../../services";
 import {
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   getFilePath,
   moneyFormat,
   dateConverter,
@@ -40,7 +40,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   }
 
   const subtotalPrice = calculateTotalPriceByDaysCount(
-    getDaysDifference(payment.offerStartDate, payment.offerEndDate),
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
     payment.offerPricePerDay
   );
 
@@ -99,7 +99,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Payment by ${payment.payerName}`}</div>
+                        <div className="max-w-full overflow-separate order-form-title">{`Payment by ${payment.payerName}`}</div>
                       </h2>
 
                       <section>

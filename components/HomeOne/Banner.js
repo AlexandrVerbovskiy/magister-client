@@ -125,7 +125,7 @@ const Banner = () => {
                     placeholder="What are you looking for?"
                     name="listing"
                     value={searchListingName}
-                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     onInput={handleChangeSearchListingName}
                   />
                 </div>
@@ -146,7 +146,7 @@ const Banner = () => {
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
-                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     onKeyPress={handleKeyPress}
                   />
 
@@ -173,7 +173,7 @@ const Banner = () => {
                     onBlur={closeCategoryTipsPopup}
                     value={searchCategory}
                     onInput={handleChangeCategory}
-                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     onKeyPress={handleKeyPress}
                   />
 

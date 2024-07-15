@@ -2,7 +2,7 @@ import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
 import { useRouter } from "next/router";
-import { hasPayError } from "../../utils";
+import { changeLocation, hasPayError } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
@@ -40,14 +40,42 @@ const OrderActions = ({
     }
   };
 
+  const handleMoveToOrder = (id) => {
+    changeLocation(`/dashboard/orders/${id}`);
+    window.location.reload();
+  };
+
   return (
     <>
       <Link className={actionClass} href={link + "/" + order.id}>
         {needIcon && <i className="bx bx-detail"></i>} View details
       </Link>
 
+      {currentActionButtons.includes(
+        STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW
+      ) && (
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => handleMoveToOrder(order.orderParentId)}
+        >
+          {needIcon && <i className="bx bx-detail"></i>} View main order
+        </button>
+      )}
+
       {canActions && (
         <>
+          {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+          ) && (
+            <Link
+              className={actionClass}
+              href={`/dashboard/pay-by-bank-transfer/` + order.id}
+            >
+              {needIcon && <i className="bx bx-wallet"></i>} Update payment
+            </Link>
+          )}
+
           {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
           ) && (

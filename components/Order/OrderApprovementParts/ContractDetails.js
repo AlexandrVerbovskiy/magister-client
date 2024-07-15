@@ -1,6 +1,6 @@
 import {
   autoMultiEnding,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   dateConverter,
 } from "../../../utils";
@@ -15,7 +15,7 @@ const ContractDetails = ({
   feeActive = null,
   setFeeActive = null,
 }) => {
-  const duration = getDaysDifference(fromDate, toDate);
+  const duration = getFactOrderDays(fromDate, toDate);
   const subtotalPrice = price * duration;
   const totalFee = (subtotalPrice * fee) / 100;
   const totalPrice = subtotalPrice + totalFee;

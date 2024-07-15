@@ -119,20 +119,24 @@ const useSingleOrderActions = ({
     fromDate,
     toDate,
   }) => {
-    const result = await extendOrder(
-      {
-        pricePerDay: price,
-        startDate: fromDate,
-        endDate: toDate,
-        listingId: order.listingId,
-        feeActive,
-        message: sendingMessage,
-        parentOrderId: order.id,
-      },
-      authToken
-    );
+    try {
+      const result = await extendOrder(
+        {
+          pricePerDay: price,
+          startDate: fromDate,
+          endDate: toDate,
+          listingId: order.listingId,
+          feeActive,
+          message: sendingMessage,
+          parentOrderId: order.orderParentId ?? order.id,
+        },
+        authToken
+      );
 
-    onExtendOrder(result);
+      onExtendOrder(result);
+    } catch (e) {
+      setError(e.message);
+    }
   };
 
   return {

@@ -35,6 +35,10 @@ const useOrderActions = ({ order }) => {
         );
       }
 
+      console.log(
+        order.paymentInfo
+      );
+
       if (
         order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
         isTenant
@@ -131,7 +135,19 @@ const useOrderActions = ({ order }) => {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
 
-      const hasProcessedExtends =
+      if (order.orderParentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
+      }
+
+      if (
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        (!order.orderParentId || order.extendOrders.length > 1)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
+      }
+
+      const hasFinishedExtends =
         order.extendOrders &&
         order.extendOrders.length > 0 &&
         !order.extendOrders.find(
@@ -144,11 +160,24 @@ const useOrderActions = ({ order }) => {
             ].includes(extendOrder.status) || extendOrder.cancelStatus
         );
 
+      const hasUnstartedExtends =
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        order.extendOrders.find(
+          (extendOrder) =>
+            [
+              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_OWNER,
+              STATIC.ORDER_STATUSES.PENDING_TENANT,
+              STATIC.ORDER_STATUSES.REJECTED,
+            ].includes(extendOrder.status) && !extendOrder.cancelStatus
+        );
+
       if (
-        !order.orderParentId &&
         isTenant &&
+        !hasUnstartedExtends &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER ||
-          hasProcessedExtends)
+          hasFinishedExtends)
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
       }

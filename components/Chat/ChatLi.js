@@ -16,7 +16,7 @@ const ChatLi = ({ chat, selected, onClick }) => {
             src={
               isOrder
                 ? generateProfileFilePath(chat.opponentPhoto)
-                : STATIC.ADMIN_CHAT_LOGO
+                : STATIC.DEFAULTS.ADMIN_CHAT_LOGO
             }
             width="40"
             height="40"

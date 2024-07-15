@@ -76,7 +76,7 @@ const TableItem = ({
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>

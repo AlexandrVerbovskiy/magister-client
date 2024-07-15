@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   tenantPaymentCalculate,
   dateConverter,
@@ -48,7 +48,7 @@ const InvoiceTable = ({
   const [disabled, setDisabled] = useState(false);
 
   const subTotalPrice =
-    offer.pricePerDay * getDaysDifference(offer.startDate, offer.endDate);
+    offer.pricePerDay * getFactOrderDays(offer.startDate, offer.endDate);
 
   const handlePdfDownload = async () => {
     try {

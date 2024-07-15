@@ -2,11 +2,13 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
+  generateDatesBetween,
   generateProfileFilePath,
-  getDaysDifference,
+  getFactOrderDays,
   getPaymentNameByType,
   moneyFormat,
   objDateSort,
+  removeDuplicates,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
@@ -60,11 +62,13 @@ const OrderInfo = ({
         </h4>
 
         <ul>
-          <li className="row-dots-end">
-            <i className="bx bx-map"></i>
-            <span>Address: </span>
-            <span>{order.listingCity}</span>
-          </li>
+          {!extension && (
+            <li className="row-dots-end">
+              <i className="bx bx-map"></i>
+              <span>Address: </span>
+              <span>{order.listingCity}</span>
+            </li>
+          )}
           <li className="order-list-item-date">
             <i className="bx bx-calendar"></i>
             <CanBeErrorBaseDateSpan
@@ -81,14 +85,11 @@ const OrderInfo = ({
               {order.requestId
                 ? moneyFormat(
                     order.newPricePerDay *
-                      getDaysDifference(order.newStartDate, order.newEndDate)
+                      getFactOrderDays(order.newStartDate, order.newEndDate)
                   )
                 : moneyFormat(
                     order.offerPricePerDay *
-                      getDaysDifference(
-                        order.offerStartDate,
-                        order.offerEndDate
-                      )
+                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}
             </span>
           </li>
@@ -424,32 +425,37 @@ const OrderItem = ({
       </tr>
 
       {objDateSort(order.extendOrders, "offerStartDate").map(
-        (extendOrder, index) => (
-          <tr key={extendOrder.id}>
-            <td
-              className="name"
-              style={
-                order.extendOrders.length != index + 1
-                  ? { borderBottom: 0, borderTop: 0 }
-                  : { borderTop: 0 }
-              }
-            ></td>
+        (extendOrder, index) => {
+          extendOrder["blockedDates"] = order.blockedDates;
+          extendOrder["extendOrders"] = order.extendOrders;
 
-            <OrderInfo
-              order={extendOrder}
-              handleClickCancel={handleClickCancel}
-              handleClickPayedFastCancel={handleClickPayedFastCancel}
-              handleClickUpdateRequest={handleClickUpdateRequest}
-              handleClickReject={handleClickReject}
-              handleClickAccept={handleClickAccept}
-              handleClickPay={handleClickPay}
-              handleClickExtend={handleClickExtend}
-              handleDisputeCreate={handleDisputeCreate}
-              link={link}
-              extension={true}
-            />
-          </tr>
-        )
+          return (
+            <tr key={extendOrder.id}>
+              <td
+                className="name"
+                style={
+                  order.extendOrders.length != index + 1
+                    ? { borderBottom: 0, borderTop: 0 }
+                    : { borderTop: 0 }
+                }
+              ></td>
+
+              <OrderInfo
+                order={extendOrder}
+                handleClickCancel={handleClickCancel}
+                handleClickPayedFastCancel={handleClickPayedFastCancel}
+                handleClickUpdateRequest={handleClickUpdateRequest}
+                handleClickReject={handleClickReject}
+                handleClickAccept={handleClickAccept}
+                handleClickPay={handleClickPay}
+                handleClickExtend={handleClickExtend}
+                handleDisputeCreate={handleDisputeCreate}
+                link={link}
+                extension={true}
+              />
+            </tr>
+          );
+        }
       )}
     </>
   );

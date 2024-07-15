@@ -75,5 +75,5 @@ export const getFilePath = (part) =>
   env.SERVER_URL + env.SERVER_STORAGE + "/" + part;
 
 export const generateProfileFilePath = (path) => {
-  return path ? getFilePath(path) : STATIC.DEFAULT_PHOTO_LINK;
+  return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
 };

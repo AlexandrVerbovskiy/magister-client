@@ -1,11 +1,7 @@
-import {
-  autoMultiEnding,
-  getDaysDifference,
-  moneyFormat,
-} from "../../../utils";
+import { autoMultiEnding, getFactOrderDays, moneyFormat } from "../../../utils";
 
 const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
-  const duration = getDaysDifference(fromDate, toDate);
+  const duration = getFactOrderDays(fromDate, toDate);
   const subtotalPrice = price * duration;
   const totalFee = (subtotalPrice * fee) / 100;
   const totalPrice = subtotalPrice + totalFee;
@@ -19,9 +15,7 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div>
-            Rental period
-          </div>
+          <div>Rental period</div>
 
           <div>
             {duration} {autoMultiEnding(duration, "day")}

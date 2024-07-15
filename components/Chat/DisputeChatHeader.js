@@ -19,7 +19,7 @@ const DisputeChatHeader = ({ entity, handleGoBackClick }) => {
       <div className="header-left d-flex align-items-center me-2">
         <div className="avatar me-2">
           <img
-            src={STATIC.ADMIN_CHAT_LOGO}
+            src={STATIC.DEFAULTS.ADMIN_CHAT_LOGO}
             width="40"
             height="40"
             className="rounded-circle"

@@ -8,7 +8,7 @@ import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
   dateName,
-  getDaysDifference,
+  getFactOrderDays,
 } from "../../utils";
 import STATIC from "../../static";
 import DisputeModal from "../Order/DisputeModal";
@@ -64,7 +64,7 @@ const OrderChatBody = ({
       offerPricePerDay,
       offerStartDate,
       offerEndDate,
-      duration: getDaysDifference(offerStartDate, offerEndDate),
+      duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
     };
 

@@ -3,10 +3,6 @@ export default {
     Warrington: { lat: 53.390044, lng: -2.59695 },
     Manchester: { lat: 53.48095, lng: -2.23743 },
   },
-  BASE_LISTING_MAP_CIRCLE_RADIUS: 500,
-  DEFAULT_PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
-  DEFAULT_PHOTO_LINK: "/images/admin/default-photo.png",
-  MAX_SEARCH_INPUT_LENGTH: 255,
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",
     PENDING_TENANT: "pending_tenant",
@@ -27,8 +23,6 @@ export default {
     OPEN: "open",
     UNSOLVED: "unsolved",
   },
-  MIN_PRICE_LIMIT: 1,
-  MAX_PRICE_LIMIT: 1000000,
   ORDER_ACTION_BUTTONS: {
     BOOKING_AGREEMENT_SECTION: "booking-agreement-section",
     PAY_BUTTON: "pay-button",
@@ -47,6 +41,8 @@ export default {
     OPEN_DISPUTE: "open-dispute",
     ORDER_CHAT: "order-chat",
     VIEW_DISPUTE_CHAT: "view-dispute-chat",
+    PARENT_VIEW: "parent-view",
+    EXTENSION_LIST: "extension-list",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],
@@ -97,10 +93,6 @@ export default {
     "tiff",
     "webp",
   ],
-  FILE_ACCEPT:
-    ".txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .mp3, .wav, .mp4, .avi, .mov, .csv, .html, .css, .js, .xml, .json, .svg, .bmp, .ico, .tif, .tiff, .psd, .ai, .eps, .wmv, .flv, .mkv, .ogg, .aac, .wma, .flac, .exe, .dll, .bat, .cmd, .apk, .jar, .cpp, .c, .java, .py, .php, .html, .htm, .asp, .aspx, .jsp, .rb, .pl, .sql, .db, .bak, .tar, .gz, .tgz, .deb, .rpm, .iso, .img, .dmg, .swf, .mpg, .mpeg, .3gp, .wmv, .mov, .ogg, .m4a, .aac, .ac3, .aiff, .au, .mid, .midi, .wma, .rtf, .odt, .ods, .odp, .odg, .odf, .log, .yaml, .m3u, .pls, .log, .ini, .cfg, .inf, .nfo, .url, .torrent, .bak, .tmp, .tmp, .old, .temp, .part, .bak, .dmp, .crash, .swp, .srt, .sub, .ass, .vtt, .ttf, .otf, .woff, .woff2, .eot, .tsv, .webp",
-  BLOB_CHUNK_SIZE: 1024,
-  UNBLOB_CHUNK_SIZE: 1024,
   MESSAGE_TYPES: {
     TEXT: "text",
     FILE: "file",
@@ -123,10 +115,7 @@ export default {
     RESOLVED_DISPUTE: "resolved-dispute",
   },
   CHAT_TYPES: { DISPUTE: "dispute", ORDER: "order" },
-  ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
   AUTHOR_MESSAGE_LOCATIONS: { RIGHT: "right", LEFT: "left" },
-  MAX_CHAT_FILE_SIZE: 1 * 1024 * 1024 * 1024,
-  MAX_RENTAL_DURATION: 350,
   PAYMENT_TYPES: {
     PAYPAL: "paypal",
     CREDIT_CARD: "credit-card",
@@ -136,4 +125,19 @@ export default {
     SUCCESS_LOGIN: "/dashboard/profile-edit?success=Successfully logged in",
     SUCCESS_LOGOUT: "/?success=Successfully logged out",
   },
+  LIMITS: {
+    CHAT_FILE_SIZE: 25 * 1024 * 1024,
+    RENTAL_DURATION: 350,
+    SEARCH_INPUT_LENGTH: 255,
+  },
+  DEFAULTS: {
+    LISTING_MAP_CIRCLE_RADIUS: 500,
+    PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
+    PHOTO_LINK: "/images/admin/default-photo.png",
+    ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
+  },
+  FILE_ACCEPT:
+    ".txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .mp3, .wav, .mp4, .avi, .mov, .csv, .html, .css, .js, .xml, .json, .svg, .bmp, .ico, .tif, .tiff, .psd, .ai, .eps, .wmv, .flv, .mkv, .ogg, .aac, .wma, .flac, .exe, .dll, .bat, .cmd, .apk, .jar, .cpp, .c, .java, .py, .php, .html, .htm, .asp, .aspx, .jsp, .rb, .pl, .sql, .db, .bak, .tar, .gz, .tgz, .deb, .rpm, .iso, .img, .dmg, .swf, .mpg, .mpeg, .3gp, .wmv, .mov, .ogg, .m4a, .aac, .ac3, .aiff, .au, .mid, .midi, .wma, .rtf, .odt, .ods, .odp, .odg, .odf, .log, .yaml, .m3u, .pls, .log, .ini, .cfg, .inf, .nfo, .url, .torrent, .bak, .tmp, .tmp, .old, .temp, .part, .bak, .dmp, .crash, .swp, .srt, .sub, .ass, .vtt, .ttf, .otf, .woff, .woff2, .eot, .tsv, .webp",
+  BLOB_CHUNK_SIZE: 1024,
+  UNBLOB_CHUNK_SIZE: 1024,
 };

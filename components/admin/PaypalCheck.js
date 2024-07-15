@@ -76,14 +76,14 @@ const PaypalCheck = ({
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}></th>
-                    <th style={{ width: "20%" }}></th>
+                    <th style={{ width: "70%" }}></th>
+                    <th style={{ width: "30%" }}></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="row">
-                    <td className="title">Rent x {listingName}</td>
-                    <td className="price">
+                    <td className="title max-w-full overflow-separate">Rent x {listingName}</td>
+                    <td className="price max-w-full overflow-separate">
                       <span className="amount">${rentalPrice}</span>
                       <span className="currency">USD</span>
                     </td>
@@ -94,13 +94,13 @@ const PaypalCheck = ({
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}></th>
-                    <th style={{ width: "20%" }}></th>
+                    <th style={{ width: "70%" }}></th>
+                    <th style={{ width: "30%" }}></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="row item-id">
-                    <td className="title">
+                    <td className="title max-w-full overflow-separate">
                       Item #:
                       <span className="amount">{listingId}</span>
                     </td>
@@ -112,14 +112,14 @@ const PaypalCheck = ({
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}></th>
-                    <th style={{ width: "20%" }}></th>
+                    <th style={{ width: "70%" }}></th>
+                    <th style={{ width: "30%" }}></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="row">
-                    <td className="title">Subtotal:</td>
-                    <td className="price">
+                    <td className="title max-w-full overflow-separate">Subtotal:</td>
+                    <td className="price max-w-full overflow-separate">
                       <span className="amount">${rentalPrice}</span>
                       <span className="currency">USD</span>
                     </td>
@@ -130,14 +130,14 @@ const PaypalCheck = ({
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}></th>
-                    <th style={{ width: "20%" }}></th>
+                    <th style={{ width: "70%" }}></th>
+                    <th style={{ width: "30%" }}></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="row total">
-                    <td className="title">Total:</td>
-                    <td className="price">
+                    <td className="title max-w-full overflow-separate">Total:</td>
+                    <td className="price max-w-full overflow-separate">
                       <span className="amount">${rentalPrice}</span>
                       <span className="currency">USD</span>
                     </td>
@@ -156,14 +156,14 @@ const PaypalCheck = ({
               <table>
                 <thead>
                   <tr>
-                    <th style={{ width: "80%" }}></th>
-                    <th style={{ width: "20%" }}></th>
+                    <th style={{ width: "70%" }}></th>
+                    <th style={{ width: "30%" }}></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="row total">
-                    <td className="title">{paidWith}</td>
-                    <td className="price">
+                    <td className="title max-w-full overflow-separate">{paidWith}</td>
+                    <td className="price max-w-full overflow-separate">
                       <span className="amount">${rentalPrice}</span>
                       <span className="currency">USD</span>
                     </td>
