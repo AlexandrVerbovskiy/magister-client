@@ -149,7 +149,9 @@ const EditForm = ({
 
   const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
   const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+  const [radius, setRadius] = useState(
+    STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
+  );
 
   const [mainError, setMainError] = useState(null);
 
@@ -238,7 +240,7 @@ const EditForm = ({
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+    setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
     setMainError(null);
   };
 
@@ -315,7 +317,7 @@ const EditForm = ({
       minRentalDays: listing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: listing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
+      rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
       backgroundPhotoUrl: listing.backgroundPhoto
@@ -532,9 +534,9 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (minRentalDays && minRentalDays > 350) {
+    if (minRentalDays && minRentalDays > STATIC.LIMITS.RENTAL_DURATION) {
       setMinRentalDaysError(
-        "You cannot make the minimum rental duration longer than 350 days"
+        `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
       );
       hasError = true;
     }
@@ -900,7 +902,7 @@ const EditForm = ({
                 </div>
               </div>
             </div>
-            
+
             <div className="col-md-6">
               <EditMap
                 markerActive={markerActive}

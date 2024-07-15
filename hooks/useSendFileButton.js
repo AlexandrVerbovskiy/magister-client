@@ -9,7 +9,7 @@ const useSendFileButton = ({ handleSendMedia, setError }) => {
 
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
-    const maxFileSize = STATIC.MAX_CHAT_FILE_SIZE;
+    const maxFileSize = STATIC.DEFAULTS.CHAT_FILE_SIZE;
 
     if (!file) {
       return;

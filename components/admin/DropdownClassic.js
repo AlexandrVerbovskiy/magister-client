@@ -98,7 +98,7 @@ function DropdownClassic({
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+              maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
             />
           )}
 

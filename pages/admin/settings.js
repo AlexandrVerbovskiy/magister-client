@@ -335,9 +335,9 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Main
                       </h2>
 
@@ -360,9 +360,9 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Commission Settings
                       </h2>
 
@@ -449,9 +449,9 @@ const Settings = ({
 
               <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                 <div className="flex flex-col md:flex-row md:-mr-px">
-                  <div className="grow">
+                  <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Bank Account Settings
                       </h2>
 

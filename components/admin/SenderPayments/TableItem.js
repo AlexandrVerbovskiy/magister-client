@@ -48,7 +48,7 @@ const TableItem = (props) => {
 
   const proofPath = payedProof
     ? getFilePath(payedProof)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 

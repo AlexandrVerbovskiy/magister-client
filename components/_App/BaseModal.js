@@ -6,10 +6,18 @@ const BaseModal = ({
   children,
   className = "",
   needCloseBtn = true,
+  style = {},
+  hidden = false,
 }) => {
-  if (className) className += " ";
+  if (className) {
+    className += " ";
+  }
+
   className += "modal loginRegisterModal base-modal";
-  if (active) className += " show";
+
+  if (active && !hidden) {
+    className += " show";
+  }
 
   const handlePopupOverlayClick = (e) => {
     if (
@@ -18,13 +26,17 @@ const BaseModal = ({
     )
       return;
 
-      closeModal();
+    closeModal();
   };
 
   return (
     <>
-      <div className={active ? "body_overlay open test" : "body_overlay"}></div>
-      <div className={className} onMouseDown={handlePopupOverlayClick}>
+      <div className={active && !hidden ? "body_overlay open test" : "body_overlay"}></div>
+      <div
+        style={style}
+        className={className}
+        onMouseDown={handlePopupOverlayClick}
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {needCloseBtn && (

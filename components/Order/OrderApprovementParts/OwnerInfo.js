@@ -21,8 +21,8 @@ const OwnerInfo = ({
             src={generateProfileFilePath(data.userPhoto)}
             alt={data.userName}
           />
-          <div className="title">
-            <h4>
+          <div className="title row-dots-end">
+            <h4 className="row-dots-end">
               <a href="#">{data.userName}</a>
             </h4>
             <span style={{ color: "#666666" }}>

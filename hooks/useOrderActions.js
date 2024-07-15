@@ -131,6 +131,18 @@ const useOrderActions = ({ order }) => {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
 
+      if (order.orderParentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
+      }
+
+      if (
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        (!order.orderParentId || order.extendOrders.length > 1)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
+      }
+
       const hasFinishedExtends =
         order.extendOrders &&
         order.extendOrders.length > 0 &&
@@ -156,8 +168,6 @@ const useOrderActions = ({ order }) => {
               STATIC.ORDER_STATUSES.REJECTED,
             ].includes(extendOrder.status) && !extendOrder.cancelStatus
         );
-
-      console.log("hasUnstartedExtends: ", hasUnstartedExtends);
 
       if (
         isTenant &&

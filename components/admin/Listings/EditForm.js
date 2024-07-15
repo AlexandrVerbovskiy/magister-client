@@ -202,7 +202,7 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
   const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+  const [radius, setRadius] = useState(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
@@ -214,7 +214,7 @@ const EditForm = ({ listing, categories, save }) => {
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+    setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
   };
 
   const handleChangeAddress = async (newAddress) => {
@@ -321,7 +321,7 @@ const EditForm = ({ listing, categories, save }) => {
       minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: prevListing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
+      rentalRadius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -478,6 +478,11 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
+      if (minRentalDays > STATIC.LIMITS.RENTAL_DURATION){
+        setMinRentalDaysError(`You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`);
+        hasError = true;
+      }
+
       if (!countStoredItems) {
         setCountStoredItemsError("Required field");
         hasError = true;
@@ -629,7 +634,7 @@ const EditForm = ({ listing, categories, save }) => {
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         {listing.name}
                       </h2>
 

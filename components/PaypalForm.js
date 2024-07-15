@@ -39,11 +39,7 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
           const obj = JSON.parse(extractedData);
 
           if (obj) {
-            if (
-              obj.details &&
-              obj.details[0] &&
-              obj.details[0].description
-            ) {
+            if (obj.details && obj.details[0] && obj.details[0].description) {
               description = obj.details[0].description;
             } else {
               description = obj.message;

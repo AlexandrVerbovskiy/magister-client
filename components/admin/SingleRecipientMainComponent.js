@@ -73,7 +73,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                         Payment Details
                       </h2>
 

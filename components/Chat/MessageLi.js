@@ -65,7 +65,7 @@ const MessageLi = ({
           <img
             src={
               adminSend
-                ? STATIC.ADMIN_CHAT_LOGO
+                ? STATIC.DEFAULTS.ADMIN_CHAT_LOGO
                 : generateProfileFilePath(senderPhoto)
             }
             width="40"

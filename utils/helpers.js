@@ -142,3 +142,5 @@ export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
 
   return increaseDateByOneDay(lastOrderDate);
 };
+
+export const removeDuplicates = (arr) => [...new Set(arr)];

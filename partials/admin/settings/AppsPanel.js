@@ -2,11 +2,11 @@ import React from 'react';
 
 function AppsPanel() {
   return (
-    <div className="grow">
+    <div className="w-full grow">
 
       {/* Panel body */}
       <div className="p-6">
-        <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">Connected Apps</h2>
+        <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">Connected Apps</h2>
 
         {/* General */}
         <div className="mb-6">

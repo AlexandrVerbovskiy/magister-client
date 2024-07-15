@@ -212,7 +212,7 @@ const createCategoryBySearch = ({
                             <div className="single-image-bpx">
                               <img
                                 className="w-20 h-20"
-                                src={photoUrl ?? STATIC.DEFAULT_PHOTO_LINK}
+                                src={photoUrl ?? STATIC.DEFAULTS.PHOTO_LINK}
                                 alt={`${name} image`}
                               />
                             </div>

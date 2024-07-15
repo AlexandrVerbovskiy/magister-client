@@ -144,7 +144,7 @@ const Order = (order) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}

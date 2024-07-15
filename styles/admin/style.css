@@ -318,6 +318,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   border-radius: 0 !important;
 }
 
+.overflow-separate,
 .admin-table .overflow-separate,
 .admin-table td:not(:has(*)) {
   overflow: hidden;

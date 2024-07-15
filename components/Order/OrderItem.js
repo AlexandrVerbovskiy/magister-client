@@ -2,11 +2,13 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
+  generateDatesBetween,
   generateProfileFilePath,
   getFactOrderDays,
   getPaymentNameByType,
   moneyFormat,
   objDateSort,
+  removeDuplicates,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
@@ -424,8 +426,9 @@ const OrderItem = ({
 
       {objDateSort(order.extendOrders, "offerStartDate").map(
         (extendOrder, index) => {
+          extendOrder["blockedDates"] = order.blockedDates;
           extendOrder["extendOrders"] = order.extendOrders;
-          
+
           return (
             <tr key={extendOrder.id}>
               <td
