@@ -1627,7 +1627,10 @@ const OrderContent = ({
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
       ) && (
-        <div className="add-listings-box listings-sidebar listings-widget order_widget">
+        <div
+          className="add-listings-box listings-sidebar listings-widget order_widget"
+          style={{ marginTop: 0 }}
+        >
           <h3>Extensions</h3>
 
           <div className="booking-operations form-group">

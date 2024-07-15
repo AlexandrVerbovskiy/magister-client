@@ -263,6 +263,31 @@ const PayModal = ({
                     >
                       <b>Booking:</b> #{orderId}
                     </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Sort Code: </b>
+                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
+                    </li>
+
+                    <li
+                      style={{
+                        padding: "10px 0",
+                        background: "white",
+                        borderBottom: "0",
+                        color: "black",
+                      }}
+                    >
+                      <b>Account No: </b>
+                      {bankInfo?.bankAccountBeneficiary ?? ""}
+                    </li>
+
                     <li
                       style={{
                         padding: "10px 0",
@@ -283,34 +308,11 @@ const PayModal = ({
                         color: "black",
                       }}
                     >
-                      <b>SWIFT/BIC: </b>
+                      <b>BIC: </b>
                       {bankInfo?.bankAccountSwiftBic ?? ""}
                       {}
                     </li>
 
-                    <li
-                      style={{
-                        padding: "10px 0",
-                        background: "white",
-                        borderBottom: "0",
-                        color: "black",
-                      }}
-                    >
-                      <b>Beneficiary Name and Address: </b>
-                      {bankInfo?.bankAccountBeneficiary ?? ""}
-                    </li>
-
-                    <li
-                      style={{
-                        padding: "10px 0",
-                        background: "white",
-                        borderBottom: "0",
-                        color: "black",
-                      }}
-                    >
-                      <b>Reference/Concept Code: </b>
-                      {bankInfo?.bankAccountReferenceConceptCode ?? ""}
-                    </li>
                     <li
                       style={{
                         background: "white",

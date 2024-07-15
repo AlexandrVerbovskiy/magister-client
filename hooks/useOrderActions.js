@@ -35,6 +35,10 @@ const useOrderActions = ({ order }) => {
         );
       }
 
+      console.log(
+        order.paymentInfo
+      );
+
       if (
         order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
         isTenant
