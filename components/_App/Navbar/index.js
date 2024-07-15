@@ -152,15 +152,8 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
       await signIn("credentials", {
         authToken: res.authToken,
-        redirect: false,
+        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
       });
-
-      onLogin(res.user);
-      setCodeModalActive(false);
-      router.push("/dashboard/profile-edit");
-
-      mainSuccess.set("Successfully logged in");
-      setCode("");
     } catch (e) {
       setCodeModalError(e.message);
     }

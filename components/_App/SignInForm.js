@@ -49,7 +49,7 @@ const SignInForm = () => {
       await signIn("credentials", {
         userId: res.userId,
         authToken: res.authToken,
-        redirect: successReloadLink(),
+        callbackUrl: successReloadLink(),
         needRegularViewInfoForm: res.needRegularViewInfoForm,
       });
     }
@@ -116,7 +116,7 @@ const SignInForm = () => {
 
       await signIn("credentials", {
         authToken: res.authToken,
-        redirect: successReloadLink(),
+        callbackUrl: successReloadLink(),
       });
 
       setCode("");

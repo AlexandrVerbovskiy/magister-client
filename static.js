@@ -126,9 +126,14 @@ export default {
   ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
   AUTHOR_MESSAGE_LOCATIONS: { RIGHT: "right", LEFT: "left" },
   MAX_CHAT_FILE_SIZE: 1 * 1024 * 1024 * 1024,
+  MAX_RENTAL_DURATION: 350,
   PAYMENT_TYPES: {
     PAYPAL: "paypal",
     CREDIT_CARD: "credit-card",
     BANK_TRANSFER: "bank-transfer",
+  },
+  REDIRECTS: {
+    SUCCESS_LOGIN: "/dashboard/profile-edit?success=Successfully logged in",
+    SUCCESS_LOGOUT: "/?success=Successfully logged out",
   },
 };

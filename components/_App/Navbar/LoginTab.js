@@ -6,6 +6,8 @@ import PasswordInput from "../../FormComponents/PasswordInput";
 import { useLogin } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
+import STATIC from "../../../static";
 
 const LoginTab = ({
   email,
@@ -23,9 +25,6 @@ const LoginTab = ({
   setRememberMe,
   activePopup,
 }) => {
-  const router = useRouter();
-  const { success: mainSuccess, onLogin } = useContext(IndiceContext);
-
   const onLoginPartSuccess = async (res) => {
     closeModal();
 
@@ -42,14 +41,9 @@ const LoginTab = ({
       await signIn("credentials", {
         userId: res.userId,
         authToken: res.authToken,
-        redirect: false,
+        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
         needRegularViewInfoForm: res.needRegularViewInfoForm,
       });
-
-      onLogin(res.user);
-      setPassword("");
-      mainSuccess.set("Successfully logged in");
-      router.push("/dashboard/profile-edit");
     }
   };
 
