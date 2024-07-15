@@ -11,7 +11,7 @@ const ErrorPage = () => {
   useEffect(() => {
     (async () => {
       const session = await getSession();
-      setIsAuth(!!session.user);
+      setIsAuth(!!session?.user);
       setLoading(false);
     })();
   }, []);

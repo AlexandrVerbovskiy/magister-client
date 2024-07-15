@@ -2,13 +2,14 @@ import { signOut } from "next-auth/react";
 import YesNoModal from "./YesNoModal";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
+import STATIC from "../../static";
 
 const SignOutModal = ({ active, closeModal }) => {
   const { error } = useContext(IndiceContext);
 
   const onAccept = async () => {
     try {
-      await signOut({ redirect: false });
+      await signOut({ callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGOUT });
       closeModal();
     } catch (e) {
       error.set(e.message);
