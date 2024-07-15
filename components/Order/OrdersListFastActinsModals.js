@@ -5,7 +5,10 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { increaseDateByOneDay, tenantPaymentCalculate } from "../../utils";
+import {
+  getStartExtendOrderDate,
+  tenantPaymentCalculate,
+} from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingModal from "../SingleListings/BookingModal";
@@ -134,6 +137,15 @@ const OrdersListFastActinsModals = ({
     setPayOfferEndDate(activePayOrder?.offerEndDate ?? Date.now());
   }, [activePayOrder, sessionUser]);
 
+  let extendStartDate = null;
+
+  if (extendModalActiveOrder) {
+    extendStartDate = getStartExtendOrderDate(
+      extendModalActiveOrder.offerEndDate,
+      extendModalActiveOrder.extendOrders
+    );
+  }
+
   return (
     <>
       <CancelModal
@@ -201,19 +213,16 @@ const OrdersListFastActinsModals = ({
 
       <BookingModal
         handleMakeBooking={handleClickApproveExtendOrder}
-        price={extendModalActiveOrder.offerPricePerDay ?? 0}
-        minRentalDays={extendModalActiveOrder.listingMinRentalDays ?? 0}
+        price={extendModalActiveOrder?.offerPricePerDay ?? 0}
+        minRentalDays={extendModalActiveOrder?.listingMinRentalDays ?? 0}
         fee={tenantBaseCommission}
         createOrderModalActive={extendModalActive}
         closeModal={closeExtendOrder}
-        listingName={extendModalActiveOrder.listingName ?? ""}
-        blockedDates={extendModalActiveOrder.blockedDates ?? []}
+        listingName={extendModalActiveOrder?.listingName ?? ""}
+        blockedDates={extendModalActiveOrder?.blockedDates ?? []}
         title="Extend Now"
-        startDate={
-          extendModalActiveOrder.offerEndDate
-            ? increaseDateByOneDay(extendModalActiveOrder.offerEndDate)
-            : null
-        }
+        startDate={extendStartDate}
+        isExtend={true}
       />
     </>
   );

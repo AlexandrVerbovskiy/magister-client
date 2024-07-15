@@ -3,7 +3,7 @@ import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 import {
   calculateFullTotalByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
 } from "../../utils";
 
@@ -30,7 +30,7 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
   let message = "To confirm the cancellation of the order, click 'Confirm'";
   if (order) {
     const totalPayed = calculateFullTotalByDaysCount(
-      getDaysDifference(order.offerStartDate, order.offerEndDate),
+      getFactOrderDays(order.offerStartDate, order.offerEndDate),
       order.offerPricePerDay,
       order.tenantFee,
       "sum"

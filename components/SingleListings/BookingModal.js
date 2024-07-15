@@ -5,10 +5,11 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
+  dateConverter,
   dateToSeconds,
   findFirstAvailableDate,
   getDateByCurrentAdd,
-  getDaysDifference,
+  getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
   moneyFormat,
@@ -30,6 +31,7 @@ const BookingModal = ({
   title = "Book Now",
   startDate = null,
   fullVersion = false,
+  isExtend = false,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
@@ -54,7 +56,7 @@ const BookingModal = ({
   const [fullTotal, setFullTotal] = useState(0);
 
   const recalculateTotalInfo = ({ fromDate, toDate, price, fee }) => {
-    const countDays = getDaysDifference(fromDate, toDate);
+    const countDays = getFactOrderDays(fromDate, toDate);
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
     setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
@@ -121,7 +123,7 @@ const BookingModal = ({
   }, [defaultPrice]);
 
   useEffect(() => {
-    const defaultCountDays = minRentalDays ? minRentalDays : 1;
+    const defaultCountDays = minRentalDays && !isExtend ? minRentalDays : 1;
     const firstAvailableDate = findFirstAvailableDate(
       blockedDates,
       defaultCountDays,
@@ -147,14 +149,23 @@ const BookingModal = ({
   const handleSubmit = () => {
     let hasError = false;
 
-    if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
-      setCalendarError(
-        `You can rent a listing only for more than ${minRentalDays} days`
-      );
-      hasError = true;
+    if (!isExtend || dateConverter(startDate) != dateConverter(fromDate)) {
+      if (
+        minRentalDays &&
+        getFactOrderDays(fromDate, toDate) < minRentalDays
+      ) {
+        let message = `You can rent ads only for a period of more than ${minRentalDays} days`;
+
+        if (isExtend) {
+          message += `, or extend renting from ${dateConverter(startDate)}`;
+        }
+
+        setCalendarError(message);
+        hasError = true;
+      }
     }
 
-    if (getDaysDifference(fromDate, toDate) > 350) {
+    if (getFactOrderDays(fromDate, toDate) > 350) {
       setCalendarError(`You can't rent a listing more than 350 days`);
       hasError = true;
     }
@@ -194,6 +205,11 @@ const BookingModal = ({
     >
       <span className="sub-title mb-2">
         <span>{title}</span>
+        <br />
+        <span className="sub-text">
+          You can extend the order from {dateConverter(startDate)}, or start a
+          new order if the start date is different
+        </span>
       </span>
 
       <div className="mt-3 booking-form left-scrollable">

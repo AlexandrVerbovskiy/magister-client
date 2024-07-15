@@ -88,7 +88,11 @@ export const getDaysDifference = (startDate, endDate) => {
   const start = new Date(startDate).getTime();
   const end = new Date(endDate).getTime();
   const difference = Math.abs(end - start);
-  return Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+  return Math.ceil(difference / (1000 * 3600 * 24));
+};
+
+export const getFactOrderDays = (startDate, endDate) => {
+  return getDaysDifference(startDate, endDate) + 1;
 };
 
 export const groupDates = (dates) => {
@@ -229,4 +233,24 @@ export const dateName = (date) => {
 export const formatTimeWithAmPm = (date) => {
   const dateObj = typeof date === "string" ? new Date(date) : date;
   return format(dateObj, "hh:mm a");
+};
+
+export const getMinDate = (dates) => {
+  if (!dates.length) {
+    return null;
+  }
+
+  const dateObjects = dates.map((date) => new Date(date));
+  const date = new Date(Math.min(...dateObjects));
+  return separateDate(date);
+};
+
+export const getMaxDate = (dates) => {
+  if (!dates.length) {
+    return null;
+  }
+
+  const dateObjects = dates.map((date) => new Date(date));
+  const date = new Date(Math.max(...dateObjects));
+  return separateDate(date);
 };

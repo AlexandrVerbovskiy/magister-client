@@ -9,7 +9,7 @@ import {
 } from "../../../services";
 import {
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   getFilePath,
   moneyFormat,
   dateConverter,
@@ -40,7 +40,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   }
 
   const subtotalPrice = calculateTotalPriceByDaysCount(
-    getDaysDifference(payment.offerStartDate, payment.offerEndDate),
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
     payment.offerPricePerDay
   );
 

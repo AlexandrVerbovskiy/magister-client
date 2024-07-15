@@ -3273,6 +3273,7 @@ Features Area CSS
   align-items: center;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
 }
 .single-features-box .icon {
   margin-bottom: 25px;
@@ -11803,6 +11804,13 @@ All Modal CSS
   z-index: 1;
   position: relative;
 }
+
+.sub-title .sub-text{
+  color: black!important;
+  font-size: 12px!important;
+  font-weight: 400;
+}
+
 .loginRegisterModal
   .modal-dialog
   .modal-content

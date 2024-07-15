@@ -120,14 +120,14 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [activePayOrder, setActivePayOrder] = useState(null);
 
   const [updateRequestModalActiveOrder, setUpdateRequestModalActiveOrder] =
-    useState({});
+    useState(null);
   const [acceptOrderModalActiveId, setAcceptOrderModalActiveId] =
     useState(null);
   const [rejectOrderModalActiveId, setRejectOrderModalActiveId] =
     useState(null);
 
   const [extendModalActive, setExtendModalActive] = useState(false);
-  const [extendModalActiveOrder, setExtendModalActiveOrder] = useState({});
+  const [extendModalActiveOrder, setExtendModalActiveOrder] = useState(null);
   const [extendModalApproveActive, setExtendModalApproveActive] =
     useState(false);
   const [extendModalApproveData, setExtendModalApproveData] = useState(null);
@@ -220,7 +220,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const closeExtendOrder = () => {
-    setExtendModalActiveOrder({});
+    setExtendModalActiveOrder(null);
     setExtendModalActive(false);
   };
 
@@ -243,40 +243,44 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       toDate,
       order: extendModalActiveOrder,
     });
-    setExtendModalActiveOrder({});
+    setExtendModalActiveOrder(null);
   };
 
   const acceptApproveExtendOrder = async ({ feeActive, sendingMessage }) => {
-    const dayDiff = getDaysDifference(
-      extendModalApproveData.order.offerEndDate,
-      extendModalApproveData.fromDate
-    );
+    try {
+      const dayDiff = getDaysDifference(
+        extendModalApproveData.order.offerEndDate,
+        extendModalApproveData.fromDate
+      );
 
-    await extendOrder(
-      {
-        pricePerDay: extendModalApproveData.price,
-        startDate: extendModalApproveData.fromDate,
-        endDate: extendModalApproveData.toDate,
-        listingId: extendModalApproveData.order.listingId,
-        feeActive,
-        message: sendingMessage,
-        parentOrderId: extendModalApproveData.order.id,
-      },
-      authToken
-    );
+      await extendOrder(
+        {
+          pricePerDay: extendModalApproveData.price,
+          startDate: extendModalApproveData.fromDate,
+          endDate: extendModalApproveData.toDate,
+          listingId: extendModalApproveData.order.listingId,
+          feeActive,
+          message: sendingMessage,
+          parentOrderId: extendModalApproveData.order.id,
+        },
+        authToken
+      );
 
-    setExtendModalApproveData(null);
-    setExtendModalApproveActive(false);
+      setExtendModalApproveData(null);
+      setExtendModalApproveActive(false);
 
-    if (dayDiff == 2) {
-      success.set("Order extended successfully");
-    } else {
-      success.set("New booking created successfully");
+      if (dayDiff == 1) {
+        success.set("Order extended successfully");
+      } else {
+        success.set("New booking created successfully");
+      }
+
+      router.push("/dashboard/orders", undefined, {
+        unstable_skipClientCache: true,
+      });
+    } catch (e) {
+      error.set(e.message);
     }
-
-    router.push("/dashboard/orders", undefined, {
-      unstable_skipClientCache: true,
-    });
   };
 
   const handleAcceptPayedFastCancel = async ({

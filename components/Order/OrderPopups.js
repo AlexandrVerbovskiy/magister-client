@@ -4,10 +4,13 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import { calculateCurrentTotalPrice, increaseDateByOneDay } from "../../utils";
+import {
+  calculateCurrentTotalPrice,
+  getStartExtendOrderDate,
+  increaseDateByOneDay,
+} from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import DisputeModal from "./DisputeModal";
 
 const OrderPopups = ({
   order,
@@ -49,6 +52,11 @@ const OrderPopups = ({
   const { authToken, sessionUser } = useContext(IndiceContext);
 
   const isOwner = sessionUser.id == order.ownerId;
+
+  const extendStartDate = getStartExtendOrderDate(
+    order.offerEndDate,
+    order.extendOrders
+  );
 
   return (
     <>
@@ -105,10 +113,9 @@ const OrderPopups = ({
           listingName={order.listingName}
           blockedDates={order.blockedDates}
           title="Extend Now"
-          startDate={
-            order.offerEndDate ? increaseDateByOneDay(order.offerEndDate) : null
-          }
+          startDate={extendStartDate}
           fullVersion={true}
+          isExtend={true}
         />
       )}
 

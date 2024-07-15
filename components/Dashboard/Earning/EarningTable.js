@@ -3,7 +3,7 @@ import { IndiceContext } from "../../../contexts";
 import InputView from "../../FormComponents/InputView";
 import {
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -15,7 +15,6 @@ import PayedCancelModal from "../../Order/PayedCancelModal";
 import SuccessIconPopup from "../../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import { updateRecipientPaymentData } from "../../../services";
-import STATIC from "../../../static";
 
 const Status = ({ status, receivedType }) => {
   let statusName = "Unknown";
@@ -96,9 +95,8 @@ const EarningTable = ({
 
     if (isPayedUsedPaypal(type)) {
       recipientNumber = data.paypalId;
-    }else{
+    } else {
       recipientNumber = data.cardNumber;
-
     }
   }
 
@@ -166,7 +164,7 @@ const EarningTable = ({
               placeholder="Subtotal Price"
               icon="bx bx-dollar-circle"
               value={`${calculateTotalPriceByDaysCount(
-                getDaysDifference(offerStartDate, offerEndDate),
+                getFactOrderDays(offerStartDate, offerEndDate),
                 offerPricePerDay
               )}`}
             />

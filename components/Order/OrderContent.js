@@ -4,7 +4,7 @@ import {
   calculateCurrentTotalPrice,
   checkStringDateLowerOrEqualCurrentDate,
   generateProfileFilePath,
-  getDaysDifference,
+  getFactOrderDays,
   getListingImageByType,
   hasPayError,
   moneyFormat,
@@ -244,7 +244,7 @@ const OrderContent = ({
       offerPricePerDay,
       offerStartDate,
       offerEndDate,
-      duration: getDaysDifference(offerStartDate, offerEndDate),
+      duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
     };
 
@@ -853,7 +853,7 @@ const OrderContent = ({
                       Subtotal price with listing price per day $
                       {moneyFormat(
                         order.listingPricePerDay *
-                          getDaysDifference(
+                          getFactOrderDays(
                             order.offerStartDate,
                             order.offerEndDate
                           )
@@ -865,10 +865,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     order.offerPricePerDay *
-                      getDaysDifference(
-                        order.offerStartDate,
-                        order.offerEndDate
-                      )
+                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}
                 </li>
 
@@ -876,7 +873,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (order.offerPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         order.offerStartDate,
                         order.offerEndDate
                       ) *
@@ -1006,7 +1003,7 @@ const OrderContent = ({
                       Subtotal price with listing price per day $
                       {moneyFormat(
                         prevUpdateRequest.pricePerDay *
-                          getDaysDifference(
+                          getFactOrderDays(
                             prevUpdateRequest.startDate,
                             prevUpdateRequest.endDate
                           )
@@ -1018,7 +1015,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     prevUpdateRequest.pricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         prevUpdateRequest.startDate,
                         prevUpdateRequest.endDate
                       )
@@ -1029,7 +1026,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (prevUpdateRequest.pricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         prevUpdateRequest.startDate,
                         prevUpdateRequest.endDate
                       ) *
@@ -1106,7 +1103,7 @@ const OrderContent = ({
                     Subtotal price with listing price per day $
                     {moneyFormat(
                       actualUpdateRequest.newPricePerDay *
-                        getDaysDifference(
+                        getFactOrderDays(
                           actualUpdateRequest.newStartDate,
                           actualUpdateRequest.newEndDate
                         )
@@ -1118,7 +1115,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     actualUpdateRequest.newPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
                       )
@@ -1129,7 +1126,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (actualUpdateRequest.newPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
                       ) *

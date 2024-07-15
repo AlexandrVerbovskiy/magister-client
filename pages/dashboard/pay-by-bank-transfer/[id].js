@@ -11,7 +11,7 @@ import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByDaysCount,
   downloadFileUrl,
-  getDaysDifference,
+  getFactOrderDays,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
@@ -56,7 +56,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
     });
 
   const totalPrice = calculateFullTotalByDaysCount(
-    getDaysDifference(order.offerStartDate, order.offerEndDate),
+    getFactOrderDays(order.offerStartDate, order.offerEndDate),
     order.offerPricePerDay,
     order.tenantFee,
     "sum"
