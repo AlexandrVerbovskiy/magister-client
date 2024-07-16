@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Flatpickr from "react-flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
 import { dateToSeconds, getMaxFlatpickrDate } from "../../utils";
+//import "flatpickr/dist/flatpickr.min.css";
 
 const DateFilter = ({ value, onChange, placeholder = "Filter date" }) => {
   const [pickerValue, setPickerValue] = useState(value);
