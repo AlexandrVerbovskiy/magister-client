@@ -51,7 +51,7 @@ const OrderPopups = ({
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
-  const isOwner = sessionUser.id == order.ownerId;
+  const isOwner = sessionUser?.id == order.ownerId;
 
   const extendStartDate = getStartExtendOrderDate(
     order.offerEndDate,

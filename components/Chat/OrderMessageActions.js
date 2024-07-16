@@ -10,8 +10,8 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
   let canActions = false;
 
-  const isOwner = sessionUser.id == order.ownerId;
-  const isTenant = sessionUser.id == order.tenantId;
+  const isOwner = sessionUser?.id == order.ownerId;
+  const isTenant = sessionUser?.id == order.tenantId;
 
   if (order.disputeStatus) {
     if (
@@ -62,6 +62,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
+        type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING &&
         order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT
       ) {
         canActions = true;

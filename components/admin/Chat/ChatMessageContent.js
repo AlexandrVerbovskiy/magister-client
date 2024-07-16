@@ -178,6 +178,7 @@ const orderMessageContent = ({
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.TENANT_PAYED,
+      STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING,
       STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
@@ -187,6 +188,10 @@ const orderMessageContent = ({
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED) {
       title = "Paid for the rental";
+    }
+
+    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
+      title = "Send a request for confirmation of rent payment";
     }
 
     if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {

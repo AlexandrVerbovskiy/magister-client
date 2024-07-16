@@ -17,7 +17,7 @@ const Status = ({
 
   if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
     text = "Rental in progress";
-    dopClassName = "bg-cyan-100 text-cyan-500";
+    dopClassName = "bg-orange-100 text-orange-500";
   }
 
   if (status == STATIC.ORDER_STATUSES.FINISHED) {

@@ -80,7 +80,7 @@ const useSingleOrderActions = ({
     onRejectOrder,
   });
 
-  const isOwner = sessionUser.id == ownerId;
+  const isOwner = sessionUser?.id == ownerId;
 
   const handleCancelApprove = async () => {
     try {

@@ -14,7 +14,7 @@ const OrderModals = ({
   const { sessionUser } = useContext(IndiceContext);
 
   const currentFee =
-    sessionUser.id == order.ownerId ? order.ownerFee : order.tenantFee;
+    sessionUser?.id == order.ownerId ? order.ownerFee : order.tenantFee;
 
   const currentActionButtons = useOrderActions({
     order,

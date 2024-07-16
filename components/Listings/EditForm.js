@@ -31,7 +31,6 @@ import {
   deleteListing,
   changeActiveListing,
 } from "../../services";
-import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
 import ENV from "../../env";
 import ErrorSpan from "../ErrorSpan";
@@ -336,7 +335,7 @@ const EditForm = ({
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: ENV.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFile = acceptedFiles[0];
 
@@ -411,8 +410,14 @@ const EditForm = ({
 
   useEffect(() => {
     const data = listingToState();
+    let categoryInfo = data.categoryId ?? null;
+
+    if (!categoryInfo && data.otherCategory) {
+      categoryInfo = "-";
+    }
+
     setName(data.name);
-    setCategory(data.categoryId ?? "-");
+    setCategory(categoryInfo);
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
@@ -467,7 +472,7 @@ const EditForm = ({
         totalSize += file.size;
       });
 
-      const maxFileSize = Number(ENV.MAX_SUMMARY_FILE_SIZE);
+      const maxFileSize = Number(STATIC.LIMITS.SUMMARY_FILE_SIZE);
 
       if (totalSize > maxFileSize) {
         throw new Error(

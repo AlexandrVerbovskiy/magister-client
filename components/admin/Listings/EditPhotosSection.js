@@ -71,7 +71,7 @@ const EditPhotosSection = ({
 }) => {
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
@@ -101,7 +101,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
@@ -188,7 +188,9 @@ const EditPhotosSection = ({
           Photos
         </h2>
 
-        <div className="text-sm">You can add maximum 5 files with maximum summary size 20 MB</div>
+        <div className="text-sm">
+          You can add maximum 5 files with maximum summary size 20 MB
+        </div>
 
         <div
           className="flex flex-wrap mt-5"
