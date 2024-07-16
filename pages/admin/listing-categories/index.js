@@ -12,7 +12,7 @@ import {
 import CategoryList from "../../../partials/admin/listingCategories/CategoryList";
 import { byteConverter, uniqueId } from "../../../utils";
 import lodash from "lodash";
-import env from "../../../env";
+import STATIC from "../../../static";
 
 const ListingCategories = ({ categories: baseCategories }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -563,7 +563,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
         });
       });
 
-      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
+      const maxFileSize = Number(STATIC.LIMITS.SUMMARY_FILE_SIZE);
 
       if (totalSize > maxFileSize) {
         throw new Error(
