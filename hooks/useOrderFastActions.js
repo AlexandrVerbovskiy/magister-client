@@ -38,7 +38,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     };
 
     if (!closeButtonText) {
-      closeButtonText = "Close Popup";
+      closeButtonText = "Close";
     }
 
     setSuccessIconPopupState({
