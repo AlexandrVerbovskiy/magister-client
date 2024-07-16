@@ -64,10 +64,10 @@ const StatusBlock = ({
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
     if (separateDate(new Date()) < endDate) {
-      color = "status-background-base";
+      color = "status-background-orange";
       text = "Rental in progress";
     } else {
-      color = "status-background-base";
+      color = "status-background-orange";
       text = "Rental in progress";
     }
   }

@@ -33,7 +33,7 @@ const OrderChatBody = ({
   });
 
   const { error, sessionUser, success } = useContext(IndiceContext);
-  const isOwner = sessionUser.id == order.ownerId;
+  const isOwner = sessionUser?.id == order.ownerId;
   const actualUpdateRequest = order.actualUpdateRequest;
 
   const setActualUpdateRequest = (request) => {

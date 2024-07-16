@@ -1,8 +1,6 @@
 import { useState } from "react";
-import env from "../../env";
 import ErrorSpan from "../ErrorSpan";
 import ImagePopup from "../_App/ImagePopup";
-
 import STATIC from "../../static";
 import { byteConverter } from "../../utils";
 
@@ -24,7 +22,7 @@ const ImageInput = ({
   }
 
   if (!fileSizeLimit) {
-    fileSizeLimit = env.MAX_FILE_SIZE;
+    fileSizeLimit = STATIC.LIMITS.FILE_SIZE;
   }
 
   const handleChange = (e) => {

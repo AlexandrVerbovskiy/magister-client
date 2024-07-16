@@ -4,7 +4,9 @@ const OrderUpdateStatusMessageContent = ({
   Icon = null,
 }) => {
   return (
-    <div className={`flex flex-col items-center ${messageClassName}`}>
+    <div
+      className={`flex flex-col items-center ${messageClassName}`}
+    >
       <div className="flex items-center">
         <b>{title}</b>
         {Icon && (

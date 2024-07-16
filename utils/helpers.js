@@ -106,7 +106,7 @@ export const isPayedUsedPaypal = (type) =>
   );
 
 export const hasPayError = ({ sessionUser, order }) => {
-  if (!sessionUser.verified) {
+  if (!sessionUser?.verified) {
     return "You need to be verified to make a payment";
   }
 

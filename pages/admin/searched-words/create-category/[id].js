@@ -15,7 +15,6 @@ import ImageInput from "../../../../components/admin/Form/ImageInput";
 import Link from "next/link";
 import ImageView from "../../../../components/admin/Form/ImageView";
 import STATIC from "../../../../static";
-import ENV from "../../../../env";
 import { getFilePath } from "../../../../utils";
 import YesNoModal from "../../../../components/admin/YesNoModal";
 
@@ -279,7 +278,7 @@ const createCategoryBySearch = ({
                           <ImageInput
                             photoUrl={photoUrl}
                             onChange={handlePhotoChange}
-                            fileSizeLimit={ENV.MAX_SMALL_FILE_SIZE}
+                            fileSizeLimit={STATIC.LIMITS.SMALL_FILE_SIZE}
                           />
                         </section>
 

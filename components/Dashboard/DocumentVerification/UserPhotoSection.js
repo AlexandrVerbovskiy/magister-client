@@ -1,4 +1,4 @@
-import ENV from "../../../env";
+import STATIC from "../../../static";
 import { byteConverter } from "../../../utils";
 
 const VisualizeCamera = ({ videoRef, image }) => {
@@ -51,7 +51,7 @@ const UserPhotoSection = ({
     const imageSrc = canvas.toDataURL("image/jpeg");
     canvas.remove();
 
-    const fileSizeLimit = Number(ENV.MAX_FILE_SIZE);
+    const fileSizeLimit = Number(STATIC.LIMITS.FILE_SIZE);
     setDisabled(false);
 
     if (imageSrc.length > fileSizeLimit) {

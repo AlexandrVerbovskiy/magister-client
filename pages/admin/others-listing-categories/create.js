@@ -12,7 +12,7 @@ import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ImageInput from "../../../components/admin/Form/ImageInput";
-import ENV from "../../../env";
+import STATIC from "../../../static";
 import YesNoModal from "../../../components/admin/YesNoModal";
 
 const CreateCategory = ({ groupedCategories }) => {
@@ -175,7 +175,7 @@ const CreateCategory = ({ groupedCategories }) => {
                       <ImageInput
                         photoUrl={photoUrl}
                         onChange={handlePhotoChange}
-                        fileSizeLimit={ENV.MAX_SMALL_FILE_SIZE}
+                        fileSizeLimit={STATIC.LIMITS.SMALL_FILE_SIZE}
                       />
                     </section>
 
