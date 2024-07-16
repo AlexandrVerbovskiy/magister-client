@@ -13,9 +13,8 @@ const PaypalSection = () => {
     script.onload = () => {
       if (window.paypal) {
         window.paypal.use(["login"], function (login) {
-          login.render({
+          const loginRenderObj = {
             appid: ENV.PAYPAL_CLIENT_ID,
-            authend: "sandbox",
             containerid: "paypal-connect",
             responseType: "code",
             scopes: "https://uri.paypal.com/services/paypalattributes",
@@ -24,8 +23,14 @@ const PaypalSection = () => {
             buttonShape: "pill",
             buttonSize: "lg",
             fullPage: "true",
-            returnurl: ENV.CLIENT_URL+"/dashboard/profile-edit",
-          });
+            returnurl: ENV.CLIENT_URL + "/dashboard/profile-edit",
+          };
+
+          if (ENV.PAYPAL_TYPE != "production") {
+            loginRenderObj["authend"] = ENV.PAYPAL_TYPE;
+          }
+
+          login.render(loginRenderObj);
         });
       }
     };
