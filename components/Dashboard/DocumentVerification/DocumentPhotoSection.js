@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { byteConverter } from "../../../utils";
-import ENV from "../../../env";
+import STATIC from "../../../static";
 
 const TABS = {
   FRONT: "front",
@@ -23,7 +23,7 @@ const FileUploadSection = ({
   }
 
   const handleUploadPhoto = (e) => {
-    const fileSizeLimit = Number(ENV.MAX_FILE_SIZE);
+    const fileSizeLimit = Number(STATIC.LIMITS.FILE_SIZE);
     const file = e.target.files[0];
     setError(null);
 
@@ -58,7 +58,7 @@ const FileUploadSection = ({
 
           <div className="sub-title">
             Please upload a copy of your valid identification in PNG, JPEG or
-            PDF format, no larger than {byteConverter(ENV.MAX_FILE_SIZE)} size
+            PDF format, no larger than {byteConverter(STATIC.LIMITS.FILE_SIZE)} size
           </div>
 
           <input

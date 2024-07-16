@@ -578,7 +578,7 @@ const ProfileEdit = ({ newPaypalId }) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const paypalCode = context.query["code"] ?? null;
 
-  if (baseSideProps.sessionUser.needRegularViewInfoForm) {
+  if (baseSideProps.sessionUser?.needRegularViewInfoForm) {
     noNeedRegularViewInfoForm(baseSideProps.authToken);
   }
 

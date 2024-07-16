@@ -16,6 +16,7 @@ import STATIC from "../static";
 import { useRouter } from "next/router";
 import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
+import lodash from "lodash";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
@@ -63,7 +64,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const createDisputeData = useCreateDispute({ order: orderToDispute });
 
   const disputeCreate = (orderId) => {
-    const order = orders.find((order) => order.id === orderId);
+    const order = findCurrentOrderById(orderId);
     setDisputeWindowActive(true);
     setOrderToDispute({ ...order });
   };
@@ -139,7 +140,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       for (let i = 0; i < orders.length; i++) {
         for (let j = 0; j < orders[i].extendOrders.length; j++) {
           if (orders[i].extendOrders[j].id === id) {
-            foundOrder = orders[i].extendOrders[j];
+            foundOrder = { ...orders[i], ...orders[i].extendOrders[j] };
           }
         }
       }

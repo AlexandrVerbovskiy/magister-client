@@ -202,7 +202,9 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
   const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
+  const [radius, setRadius] = useState(
+    STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
+  );
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
@@ -260,8 +262,14 @@ const EditForm = ({ listing, categories, save }) => {
 
   useEffect(() => {
     const data = listingToState();
+    let categoryInfo = data.categoryId ?? null;
+
+    if (!categoryInfo && data.otherCategory) {
+      categoryInfo = "-";
+    }
+
     setName(data.name);
-    setCategory(data.categoryId ?? "-");
+    setCategory(categoryInfo);
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
@@ -321,7 +329,8 @@ const EditForm = ({ listing, categories, save }) => {
       minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+      rentalRadius:
+        prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -343,7 +352,7 @@ const EditForm = ({ listing, categories, save }) => {
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: ENV.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFile = acceptedFiles[0];
 
@@ -478,8 +487,10 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (minRentalDays > STATIC.LIMITS.RENTAL_DURATION){
-        setMinRentalDaysError(`You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`);
+      if (minRentalDays > STATIC.LIMITS.RENTAL_DURATION) {
+        setMinRentalDaysError(
+          `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
+        );
         hasError = true;
       }
 
@@ -559,7 +570,7 @@ const EditForm = ({ listing, categories, save }) => {
             totalSize += file.size;
           });
 
-          const maxFileSize = Number(ENV.MAX_SUMMARY_FILE_SIZE);
+          const maxFileSize = Number(STATIC.LIMITS.SUMMARY_FILE_SIZE);
 
           if (totalSize > maxFileSize) {
             throw new Error(

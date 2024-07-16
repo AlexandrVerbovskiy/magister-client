@@ -4,7 +4,7 @@ import DropdownClassic from "../../../components/admin/DropdownClassic";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 import ImageInput from "../../../components/admin/Form/ImageInput";
-import env from "../../../env";
+import STATIC from "../../../static";
 import { getFilePath, getNumberLevelByName } from "../../../utils";
 
 const CategoryListItem = ({
@@ -165,7 +165,7 @@ const CategoryListItem = ({
               <ImageInput
                 btnText="Change"
                 photoUrl={photoUrl}
-                fileSizeLimit={env.MAX_SMALL_FILE_SIZE}
+                fileSizeLimit={STATIC.LIMITS.SMALL_FILE_SIZE}
                 onChange={onChangePhoto}
               />
             </div>

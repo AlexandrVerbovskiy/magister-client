@@ -75,7 +75,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
           0,
@@ -103,7 +103,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 

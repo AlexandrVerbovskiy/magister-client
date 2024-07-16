@@ -192,7 +192,7 @@ const OrderContent = ({
         onClose = () => {
           router.push(
             `/dashboard/orders?type=${
-              sessionUser.id == order.ownerId ? "owner" : "tenant"
+              sessionUser?.id == order.ownerId ? "owner" : "tenant"
             }`
           );
         };
@@ -1268,8 +1268,10 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {(order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
+      {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+        order.canAcceptTenantListing) ||
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
+          order.canAcceptOwnerListing)) && (
         <div className="order_widget add-listings-box">
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
             <h3>Any defects</h3>
@@ -1625,7 +1627,7 @@ const OrderContent = ({
       )}
 
       {currentActionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
+        STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST
       ) && (
         <div
           className="add-listings-box listings-sidebar listings-widget order_widget"

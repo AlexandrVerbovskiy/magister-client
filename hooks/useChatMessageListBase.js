@@ -85,9 +85,9 @@ const useChatMessageListBase = ({
           chatId: message.chatId,
           type: messageType,
           content: { filename: message.filename, path: message.contentPath },
-          senderId: sessionUser.id,
+          senderId: sessionUser?.id,
           tempKey: message.tempKey,
-          senderPhoto: sessionUser.photo,
+          senderPhoto: sessionUser?.photo,
           isAdminSender: false,
           createdAt: message.createdAt.toISOString(),
         };

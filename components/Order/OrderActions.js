@@ -124,17 +124,6 @@ const OrderActions = ({
           )}
 
           {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
-          ) && (
-            <Link
-              className={actionClass}
-              href={`/dashboard/pay-by-bank-transfer/` + order.id}
-            >
-              {needIcon && <i className="bx bx-wallet"></i>} Update payment
-            </Link>
-          )}
-
-          {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
           ) && (
             <Link

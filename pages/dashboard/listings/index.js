@@ -222,7 +222,7 @@ const ListingList = (pageProps) => {
   };
 
   const handleCreateListingClick = (e) => {
-    if (!sessionUser.paypalId) {
+    if (!sessionUser?.paypalId) {
       e.preventDefault();
       error.set(
         "You cannot create listing if your profile do not have a linked card for payment"

@@ -7,9 +7,10 @@ const OrderUpdateStatusMessageContent = ({
   type,
   title,
   Icon = null,
+  style = {},
 }) => {
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center" style={style}>
       <div>
         <b>{title}</b>
         {Icon && (

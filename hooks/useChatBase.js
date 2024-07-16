@@ -58,6 +58,10 @@ const useChatBase = ({
       listProps.onGetMessage(data.message, data.opponent);
     });
 
+    io.on(prefix + "update-order", (data) => {
+      bodyProps.handleOrderUpdate(data.orderPart);
+    });
+
     io.on(prefix + "message-updated", async (data) =>
       bodyProps.updateMessage(data.message, data.message.id)
     );
@@ -128,8 +132,8 @@ const useChatBase = ({
       chatId: chatId,
       type: messageType,
       content: { text },
-      senderId: sessionUser.id,
-      senderPhoto: sessionUser.photo,
+      senderId: sessionUser?.id,
+      senderPhoto: sessionUser?.photo,
       isAdminSender: false,
       createdAt,
       ...dop,
@@ -139,7 +143,7 @@ const useChatBase = ({
     listProps.updateChatInfo(chatId, {
       messageId: null,
       messageType: messageType,
-      messageSenderId: sessionUser.id,
+      messageSenderId: sessionUser?.id,
       messageCreatedAt: createdAt,
     });
 
@@ -200,9 +204,9 @@ const useChatBase = ({
       chatId,
       type: messageType,
       content: { filename: filename, path: data },
-      senderId: sessionUser.id,
+      senderId: sessionUser?.id,
       tempKey: dataToSend["tempKey"],
-      senderPhoto: sessionUser.photo,
+      senderPhoto: sessionUser?.photo,
       isAdminSender: false,
       createdAt,
     };
@@ -211,7 +215,7 @@ const useChatBase = ({
     listProps.updateChatInfo(chatId, {
       messageId: null,
       messageType: messageType,
-      messageSenderId: sessionUser.id,
+      messageSenderId: sessionUser?.id,
       messageCreatedAt: createdAt,
     });
 
