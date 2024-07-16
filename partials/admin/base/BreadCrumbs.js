@@ -8,7 +8,7 @@ const BreadCrumbs = ({ links }) => {
           return (
             <li
               key={index}
-              className="max-w-full text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
+              className="overflow-separate max-w-full text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
             >
               {link.href && (
                 <a

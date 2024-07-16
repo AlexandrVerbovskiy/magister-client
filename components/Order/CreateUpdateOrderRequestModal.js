@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
 import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
@@ -18,6 +17,7 @@ import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
+//import "flatpickr/dist/flatpickr.min.css";
 
 const CreateUpdateOrderRequestModal = ({
   handleCreateUpdateRequest,

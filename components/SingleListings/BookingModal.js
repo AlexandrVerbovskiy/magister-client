@@ -15,11 +15,11 @@ import {
   separateDate,
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
-import "flatpickr/dist/flatpickr.min.css";
 import Switch from "../FormComponents/Switch";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../static";
 import YesNoModal from "../_App/YesNoModal";
+//import "flatpickr/dist/flatpickr.min.css";
 
 const BookingModal = ({
   handleMakeBooking,

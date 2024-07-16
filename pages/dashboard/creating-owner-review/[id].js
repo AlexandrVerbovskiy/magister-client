@@ -119,6 +119,8 @@ const FullReview = (pageProps) => {
               userName: pageProps.order.ownerName,
               userPhoto: pageProps.order.ownerPhoto,
               userCountItems: pageProps.order.ownerCountItems,
+              userAverageRating: pageProps.order.ownerAverageRating,
+              userCommentCount: pageProps.order.ownerCommentCount,
             }}
             onSubmit={handleOwnerReviewSubmit}
             goBack={handleBackToItemReview}
