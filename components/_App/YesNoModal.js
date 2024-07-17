@@ -34,11 +34,11 @@ const YesNoModal = ({
             <div className="tab-content mt-0">
               <div className="tab-pane fade show active" id="login">
                 <div className="miran-login">
-                  <span className="sub-title mb-2">
-                    <span className="row-dots-end">{title}</span>
-                  </span>
+                  <div className="w-100 sub-title mb-2">
+                    <div className="w-100 row-dots-end">{title}</div>
+                  </div>
 
-                  <span className="row-dots-end">{body}</span>
+                  <div className="w-100 row-dots-end">{body}</div>
 
                   <form
                     method="get"

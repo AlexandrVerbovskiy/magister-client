@@ -142,6 +142,7 @@ const TableItem = (props) => {
               <SingleRatingStar
                 value={ownerAverageRating}
                 ownerCommentCount={ownerCommentCount}
+                commentName="owner"
               />
             </SubInfoRowWithChild>
           </div>
@@ -164,6 +165,7 @@ const TableItem = (props) => {
               <SingleRatingStar
                 value={tenantAverageRating}
                 count={tenantCommentCount}
+                commentName="renter"
               />
             </SubInfoRowWithChild>
           </div>

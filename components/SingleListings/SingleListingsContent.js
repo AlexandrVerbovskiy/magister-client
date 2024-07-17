@@ -609,6 +609,7 @@ const SingleListingsContent = ({
                                   countClass="rating-count"
                                   pointsValue={true}
                                   centerAlign={true}
+                                  commentName="owner"
                                 />
                               </div>
                             </div>

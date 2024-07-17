@@ -874,11 +874,10 @@ const EditForm = ({ listing, categories, save }) => {
                       />
 
                       <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        <h2 className="small-text text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                           Listing Background Photo
                           <div
                             style={{
-                              fontSize: "12px",
                               fontWeight: 400,
                               marginTop: "2px",
                             }}

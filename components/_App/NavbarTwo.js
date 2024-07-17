@@ -18,7 +18,7 @@ import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
 
-const NavbarTwo = ({ canShowSearch = true }) => {
+const NavbarTwo = ({ canShowSearch = false }) => {
   const {
     isAuth,
     success: mainSuccess,

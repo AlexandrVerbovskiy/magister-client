@@ -18639,10 +18639,10 @@ input[type="number"] {
   margin-right: 0.75rem;
 }
 
-.all-listings-list .swiper-wrapper,
+/*.all-listings-list .swiper-wrapper,
 .listings-area .swiper-wrapper {
   grid-column-gap: 25px !important;
-}
+}*/
 
 .all-listings-list .swiper-wrapper .swiper-slide,
 .listings-area .swiper-wrapper .swiper-slide {
@@ -19157,6 +19157,8 @@ span.flatpickr-weekday {
   border: 0 !important;
   border-radius: 0 !important;
   max-width: unset !important;
+  font-size: var(--fontSize) !important;
+  font-family: var(--fontFamily) !important;
 }
 
 #paypal-connect a:hover {
@@ -19220,11 +19222,6 @@ span.flatpickr-weekday {
 
 .client-info .sub-title {
   color: #666666;
-}
-
-#paypal-connect.update-paypal,
-#paypal-connect.update-paypal * {
-  font-family: var(--fontFamily) !important;
 }
 
 .cookie-banner button {
@@ -19602,4 +19599,31 @@ span.flatpickr-weekday {
 
 .no-comments-rating {
   font-size: 12px;
+}
+
+.small-text{
+  font-size: 14px;
+}
+
+.very-small-text{
+  font-size: 12px;
+}
+
+.form-hint{
+  font-size: 14px;
+   font-weight: 400; margin-top: 2px;
+}
+
+.sidemenu-nav .nav-item .nav-link{
+  display: flex!important;
+  align-items: center;
+}
+
+.chat-list-show-more{
+  transition: var(--transition);
+  color: #847bdd;
+}
+
+.chat-list-show-more:hover{
+  color: var(--mainColor);
 }
