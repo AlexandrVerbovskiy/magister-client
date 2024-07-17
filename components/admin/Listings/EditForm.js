@@ -110,7 +110,7 @@ const EditForm = ({ listing, categories, save }) => {
   const { error, success, authToken } = useContext(IndiceContext);
   const [prevListing, setPrevListing] = useState(listing);
 
-  categories = convertToSelectPopupCategories(categories);
+  categories = convertToSelectPopupCategories(categories, true);
 
   let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
 

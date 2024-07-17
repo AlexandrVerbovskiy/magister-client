@@ -56,7 +56,7 @@ const EditForm = ({
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
   const router = useRouter();
-  categories = convertToSelectPopupCategories(categories);
+  categories = convertToSelectPopupCategories(categories, true);
 
   let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
 
