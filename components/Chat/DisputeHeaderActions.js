@@ -28,7 +28,7 @@ const DisputeHeaderActions = ({ dispute }) => {
       </Link>
       <Link
         className="dropdown-item d-flex align-items-center"
-        href={`/dashboard/listings/` + dispute.listingId}
+        href={`/listings/` + dispute.listingId}
       >
         <i className="bx bx-layer"></i> View Item
       </Link>

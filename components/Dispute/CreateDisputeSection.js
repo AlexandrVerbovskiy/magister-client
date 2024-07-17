@@ -33,28 +33,31 @@ const Wrap = ({ children, needWrapping }) => {
   );
 };
 
-const CreateDisputeSection = ({
-  type,
-  error,
-  setType,
-  listing,
-  setError,
-  onGoBack,
-  onSubmit,
-  disabled,
-  description,
-  setDescription,
-  opponentId,
-  opponentName,
-  opponentPhoto,
-  setCurrentOpenImg,
-  opponentCountItems,
-  opponentCommentCountName,
-  opponentAverageRatingName,
-  opponentItemsType = "for rental",
-  isOwnerCreateDispute,
-  needWrapping = true,
-}) => {
+const CreateDisputeSection = (data) => {
+  const {
+    type,
+    error,
+    setType,
+    listing,
+    setError,
+    onGoBack,
+    onSubmit,
+    disabled,
+    description,
+    setDescription,
+    opponentId,
+    opponentName,
+    opponentPhoto,
+    setCurrentOpenImg,
+    opponentCountItems,
+    opponentCommentCount,
+    opponentAverageRating,
+    opponentItemsType = "for rental",
+    isOwnerCreateDispute,
+    needWrapping = true,
+  } = data;
+  console.log(data);
+
   const handleDescriptionChange = (e) => {
     setError(null);
     setDescription(e.target.value);
@@ -85,8 +88,8 @@ const CreateDisputeSection = ({
                 userName: opponentName,
                 userPhoto: opponentPhoto,
                 userCountItems: +opponentCountItems,
-                userCommentCount: opponentCommentCountName,
-                userAverageRating: opponentAverageRatingName,
+                userCommentCount: opponentCommentCount,
+                userAverageRating: opponentAverageRating,
               }}
               countItemsType={opponentItemsType}
               title={isOwnerCreateDispute ? "Renter" : "Owner"}
