@@ -17913,13 +17913,6 @@ input:-internal-autofill-selected {
   box-sizing: border-box !important;
 }
 
-.custom-search-select [class*="-ValueContainer"] {
-  font-weight: 600;
-  font-size: 15px !important;
-  padding: 0 !important;
-  text-align: left !important;
-}
-
 .custom-search-select [class*="-option"] {
   font-weight: 400 !important;
   text-align: left !important;
@@ -17975,6 +17968,10 @@ input:-internal-autofill-selected {
   overflow: hidden !important;
   padding: 2px 8px !important;
   box-sizing: border-box !important;
+  font-weight: 600;
+  font-size: 15px !important;
+  padding: 0 !important;
+  text-align: left !important;
 }
 
 .custom-search-select [class*="-control"] > div:nth-of-type(2) {
