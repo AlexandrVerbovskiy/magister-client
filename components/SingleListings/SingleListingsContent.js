@@ -520,6 +520,7 @@ const SingleListingsContent = ({
                                         checkedOnlyActive={true}
                                         uncheckedStarClassName="bxs-star"
                                         commentCount={comments.length}
+                                        needCommentsCount={false}
                                       />
                                       <p>{comment.description}</p>
                                     </div>

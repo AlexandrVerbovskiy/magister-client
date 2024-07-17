@@ -20,6 +20,10 @@ const Layout = ({ children }) => {
           }
           async
         ></script>
+        <script
+          src="https://www.paypalobjects.com/js/external/api.js"
+          async
+        ></script>
       </Head>
 
       {children}
