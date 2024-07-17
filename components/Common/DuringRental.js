@@ -19,9 +19,13 @@ const DuringRental = () => {
 
               <div>
                 <div>
-                  <h4 className="mb-2">Share your things, earn cash!</h4>
+                  <h4 className="mb-2">
+                    Start earning by renting out your hardly used things
+                  </h4>
                   <p className="mb-4">
-                    Earn by renting out your stuff locally when you're not using it. Relax with verified renters and an owners’ guarantee.
+                    Share your things, earn cash! Earn by renting out your stuff
+                    locally when you're not using it. Relax with verified
+                    renters and an owners’ guarantee.
                   </p>
                 </div>
               </div>

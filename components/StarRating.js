@@ -10,6 +10,7 @@ const StarRating = ({
   checkedOnlyActive = false,
   uncheckedStarClassName = "bx-star",
   emptyMaxWidth = null,
+  needCommentsCount = true,
 }) => {
   if (!commentCount) {
     return (
@@ -54,7 +55,7 @@ const StarRating = ({
         <span className="overall-rating">{averageRating.toFixed(1)}</span>
       )}
 
-      {commentCount > 0 && (
+      {needCommentsCount && (
         <span className={countClass}>
           ({commentCount}
           {pointsValue && ` ${autoMultiEnding(commentCount, "review")}`})
