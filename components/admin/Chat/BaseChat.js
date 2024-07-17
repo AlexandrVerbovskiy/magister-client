@@ -191,6 +191,8 @@ const BaseChat = ({
               setFilter={listProps.setFilter}
               loading={listProps.loading}
               filterChats={listProps.filterChats}
+              canShowMore={listProps.canShowMore}
+              handleShowMore={listProps.handleShowMore}
             />
 
             <div

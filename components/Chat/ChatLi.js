@@ -9,6 +9,7 @@ const ChatLi = ({ chat, selected, onClick }) => {
     <li
       className={`cursor-pointer${selected ? " selected" : ""}`}
       onClick={onClick}
+      id={`chat-${chat.id}`}
     >
       <div className="d-flex align-items-center">
         <div className="avatar me-2">
@@ -22,13 +23,15 @@ const ChatLi = ({ chat, selected, onClick }) => {
             height="40"
             className="rounded-circle"
             alt="image"
-            style={{width:"40px", height:"40px"}}
+            style={{ width: "40px", height: "40px" }}
           />
           {isOrder && <OnlineStatus online={chat.opponentOnline} />}
         </div>
 
         <div className="w-100 user-name row-dots-end">
-          <h6 className="row-dots-end">{isOrder?chat.opponentName:"SUPPORT"}</h6>
+          <h6 className="row-dots-end">
+            {isOrder ? chat.opponentName : "SUPPORT"}
+          </h6>
           <span className="d-block row-dots-end no-wrap">{chat.name}</span>
         </div>
       </div>

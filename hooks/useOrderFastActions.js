@@ -76,7 +76,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const onCreateDispute = async () => {
     try {
-      const { disputeId } = await createDispute(
+      const { orderPart } = await createDispute(
         {
           orderId: orderToDispute.id,
           type: createDisputeData.type,
@@ -87,7 +87,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
       autoParentOrderSetItemField(
         {
-          disputeId,
+          disputeId: orderPart.disputeId,
           disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
           disputeType: createDisputeData.type,
           disputeDescription: createDisputeData.description,

@@ -214,6 +214,7 @@ const TableItem = ({
                       <SingleRatingStar
                         value={ownerAverageRating}
                         count={ownerCommentCount}
+                        commentName="owner"
                       />
                     </SubInfoRowWithChild>
                   </div>

@@ -857,9 +857,7 @@ const EditForm = ({
         <div className="add-listings-box">
           <h3>
             Collection Location{" "}
-            <div
-              style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
-            >
+            <div className="form-hint">
               The location is where you plan to hand over the item to the
               renter. It could be your home, workplace, or any other convenient
               place. <br />
@@ -952,9 +950,7 @@ const EditForm = ({
         <div className="add-listings-box">
           <h3>
             Listing Background Photo
-            <div
-              style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
-            >
+            <div className="form-hint">
               You can add file with maximum size 5 MB. Valid photo format is 3
               to 1
             </div>

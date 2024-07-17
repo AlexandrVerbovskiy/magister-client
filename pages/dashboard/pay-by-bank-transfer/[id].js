@@ -152,9 +152,8 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                 <div>
                   <button
                     disabled={disabled}
-                    className="pay-download-invoice"
+                    className="pay-download-invoice small-text"
                     type="button"
-                    style={{ fontSize: "14px" }}
                     onClick={handlePdfDownload}
                   >
                     Download Invoice

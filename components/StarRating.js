@@ -11,6 +11,7 @@ const StarRating = ({
   uncheckedStarClassName = "bx-star",
   emptyMaxWidth = null,
   needCommentsCount = true,
+  commentName = "item",
 }) => {
   if (!commentCount) {
     return (
@@ -18,7 +19,7 @@ const StarRating = ({
         className="no-comments-rating"
         style={emptyMaxWidth ? { maxWidth: emptyMaxWidth } : {}}
       >
-        No reviews added to this item
+        No reviews added to this {commentName}
       </div>
     );
   }

@@ -56,7 +56,6 @@ const CreateDisputeSection = (data) => {
     isOwnerCreateDispute,
     needWrapping = true,
   } = data;
-  console.log(data);
 
   const handleDescriptionChange = (e) => {
     setError(null);

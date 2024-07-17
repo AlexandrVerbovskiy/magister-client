@@ -26,11 +26,11 @@ const DownloadButton = ({ src }) => {
   );
 };
 
-const PointStarInfo = ({ label, value }) => {
+const PointStarInfo = ({ label, value, commentName = "item" }) => {
   return (
     <div style={{ width: "150px" }}>
       <label>{label}</label>
-      <SingleRatingStar value={value} count={1} />
+      <SingleRatingStar commentName={commentName} value={value} count={1} />
     </div>
   );
 };
@@ -294,6 +294,8 @@ const orderMessageContent = ({
   }
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+    const commentName = content.type == "tenant" ? "reviewer" : "owner";
+
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
@@ -302,14 +304,38 @@ const orderMessageContent = ({
 
         <div className="mb-1">
           <div className="flex">
-            <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
-            <PointStarInfo label="Utility" value={content.utility} />
+            <PointStarInfo
+              commentName={commentName}
+              label="Quality"
+              value={content.quality}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Accuracy"
+              value={content.listingAccuracy}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Utility"
+              value={content.utility}
+            />
           </div>
           <div className="flex">
-            <PointStarInfo label="Condition" value={content.condition} />
-            <PointStarInfo label="Performance" value={content.performance} />
-            <PointStarInfo label="Location" value={content.location} />
+            <PointStarInfo
+              commentName={commentName}
+              label="Condition"
+              value={content.condition}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Performance"
+              value={content.performance}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Location"
+              value={content.location}
+            />
           </div>
         </div>
 

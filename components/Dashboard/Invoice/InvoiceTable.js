@@ -23,8 +23,8 @@ const Status = ({ adminApproved, waitingApproved }) => {
 
   return (
     <div
-      className={`bookings-status order-item-status ${className}`}
-      style={{ fontSize: "14px", marginLeft: "10px" }}
+      className={`small-text bookings-status order-item-status ${className}`}
+      style={{ marginLeft: "10px" }}
     >
       {statusName}
     </div>

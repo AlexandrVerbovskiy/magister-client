@@ -140,7 +140,7 @@ const useOrderActions = ({ order }) => {
         order.extendOrders.length > 0 &&
         (!order.orderParentId || order.extendOrders.length > 1)
       ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
       }
 
       const hasFinishedExtends =
@@ -168,6 +168,7 @@ const useOrderActions = ({ order }) => {
               STATIC.ORDER_STATUSES.REJECTED,
             ].includes(extendOrder.status) && !extendOrder.cancelStatus
         );
+
 
       if (
         isTenant &&

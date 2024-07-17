@@ -3,6 +3,7 @@ const SingleRatingStar = ({
   count = 0,
   bodyColor = "rgb(248 250 252)",
   emptyMaxWidth = null,
+  commentName = "item",
 }) => {
   if (!count) {
     return (
@@ -10,7 +11,7 @@ const SingleRatingStar = ({
         className="no-comments-rating"
         style={emptyMaxWidth ? { maxWidth: emptyMaxWidth } : {}}
       >
-        No reviews added to this item
+        No reviews added to this {commentName}
       </div>
     );
   }
