@@ -7,11 +7,13 @@ const PaypalSection = () => {
   const { sessionUser } = useContext(IndiceContext);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://www.paypalobjects.com/js/external/api.js";
+    if (window.paypal) {
+      console.log(window.paypal);
+      const script = document.createElement("script");
+      script.src = "https://www.paypalobjects.com/js/external/api.js";
+      script.async = true;
 
-    script.onload = () => {
-      if (window.paypal) {
+      script.onload = () => {
         window.paypal.use(["login"], function (login) {
           const loginRenderObj = {
             appid: ENV.PAYPAL_CLIENT_ID,
@@ -32,10 +34,10 @@ const PaypalSection = () => {
 
           login.render(loginRenderObj);
         });
-      }
-    };
+      };
 
-    document.body.appendChild(script);
+      document.body.appendChild(script);
+    }
   }, []);
 
   return (

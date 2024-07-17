@@ -117,7 +117,7 @@ const HowItWorks = () => {
       <div className="listings-area ptb-100 pb-0 how-it-works-section">
         <div className="container">
           <div className="section-title max-w-max m-0">
-            <h2>Renting is easy</h2>
+            <h2>Earn money safely and securely</h2>
           </div>
           <div className="row justify-content-center">
             {rentingSafelyAndSecurityOptions.map((option, index) => {
