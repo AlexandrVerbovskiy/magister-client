@@ -11,6 +11,7 @@ const OwnerInfo = ({
   countItemsType = "for rental",
   title = "Owner",
 }) => {
+
   return (
     <div className="listings-widget listings_author">
       <h3>{title}</h3>
