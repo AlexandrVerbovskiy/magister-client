@@ -124,7 +124,7 @@ export const hasPayError = ({ sessionUser, order }) => {
 export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
   let lastOrderDate = offerEndDate;
 
-  if (extendOrders) {
+  if (extendOrders && extendOrders.length) {
     const extendOrderDates = extendOrders
       .filter(
         (order) =>

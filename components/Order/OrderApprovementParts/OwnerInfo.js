@@ -41,6 +41,7 @@ const OwnerInfo = ({
           centerAlign={true}
           countClass="rating-count"
           pointsValue={true}
+          commentName="owner"
         />
       </div>
     </div>

@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
 import { generateProfileFilePath } from "../../../utils";
 import SmallLoader from "../SmallLoader";
 
 const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
   return (
-    <li className="-mx-2">
+    <li className="-mx-2" id={`chat-${chat.id}`}>
       <button
         className={`flex items-center justify-between w-full p-2 rounded ${
           selectedChat?.id == chat.id
@@ -57,9 +58,32 @@ const InboxSidebar = ({
   setFilter,
   loading,
   filterChats,
+  canShowMore,
+  handleShowMore,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const [lastShowedChatId, setLastShowedChatId] = useState(null);
+
+  useEffect(() => {
+    if (lastShowedChatId) {
+      setTimeout(() => {
+        const lastChat = document.querySelector("#chat-" + lastShowedChatId);
+
+        if (lastChat) {
+          lastChat.scrollIntoView({ behavior: "instant", block: "end" });
+        }
+      }, 0);
+
+      setLastShowedChatId(null);
+    }
+  }, [JSON.stringify(chats)]);
+
+  const handleShowMoreClick = () => {
+    setLastShowedChatId(chats[chats.length - 1].id);
+    handleShowMore();
   };
 
   return (
@@ -134,6 +158,16 @@ const InboxSidebar = ({
                     handleSelectChat={handleSelectChat}
                   />
                 ))}
+                <li className="-mx-2">
+                  {canShowMore && (
+                    <div
+                      className="transition text-indigo-400 hover:text-indigo-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
+                      onClick={handleShowMoreClick}
+                    >
+                      Show more
+                    </div>
+                  )}
+                </li>
               </ul>
             )}
           </div>

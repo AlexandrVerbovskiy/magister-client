@@ -10,7 +10,7 @@ import OrderUpdateStatusMessageContent from "./OrderUpdateStatusMessageContent";
 import OrderMessageActions from "./OrderMessageActions";
 import StarRating from "../StarRating";
 
-const PointStarInfo = ({ label, value }) => {
+const PointStarInfo = ({ label, value, commentName = "item" }) => {
   return (
     <div style={{ width: "120px" }}>
       <label>{label}</label>
@@ -21,6 +21,7 @@ const PointStarInfo = ({ label, value }) => {
         uncheckedStarClassName="bxs-star"
         commentCount={1}
         needCommentsCount={false}
+        commentName={commentName}
       />
     </div>
   );
@@ -271,6 +272,8 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
   }
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+    const commentName = content.type == "tenant" ? "reviewer" : "owner";
+
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="mb-2">
@@ -279,15 +282,39 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
 
         <div className="my-1">
           <div className="d-flex">
-            <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
-            <PointStarInfo label="Utility" value={content.utility} />
+            <PointStarInfo
+              commentName={commentName}
+              label="Quality"
+              value={content.quality}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Accuracy"
+              value={content.listingAccuracy}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Utility"
+              value={content.utility}
+            />
           </div>
 
           <div className="d-flex">
-            <PointStarInfo label="Condition" value={content.condition} />
-            <PointStarInfo label="Performance" value={content.performance} />
-            <PointStarInfo label="Location" value={content.location} />
+            <PointStarInfo
+              commentName={commentName}
+              label="Condition"
+              value={content.condition}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Performance"
+              value={content.performance}
+            />
+            <PointStarInfo
+              commentName={commentName}
+              label="Location"
+              value={content.location}
+            />
           </div>
         </div>
 

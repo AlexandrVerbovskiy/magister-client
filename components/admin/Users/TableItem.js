@@ -327,12 +327,14 @@ const TableItem = ({
                       <SingleRatingStar
                         value={tenantAverageRating}
                         count={tenantCommentCount}
+                        commentName="renter"
                       />
                     </SubInfoRowWithChild>
                     <SubInfoRowWithChild label="Owner">
                       <SingleRatingStar
                         value={ownerAverageRating}
                         count={ownerCommentCount}
+                        commentName="owner"
                       />
                     </SubInfoRowWithChild>
                   </div>

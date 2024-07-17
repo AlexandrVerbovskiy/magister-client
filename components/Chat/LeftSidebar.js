@@ -2,6 +2,7 @@ import SmallLoader from "../_App/SmallLoader";
 import ChatLi from "./ChatLi";
 import SearchHeader from "./SearchHeader";
 import STATIC from "../../static";
+import { useEffect, useState } from "react";
 
 const LeftSidebar = ({
   loading,
@@ -21,6 +22,27 @@ const LeftSidebar = ({
     type == STATIC.CHAT_TYPES.DISPUTE
       ? "You don't have any dispute chats yet"
       : "You don't have any order chats yet";
+
+  const [lastShowedChatId, setLastShowedChatId] = useState(null);
+
+  useEffect(() => {
+    if (lastShowedChatId) {
+      setTimeout(() => {
+        const lastChat = document.querySelector("#chat-" + lastShowedChatId);
+
+        if (lastChat) {
+          lastChat.scrollIntoView({ behavior: "instant", block: "end" });
+        }
+      }, 0);
+
+      setLastShowedChatId(null);
+    }
+  }, [JSON.stringify(chats)]);
+
+  const handleShowMoreClick = () => {
+    setLastShowedChatId(chats[chats.length - 1].id);
+    handleShowMore();
+  };
 
   return (
     <div className="sidebar-left h-100">
@@ -96,9 +118,8 @@ const LeftSidebar = ({
 
                     {canShowMore && (
                       <div
-                        className="d-flex align-items-center justify-content-center cursor-pointer mt-1"
-                        style={{ color: "#71738d" }}
-                        onClick={handleShowMore}
+                        className="d-flex align-items-center justify-content-center cursor-pointer py-2 chat-list-show-more"
+                        onClick={handleShowMoreClick}
                       >
                         Show more
                       </div>

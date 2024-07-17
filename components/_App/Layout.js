@@ -1,7 +1,16 @@
 import Head from "next/head";
 import env from "../../env";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Layout = ({ children }) => {
+  const router = useRouter();
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    setCurrentPath(router.asPath);
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -14,16 +23,20 @@ const Layout = ({ children }) => {
           type="image/x-icon"
           href="/images/rent-about-logo.ico"
         />
-        <script
-          src={
-            "https://www.paypal.com/sdk/js?client-id=" + env.PAYPAL_CLIENT_ID
-          }
-          async
-        ></script>
-        <script
-          src="https://www.paypalobjects.com/js/external/api.js"
-          async
-        ></script>
+        {currentPath.includes("/dashboard/orders/") && (
+          <script
+            src={
+              "https://www.paypal.com/sdk/js?client-id=" + env.PAYPAL_CLIENT_ID
+            }
+            async
+          ></script>
+        )}
+        {currentPath.includes("/dashboard/profile-edit/") && (
+          <script
+            src="https://www.paypalobjects.com/js/external/api.js"
+            async
+          ></script>
+        )}
       </Head>
 
       {children}

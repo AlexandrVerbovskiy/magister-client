@@ -188,7 +188,7 @@ const EditPhotosSection = ({
       <div {...getRootPropsBase()} className="dropzone add-listings-box">
         <h3>
           Photos
-          <div style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
+          <div className="form-hint">
             You can add maximum 5 files with maximum summary size 20 MB
           </div>
         </h3>

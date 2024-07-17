@@ -509,7 +509,7 @@ const ProfileEdit = ({ newPaypalId }) => {
         </span>
 
         <form className="mt-0" method="get">
-          <span style={{ fontSize: "12px" }}>
+          <span className="small-text">
             You received a verification code on your mobile phone. Copy and
             paste it in the field below
           </span>
