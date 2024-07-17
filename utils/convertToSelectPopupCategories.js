@@ -28,17 +28,6 @@ const convertToSelectPopupCategories = (categories) => {
   );
   newCategories["thirdLevel"].sort((a, b) => b.countChildren - a.countChildren);
 
-  newCategories["firstLevel"].push({
-    countChildren: 0,
-    id: "-",
-    image: null,
-    level: 1,
-    name: "Others",
-    orderIndex: null,
-    parentId: null,
-    popular: false,
-  });
-
   return newCategories;
 };
 
