@@ -26,7 +26,7 @@ const ManageBusiness = () => {
                   maecenas accumsan lacus vel facilisis.
                 </p>
 
-                <Link href="/dashboard/add-listing" className="default-btn">
+                <Link href="/dashboard/add-listing/" className="default-btn">
                   <i className="flaticon-more"></i> Add Listing
                 </Link>
               </div>

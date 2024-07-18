@@ -182,7 +182,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePayOrder(null);
     activateSuccessOrderPopup({
       text: "Operation successful",
-      onClose: () => router.push("/dashboard/orders/" + activePayOrder.id),
+      onClose: () => router.push(`/dashboard/orders/${activePayOrder.id}/`),
       closeButtonText: "Move to Order",
     });
   };
@@ -276,7 +276,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         success.set("New booking created successfully");
       }
 
-      router.push("/dashboard/orders", undefined, {
+      router.push("/dashboard/orders/", undefined, {
         unstable_skipClientCache: true,
       });
     } catch (e) {

@@ -49,7 +49,7 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         {sessionUser?.id != userId && (
-          <Link href={`/admin/users/edit/${userId}`}>{userEmail}</Link>
+          <Link href={`/admin/users/edit/${userId}/`}>{userEmail}</Link>
         )}
         {sessionUser?.id == userId && userEmail}
       </td>

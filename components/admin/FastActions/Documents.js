@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const View = ({ href }) => {
+const Documents = ({ href }) => {
   return (
     <Link
       href={href}
@@ -11,4 +11,4 @@ const View = ({ href }) => {
   );
 };
 
-export default View;
+export default Documents;

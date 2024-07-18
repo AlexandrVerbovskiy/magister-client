@@ -25,7 +25,11 @@ const useIdPage = ({
       currentProps: props,
     });
 
-    setProps(newProps);
+    setProps((prev) => {
+      const result = { ...prev, ...newProps };
+      result[observingField] = field;
+      return result;
+    });
 
     if (onUpdate) {
       onUpdate(newProps, field);

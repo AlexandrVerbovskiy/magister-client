@@ -2,7 +2,7 @@ import Link from "next/link";
 import View from "../FastActions/View";
 
 const TableItem = ({ index, otherCategoryName, listingsCount }) => {
-  const editLink = `/admin/others-listing-categories/create?name=${otherCategoryName}`;
+  const editLink = `/admin/others-listing-categories/create/?name=${otherCategoryName}`;
 
   return (
     <tr>

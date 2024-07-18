@@ -5,7 +5,7 @@ const SuccessIcon = ({
   closeModal,
   text = null,
   textWeight = null,
-  mainCloseButtonText = "Close Modal",
+  mainCloseButtonText = "Close",
 }) => {
   return (
     <BaseModal

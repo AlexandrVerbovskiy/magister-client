@@ -106,7 +106,7 @@ const TableItem = (props) => {
           <div>
             <SubInfoTitle
               title="Item Details"
-              href={"/admin/listings/edit/" + listingId}
+              href={`/admin/listings/edit/${listingId}`}
               canMove={isAdmin}
             />
             <SubInfoRow label="Name" value={listingName} />
@@ -129,7 +129,7 @@ const TableItem = (props) => {
           <div>
             <SubInfoTitle
               title="Owner"
-              href={"/admin/users/edit/" + ownerId}
+              href={`/admin/users/edit/${ownerId}`}
               canMove={isAdmin && sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
@@ -152,7 +152,7 @@ const TableItem = (props) => {
           <div>
             <SubInfoTitle
               title="Renter"
-              href={"/admin/users/edit/" + tenantId}
+              href={`/admin/users/edit/${tenantId}`}
               canMove={isAdmin && sessionUser?.id != tenantId}
             />
             <SubInfoRow label="Name" value={tenantName} />
@@ -202,7 +202,7 @@ const TableItem = (props) => {
           className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
-            <View href={`/admin/orders/${id}`} />
+            <View href={`/admin/orders/${id}/`} />
             {/*<Delete onDeleteClick={onDeleteClick} />*/}
           </div>
         </td>

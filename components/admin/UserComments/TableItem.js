@@ -70,7 +70,7 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div>
             <Link
-              href={`/admin/users/edit/${reviewerId}`}
+              href={`/admin/users/edit/${reviewerId}/`}
               className="flex items-center"
               onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
               style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -90,7 +90,7 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div>
             <Link
-              href={`/admin/users/edit/${reviewerId}`}
+              href={`/admin/users/edit/${reviewerId}/`}
               className="flex items-center"
               onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
               style={canMoveToReviewer ? {} : { cursor: "auto" }}
@@ -147,7 +147,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Reviewer"
-                      href={"/admin/users/edit/" + reviewerId}
+                      href={`/admin/users/edit/${reviewerId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
@@ -173,7 +173,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title={userColumnTitle}
-                      href={"/admin/users/edit/" + userId}
+                      href={`/admin/users/edit/${userId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={userName} />

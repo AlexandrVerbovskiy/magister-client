@@ -91,13 +91,13 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div>
-            <Link href={`/admin/listing-approval-requests/${id}`}>{name}</Link>
+            <Link href={`/admin/listing-approval-requests/${id}/`}>{name}</Link>
           </div>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${userId}`}
+            href={`/admin/users/edit/${userId}/`}
             className="flex items-center"
             onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
             style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -146,7 +146,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Item Details"
-              href={"/admin/listings/edit/" + listingId}
+              href={`/admin/listings/edit/${listingId}`}
             />
             <SubInfoRow label="Name" value={name} />
             <SubInfoRow
@@ -201,7 +201,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Owner"
-                      href={"/admin/users/edit/" + userId}
+                      href={`/admin/users/edit/${userId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={userName} />
@@ -246,7 +246,7 @@ const TableItem = ({
                       </>
                     )}
 
-                    <View href={`/admin/listing-approval-requests/${id}`} />
+                    <View href={`/admin/listing-approval-requests/${id}/`} />
                   </div>
                 </td>
               </tr>

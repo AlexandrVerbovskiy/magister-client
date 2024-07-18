@@ -63,7 +63,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${ownerId}`}
+            href={`/admin/users/edit/${ownerId}/`}
             className="flex items-center"
             onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
             style={canMoveToOwner ? {} : { cursor: "auto" }}
@@ -80,7 +80,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${tenantId}`}
+            href={`/admin/users/edit/${tenantId}/`}
             className="flex items-center"
             onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
             style={canMoveToTenant ? {} : { cursor: "auto" }}
@@ -97,7 +97,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/listings/${listingId}`}
+            href={`/listings/${listingId}/`}
             className="flex items-center"
             onClick={(e) => (isAdmin ? {} : e.preventDefault())}
             style={isAdmin ? {} : { cursor: "auto" }}
@@ -164,7 +164,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Owner"
-              href={"/admin/users/edit/" + ownerId}
+              href={`/admin/users/edit/${ownerId}`}
               canMove={canMoveToOwner}
             />
             <SubInfoRow label="Name" value={ownerName} />
@@ -180,7 +180,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Renter"
-              href={"/admin/users/edit/" + tenantId}
+              href={`/admin/users/edit/${tenantId}`}
               canMove={canMoveToTenant}
             />
             <SubInfoRow label="Name" value={tenantName} />
@@ -244,7 +244,7 @@ const TableItem = ({
             )}
 
             <Link
-              href={"/admin/chats/" + chatId}
+              href={`/admin/chats/${chatId}/`}
               className="bg-indigo-100 hover:bg-indigo-200  flex items-center text-indigo-500 hover:text-indigo-600 rounded-full py-2 px-4"
             >
               Chat

@@ -13,6 +13,7 @@ export const isCurrentAdminPath = (currentPath, link = null) => {
 
   return (
     currentPath === "/admin/" + link ||
+    currentPath === "/admin/" + link + "/" ||
     currentPath.includes("/admin/" + link + "/")
   );
 };

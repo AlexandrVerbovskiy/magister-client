@@ -6,20 +6,20 @@ const DisputeHeaderActions = ({ dispute }) => {
 
   const handleOrderChatClick = (e) => {
     e.preventDefault();
-    router.push(`/dashboard/chats/${dispute.chatId}`);
+    router.push(`/dashboard/chats/${dispute.chatId}/`);
   };
 
   return (
     <>
       <Link
         className="dropdown-item d-flex align-items-center"
-        href={`/dashboard/orders/` + dispute.orderId}
+        href={`/dashboard/orders/${dispute.orderId}/`}
       >
         <i className="bx bx-purchase-tag"></i> View Order
       </Link>
       <Link
         className="dropdown-item d-flex align-items-center"
-        href={`/listings/` + dispute.listingId}
+        href={`/listings/${dispute.listingId}/`}
       >
         <i className="bx bx-layer"></i> View Item
       </Link>

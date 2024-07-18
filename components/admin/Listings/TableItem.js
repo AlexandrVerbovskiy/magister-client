@@ -86,7 +86,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/listings/edit/${id}`}
+            href={`/admin/listings/edit/${id}/`}
             className="flex items-center"
           >
             {name}
@@ -94,7 +94,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${ownerId}`}
+            href={`/admin/users/edit/${ownerId}/`}
             onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
             style={canMoveToOwner ? {} : { cursor: "auto" }}
             className="flex items-center"
@@ -155,7 +155,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Item Details"
-              href={"/admin/listings/edit/" + id}
+              href={`/admin/listings/edit/${id}`}
             />
             <SubInfoRow label="Name" value={name} />
             <SubInfoRow
@@ -205,7 +205,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Owner"
-              href={"/admin/users/edit/" + ownerId}
+              href={`/admin/users/edit/${ownerId}`}
               canMove={sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
@@ -229,8 +229,8 @@ const TableItem = ({
           className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
-            <View href={`/listings/${id}`} />
-            <Edit href={`/admin/listings/edit/${id}`} />
+            <View href={`/listings/${id}/`} />
+            <Edit href={`/admin/listings/edit/${id}/`} />
           </div>
         </td>
       </tr>

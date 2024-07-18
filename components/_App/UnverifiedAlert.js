@@ -25,7 +25,7 @@ const UnverifiedAlert = ({ statusCode }) => {
       <div>
         You must be verified to conduct transactions with funds on the platform.
         To verify, send the necessary data via the{" "}
-        <Link href="/dashboard/documents-verification">
+        <Link href="/dashboard/documents-verification/">
           Documents Verification
         </Link>
       </div>

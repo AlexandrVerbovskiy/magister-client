@@ -74,7 +74,7 @@ const SingleListingsContent = ({
         },
         authToken
       );
-      await router.push(`/dashboard/orders/${id}`);
+      await router.push(`/dashboard/orders/${id}/`);
       success.set(
         "Booking made successfully. Wait for a response from the owner"
       );

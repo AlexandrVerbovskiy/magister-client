@@ -61,7 +61,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
                     alt="image"
                   />
                   <Link
-                    href={`/listings/${listing.id}`}
+                    href={`/listings/${listing.id}/`}
                     className="link-btn"
                   ></Link>
                 </div>
@@ -71,7 +71,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         )}
 
         {images.length <= 1 && (
-          <Link href={`/listings/${listing.id}`} className="link-btn"></Link>
+          <Link href={`/listings/${listing.id}/`} className="link-btn"></Link>
         )}
 
         <a
@@ -88,7 +88,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           className="author row-dots-end"
           style={{ maxWidth: "calc(100% - 40px)" }}
         >
-          <Link href={`/owner-listing-list/${listing.userId}`}>
+          <Link href={`/owner-listing-list/${listing.userId}/`}>
             <div className="d-flex align-items-center">
               <img
                 src={generateProfileFilePath(listing.userPhoto)}
@@ -101,7 +101,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         <ul className="listings-meta">
           <li>
             <Link
-              href={`/listing-list?categories=${
+              href={`/listing-list/?categories=${
                 listing.categoryName ?? listing.otherCategory
               }`}
             >
@@ -110,7 +110,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
             </Link>
           </li>
           <li>
-            <Link href={`/listing-list?cities=${listing.city}`}>
+            <Link href={`/listing-list/?cities=${listing.city}`}>
               <i className="flaticon-pin"></i>
               <span>{listing.city}</span>
             </Link>
@@ -118,7 +118,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         </ul>
 
         <h3 className="row-dots-end">
-          <Link className="row-dots-end" href={`/listings/${listing.id}`}>
+          <Link className="row-dots-end" href={`/listings/${listing.id}/`}>
             {listing.name}
           </Link>
         </h3>

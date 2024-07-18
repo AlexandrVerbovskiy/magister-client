@@ -682,7 +682,7 @@ const EditForm = ({
       setDeleteDisabled(true);
       await deleteListing(listing.id, authToken);
       setActiveDeletePopup(false);
-      router.push("/dashboard/listings");
+      router.push("/dashboard/listings/");
       success.set("Deleted successfully");
     } catch (e) {
       error.set(e.message);
@@ -743,7 +743,7 @@ const EditForm = ({
               <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href="/dashboard/listings">Listings</Link>
+              <Link href="/dashboard/listings/">Listings</Link>
             </li>
             <li className="item">{listing.name ?? "Add Listings"}</li>
           </ol>

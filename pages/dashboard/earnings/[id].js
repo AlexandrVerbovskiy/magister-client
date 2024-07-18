@@ -31,7 +31,7 @@ const Earning = (baseProps) => {
               <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href={`/dashboard/wallet`}>Wallet</Link>
+              <Link href={`/dashboard/wallet/`}>Wallet</Link>
             </li>
             <li className="item">Earning #{recipient.id}</li>
           </ol>

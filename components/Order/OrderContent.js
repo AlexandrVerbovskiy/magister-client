@@ -68,10 +68,10 @@ const SubOrderItem = ({
       <div className="d-flex justify-content-between">
         <div>
           Id:{" "}
-          <Link href={`/dashboard/orders/${subOrder.id}`}>#{subOrder.id}</Link>
+          <Link href={`/dashboard/orders/${subOrder.id}/`}>#{subOrder.id}</Link>
         </div>
 
-        <Link href={`/dashboard/orders/${subOrder.id}`}>
+        <Link href={`/dashboard/orders/${subOrder.id}/`}>
           <StatusBlock
             status={subOrder.status}
             statusCancelled={subOrder.cancelStatus}
@@ -96,7 +96,7 @@ const SubOrderItem = ({
         Rental:{" "}
         <Link
           className="w-100 row-dots-end"
-          href={`/owner-listing-list/${tenantId}`}
+          href={`/owner-listing-list/${tenantId}/`}
         >
           {tenantName}
         </Link>
@@ -163,6 +163,10 @@ const OrderContent = ({
     });
 
   useEffect(() => {
+    setOrder(baseOrder);
+  }, [baseOrder?.id]);
+
+  useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
     setIsTenant(order.tenantId == sessionUser?.id);
 
@@ -194,7 +198,7 @@ const OrderContent = ({
       if (!onClose) {
         onClose = () => {
           router.push(
-            `/dashboard/orders?type=${
+            `/dashboard/orders/?type=${
               sessionUser?.id == order.ownerId ? "owner" : "tenant"
             }`
           );
@@ -384,11 +388,11 @@ const OrderContent = ({
 
   const onExtendOrder = ({ id }) => {
     success.set("Order extended successfully");
-    router.push("/dashboard/orders");
+    router.push("/dashboard/orders/");
   };
 
   const handleMoveToOrder = (id) => {
-    router.push(`/dashboard/orders/${id}`);
+    router.push(`/dashboard/orders/${id}/`);
   };
 
   const handleTenantGotListingApprove = async () => {
@@ -1439,7 +1443,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/pay-by-bank-transfer/` + order.id}
+                href={`/dashboard/pay-by-bank-transfer/${order.id}/`}
               >
                 Update payment
               </Link>
@@ -1450,7 +1454,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/creating-renter-review/` + order.id}
+                href={`/dashboard/creating-renter-review/${order.id}`}
               >
                 Leave a review
               </Link>
@@ -1461,7 +1465,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/creating-owner-review/` + order.id}
+                href={`/dashboard/creating-owner-review/${order.id}`}
               >
                 Leave a review
               </Link>

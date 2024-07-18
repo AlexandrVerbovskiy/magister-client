@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import NavbarThree from "../../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../../components/Dashboard/DashboardNavbar";
 import CreateDisputeSection from "../../../../components/Dispute/CreateDisputeSection";
@@ -9,41 +9,54 @@ import {
   getOrderFullByIdOptions,
 } from "../../../../services";
 import ImagePopup from "../../../../components/_App/ImagePopup";
-import { IndiceContext } from "../../../../contexts";
 import { useRouter } from "next/router";
+import SuccessIconPopup from "../../../../components/IconPopups/SuccessIconPopup";
+import YesNoModal from "../../../../components/_App/YesNoModal";
 
 const CreateDispute = (baseProps) => {
   const router = useRouter();
-  const { props } = useIdPage({
+  const { props, authToken } = useIdPage({
     baseProps,
     getPagePropsFunc: ({ field, authToken }) =>
       getOrderFullByIdOptions(field, authToken),
   });
 
-  const { success } = useContext(IndiceContext);
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
+  const [yesNoActive, setYesNoActive] = useState(false);
+
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
   const disputeOptions = useCreateDispute({ order: props.order });
+
+  const [successIconPopupState, setSuccessIconPopupState] = useState({});
 
   const handleGoBack = () => {
     router.back();
   };
 
-  const handleOpenDispute = async () => {
+  const handleOpenDispute = () => {
+    setYesNoActive(true);
+  };
+
+  const onAccept = async () => {
     try {
       await handleCreateDispute(
         {
-          orderId: order.id,
+          orderId: props.order.id,
           type: disputeOptions.type,
           description: disputeOptions.description,
         },
         authToken
       );
 
-      success.set("Dispute created success");
-      router.push("/dashboard/orders/");
+      setSuccessIconPopupState({
+        active: true,
+        onClose: () => {
+          router.push("/dashboard/orders/");
+          setSuccessIconPopupState({});
+        },
+      });
     } catch (e) {
-      setError(e.message);
+      disputeOptions.setError(e.message);
     }
   };
 
@@ -70,6 +83,22 @@ const CreateDispute = (baseProps) => {
           photoUrl={currentOpenImg}
           open={!!currentOpenImg}
           close={closeCurrentOpenImg}
+        />
+
+        <SuccessIconPopup
+          modalActive={successIconPopupState.active}
+          closeModal={successIconPopupState.onClose}
+          text="Dispute created success"
+        />
+
+        <YesNoModal
+          title="Do you really want to create dispute?"
+          active={yesNoActive}
+          closeModal={() => setYesNoActive(false)}
+          onAccept={onAccept}
+          acceptText="Create"
+          closeModalClassName="Cancel"
+          acceptModalClassName="button-danger"
         />
       </div>
     </>

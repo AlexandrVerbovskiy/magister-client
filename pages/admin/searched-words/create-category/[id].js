@@ -371,7 +371,7 @@ const createCategoryBySearch = (baseProps) => {
                   <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                     <div className="flex self-end">
                       <Link
-                        href="/admin/searched-words"
+                        href="/admin/searched-words/"
                         aria-controls="access-leave-modal"
                         className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                       >

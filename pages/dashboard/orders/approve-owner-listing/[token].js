@@ -33,7 +33,7 @@ const ApproveOwnerListing = (baseProps) => {
                 <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href="/dashboard/orders">Orders</Link>
+                <Link href="/dashboard/orders/">Orders</Link>
               </li>
               <li className="item">{props.order.listingName}</li>
             </ol>

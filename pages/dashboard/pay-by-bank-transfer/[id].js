@@ -109,7 +109,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
         text: "Request sent successfully",
         closeButtonText: "Go to bookings page",
         onClose: () => {
-          router.push(`/dashboard/orders/${orderId}`);
+          router.push(`/dashboard/orders/${orderId}/`);
         },
         textWeight: 600,
       });
