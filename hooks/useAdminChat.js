@@ -1,9 +1,8 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useAdminChatList from "./useAdminChatList";
-import { changeLocation, indicateMediaTypeByExtension } from "../utils";
-import { IndiceContext } from "../contexts";
 import useAdminChatMessageList from "./useAdminChatMessageList";
 import useChatBase from "./useChatBase";
+import { useRouter } from "next/router";
 
 const useAdminChat = ({
   chatId: baseChatId = null,
@@ -19,11 +18,37 @@ const useAdminChat = ({
   mainSearchChatId: baseMainSearchChatId = false,
   searchChatType,
 }) => {
-  const { io, sessionUser } = useContext(IndiceContext);
+  const router = useRouter();
+  const firstUpdateChatRef = useRef(true);
   const chatBodyTriggerRef = useRef(null);
   const [selectedChatId, setSelectedChatId] = useState(baseChatId);
   const [mainSelectedChatId, setMainSelectedChatId] =
     useState(baseMainSearchChatId);
+
+  const onChatIdUpdate = async (chatId) => {
+    let mainSelectedChatInfo = chats.find((chat) =>
+      [chat.id, chat.ownerChatId, chat.tenantChatId].includes(chatId)
+    );
+
+    if (mainSelectedChatInfo) {
+      setSelectedChatId(chatId);
+      setMainSelectedChatId(mainSelectedChatInfo.id);
+      await bodyProps.handleChangeChat(chatId);
+    } else {
+      setSelectedChatId(null);
+      setMainSelectedChatId(null);
+    }
+  };
+
+  useEffect(() => {
+    if (firstUpdateChatRef.current) {
+      firstUpdateChatRef.current = false;
+    } else {
+      if (baseChatId) {
+        onChatIdUpdate(baseChatId);
+      }
+    }
+  }, [baseChatId]);
 
   const listProps = useAdminChatList({
     chats,
@@ -59,16 +84,11 @@ const useAdminChat = ({
   }, [selectedChatId]);
 
   const handleSelectChat = async (chatId) => {
-    await bodyProps.handleChangeChat(chatId);
-    setSelectedChatId(chatId);
-    setMainSelectedChatId(chatId);
-    changeLocation(`/admin/chats/${chatId}`);
+    router.push(`/admin/chats/${chatId}`);
   };
 
   const handleSelectSubChat = async (chatId) => {
-    await bodyProps.handleChangeChat(chatId);
-    setSelectedChatId(chatId);
-    changeLocation(`/admin/chats/${chatId}`);
+    router.push(`/admin/chats/${chatId}`);
   };
 
   const chatActions = useChatBase({

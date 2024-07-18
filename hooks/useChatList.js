@@ -1,39 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { getChatList } from "../services/chat";
-import { changeLocation } from "../utils";
 import STATIC from "../static";
 import useChatListBase from "./useChatListBase";
+import { useRouter } from "next/router";
 
 const useChatList = (props) => {
-  const { options, authToken } = props;
+  const { options, authToken, typeRef } = props;
+  const router = useRouter();
 
-  const chatListActions = useChatListBase({
-    ...props,
-    getChatList,
-    getDopOptions: () => ({ chatType: typeRef.current }),
-    chatHasRelationToOther: (chat, chatId) => chat.id === chatId,
-    checkMainRelationToOther: (chat, chatId) => chat.id === chatId,
-    ignoreNewMessageCondition: (message) =>
-      message.entityType != typeRef.current,
-  });
-
-  const {
-    loading,
-    updateChatInfo,
-    setLoading,
-    setCanShowMore,
-    setChats,
-    setFilter,
-    setFilterChats,
-  } = chatListActions;
-
-  const typeRef = useRef(options.chatType ?? STATIC.CHAT_TYPES.ORDER);
-
-  const changeType = async (newType) => {
-    if (loading) {
-      return;
-    }
-
+  const onChatTypeUpdate = async (newType) => {
     setLoading(true);
 
     try {
@@ -55,16 +30,44 @@ const useChatList = (props) => {
       setChats(result.chats);
       setFilter("");
       setFilterChats([]);
-
-      if (newType === STATIC.CHAT_TYPES.DISPUTE) {
-        changeLocation(`/dashboard/chats?chat-type=${newType}`);
-      } else {
-        changeLocation(`/dashboard/chats`);
-      }
     } catch (e) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const chatListActions = useChatListBase({
+    ...props,
+    getChatList,
+    getDopOptions: () => ({ chatType: typeRef.current }),
+    chatHasRelationToOther: (chat, chatId) => chat.id === chatId,
+    checkMainRelationToOther: (chat, chatId) => chat.id === chatId,
+    ignoreNewMessageCondition: (message) =>
+      message.entityType != typeRef.current,
+  });
+
+  const {
+    loading,
+    updateChatInfo,
+    setLoading,
+    setCanShowMore,
+    setChats,
+    setFilter,
+    setFilterChats,
+  } = chatListActions;
+
+  const changeType = async (newType) => {
+    if (loading) {
+      return;
+    }
+
+    let newPath = `/dashboard/chats`;
+
+    if (newType === STATIC.CHAT_TYPES.DISPUTE) {
+      newPath += "?chat-type=" + newType;
+    }
+
+    router.push(newPath);
   };
 
   const opponentOnline = (chatId) =>
@@ -82,6 +85,7 @@ const useChatList = (props) => {
     opponentOnline,
     opponentOffline,
     ...chatListActions,
+    onChatTypeUpdate,
   };
 };
 
