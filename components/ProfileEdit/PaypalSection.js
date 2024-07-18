@@ -23,7 +23,7 @@ const PaypalSection = () => {
             buttonShape: "pill",
             buttonSize: "lg",
             fullPage: "true",
-            returnurl: ENV.CLIENT_URL + "/dashboard/profile-edit",
+            returnurl: ENV.CLIENT_URL + "/dashboard/profile-edit/",
           };
 
           if (ENV.PAYPAL_TYPE != "production") {

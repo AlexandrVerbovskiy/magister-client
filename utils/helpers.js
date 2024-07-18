@@ -44,9 +44,6 @@ export const checkIsFileHasExtension = (file, extensions) => {
   return result;
 };
 
-export const changeLocation = (location) =>
-  window.history.pushState(null, "", location);
-
 export const indicateMediaTypeByExtension = (type) => {
   if (STATIC.VIDEO_EXTENSIONS.includes(type.toLowerCase()))
     return STATIC.MESSAGE_TYPES.VIDEO;

@@ -2,7 +2,7 @@ import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
 import { useRouter } from "next/router";
-import { changeLocation, hasPayError } from "../../utils";
+import { hasPayError } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
@@ -24,9 +24,7 @@ const OrderActions = ({
 
   const handleDisputeChatClick = (e) => {
     e.preventDefault();
-    router
-      .push(`/dashboard/chats/${order.disputeChatId}`)
-      .then(() => window.location.reload());
+    router.push(`/dashboard/chats/${order.disputeChatId}`);
   };
 
   const handlePayClick = (e) => {
@@ -41,8 +39,7 @@ const OrderActions = ({
   };
 
   const handleMoveToOrder = (id) => {
-    changeLocation(`/dashboard/orders/${id}`);
-    window.location.reload();
+    router.push(`/dashboard/orders/${id}`);
   };
 
   return (

@@ -117,7 +117,7 @@ const DocumentsVerification = () => {
   };
 
   const goBackToProfile = () => {
-    router.push("/dashboard/profile-edit");
+    router.push("/dashboard/profile-edit/");
   };
 
   const statuses = [
