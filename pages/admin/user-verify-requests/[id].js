@@ -13,14 +13,21 @@ import DocumentList from "../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../middlewares";
 import DeclineModal from "../../../components/admin/UserVerifyRequests/DeclineModal";
 import ApproveModal from "../../../components/admin/UserVerifyRequests/ApproveModal";
+import {useIdPage} from "../../../hooks";
 
-const UserVerifyRequest = ({ info: baseInfo }) => {
+const UserVerifyRequest = (baseProps) => {
+  const { props, authToken } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getUserVerifyRequestById(field, authToken),
+    onUpdate: (newProps) => setInfo(newProps.info),
+  });
+
   const router = useRouter();
   const { id } = router.query;
 
-  const [info, setInfo] = useState(baseInfo);
-
-  const { error, success, authToken } = useContext(IndiceContext);
+  const [info, setInfo] = useState(props.info);
+  const { success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
   const [accessDeclineModalOpen, setAccessDeclineModalOpen] = useState(false);

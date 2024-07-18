@@ -30,7 +30,6 @@ import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
-import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 import OrderPopups from "./OrderPopups";
 import TenantGotListingApproveModal from "./TenantGotListingApproveModal";
 import FinishOrderModal from "./FinishOrderModal";
@@ -93,9 +92,14 @@ const SubOrderItem = ({
         Type: {bookingStatuses.includes(subOrder.status) ? "Booking" : "Order"}
       </div>
 
-      <div>
+      <div className="w-100 row-dots-end">
         Rental:{" "}
-        <Link href={`/owner-listing-list/${tenantId}`}>{tenantName}</Link>
+        <Link
+          className="w-100 row-dots-end"
+          href={`/owner-listing-list/${tenantId}`}
+        >
+          {tenantName}
+        </Link>
       </div>
 
       <div>
@@ -497,17 +501,6 @@ const OrderContent = ({
         },
       ];
 
-  const onDisputeOpened = async ({ orderPart }) => {
-    setOrder((prev) => ({
-      ...prev,
-      ...orderPart,
-    }));
-
-    orderPopupsData.setActiveDisputeWindow(false);
-
-    success.set("Dispute created success");
-  };
-
   const orderPopupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -518,7 +511,6 @@ const OrderContent = ({
     onPayedFastCancel,
     setError: error.set,
     onExtendOrder,
-    onDisputeOpened,
   });
 
   const onMakeExtend = ({ price, fromDate, toDate }) => {
@@ -589,25 +581,6 @@ const OrderContent = ({
         price={orderPopupsData.extendApproveData.price}
         fee={tenantBaseCommission}
       />
-    );
-  }
-
-  if (orderPopupsData.activeDisputeWindow) {
-    return (
-      <>
-        <CreateDisputeSection
-          {...orderPopupsData.createDisputeData}
-          onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
-          setCurrentOpenImg={setCurrentOpenImg}
-          needWrapping={false}
-          onSubmit={orderPopupsData.handleOpenDispute}
-        />
-        <ImagePopup
-          photoUrl={currentOpenImg}
-          open={!!currentOpenImg}
-          close={closeCurrentOpenImg}
-        />
-      </>
     );
   }
 
@@ -1533,13 +1506,13 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
             ) && (
-              <button
+              <Link
                 type="button"
                 className="default-btn error-btn"
-                onClick={() => orderPopupsData.setActiveDisputeWindow(true)}
+                href={`/dashboard/orders/create-dispute/${order.id}`}
               >
                 Open dispute
-              </button>
+              </Link>
             )}
 
             {currentActionButtons.includes(

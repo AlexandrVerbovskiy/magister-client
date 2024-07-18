@@ -2,13 +2,11 @@ import { useContext, useState } from "react";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import { IndiceContext } from "../contexts";
 import {
-  createDispute,
   extendOrder,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
 } from "../services";
-import useCreateDispute from "./useCreateDispute";
 
 const useSingleOrderActions = ({
   order,
@@ -22,42 +20,18 @@ const useSingleOrderActions = ({
   onAcceptOrder = null,
   onRejectOrder = null,
   onPayedFastCancel = null,
-  onDisputeOpened = null,
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
   const [extendPopupActive, setExtendPopupActive] = useState(false);
   const [extendApproveData, setExtendApproveData] = useState(null);
-  const [activeDisputeWindow, setActiveDisputeWindow] = useState(false);
   const [paypalModalActive, setPaypalModalActive] = useState(false);
 
   const [cancelModalActive, setCancelModalActive] = useState(false);
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
-  const createDisputeData = useCreateDispute({ order });
 
   const ownerId = order.ownerId;
-
-  const handleOpenDispute = async () => {
-    try {
-      const result = await createDispute(
-        {
-          orderId: order.id,
-          type: createDisputeData.type,
-          description: createDisputeData.description,
-        },
-        authToken
-      );
-
-      if (onDisputeOpened) {
-        onDisputeOpened({ ...result, createDisputeData });
-      }
-
-      setActiveDisputeWindow(false);
-    } catch (e) {
-      setError(e.message);
-    }
-  };
 
   const {
     disabled: bookingActionsDisabled,
@@ -140,7 +114,6 @@ const useSingleOrderActions = ({
   };
 
   return {
-    createDisputeData,
     bookingActionsDisabled,
     updateRequestModalActive,
     setUpdateRequestModalActive,
@@ -156,8 +129,6 @@ const useSingleOrderActions = ({
     setExtendPopupActive,
     extendApproveData,
     setExtendApproveData,
-    activeDisputeWindow,
-    setActiveDisputeWindow,
     paypalModalActive,
     setPaypalModalActive,
     cancelModalActive,
@@ -170,8 +141,6 @@ const useSingleOrderActions = ({
     handleCancelApprove,
     handlePayedFastCancel,
     handleMakeBooking,
-
-    handleOpenDispute,
   };
 };
 

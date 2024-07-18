@@ -13,7 +13,6 @@ import Pagination from "../../../components/Pagination";
 import OrdersListFastActinsModals from "../../../components/Order/OrdersListFastActinsModals";
 import ImagePopup from "../../../components/_App/ImagePopup";
 import OrderExtendApprovementSection from "../../../components/Order/OrderExtendApprovementSection";
-import CreateDisputeSection from "../../../components/Dispute/CreateDisputeSection";
 
 const Wrapper = ({ children }) => {
   return (
@@ -171,31 +170,7 @@ const Orders = (pageProps) => {
     acceptApproveExtendOrder,
 
     successIconPopupState,
-
-    closeDisputeWindow,
-    disputeWindowActive,
-    disputeCreate,
-    createDisputeData,
-    onCreateDispute,
   } = useOrderFastActions({ orders: orders, setItemFields });
-
-  if (disputeWindowActive) {
-    return (
-      <>
-        <CreateDisputeSection
-          {...createDisputeData}
-          onGoBack={closeDisputeWindow}
-          setCurrentOpenImg={setCurrentOpenImg}
-          onSubmit={onCreateDispute}
-        />
-        <ImagePopup
-          photoUrl={currentOpenImg}
-          open={!!currentOpenImg}
-          close={() => setCurrentOpenImg(null)}
-        />
-      </>
-    );
-  }
 
   if (extendModalApproveActive && extendModalApproveData.order) {
     return (
@@ -288,7 +263,6 @@ const Orders = (pageProps) => {
                       handleClickAccept={handleClickAccept}
                       handleClickPay={handleClickPay}
                       handleClickExtend={handleClickExtendOrder}
-                      handleDisputeCreate={disputeCreate}
                     />
                   ))}
                 </tbody>

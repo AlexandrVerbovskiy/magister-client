@@ -5,8 +5,16 @@ import OrderContent from "../../../../components/Order/OrderContent";
 import DashboardNavbar from "../../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../../components/_App/NavbarThree";
 import Link from "next/link";
+import {useIdPage} from "../../../../hooks";
 
-const ApproveOwnerListing = (props) => {
+const ApproveOwnerListing = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    observingField: "token",
+    getPagePropsFunc: ({ field, authToken }) =>
+      getOwnerListingScanRentalCode(field, authToken),
+  });
+
   return (
     <>
       <DashboardNavbar />

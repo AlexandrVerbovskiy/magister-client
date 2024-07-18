@@ -17,12 +17,58 @@ import ImageView from "../../../../components/admin/Form/ImageView";
 import STATIC from "../../../../static";
 import { getFilePath } from "../../../../utils";
 import YesNoModal from "../../../../components/admin/YesNoModal";
+import {useIdPage} from "../../../../hooks";
 
-const createCategoryBySearch = ({
+const getParentOptions = (groupedCategories, level) =>
+  groupedCategories[level].map((elem, index) => ({
+    value: elem.id,
+    title: elem.name,
+    default: index === 0,
+  }));
+
+const getBaseCategoryInfo = ({
   searchedWord,
-  groupedCategories,
   createdCategory,
+  groupedCategories,
 }) => {
+  const baseLevel = createdCategory ? createdCategory["level"] : 1;
+  const baseParentId = createdCategory ? createdCategory["parentId"] : null;
+  const baseName = createdCategory
+    ? createdCategory["name"]
+    : searchedWord["name"];
+
+  let baseParentOptions = [];
+
+  if (baseLevel == 2) {
+    baseParentOptions = getParentOptions(groupedCategories, "firstLevel");
+  }
+
+  if (baseLevel == 3) {
+    baseParentOptions = getParentOptions(groupedCategories, "secondLevel");
+  }
+
+  return { baseLevel, baseParentId, baseName, baseParentOptions };
+};
+
+const createCategoryBySearch = (baseProps) => {
+  const { props, authToken } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getSearchedWordById(field, authToken),
+    onUpdate: (newProps) => {
+      const { baseLevel, baseParentId, baseName, baseParentOptions } =
+        getBaseCategoryInfo(newProps);
+
+      setPrevCategory(newProps.createdCategory);
+      setLevel(baseLevel);
+      setName(baseName);
+      setParentId(baseParentId);
+      setParentIdOptions(baseParentOptions);
+    },
+  });
+
+  const { searchedWord, groupedCategories, createdCategory } = props;
+
   const [prevCategory, setPrevCategory] = useState(createdCategory);
   const [submitting, setSubmitting] = useState(false);
 
@@ -41,36 +87,16 @@ const createCategoryBySearch = ({
     setPhotoUrl(url);
   };
 
-  const baseLevel = createdCategory ? createdCategory["level"] : 1;
-  const baseParentId = createdCategory ? createdCategory["parentId"] : null;
+  const { baseLevel, baseParentId, baseName, baseParentOptions } =
+    getBaseCategoryInfo(props);
 
-  const baseName = createdCategory
-    ? createdCategory["name"]
-    : searchedWord["name"];
-
-  const getParentOptions = (level) =>
-    groupedCategories[level].map((elem, index) => ({
-      value: elem.id,
-      title: elem.name,
-      default: index === 0,
-    }));
-
-  const { success, authToken } = useContext(IndiceContext);
+  const { success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
+  const [formError, setFormError] = useState(null);
+
   const [level, setLevel] = useState(baseLevel);
   const [name, setName] = useState(baseName);
   const [parentId, setParentId] = useState(baseParentId);
-
-  let baseParentOptions = [];
-
-  if (baseLevel == 2) {
-    baseParentOptions = getParentOptions("firstLevel");
-  }
-
-  if (baseLevel == 3) {
-    baseParentOptions = getParentOptions("secondLevel");
-  }
-
   const [parentIdOptions, setParentIdOptions] = useState(baseParentOptions);
 
   const levelOptions = [
@@ -91,8 +117,6 @@ const createCategoryBySearch = ({
     },
   ];
 
-  const [formError, setFormError] = useState(null);
-
   const handleChangeName = (name) => {
     setName(name);
     setFormError(null);
@@ -107,15 +131,18 @@ const createCategoryBySearch = ({
     }
 
     if (level == 2) {
-      const options = getParentOptions("firstLevel");
+      const options = getParentOptions(groupedCategories, "firstLevel");
+
       if (options.length > 0) {
         setParentId(groupedCategories["firstLevel"][0]["id"]);
       }
+
       setParentIdOptions(options);
     }
 
     if (level == 3) {
-      const options = getParentOptions("secondLevel");
+      const options = getParentOptions(groupedCategories, "secondLevel");
+
       if (options.length > 0) {
         setParentId(groupedCategories["secondLevel"][0]["id"]);
       }

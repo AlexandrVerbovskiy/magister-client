@@ -183,14 +183,13 @@ const OrderActions = ({
           {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
           ) && (
-            <button
-              type="button"
+            <Link
               className={actionClass}
-              onClick={() => popupsData.setActiveDisputeWindow(true)}
+              href={`/dashboard/orders/create-dispute/${order.id}`}
             >
               {needIcon && <i className="bx bx-transfer-alt"></i>}
               Open dispute
-            </button>
+            </Link>
           )}
 
           {currentActionButtons.includes(

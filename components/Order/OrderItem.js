@@ -27,7 +27,6 @@ const OrderInfo = ({
   handleClickPay,
   handleClickExtend,
   extension = false,
-  handleDisputeCreate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -269,16 +268,13 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
         ) && (
-          <button
+          <Link
             className="default-btn"
-            onClick={() => {
-              handleDisputeCreate(order.id);
-            }}
-            type="button"
+            href={`/dashboard/orders/create-dispute/${order.id}`}
           >
             <i className="bx bx-transfer-alt"></i>
             Open dispute
-          </button>
+          </Link>
         )}
 
         {currentActionButtons.includes(
@@ -363,10 +359,7 @@ const OrderItem = ({
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
-  handleDisputeCreate,
 }) => {
-  const router = useRouter();
-  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
     filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
@@ -420,7 +413,6 @@ const OrderItem = ({
           handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
-          handleDisputeCreate={handleDisputeCreate}
         />
       </tr>
 
@@ -449,7 +441,6 @@ const OrderItem = ({
                 handleClickAccept={handleClickAccept}
                 handleClickPay={handleClickPay}
                 handleClickExtend={handleClickExtend}
-                handleDisputeCreate={handleDisputeCreate}
                 link={link}
                 extension={true}
               />

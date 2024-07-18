@@ -14,10 +14,21 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ImageInput from "../../../components/admin/Form/ImageInput";
 import STATIC from "../../../static";
 import YesNoModal from "../../../components/admin/YesNoModal";
+import { useIdPage } from "../../../hooks";
 
-const CreateCategory = ({ groupedCategories }) => {
+const CreateCategory = (baseProps) => {
   const router = useRouter();
   const { name: baseName } = router.query;
+
+  const { props } = useIdPage({
+    baseProps,
+    observingField: "name",
+    getPagePropsFunc: ({ authToken }) =>
+      getAdminCreateCategoryByOthersOptions(authToken),
+    onUpdate: (newProps, newName) => setName(newName),
+  });
+
+  const { groupedCategories } = props;
 
   const [submitting, setSubmitting] = useState(false);
   const [newPhoto, setNewPhoto] = useState(null);

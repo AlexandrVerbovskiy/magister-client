@@ -12,20 +12,26 @@ import {
 } from "../../../services";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
-import ModalBlank from "../../../components/admin/ModalBlank";
-import ErrorSpan from "../../../components/admin/ErrorSpan";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import { getFilePath, getListingImageByType } from "../../../utils";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
 import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
+import {useIdPage} from "../../../hooks";
 
-const ListingApprovalRequest = ({
-  request: baseRequest,
-  listing: baseListing,
-}) => {
-  const [listing, setListing] = useState(baseListing);
-  const [request, setRequest] = useState(baseRequest);
+const ListingApprovalRequest = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminListingApprovalRequestOption(field, authToken),
+    onUpdate: (newProps) => {
+      setListing(newProps.listing);
+      setRequest(newProps.request);
+    },
+  });
+
+  const [listing, setListing] = useState(props.listing);
+  const [request, setRequest] = useState(props.request);
   const [mapCenter, setMapCenter] = useState(null);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
