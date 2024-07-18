@@ -57,7 +57,7 @@ function DropdownProfile({ align }) {
           height="32"
           alt="User"
         />
-        <div className="flex items-center truncate">
+        <div className="flex items-center truncate overflow-separate"  style={{ maxWidth: "100px" }}>
           <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">
             {name}
           </span>

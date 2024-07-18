@@ -551,3 +551,10 @@ div.add-listings-box.dropzone > .gallery-flex {
 .chat-message:has(+ .right-sidebar-bottom):has(.message-actions.show) {
   margin-bottom: 60px !important;
 }
+
+.merchant-details p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}

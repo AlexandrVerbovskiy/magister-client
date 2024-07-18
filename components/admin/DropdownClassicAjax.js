@@ -136,7 +136,7 @@ function DropdownClassicAjax({
         aria-expanded={dropdownOpen}
         style={{ minHeight: "37.6px" }}
       >
-        <span className="flex items-center">
+        <span className="block text-start w-full overflow-separate">
           {selectedTitleToView ? (
             <span>{selectedTitleToView}</span>
           ) : (

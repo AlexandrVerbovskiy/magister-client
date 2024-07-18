@@ -191,7 +191,7 @@ const orderMessageContent = ({
     }
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
-      title = "Send a request for confirmation of rent payment";
+      title = "Request for confirmation of rent payment was successfully sent";
     }
 
     if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {

@@ -198,13 +198,7 @@ const TableItem = ({
           colSpan={3}
           className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
         >
-          <div
-            className="mt-1"
-            style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
+          <div className="mt-1 overflow-separate">
             <span className="text-black mr-1">Description:</span>
             <span className="text-gray-400" style={{ textWrap: "wrap" }}>
               {description}

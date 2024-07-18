@@ -169,7 +169,7 @@ const TableItem = ({
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
         <td colSpan={5} className="overflow-separate border-r align-top">
-          <table>
+          <table className="w-full table-fixed">
             <thead>
               <tr>
                 <th style={{ width: "calc(100% / 3)", padding: 0 }}></th>
