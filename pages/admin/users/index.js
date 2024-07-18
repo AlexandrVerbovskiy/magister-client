@@ -232,7 +232,7 @@ const Users = (pageProps) => {
 
                 {isAdmin && (
                   <Link
-                    href="/admin/users/create"
+                    href="/admin/users/create/"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                   >
                     <svg

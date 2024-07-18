@@ -84,11 +84,11 @@ const useAdminChat = ({
   }, [selectedChatId]);
 
   const handleSelectChat = async (chatId) => {
-    router.push(`/admin/chats/${chatId}`);
+    router.push(`/admin/chats/${chatId}/`);
   };
 
   const handleSelectSubChat = async (chatId) => {
-    router.push(`/admin/chats/${chatId}`);
+    router.push(`/admin/chats/${chatId}/`);
   };
 
   const chatActions = useChatBase({

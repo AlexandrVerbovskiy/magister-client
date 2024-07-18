@@ -224,10 +224,12 @@ const BookingModal = ({
         <span className="sub-title mb-2">
           <span>{title}</span>
           <br />
-          <span className="sub-text">
-            You can extend the order from {dateConverter(startDate)}, or start a
-            new order if the start date is different
-          </span>
+          {isExtend && (
+            <span className="sub-text">
+              You can extend the order from {dateConverter(startDate)}, or start
+              a new order if the start date is different
+            </span>
+          )}
         </span>
 
         <div className="mt-3 booking-form left-scrollable">
@@ -256,7 +258,7 @@ const BookingModal = ({
               </div>
             )}
             {fee && <div>Fee: {fee}%</div>}
-            {minRentalDays > 0 && (
+            {!isExtend && minRentalDays > 0 && (
               <div>Minimal Count Rental Days: {minRentalDays}</div>
             )}
             {fee && <div>Price: ${totalPrice}</div>}

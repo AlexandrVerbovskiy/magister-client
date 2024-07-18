@@ -9,7 +9,7 @@ const useListingListClick = () => {
 
   const handleClick = () => {
     if (sessionUser) {
-      router.push("/listing-list");
+      router.push("/listing-list/");
     } else {
       activateAuthPopup();
     }

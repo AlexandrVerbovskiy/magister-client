@@ -1,9 +1,16 @@
 import BaseSenderView from "../../../../components/admin/SenderPayments/BaseSenderView";
+import {useIdPage} from "../../../../hooks";
 import { adminSideProps } from "../../../../middlewares";
 import { getAdminSenderPaymentOptions } from "../../../../services";
 
-const Sender = ({ payment }) => {
-  return <BaseSenderView payment={payment} parentType="senders" />;
+const Sender = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminSenderPaymentOptions(field, authToken),
+  });
+
+  return <BaseSenderView payment={props.payment} parentType="senders" />;
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {

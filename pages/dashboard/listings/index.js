@@ -252,7 +252,7 @@ const ListingList = (pageProps) => {
           </div>
 
           <Link
-            href="/dashboard/listings/add"
+            href="/dashboard/listings/add/"
             className="default-btn add-listing-link-btn"
             onClick={handleCreateListingClick}
           >
@@ -279,7 +279,7 @@ const ListingList = (pageProps) => {
               <div className="no-listing-text">You have no listings yet</div>
               <div className="no-listing-btn">
                 <Link
-                  href="/dashboard/listings/add"
+                  href="/dashboard/listings/add/"
                   className="default-btn add-listing-link-btn"
                 >
                   <span className="icon">
@@ -316,7 +316,7 @@ const ListingList = (pageProps) => {
                           <div className="listings-image">
                             {listing.images.length < 1 && (
                               <Link
-                                href={`/listings/${listing.id}`}
+                                href={`/listings/${listing.id}/`}
                                 className="link-btn"
                               ></Link>
                             )}
@@ -331,7 +331,7 @@ const ListingList = (pageProps) => {
                                   alt={listing.name}
                                 />
                                 <Link
-                                  href={`/listings/${listing.id}`}
+                                  href={`/listings/${listing.id}/`}
                                   className="link-btn"
                                 ></Link>
                               </>
@@ -355,7 +355,7 @@ const ListingList = (pageProps) => {
                                         alt={listing.name}
                                       />
                                       <Link
-                                        href={`/listings/${listing.id}`}
+                                        href={`/listings/${listing.id}/`}
                                         className="link-btn"
                                       ></Link>
                                     </div>

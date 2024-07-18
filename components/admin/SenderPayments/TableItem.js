@@ -59,7 +59,7 @@ const TableItem = (props) => {
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${payerId}`}
+            href={`/admin/users/edit/${payerId}/`}
             className="flex items-center"
             onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
             style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -82,7 +82,7 @@ const TableItem = (props) => {
           style={{ paddingRight: "calc(1rem + 10px)", paddingLeft: "10px" }}
         >
           <Link
-            href={`/admin${viewPath}/${id}`}
+            href={`/admin${viewPath}/${id}/`}
             className="font-medium text-sky-500"
           >
             #{id}
@@ -263,7 +263,7 @@ const TableItem = (props) => {
               </>
             )}
 
-            <View href={`/admin${viewPath}/${id}`} />
+            <View href={`/admin${viewPath}/${id}/`} />
           </div>
         </td>
       </tr>

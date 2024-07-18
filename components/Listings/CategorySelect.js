@@ -33,15 +33,14 @@ const CategorySelect = ({
                 src={getFilePath(selectedCategoryInfo.image)}
               />
             )}
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+            <span className="overflow-separate">
               {selectedCategoryInfo.name ?? ""}
             </span>
           </>
         ) : (
           <span
+            className="overflow-separate"
             style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
               color: "#999999",
             }}
           >

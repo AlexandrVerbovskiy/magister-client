@@ -223,6 +223,7 @@ const OrdersListFastActinsModals = ({
         title="Extend Now"
         startDate={extendStartDate}
         isExtend={true}
+        fullVersion={true}
       />
     </>
   );

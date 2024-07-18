@@ -1,6 +1,9 @@
-import React, { useState,  useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
-import { changeVerified, getUserDocumentsPageOption } from "../../../../services";
+import {
+  changeVerified,
+  getUserDocumentsPageOption,
+} from "../../../../services";
 import { IndiceContext } from "../../../../contexts";
 import Sidebar from "../../../../partials/admin/Sidebar";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
@@ -8,12 +11,20 @@ import Header from "../../../../partials/admin/Header";
 import { useAdminPage } from "../../../../hooks";
 import DocumentList from "../../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../../middlewares";
+import {useIdPage} from "../../../../hooks";
 
-const UserDocuments = ({ documents, user: baseUser }) => {
-  const { error, success, authToken } = useContext(IndiceContext);
+const UserDocuments = (baseProps) => {
+  const { props, authToken } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getUserDocumentsPageOption(field, authToken),
+    onUpdate: (newProps) => setUser(newProps.user),
+  });
+
+  const { error, success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
 
-  const [user, setUser] = useState(baseUser);
+  const [user, setUser] = useState(props.user);
   const router = useRouter();
   const { id } = router.query;
 
@@ -57,7 +68,7 @@ const UserDocuments = ({ documents, user: baseUser }) => {
             <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
               <div className="flex flex-col md:flex-row md:-mr-px">
                 <div className="grow">
-                  <DocumentList {...documents} />
+                  <DocumentList {...props.documents} />
 
                   <footer>
                     <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">

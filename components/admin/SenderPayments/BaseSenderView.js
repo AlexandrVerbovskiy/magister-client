@@ -32,11 +32,11 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   const [openProofImage, setOpenProofImage] = useState(false);
 
   let parentName = "Senders";
-  let parentLink = "/admin/payments/senders";
+  let parentLink = "/admin/payments/senders/";
 
   if (parentType == "failed-senders") {
     parentName = "Failed Paypal Payments";
-    parentLink = "/admin/payments/failed-senders-paypal";
+    parentLink = "/admin/payments/failed-senders-paypal/";
   }
 
   const subtotalPrice = calculateTotalPriceByDaysCount(

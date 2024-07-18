@@ -27,7 +27,6 @@ const OrderInfo = ({
   handleClickPay,
   handleClickExtend,
   extension = false,
-  handleDisputeCreate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -151,7 +150,7 @@ const OrderInfo = ({
       </td>
 
       <td className="action d-flex flex-column align-items-start">
-        <Link href={link + "/" + order.id} className="default-btn">
+        <Link href={`${link}/${order.id}/`} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
 
@@ -216,7 +215,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/pay-by-bank-transfer/` + order.id}
+            href={`/dashboard/pay-by-bank-transfer/${order.id}`}
           >
             <i className="bx bx-wallet"></i> Update payment
           </Link>
@@ -227,7 +226,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={link + "/" + order.id + "?scroll-to=tenant-qr-code"}
+            href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
           >
             <i className="bx bx-comment-detail"></i> Start the rental
           </Link>
@@ -238,7 +237,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={link + "/" + order.id + "?scroll-to=owner-qr-code"}
+            href={`${link}/${order.id}/?scroll-to=owner-qr-code`}
           >
             <i className="bx bx-comment-detail"></i> Finish the rental
           </Link>
@@ -249,7 +248,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-renter-review/` + order.id}
+            href={`/dashboard/creating-renter-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -260,7 +259,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-owner-review/` + order.id}
+            href={`/dashboard/creating-owner-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -269,16 +268,13 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
         ) && (
-          <button
+          <Link
             className="default-btn"
-            onClick={() => {
-              handleDisputeCreate(order.id);
-            }}
-            type="button"
+            href={`/dashboard/orders/create-dispute/${order.id}/`}
           >
             <i className="bx bx-transfer-alt"></i>
             Open dispute
-          </button>
+          </Link>
         )}
 
         {currentActionButtons.includes(
@@ -331,7 +327,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chats/${order.chatId}`}
+            href={`/dashboard/chats/${order.chatId}/`}
           >
             <i className="bx bx-chat"></i> Chat
           </Link>
@@ -342,7 +338,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chats/${order.disputeChatId}`}
+            href={`/dashboard/chats/${order.disputeChatId}/`}
           >
             <i className="bx bx-chat"></i> Dispute Chat
           </Link>
@@ -363,10 +359,7 @@ const OrderItem = ({
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
-  handleDisputeCreate,
 }) => {
-  const router = useRouter();
-  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
     filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
@@ -401,7 +394,7 @@ const OrderItem = ({
             </ul>
             {order.chatId && (
               <Link
-                href={`/dashboard/chats/${order.chatId}`}
+                href={`/dashboard/chats/${order.chatId}/`}
                 className="default-btn"
               >
                 <i className="bx bx-envelope"></i> Send Message
@@ -420,7 +413,6 @@ const OrderItem = ({
           handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
-          handleDisputeCreate={handleDisputeCreate}
         />
       </tr>
 
@@ -449,7 +441,6 @@ const OrderItem = ({
                 handleClickAccept={handleClickAccept}
                 handleClickPay={handleClickPay}
                 handleClickExtend={handleClickExtend}
-                handleDisputeCreate={handleDisputeCreate}
                 link={link}
                 extension={true}
               />

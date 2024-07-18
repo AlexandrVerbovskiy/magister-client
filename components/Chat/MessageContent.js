@@ -149,7 +149,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
     }
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
-      title = "Send a request for confirmation of rent payment";
+      title = "Request for confirmation of rent payment was successfully sent";
       style = { maxWidth: "200px", textAlign: "center" };
     }
 

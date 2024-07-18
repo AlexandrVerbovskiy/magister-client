@@ -129,9 +129,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const [extendModalActive, setExtendModalActive] = useState(false);
   const [extendModalActiveOrder, setExtendModalActiveOrder] = useState(null);
-  const [extendModalApproveActive, setExtendModalApproveActive] =
-    useState(false);
-  const [extendModalApproveData, setExtendModalApproveData] = useState(null);
 
   const findCurrentOrderById = (id) => {
     let foundOrder = orders.find((order) => order.id === id);
@@ -182,7 +179,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePayOrder(null);
     activateSuccessOrderPopup({
       text: "Operation successful",
-      onClose: () => router.push("/dashboard/orders/" + activePayOrder.id),
+      onClose: () => router.push(`/dashboard/orders/${activePayOrder.id}/`),
       closeButtonText: "Move to Order",
     });
   };
@@ -225,50 +222,36 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setExtendModalActive(false);
   };
 
-  const closeApproveExtendOrder = () => {
-    setExtendModalApproveData(null);
-    setExtendModalApproveActive(false);
-  };
-
   const handleClickExtendOrder = (orderId) => {
     setExtendModalActiveOrder(findCurrentOrderById(orderId));
     setExtendModalActive(true);
   };
 
-  const handleClickApproveExtendOrder = ({ price, fromDate, toDate }) => {
-    setExtendModalActive(false);
-    setExtendModalApproveActive(true);
-    setExtendModalApproveData({
-      price,
-      fromDate,
-      toDate,
-      order: extendModalActiveOrder,
-    });
-    setExtendModalActiveOrder(null);
-  };
-
-  const acceptApproveExtendOrder = async ({ feeActive, sendingMessage }) => {
+  const handleClickApproveExtendOrder = async({
+    price,
+    fromDate,
+    toDate,
+    feeActive,
+    sendingMessage,
+  }) => {
     try {
       const dayDiff = getDaysDifference(
-        extendModalApproveData.order.offerEndDate,
-        extendModalApproveData.fromDate
+        extendModalActiveOrder.offerEndDate,
+        extendModalActiveOrder.fromDate
       );
 
       await extendOrder(
         {
-          pricePerDay: extendModalApproveData.price,
-          startDate: extendModalApproveData.fromDate,
-          endDate: extendModalApproveData.toDate,
-          listingId: extendModalApproveData.order.listingId,
+          pricePerDay: price,
+          startDate: fromDate,
+          endDate: toDate,
+          listingId: extendModalActiveOrder.listingId,
           feeActive,
           message: sendingMessage,
-          parentOrderId: extendModalApproveData.order.id,
+          parentOrderId: extendModalActiveOrder.id,
         },
         authToken
       );
-
-      setExtendModalApproveData(null);
-      setExtendModalApproveActive(false);
 
       if (dayDiff == 1) {
         success.set("Order extended successfully");
@@ -276,7 +259,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         success.set("New booking created successfully");
       }
 
-      router.push("/dashboard/orders", undefined, {
+      router.push("/dashboard/orders/", undefined, {
         unstable_skipClientCache: true,
       });
     } catch (e) {
@@ -652,11 +635,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     handleClickApproveExtendOrder,
     extendModalActive,
     extendModalActiveOrder,
-    extendModalApproveActive,
-    extendModalApproveData,
     closeExtendOrder,
-    closeApproveExtendOrder,
-    acceptApproveExtendOrder,
 
     successIconPopupState,
 

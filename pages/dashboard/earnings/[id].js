@@ -1,14 +1,19 @@
-import { useContext } from "react";
-import { IndiceContext } from "../../../contexts";
 import { authSideProps } from "../../../middlewares";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
 import { getWaitingRefundOptions } from "../../../services";
 import EarningTable from "../../../components/Dashboard/Earning/EarningTable";
+import { useIdPage } from "../../../hooks";
 
-const Earning = ({ recipient, refundCommission }) => {
-  const { success, authToken, error } = useContext(IndiceContext);
+const Earning = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getWaitingRefundOptions(field, authToken),
+  });
+
+  const { recipient, refundCommission } = props;
 
   return (
     <>
@@ -26,13 +31,13 @@ const Earning = ({ recipient, refundCommission }) => {
               <Link href="/dashboard/">Dashboard</Link>
             </li>
             <li className="item">
-              <Link href={`/dashboard/wallet`}>Wallet</Link>
+              <Link href={`/dashboard/wallet/`}>Wallet</Link>
             </li>
             <li className="item">Earning #{recipient.id}</li>
           </ol>
         </div>
 
-        <EarningTable {...recipient} refundCommission={refundCommission}/>
+        <EarningTable {...recipient} refundCommission={refundCommission} />
       </div>
     </>
   );

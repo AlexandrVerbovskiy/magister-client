@@ -166,7 +166,7 @@ const Listings = (pageProps) => {
                   />
 
                   <Link
-                    href="/admin/listings/create"
+                    href="/admin/listings/create/"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                   >
                     <svg

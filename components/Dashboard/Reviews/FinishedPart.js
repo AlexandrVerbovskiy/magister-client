@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const FinishedPart = ({ isReviewerOwner = true }) => {
   const link = isReviewerOwner
-    ? "/dashboard/orders?type=owner"
-    : "/dashboard/orders";
+    ? "/dashboard/orders/?type=owner"
+    : "/dashboard/orders/";
 
   return (
     <div

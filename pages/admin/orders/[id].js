@@ -13,23 +13,32 @@ import {
   ownerGetsCalculate,
   tenantPaymentCalculate,
 } from "../../../utils";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
+import {useIdPage} from "../../../hooks";
 
-const PreviousProposalElem = ({
-  index,
-  prevStartDate,
-  prevEndDate,
-  prevPricePerDay,
-  prevTotalPrice,
-  prevSenderName,
-  prevGetterName,
-  needBottomMargin = false,
-}) => {
+const PreviousProposalElem = () => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminOrderInfo(field, authToken),
+  });
+
+  const {
+    index,
+    prevStartDate,
+    prevEndDate,
+    prevPricePerDay,
+    prevTotalPrice,
+    prevSenderName,
+    prevGetterName,
+    needBottomMargin = false,
+  } = props;
+
   return (
     <>
       <div className="flex flex-col gap-2 mb-2">

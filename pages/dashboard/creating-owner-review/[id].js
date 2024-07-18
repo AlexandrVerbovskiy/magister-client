@@ -15,8 +15,15 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../../contexts";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import { useListingReview, useUserReview } from "../../../hooks";
+import { useIdPage } from "../../../hooks";
 
-const FullReview = (pageProps) => {
+const FullReview = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getOrderReviewByTenantOptions(field, authToken),
+  });
+
   const router = useRouter();
   const { id } = router.query;
   const [currentStep, setCurrentStep] = useState("item");
@@ -101,7 +108,7 @@ const FullReview = (pageProps) => {
 
         {currentStep == "item" && (
           <ListingReviewForm
-            order={pageProps.order}
+            order={props.order}
             onSubmit={handleListingReviewSubmit}
             setCurrentOpenImg={setCurrentOpenImg}
             submitButtonText="Continue"
@@ -116,11 +123,11 @@ const FullReview = (pageProps) => {
         {currentStep == "owner" && (
           <UserReviewForm
             data={{
-              userName: pageProps.order.ownerName,
-              userPhoto: pageProps.order.ownerPhoto,
-              userCountItems: pageProps.order.ownerCountItems,
-              userAverageRating: pageProps.order.ownerAverageRating,
-              userCommentCount: pageProps.order.ownerCommentCount,
+              userName: props.order.ownerName,
+              userPhoto: props.order.ownerPhoto,
+              userCountItems: props.order.ownerCountItems,
+              userAverageRating: props.order.ownerAverageRating,
+              userCommentCount: props.order.ownerCommentCount,
             }}
             onSubmit={handleOwnerReviewSubmit}
             goBack={handleBackToItemReview}

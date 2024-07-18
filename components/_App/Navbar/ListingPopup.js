@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BaseModal from "../BaseModal";
-import { getFilePath } from "../../../utils";
+import { getFilePath, getListingSearchLink } from "../../../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -99,12 +99,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
   }, []);
 
   const handleClickCategory = (categoryName = null) => {
-    let link = "";
-
-    if (categoryName) {
-      link += ``;
-    }
-
+    const link = getListingSearchLink(categoryName);
     router.push(link);
     setActive(false);
   };
@@ -146,14 +141,14 @@ const ListingPopup = ({ active, setActive, categories }) => {
     (c) => c.id === selectedSecondCategory
   );
 
-  const firstAllLink = `/listing-list`;
+  const firstAllLink = `/listing-list/`;
 
   const secondAllLink = firstSelectedCategoryInfo
-    ? `/listing-list?categories=${firstSelectedCategoryInfo.name}`
+    ? `listing-list/?categories=${firstSelectedCategoryInfo.name}`
     : firstAllLink;
 
   const thirdAllLink = secondSelectedCategoryInfo
-    ? `/listing-list?categories=${secondSelectedCategoryInfo.name}`
+    ? `listing-list/?categories=${secondSelectedCategoryInfo.name}`
     : secondAllLink;
 
   return (
@@ -183,7 +178,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list?categories=${category.name}`
+                    : `/listing-list/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -199,7 +194,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
             key="-"
             category={{ image: null, name: "Others" }}
             active={false}
-            href="/listing-list?others-categories=true"
+            href="/listing-list/?others-categories=true"
           />
         </div>
 
@@ -223,7 +218,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list?categories=${category.name}`
+                    : `/listing-list/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -252,7 +247,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
               <CategoryOption
                 key={category.id}
                 category={category}
-                href={`/listing-list?categories=${category.name}`}
+                href={`/listing-list/?categories=${category.name}`}
                 onClick={() => setActive(false)}
               />
             ))}

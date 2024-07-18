@@ -222,7 +222,7 @@ const SignInForm = () => {
 
                 <p className="words-wrap">
                   Forgot or lost your password?{" "}
-                  <Link href="/password-reset-send">Reset It Now</Link>
+                  <Link href="/password-reset-send/">Reset It Now</Link>
                 </p>
               </form>
 

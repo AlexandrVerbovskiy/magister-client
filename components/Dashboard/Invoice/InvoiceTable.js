@@ -121,7 +121,7 @@ const InvoiceTable = ({
                   <sub>
                     <Link
                       style={{ color: "inherit" }}
-                      href={`/dashboard/orders/${purchaseOrderId}`}
+                      href={`/dashboard/orders/${purchaseOrderId}/`}
                     >
                       Ord-{purchaseOrderId ?? "-"}
                     </Link>

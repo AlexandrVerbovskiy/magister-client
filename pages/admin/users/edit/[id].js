@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import { getFullUserById, updateUser } from "../../../../services";
 import EditUserForm from "../../../../components/admin/EditUserForm";
 import { adminSideProps } from "../../../../middlewares";
-import { IndiceContext } from "../../../../contexts";
 import { HttpError } from "../../../../utils";
+import { useIdPage } from "../../../../hooks";
 
-const UserEdit = ({ editableUser }) => {
-  const { authToken } = useContext(IndiceContext);
+const UserEdit = (baseProps) => {
+  const { props, authToken } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getFullUserById(field, authToken),
+  });
+
+  const { editableUser } = props;
 
   const handleSave = async (formData) => {
     formData.append("id", editableUser.id);

@@ -74,7 +74,7 @@ const EarningTable = ({
 
   const activateSuccessOrderPopup = () => {
     const handleClose = () => {
-      router.push("/dashboard/wallet");
+      router.push("/dashboard/wallet/");
       setSuccessIconPopupState({});
     };
 
