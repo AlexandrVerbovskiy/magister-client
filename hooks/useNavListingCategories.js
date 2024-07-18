@@ -34,7 +34,7 @@ const useNavListingCategories = () => {
     e.preventDefault();
     setActivePopup(true);
   };
-
+  
   return {
     navbarCategories,
     handleChangeCategory,
