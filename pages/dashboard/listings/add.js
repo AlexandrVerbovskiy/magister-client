@@ -1,15 +1,12 @@
-import React, { useState, useContext } from "react";
-
+import React, { useState } from "react";
 import { authSideProps } from "../../../middlewares";
 import {
   createListing,
   getCreateListingOptions,
   updateListing,
 } from "../../../services";
-
 import EditForm from "../../../components/Listings/EditForm";
 import { useRouter } from "next/router";
-import { changeLocation } from "../../../utils";
 
 const AddListing = ({ categories }) => {
   const [listing, setListing] = useState({});
@@ -32,13 +29,10 @@ const AddListing = ({ categories }) => {
       const createdListing = res.listing;
       const listingId = createdListing.listingId;
 
-      const newLinkPart =
-        window.location.origin + "/dashboard/listings/update/" + listingId;
-      //router.replace(newLinkPart, undefined, { shallow: true });
-      changeLocation(newLinkPart);
-
+      router.replace("/dashboard/listings/update/" + listingId);
       setListing(createdListing);
       setCanSendRequest(!res.createdVerifiedRequest);
+
       return createdListing;
     }
   };
