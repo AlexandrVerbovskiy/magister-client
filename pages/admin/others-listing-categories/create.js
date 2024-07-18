@@ -14,10 +14,21 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ImageInput from "../../../components/admin/Form/ImageInput";
 import STATIC from "../../../static";
 import YesNoModal from "../../../components/admin/YesNoModal";
+import { useIdPage } from "../../../hooks";
 
-const CreateCategory = ({ groupedCategories }) => {
+const CreateCategory = (baseProps) => {
   const router = useRouter();
   const { name: baseName } = router.query;
+
+  const { props } = useIdPage({
+    baseProps,
+    observingField: "name",
+    getPagePropsFunc: ({ authToken }) =>
+      getAdminCreateCategoryByOthersOptions(authToken),
+    onUpdate: (newProps, newName) => setName(newName),
+  });
+
+  const { groupedCategories } = props;
 
   const [submitting, setSubmitting] = useState(false);
   const [newPhoto, setNewPhoto] = useState(null);
@@ -139,7 +150,7 @@ const CreateCategory = ({ groupedCategories }) => {
       await createCategoryByOther(formData, authToken);
 
       success.set(`Listing "${name}" created successfully!`);
-      router.push(`/admin/others-listing-categories`);
+      router.push(`/admin/others-listing-categories/`);
     } catch (e) {
       setFormError(e.message);
       setSubmitting(false);
@@ -239,7 +250,7 @@ const CreateCategory = ({ groupedCategories }) => {
                   <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                     <div className="flex self-end">
                       <Link
-                        href="/admin/others-listing-categories"
+                        href="/admin/others-listing-categories/"
                         aria-controls="access-leave-modal"
                         className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                       >

@@ -47,7 +47,6 @@ const ChatHeader = ({
   statusPopupActive,
   setStatusPopupActive,
 }) => {
-
   const tenant = {
     id: order.tenantId,
     name: order.tenantName,
@@ -82,7 +81,7 @@ const ChatHeader = ({
 
           <div className="flex -space-x-3 -ml-px justify-between w-full">
             <Link
-              href={"/admin/orders/" + selectedChat.orderId}
+              href={`/admin/orders/${selectedChat.orderId}/`}
               className="font-semibold flex items-center"
               style={{ color: "var(--mainColor)" }}
             >

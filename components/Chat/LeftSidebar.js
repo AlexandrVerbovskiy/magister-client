@@ -118,7 +118,7 @@ const LeftSidebar = ({
 
                     {canShowMore && (
                       <div
-                        className="d-flex align-items-center justify-content-center cursor-pointer py-2 chat-list-show-more"
+                        className="d-flex align-items-center justify-content-center cursor-pointer chat-list-show-more"
                         onClick={handleShowMoreClick}
                       >
                         Show more

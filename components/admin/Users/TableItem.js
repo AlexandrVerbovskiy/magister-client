@@ -155,7 +155,7 @@ const TableItem = ({
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${id}`}
+            href={`/admin/users/edit/${id}/`}
             className="flex items-center"
             onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
             style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -356,7 +356,7 @@ const TableItem = ({
               <Edit href={`/admin/users/edit/${id}`} />
             )}
             {!isCurrent && role !== "admin" && (
-              <Documents href={`/admin/users/documents/${id}`} />
+              <Documents href={`/admin/users/documents/${id}/`} />
             )}
           </div>
         </td>

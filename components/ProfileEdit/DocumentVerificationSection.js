@@ -21,7 +21,7 @@ const DocumentVerificationSection = () => {
         <div className="row">
           <div className="col-lg-12 col-md-12">
             <div className="form-group">
-              <Link href="/dashboard/documents-verification">
+              <Link href="/dashboard/documents-verification/">
                 <button type="button">
                   {sessionUser?.verified
                     ? "Update documents"

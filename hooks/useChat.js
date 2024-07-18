@@ -78,7 +78,7 @@ const useChat = ({
   }, [baseChatId]);
 
   const handleSelectChat = async (chatId) => {
-    router.push(`/dashboard/chats/${chatId}`);
+    router.push(`/dashboard/chats/${chatId}/`);
   };
 
   const handleChangeType = (type) => {

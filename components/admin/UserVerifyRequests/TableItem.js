@@ -64,7 +64,7 @@ const TableItem = ({
             <Link
               onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
               style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}`}
+              href={`/admin/users/edit/${userId}/`}
             >
               {userName}
             </Link>
@@ -75,7 +75,7 @@ const TableItem = ({
             <Link
               onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
               style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}`}
+              href={`/admin/users/edit/${userId}/`}
             >
               {userEmail}
             </Link>
@@ -276,7 +276,7 @@ const TableItem = ({
                       </>
                     )}
 
-                    <View href={`/admin/user-verify-requests/${id}`} />
+                    <View href={`/admin/user-verify-requests/${id}/`} />
                   </div>
                 </td>
               </tr>

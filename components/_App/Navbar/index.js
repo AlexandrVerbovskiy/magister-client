@@ -297,7 +297,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                     </li>
                   ) : (
                     <li className="nav-item">
-                      <Link href="/how-it-works" className="nav-link">
+                      <Link href="/how-it-works/" className="nav-link">
                         How it works
                       </Link>
                     </li>
@@ -412,7 +412,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                   )}
 
                   {/*<div className="option-item">
-                    <Link href="/dashboard/add-listing" className="default-btn">
+                    <Link href="/dashboard/add-listing/" className="default-btn">
                       <i className="flaticon-more"></i> Add Listing
                     </Link>
                   </div>*/}

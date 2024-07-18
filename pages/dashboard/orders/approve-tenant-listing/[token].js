@@ -5,8 +5,16 @@ import OrderContent from "../../../../components/Order/OrderContent";
 import DashboardNavbar from "../../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../../components/_App/NavbarThree";
 import Link from "next/link";
+import {useIdPage} from "../../../../hooks";
 
-const ApproveTenantListing = (props) => {
+const ApproveTenantListing = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    observingField:"token",
+    getPagePropsFunc: ({ field, authToken }) =>
+      getTenantListingScanRentalCode(field, authToken),
+  });
+
   return (
     <>
       <DashboardNavbar />
@@ -25,7 +33,7 @@ const ApproveTenantListing = (props) => {
                 <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href="/dashboard/orders">Orders</Link>
+                <Link href="/dashboard/orders/">Orders</Link>
               </li>
               <li className="item">{props.order.listingName}</li>
             </ol>

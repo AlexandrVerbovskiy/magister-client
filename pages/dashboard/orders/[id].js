@@ -5,8 +5,15 @@ import OrderContent from "../../../components/Order/OrderContent";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
+import { useIdPage } from "../../../hooks";
 
-const Order = (props) => {
+const Order = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getOrderFullByIdOptions(field, authToken),
+  });
+
   return (
     <>
       <DashboardNavbar />
@@ -25,7 +32,7 @@ const Order = (props) => {
                 <Link href="/dashboard/">Dashboard</Link>
               </li>
               <li className="item">
-                <Link href="/dashboard/orders">Orders</Link>
+                <Link href="/dashboard/orders/">Orders</Link>
               </li>
               <li className="item">{props.order.listingName}</li>
             </ol>

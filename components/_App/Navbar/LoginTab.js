@@ -147,7 +147,7 @@ const LoginTab = ({
 
             <span className="dont-account mt-0 mb-3">
               Forgot or lost your password?{" "}
-              <Link href="/password-reset-send">Reset It Now</Link>
+              <Link href="/password-reset-send/">Reset It Now</Link>
             </span>
 
             <button type="submit">Login Now</button>

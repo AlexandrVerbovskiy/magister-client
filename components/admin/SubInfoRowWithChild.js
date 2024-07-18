@@ -4,11 +4,7 @@ const SubInfoRowWithChild = ({ label = null, children, newRow = false }) => {
 
   return (
     <div
-      className="mt-1"
-      style={{
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-      }}
+      className="mt-1 overflow-separate"
     >
       {label && (
         <LabelElement className="text-black mr-1">{label}:</LabelElement>

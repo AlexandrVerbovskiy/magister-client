@@ -37,7 +37,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
       authToken
     );
 
-    router.push("/admin/payments/recipients");
+    router.push("/admin/payments/recipients/");
   };
 
   const totalPayed = tenantPaymentCalculate(

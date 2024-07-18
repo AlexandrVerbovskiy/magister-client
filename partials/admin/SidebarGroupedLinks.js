@@ -79,7 +79,7 @@ const SidebarGroupedLinks = ({
                 {sublinks.map((sublink) => (
                   <li className="mb-1 last:mb-0" key={sublink.href}>
                     <Link
-                      href={"/admin/" + sublink.href}
+                      href={"/admin/" + sublink.href + "/"}
                       className={
                         "block transition duration-150 truncate " +
                         (isCurrentAdminPath(router.asPath, sublink.href)

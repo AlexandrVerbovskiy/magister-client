@@ -1,15 +1,22 @@
 import { adminSideProps } from "../../../../middlewares";
-import {
-  getAdminRecipientPaymentOptions,
-} from "../../../../services";
+import { getAdminRecipientPaymentOptions } from "../../../../services";
 import SingleRecipientMainComponent from "../../../../components/admin/SingleRecipientMainComponent";
+import {useIdPage} from "../../../../hooks";
 
-const Recipient = ({ recipient, refundCommission }) => (
-  <SingleRecipientMainComponent
-    recipient={recipient}
-    refundCommission={refundCommission}
-  />
-);
+const Recipient = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminRecipientPaymentOptions(field, authToken),
+  });
+
+  return (
+    <SingleRecipientMainComponent
+      recipient={props.recipient}
+      refundCommission={props.refundCommission}
+    />
+  );
+};
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;

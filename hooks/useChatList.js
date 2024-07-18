@@ -61,7 +61,7 @@ const useChatList = (props) => {
       return;
     }
 
-    let newPath = `/dashboard/chats`;
+    let newPath = `/dashboard/chats/`;
 
     if (newType === STATIC.CHAT_TYPES.DISPUTE) {
       newPath += "?chat-type=" + newType;

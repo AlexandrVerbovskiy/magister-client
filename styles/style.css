@@ -19601,29 +19601,36 @@ span.flatpickr-weekday {
   font-size: 12px;
 }
 
-.small-text{
+.small-text {
   font-size: 14px;
 }
 
-.very-small-text{
+.very-small-text {
   font-size: 12px;
 }
 
-.form-hint{
+.form-hint {
   font-size: 14px;
-   font-weight: 400; margin-top: 2px;
+  font-weight: 400;
+  margin-top: 2px;
 }
 
-.sidemenu-nav .nav-item .nav-link{
-  display: flex!important;
+.sidemenu-nav .nav-item .nav-link {
+  display: flex !important;
   align-items: center;
 }
 
-.chat-list-show-more{
+.chat-list-show-more {
   transition: var(--transition);
   color: #847bdd;
+  font-weight: 600;
+  padding: 10px 0 20px;
 }
 
-.chat-list-show-more:hover{
+.chat-list-show-more:hover {
   color: var(--mainColor);
+}
+
+.chat-menu:not(:has(.chat-list-show-more)) > ul {
+  padding-bottom: 20px;
 }

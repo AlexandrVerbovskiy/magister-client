@@ -299,7 +299,7 @@ const NavbarTwo = ({ canShowSearch = false }) => {
                     </li>
                   ) : (
                     <li className="nav-item">
-                      <Link href="/how-it-works" className="nav-link">
+                      <Link href="/how-it-works/" className="nav-link">
                         How it works
                       </Link>
                     </li>

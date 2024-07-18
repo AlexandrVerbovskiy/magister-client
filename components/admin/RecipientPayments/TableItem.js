@@ -109,7 +109,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${tenantId}`}
+            href={`/admin/users/edit/${tenantId}/`}
             onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
             className="flex items-center"
           >
@@ -125,7 +125,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${recipientId}`}
+            href={`/admin/users/edit/${recipientId}/`}
             onClick={(e) => (canMoveToRecipient ? {} : e.preventDefault())}
             className="flex items-center"
           >
@@ -169,7 +169,7 @@ const TableItem = ({
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
         <td colSpan={5} className="overflow-separate border-r align-top">
-          <table>
+          <table className="w-full table-fixed">
             <thead>
               <tr>
                 <th style={{ width: "calc(100% / 3)", padding: 0 }}></th>
@@ -185,7 +185,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Renter"
-                    href={"/admin/users/edit/" + tenantId}
+                    href={`/admin/users/edit/${tenantId}`}
                     canMove={canMoveToRecipient}
                   />
                   <SubInfoRow label="Name" value={tenantName} />
@@ -203,7 +203,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Recipient"
-                    href={"/admin/users/edit/" + recipientId}
+                    href={`/admin/users/edit/${recipientId}`}
                     canMove={canMoveToRecipient}
                   />
                   <SubInfoRow label="Name" value={recipientName} />
@@ -223,7 +223,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Item Details"
-                    href={"/admin/listings/edit/" + listingId}
+                    href={`/admin/listings/edit/${listingId}`}
                   />
                   <SubInfoRow label="Name" value={listingName} />
                   <SubInfoRow label="Address" value={listingAddress} />
@@ -263,7 +263,7 @@ const TableItem = ({
               </button>
             )}
 
-            <View href={`/admin${viewPath}/${id}`} />
+            <View href={`/admin${viewPath}/${id}/`} />
           </div>
         </td>
       </tr>

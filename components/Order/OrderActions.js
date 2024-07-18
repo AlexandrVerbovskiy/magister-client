@@ -24,7 +24,7 @@ const OrderActions = ({
 
   const handleDisputeChatClick = (e) => {
     e.preventDefault();
-    router.push(`/dashboard/chats/${order.disputeChatId}`);
+    router.push(`/dashboard/chats/${order.disputeChatId}/`);
   };
 
   const handlePayClick = (e) => {
@@ -39,12 +39,12 @@ const OrderActions = ({
   };
 
   const handleMoveToOrder = (id) => {
-    router.push(`/dashboard/orders/${id}`);
+    router.push(`/dashboard/orders/${id}/`);
   };
 
   return (
     <>
-      <Link className={actionClass} href={link + "/" + order.id}>
+      <Link className={actionClass} href={`${link}/${order.id}/`}>
         {needIcon && <i className="bx bx-detail"></i>} View details
       </Link>
 
@@ -67,7 +67,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/pay-by-bank-transfer/` + order.id}
+              href={`/dashboard/pay-by-bank-transfer/${order.id}/`}
             >
               {needIcon && <i className="bx bx-wallet"></i>} Update payment
             </Link>
@@ -125,7 +125,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={link + "/" + order.id + "?scroll-to=tenant-qr-code"}
+              href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Start the
               rental
@@ -149,7 +149,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/creating-renter-review/` + order.id}
+              href={`/dashboard/creating-renter-review/${order.id}/`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review
@@ -161,7 +161,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/creating-owner-review/` + order.id}
+              href={`/dashboard/creating-owner-review/${order.id}`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review
@@ -183,14 +183,13 @@ const OrderActions = ({
           {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
           ) && (
-            <button
-              type="button"
+            <Link
               className={actionClass}
-              onClick={() => popupsData.setActiveDisputeWindow(true)}
+              href={`/dashboard/orders/create-dispute/${order.id}`}
             >
               {needIcon && <i className="bx bx-transfer-alt"></i>}
               Open dispute
-            </button>
+            </Link>
           )}
 
           {currentActionButtons.includes(

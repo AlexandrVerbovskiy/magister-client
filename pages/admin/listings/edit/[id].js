@@ -5,12 +5,20 @@ import {
 } from "../../../../services";
 import { adminSideProps } from "../../../../middlewares";
 import EditForm from "../../../../components/admin/Listings/EditForm";
+import { useIdPage } from "../../../../hooks";
 
-const ListingEdit = ({ categories, listing: baseListing, id }) => {
-  const [listing, setListing] = useState(baseListing);
+const ListingEdit = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminListingEditPageOptions(field, authToken),
+    onUpdate: (newProps) => setListing(newProps.listing),
+  });
+
+  const [listing, setListing] = useState(props.listing);
 
   const save = async (formData, authToken) => {
-    formData.append("id", id);
+    formData.append("id", props.id);
     const res = await updateListingByAdmin(formData, authToken);
     const updatedListing = res.listing;
     setListing(updatedListing);
@@ -18,11 +26,7 @@ const ListingEdit = ({ categories, listing: baseListing, id }) => {
   };
 
   return (
-    <EditForm
-      categories={categories}
-      listing={listing}
-      save={save}
-    />
+    <EditForm categories={props.categories} listing={listing} save={save} />
   );
 };
 

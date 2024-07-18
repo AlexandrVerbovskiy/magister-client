@@ -31,7 +31,7 @@ const CookieBanner = () => {
         <div className="title">We use cookies</div>
         We use cookies to enhance your experience on our website. By accepting,
         you agree to our{" "}
-        <Link href="/privacy-policy" target="_blank">
+        <Link href="/privacy-policy/" target="_blank">
           Privacy Policy
         </Link>
       </div>
