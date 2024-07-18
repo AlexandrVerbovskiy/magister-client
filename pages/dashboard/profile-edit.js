@@ -19,7 +19,6 @@ import {
   validatePassword,
   validatePhoneNumber,
   validateUrl,
-  changeLocation,
 } from "../../utils";
 import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
@@ -32,8 +31,10 @@ import {
   DocumentVerificationSection,
   PaypalSection,
 } from "../../components/ProfileEdit";
+import { useRouter } from "next/router";
 
 const ProfileEdit = ({ newPaypalId }) => {
+  const router = useRouter();
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
@@ -51,7 +52,7 @@ const ProfileEdit = ({ newPaypalId }) => {
       updateUserFields({ paypalId: newPaypalId });
     }
 
-    changeLocation("/dashboard/profile-edit");
+    router.replace("/dashboard/profile-edit/");
   }, []);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);

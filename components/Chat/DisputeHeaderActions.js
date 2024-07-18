@@ -1,21 +1,12 @@
 import Link from "next/link";
-import { useContext } from "react";
-import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
-import { changeLocation } from "../../utils";
 
 const DisputeHeaderActions = ({ dispute }) => {
-  const { sessionUser } = useContext(IndiceContext);
-  /*const isOwner = sessionUser.id == dispute.ownerId;
-  const isTenant = sessionUser.id == dispute.tenantId;*/
-
   const router = useRouter();
 
   const handleOrderChatClick = (e) => {
     e.preventDefault();
-    router
-      .push(`/dashboard/chats/${dispute.chatId}`)
-      .then(() => window.location.reload());
+    router.push(`/dashboard/chats/${dispute.chatId}`);
   };
 
   return (

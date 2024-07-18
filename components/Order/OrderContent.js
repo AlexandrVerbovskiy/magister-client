@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
-  changeLocation,
   checkStringDateLowerOrEqualCurrentDate,
   dateConverter,
   generateProfileFilePath,
@@ -385,8 +384,7 @@ const OrderContent = ({
   };
 
   const handleMoveToOrder = (id) => {
-    changeLocation(`/dashboard/orders/${id}`);
-    window.location.reload();
+    router.push(`/dashboard/orders/${id}`);
   };
 
   const handleTenantGotListingApprove = async () => {
