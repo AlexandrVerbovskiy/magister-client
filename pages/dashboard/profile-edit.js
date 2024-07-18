@@ -52,7 +52,7 @@ const ProfileEdit = ({ newPaypalId }) => {
       updateUserFields({ paypalId: newPaypalId });
     }
 
-    router.replace("/dashboard/profile-edit");
+    router.replace("/dashboard/profile-edit/");
   }, []);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
