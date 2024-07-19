@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { SessionProvider } from "next-auth/react";
 
 import { IndiceProvider } from "../contexts";

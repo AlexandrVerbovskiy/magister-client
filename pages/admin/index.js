@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
-import WelcomeBanner from "../../partials/admin/dashboard/WelcomeBanner";
 import { useAdminPage } from "../../hooks";
 import { supportSideProps } from "../../middlewares";
 import {

@@ -16,7 +16,7 @@ import ListingCommentsTable from "../../components/admin/ListingComments/Table";
 
 const ListingReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
@@ -47,7 +47,8 @@ const ListingReviews = (pageProps) => {
     canMovePrevPage,
     items: reviews,
     rebuild,
-    setItemFields
+    setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getListingCommentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -109,6 +110,7 @@ const ListingReviews = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

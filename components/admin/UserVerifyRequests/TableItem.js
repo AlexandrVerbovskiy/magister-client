@@ -5,8 +5,7 @@ import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import { IndiceContext } from "../../../contexts";
-import { generateProfileFilePath, getFilePath } from "../../../utils";
-import STATIC from "../../../static";
+import { generateProfileFilePath } from "../../../utils";
 
 const TableItem = ({
   id,
@@ -19,7 +18,6 @@ const TableItem = ({
   userId,
   createdAt,
   failedDescription,
-  userPlaceWork,
   userContactDetails,
   userTwitterUrl,
   userFacebookUrl,

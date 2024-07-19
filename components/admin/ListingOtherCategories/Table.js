@@ -1,6 +1,7 @@
 import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import PaginationLoading from "../PaginationLoading";
 
 const ListingCommentsTable = ({
   categories,
@@ -9,6 +10,7 @@ const ListingCommentsTable = ({
   onClickTh,
   totalCount,
   setItemFields,
+  loading,
 }) => {
   const ths = [
     { title: "Index", value: "index", canOrder: false, width: "15%" },
@@ -22,9 +24,11 @@ const ListingCommentsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           All Categories{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -44,15 +48,18 @@ const ListingCommentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {categories.map((category, index) => (
-                <TableItem
-                  key={category.otherCategory}
-                  {...category}
-                  index={index + 1}
-                />
-              ))}
+              {!loading &&
+                categories.map((category, index) => (
+                  <TableItem
+                    key={category.otherCategory}
+                    {...category}
+                    index={index + 1}
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
     </div>

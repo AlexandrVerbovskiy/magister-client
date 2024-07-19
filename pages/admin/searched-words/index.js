@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -23,7 +23,7 @@ const SearchedWords = (pageProps) => {
   const router = useRouter();
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const baseViewedFilter = router.query.viewed ?? "all";
   const baseAcceptedFilter = router.query.accepted ?? "all";
@@ -47,7 +47,7 @@ const SearchedWords = (pageProps) => {
     canMovePrevPage,
     items: searchedWords,
     rebuild,
-    options,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getSearchedWordList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -137,6 +137,7 @@ const SearchedWords = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

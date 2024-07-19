@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import EditUserForm from "../../../components/admin/EditUserForm";
 import { createUser, updateUser } from "../../../services";

@@ -1,8 +1,7 @@
 import { useContext, useRef, useState } from "react";
-import { authSideProps, userSideProps } from "../../middlewares";
+import { authSideProps } from "../../middlewares";
 import {
   getCurrentUserDocumentsPageOptions,
-  getViewPageWithCategoriesOptions,
   saveMyDocuments,
 } from "../../services";
 import NavbarThree from "../../components/_App/NavbarThree";

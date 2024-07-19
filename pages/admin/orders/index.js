@@ -5,10 +5,7 @@ import {
   usePagination,
 } from "../../../hooks";
 import { supportSideProps } from "../../../middlewares";
-import {
-  baseAdminTimeListPageParams,
-  baseTimeTypePageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import OrdersTable from "../../../components/admin/Orders/Table";
@@ -57,6 +54,7 @@ const Orders = (pageProps) => {
     canMovePrevPage,
     items: orders,
     rebuild,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -146,6 +144,7 @@ const Orders = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 openDeleteModal={handleOpenDeleteModal}
                 totalCount={countItems}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

@@ -15,10 +15,7 @@ import Header from "../../../../partials/admin/Header";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
 import DropdownFilter from "../../../../components/admin/DropdownFilter";
-import {
-  baseAdminTimeListPageParams,
-  baseTimeListPageParams,
-} from "../../../../utils";
+import { baseAdminTimeListPageParams } from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
 import { useRouter } from "next/router";
 import FilterRadioOption from "../../../../components/admin/Form/FilterRadioOption";
@@ -28,7 +25,7 @@ import DateSelect from "../../../../components/admin/DateSelect";
 const RecipientPayments = (pageProps) => {
   const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const [type, setType] = useState(router.query.type ?? "all");
   const [status, setStatus] = useState(router.query.status ?? "all");
@@ -53,6 +50,7 @@ const RecipientPayments = (pageProps) => {
     items: payments,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -159,6 +157,7 @@ const RecipientPayments = (pageProps) => {
                 totalCount={countItems}
                 viewPath="/payments/recipients"
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

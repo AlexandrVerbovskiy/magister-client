@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../../../contexts";
-import ModalWithDescription from "../Form/ModalWithDescription";
 import ModalBlank from "../ModalBlank";
 import ErrorSpan from "../ErrorSpan";
 import CheckboxList from "../Form/CheckboxList";

@@ -24,6 +24,7 @@ const usePagination = ({
   const [order, setOrder] = useState(null);
   const [orderType, setOrderType] = useState(null);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [items, setItems] = useState(defaultData?.items ?? []);
   const [canMoveNextPage, setCanMoveNextPage] = useState(true);
@@ -144,36 +145,68 @@ const usePagination = ({
     return { ...props, ...dopBody };
   };
 
+  const updatePaginationState = (data) => {
+    const {
+      options: gotOptions,
+      items: gotItems,
+      countItems: gotCountItems,
+    } = data;
+
+    countPagesRef.current = gotOptions.totalPages;
+    countItemsRef.current = gotCountItems;
+    updateStateByOption(gotOptions);
+    setItems(gotItems);
+
+    if (onRebuild) {
+      onRebuild(data);
+    }
+
+    if (onSendRequest) {
+      onSendRequest({ items: gotItems });
+    }
+  };
+
   const onChangeOptions = async (dopBody = {}) => {
     try {
+      setLoading(true);
       setItems([]);
       const props = getFullProps(dopBody);
       const res = await getItemsFunc(props);
-
-      const {
-        options: gotOptions,
-        items: gotItems,
-        countItems: gotCountItems,
-      } = res;
-
-      countPagesRef.current = gotOptions.totalPages;
-      countItemsRef.current = gotCountItems;
-      updateStateByOption(gotOptions);
-      setItems(gotItems);
-
-      if (onRebuild) {
-        onRebuild(res);
-      }
-
-      if (onSendRequest) {
-        onSendRequest({ items: gotItems });
-      }
+      updatePaginationState(res);
     } catch (e) {
       if (onError) {
         onError(e);
       }
+    } finally {
+      setTimeout(() => setLoading(false), 100000);
     }
   };
+
+  const getDopBody = () => {
+    const dopBody = {};
+    const { order, page, filter } = router.query;
+    const orderType = router.query["order-type"];
+
+    if (order) {
+      dopBody["order"] = order;
+    }
+
+    if (orderType) {
+      dopBody["orderType"] = orderType;
+    }
+
+    if (page) {
+      dopBody["page"] = page;
+    }
+
+    if (filter) {
+      dopBody["filter"] = filter;
+    }
+
+    return dopBody;
+  };
+
+  const getFullPropsWithDopBody = () => getFullProps(getDopBody());
 
   useEffect(() => {
     if (!defaultData || isFirstDefaultDataRef.current) {
@@ -203,25 +236,7 @@ const usePagination = ({
   }, [defaultData?.options]);
 
   useEffect(() => {
-    const dopBody = {};
-    const { order, page, filter } = router.query;
-    const orderType = router.query["order-type"];
-
-    if (order) {
-      dopBody["order"] = order;
-    }
-
-    if (orderType) {
-      dopBody["orderType"] = orderType;
-    }
-
-    if (page) {
-      dopBody["page"] = page;
-    }
-
-    if (filter) {
-      dopBody["filter"] = filter;
-    }
+    const dopBody = getDopBody();
 
     if (isFirstRef.current) {
       isFirstRef.current = false;
@@ -306,6 +321,7 @@ const usePagination = ({
   };
 
   return {
+    loading,
     moveToPage,
     changeFilter,
     filter,
@@ -323,8 +339,9 @@ const usePagination = ({
     rebuild: onChangeOptions,
     setItemFields,
     options,
-    getFullProps,
+    getCurrentPaginationProps: getFullPropsWithDopBody,
     isFirstCall: isFirstRef.current,
+    updatePaginationState,
   };
 };
 

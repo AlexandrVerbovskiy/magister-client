@@ -1,6 +1,7 @@
 import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
+import PaginationLoading from "../PaginationLoading";
 
 const ListingsTable = ({
   listings,
@@ -10,6 +11,7 @@ const ListingsTable = ({
   totalCount,
   onClickDelete,
   onClickChangeActive,
+  loading,
 }) => {
   const ths = [
     { title: "Id", value: "id", width: "10%" },
@@ -26,9 +28,11 @@ const ListingsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           All Listings{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -48,21 +52,24 @@ const ListingsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {listings.map((listing) => (
-                <TableItem
-                  key={listing.id}
-                  {...listing}
-                  onClickDelete={(e) => {
-                    e.stopPropagation();
-                    onClickDelete(listing.id, listing.name);
-                  }}
-                  onChangeActive={(e) =>
-                    onClickChangeActive(listing.id, listing.name)
-                  }
-                />
-              ))}
+              {!loading &&
+                listings.map((listing) => (
+                  <TableItem
+                    key={listing.id}
+                    {...listing}
+                    onClickDelete={(e) => {
+                      e.stopPropagation();
+                      onClickDelete(listing.id, listing.name);
+                    }}
+                    onChangeActive={(e) =>
+                      onClickChangeActive(listing.id, listing.name)
+                    }
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
     </div>

@@ -17325,6 +17325,7 @@ button.button-danger:hover {
   min-height: 63vh;
 }
 
+.loading-pagination,
 .no-listing {
   width: calc(300px - 65px);
   height: calc(300px - 65px);
@@ -17338,6 +17339,7 @@ button.button-danger:hover {
   flex-direction: column;
 }
 
+.loading-pagination-text,
 .no-listing-text {
   margin-top: 10px;
 }
@@ -17350,13 +17352,21 @@ button.button-danger:hover {
   transition: color 0.2s ease-out;
 }
 
-.no-listing-img {
+.no-listing-img,
+.loading-pagination-img{
   width: calc(180px - 65px);
   height: calc(180px - 65px);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+}
+
+.no-listing-img {
+  background-image: url("/images/banner-img1.png");
+}
+
+.loading-pagination-img {
   background-image: url("/images/claim-your-business.png");
 }
 

@@ -1,7 +1,7 @@
 /* Max width 767px */
 @media only screen and (max-width: 768px) {
-  .how-it-works-box .icon{
-    height: 220px!important;
+  .how-it-works-box .icon {
+    height: 220px !important;
   }
 
   .listing-area {
@@ -12,10 +12,12 @@
     max-width: 80%;
   }
 
+  .loading-pagination,
   .no-listing {
     height: 200px;
   }
 
+  .loading-pagination-img,
   .no-listing-img {
     width: 80px;
     height: 80px;
@@ -26,6 +28,7 @@
     font-size: 10px;
   }
 
+  .loading-pagination-text,
   .no-listing-text {
     font-size: 10px;
   }
@@ -569,7 +572,7 @@
     display: none;
   }
 
-  .divider3{
+  .divider3 {
     display: none;
   }
 
@@ -2565,7 +2568,7 @@
   .single-category-box.more-categories h3 {
     margin-bottom: 12px;
   }
-  
+
   .subscribe-content .form button,
   .subscribe-content form button {
     position: absolute;

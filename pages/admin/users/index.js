@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -18,10 +18,7 @@ import {
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../../middlewares";
-import {
-  baseAdminTimeListPageParams,
-  baseListPageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import DateSelect from "../../../components/admin/DateSelect";
 import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHeaderDropdown";
 
@@ -56,6 +53,7 @@ const Users = (pageProps) => {
     items: users,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getUserList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -256,6 +254,7 @@ const Users = (pageProps) => {
               handleSetRole={handleSetRole}
               handleChangeActive={handleChangeActive}
               totalCount={countItems}
+              loading={paginationLoading}
               handleChangeVerified={handleChangeVerified}
             />
 

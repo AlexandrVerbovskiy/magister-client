@@ -6,6 +6,7 @@ import AcceptModal from "../SenderPayments/AcceptModal";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
 import { isPayedUsedPaypal } from "../../../utils";
+import PaginationLoading from "../PaginationLoading";
 
 const RecipientPaymentsTable = ({
   payments,
@@ -15,6 +16,7 @@ const RecipientPaymentsTable = ({
   totalCount,
   viewPath,
   setItemFields,
+  loading,
 }) => {
   const ths = [
     { title: "Id", value: "recipient_payments.id", width: "10%" },
@@ -61,9 +63,11 @@ const RecipientPaymentsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Payments{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -83,7 +87,7 @@ const RecipientPaymentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {payments.map((payment) => (
+              {!loading && payments.map((payment) => (
                 <TableItem
                   key={payment.id}
                   {...payment}
@@ -93,6 +97,8 @@ const RecipientPaymentsTable = ({
               ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
 

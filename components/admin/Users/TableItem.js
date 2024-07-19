@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import Tooltip from "../../../components/admin/Tooltip";
 import Link from "next/link";
-import Delete from "../FastActions/Delete";
 import Edit from "../FastActions/Edit";
 import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
-import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
 import {
   generateProfileFilePath,
-  getFilePath,
   moneyFormat,
   dateConverter,
 } from "../../../utils";
@@ -86,13 +83,11 @@ const TableItem = ({
   id,
   name,
   emailVerified,
-  phoneVerified,
   email,
   phone,
   photo,
   active,
   verified,
-  onDeleteClick,
   onChangeRole,
   onChangeActive,
   onChangeVerified,
