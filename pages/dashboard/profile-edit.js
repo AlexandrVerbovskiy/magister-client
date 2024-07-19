@@ -50,9 +50,9 @@ const ProfileEdit = ({ newPaypalId }) => {
   useEffect(() => {
     if (newPaypalId) {
       updateUserFields({ paypalId: newPaypalId });
+      router.replace("/dashboard/profile-edit/");
+      success.set("Paypal id successfully saved")
     }
-
-    router.replace("/dashboard/profile-edit/");
   }, []);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
