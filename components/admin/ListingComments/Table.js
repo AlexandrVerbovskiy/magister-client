@@ -6,6 +6,7 @@ import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
 import ApproveModal from "../Comments/ApproveModal";
 import { listingCommentApprove, listingCommentReject } from "../../../services";
+import PaginationLoading from "../PaginationLoading";
 
 const ListingCommentsTable = ({
   reviews,
@@ -14,6 +15,7 @@ const ListingCommentsTable = ({
   onClickTh,
   totalCount,
   setItemFields,
+  loading,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
@@ -64,7 +66,7 @@ const ListingCommentsTable = ({
     const newAveragePoints = totalPoints / newCount;
 
     await listingCommentApprove({ id: popupApproveId }, authToken);
-    
+
     setItemFields(
       {
         approved: true,
@@ -81,9 +83,11 @@ const ListingCommentsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           All Reviews{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -103,17 +107,20 @@ const ListingCommentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {reviews.map((review) => (
-                <TableItem
-                  key={review.id}
-                  {...review}
-                  openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleRejectClick={(id) => setPopupRejectId(id)}
-                />
-              ))}
+              {!loading &&
+                reviews.map((review) => (
+                  <TableItem
+                    key={review.id}
+                    {...review}
+                    openPopupImage={(image) => setPopupImage(image)}
+                    handleApproveClick={(id) => setPopupApproveId(id)}
+                    handleRejectClick={(id) => setPopupRejectId(id)}
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
 

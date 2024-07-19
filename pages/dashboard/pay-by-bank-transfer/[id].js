@@ -15,7 +15,6 @@ import {
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
-import env from "../../../env";
 import { IndiceContext } from "../../../contexts";
 import ErrorSpan from "../../../components/ErrorSpan";
 import OrderIconPopup from "../../../components/IconPopups/OrderIconPopup";

@@ -617,6 +617,10 @@ div.add-listings-box.dropzone > .gallery-flex {
   background-color: #f9f9f9;
 }
 
+.base-pagination-table{
+  min-height: 400px;
+}
+
 @media only screen and (max-width: 768px) {
   .error-content h3 {
     font-size: 20px;

@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { cloneObject, getDateByCurrentAdd, validatePrice } from "../../utils";
 import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
+import Loading from "../../components/GridListings/Loading";
 
 const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
 const baseItemsPerPage = 6;
@@ -213,6 +214,7 @@ const ListingsWithMap = ({
     options,
     order,
     handleChangeOrder,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: async (data) => {
       const res = await getListingListRequest(data, authToken);
@@ -506,116 +508,129 @@ const ListingsWithMap = ({
                       listings.length < 1 ? "d-flex justify-content-center" : ""
                     }`}
                   >
-                    {listings.length > 0 && (
-                      <div
-                        className="listings-grid-sorting row align-items-center"
-                        ref={filterFullRef}
-                      >
-                        <div className="col-lg-5 col-md-6 result-count">
-                          <p>
-                            <span className="count">{countItems}</span> Results
-                          </p>
-                        </div>
+                    {paginationLoading ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        {listings.length > 0 && (
+                          <div
+                            className="listings-grid-sorting row align-items-center"
+                            ref={filterFullRef}
+                          >
+                            <div className="col-lg-5 col-md-6 result-count">
+                              <p>
+                                <span className="count">{countItems}</span>{" "}
+                                Results
+                              </p>
+                            </div>
 
-                        <div className="col-lg-7 col-md-6 ordering">
-                          <div className="d-flex justify-content-end">
-                            <div
-                              className="d-flex select-box"
-                              style={{ zIndex: "999", alignItems: "center" }}
-                            >
-                              <label>Sort By:</label>
+                            <div className="col-lg-7 col-md-6 ordering">
+                              <div className="d-flex justify-content-end">
+                                <div
+                                  className="d-flex select-box"
+                                  style={{
+                                    zIndex: "999",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <label>Sort By:</label>
 
-                              <AdaptiveSelect
-                                options={orderOptions}
-                                value={
-                                  orderOptions.find(
-                                    (option) => option.value === order
-                                  ) ?? orderOptions[0]
-                                }
-                                onChange={(e) => handleChangeOrder(e.value)}
-                                isSearchable={false}
-                                className="custom-search-select blog-select"
-                                name="listing-order-select"
-                              />
+                                  <AdaptiveSelect
+                                    options={orderOptions}
+                                    value={
+                                      orderOptions.find(
+                                        (option) => option.value === order
+                                      ) ?? orderOptions[0]
+                                    }
+                                    onChange={(e) => handleChangeOrder(e.value)}
+                                    isSearchable={false}
+                                    className="custom-search-select blog-select"
+                                    name="listing-order-select"
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    )}
+                        )}
 
-                    <div ref={listingListParentRef} className="row">
-                      {listings.map((listing) => (
-                        <div
-                          key={listing.id}
-                          className="col-xl-6 col-lg-6 col-md-6 d-flex"
-                          onMouseOver={() => setListingMarkerActive(listing.id)}
-                          onMouseLeave={() => setMarkerUnactive(listing.id)}
-                        >
-                          <ListingItem
-                            listing={listing}
-                            hovered={activeListingIds.includes(listing.id)}
+                        <div ref={listingListParentRef} className="row">
+                          {listings.map((listing) => (
+                            <div
+                              key={listing.id}
+                              className="col-xl-6 col-lg-6 col-md-6 d-flex"
+                              onMouseOver={() =>
+                                setListingMarkerActive(listing.id)
+                              }
+                              onMouseLeave={() => setMarkerUnactive(listing.id)}
+                            >
+                              <ListingItem
+                                listing={listing}
+                                hovered={activeListingIds.includes(listing.id)}
+                              />
+                            </div>
+                          ))}
+
+                          {dopListingCards.map((card, index) => (
+                            <div
+                              key={index}
+                              className="col-xl-6 col-lg-6 col-md-6 d-none d-xl-flex p-0"
+                              style={{ height: "420px" }}
+                            ></div>
+                          ))}
+                        </div>
+
+                        {!hasListings && canSendCreateNotifyRequest && (
+                          <div className="send-create-listing-category-notification">
+                            <div className="image-parent">
+                              <img src="/images/contact.png" alt="image" />
+                            </div>
+
+                            <div className="description">
+                              Unfortunately, the searched category was not
+                              found.
+                              <br />
+                              It will be added in the future. <br />
+                              Sign up for a notification so you don't miss this
+                              event!
+                            </div>
+
+                            <button
+                              onClick={
+                                handleSendSubscribeNotificationOnCreateCategory
+                              }
+                              className="default-btn"
+                              type="button"
+                            >
+                              Subscribe on update listing categories
+                            </button>
+                          </div>
+                        )}
+
+                        {!hasListings && !canSendCreateNotifyRequest && (
+                          <div className="no-listing-found">
+                            <div className="image-parent">
+                              <img src="/images/banner-img1.png" alt="image" />
+                            </div>
+
+                            <div className="description">
+                              Unfortunately, no listings were found for the
+                              specified parameters.
+                              <br /> Try searching for something similar
+                            </div>
+                          </div>
+                        )}
+
+                        {listings.length > 0 && (
+                          <Pagination
+                            page={page}
+                            countPages={countPages}
+                            move={moveToPage}
+                            canNext={canMoveNextPage}
+                            canPrev={canMovePrevPage}
+                            viewOnlyMoreOnePage={true}
                           />
-                        </div>
-                      ))}
-
-                      {dopListingCards.map((card, index) => (
-                        <div
-                          key={index}
-                          className="col-xl-6 col-lg-6 col-md-6 d-none d-xl-flex p-0"
-                          style={{ height: "420px" }}
-                        ></div>
-                      ))}
-                    </div>
-
-                    {!hasListings && canSendCreateNotifyRequest && (
-                      <div className="send-create-listing-category-notification">
-                        <div className="image-parent">
-                          <img src="/images/contact.png" alt="image" />
-                        </div>
-
-                        <div className="description">
-                          Unfortunately, the searched category was not found.
-                          <br />
-                          It will be added in the future. <br />
-                          Sign up for a notification so you don't miss this
-                          event!
-                        </div>
-
-                        <button
-                          onClick={
-                            handleSendSubscribeNotificationOnCreateCategory
-                          }
-                          className="default-btn"
-                          type="button"
-                        >
-                          Subscribe on update listing categories
-                        </button>
-                      </div>
-                    )}
-
-                    {!hasListings && !canSendCreateNotifyRequest && (
-                      <div className="no-listing-found">
-                        <div className="image-parent">
-                          <img src="/images/banner-img1.png" alt="image" />
-                        </div>
-
-                        <div className="description">
-                          Unfortunately, no listings were found for the
-                          specified parameters.
-                          <br /> Try searching for something similar
-                        </div>
-                      </div>
-                    )}
-
-                    {listings.length > 0 && (
-                      <Pagination
-                        page={page}
-                        countPages={countPages}
-                        move={moveToPage}
-                        canNext={canMoveNextPage}
-                        canPrev={canMovePrevPage}
-                        viewOnlyMoreOnePage={true}
-                      />
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

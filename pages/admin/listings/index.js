@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -16,10 +16,7 @@ import ListingsTable from "../../../components/admin/Listings/Table";
 import { IndiceContext } from "../../../contexts";
 import DeleteAccept from "../../../components/admin/DeleteAccept";
 import Link from "next/link";
-import {
-  baseAdminTimeListPageParams,
-  baseListPageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHeaderDropdown";
 
 const Listings = (pageProps) => {
@@ -51,6 +48,7 @@ const Listings = (pageProps) => {
     items: listings,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminListingList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -188,6 +186,7 @@ const Listings = (pageProps) => {
                 totalCount={countItems}
                 onClickDelete={handleOpenDeleteModal}
                 onClickChangeActive={handleChangeActiveClick}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

@@ -21,7 +21,7 @@ import STATIC from "../../../../static";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typeCount, setTypeCount] = useState(pageProps.typesCount);
   const [status, setStatus] = useState(pageProps.options.status ?? "all");
   const {
@@ -52,8 +52,8 @@ const SenderPayments = (pageProps) => {
     canMovePrevPage,
     items: payments,
     rebuild,
-    options,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -146,6 +146,7 @@ const SenderPayments = (pageProps) => {
                 totalCount={countItems}
                 viewPath="/payments/senders"
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

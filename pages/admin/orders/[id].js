@@ -1,4 +1,4 @@
-import { adminSideProps, supportSideProps } from "../../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 import { getAdminOrderInfo } from "../../../services";
 import { useAdminPage } from "../../../hooks";
 import Sidebar from "../../../partials/admin/Sidebar";

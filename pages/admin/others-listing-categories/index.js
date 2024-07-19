@@ -14,7 +14,7 @@ import { getAdminOthersListingCategories } from "../../../services/listingCatego
 
 const OthersList = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const {
     page,
@@ -31,8 +31,8 @@ const OthersList = (pageProps) => {
     canMoveNextPage,
     canMovePrevPage,
     items: otherCategories,
-    rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminOthersListingCategories(data, authToken),
     onError: (e) => error.set(e.message),
@@ -63,6 +63,7 @@ const OthersList = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

@@ -18,7 +18,7 @@ import UserCommentsTable from "../../components/admin/UserComments/Table";
 
 const OwnerReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
@@ -50,6 +50,7 @@ const OwnerReviews = (pageProps) => {
     items: reviews,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getOwnerCommentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -114,6 +115,7 @@ const OwnerReviews = (pageProps) => {
                 userColumnTitle="Owner"
                 rejectReview={ownerCommentReject}
                 approveReview={ownerCommentApprove}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

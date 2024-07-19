@@ -50,6 +50,7 @@ const TenantReviews = (pageProps) => {
     items: reviews,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getTenantCommentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -114,6 +115,7 @@ const TenantReviews = (pageProps) => {
                 userColumnTitle="Tenant"
                 rejectReview={tenantCommentReject}
                 approveReview={tenantCommentApprove}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React from "react";
 import NavbarTwo from "../../components/_App/NavbarTwo";
 import Footer from "../../components/_App/Footer";
 import SingleListingsContent from "../../components/SingleListings/SingleListingsContent";
