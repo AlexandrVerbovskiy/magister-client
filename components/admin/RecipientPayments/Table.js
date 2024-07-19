@@ -18,12 +18,17 @@ const RecipientPaymentsTable = ({
 }) => {
   const ths = [
     { title: "Id", value: "recipient_payments.id", width: "10%" },
-    { title: "Payer", value: "tenants.name", width: "20%" },
-    { title: "Recipient", value: "users.name", width: "20%" },
+    { title: "Payer", value: "tenants.name", width: "15%" },
+    { title: "Recipient", value: "users.name", width: "15%" },
     { title: "Price", value: "recipient_payments.money", width: "15%" },
     {
       title: "Type",
       value: "recipient_payments.received_type",
+      width: "10%",
+    },
+    {
+      title: "Created At",
+      value: "recipient_payments.created_at",
       width: "15%",
     },
     { title: "Status", value: "recipient_payments.status", width: "15%" },

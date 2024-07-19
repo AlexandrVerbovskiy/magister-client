@@ -19,7 +19,7 @@ import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
-import {useIdPage} from "../../../hooks";
+import { useIdPage } from "../../../hooks";
 
 const PreviousProposalElem = () => {
   const { props } = useIdPage({
@@ -162,7 +162,10 @@ const Order = (order) => {
                         ) : (
                           <Status
                             status={order.status}
-                            baseClass="form-input w-max ml-2"
+                            payedId={order.payedId}
+                            payedAdminApproved={order.payedAdminApproved}
+                            payedWaitingApproved={order.payedWaitingApproved}
+                            baseClass="min-w-fit form-input w-max ml-2"
                           />
                         )}
                       </h2>
@@ -322,8 +325,8 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_fee"
-                                label="Tenant Fee, %"
-                                placeholder="Tenant Fee"
+                                label="Renter Fee, %"
+                                placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={order.tenantFee}
                                 inputClassName="form-input w-full"
@@ -362,8 +365,8 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_total_fee"
-                                label="Tenant Total Fee, $"
-                                placeholder="Tenant Fee"
+                                label="Renter Total Fee, $"
+                                placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
@@ -420,8 +423,8 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_price"
-                                label="Tenant Send Total Price, $"
-                                placeholder="Tenant Send Total Price"
+                                label="Renter Send Total Price, $"
+                                placeholder="Renter Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate

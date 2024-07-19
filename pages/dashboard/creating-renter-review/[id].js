@@ -86,6 +86,8 @@ const FullReview = (baseProps) => {
               userName: props.order.tenantName,
               userPhoto: props.order.tenantPhoto,
               userCountItems: props.order.tenantCountItems,
+              userAverageRating: props.order.tenantAverageRating,
+              userCommentCount: props.order.tenantCommentCount,
             }}
             onSubmit={handleRenterReviewSubmit}
             disabled={disabled}

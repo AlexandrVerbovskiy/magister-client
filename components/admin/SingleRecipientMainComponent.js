@@ -226,6 +226,50 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                                 />
                               </div>
                             </div>
+
+                            <div className="flex w-full gap-2">
+                              <div className="w-full sm:w-1/2">
+                                <InputView
+                                  value={
+                                    recipient.type ==
+                                    STATIC.PAYMENT_TYPES.BANK_TRANSFER
+                                      ? "Credit Card"
+                                      : "Paypal Id"
+                                  }
+                                  label="Recipient Type"
+                                  name="recipient-type"
+                                  placeholder="Recipient Type"
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+
+                              <div className="w-full sm:w-1/2">
+                                <InputView
+                                  value={
+                                    recipient.type ==
+                                    STATIC.PAYMENT_TYPES.BANK_TRANSFER
+                                      ? recipient.data.cardNumber
+                                      : recipient.data.paypalId
+                                  }
+                                  label={
+                                    recipient.type ==
+                                    STATIC.PAYMENT_TYPES.BANK_TRANSFER
+                                      ? "Card Number"
+                                      : "Paypal Id"
+                                  }
+                                  name="refund-number"
+                                  placeholder={
+                                    recipient.type ==
+                                    STATIC.PAYMENT_TYPES.BANK_TRANSFER
+                                      ? "Card Number"
+                                      : "Paypal Id"
+                                  }
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  inputClassName="form-input w-full"
+                                />
+                              </div>
+                            </div>
                           </div>
 
                           {recipient.failedDescription && (

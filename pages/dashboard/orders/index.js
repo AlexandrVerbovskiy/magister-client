@@ -165,7 +165,7 @@ const Orders = (pageProps) => {
     extendModalActiveOrder,
     closeExtendOrder,
     successIconPopupState,
-  } = useOrderFastActions({ orders: orders, setItemFields });
+  } = useOrderFastActions({ orders: orders, setItemFields, rebuildItems: rebuild });
 
   return (
     <Wrapper>

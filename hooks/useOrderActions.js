@@ -36,7 +36,7 @@ const useOrderActions = ({ order }) => {
       }
 
       if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT &&
         isTenant
       ) {
         if (order.paymentInfo) {
@@ -57,19 +57,19 @@ const useOrderActions = ({ order }) => {
         (isOwner &&
           [
             STATIC.ORDER_STATUSES.PENDING_TENANT,
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
           ].includes(order.status)) ||
         (isTenant &&
           [
             STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
           ].includes(order.status))
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
       }
 
       if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
         isOwner
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE);
@@ -82,7 +82,7 @@ const useOrderActions = ({ order }) => {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE);
       }
 
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
         if (isTenant) {
           if (order.canAcceptTenantListing) {
             newActionButtons.push(
@@ -124,9 +124,10 @@ const useOrderActions = ({ order }) => {
       if (
         [
           STATIC.ORDER_STATUSES.FINISHED,
-          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
           STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-        ].includes(order.status)
+        ].includes(order.status) ||
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
+          isOwner)
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
@@ -149,7 +150,7 @@ const useOrderActions = ({ order }) => {
         !order.extendOrders.find(
           (extendOrder) =>
             [
-              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
               STATIC.ORDER_STATUSES.PENDING_OWNER,
               STATIC.ORDER_STATUSES.PENDING_TENANT,
               STATIC.ORDER_STATUSES.REJECTED,
@@ -162,13 +163,12 @@ const useOrderActions = ({ order }) => {
         order.extendOrders.find(
           (extendOrder) =>
             [
-              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
               STATIC.ORDER_STATUSES.PENDING_OWNER,
               STATIC.ORDER_STATUSES.PENDING_TENANT,
               STATIC.ORDER_STATUSES.REJECTED,
             ].includes(extendOrder.status) && !extendOrder.cancelStatus
         );
-
 
       if (
         isTenant &&

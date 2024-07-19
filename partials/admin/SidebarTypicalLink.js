@@ -13,7 +13,7 @@ const SidebarTypicalLink = ({ SVG, link = "", title }) => {
       }`}
     >
       <Link
-        href={`/admin/${link}/`}
+        href={`/admin/${link ? link + "/" : ""}`}
         className={`block text-slate-200 truncate transition duration-150 ${
           isCurrent ? "hover:text-slate-200" : "hover:text-white"
         }`}
