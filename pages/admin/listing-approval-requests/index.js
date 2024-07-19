@@ -2,19 +2,13 @@ import React, { useContext, useState } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import Datepicker from "../../../components/admin/Datepicker";
 import { adminSideProps } from "../../../middlewares";
-import ListingApprovalRequests from "../../../components/admin/ListingApprovalRequests/Table";
-import FilterRadioOption from "../../../components/admin/Form/FilterRadioOption";
+import ListingApprovalRequestsTable from "../../../components/admin/ListingApprovalRequests/Table";
 
 import {
   useAdminPage,
   usePagination,
-  useInitPaginationTimeFilter,
-  useChangeTimeFilter,
-  useTimeTypeFilter,
   useBaseAdminFilter,
 } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
@@ -22,14 +16,12 @@ import {
   getAdminListingApprovalRequestListPageOptions,
   getAdminListingApprovalRequestsList,
 } from "../../../services";
-import {
-  baseAdminTimeListPageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [status, setStatus] = useState(pageProps.status ?? "waiting");
 
   const {
@@ -38,7 +30,7 @@ const UserVerifyRequests = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps });
 
   const {
     page,
@@ -56,8 +48,8 @@ const UserVerifyRequests = (pageProps) => {
     canMovePrevPage,
     items: listingApprovalRequests,
     rebuild,
-    options,
-    setItemFields
+    setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) =>
       getAdminListingApprovalRequestsList(data, authToken),
@@ -126,13 +118,14 @@ const UserVerifyRequests = (pageProps) => {
                 />
               </div>
 
-              <ListingApprovalRequests
+              <ListingApprovalRequestsTable
                 listingApprovalRequests={listingApprovalRequests}
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

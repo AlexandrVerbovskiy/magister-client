@@ -11,7 +11,7 @@ const PasswordResetSend = () => {
   const router = useRouter();
   const [formError, setFormError] = useState(null);
   const { token } = router.query;
-  const { error, success } = useContext(IndiceContext);
+  const { success } = useContext(IndiceContext);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");

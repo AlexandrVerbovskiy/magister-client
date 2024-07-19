@@ -6,14 +6,14 @@ import { baseAdminTimeListPageParams } from "../../utils";
 import { supportSideProps } from "../../middlewares";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import DisputesTable  from "../../components/admin/Disputes/Table";
+import DisputesTable from "../../components/admin/Disputes/Table";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 
 const Disputes = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
@@ -45,6 +45,7 @@ const Disputes = (pageProps) => {
     items: disputes,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getDisputeList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -106,6 +107,7 @@ const Disputes = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

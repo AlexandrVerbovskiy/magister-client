@@ -5,6 +5,7 @@ import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
 import ApproveModal from "../Comments/ApproveModal";
+import PaginationLoading from "../PaginationLoading";
 
 const UserCommentsTable = ({
   reviews,
@@ -16,6 +17,7 @@ const UserCommentsTable = ({
   rejectReview,
   approveReview,
   userColumnTitle = "Tenant",
+  loading,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
@@ -83,9 +85,11 @@ const UserCommentsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Reviews{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -105,18 +109,21 @@ const UserCommentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {reviews.map((review) => (
-                <TableItem
-                  key={review.id}
-                  {...review}
-                  openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleRejectClick={(id) => setPopupRejectId(id)}
-                  userColumnTitle={userColumnTitle}
-                />
-              ))}
+              {!loading &&
+                reviews.map((review) => (
+                  <TableItem
+                    key={review.id}
+                    {...review}
+                    openPopupImage={(image) => setPopupImage(image)}
+                    handleApproveClick={(id) => setPopupApproveId(id)}
+                    handleRejectClick={(id) => setPopupRejectId(id)}
+                    userColumnTitle={userColumnTitle}
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
 

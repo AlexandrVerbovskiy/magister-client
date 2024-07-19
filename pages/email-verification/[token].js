@@ -10,7 +10,7 @@ import ErrorSpan from "../../components/ErrorSpan";
 const PasswordResetSend = () => {
   const router = useRouter();
   const { token } = router.query;
-  const { error, success } = useContext(IndiceContext);
+  const { success } = useContext(IndiceContext);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState(null);
 

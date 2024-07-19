@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
-import { IndiceContext } from "../../../contexts";
+import PaginationLoading from "../PaginationLoading";
 
 const UsersTable = ({
   users,
@@ -13,9 +13,8 @@ const UsersTable = ({
   handleChangeActive,
   handleChangeVerified,
   totalCount,
+  loading,
 }) => {
-  const { isAdmin } = useContext(IndiceContext);
-
   const ths = [
     { title: "User", value: "name", width: "25%" },
     { title: "Email", value: "email", width: "20%" },
@@ -42,9 +41,11 @@ const UsersTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Users{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -64,29 +65,32 @@ const UsersTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {users.map((user) => {
-                return (
-                  <TableItem
-                    key={user.id}
-                    {...user}
-                    onChangeRole={(role) =>
-                      handleSetRole(user.id, user.name, role)
-                    }
-                    onChangeActive={() =>
-                      handleChangeActive(user.id, user.name)
-                    }
-                    onDeleteClick={(e) => {
-                      e.stopPropagation();
-                      openDeleteModal(user.id, user.name);
-                    }}
-                    onChangeVerified={() =>
-                      handleChangeVerified(user.id, user.name)
-                    }
-                  />
-                );
-              })}
+              {!loading &&
+                users.map((user) => {
+                  return (
+                    <TableItem
+                      key={user.id}
+                      {...user}
+                      onChangeRole={(role) =>
+                        handleSetRole(user.id, user.name, role)
+                      }
+                      onChangeActive={() =>
+                        handleChangeActive(user.id, user.name)
+                      }
+                      onDeleteClick={(e) => {
+                        e.stopPropagation();
+                        openDeleteModal(user.id, user.name);
+                      }}
+                      onChangeVerified={() =>
+                        handleChangeVerified(user.id, user.name)
+                      }
+                    />
+                  );
+                })}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
     </div>

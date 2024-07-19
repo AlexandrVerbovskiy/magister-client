@@ -7,17 +7,24 @@ import {
   orderAcceptCancelByTenant,
   orderCancelByOwner,
   orderCancelByTenant,
-  orderFullCancel,
   orderFullCancelPayed,
-  rejectOrder,
+  orderFullCancelPayedWithRebuildCurrentList,
+  orderFullCancelWithRebuildCurrentList,
+  rejectOrderWithRebuildCurrentList,
 } from "../services";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
 import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
+import { get } from "lodash";
 
-const useOrderFastActions = ({ orders, setItemFields, rebuildItems }) => {
+const useOrderFastActions = ({
+  orders,
+  setItemFields,
+  getCurrentPaginationProps,
+  updatePaginationState,
+}) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
 
   const router = useRouter();
@@ -184,28 +191,33 @@ const useOrderFastActions = ({ orders, setItemFields, rebuildItems }) => {
   };
 
   const handleAcceptCancel = async () => {
+    const pageProps = getCurrentPaginationProps();
+
     try {
       const foundOrder = findCurrentOrderById(activeCancelId);
+      let orderListResult = [];
 
       if (foundOrder.ownerId === sessionUser?.id) {
-        await rejectOrder(activeCancelId, authToken);
-
-        autoParentOrderSetItemField(
-          { status: STATIC.ORDER_STATUSES.REJECTED },
-          activeCancelId
+        const result = await rejectOrderWithRebuildCurrentList(
+          activeCancelId,
+          pageProps,
+          authToken
         );
+
+        orderListResult = result.orderListResult;
       } else {
-        await orderFullCancel(activeCancelId, authToken);
-
-        autoParentOrderSetItemField(
-          { cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED },
-          activeCancelId
+        const result = await orderFullCancelWithRebuildCurrentList(
+          activeCancelId,
+          pageProps,
+          authToken
         );
-      }
 
+        orderListResult = result.orderListResult;
+      }
+      updatePaginationState(orderListResult);
       setActiveCancelId(null);
       setActiveCancel(false);
-      rebuildItems();
+
       activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
     } catch (e) {
       error.set(e.message);
@@ -273,17 +285,14 @@ const useOrderFastActions = ({ orders, setItemFields, rebuildItems }) => {
     cardNumber,
   }) => {
     try {
-      await orderFullCancelPayed(
-        { id: activeFastCancelOrder.id, type, paypalId, cardNumber },
-        authToken
-      );
+      const { orderListResult } =
+        await orderFullCancelPayedWithRebuildCurrentList(
+          { id: activeFastCancelOrder.id, type, paypalId, cardNumber },
+          getCurrentPaginationProps(),
+          authToken
+        );
 
-      autoParentOrderSetItemField(
-        {
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-        },
-        activeFastCancelOrder.id
-      );
+      updatePaginationState(orderListResult);
 
       activateSuccessOrderPopup({
         text: `Order cancelled successfully. The money was returned to your paypal`,

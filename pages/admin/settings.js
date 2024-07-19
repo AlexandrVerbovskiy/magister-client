@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
@@ -15,9 +15,7 @@ import {
 } from "../../services";
 import { IndiceContext } from "../../contexts";
 import Input from "../../components/admin/Form/Input";
-import { baseAdminTimeListPageParams, validateSmallText } from "../../utils";
-
-const goBackLink = "/admin";
+import { validateSmallText } from "../../utils";
 
 const Settings = ({
   userLogActive: baseUserLogActive,

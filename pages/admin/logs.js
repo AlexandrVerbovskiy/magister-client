@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
@@ -21,7 +21,7 @@ import { baseTimeListPageParams } from "../../utils";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [panelItem, setPanelItem] = useState(false);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
@@ -44,6 +44,7 @@ const Logs = (pageProps) => {
     items: logs,
     rebuild,
     options,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getLogList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -95,6 +96,7 @@ const Logs = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 onSelectPanelItem={handleSelectPanelItem}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

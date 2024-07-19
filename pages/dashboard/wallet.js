@@ -19,7 +19,7 @@ import { useContext } from "react";
 import Pagination from "../../components/Pagination";
 import { usePagination } from "../../hooks";
 import EmptyTable from "../../components/DashboardComponents/Table/EmptyTable";
-import { useRouter } from "next/router";
+import PaginationLoadingWrapper from "../../components/_App/PaginationLoadingWrapper";
 
 const Wallet = ({
   totalPayed,
@@ -38,6 +38,7 @@ const Wallet = ({
     canMoveNextPage: canEarningsMoveNextPage,
     canMovePrevPage: canEarningsMovePrevPage,
     items: earnings,
+    loading: earningsLoading,
   } = usePagination({
     getItemsFunc: (data) => getRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -51,6 +52,7 @@ const Wallet = ({
     canMoveNextPage: canSendingsMoveNextPage,
     canMovePrevPage: canSendingsMovePrevPage,
     items: sendings,
+    loading: sendingsLoading,
   } = usePagination({
     getItemsFunc: (data) => getSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -112,177 +114,184 @@ const Wallet = ({
 
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <div className="earnings-box">
-              <h3>
-                Earnings{" "}
-                <span className="comission-taken">
-                  Fee: {feeInfo.ownerBaseCommissionPercent}%
-                </span>
-              </h3>
-              {earnings.length > 0 ? (
-                <ul>
-                  {earnings.map((earning) => {
-                    const pricePerDuration = calculateTotalPriceByDaysCount(
-                      getFactOrderDays(
-                        earning.offerStartDate,
-                        earning.offerEndDate
-                      ),
-                      earning.offerPricePerDay
-                    );
+            <PaginationLoadingWrapper active={earningsLoading}>
+              <div className="earnings-box">
+                <h3>
+                  Earnings{" "}
+                  <span className="comission-taken">
+                    Fee: {feeInfo.ownerBaseCommissionPercent}%
+                  </span>
+                </h3>
+                {earnings.length > 0 ? (
+                  <ul>
+                    {earnings.map((earning) => {
+                      const pricePerDuration = calculateTotalPriceByDaysCount(
+                        getFactOrderDays(
+                          earning.offerStartDate,
+                          earning.offerEndDate
+                        ),
+                        earning.offerPricePerDay
+                      );
 
-                    const feePerDuration = calculateFeeByDaysCount(
-                      getFactOrderDays(
-                        earning.offerStartDate,
-                        earning.offerEndDate
-                      ),
-                      earning.offerPricePerDay,
-                      earning.ownerFee
-                    );
+                      const feePerDuration = calculateFeeByDaysCount(
+                        getFactOrderDays(
+                          earning.offerStartDate,
+                          earning.offerEndDate
+                        ),
+                        earning.offerPricePerDay,
+                        earning.ownerFee
+                      );
 
-                    return (
-                      <li key={earning.id}>
-                        <a href={"/dashboard/earnings/" + earning.id}>
-                          <div className="icon">
-                            <i className="bx bx-wallet"></i>
-                          </div>
-                          <ul>
-                            <li>Date: {dateConverter(earning.plannedTime)}</li>
-                            <li>Order: #{earning.orderId}</li>
-                            <li className="price">
-                              ${moneyFormat(pricePerDuration)}
-                            </li>
-                            <li className="fee-price">
-                              Fee: ${moneyFormat(feePerDuration)}
-                            </li>
-                            <li className="price">
-                              Net Earning:{" "}
-                              <strong>${moneyFormat(earning.money)}</strong>
-                            </li>
-                            {earning.receivedType == "refund" &&
-                              earning.status == "failed" && (
-                                <li className="rejected">
-                                  <strong>Failed</strong>
+                      return (
+                        <li key={earning.id}>
+                          <a href={"/dashboard/earnings/" + earning.id}>
+                            <div className="icon">
+                              <i className="bx bx-wallet"></i>
+                            </div>
+                            <ul>
+                              <li>
+                                Date: {dateConverter(earning.plannedTime)}
+                              </li>
+                              <li>Order: #{earning.orderId}</li>
+                              <li className="price">
+                                ${moneyFormat(pricePerDuration)}
+                              </li>
+                              <li className="fee-price">
+                                Fee: ${moneyFormat(feePerDuration)}
+                              </li>
+                              <li className="price">
+                                Net Earning:{" "}
+                                <strong>${moneyFormat(earning.money)}</strong>
+                              </li>
+                              {earning.receivedType == "refund" &&
+                                earning.status == "failed" && (
+                                  <li className="rejected">
+                                    <strong>Failed</strong>
+                                  </li>
+                                )}
+                              {(earning.status == "waiting" ||
+                                (earning.receivedType != "refund" &&
+                                  earning.status == "failed")) && (
+                                <li className="waiting">
+                                  <strong>Waiting</strong>
                                 </li>
                               )}
-                            {(earning.status == "waiting" ||
-                              (earning.receivedType != "refund" &&
-                                earning.status == "failed")) && (
-                              <li className="waiting">
-                                <strong>Waiting</strong>
-                              </li>
-                            )}
-                            {earning.status == "completed" && (
-                              <li className="completed">
-                                <strong>Completed</strong>
-                              </li>
-                            )}
-                            {earning.status == "cancelled" && (
-                              <li className="cancelled">
-                                <strong>Cancelled</strong>
-                              </li>
-                            )}
-                          </ul>
-                          <span>{earning.listingName}</span>
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <div style={{ paddingBottom: "50px" }}>
-                  <EmptyTable entityName="earnings" />
-                </div>
-              )}
-            </div>
-            <Pagination
-              viewOnlyMoreOnePage={true}
-              page={earningsPage}
-              countPages={earningsCountPages}
-              move={earningsMoveToPage}
-              canNext={canEarningsMoveNextPage}
-              canPrev={canEarningsMovePrevPage}
-            />
+                              {earning.status == "completed" && (
+                                <li className="completed">
+                                  <strong>Completed</strong>
+                                </li>
+                              )}
+                              {earning.status == "cancelled" && (
+                                <li className="cancelled">
+                                  <strong>Cancelled</strong>
+                                </li>
+                              )}
+                            </ul>
+                            <span>{earning.listingName}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div style={{ paddingBottom: "50px" }}>
+                    <EmptyTable entityName="earnings" />
+                  </div>
+                )}
+              </div>
+              <Pagination
+                viewOnlyMoreOnePage={true}
+                page={earningsPage}
+                countPages={earningsCountPages}
+                move={earningsMoveToPage}
+                canNext={canEarningsMoveNextPage}
+                canPrev={canEarningsMovePrevPage}
+              />
+            </PaginationLoadingWrapper>
           </div>
           <div className="col-lg-6 col-md-12 mt-4 mt-md-0">
-            <div className="earnings-box">
-              <h3>
-                Payout History{" "}
-                <span className="comission-taken">
-                  Fee: {feeInfo.tenantBaseCommissionPercent}%
-                </span>
-              </h3>
-              {sendings.length > 0 ? (
-                <ul>
-                  {sendings.map((sending) => {
-                    const pricePerDuration = calculateTotalPriceByDaysCount(
-                      getFactOrderDays(
-                        sending.offerStartDate,
-                        sending.offerEndDate
-                      ),
-                      sending.offerPricePerDay
-                    );
+            <PaginationLoadingWrapper active={sendingsLoading}>
+              <div className="earnings-box">
+                <h3>
+                  Payout History{" "}
+                  <span className="comission-taken">
+                    Fee: {feeInfo.tenantBaseCommissionPercent}%
+                  </span>
+                </h3>
+                {sendings.length > 0 ? (
+                  <ul>
+                    {sendings.map((sending) => {
+                      const pricePerDuration = calculateTotalPriceByDaysCount(
+                        getFactOrderDays(
+                          sending.offerStartDate,
+                          sending.offerEndDate
+                        ),
+                        sending.offerPricePerDay
+                      );
 
-                    const feePerDuration = calculateFeeByDaysCount(
-                      getFactOrderDays(
-                        sending.offerStartDate,
-                        sending.offerEndDate
-                      ),
-                      sending.offerPricePerDay,
-                      sending.tenantFee
-                    );
+                      const feePerDuration = calculateFeeByDaysCount(
+                        getFactOrderDays(
+                          sending.offerStartDate,
+                          sending.offerEndDate
+                        ),
+                        sending.offerPricePerDay,
+                        sending.tenantFee
+                      );
 
-                    return (
-                      <li key={sending.id} style={{ cursor: "pointer" }}>
-                        <a href={"/dashboard/invoices/" + sending.id}>
-                          <div className="icon">
-                            <i className="bx bx-cart"></i>
-                          </div>
-                          <ul>
-                            <li>Date: {dateConverter(sending.createdAt)}</li>
-                            <li>Order: #{sending.orderId}</li>
-                            <li className="price">
-                              ${moneyFormat(pricePerDuration)}
-                            </li>
-                            <li className="fee-price">
-                              Fee: ${moneyFormat(feePerDuration)}
-                            </li>
-                            <li className="price">
-                              Net Paid:{" "}
-                              <strong>${moneyFormat(sending.money)}</strong>
-                            </li>
-                            {!sending.adminApproved &&
-                              sending.waitingApproved && (
-                                <li className="waiting">
-                                  <strong>Unapproved</strong>
-                                </li>
-                              )}
-                            {!sending.adminApproved &&
-                              !sending.waitingApproved && (
-                                <li className="rejected">
-                                  <strong>Rejected</strong>
-                                </li>
-                              )}
-                            {sending.adminApproved && (
-                              <li className="completed">
-                                <strong>Completed</strong>
+                      return (
+                        <li key={sending.id} style={{ cursor: "pointer" }}>
+                          <a href={"/dashboard/invoices/" + sending.id}>
+                            <div className="icon">
+                              <i className="bx bx-cart"></i>
+                            </div>
+                            <ul>
+                              <li>Date: {dateConverter(sending.createdAt)}</li>
+                              <li>Order: #{sending.orderId}</li>
+                              <li className="price">
+                                ${moneyFormat(pricePerDuration)}
                               </li>
-                            )}
-                          </ul>
-                          <span>{sending.listingName}</span>
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <div style={{ paddingBottom: "50px" }}>
-                  <EmptyTable
-                    imgSrc="/images/claim-your-business.png"
-                    entityName="payouts"
-                  />
-                </div>
-              )}
-            </div>
+                              <li className="fee-price">
+                                Fee: ${moneyFormat(feePerDuration)}
+                              </li>
+                              <li className="price">
+                                Net Paid:{" "}
+                                <strong>${moneyFormat(sending.money)}</strong>
+                              </li>
+                              {!sending.adminApproved &&
+                                sending.waitingApproved && (
+                                  <li className="waiting">
+                                    <strong>Unapproved</strong>
+                                  </li>
+                                )}
+                              {!sending.adminApproved &&
+                                !sending.waitingApproved && (
+                                  <li className="rejected">
+                                    <strong>Rejected</strong>
+                                  </li>
+                                )}
+                              {sending.adminApproved && (
+                                <li className="completed">
+                                  <strong>Completed</strong>
+                                </li>
+                              )}
+                            </ul>
+                            <span>{sending.listingName}</span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div style={{ paddingBottom: "50px" }}>
+                    <EmptyTable
+                      imgSrc="/images/claim-your-business.png"
+                      entityName="payouts"
+                    />
+                  </div>
+                )}
+              </div>
+            </PaginationLoadingWrapper>
+
             <Pagination
               viewOnlyMoreOnePage={true}
               page={sendingsPage}

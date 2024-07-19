@@ -6,6 +6,7 @@ import DeclineModal from "./DeclineModal";
 import ApproveModal from "./ApproveModal";
 import { IndiceContext } from "../../../contexts";
 import { userVerifyRequestUpdate } from "../../../services";
+import PaginationLoading from "../PaginationLoading";
 
 const RequestsTable = ({
   userVerifyRequests,
@@ -14,6 +15,7 @@ const RequestsTable = ({
   onClickTh,
   totalCount,
   setItemFields,
+  loading,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
@@ -62,9 +64,11 @@ const RequestsTable = ({
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Requests{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
@@ -84,17 +88,20 @@ const RequestsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {userVerifyRequests.map((request) => (
-                <TableItem
-                  key={request.id}
-                  {...request}
-                  openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleDeclineClick={(id) => setPopupDeclineId(id)}
-                />
-              ))}
+              {!loading &&
+                userVerifyRequests.map((request) => (
+                  <TableItem
+                    key={request.id}
+                    {...request}
+                    openPopupImage={(image) => setPopupImage(image)}
+                    handleApproveClick={(id) => setPopupApproveId(id)}
+                    handleDeclineClick={(id) => setPopupDeclineId(id)}
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
         </div>
       </div>
 
