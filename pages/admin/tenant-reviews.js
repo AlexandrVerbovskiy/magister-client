@@ -18,7 +18,7 @@ import UserCommentsTable from "../../components/admin/UserComments/Table";
 
 const TenantReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {

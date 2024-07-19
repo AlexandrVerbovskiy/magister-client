@@ -6,6 +6,7 @@ const OrderUpdateStatusMessageContent = ({
   popupsData,
   type,
   title,
+  senderId,
   Icon = null,
   style = {},
 }) => {
@@ -22,17 +23,13 @@ const OrderUpdateStatusMessageContent = ({
         )}
       </div>
 
-      <div
-        className="d-flex flex-column"
-        style={{ gap: "10px", marginTop: "10px" }}
-      >
-        <OrderMessageActions
-          type={type}
-          order={entity}
-          popupsData={popupsData}
-          content={content}
-        />
-      </div>
+      <OrderMessageActions
+        type={type}
+        order={entity}
+        popupsData={popupsData}
+        content={content}
+        senderId={senderId}
+      />
     </div>
   );
 };

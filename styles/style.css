@@ -19624,7 +19624,7 @@ span.flatpickr-weekday {
   transition: var(--transition);
   color: #847bdd;
   font-weight: 600;
-  padding: 10px 0 20px;
+  padding: 15px 0 10px;
 }
 
 .chat-list-show-more:hover {
