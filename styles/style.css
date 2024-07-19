@@ -19110,7 +19110,7 @@ span.flatpickr-weekday {
 .chat-message > audio,
 .chat-message > img {
   max-width: 100% !important;
-  max-height: 200px !important;
+  max-height: 280px !important;
 }
 
 .small-message-media {
@@ -19655,4 +19655,8 @@ span.flatpickr-weekday {
   display: flex!important;
   align-items: center!important;
   justify-content: center!important;
+}
+
+video::-webkit-media-controls-panel {
+  width: 100%;
 }
