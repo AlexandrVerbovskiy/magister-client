@@ -85,6 +85,7 @@ const useChatSenderPanel = ({
       dataType,
       filetype: file.type,
       filename: file.name,
+      fileSrc: file.src,
     });
   };
 

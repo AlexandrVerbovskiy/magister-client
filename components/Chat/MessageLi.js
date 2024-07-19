@@ -92,6 +92,7 @@ const MessageLi = ({
             type={type}
             content={content}
             popupsData={popupsData}
+            senderId={senderId}
           />
 
           {isTemp ? (
