@@ -189,6 +189,7 @@ const useChatBase = ({
     dataType,
     filetype,
     filename,
+    fileSrc,
   }) => {
     const dataToSend = await bodyProps.createMediaActions({
       chatId,
@@ -196,6 +197,7 @@ const useChatBase = ({
       dataType,
       filetype,
       filename,
+      fileSrc,
     });
     const messageType = indicateMediaTypeByExtension(filetype);
     const createdAt = new Date().toISOString();
@@ -203,7 +205,7 @@ const useChatBase = ({
     const dataToInsert = {
       chatId,
       type: messageType,
-      content: { filename: filename, path: data },
+      content: { filename: filename, path: fileSrc },
       senderId: sessionUser?.id,
       tempKey: dataToSend["tempKey"],
       senderPhoto: sessionUser?.photo,

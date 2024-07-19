@@ -43,8 +43,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
     ].includes(type)
   ) {
     if (isTemp) {
-      const blob = new Blob([content.path], { type: content.path["type"] });
-      src = URL.createObjectURL(blob);
+      src = content.path;
     } else {
       src = ENV.SERVER_URL + "/" + content.path;
     }
@@ -91,7 +90,13 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   return null;
 };
 
-const orderMessageContent = ({ type, content, entity, popupsData }) => {
+const orderMessageContent = ({
+  type,
+  content,
+  entity,
+  popupsData,
+  senderId,
+}) => {
   const { sessionUser } = useContext(IndiceContext);
 
   if (
@@ -127,6 +132,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
             : "Request"
         }
         hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
+        senderId={senderId}
       />
     );
   }
@@ -174,6 +180,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         title={title}
         Icon={SuccessIcon}
         style={style}
+        senderId={senderId}
       />
     );
   }
@@ -203,6 +210,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         type={type}
         title={title}
         Icon={ErrorIcon}
+        senderId={senderId}
       />
     );
   }
@@ -224,17 +232,13 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
           {content.description}
         </div>
 
-        <div
-          className="d-flex flex-column align-items-center"
-          style={{ gap: "10px", marginTop: "10px" }}
-        >
-          <OrderMessageActions
-            type={type}
-            order={entity}
-            popupsData={popupsData}
-            content={content}
-          />
-        </div>
+        <OrderMessageActions
+          type={type}
+          order={entity}
+          popupsData={popupsData}
+          content={content}
+          senderId={senderId}
+        />
       </div>
     );
   }
@@ -336,13 +340,26 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
   return null;
 };
 
-const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
+const MessageContent = ({
+  isTemp,
+  type,
+  content,
+  entity,
+  popupsData,
+  senderId,
+}) => {
   const isOrder = entity["type"] == STATIC.CHAT_TYPES.ORDER;
 
   let messageContent = baseMessageContent({ isTemp, type, content });
 
   if (!messageContent && isOrder) {
-    messageContent = orderMessageContent({ type, content, entity, popupsData });
+    messageContent = orderMessageContent({
+      type,
+      content,
+      entity,
+      popupsData,
+      senderId,
+    });
   }
 
   if (!messageContent) {

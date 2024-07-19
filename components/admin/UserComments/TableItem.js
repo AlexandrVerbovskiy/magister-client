@@ -148,7 +148,7 @@ const TableItem = ({
                     <SubInfoTitle
                       title="Reviewer"
                       href={`/admin/users/edit/${reviewerId}`}
-                      canMove={canMoveToUser}
+                      canMove={canMoveToReviewer}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
                     <SubInfoRow label="Email" value={reviewerEmail} />

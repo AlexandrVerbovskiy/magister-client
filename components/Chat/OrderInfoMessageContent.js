@@ -17,6 +17,7 @@ const OrderInfoMessageContent = ({
   type,
   duration,
   title,
+  senderId,
   hasDescription = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
@@ -65,17 +66,13 @@ const OrderInfoMessageContent = ({
           <b>Description: </b> {content.description}
         </div>
       )}
-      <div
-        className="d-flex flex-column"
-        style={{ gap: "10px", marginTop: "10px" }}
-      >
-        <OrderMessageActions
-          type={type}
-          order={entity}
-          popupsData={popupsData}
-          content={content}
-        />
-      </div>
+      <OrderMessageActions
+        type={type}
+        order={entity}
+        popupsData={popupsData}
+        content={content}
+        senderId={senderId}
+      />
     </div>
   );
 };
