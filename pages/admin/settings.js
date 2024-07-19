@@ -420,7 +420,7 @@ const Settings = ({
                               setValue={setTenantCancelFeePercent}
                               error={tenantCancelFeePercentError}
                               setError={setTenantCancelFeePercentError}
-                              label="Tenant Cancel Commission, %"
+                              label="Renter Cancel Commission, %"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />

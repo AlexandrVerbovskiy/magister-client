@@ -36,7 +36,7 @@ import FinishOrderModal from "./FinishOrderModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
-  STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
@@ -353,7 +353,7 @@ const OrderContent = ({
     setTimeout(() => {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
       }));
     }, 100);
   };
@@ -478,7 +478,7 @@ const OrderContent = ({
         {
           title: "Accepted",
           finished:
-            order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
         },
         {
           title: "Payment Confirmation",
@@ -1243,12 +1243,12 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+      {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
         order.canAcceptTenantListing) ||
         (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
           order.canAcceptOwnerListing)) && (
         <div className="order_widget add-listings-box">
-          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT && (
             <h3>Any defects</h3>
           )}
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (

@@ -126,8 +126,8 @@ export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
       .filter(
         (order) =>
           [
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
             STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
             STATIC.ORDER_STATUSES.FINISHED,
           ].includes(order.status) && !order.cancelStatus

@@ -313,7 +313,7 @@ const TableItem = ({
                       newRow={true}
                     />
                     <SubInfoRow
-                      label="Tenant Disputes"
+                      label="Renter Disputes"
                       value={tenantDisputesCount}
                       newRow={true}
                     />
@@ -323,7 +323,7 @@ const TableItem = ({
                       newRow={true}
                     />
 
-                    <SubInfoRowWithChild label="Tenant">
+                    <SubInfoRowWithChild label="Renter">
                       <SingleRatingStar
                         value={tenantAverageRating}
                         count={tenantCommentCount}

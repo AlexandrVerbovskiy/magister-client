@@ -31,7 +31,7 @@ const useChatMessageList = (props) => {
     setEntity((prev) => ({ ...prev, ...part }));
   };
 
-  const handleOrderUpdate = (orderPart) => {
+  const handleOrderUpdate = (orderPart) => {    
     if (orderPart.id === entity?.id) {
       setEntity((prevEntity) => ({ ...prevEntity, ...orderPart }));
     }

@@ -76,7 +76,7 @@ const useBookingAgreementPanel = ({
       }
 
       setUpdatedOffer(
-        { status: STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT },
+        { status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT },
         orderId
       );
 

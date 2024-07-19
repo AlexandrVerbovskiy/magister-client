@@ -6,8 +6,8 @@ export default {
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",
     PENDING_TENANT: "pending_tenant",
-    PENDING_CLIENT_PAYMENT: "pending_client_payment",
-    PENDING_ITEM_TO_CLIENT: "pending_item_to_client",
+    PENDING_TENANT_PAYMENT: "pending_tenant_payment",
+    PENDING_ITEM_TO_TENANT: "pending_item_to_tenant",
     PENDING_ITEM_TO_OWNER: "pending_item_to_owner",
     FINISHED: "finished",
     REJECTED: "rejected",
@@ -105,7 +105,7 @@ export default {
     CANCELED_ORDER: "canceled-order",
     TENANT_PAYED: "tenant-payed",
     TENANT_PAYED_WAITING: "tenant-payed-waiting",
-    PENDED_TO_CLIENT: "pending_item_to_client",
+    PENDED_TO_TENANT: "pending_item_to_tenant",
     FINISHED: "finished",
     CREATED_CANCEL_REQUEST: "created-cancel",
     ACCEPTED_CANCEL_REQUEST: "accepted-cancel",
@@ -138,6 +138,10 @@ export default {
     PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
     PHOTO_LINK: "/images/admin/default-photo.png",
     ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
+  },
+  RECIPIENT_PAYMENT_TYPES:{
+    REFUND:"refund",
+    RENTAL:"rental",
   },
   FILE_ACCEPT:
     ".txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .mp3, .wav, .mp4, .avi, .mov, .csv, .html, .css, .js, .xml, .json, .svg, .bmp, .ico, .tif, .tiff, .psd, .ai, .eps, .wmv, .flv, .mkv, .ogg, .aac, .wma, .flac, .exe, .dll, .bat, .cmd, .apk, .jar, .cpp, .c, .java, .py, .php, .html, .htm, .asp, .aspx, .jsp, .rb, .pl, .sql, .db, .bak, .tar, .gz, .tgz, .deb, .rpm, .iso, .img, .dmg, .swf, .mpg, .mpeg, .3gp, .wmv, .mov, .ogg, .m4a, .aac, .ac3, .aiff, .au, .mid, .midi, .wma, .rtf, .odt, .ods, .odp, .odg, .odf, .log, .yaml, .m3u, .pls, .log, .ini, .cfg, .inf, .nfo, .url, .torrent, .bak, .tmp, .tmp, .old, .temp, .part, .bak, .dmp, .crash, .swp, .srt, .sub, .ass, .vtt, .ttf, .otf, .woff, .woff2, .eot, .tsv, .webp",

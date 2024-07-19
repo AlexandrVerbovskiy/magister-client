@@ -1,20 +1,19 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
-  generateDatesBetween,
   generateProfileFilePath,
   getFactOrderDays,
   getPaymentNameByType,
   moneyFormat,
   objDateSort,
-  removeDuplicates,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
+const baseShowedExtendsCount = 5;
 
 const OrderInfo = ({
   order,
@@ -97,8 +96,8 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+                STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
                 STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
                 STATIC.ORDER_STATUSES.FINISHED,
               ].includes(order.status) && paymentType ? (
@@ -360,6 +359,7 @@ const OrderItem = ({
   handleClickPay,
   handleClickExtend,
 }) => {
+  const [showedAllExtends, setShowedAllExtends] = useState(false);
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
     filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
@@ -367,6 +367,13 @@ const OrderItem = ({
     filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
   const userPhone =
     filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
+
+  let extendOrders = objDateSort(order.extendOrders, "offerStartDate");
+  extendOrders = extendOrders.reverse();
+  
+  if (!showedAllExtends) {
+    extendOrders = extendOrders.slice(0, baseShowedExtendsCount);
+  }
 
   return (
     <>
@@ -416,37 +423,49 @@ const OrderItem = ({
         />
       </tr>
 
-      {objDateSort(order.extendOrders, "offerStartDate").map(
-        (extendOrder, index) => {
-          extendOrder["blockedDates"] = order.blockedDates;
-          extendOrder["extendOrders"] = order.extendOrders;
+      {extendOrders.map((extendOrder, index) => {
+        extendOrder["blockedDates"] = order.blockedDates;
+        extendOrder["extendOrders"] = order.extendOrders;
 
-          return (
-            <tr key={extendOrder.id}>
-              <td
-                className="name"
-                style={
-                  order.extendOrders.length != index + 1
-                    ? { borderBottom: 0, borderTop: 0 }
-                    : { borderTop: 0 }
-                }
-              ></td>
+        return (
+          <tr key={extendOrder.id}>
+            <td
+              className="name"
+              style={
+                order.extendOrders.length != index + 1
+                  ? { borderBottom: 0, borderTop: 0 }
+                  : { borderTop: 0 }
+              }
+            ></td>
 
-              <OrderInfo
-                order={extendOrder}
-                handleClickCancel={handleClickCancel}
-                handleClickPayedFastCancel={handleClickPayedFastCancel}
-                handleClickUpdateRequest={handleClickUpdateRequest}
-                handleClickReject={handleClickReject}
-                handleClickAccept={handleClickAccept}
-                handleClickPay={handleClickPay}
-                handleClickExtend={handleClickExtend}
-                link={link}
-                extension={true}
-              />
-            </tr>
-          );
-        }
+            <OrderInfo
+              order={extendOrder}
+              handleClickCancel={handleClickCancel}
+              handleClickPayedFastCancel={handleClickPayedFastCancel}
+              handleClickUpdateRequest={handleClickUpdateRequest}
+              handleClickReject={handleClickReject}
+              handleClickAccept={handleClickAccept}
+              handleClickPay={handleClickPay}
+              handleClickExtend={handleClickExtend}
+              link={link}
+              extension={true}
+            />
+          </tr>
+        );
+      })}
+
+      {order.extendOrders.length > baseShowedExtendsCount && (
+        <tr>
+          <td colSpan={3} className="show-more-table-rows">
+            <button
+              onClick={() => setShowedAllExtends(!showedAllExtends)}
+              type="button"
+              className="default-btn"
+            >
+              {showedAllExtends ? "Show Less" : "Show More"}
+            </button>
+          </td>
+        </tr>
       )}
     </>
   );

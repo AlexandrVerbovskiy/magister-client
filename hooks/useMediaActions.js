@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { generateRandomString, splitBlob, splitDataIntoChunks } from "../utils";
 import STATIC from "../static";
 

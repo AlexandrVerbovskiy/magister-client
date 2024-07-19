@@ -179,7 +179,7 @@ const orderMessageContent = ({
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.TENANT_PAYED,
       STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING,
-      STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT,
+      STATIC.MESSAGE_TYPES.PENDED_TO_TENANT,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
     ].includes(type)
@@ -194,7 +194,7 @@ const orderMessageContent = ({
       title = "Request for confirmation of rent payment was successfully sent";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {
+    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT) {
       title = "Got the item";
     }
 

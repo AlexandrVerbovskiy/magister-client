@@ -57,7 +57,10 @@ function DropdownProfile({ align }) {
           height="32"
           alt="User"
         />
-        <div className="flex items-center truncate overflow-separate"  style={{ maxWidth: "100px" }}>
+        <div
+          className="flex items-center truncate overflow-separate"
+          style={{ maxWidth: "100px" }}
+        >
           <span className="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-slate-200">
             {name}
           </span>
@@ -71,7 +74,7 @@ function DropdownProfile({ align }) {
       </button>
 
       <Transition
-        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${
+        className={`w-full origin-top-right z-10 absolute top-full min-w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${
           align === "right" ? "right-0" : "left-0"
         }`}
         show={dropdownOpen}
@@ -88,7 +91,10 @@ function DropdownProfile({ align }) {
           onBlur={() => setDropdownOpen(false)}
         >
           <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200 dark:border-slate-700">
-            <div className="font-medium text-slate-800 dark:text-slate-100">
+            <div
+              className="font-medium text-slate-800 dark:text-slate-100 overflow-separate"
+              style={{ maxWidth: "100%" }}
+            >
               {name}
             </div>
             <div className="text-xs text-slate-500 dark:text-slate-400 italic">
