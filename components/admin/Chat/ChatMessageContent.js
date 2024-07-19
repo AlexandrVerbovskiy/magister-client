@@ -67,9 +67,9 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
     return (
       <div className="flex items-center w-max">
         <img
-          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          style={{ maxWidth: "200px", maxHeight: "280px" }}
           className="rounded-lg shadow-md mb-1"
-          height="200px"
+          height="280px"
           src={src}
         />
         <DownloadButton src={src} />
@@ -82,8 +82,8 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
       <div className="flex items-center w-max">
         <video
           className="rounded-lg shadow-md mb-1"
-          height="200px"
-          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          height="280px"
+          style={{ maxWidth: "200px", maxHeight: "280px" }}
           controls
           src={src}
         />

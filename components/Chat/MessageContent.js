@@ -52,7 +52,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   if (type === STATIC.MESSAGE_TYPES.IMAGE) {
     return (
       <img
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
+        style={{ maxWidth: "200px", maxHeight: "280px" }}
         height="200px"
         className=""
         src={src}
@@ -63,8 +63,8 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   if (type === STATIC.MESSAGE_TYPES.VIDEO) {
     return (
       <video
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
-        height="200px"
+        style={{ maxWidth: "200px", maxHeight: "280px" }}
+        height="280px"
         controls
         className=""
         src={src}
