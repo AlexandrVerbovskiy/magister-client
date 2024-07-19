@@ -34,7 +34,7 @@ const OrderInfoMessageContent = ({
       />
       <div className="my-1">
         <b>Owner get: ${moneyFormat(forOwnerPrice)}</b>
-        <b>Tenant payed: ${moneyFormat(forTenantPrice)}</b>
+        <b>Renter payed: ${moneyFormat(forTenantPrice)}</b>
       </div>
       <div className="mb-1">
         {duration} {autoMultiEnding(duration, "day")} (

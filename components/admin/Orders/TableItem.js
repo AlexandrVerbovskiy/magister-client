@@ -69,11 +69,11 @@ const TableItem = (props) => {
             ${getFactOrderDays(offerStartDate, offerEndDate) * offerPricePerDay}
           </div>
         </td>
-        <td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           {cancelStatus ? (
             <CancelStatus
               status={cancelStatus}
-              baseClass="px-3 rounded-full shadow-2xl w-max"
+              baseClass="px-3 rounded-full shadow-2xl w-fit overflow-separate"
             />
           ) : (
             <Status
@@ -81,7 +81,7 @@ const TableItem = (props) => {
               payedId={payedId}
               payedAdminApproved={payedAdminApproved}
               payedWaitingApproved={payedWaitingApproved}
-              baseClass="px-3 rounded-full shadow-2xl w-max"
+              baseClass="px-3 rounded-full shadow-2xl w-fit overflow-separate"
             />
           )}
         </td>

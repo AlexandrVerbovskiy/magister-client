@@ -1,23 +1,20 @@
 import Link from "next/link";
 import View from "../FastActions/View";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  moneyFormat,
-} from "../../../utils";
+import { generateProfileFilePath, moneyFormat } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
-import STATIC from "../../../static";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
+import TableDateView from "../TableDateView";
+import STATIC from "../../../static";
 
 const TypeSpan = ({ type }) => {
   let dopClass =
     "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
   let text = "Rental";
 
-  if (type == "returned") {
+  if (type == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND) {
     dopClass =
       "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400";
     text = "Refund";
@@ -73,7 +70,7 @@ const TableItem = ({
   tenantPhoto,
   money,
   status,
-  recipientType,
+  receivedType,
   plannedTime,
   recipientId,
   recipientName,
@@ -89,6 +86,9 @@ const TableItem = ({
   listingMinRentalDays,
   listingCountStoredItems,
   handleApproveClick,
+  createdAt,
+  type,
+  data,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -145,7 +145,10 @@ const TableItem = ({
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TypeSpan type={recipientType} />
+          <TypeSpan type={receivedType} />
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <TableDateView date={createdAt} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <StatusSpan status={status} />
@@ -168,7 +171,7 @@ const TableItem = ({
           !descriptionOpen && "hidden"
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td colSpan={5} className="overflow-separate border-r align-top">
+        <td colSpan={6} className="overflow-separate border-r align-top">
           <table className="w-full table-fixed">
             <thead>
               <tr>
@@ -216,6 +219,28 @@ const TableItem = ({
                         : "-"
                     }
                   />
+                  {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND && (
+                    <>
+                      {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
+                        <>
+                          <SubInfoRow
+                            label="Recipient Type"
+                            value="Credit Card"
+                          />
+                          <SubInfoRow
+                            label="Card Number"
+                            value={data.cardNumber}
+                          />
+                        </>
+                      )}
+                      {type == STATIC.PAYMENT_TYPES.PAYPAL && (
+                        <>
+                          <SubInfoRow label="Recipient Type" value="Paypal" />
+                          <SubInfoRow label="Paypal Id" value={data.paypalId} />
+                        </>
+                      )}
+                    </>
+                  )}
                 </td>
                 <td
                   style={{ overflow: "hidden" }}

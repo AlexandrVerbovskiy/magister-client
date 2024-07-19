@@ -7,7 +7,6 @@ import PayModal from "../PayModal";
 import {
   calculateCurrentTotalPrice,
   getStartExtendOrderDate,
-  increaseDateByOneDay,
 } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";

@@ -16,9 +16,8 @@ import STATIC from "../static";
 import { useRouter } from "next/router";
 import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
-import lodash from "lodash";
 
-const useOrderFastActions = ({ orders, setItemFields }) => {
+const useOrderFastActions = ({ orders, setItemFields, rebuildItems }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
 
   const router = useRouter();
@@ -170,7 +169,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const onTenantPayed = () => {
     autoParentOrderSetItemField(
       {
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
       },
       activePayOrder.id
     );
@@ -206,6 +205,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
       setActiveCancelId(null);
       setActiveCancel(false);
+      rebuildItems();
       activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
     } catch (e) {
       error.set(e.message);
@@ -227,7 +227,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setExtendModalActive(true);
   };
 
-  const handleClickApproveExtendOrder = async({
+  const handleClickApproveExtendOrder = async ({
     price,
     fromDate,
     toDate,
