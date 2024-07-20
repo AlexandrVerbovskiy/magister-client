@@ -13,8 +13,6 @@ const useSocketInit = ({ authToken }) => {
         },
       });
 
-      newSocketIo.on("get-notification", (data) => console.log(data));
-
       setSocketIo(newSocketIo);
     } else {
       setSocketIo(null);

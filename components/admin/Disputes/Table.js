@@ -8,6 +8,7 @@ import SolveModal from "./SolveModal";
 import { solveDispute, unsolveDispute } from "../../../services";
 import STATIC from "../../../static";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const DisputesTable = ({
   disputes,
@@ -61,7 +62,7 @@ const DisputesTable = ({
       { solution, status: STATIC.DISPUTE_STATUSES.SOLVED },
       popupSolveId
     );
-  };
+  }
 
   return (
     <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
@@ -107,6 +108,8 @@ const DisputesTable = ({
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && disputes.length < 1 && <EmptyTable name="disputes" />}
         </div>
       </div>
 

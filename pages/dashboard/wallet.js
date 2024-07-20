@@ -15,7 +15,7 @@ import {
   dateConverter,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Pagination from "../../components/Pagination";
 import { usePagination } from "../../hooks";
 import EmptyTable from "../../components/DashboardComponents/Table/EmptyTable";
@@ -114,14 +114,14 @@ const Wallet = ({
 
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <PaginationLoadingWrapper active={earningsLoading}>
-              <div className="earnings-box">
-                <h3>
-                  Earnings{" "}
-                  <span className="comission-taken">
-                    Fee: {feeInfo.ownerBaseCommissionPercent}%
-                  </span>
-                </h3>
+            <div className="earnings-box position-relative" style={{ minHeight: "400px" }}>
+              <h3>
+                Earnings{" "}
+                <span className="comission-taken">
+                  Fee: {feeInfo.ownerBaseCommissionPercent}%
+                </span>
+              </h3>
+              <PaginationLoadingWrapper active={earningsLoading}>
                 {earnings.length > 0 ? (
                   <ul>
                     {earnings.map((earning) => {
@@ -198,26 +198,27 @@ const Wallet = ({
                     <EmptyTable entityName="earnings" />
                   </div>
                 )}
-              </div>
-              <Pagination
-                viewOnlyMoreOnePage={true}
-                page={earningsPage}
-                countPages={earningsCountPages}
-                move={earningsMoveToPage}
-                canNext={canEarningsMoveNextPage}
-                canPrev={canEarningsMovePrevPage}
-              />
-            </PaginationLoadingWrapper>
+              </PaginationLoadingWrapper>
+            </div>
+            <Pagination
+              viewOnlyMoreOnePage={true}
+              page={earningsPage}
+              countPages={earningsCountPages}
+              move={earningsMoveToPage}
+              canNext={canEarningsMoveNextPage}
+              canPrev={canEarningsMovePrevPage}
+            />
           </div>
           <div className="col-lg-6 col-md-12 mt-4 mt-md-0">
-            <PaginationLoadingWrapper active={sendingsLoading}>
-              <div className="earnings-box">
-                <h3>
-                  Payout History{" "}
-                  <span className="comission-taken">
-                    Fee: {feeInfo.tenantBaseCommissionPercent}%
-                  </span>
-                </h3>
+            <div className="earnings-box position-relative" style={{ minHeight: "400px" }}>
+              <h3>
+                Payout History{" "}
+                <span className="comission-taken">
+                  Fee: {feeInfo.tenantBaseCommissionPercent}%
+                </span>
+              </h3>
+
+              <PaginationLoadingWrapper active={sendingsLoading}>
                 {sendings.length > 0 ? (
                   <ul>
                     {sendings.map((sending) => {
@@ -289,8 +290,8 @@ const Wallet = ({
                     />
                   </div>
                 )}
-              </div>
-            </PaginationLoadingWrapper>
+              </PaginationLoadingWrapper>
+            </div>
 
             <Pagination
               viewOnlyMoreOnePage={true}

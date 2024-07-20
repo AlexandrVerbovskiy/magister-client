@@ -1,11 +1,6 @@
 import { initAxios } from "../utils";
 const { get, post } = initAxios("/listing-approval-requests");
 
-export const getListingApproveRequestsList = async (params) => {
-  const data = await post(`/list`, params);
-  return data.body;
-};
-
 export const getAdminListingApprovalRequestsList = async (params, authToken) => {
   const data = await post(`/admin-list`, params, authToken);
   return data.body;

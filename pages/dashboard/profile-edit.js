@@ -9,7 +9,6 @@ import {
   checkMyPhoneVerifyCode,
   generateMyPhoneVerifyCode,
   changeTwoFactorAuth,
-  noNeedRegularViewInfoForm,
   getUserProfileEditPageOptions,
 } from "../../services";
 import {
@@ -578,10 +577,6 @@ const ProfileEdit = ({ newPaypalId }) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const paypalCode = context.query["code"] ?? null;
-
-  if (baseSideProps.sessionUser?.needRegularViewInfoForm) {
-    noNeedRegularViewInfoForm(baseSideProps.authToken);
-  }
 
   const options = await getUserProfileEditPageOptions(
     paypalCode,

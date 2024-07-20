@@ -28,11 +28,9 @@ import YesNoModal from "../_App/YesNoModal";
 import DeleteModal from "./DeleteModal";
 import {
   createListingApprovalRequest,
-  deleteListing,
   changeActiveListing,
 } from "../../services";
 import { useRouter } from "next/router";
-import ENV from "../../env";
 import ErrorSpan from "../ErrorSpan";
 import { useDropzone } from "react-dropzone";
 
@@ -55,7 +53,6 @@ const EditForm = ({
   canChange,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
-  const router = useRouter();
   categories = convertToSelectPopupCategories(categories, true);
 
   let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
@@ -97,9 +94,7 @@ const EditForm = ({
 
   const [disabled, setDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
-  const [deleteDisabled, setDeleteDisabled] = useState(false);
   const [changeActiveDisabled, setChangeActiveDisabled] = useState(false);
-  const [activeDeletePopup, setActiveDeletePopup] = useState(false);
   const [activeSentRequestPopup, setActiveSentRequestPopup] = useState(false);
   const [activeUpdatePopup, setActiveUpdatePopup] = useState(false);
 
@@ -194,7 +189,6 @@ const EditForm = ({
       setLng(newLng);
       const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
       setAddress(newAddress);
-      setActiveDeletePopup(false);
     } catch (e) {
       error.set(e.message);
     }
@@ -667,30 +661,6 @@ const EditForm = ({
     setActiveSentRequestPopup(true);
   };
 
-  const activateDeletePopup = (e) => {
-    e.preventDefault();
-
-    if (!canChange) {
-      return;
-    }
-
-    setActiveDeletePopup(true);
-  };
-
-  const handleAcceptDelete = async () => {
-    try {
-      setDeleteDisabled(true);
-      await deleteListing(listing.id, authToken);
-      setActiveDeletePopup(false);
-      router.push("/dashboard/listings/");
-      success.set("Deleted successfully");
-    } catch (e) {
-      error.set(e.message);
-    } finally {
-      setDeleteDisabled(false);
-    }
-  };
-
   const activateUpdatePopup = (e) => {
     e.preventDefault();
 
@@ -1112,14 +1082,6 @@ const EditForm = ({
           body={"Confirmation is required to send a listing approval request"}
           acceptText="Send"
         />
-        {/*<YesNoModal
-          active={activeDeletePopup}
-          closeModal={() => setActiveDeletePopup(false)}
-          onAccept={handleAcceptDelete}
-          title="Confirm Action"
-          body={`Confirmation is required to continue. Are you sure you want to delete listing "${listing.name}"?`}
-          acceptText="Send"
-        />*/}
         <DeleteModal
           active={changePopupActive}
           onAccept={handleChangeActive}

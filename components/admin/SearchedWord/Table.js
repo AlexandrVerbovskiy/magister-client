@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const SearchedWordTable = ({
   searchedWords,
@@ -26,7 +27,7 @@ const SearchedWordTable = ({
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Searches{" "}
@@ -62,6 +63,8 @@ const SearchedWordTable = ({
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && searchedWords.length < 1 && <EmptyTable name="words" />}
         </div>
       </div>
     </div>
