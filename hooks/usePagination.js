@@ -178,7 +178,7 @@ const usePagination = ({
         onError(e);
       }
     } finally {
-      setTimeout(() => setLoading(false), 100000);
+      setLoading(false);
     }
   };
 

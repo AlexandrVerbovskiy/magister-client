@@ -7,6 +7,7 @@ import RejectModal from "../Comments/RejectModal";
 import ApproveModal from "../Comments/ApproveModal";
 import { listingCommentApprove, listingCommentReject } from "../../../services";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const ListingCommentsTable = ({
   reviews,
@@ -79,7 +80,7 @@ const ListingCommentsTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           All Reviews{" "}
@@ -121,6 +122,8 @@ const ListingCommentsTable = ({
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && reviews.length < 1 && <EmptyTable name="reviews"/>}
         </div>
       </div>
 

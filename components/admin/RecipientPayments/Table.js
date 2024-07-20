@@ -7,6 +7,7 @@ import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
 import { isPayedUsedPaypal } from "../../../utils";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const RecipientPaymentsTable = ({
   payments,
@@ -59,7 +60,7 @@ const RecipientPaymentsTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Payments{" "}
@@ -87,18 +88,21 @@ const RecipientPaymentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {!loading && payments.map((payment) => (
-                <TableItem
-                  key={payment.id}
-                  {...payment}
-                  viewPath={viewPath}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                />
-              ))}
+              {!loading &&
+                payments.map((payment) => (
+                  <TableItem
+                    key={payment.id}
+                    {...payment}
+                    viewPath={viewPath}
+                    handleApproveClick={(id) => setPopupApproveId(id)}
+                  />
+                ))}
             </tbody>
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && payments.length < 1 && <EmptyTable name="payments" />}
         </div>
       </div>
 

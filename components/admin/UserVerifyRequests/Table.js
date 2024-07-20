@@ -7,6 +7,7 @@ import ApproveModal from "./ApproveModal";
 import { IndiceContext } from "../../../contexts";
 import { userVerifyRequestUpdate } from "../../../services";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const RequestsTable = ({
   userVerifyRequests,
@@ -60,7 +61,7 @@ const RequestsTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Requests{" "}
@@ -102,6 +103,10 @@ const RequestsTable = ({
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && userVerifyRequests.length < 1 && (
+            <EmptyTable name="requests" />
+          )}
         </div>
       </div>
 

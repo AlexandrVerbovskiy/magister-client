@@ -3,11 +3,6 @@ import { IndiceContext } from "../contexts";
 import {
   createDispute,
   extendOrder,
-  orderAcceptCancelByOwner,
-  orderAcceptCancelByTenant,
-  orderCancelByOwner,
-  orderCancelByTenant,
-  orderFullCancelPayed,
   orderFullCancelPayedWithRebuildCurrentList,
   orderFullCancelWithRebuildCurrentList,
   rejectOrderWithRebuildCurrentList,
@@ -17,7 +12,6 @@ import STATIC from "../static";
 import { useRouter } from "next/router";
 import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
-import { get } from "lodash";
 
 const useOrderFastActions = ({
   orders,
@@ -108,20 +102,6 @@ const useOrderFastActions = ({
       error.set(e.message);
     }
   };
-
-  const [activeOrderAcceptCancelByTenant, setActiveOrderAcceptCancelByTenant] =
-    useState(false);
-  const [
-    activeOrderAcceptCancelByTenantId,
-    setActiveOrderAcceptCancelByTenantId,
-  ] = useState(null);
-
-  const [activeOrderAcceptCancelByOwner, setActiveOrderAcceptCancelByOwner] =
-    useState(false);
-  const [
-    activeOrderAcceptCancelByOwnerId,
-    setActiveOrderAcceptCancelByOwnerId,
-  ] = useState(null);
 
   const [activePay, setActivePay] = useState(false);
   const [activePayOrder, setActivePayOrder] = useState(null);
@@ -287,7 +267,12 @@ const useOrderFastActions = ({
     try {
       const { orderListResult } =
         await orderFullCancelPayedWithRebuildCurrentList(
-          { id: activeFastCancelOrder.id, type, paypalId, cardNumber },
+          {
+            id: activeFastCancelOrder.id,
+            receiptType: type,
+            paypalId,
+            cardNumber,
+          },
           getCurrentPaginationProps(),
           authToken
         );
@@ -310,106 +295,9 @@ const useOrderFastActions = ({
     setActiveFastCancel(true);
   };
 
-  const handleAcceptCreateCancel = async (description) => {
-    try {
-      if (
-        findCurrentOrderById(activeCreateCancelId).ownerId === sessionUser?.id
-      ) {
-        await orderCancelByOwner(
-          { id: activeCreateCancelId, description },
-          authToken
-        );
-
-        autoParentOrderSetItemField(
-          {
-            cancelStatus:
-              STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE,
-          },
-          activeCreateCancelId
-        );
-      } else {
-        await orderCancelByTenant(
-          { id: activeCreateCancelId, description },
-          authToken
-        );
-
-        autoParentOrderSetItemField(
-          {
-            cancelStatus:
-              STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE,
-          },
-          activeCreateCancelId
-        );
-      }
-
-      setActiveCreateCancelId(null);
-      setActiveCreateCancel(false);
-
-      activateSuccessOrderPopup({
-        text: "Request to cancel created successfully. Wait for the opponent feedback",
-      });
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
   const handleClickCreateCancel = (orderId) => {
     setActiveCreateCancelId(orderId);
     setActiveCreateCancel(true);
-  };
-
-  const handleOrderAcceptAcceptCancelByTenant = async () => {
-    try {
-      await orderAcceptCancelByTenant(
-        activeOrderAcceptCancelByTenantId,
-        authToken
-      );
-
-      autoParentOrderSetItemField(
-        {
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-        },
-        activeOrderAcceptCancelByTenantId
-      );
-
-      setActiveOrderAcceptCancelByTenantId(null);
-      setActiveOrderAcceptCancelByTenant(false);
-      activateSuccessOrderPopup({ text: "Order cancelled successfully" });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleOrderClickAcceptCancelByTenant = (orderId) => {
-    setActiveOrderAcceptCancelByTenantId(orderId);
-    setActiveOrderAcceptCancelByTenant(true);
-  };
-
-  const handleOrderAcceptAcceptCancelByOwner = async () => {
-    try {
-      await orderAcceptCancelByOwner(
-        activeOrderAcceptCancelByOwnerId,
-        authToken
-      );
-
-      autoParentOrderSetItemField(
-        {
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-        },
-        activeOrderAcceptCancelByOwnerId
-      );
-
-      setActiveOrderAcceptCancelByOwnerId(null);
-      setActiveOrderAcceptCancelByOwner(false);
-      activateSuccessOrderPopup({ text: "Order cancelled successfully" });
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const handleOrderClickAcceptCancelByOwner = (orderId) => {
-    setActiveOrderAcceptCancelByOwnerId(orderId);
-    setActiveOrderAcceptCancelByOwner(true);
   };
 
   const closePay = () => {
@@ -570,14 +458,6 @@ const useOrderFastActions = ({
     setActiveCreateCancel(false);
   };
 
-  const closeActiveOrderAcceptCancelByTenant = () => {
-    setActiveOrderAcceptCancelByTenant(false);
-  };
-
-  const closeActiveOrderAcceptCancelByOwner = () => {
-    setActiveOrderAcceptCancelByOwner(false);
-  };
-
   const closeActiveUpdateRequest = () => {
     setUpdateRequestModalActiveOrder(null);
     setUpdateRequestModalActive(false);
@@ -604,19 +484,8 @@ const useOrderFastActions = ({
     closeActiveFastCancel,
 
     handleClickCreateCancel,
-    handleAcceptCreateCancel,
     activeCreateCancel,
     closeActiveCreateCancel,
-
-    handleOrderClickAcceptCancelByTenant,
-    handleOrderAcceptAcceptCancelByTenant,
-    activeOrderAcceptCancelByTenant,
-    closeActiveOrderAcceptCancelByTenant,
-
-    handleOrderClickAcceptCancelByOwner,
-    handleOrderAcceptAcceptCancelByOwner,
-    activeOrderAcceptCancelByOwner,
-    closeActiveOrderAcceptCancelByOwner,
 
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,

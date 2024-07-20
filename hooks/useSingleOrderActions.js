@@ -74,7 +74,7 @@ const useSingleOrderActions = ({
   const handlePayedFastCancel = async ({ type, paypalId, cardNumber }) => {
     try {
       const result = await orderFullCancelPayed(
-        { id: order.id, type, paypalId, cardNumber },
+        { id: order.id, receiptType: type, paypalId, cardNumber },
         authToken
       );
 

@@ -78,46 +78,26 @@ export const approveClientGotListing = async (
   return data.body;
 };
 
-export const orderCancelByTenant = async ({ id, description }, authToken) => {
-  const data = await post(`/cancel-by-tenant`, { id, description }, authToken);
-  return data.body;
-};
-
-export const orderCancelByOwner = async ({ id, description }, authToken) => {
-  const data = await post(`/cancel-by-owner`, { id, description }, authToken);
-  return data.body;
-};
-
-export const orderAcceptCancelByTenant = async (id, authToken) => {
-  const data = await post(`/accept-cancel-by-tenant`, { id }, authToken);
-  return data.body;
-};
-
-export const orderAcceptCancelByOwner = async (id, authToken) => {
-  const data = await post(`/accept-cancel-by-owner`, { id }, authToken);
-  return data.body;
-};
-
 export const orderFullCancelPayed = async (
-  { id, type, paypalId, cardNumber },
+  { id, receiptType, paypalId, cardNumber },
   authToken
 ) => {
   const data = await post(
     `/full-cancel-payed`,
-    { id, type, paypalId, cardNumber },
+    { id, receiptType, paypalId, cardNumber },
     authToken
   );
   return data.body;
 };
 
 export const orderFullCancelPayedWithRebuildCurrentList = async (
-  { id, type, paypalId, cardNumber },
+  { id, receiptType, paypalId, cardNumber },
   pageProps,
   authToken
 ) => {
   const data = await post(
     `/full-cancel-payed-with-page-props`,
-    { id, type, paypalId, cardNumber, ...pageProps },
+    { id, receiptType, paypalId, cardNumber, ...pageProps },
     authToken
   );
   return data.body;
