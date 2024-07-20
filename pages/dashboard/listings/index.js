@@ -8,7 +8,6 @@ import { Navigation } from "swiper/modules";
 import { authSideProps } from "../../../middlewares";
 import {
   changeActiveListing,
-  deleteListing,
   getUserListingList,
   getUserListingListOptions,
 } from "../../../services";
@@ -17,7 +16,6 @@ import { IndiceContext } from "../../../contexts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { baseListPageParams, getListingImageByType } from "../../../utils";
 
-import YesNoModal from "../../../components/_App/YesNoModal";
 import DropdownFilter from "../../../components/DropdownFilter";
 import STATIC from "../../../static";
 import StarRating from "../../../components/StarRating";
@@ -140,11 +138,8 @@ const StatusBlock = ({ requestId, requestApproved }) => {
 const ListingList = (pageProps) => {
   const { error, success, authToken, sessionUser } = useContext(IndiceContext);
 
-  const [listingIdToDelete, setListingIdToDelete] = useState(null);
-
   const baseStatusFilter = pageProps.options.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
-  const [hasMore, setHasMore] = useState(pageProps.items.length > 0);
   const [changeActiveData, setChangeActiveData] = useState(null);
 
   const {
@@ -170,35 +165,7 @@ const ListingList = (pageProps) => {
         hidden: (value) => value == "all",
       },
     }),
-    onRebuild: (data) => setHasMore(data.items.length > 0),
   });
-
-  const handleAcceptDelete = async () => {
-    const id = listingIdToDelete;
-    setListingIdToDelete(null);
-
-    try {
-      await deleteListing(id, authToken);
-      await rebuild();
-      success.set("Deleted successfully");
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
-
-  const handleDeleteItem = (e, id) => {
-    e.preventDefault();
-    const listing = listings.find((listing) => listing.id === id);
-
-    if (Number(listing.ordersCount) > 0) {
-      error.set(
-        "The listing has a unfinished booking or order. Please finish all listing orders and bookings before updating"
-      );
-      return;
-    }
-
-    setListingIdToDelete(id);
-  };
 
   const handleChangeActiveItem = async () => {
     try {
@@ -265,43 +232,16 @@ const ListingList = (pageProps) => {
           </Link>
         </div>
 
-        <PaginationLoadingWrapper active={paginationLoading}>
-          {!hasMore ? (
-            <section className="listing-area">
-              <TabHeaderSection
-                style={{ marginBottom: "0" }}
-                filter={filter}
-                changeFilter={changeFilter}
-                countItems={countItems}
-                statusFilter={statusFilter}
-                handleChangeStatusFilter={handleChangeStatusFilter}
-              />
-
-              <div className="no-listing">
-                <div className="no-listing-img"></div>
-                <div className="no-listing-text">You have no listings yet</div>
-                <div className="no-listing-btn">
-                  <Link
-                    href="/dashboard/listings/add/"
-                    className="default-btn add-listing-link-btn"
-                  >
-                    <span className="icon">
-                      <i className="flaticon-more"></i>
-                    </span>
-                    <span className="menu-title">Add Listings</span>
-                  </Link>
-                </div>
-              </div>
-            </section>
-          ) : (
-            <section className="listing-area">
-              <TabHeaderSection
-                filter={filter}
-                changeFilter={changeFilter}
-                countItems={countItems}
-                statusFilter={statusFilter}
-                handleChangeStatusFilter={handleChangeStatusFilter}
-              />
+        <section className="listing-area">
+          <TabHeaderSection
+            filter={filter}
+            changeFilter={changeFilter}
+            countItems={countItems}
+            statusFilter={statusFilter}
+            handleChangeStatusFilter={handleChangeStatusFilter}
+          />
+          <PaginationLoadingWrapper active={paginationLoading}>
+            {listings.length > 0 && (
               <div className="tab-content">
                 <div className="tab-pane fade show active" id="all-listing">
                   <div
@@ -431,14 +371,6 @@ const ListingList = (pageProps) => {
                                   Edit
                                 </Link>
 
-                                {/*<button
-                                onClick={(e) => handleDeleteItem(e, listing.id)}
-                                type="button"
-                                className="default-btn"
-                              >
-                                Delete
-                              </button>*/}
-
                                 <Link
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -465,9 +397,27 @@ const ListingList = (pageProps) => {
                   </div>
                 </div>
               </div>
-            </section>
-          )}
-        </PaginationLoadingWrapper>
+            )}
+
+            {listings.length < 1 && (
+              <div className="no-listing">
+                <div className="no-listing-img"></div>
+                <div className="no-listing-text">You have no listings yet</div>
+                <div className="no-listing-btn">
+                  <Link
+                    href="/dashboard/listings/add/"
+                    className="default-btn add-listing-link-btn"
+                  >
+                    <span className="icon">
+                      <i className="flaticon-more"></i>
+                    </span>
+                    <span className="menu-title">Add Listings</span>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </PaginationLoadingWrapper>
+        </section>
 
         <Pagination
           viewOnlyMoreOnePage={true}
@@ -478,17 +428,6 @@ const ListingList = (pageProps) => {
           canPrev={canMovePrevPage}
         />
       </div>
-
-      <YesNoModal
-        active={listingIdToDelete}
-        closeModal={() => setListingIdToDelete(null)}
-        onAccept={handleAcceptDelete}
-        title="Confirm Action"
-        body={`Confirmation is required to continue. Are you sure you want to delete listing "${
-          listings.filter((listing) => listing.id === listingIdToDelete)[0]
-            ?.name
-        }"?`}
-      />
 
       <DeleteModal
         active={changeActiveData}

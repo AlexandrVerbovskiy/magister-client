@@ -10,6 +10,7 @@ import {
   rejectListingApproveRequest,
 } from "../../../services";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const RequestsTable = ({
   listingApprovalRequests,
@@ -99,21 +100,26 @@ const RequestsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {!loading && listingApprovalRequests.map((request) => (
-                <TableItem
-                  key={request.id}
-                  {...request}
-                  openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(listingId) =>
-                    setPopupApproveId(listingId)
-                  }
-                  handleRejectClick={(listingId) => setPopupRejectId(listingId)}
-                />
-              ))}
+              {!loading &&
+                listingApprovalRequests.map((request) => (
+                  <TableItem
+                    key={request.id}
+                    {...request}
+                    openPopupImage={(image) => setPopupImage(image)}
+                    handleApproveClick={(listingId) =>
+                      setPopupApproveId(listingId)
+                    }
+                    handleRejectClick={(listingId) =>
+                      setPopupRejectId(listingId)
+                    }
+                  />
+                ))}
             </tbody>
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && listingApprovalRequests.length < 1 && <EmptyTable name="requests"/>}
         </div>
       </div>
 

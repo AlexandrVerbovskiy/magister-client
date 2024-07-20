@@ -11,11 +11,6 @@ export const getUserVerifyRequestList = async (body, authToken) => {
   return data.body;
 };
 
-export const userVerifyRequestCreate = async (authToken) => {
-  const data = await post("/create", null, authToken);
-  return data.message;
-};
-
 export const userVerifyRequestUpdate = async (body, authToken) => {
   const data = await post("/update", body, authToken);
   return data.body;

@@ -2,6 +2,7 @@ import React from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const UsersTable = ({
   users,
@@ -37,7 +38,7 @@ const UsersTable = ({
   ];
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           Users{" "}
@@ -91,6 +92,8 @@ const UsersTable = ({
           </table>
 
           {loading && <PaginationLoading />}
+
+          {!loading && users.length < 1 && <EmptyTable name="users" />}
         </div>
       </div>
     </div>
