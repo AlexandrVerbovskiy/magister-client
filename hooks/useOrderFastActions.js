@@ -3,22 +3,17 @@ import { IndiceContext } from "../contexts";
 import {
   createDispute,
   extendOrder,
-  orderFullCancelPayedWithRebuildCurrentList,
-  orderFullCancelWithRebuildCurrentList,
-  rejectOrderWithRebuildCurrentList,
+  orderFullCancelPayed,
+  orderFullCancel,
+  rejectOrder,
 } from "../services";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { generateDatesBetween, getDaysDifference, hasPayError } from "../utils";
+import { getDaysDifference, hasPayError } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
-const useOrderFastActions = ({
-  orders,
-  setItemFields,
-  getCurrentPaginationProps,
-  updatePaginationState,
-}) => {
+const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
 
   const router = useRouter();
@@ -56,12 +51,81 @@ const useOrderFastActions = ({
   const [activeFastCancel, setActiveFastCancel] = useState(false);
   const [activeFastCancelOrder, setActiveFastCancelOrder] = useState(null);
 
-  const [activeCreateCancel, setActiveCreateCancel] = useState(false);
-  const [activeCreateCancelId, setActiveCreateCancelId] = useState(null);
-
   const [orderToDispute, setOrderToDispute] = useState(null);
   const [disputeWindowActive, setDisputeWindowActive] = useState(false);
   const createDisputeData = useCreateDispute({ order: orderToDispute });
+
+  const getOrdersWithOrderListing = (order) => {
+    return orders.filter(
+      (checkOrder) =>
+        checkOrder.listingId === order.listingId && checkOrder.id !== order.id
+    );
+  };
+
+  const addConflictOrder = (order) => {
+    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
+
+    const blockedStartDate = order.requestId
+      ? order.newStartDate
+      : order.offerStartDate;
+    const blockedEndDate = order.requestId
+      ? order.newEndDate
+      : order.offerEndDate;
+
+    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
+      const newConflictOrders = [
+        ...orderWithCurrentListing.conflictOrders,
+        {
+          ...order,
+          offerStartDate: blockedStartDate,
+          offerEndDate: blockedEndDate,
+          newStartDate: null,
+          newEndDate: null,
+        },
+      ];
+
+      setItemFields(
+        {
+          conflictOrders: newConflictOrders,
+        },
+        orderWithCurrentListing.id
+      );
+    });
+  };
+
+  const removeConflictOrder = (order) => {
+    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
+
+    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
+      const newConflictOrders = orderWithCurrentListing.conflictOrders.filter(
+        (conflictOrder) => conflictOrder.id != order.id
+      );
+
+      setItemFields(
+        {
+          conflictOrders: newConflictOrders,
+        },
+        orderWithCurrentListing.id
+      );
+    });
+  };
+
+  const updateConflictOrder = (order) => {
+    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
+
+    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
+      const newConflictOrders = orderWithCurrentListing.conflictOrders.filter(
+        (conflictOrder) => conflictOrder.id != order.id
+      );
+
+      setItemFields(
+        {
+          conflictOrders: [...newConflictOrders, order],
+        },
+        orderWithCurrentListing.id
+      );
+    });
+  };
 
   const disputeCreate = (orderId) => {
     const order = findCurrentOrderById(orderId);
@@ -171,33 +235,28 @@ const useOrderFastActions = ({
   };
 
   const handleAcceptCancel = async () => {
-    const pageProps = getCurrentPaginationProps();
-
     try {
       const foundOrder = findCurrentOrderById(activeCancelId);
-      let orderListResult = [];
 
       if (foundOrder.ownerId === sessionUser?.id) {
-        const result = await rejectOrderWithRebuildCurrentList(
-          activeCancelId,
-          pageProps,
-          authToken
-        );
+        await rejectOrder(activeCancelId, authToken);
 
-        orderListResult = result.orderListResult;
+        autoParentOrderSetItemField(
+          { status: STATIC.ORDER_STATUSES.REJECTED },
+          activeCancelId
+        );
       } else {
-        const result = await orderFullCancelWithRebuildCurrentList(
-          activeCancelId,
-          pageProps,
-          authToken
-        );
+        await orderFullCancel(activeCancelId, authToken);
 
-        orderListResult = result.orderListResult;
+        autoParentOrderSetItemField(
+          { cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED },
+          activeCancelId
+        );
       }
-      updatePaginationState(orderListResult);
+
+      removeConflictOrder(foundOrder);
       setActiveCancelId(null);
       setActiveCancel(false);
-
       activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
     } catch (e) {
       error.set(e.message);
@@ -265,25 +324,29 @@ const useOrderFastActions = ({
     cardNumber,
   }) => {
     try {
-      const { orderListResult } =
-        await orderFullCancelPayedWithRebuildCurrentList(
-          {
-            id: activeFastCancelOrder.id,
-            receiptType: type,
-            paypalId,
-            cardNumber,
-          },
-          getCurrentPaginationProps(),
-          authToken
-        );
+      await orderFullCancelPayed(
+        {
+          id: activeFastCancelOrder.id,
+          receiptType: type,
+          paypalId,
+          cardNumber,
+        },
+        authToken
+      );
 
-      updatePaginationState(orderListResult);
+      autoParentOrderSetItemField(
+        {
+          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
+        },
+        activeFastCancelOrder.id
+      );
 
+      removeConflictOrder(activeFastCancelOrder);
+      setActiveFastCancelOrder(null);
+      setActiveFastCancel(false);
       activateSuccessOrderPopup({
         text: `Order cancelled successfully. The money was returned to your paypal`,
       });
-      setActiveFastCancelOrder(null);
-      setActiveFastCancel(false);
     } catch (e) {
       error.set(e.message);
     }
@@ -293,11 +356,6 @@ const useOrderFastActions = ({
     const order = findCurrentOrderById(orderId);
     setActiveFastCancelOrder(order);
     setActiveFastCancel(true);
-  };
-
-  const handleClickCreateCancel = (orderId) => {
-    setActiveCreateCancelId(orderId);
-    setActiveCreateCancel(true);
   };
 
   const closePay = () => {
@@ -326,25 +384,31 @@ const useOrderFastActions = ({
   }) => {
     let status = null;
     const requestId = request.id;
+    const updatedOrder = findCurrentOrderById(orderId);
 
-    if (findCurrentOrderById(orderId).ownerId === sessionUser?.id) {
+    if (updatedOrder.ownerId === sessionUser?.id) {
       status = STATIC.ORDER_STATUSES.PENDING_TENANT;
     } else {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
 
-    autoParentOrderSetItemField(
-      {
-        newPricePerDay: price,
-        newStartDate: fromDate,
-        newEndDate: toDate,
-        status,
-        requestId,
-        conflictOrders: [],
-      },
-      orderId
-    );
+    const updatedParts = {
+      newPricePerDay: price,
+      newStartDate: fromDate,
+      newEndDate: toDate,
+      status,
+      requestId,
+      conflictOrders: [],
+    };
+
+    autoParentOrderSetItemField(updatedParts, orderId);
     setUpdateRequestModalActiveOrder(null);
+
+    if (updatedOrder.ownerId === sessionUser?.id) {
+      updateConflictOrder({ ...updatedOrder, ...updatedParts });
+    } else {
+      removeConflictOrder(updatedOrder);
+    }
   };
 
   const {
@@ -407,43 +471,7 @@ const useOrderFastActions = ({
       order.ownerId === sessionUser?.id
     );
 
-    const ordersWithCurrentListing = orders.filter(
-      (checkOrder) =>
-        checkOrder.listingId === order.listingId && checkOrder.id !== order.id
-    );
-
-    const blockedStartDate = order.requestId
-      ? order.newStartDate
-      : order.offerStartDate;
-    const blockedEndDate = order.requestId
-      ? order.newEndDate
-      : order.offerEndDate;
-
-    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
-      let newBlockedDates = [
-        ...(orderWithCurrentListing.blockedDates ?? []),
-        ...generateDatesBetween(blockedStartDate, blockedEndDate),
-      ];
-
-      newBlockedDates = [...new Set(newBlockedDates)];
-
-      const newConflictOrders = [
-        ...orderWithCurrentListing.conflictOrders,
-        {
-          ...order,
-          offerStartDate: blockedStartDate,
-          offerEndDate: blockedEndDate,
-        },
-      ];
-
-      setItemFields(
-        {
-          blockedDates: newBlockedDates,
-          conflictOrders: newConflictOrders,
-        },
-        orderWithCurrentListing.id
-      );
-    });
+    addConflictOrder(order);
   };
 
   const closeActiveCancel = () => {
@@ -452,10 +480,6 @@ const useOrderFastActions = ({
 
   const closeActiveFastCancel = () => {
     setActiveFastCancel(false);
-  };
-
-  const closeActiveCreateCancel = () => {
-    setActiveCreateCancel(false);
   };
 
   const closeActiveUpdateRequest = () => {
@@ -482,10 +506,6 @@ const useOrderFastActions = ({
     activeFastCancel,
     activeFastCancelOrder,
     closeActiveFastCancel,
-
-    handleClickCreateCancel,
-    activeCreateCancel,
-    closeActiveCreateCancel,
 
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,

@@ -90,52 +90,13 @@ export const orderFullCancelPayed = async (
   return data.body;
 };
 
-export const orderFullCancelPayedWithRebuildCurrentList = async (
-  { id, receiptType, paypalId, cardNumber },
-  pageProps,
-  authToken
-) => {
-  const data = await post(
-    `/full-cancel-payed-with-page-props`,
-    { id, receiptType, paypalId, cardNumber, ...pageProps },
-    authToken
-  );
-  return data.body;
-};
-
 export const orderFullCancel = async (id, authToken) => {
   const data = await post(`/full-cancel`, { id }, authToken);
   return data.body;
 };
 
-export const orderFullCancelWithRebuildCurrentList = async (
-  id,
-  pageProps,
-  authToken
-) => {
-  const data = await post(
-    `/full-cancel-with-page-props`,
-    { id, ...pageProps },
-    authToken
-  );
-  return data.body;
-};
-
 export const rejectOrder = async (id, authToken) => {
   const data = await post(`/reject-booking`, { id }, authToken);
-  return data.body;
-};
-
-export const rejectOrderWithRebuildCurrentList = async (
-  id,
-  pageProps,
-  authToken
-) => {
-  const data = await post(
-    `/reject-booking-with-page-props`,
-    { id, ...pageProps },
-    authToken
-  );
   return data.body;
 };
 

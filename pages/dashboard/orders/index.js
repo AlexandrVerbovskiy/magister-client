@@ -137,7 +137,6 @@ const Orders = (pageProps) => {
     handleAcceptPayedFastCancel,
     activeFastCancel,
     closeActiveFastCancel,
-    handleClickCreateCancel,
     handleClickUpdateRequest,
     handleAcceptUpdateRequest,
     activeUpdateRequest,
@@ -169,8 +168,6 @@ const Orders = (pageProps) => {
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
-    getCurrentPaginationProps,
-    updatePaginationState,
   });
 
   return (
@@ -205,7 +202,6 @@ const Orders = (pageProps) => {
                       link={`/dashboard/orders`}
                       handleClickCancel={handleClickCancel}
                       handleClickPayedFastCancel={handleClickPayedFastCancel}
-                      handleClickCreateCancel={handleClickCreateCancel}
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}

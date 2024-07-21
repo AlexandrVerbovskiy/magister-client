@@ -6,6 +6,8 @@ import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
 import {
   calculateCurrentTotalPrice,
+  getOrderBlockedDatesToExtend,
+  getOrderBlockedDatesToUpdate,
   getStartExtendOrderDate,
 } from "../../utils";
 import { useContext } from "react";
@@ -88,7 +90,7 @@ const OrderPopups = ({
               : "sum"
           }
           listingName={order.listingName}
-          blockedDates={order.blockedDates}
+          blockedDates={getOrderBlockedDatesToUpdate(order)}
           updateRequestModalActive={updateRequestModalActive}
           setUpdateRequestModalActive={setUpdateRequestModalActive}
           handleCreateUpdateRequest={handleCreateUpdateRequest}
@@ -110,7 +112,7 @@ const OrderPopups = ({
           price={order.offerPricePerDay}
           minRentalDays={order.listingMinRentalDays}
           listingName={order.listingName}
-          blockedDates={order.blockedDates}
+          blockedDates={getOrderBlockedDatesToExtend(order)}
           title="Extend Now"
           startDate={extendStartDate}
           fullVersion={true}

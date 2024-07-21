@@ -173,8 +173,7 @@ const useOrderActions = ({ order }) => {
       if (
         isTenant &&
         !hasUnstartedExtends &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER ||
-          hasFinishedExtends)
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
       }
