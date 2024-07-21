@@ -254,3 +254,13 @@ export const getMaxDate = (dates) => {
   const date = new Date(Math.max(...dateObjects));
   return separateDate(date);
 };
+
+export const checkStartEndHasConflict = (startDate, endDate, conflictDates) => {
+  const selectedDates = generateDatesBetween(startDate, endDate);
+
+  const hasBlockedDate = selectedDates.find((selectedDate) =>
+    conflictDates.includes(selectedDate)
+  );
+
+  return !!hasBlockedDate;
+};
