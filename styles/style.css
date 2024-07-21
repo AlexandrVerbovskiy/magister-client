@@ -18619,6 +18619,9 @@ input[type="number"] {
   margin-bottom: 0;
   padding: 0.25rem 0.5rem;
   font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bookings-listings-box table tbody td.action {

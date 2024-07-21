@@ -6,6 +6,8 @@ import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
 import {
+  getOrderBlockedDatesToExtend,
+  getOrderBlockedDatesToUpdate,
   getStartExtendOrderDate,
   tenantPaymentCalculate,
 } from "../../utils";
@@ -114,7 +116,7 @@ const OrdersListFastActinsModals = ({
       );
       setUpdateRequestListingName(updateRequestModalActiveOrder.listingName);
       setUpdateRequestBlockedDates(
-        updateRequestModalActiveOrder.blockedDates ?? []
+        getOrderBlockedDatesToUpdate(updateRequestModalActiveOrder)
       );
     }
   }, [updateRequestModalActiveOrder, sessionUser]);
@@ -219,7 +221,7 @@ const OrdersListFastActinsModals = ({
         createOrderModalActive={extendModalActive}
         closeModal={closeExtendOrder}
         listingName={extendModalActiveOrder?.listingName ?? ""}
-        blockedDates={extendModalActiveOrder?.blockedDates ?? []}
+        blockedDates={getOrderBlockedDatesToExtend(extendModalActiveOrder)}
         title="Extend Now"
         startDate={extendStartDate}
         isExtend={true}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
 import { useRouter } from "next/router";
-import { hasPayError } from "../../utils";
+import { hasPayError, isOrderCanBeAccepted } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
@@ -77,9 +77,7 @@ const OrderActions = ({
             STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
           ) && (
             <>
-              {!checkErrorData(
-                order.requestId ? order.newStartDate : order.offerStartDate
-              ).blocked && (
+              {isOrderCanBeAccepted(order) && (
                 <button
                   type="button"
                   className={actionClass}

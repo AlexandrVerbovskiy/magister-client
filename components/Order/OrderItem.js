@@ -5,6 +5,7 @@ import {
   generateProfileFilePath,
   getFactOrderDays,
   getPaymentNameByType,
+  isOrderCanBeAccepted,
   moneyFormat,
   objDateSort,
 } from "../../utils";
@@ -157,9 +158,7 @@ const OrderInfo = ({
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
         ) && (
           <>
-            {!checkErrorData(
-              order.requestId ? order.newStartDate : order.offerStartDate
-            ).blocked && (
+            {isOrderCanBeAccepted(order) && (
               <button
                 type="button"
                 onClick={(e) => {
@@ -370,7 +369,7 @@ const OrderItem = ({
 
   let extendOrders = objDateSort(order.extendOrders, "offerStartDate");
   extendOrders = extendOrders.reverse();
-  
+
   if (!showedAllExtends) {
     extendOrders = extendOrders.slice(0, baseShowedExtendsCount);
   }
@@ -424,7 +423,6 @@ const OrderItem = ({
       </tr>
 
       {extendOrders.map((extendOrder, index) => {
-        extendOrder["blockedDates"] = order.blockedDates;
         extendOrder["extendOrders"] = order.extendOrders;
 
         return (

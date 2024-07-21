@@ -8,6 +8,7 @@ import {
   getFactOrderDays,
   getListingImageByType,
   hasPayError,
+  isOrderCanBeAccepted,
   moneyFormat,
   validateBigText,
 } from "../../utils";
@@ -587,15 +588,6 @@ const OrderContent = ({
       />
     );
   }
-
-  const bookingAcceptView =
-    ((actualUpdateRequest &&
-      !checkStringDateLowerOrEqualCurrentDate(
-        actualUpdateRequest.newStartDate
-      )) ||
-      (!actualUpdateRequest &&
-        !checkStringDateLowerOrEqualCurrentDate(order.offerStartDate))) &&
-    (!order.conflictOrders || order.conflictOrders.length < 1);
 
   return (
     <>
@@ -1389,7 +1381,7 @@ const OrderContent = ({
               STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
             ) && (
               <>
-                {bookingAcceptView && (
+                {isOrderCanBeAccepted(order) && (
                   <button
                     className="default-btn"
                     type="button"
