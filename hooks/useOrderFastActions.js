@@ -62,37 +62,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     );
   };
 
-  const addConflictOrder = (order) => {
-    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
-
-    const blockedStartDate = order.requestId
-      ? order.newStartDate
-      : order.offerStartDate;
-    const blockedEndDate = order.requestId
-      ? order.newEndDate
-      : order.offerEndDate;
-
-    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
-      const newConflictOrders = [
-        ...orderWithCurrentListing.conflictOrders,
-        {
-          ...order,
-          offerStartDate: blockedStartDate,
-          offerEndDate: blockedEndDate,
-          newStartDate: null,
-          newEndDate: null,
-        },
-      ];
-
-      setItemFields(
-        {
-          conflictOrders: newConflictOrders,
-        },
-        orderWithCurrentListing.id
-      );
-    });
-  };
-
   const removeConflictOrder = (order) => {
     const ordersWithCurrentListing = getOrdersWithOrderListing(order);
 
@@ -101,9 +70,19 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         (conflictOrder) => conflictOrder.id != order.id
       );
 
+      const newExtendOrders = orderWithCurrentListing.extendOrders.map(
+        (extendOrder) => ({
+          ...extendOrder,
+          conflictOrders: extendOrder.conflictOrders.filter(
+            (conflictOrder) => conflictOrder.id != order.id
+          ),
+        })
+      );
+
       setItemFields(
         {
           conflictOrders: newConflictOrders,
+          extendOrders: newExtendOrders,
         },
         orderWithCurrentListing.id
       );
@@ -118,13 +97,46 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         (conflictOrder) => conflictOrder.id != order.id
       );
 
+      const newExtendOrders = orderWithCurrentListing.extendOrders.map(
+        (extendOrder) => {
+          const extendConflictOrders = extendOrder.conflictOrders.filter(
+            (conflictOrder) => conflictOrder.id != order.id
+          );
+
+          return {
+            ...extendOrder,
+            conflictOrders: [...extendConflictOrders, order],
+          };
+        }
+      );
+
       setItemFields(
         {
           conflictOrders: [...newConflictOrders, order],
+          extendOrders: newExtendOrders,
         },
         orderWithCurrentListing.id
       );
     });
+  };
+
+  const addConflictOrder = (order) => {
+    const blockedStartDate = order.requestId
+      ? order.newStartDate
+      : order.offerStartDate;
+    const blockedEndDate = order.requestId
+      ? order.newEndDate
+      : order.offerEndDate;
+
+    const updatedOrder = {
+      ...order,
+      offerStartDate: blockedStartDate,
+      offerEndDate: blockedEndDate,
+      newStartDate: null,
+      newEndDate: null,
+    };
+
+    updateConflictOrder(updatedOrder);
   };
 
   const disputeCreate = (orderId) => {
