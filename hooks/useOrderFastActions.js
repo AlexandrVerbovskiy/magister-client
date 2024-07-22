@@ -105,7 +105,17 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
           return {
             ...extendOrder,
-            conflictOrders: [...extendConflictOrders, order],
+            conflictOrders: [
+              ...extendConflictOrders,
+              {
+                id: order.id,
+                requestId: order.requestId,
+                offerStartDate: order.offerStartDate,
+                offerEndDate: order.offerEndDate,
+                newStartDate: order.newStartDate,
+                newEndDate: order.newEndDate,
+              },
+            ],
           };
         }
       );
