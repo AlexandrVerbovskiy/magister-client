@@ -1,17 +1,28 @@
 import Head from "next/head";
 import env from "../../env";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
-import { IndiceContext } from "../../contexts";
+import { useEffect, useState } from "react";
 
-const Layout = ({ children }) => {
+const getPaypalInsertScript = ({ sessionUser, currentPath }) => {
+  if (!sessionUser || currentPath.includes("/dashboard/profile-edit/")) {
+    return "https://www.paypalobjects.com/js/external/api.js";
+  } else {
+    if (currentPath.includes("/dashboard/")) {
+      return "https://www.paypal.com/sdk/js?client-id=" + env.PAYPAL_CLIENT_ID;
+    }
+  }
+};
+
+const Layout = ({ sessionUser, children }) => {
   const router = useRouter();
-  const [currentPath, setCurrentPath] = useState("");
-  const { isAuth } = useContext(IndiceContext);
+  const [insertPaypalScript, setInsertPaypalScript] = useState(
+    getPaypalInsertScript({ sessionUser, currentPath: router.asPath })
+  );
 
   useEffect(() => {
-    setCurrentPath(router.asPath);
-  }, [router]);
+    const currentPath = router.asPath;
+    setInsertPaypalScript(getPaypalInsertScript({ sessionUser, currentPath }));
+  }, [router, sessionUser]);
 
   return (
     <>
@@ -25,20 +36,7 @@ const Layout = ({ children }) => {
           type="image/x-icon"
           href="/images/rent-about-logo.ico"
         />
-        {currentPath.includes("/dashboard/orders/") && (
-          <script
-            src={
-              "https://www.paypal.com/sdk/js?client-id=" + env.PAYPAL_CLIENT_ID
-            }
-            async
-          ></script>
-        )}
-        {(!isAuth || currentPath.includes("/dashboard/profile-edit/")) && (
-          <script
-            src="https://www.paypalobjects.com/js/external/api.js"
-            async
-          ></script>
-        )}
+        {insertPaypalScript && <script src={insertPaypalScript} async></script>}
       </Head>
 
       {children}
