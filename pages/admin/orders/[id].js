@@ -137,7 +137,7 @@ const Order = (baseProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs
                   links={[
                     { title: "Orders", href: "/admin/orders" },
@@ -493,7 +493,7 @@ const Order = (baseProps) => {
 
                           <div className="w-full sm:w-1/2">
                             <div
-                              className="flex w-full admin-map-parent mb-2"
+                              className="flex w-full admin-map-parent flex-col md:flex-row mb-2"
                               style={{ height: "240px" }}
                             >
                               <MultyMarkersMap

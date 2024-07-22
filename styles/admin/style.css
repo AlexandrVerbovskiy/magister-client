@@ -318,6 +318,10 @@ div.add-listings-box.dropzone > .gallery-flex {
   border-radius: 0 !important;
 }
 
+.admin-table{
+  width: 1000px;
+}
+
 .overflow-separate,
 .admin-table .overflow-separate,
 .admin-table td:not(:has(*)) {

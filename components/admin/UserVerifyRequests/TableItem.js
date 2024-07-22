@@ -58,7 +58,6 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
             <Link
               onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
               style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -66,10 +65,8 @@ const TableItem = ({
             >
               {userName}
             </Link>
-          </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
             <Link
               onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
               style={canMoveToUser ? {} : { cursor: "auto" }}
@@ -77,7 +74,6 @@ const TableItem = ({
             >
               {userEmail}
             </Link>
-          </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div

@@ -76,16 +76,18 @@ const Logs = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Logs" }]} />
 
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by create time"
-                  />
+                <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                  <div className="flex gap-2 flex-col xs:flex-row">
+                    <SearchForm value={filter} onInput={changeFilter} />
+                    <Datepicker
+                      value={[fromTime, toTime]}
+                      onChange={handleChangeTimeFilter}
+                      placeholder="Filter by create time"
+                    />
+                  </div>
                 </div>
               </div>
 

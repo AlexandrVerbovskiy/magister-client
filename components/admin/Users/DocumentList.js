@@ -17,7 +17,7 @@ const DocumentView = ({ label, url }) => {
   };
 
   return (
-    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end document-view">
+    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end document-view items-center md:items-start">
       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
         {label}
       </h2>
