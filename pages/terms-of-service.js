@@ -14,7 +14,7 @@ const TermsOfService = () => {
         pageName="Terms of Service"
       />
 
-      <div className="listings-area ptb-100">
+      <div className="listings-area ptb-70">
         <div className="container mt-4">
           <div className="row m-0">
             <h3>Terms of Service</h3>

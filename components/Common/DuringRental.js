@@ -13,7 +13,7 @@ const DuringRental = () => {
               style={{ transform: "scale(2)" }}
             />
           </div>
-          <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
+          <div className="col-lg-8 col-md-12">
             <div className="d-flex flex-column justify-content-between h-100">
               <h2 className="mb-4">Start Earning</h2>
 

@@ -7,7 +7,7 @@ const BeforeTheRental = () => {
     <section className="category-area pt-100 pb-100 bg-f9f9f9">
       <div className="container">
         <div className="row flex-column-reverse flex-lg-row">
-          <div className="col-lg-8 col-md-12 pb-100 pb-lg-0">
+          <div className="col-lg-8 col-md-12">
             <div className="d-flex flex-column justify-content-between h-100">
               <h2 className="mb-4">Unlock Access</h2>
 
