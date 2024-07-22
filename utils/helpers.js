@@ -153,12 +153,17 @@ export const getOrderBlockedDatesToUpdate = (order) => {
   let blockedDatesToUpdate = [];
 
   order.conflictOrders.map((conflictOrder) => {
+    const startDate = conflictOrder.requestId
+      ? conflictOrder.newStartDate
+      : conflictOrder.offerStartDate;
+
+    const endDate = conflictOrder.requestId
+      ? conflictOrder.newEndDate
+      : conflictOrder.offerEndDate;
+
     blockedDatesToUpdate = [
       ...blockedDatesToUpdate,
-      ...generateDatesBetween(
-        conflictOrder.newStartDate ?? conflictOrder.offerStartDate,
-        conflictOrder.newEndDate ?? conflictOrder.offerEndDate
-      ),
+      ...generateDatesBetween(startDate, endDate),
     ];
   });
 
