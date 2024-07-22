@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React from "react";
 
-const SafeWithUs = ({ bgColor }) => {
+const SafeWithUs = ({ bgColor = "" }) => {
   return (
     <>
-      <section className={`how-it-works-area pt-100 pb-70 ${bgColor}`}>
+      <section className={`how-it-works-area pt-100 ${bgColor}`}>
         <div className="container">
           <div className="section-title">
             <h2>You're safe with us</h2>
