@@ -10,7 +10,6 @@ const Table = ({
   orderType,
   totalCount,
   onClickTh,
-  openDeleteModal,
   type = "orders",
   loading,
 }) => {
@@ -63,10 +62,6 @@ const Table = ({
                   <TableItem
                     key={order.id}
                     {...order}
-                    onDeleteClick={(e) => {
-                      e.stopPropagation();
-                      openDeleteModal(order.id);
-                    }}
                   />
                 ))}
             </tbody>

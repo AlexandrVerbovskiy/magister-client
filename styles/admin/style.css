@@ -552,7 +552,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   margin-bottom: 60px !important;
 }
 
-.merchant-details p{
+.merchant-details p {
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
@@ -563,7 +563,8 @@ div.add-listings-box.dropzone > .gallery-flex {
   text-align: center;
 }
 
-.error-content, .error-content *{
+.error-content,
+.error-content * {
   font-family: "Work Sans", sans-serif;
 }
 
@@ -617,7 +618,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   background-color: #f9f9f9;
 }
 
-.base-pagination-table{
+.base-pagination-table:not(:has(.admin-table tbody tr)) {
   min-height: 400px;
 }
 

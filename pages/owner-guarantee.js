@@ -1,5 +1,6 @@
 import Footer from "../components/_App/Footer";
 import Navbar from "../components/_App/Navbar";
+import PageBanner from "../components/Common/PageBanner";
 import { userSideProps } from "../middlewares";
 import { getViewPageWithCategoriesOptions } from "../services";
 
@@ -7,6 +8,12 @@ const InsuranceGuarantee = () => {
   return (
     <>
       <Navbar canShowSearch={false} />
+
+      <PageBanner
+        pageTitle="Owner Guarantee"
+        pageName="Owner Guarantee"
+      />
+
       <div className="listings-area ptb-100">
         <div className="container mt-4">
           <div className="row m-0">

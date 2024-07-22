@@ -21,24 +21,16 @@ import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 import { useIdPage } from "../../../hooks";
 
-const PreviousProposalElem = () => {
-  const { props } = useIdPage({
-    baseProps,
-    getPagePropsFunc: ({ field, authToken }) =>
-      getAdminOrderInfo(field, authToken),
-  });
-
-  const {
-    index,
-    prevStartDate,
-    prevEndDate,
-    prevPricePerDay,
-    prevTotalPrice,
-    prevSenderName,
-    prevGetterName,
-    needBottomMargin = false,
-  } = props;
-
+const PreviousProposalElem = ({
+  index,
+  prevStartDate,
+  prevEndDate,
+  prevPricePerDay,
+  prevTotalPrice,
+  prevSenderName,
+  prevGetterName,
+  needBottomMargin = false,
+}) => {
   return (
     <>
       <div className="flex flex-col gap-2 mb-2">
@@ -119,7 +111,13 @@ const PreviousProposalElem = () => {
   );
 };
 
-const Order = (order) => {
+const Order = (baseProps) => {
+  const { props: order } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminOrderInfo(field, authToken),
+  });
+
   const { requestsToUpdate, listingImages, categoryInfo } = order;
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [mapCenter, setMapCenter] = useState(null);
