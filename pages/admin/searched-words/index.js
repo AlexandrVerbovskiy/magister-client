@@ -54,9 +54,11 @@ const SearchedWords = (pageProps) => {
     getDopProps: () => ({
       viewed: {
         value: viewedFilter,
+        hidden: (newValue) => newValue=="all",
       },
       accepted: {
         value: acceptedFilter,
+        hidden: (newValue) => newValue=="all",
       },
     }),
     defaultData: pageProps,

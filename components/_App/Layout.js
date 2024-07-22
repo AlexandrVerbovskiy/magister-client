@@ -1,11 +1,13 @@
 import Head from "next/head";
 import env from "../../env";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { IndiceContext } from "../../contexts";
 
 const Layout = ({ children }) => {
   const router = useRouter();
   const [currentPath, setCurrentPath] = useState("");
+  const { isAuth } = useContext(IndiceContext);
 
   useEffect(() => {
     setCurrentPath(router.asPath);
@@ -31,7 +33,7 @@ const Layout = ({ children }) => {
             async
           ></script>
         )}
-        {currentPath.includes("/dashboard/profile-edit/") && (
+        {(!isAuth || currentPath.includes("/dashboard/profile-edit/")) && (
           <script
             src="https://www.paypalobjects.com/js/external/api.js"
             async
