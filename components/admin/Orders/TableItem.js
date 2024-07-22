@@ -26,7 +26,6 @@ const TableItem = (props) => {
     ownerId,
     status,
     cancelStatus,
-    onDeleteClick,
     offerStartDate,
     offerEndDate,
     offerPricePerDay,
@@ -203,7 +202,6 @@ const TableItem = (props) => {
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
             <View href={`/admin/orders/${id}/`} />
-            {/*<Delete onDeleteClick={onDeleteClick} />*/}
           </div>
         </td>
       </tr>

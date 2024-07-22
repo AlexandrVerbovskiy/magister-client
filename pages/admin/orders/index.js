@@ -21,9 +21,7 @@ import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Orders = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
-  const [toDeleteOrderInfo, setToDeleteOrderInfo] = useState({});
-  const [dangerModalOpen, setDangerModalOpen] = useState(false);
+  const { error, authToken } = useContext(IndiceContext);
   const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
@@ -62,28 +60,6 @@ const Orders = (pageProps) => {
     defaultData: pageProps,
     onRebuild,
   });
-
-  const handleCloseDeleteModal = () => {
-    setToDeleteOrderInfo(null);
-    setDangerModalOpen(false);
-  };
-
-  const handleOpenDeleteModal = (id) => {
-    setToDeleteOrderInfo({ id });
-    setDangerModalOpen(true);
-  };
-
-  const onDeleteAccept = async () => {
-    try {
-      const { id } = toDeleteOrderInfo;
-      await deleteOrder(id, authToken);
-      handleCloseDeleteModal();
-      await rebuild();
-      success.set(`Order #${id} deleted successfully!`);
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -142,7 +118,6 @@ const Orders = (pageProps) => {
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
-                openDeleteModal={handleOpenDeleteModal}
                 totalCount={countItems}
                 loading={paginationLoading}
               />

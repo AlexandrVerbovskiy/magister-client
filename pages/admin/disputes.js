@@ -22,7 +22,7 @@ const Disputes = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({ props: pageProps, defaultTypeValue: "suspended" });
+  } = useBaseAdminFilter({ props: pageProps, defaultTypeValue: "all" });
 
   const onRebuild = (data) => {
     setTypesCount(data.typesCount);

@@ -13,8 +13,8 @@ const PrivacyPolicy = () => {
 
       <div className="faq-area bg-f9f9f9 pt-100 pb-70">
         <div className="container">
-          <div class="row">
-            <div class="col-12">
+          <div className="row">
+            <div className="col-12">
               <h2>Privacy Policy</h2>
               <div className="faq-item">
                 <p>
@@ -76,95 +76,86 @@ const PrivacyPolicy = () => {
             <div className="col-12">
               <div className="faq-item">
                 <h3>How do we use your information?</h3>
-                <p>
-                  <ul>
-                    <li>
-                      To provide and improve our services: We use your data to
-                      enable you to use RentAbout, communicate with other users,
-                      access customer service, and receive notifications.
-                    </li>
-                    <li>
-                      To contact you: We may contact you via email, SMS, or
-                      phone about your RentAbout account.
-                    </li>
-                    <li>
-                      To ensure safety and meet legal obligations: We use your
-                      data to prevent illegal activities, enforce our Terms of
-                      Service, and resolve disputes.
-                    </li>
-                    <li>
-                      For legitimate interests: We might use your data to market
-                      products, services, or new features that we think you’ll
-                      like.
-                    </li>
-                  </ul>
-                </p>
+                <ul>
+                  <li>
+                    To provide and improve our services: We use your data to
+                    enable you to use RentAbout, communicate with other users,
+                    access customer service, and receive notifications.
+                  </li>
+                  <li>
+                    To contact you: We may contact you via email, SMS, or phone
+                    about your RentAbout account.
+                  </li>
+                  <li>
+                    To ensure safety and meet legal obligations: We use your
+                    data to prevent illegal activities, enforce our Terms of
+                    Service, and resolve disputes.
+                  </li>
+                  <li>
+                    For legitimate interests: We might use your data to market
+                    products, services, or new features that we think you’ll
+                    like.
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div className="col-12">
               <div className="faq-item">
                 <h3>Who do we share your information with?</h3>
-                <p>
-                  <ul>
-                    <li>
-                      Internal use: Only employees who need your data to do
-                      their job will access it.
-                    </li>
-                    <li>
-                      With other users: Your phone number will be shared with
-                      users you’ve made rental agreements with.
-                    </li>
-                    <li>
-                      Service providers: We may share your data with
-                      organizations that support our services, such as payment
-                      processors (like Stripe) and customer messaging platforms
-                      (like Intercom).
-                    </li>
-                    <li>
-                      Regulatory authorities: If necessary, we share information
-                      to comply with legal obligations and to protect the
-                      rights, property, or safety of our users.
-                    </li>
-                  </ul>
-                </p>
+                <ul>
+                  <li>
+                    Internal use: Only employees who need your data to do their
+                    job will access it.
+                  </li>
+                  <li>
+                    With other users: Your phone number will be shared with
+                    users you’ve made rental agreements with.
+                  </li>
+                  <li>
+                    Service providers: We may share your data with organizations
+                    that support our services, such as payment processors (like
+                    Stripe) and customer messaging platforms (like Intercom).
+                  </li>
+                  <li>
+                    Regulatory authorities: If necessary, we share information
+                    to comply with legal obligations and to protect the rights,
+                    property, or safety of our users.
+                  </li>
+                </ul>
               </div>
             </div>
 
             <div className="col-12">
               <div className="faq-item">
                 <h3>Your rights:</h3>
-                <p>
-                  <ul>
-                    <li>
-                      Access and update: You can access and update your
-                      information through your RentAbout account.
-                    </li>
-                    <li>
-                      Request copies: In some jurisdictions, you can request
-                      copies of personal information not visible in your
-                      account, unless the request is unfounded, repetitive, or
-                      excessive.
-                    </li>
-                    <li>
-                      Correction: Ask us to correct inaccurate or incomplete
-                      information.
-                    </li>
-                    <li>
-                      Deletion: Request to delete your data, although we may
-                      retain information necessary for legal obligations and
-                      legitimate business interests.
-                    </li>
-                    <li>
-                      Objection: Object to our use of your data for direct
-                      marketing and certain other purposes.
-                    </li>
-                    <li>
-                      Withdrawal of consent: Withdraw any consent you’ve given
-                      us.
-                    </li>
-                  </ul>
-                </p>
+                <ul>
+                  <li>
+                    Access and update: You can access and update your
+                    information through your RentAbout account.
+                  </li>
+                  <li>
+                    Request copies: In some jurisdictions, you can request
+                    copies of personal information not visible in your account,
+                    unless the request is unfounded, repetitive, or excessive.
+                  </li>
+                  <li>
+                    Correction: Ask us to correct inaccurate or incomplete
+                    information.
+                  </li>
+                  <li>
+                    Deletion: Request to delete your data, although we may
+                    retain information necessary for legal obligations and
+                    legitimate business interests.
+                  </li>
+                  <li>
+                    Objection: Object to our use of your data for direct
+                    marketing and certain other purposes.
+                  </li>
+                  <li>
+                    Withdrawal of consent: Withdraw any consent you’ve given us.
+                  </li>
+                </ul>
               </div>
             </div>
 

@@ -4,7 +4,7 @@ import TableItem from "./TableItem";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
 
-const ListingCommentsTable = ({
+const ListingOtherCategoriesTable = ({
   categories,
   orderField,
   orderType,
@@ -52,7 +52,7 @@ const ListingCommentsTable = ({
               {!loading &&
                 categories.map((category, index) => (
                   <TableItem
-                    key={category.otherCategory}
+                    key={category.otherCategoryName}
                     {...category}
                     index={index + 1}
                   />
@@ -69,4 +69,4 @@ const ListingCommentsTable = ({
   );
 };
 
-export default ListingCommentsTable;
+export default ListingOtherCategoriesTable;
