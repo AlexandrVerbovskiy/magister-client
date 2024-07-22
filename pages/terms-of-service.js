@@ -9,10 +9,7 @@ const TermsOfService = () => {
     <>
       <Navbar canShowSearch={false} />
 
-      <PageBanner
-        pageTitle="Terms of Service"
-        pageName="Terms of Service"
-      />
+      <PageBanner pageTitle="Terms of Service" pageName="Terms of Service" />
 
       <div className="listings-area ptb-70">
         <div className="container mt-4">
@@ -41,15 +38,17 @@ const TermsOfService = () => {
             </p>
 
             <h4>User Responsibilities</h4>
-            <p>As a user, you agree to:</p>
-            <ul>
-              <li>Provide accurate and current information</li>
-              <li>Use our services for lawful purposes only</li>
-              <li>
-                Respect the rights of others and not engage in harmful or
-                disruptive behavior
-              </li>
-            </ul>
+            <p className="mb-1">As a user, you agree to:</p>
+            <div className="p-0">
+              <ul>
+                <li>Provide accurate and current information</li>
+                <li>Use our services for lawful purposes only</li>
+                <li>
+                  Respect the rights of others and not engage in harmful or
+                  disruptive behavior
+                </li>
+              </ul>
+            </div>
 
             <h4>Intellectual Property</h4>
             <p>

@@ -5,11 +5,40 @@ const useChatWindowsChanger = (chatId) => {
   const bodyRef = useRef(null);
   const bodyTriggerRef = useRef(null);
 
-  const scrollToChatList = () =>
-    bodyRef.current.firstElementChild.scrollIntoView({ behavior: "smooth" });
+  const scrollByWidth = (width) => {
+    const scrollAmount = width;
+    let scrollStep = 25;
+    const interval = 10;
+    let steps = scrollAmount / scrollStep;
+    let currentStep = 0;
 
-  const scrollToChatBody = () =>
-    bodyRef.current.lastElementChild.scrollIntoView({ behavior: "smooth" });
+    if (width < 0) {
+      scrollStep *= -1;
+      steps *= -1;
+    }
+
+    const smoothScroll = () => {
+      if (currentStep < steps) {
+        bodyRef.current.scrollBy(scrollStep, 0);
+        currentStep++;
+        setTimeout(smoothScroll, interval);
+      }
+    };
+
+    smoothScroll();
+  };
+
+  const scrollToChatList = () => {
+    scrollByWidth(
+      -bodyRef.current.firstElementChild.getBoundingClientRect().width
+    );
+  };
+
+  const scrollToChatBody = () => {
+    scrollByWidth(
+      bodyRef.current.firstElementChild.getBoundingClientRect().width
+    );
+  };
 
   useEffect(() => {
     if (bodyRef.current && activeWindow == "list") {

@@ -97,7 +97,7 @@ const SubOrderItem = ({
         Rental:{" "}
         <Link
           className="w-100 row-dots-end"
-          href={`/owner-listing-list/${tenantId}/`}
+          href={`/owner-listings/${tenantId}/`}
         >
           {tenantName}
         </Link>
@@ -707,7 +707,10 @@ const OrderContent = ({
           <div className="col-md-6">
             <div className="row">
               <div className="col">
-                <div className="form-group mb-1" style={{ height: "300px" }}>
+                <div
+                  className="add-listings-box form-group px-0"
+                  style={{ height: "300px" }}
+                >
                   <MultyMarkersMap
                     markers={[
                       {
@@ -840,8 +843,8 @@ const OrderContent = ({
       )}
 
       {(order.cancelStatus != null || !actualUpdateRequest) && (
-        <div className="row listings-sidebar" style={{ marginTop: 0 }}>
-          <div className="col form-group">
+        <div className="row listings-sidebar mt-0">
+          <div className="col form-group mb-0">
             <div className="listings-widget order_widget order-proposal-info">
               <h3>Proposal Info</h3>
 
@@ -1012,8 +1015,8 @@ const OrderContent = ({
       )}
 
       {order.cancelStatus == null && actualUpdateRequest && (
-        <div className="row listings-sidebar" style={{ marginTop: 0 }}>
-          <div className="col col-12 col-md-6 form-group">
+        <div className="row listings-sidebar mt-0">
+          <div className="col col-12 col-md-6 form-group mb-0">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
@@ -1349,7 +1352,10 @@ const OrderContent = ({
         )}
 
       {currentActionButtons.length > countDopAction && (
-        <div className="order_widget add-listings-box">
+        <div
+          className="order_widget add-listings-box"
+          style={{ marginTop: "30px" }}
+        >
           <h3>Operations</h3>
 
           {currentActionButtons.includes(

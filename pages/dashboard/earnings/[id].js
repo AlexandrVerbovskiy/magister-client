@@ -21,20 +21,24 @@ const Earning = (baseProps) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>Earning #{recipient.id}</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">
-              <Link href={`/dashboard/wallet/`}>Wallet</Link>
-            </li>
-            <li className="item">Earning #{recipient.id}</li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Earning #{recipient.id}</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href={`/dashboard/wallet/`}>Wallet</Link>
+                </li>
+                <li className="item">Earning #{recipient.id}</li>
+              </ol>
+            </div>
+          </div>
         </div>
 
         <EarningTable {...recipient} refundCommission={refundCommission} />

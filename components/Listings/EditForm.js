@@ -703,21 +703,27 @@ const EditForm = ({
 
       <div className="main-content d-flex flex-column">
         <NavbarThree />
-        <div className="breadcrumb-area">
-          <h1>{listing.name ?? "Add Listings"}</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/listings/">Listings</Link>
-            </li>
-            <li className="item">{listing.name ?? "Add Listings"}</li>
-          </ol>
+
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>{listing.name ?? "Add Listings"}</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/listings/">Listings</Link>
+                </li>
+                <li className="item">{listing.name ?? "Add Listings"}</li>
+              </ol>
+            </div>
+          </div>
         </div>
+
         {rejectDescription && (
           <div
             className="alert-dismissible fade show alert alert-danger"

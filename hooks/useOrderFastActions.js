@@ -181,7 +181,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         orderToDispute.id
       );
 
-      success.set("Dispute created success");
+      success.set("Dispute created successfully");
 
       closeDisputeWindow();
     } catch (e) {

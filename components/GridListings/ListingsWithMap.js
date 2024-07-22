@@ -53,6 +53,7 @@ const ListingsWithMap = ({
   const listingListParentRef = useRef(null);
   const isFirstRefOptionsChange = useRef(true);
   const filterFullRef = useRef(null);
+  const orderRef = useRef(null);
 
   const [listingListMaxHeight, setListingListMaxHeight] = useState(null);
 
@@ -303,17 +304,16 @@ const ListingsWithMap = ({
 
   const handleChangeMinPrice = (value) => {
     if (validatePrice(value) !== true) {
-      error.set("Invalid min price filter value");
-    } else {
-      setMinPrice(value);
-      rebuild({ minPrice: value });
+      value = minLimitPrice;
     }
+
+    setMinPrice(value);
+    rebuild({ minPrice: value });
   };
 
   const handleChangeMaxPrice = (value) => {
     if (validatePrice(value) !== true) {
-      error.set("Invalid max price filter value");
-      return;
+      value = maxLimitPrice;
     }
 
     setMaxPrice(value);
@@ -322,13 +322,11 @@ const ListingsWithMap = ({
 
   const handleChangePrices = (minValue, maxValue) => {
     if (validatePrice(minValue) !== true) {
-      error.set("Invalid min price filter value");
-      return;
+      minValue = minLimitPrice;
     }
 
     if (validatePrice(maxValue) !== true) {
-      error.set("Invalid max price filter value");
-      return;
+      maxValue = maxLimitPrice;
     }
 
     setMinPrice(minValue);
@@ -533,7 +531,12 @@ const ListingsWithMap = ({
                                     alignItems: "center",
                                   }}
                                 >
-                                  <label>Sort By:</label>
+                                  <label
+                                    htmlFor="listing-order-select"
+                                    onClick={(e) => orderRef.current.focus()}
+                                  >
+                                    Sort By:
+                                  </label>
 
                                   <AdaptiveSelect
                                     options={orderOptions}
@@ -546,6 +549,8 @@ const ListingsWithMap = ({
                                     isSearchable={false}
                                     className="custom-search-select blog-select"
                                     name="listing-order-select"
+                                    selectRef={orderRef}
+                                    openMenuOnFocus={true}
                                   />
                                 </div>
                               </div>

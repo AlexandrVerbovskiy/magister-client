@@ -42,7 +42,7 @@ const OrderInfo = ({
 
   return (
     <>
-      <td className="details">
+      <div className="td details">
         <h4 className="order-item-title-row">
           <div>{extension ? "Extension" : order.listingName}</div>
           <StatusBlock
@@ -147,9 +147,9 @@ const OrderInfo = ({
               </li>
             )}
         </ul>
-      </td>
+      </div>
 
-      <td className="action d-flex flex-column align-items-start">
+      <div className="td action">
         <Link href={`${link}/${order.id}/`} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
@@ -341,7 +341,7 @@ const OrderInfo = ({
             <i className="bx bx-chat"></i> Dispute Chat
           </Link>
         )}
-      </td>
+      </div>
     </>
   );
 };
@@ -376,9 +376,9 @@ const OrderItem = ({
 
   return (
     <>
-      <tr>
-        <td
-          className="name"
+      <div className="tr">
+        <div
+          className="td name"
           style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
         >
           <img src={generateProfileFilePath(userPhoto)} alt="image" />
@@ -407,7 +407,7 @@ const OrderItem = ({
               </Link>
             )}
           </div>
-        </td>
+        </div>
 
         <OrderInfo
           order={order}
@@ -420,21 +420,21 @@ const OrderItem = ({
           handleClickExtend={handleClickExtend}
           link={link}
         />
-      </tr>
+      </div>
 
       {extendOrders.map((extendOrder, index) => {
         extendOrder["extendOrders"] = order.extendOrders;
 
         return (
-          <tr key={extendOrder.id}>
-            <td
-              className="name"
+          <div className="tr extension-tr" key={extendOrder.id}>
+            <div
+              className="td name"
               style={
                 order.extendOrders.length != index + 1
                   ? { borderBottom: 0, borderTop: 0 }
                   : { borderTop: 0 }
               }
-            ></td>
+            ></div>
 
             <OrderInfo
               order={extendOrder}
@@ -448,13 +448,13 @@ const OrderItem = ({
               link={link}
               extension={true}
             />
-          </tr>
+          </div>
         );
       })}
 
       {order.extendOrders.length > baseShowedExtendsCount && (
-        <tr>
-          <td colSpan={3} className="show-more-table-rows">
+        <div className="tr extension-tr">
+          <div colSpan={3} className="td show-more-table-rows">
             <button
               onClick={() => setShowedAllExtends(!showedAllExtends)}
               type="button"
@@ -462,8 +462,8 @@ const OrderItem = ({
             >
               {showedAllExtends ? "Show Less" : "Show More"}
             </button>
-          </td>
-        </tr>
+          </div>
+        </div>
       )}
     </>
   );
