@@ -1450,12 +1450,12 @@
   .about-us-goals .second-goals-row>div:nth-of-type(1) .circle-icon,
   .about-us-goals .third-goals-row>div:nth-of-type(1) .circle-icon{
     margin-left: 0!important;
-    margin-right: 10px!important;
+    margin-right: 20px!important;
   }
 
   .about-us-goals .first-goals-row>div:nth-of-type(2) .circle-icon,
   .about-us-goals .second-goals-row>div:nth-of-type(2) .circle-icon{
-    margin-left: 10px!important;
+    margin-left: 20px!important;
     margin-right: 0!important;
   }
 }
