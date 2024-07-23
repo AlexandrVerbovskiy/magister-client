@@ -320,6 +320,22 @@ const usePagination = ({
     });
   };
 
+  const updateItemsParticularly = (itemParticulars) => {
+    setItems((prev) => {
+      const res = [];
+
+      prev.forEach((item) => {
+        if (itemParticulars[item.id]) {
+          res.push({ ...item, ...itemParticulars[item.id] });
+        } else {
+          res.push(item);
+        }
+      });
+
+      return res;
+    });
+  };
+
   return {
     loading,
     moveToPage,
@@ -342,6 +358,7 @@ const usePagination = ({
     getCurrentPaginationProps: getFullPropsWithDopBody,
     isFirstCall: isFirstRef.current,
     updatePaginationState,
+    updateItemsParticularly,
   };
 };
 

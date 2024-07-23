@@ -74,31 +74,25 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link href={`/admin/listings/edit/${listingId}/`}>
-              {listingName}
-            </Link>
-          </div>
+          <Link href={`/admin/listings/edit/${listingId}/`}>{listingName}</Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              href={`/admin/users/edit/${reviewerId}/`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullReviewerPhotoPath}
-                width="32"
-                height="32"
-                alt="Reviewer"
-              />
-              {reviewerName}
-            </Link>
-          </div>
+          <Link
+            href={`/admin/users/edit/${reviewerId}/`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
+            style={canMoveToUser ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullReviewerPhotoPath}
+              width="32"
+              height="32"
+              alt="Reviewer"
+            />
+            {reviewerName}
+          </Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

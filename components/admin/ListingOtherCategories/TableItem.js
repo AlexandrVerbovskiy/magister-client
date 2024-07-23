@@ -11,13 +11,11 @@ const TableItem = ({ index, otherCategoryName, listingsCount }) => {
       </td>
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div>
-          <Link href={editLink}>{otherCategoryName}</Link>
-        </div>
+        <Link href={editLink}>{otherCategoryName}</Link>
       </td>
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div>{listingsCount}</div>
+        {listingsCount}
       </td>
 
       <td className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top">

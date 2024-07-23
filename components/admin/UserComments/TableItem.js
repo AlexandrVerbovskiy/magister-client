@@ -68,7 +68,6 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
             <Link
               href={`/admin/users/edit/${userId}/`}
               className="flex items-center"
@@ -84,11 +83,9 @@ const TableItem = ({
               />
               {userName}
             </Link>
-          </div>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
             <Link
               href={`/admin/users/edit/${reviewerId}/`}
               className="flex items-center"
@@ -104,7 +101,6 @@ const TableItem = ({
               />
               {reviewerName}
             </Link>
-          </div>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

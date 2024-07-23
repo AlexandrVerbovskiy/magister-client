@@ -88,7 +88,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           className="author row-dots-end"
           style={{ maxWidth: "calc(100% - 40px)" }}
         >
-          <Link href={`/owner-listing-list/${listing.userId}/`}>
+          <Link href={`/listings/${listing.userId}/`}>
             <div className="d-flex align-items-center">
               <img
                 src={generateProfileFilePath(listing.userPhoto)}
@@ -101,7 +101,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         <ul className="listings-meta">
           <li>
             <Link
-              href={`/listing-list/?categories=${
+              href={`/listings/?categories=${
                 listing.categoryName ?? listing.otherCategory
               }`}
             >
@@ -110,7 +110,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
             </Link>
           </li>
           <li>
-            <Link href={`/listing-list/?cities=${listing.city}`}>
+            <Link href={`/listings/?cities=${listing.city}`}>
               <i className="flaticon-pin"></i>
               <span>{listing.city}</span>
             </Link>

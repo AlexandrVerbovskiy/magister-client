@@ -125,21 +125,23 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Bookings</h1>
-            <ol className="breadcrumb">
-              <li className="item">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="item">
-                <Link href="/dashboard/">Dashboard</Link>
-              </li>
-              <li className="item">
-                <Link href={"/dashboard/orders/" + orderId}>Bookings</Link>
-              </li>
-              <li className="item">#{orderId}</li>
-            </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Bookings</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href={"/dashboard/orders/" + orderId}>Bookings</Link>
+                </li>
+                <li className="item">#{orderId}</li>
+              </ol>
+            </div>
           </div>
         </div>
 

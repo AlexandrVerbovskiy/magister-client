@@ -81,7 +81,7 @@ const DashboardNavbar = () => {
             </li>
 
             <li className="nav-item">
-              <Link href="/listing-list/" className={`nav-link`}>
+              <Link href="/listings/" className={`nav-link`}>
                 <span className="icon">
                   <i className="bx bx-wrench"></i>
                 </span>

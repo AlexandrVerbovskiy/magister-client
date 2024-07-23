@@ -65,17 +65,21 @@ const Wallet = ({
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>My Expenses</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">Wallet</li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>My Expenses</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">Wallet</li>
+              </ol>
+            </div>
+          </div>
         </div>
 
         <div className="row justify-content-center">
@@ -114,7 +118,7 @@ const Wallet = ({
 
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <div className="earnings-box position-relative" style={{ minHeight: "400px" }}>
+            <div className="waller-box earnings-box position-relative">
               <h3>
                 Earnings{" "}
                 <span className="comission-taken">
@@ -209,8 +213,8 @@ const Wallet = ({
               canPrev={canEarningsMovePrevPage}
             />
           </div>
-          <div className="col-lg-6 col-md-12 mt-4 mt-md-0">
-            <div className="earnings-box position-relative" style={{ minHeight: "400px" }}>
+          <div className="col-lg-6 col-md-12">
+            <div className="waller-box earnings-box position-relative">
               <h3>
                 Payout History{" "}
                 <span className="comission-taken">

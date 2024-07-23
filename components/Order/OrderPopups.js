@@ -65,7 +65,7 @@ const OrderPopups = ({
         STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
       ) && (
         <BookingActionModals
-          orderId={order.id}
+          order={order}
           listingPricePerDay={order.listingPricePerDay}
           proposalPrice={
             actualUpdateRequest
@@ -144,7 +144,7 @@ const OrderPopups = ({
         modalActive={paypalModalActive}
         closeModal={() => setPaypalModalActive(false)}
         amount={calculateCurrentTotalPrice({
-          isOwner,
+          isOwner: false,
           startDate: order.offerStartDate,
           endDate: order.offerEndDate,
           pricePerDay: order.offerPricePerDay,

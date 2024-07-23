@@ -60,7 +60,7 @@
 }
 
 .table-change-role-popup.active {
-  max-height: 100%;
+  max-height: max-content;
 }
 
 .table-change-role-popup:not(.active) {
@@ -318,6 +318,10 @@ div.add-listings-box.dropzone > .gallery-flex {
   border-radius: 0 !important;
 }
 
+.admin-table{
+  width: 1000px;
+}
+
 .overflow-separate,
 .admin-table .overflow-separate,
 .admin-table td:not(:has(*)) {
@@ -529,9 +533,14 @@ div.add-listings-box.dropzone > .gallery-flex {
   text-wrap: nowrap !important;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 767.9px) {
   .main-site-alert {
     max-width: 80%;
+  }
+
+  #messages-list,
+  #messages-sidebar{
+    min-width: 100%;
   }
 }
 
@@ -622,6 +631,14 @@ div.add-listings-box.dropzone > .gallery-flex {
   min-height: 400px;
 }
 
+.messages-list-body{
+  height: calc(100vh - 160px);
+}
+
+#messages-list:has(.message-footer) .messages-list-body{
+  height: calc(100vh - 224px);
+}
+
 @media only screen and (max-width: 768px) {
   .error-content h3 {
     font-size: 20px;
@@ -630,6 +647,14 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
   .error-content .default-btn {
     margin-top: 20px;
+  }
+
+  .messages-list-body{
+    height: calc(100vh - 112px);
+  }
+  
+  #messages-list:has(.message-footer) .messages-list-body{
+    height: calc(100vh - 176px);
   }
 }
 

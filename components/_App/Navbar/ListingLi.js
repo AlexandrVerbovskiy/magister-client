@@ -11,7 +11,7 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
         List An Item
       </a>
 
-      <a href="/listing-list" className={`nav-link d-block d-xl-none`}>
+      <a href="/listings" className={`nav-link d-block d-xl-none`}>
         List An Item
       </a>
     </li>

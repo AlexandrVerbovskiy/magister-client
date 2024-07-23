@@ -75,7 +75,7 @@ const RequestsTable = ({
 
       <div>
         <div className="overflow-x-auto">
-          <table className="admin-table table-fixed w-full dark:text-slate-300">
+          <table className="admin-table table-fixed dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (

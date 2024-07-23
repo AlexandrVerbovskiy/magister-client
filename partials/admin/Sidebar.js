@@ -6,7 +6,6 @@ import SidebarTypicalLink from "./SidebarTypicalLink";
 import SidebarGroupedLinks from "./SidebarGroupedLinks";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
-  const trigger = useRef(null);
   const sidebar = useRef(null);
   const { isAdmin, isSupport } = useContext(IndiceContext);
 
@@ -28,19 +27,18 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (
-        !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
-      setSidebarOpen(false);
-    };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
-  });
+    if (sidebarOpen) {
+      const clickHandler = ({ target }) => {
+        if (!sidebar.current || !sidebarOpen || sidebar.current.contains(target)) {
+          return;
+        }
+
+        setSidebarOpen(false);
+      };
+      document.addEventListener("click", clickHandler);
+      return () => document.removeEventListener("click", clickHandler);
+    }
+  }, [sidebarOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {

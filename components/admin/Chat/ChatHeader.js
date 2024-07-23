@@ -4,6 +4,207 @@ import LinkIcon from "../Icons/LinkIcon";
 import ActiveSpan from "../Disputes/ActiveSpan";
 import STATIC from "../../../static";
 import { useState } from "react";
+import Transition from "../../../utils/transition";
+
+const SubChatSelect = ({
+  selectedChat,
+  selectedChatId,
+  onSelectSubChat,
+  tenant,
+  owner,
+  align = "right",
+}) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  return (
+    <div className="relative inline-flex md:hidden border-x border-slate-200 ">
+      <button
+        className="inline-flex justify-center items-center group "
+        aria-haspopup="true"
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+        aria-expanded={dropdownOpen}
+      >
+        {selectedChat.id == selectedChatId && (
+          <div
+            className={`flex items-center h-full px-4 sm:px-6 md:px-5 bg-white`}
+          >
+            <img
+              className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+              src={getFilePath(tenant.photo)}
+              width="32"
+              height="32"
+              style={{ width: "32px", height: "32px" }}
+            />
+
+            <img
+              className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1 -ml-4"
+              src={getFilePath(owner.photo)}
+              width="32"
+              height="32"
+              style={{ width: "32px", height: "32px" }}
+            />
+
+            <div className="truncate">
+              <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                Inner Chat
+              </span>
+            </div>
+          </div>
+        )}
+
+        {selectedChat.tenantChatId == selectedChatId && (
+          <div
+            className={`flex items-center h-full px-4 sm:px-6 md:px-5 bg-white`}
+            href={"/admin/users/edit/" + tenant.id}
+            onClick={() => onSelectSubChat(selectedChat.tenantChatId)}
+          >
+            <img
+              className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+              src={getFilePath(tenant.photo)}
+              width="32"
+              height="32"
+              style={{ width: "32px", height: "32px" }}
+            />
+
+            <div className="truncate">
+              <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                {tenant.name}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {selectedChat.ownerChatId == selectedChatId && (
+          <div
+            className={`flex items-center h-full px-4 sm:px-6 md:px-5 bg-white`}
+            href={"/admin/users/edit/" + owner.id}
+            onClick={() => onSelectSubChat(selectedChat.ownerChatId)}
+          >
+            <img
+              className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+              src={getFilePath(owner.photo)}
+              width="32"
+              height="32"
+              style={{ width: "32px", height: "32px" }}
+            />
+
+            <div className="truncate">
+              <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                {owner.name}
+              </span>
+            </div>
+          </div>
+        )}
+
+        <svg
+          className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 mr-4 sm:mr-6 md:mr-5"
+          viewBox="0 0 12 12"
+        >
+          <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
+        </svg>
+      </button>
+
+      <Transition
+        className={`w-full origin-top-right z-10 absolute top-full min-w-44 bg-white dark:bg-slate-800 py-1.5 rounded shadow-lg overflow-hidden mt-1 ${
+          align === "right" ? "right-0" : "left-0"
+        }`}
+        show={dropdownOpen}
+        enter="transition ease-out duration-200 transform"
+        enterStart="opacity-0 -translate-y-2"
+        enterEnd="opacity-100 translate-y-0"
+        leave="transition ease-out duration-200"
+        leaveStart="opacity-100"
+        leaveEnd="opacity-0"
+      >
+        <div
+          onFocus={() => setDropdownOpen(true)}
+          onBlur={() => setDropdownOpen(false)}
+        >
+          <div className="mb-1">
+            <button
+              type="button"
+              className={`flex items-center h-full px-4 sm:px-6 md:px-5 w-full`}
+              onClick={() => {
+                onSelectSubChat(selectedChat.id);
+                setDropdownOpen(false);
+              }}
+            >
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+                src={getFilePath(tenant.photo)}
+                width="32"
+                height="32"
+                style={{ width: "32px", height: "32px" }}
+              />
+
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1 -ml-4"
+                src={getFilePath(owner.photo)}
+                width="32"
+                height="32"
+                style={{ width: "32px", height: "32px" }}
+              />
+
+              <div className="truncate">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                  Inner Chat
+                </span>
+              </div>
+            </button>
+
+            <button
+              key={tenant.id}
+              type="button"
+              className={`flex items-center h-full px-4 sm:px-6 md:px-5 w-full`}
+              onClick={() => {
+                onSelectSubChat(selectedChat.tenantChatId);
+                setDropdownOpen(false);
+              }}
+            >
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+                src={getFilePath(tenant.photo)}
+                width="32"
+                height="32"
+                style={{ width: "32px", height: "32px" }}
+              />
+
+              <div className="truncate">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                  {tenant.name}
+                </span>
+              </div>
+            </button>
+
+            <button
+              key={owner.id}
+              type="button"
+              className={`flex items-center h-full px-4 sm:px-6 md:px-5 w-full`}
+              onClick={() => {
+                onSelectSubChat(selectedChat.ownerChatId);
+                setDropdownOpen(false);
+              }}
+            >
+              <img
+                className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
+                src={getFilePath(owner.photo)}
+                width="32"
+                height="32"
+                style={{ width: "32px", height: "32px" }}
+              />
+
+              <div className="truncate">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                  {owner.name}
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </Transition>
+    </div>
+  );
+};
 
 const HeaderTab = ({ user, chatId, selectedChatId, onSelectSubChat }) => {
   return (
@@ -35,8 +236,6 @@ const HeaderTab = ({ user, chatId, selectedChatId, onSelectSubChat }) => {
 };
 
 const ChatHeader = ({
-  msgSidebarOpen,
-  setMsgSidebarOpen,
   order,
   dispute,
   selectedChat,
@@ -46,6 +245,7 @@ const ChatHeader = ({
   activateSolvePopup,
   statusPopupActive,
   setStatusPopupActive,
+  showChatListWindow,
 }) => {
   const tenant = {
     id: order.tenantId,
@@ -60,14 +260,13 @@ const ChatHeader = ({
   };
 
   return (
-    <div className="sticky top-16 z-10">
+    <div className="sticky top-0 z-10">
       <div className="flex items-center justify-between bg-white border-b border-slate-200 px-4 sm:px-6 md:px-5 h-12">
         <div className="flex items-center w-full">
           <button
             className="md:hidden text-slate-400 hover:text-slate-500 mr-4"
-            onClick={() => setMsgSidebarOpen(!msgSidebarOpen)}
+            onClick={() => showChatListWindow()}
             aria-controls="messages-sidebar"
-            aria-expanded={msgSidebarOpen}
           >
             <span className="sr-only">Close sidebar</span>
             <svg
@@ -88,6 +287,14 @@ const ChatHeader = ({
               Issue #{selectedChat.disputeId}
               <LinkIcon color="var(--mainColor)" />
             </Link>
+
+            <SubChatSelect
+              selectedChat={selectedChat}
+              selectedChatId={selectedChatId}
+              onSelectSubChat={onSelectSubChat}
+              tenant={tenant}
+              owner={owner}
+            />
 
             <div>
               <ActiveSpan
@@ -140,7 +347,7 @@ const ChatHeader = ({
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between border-b border-slate-200 h-12 bg-white">
+      <div className="hidden md:flex items-center justify-between border-b border-slate-200 h-12 bg-white">
         <div className="flex items-center h-full">
           <div className="flex h-full ">
             <button

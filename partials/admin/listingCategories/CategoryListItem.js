@@ -155,7 +155,7 @@ const CategoryListItem = ({
             </div>
           </div>
           <div
-            className="flex flex-col sm:flex-row space-x-4 gap-4 items-start sm:items-center sm:justify-between md:justify-start"
+            className="flex flex-col xs:flex-row space-x-4 gap-4 items-start sm:items-center sm:justify-between md:justify-start"
             style={{ marginLeft: "0" }}
           >
             <div

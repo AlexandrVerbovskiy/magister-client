@@ -3412,10 +3412,14 @@ Listings Area CSS
   z-index: 2;
   bottom: 0;
 }
+
+.filter-bookmark-save{
+  border: 0;
+  margin-left: 5px;
+}
+
+.filter-bookmark-save,
 .single-listings-box .listings-image .bookmark-save {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   z-index: 3;
   display: inline-block;
   color: var(--whiteColor);
@@ -3428,15 +3432,20 @@ Listings Area CSS
   font-size: 16px;
 }
 
+.single-listings-box .listings-image .bookmark-save {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.filter-bookmark-save.checked,
+.filter-bookmark-save:hover,
 .single-listings-box .listings-image .bookmark-save.checked,
 .single-listings-box .listings-image .bookmark-save:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
 }
 .single-listings-box .listings-image .category {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   z-index: 3;
   display: inline-block;
   color: var(--whiteColor);
@@ -3454,9 +3463,16 @@ Listings Area CSS
 }
 .single-listings-box .listings-image .swiper-button-next:after,
 .single-listings-box .listings-image .swiper-button-prev:after {
-  color: #fff;
+  color: rgba(0, 0, 0, 0.55);
   font-size: 30px;
 }
+
+.single-listings-box .listings-image .swiper-button-next:hover:after,
+.single-listings-box .listings-image .swiper-button-prev:hover:after{
+  color: var(--mainColor);
+  transition: var(--transition);
+}
+
 .single-listings-box .listings-image .single-image {
   position: relative;
   z-index: 1;
@@ -4344,6 +4360,11 @@ Listings Details Area CSS
   font-weight: 600;
   font-size: 14px;
 }
+
+.listings-details-image .listings-details-content .meta:not(:last-of-type){
+  margin-right: 10px;
+}
+
 .listings-details-image .listings-details-content .meta i {
   font-weight: normal;
   color: var(--mainColor);
@@ -4846,7 +4867,7 @@ Listings Details Area CSS
 }
 .listings-details-desc .listings-review-comments {
   margin-top: 30px;
-  margin-bottom: 35px;
+  margin-bottom: 30px;
 }
 .listings-details-desc .listings-review-comments .user-review {
   border: 1px solid #dedede;
@@ -13698,9 +13719,17 @@ Dashboard CSS
   font-size: 17px;
   font-weight: 600;
 }
+
+.bookings-listings-box .table,
 .bookings-listings-box table {
   margin-bottom: 0;
 }
+
+.bookings-listings-box .table .tr{
+  display: flex;
+}
+
+.bookings-listings-box .table .thead .th,
 .bookings-listings-box table thead th {
   white-space: nowrap;
   vertical-align: middle;
@@ -13712,6 +13741,8 @@ Dashboard CSS
   font-size: var(--fontSize);
   font-weight: 600;
 }
+
+.bookings-listings-box .table .tbody .td,
 .bookings-listings-box table tbody td {
   white-space: nowrap;
   vertical-align: middle;
@@ -13720,28 +13751,40 @@ Dashboard CSS
   border-right: 1px dashed #eeeeee;
   border-top: 1px dashed #eeeeee;
 }
+
+.bookings-listings-box .table .tbody .td.name,
 .bookings-listings-box table tbody td.name {
   position: relative;
 }
+
+.bookings-listings-box .table .tbody .td.name img,
 .bookings-listings-box table tbody td.name img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
 }
+
+.bookings-listings-box .table .tbody .td.name .info,
 .bookings-listings-box table tbody td.name .info {
   margin-top: 15px;
 }
+
+.bookings-listings-box .table .tbody .td.name .info span,
 .bookings-listings-box table tbody td.name .info span {
   display: block;
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: 600;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul,
 .bookings-listings-box table tbody td.name .info ul {
   padding-left: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li,
 .bookings-listings-box table tbody td.name .info ul li {
   color: var(--optionalColor);
   display: inline-block;
@@ -13750,13 +13793,19 @@ Dashboard CSS
   font-size: 14px;
   font-weight: 500;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li a,
 .bookings-listings-box table tbody td.name .info ul li a {
   color: var(--optionalColor);
   display: inline-block;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li a:hover,
 .bookings-listings-box table tbody td.name .info ul li a:hover {
   color: var(--mainColor);
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li::before,
 .bookings-listings-box table tbody td.name .info ul li::before {
   content: "";
   position: absolute;
@@ -13766,12 +13815,18 @@ Dashboard CSS
   height: 12px;
   background-color: #eeeeee;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li:last-child,
 .bookings-listings-box table tbody td.name .info ul li:last-child {
   margin-right: 0;
 }
+
+.bookings-listings-box .table .tbody .td.name .info ul li:last-child::before,
 .bookings-listings-box table tbody td.name .info ul li:last-child::before {
   display: none;
 }
+
+.bookings-listings-box .table .tbody .td.name .default-btn,
 .bookings-listings-box table tbody td.name .default-btn {
   border-radius: 30px;
   box-shadow: unset;
@@ -13785,6 +13840,7 @@ Dashboard CSS
   padding-left: 40px;
   padding-right: 20px;
 }
+.bookings-listings-box .table .tbody .td.name .default-btn i,
 .bookings-listings-box table tbody td.name .default-btn i {
   position: absolute;
   left: 20px;
@@ -13793,14 +13849,19 @@ Dashboard CSS
   font-size: 16px;
   margin-top: -0.5px;
 }
+
+.bookings-listings-box .table .tbody .td.name .default-btn:hover,
 .bookings-listings-box table tbody td.name .default-btn:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
 }
+
+.bookings-listings-box .table .tbody .td.details h4,
 .bookings-listings-box table tbody td.details h4 {
   margin-bottom: 15px;
   font-size: 17px;
 }
+.bookings-listings-box .table .tbody .td.details h4 .bookings-status
 .bookings-listings-box table tbody td.details h4 .bookings-status {
   border-radius: 30px;
   color: var(--whiteColor);
@@ -13812,51 +13873,78 @@ Dashboard CSS
   font-size: 12px;
   line-height: 13px !important;
 }
+
+.bookings-listings-box .table .tbody .td.details h4 .bookings-status.approved,
 .bookings-listings-box table tbody td.details h4 .bookings-status.approved {
   background-color: #64bc36;
 }
+
+.bookings-listings-box .table .tbody .td.details h4 .bookings-status.cancelled,
 .bookings-listings-box table tbody td.details h4 .bookings-status.cancelled {
   background-color: red;
 }
+
+.bookings-listings-box .table .tbody .td.details ul,
 .bookings-listings-box table tbody td.details ul {
   padding-left: 0;
   list-style-type: none;
   margin-bottom: 0;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li,
 .bookings-listings-box table tbody td.details ul li {
   margin-top: 12px;
   color: var(--optionalColor);
   font-size: 14px;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li span,
 .bookings-listings-box table tbody td.details ul li span {
   color: var(--blackColor);
   font-weight: 500;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li i,
 .bookings-listings-box table tbody td.details ul li i {
   color: var(--mainColor);
   position: relative;
   top: 0.8px;
   margin-right: 5px;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li a,
 .bookings-listings-box table tbody td.details ul li a {
   color: var(--optionalColor);
 }
+
+.bookings-listings-box .table .tbody .td.details ul li a:hover,
 .bookings-listings-box table tbody td.details ul li a:hover {
   color: var(--mainColor);
 }
+
+.bookings-listings-box .table .tbody .td.details ul li strong,
 .bookings-listings-box table tbody td.details ul li strong {
   font-weight: 600;
   color: var(--blackColor);
 }
+
+.bookings-listings-box .table .tbody .td.details ul li .paid,
 .bookings-listings-box table tbody td.details ul li .paid {
   color: #64bc36;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li .unpaid,
 .bookings-listings-box table tbody td.details ul li .unpaid {
   color: red;
 }
+
+.bookings-listings-box .table .tbody .td.details ul li:last-child,
 .bookings-listings-box table tbody td.details ul li:last-child {
   margin-bottom: 0;
 }
+
+.bookings-listings-box .table .tbody .td.show-more-table-rows button,
+.bookings-listings-box .table .tbody .td.action .default-btn,
 .bookings-listings-box table tbody td.show-more-table-rows button,
 .bookings-listings-box table tbody td.action .default-btn {
   border-radius: 30px;
@@ -13868,15 +13956,20 @@ Dashboard CSS
   padding: 8px 20px;
 }
 
+.bookings-listings-box .table .tbody .td.action .default-btn,
 .bookings-listings-box table tbody td.action .default-btn {
   padding-left: 40px;
 }
 
+.bookings-listings-box .table .tbody .td.show-more-table-rows button:hover,
+.bookings-listings-box .table .tbody .td.action .default-btn:hover,
 .bookings-listings-box table tbody td.show-more-table-rows button:hover,
 .bookings-listings-box table tbody td.action .default-btn:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
 }
+
+.bookings-listings-box .table .tbody .td.action .default-btn i ,
 .bookings-listings-box table tbody td.action .default-btn i {
   position: absolute;
   left: 20px;
@@ -13885,6 +13978,7 @@ Dashboard CSS
   font-size: 16px;
 }
 
+.bookings-listings-box .table .tbody .td.action .default-btn.danger:hover,
 .bookings-listings-box table tbody td.action .default-btn.danger:hover {
   background-color: red;
   color: var(--whiteColor);
@@ -17143,7 +17237,7 @@ button.button-danger:hover {
 }
 
 .map-container {
-  height: 400px;
+  min-height: 600px;
 }
 
 @media only screen and (min-width: 1140px) {
@@ -18624,9 +18718,13 @@ input[type="number"] {
   text-overflow: ellipsis;
 }
 
+.bookings-listings-box .table .tbody .td.action,
 .bookings-listings-box table tbody td.action {
   grid-gap: 10px;
   flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 [id*="zoid-paypal-card-number-field-uid"] {
@@ -18873,6 +18971,7 @@ span.flatpickr-weekday {
   right: 0 !important;
 }
 
+.bookings-listings-box .table,
 .bookings-listings-box table {
   display: flex;
   flex-direction: column;
@@ -19215,12 +19314,17 @@ span.flatpickr-weekday {
 }
 
 .chart-card {
-  margin-bottom: 30px !important;
   background-color: var(--whiteColor) !important;
   box-shadow: 1px 5px 24px 0 rgba(68, 102, 242, 0.05) !important;
   border-radius: 5px !important;
   display: flex !important;
   flex-direction: column !important;
+  height: 100%;
+  justify-content: space-between !important;
+}
+
+*:has(>.chart-card){
+  padding-bottom: 30px !important;
 }
 
 .chart-card h3 {
@@ -19454,6 +19558,14 @@ span.flatpickr-weekday {
   margin-top: 20px;
 }
 
+.how-it-works-box-wrapper:not(:first-of-type){
+  margin-right: 40px;
+}
+
+.how-it-works-box-wrapper:not(:last-of-type){
+  margin-left: 40px;
+}
+
 .how-it-works-box .icon {
   margin-bottom: 25px;
   position: relative;
@@ -19467,6 +19579,7 @@ span.flatpickr-weekday {
   height: 220px !important;
   width: 100%;
 }
+
 .how-it-works-box h3 {
   font-size: 32px !important;
   line-height: 37.54px !important;
@@ -19672,4 +19785,23 @@ span.flatpickr-weekday {
 
 video::-webkit-media-controls-panel {
   width: 100%;
+}
+
+.waller-box:not(:has(ul li)){
+  min-height: 400px;
+}
+
+.orders-table .tr>.th:nth-of-type(1),
+.orders-table .tr>.td:nth-of-type(1){
+  width: 40%;
+}
+
+.orders-table .tr>.th:nth-of-type(2),
+.orders-table .tr>.td:nth-of-type(2){
+  width: 40%;
+}
+
+.orders-table .tr>.th:nth-of-type(3),
+.orders-table .tr>.td:nth-of-type(3){
+  width: 20%;
 }

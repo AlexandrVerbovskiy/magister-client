@@ -206,30 +206,34 @@ const ListingList = (pageProps) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Update Listings</h1>
-            <ol className="breadcrumb">
-              <li className="item">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="item">
-                <Link href="/dashboard/">Dashboard</Link>
-              </li>
-              <li className="item">Listings</li>
-            </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-lg-6 col-md-6 result-count">
+            <div className="breadcrumb-area">
+              <h1>My Items</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">Listings</li>
+              </ol>
+            </div>
           </div>
 
-          <Link
-            href="/dashboard/listings/add/"
-            className="default-btn add-listing-link-btn"
-            onClick={handleCreateListingClick}
-          >
-            <span className="icon">
-              <i className="flaticon-more"></i>
-            </span>
-            <span className="menu-title">Add Listings</span>
-          </Link>
+          <div className="col-lg-6 col-md-6 ordering">
+            <Link
+              href="/dashboard/listings/add/"
+              className="default-btn add-listing-link-btn"
+              onClick={handleCreateListingClick}
+            >
+              <span className="icon">
+                <i className="flaticon-more"></i>
+              </span>
+              <span className="menu-title">Add Listings</span>
+            </Link>
+          </div>
         </div>
 
         <section className="listing-area">
@@ -323,7 +327,7 @@ const ListingList = (pageProps) => {
                               <ul className="listings-meta">
                                 <li>
                                   <Link
-                                    href={`/listing-list/?categories=${
+                                    href={`/listings/?categories=${
                                       listing.categoryName ??
                                       listing.otherCategory
                                     }`}
@@ -337,7 +341,7 @@ const ListingList = (pageProps) => {
                                 </li>
                                 <li>
                                   <Link
-                                    href={`/listing-list/?city=${listing.city}`}
+                                    href={`/listings/?city=${listing.city}`}
                                   >
                                     <i className="flaticon-pin"></i>
                                     <span className="row-dots-end">

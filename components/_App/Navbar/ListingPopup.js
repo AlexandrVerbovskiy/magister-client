@@ -141,14 +141,14 @@ const ListingPopup = ({ active, setActive, categories }) => {
     (c) => c.id === selectedSecondCategory
   );
 
-  const firstAllLink = `/listing-list/`;
+  const firstAllLink = `/listings/`;
 
   const secondAllLink = firstSelectedCategoryInfo
-    ? `listing-list/?categories=${firstSelectedCategoryInfo.name}`
+    ? `listings/?categories=${firstSelectedCategoryInfo.name}`
     : firstAllLink;
 
   const thirdAllLink = secondSelectedCategoryInfo
-    ? `listing-list/?categories=${secondSelectedCategoryInfo.name}`
+    ? `listings/?categories=${secondSelectedCategoryInfo.name}`
     : secondAllLink;
 
   return (
@@ -178,7 +178,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list/?categories=${category.name}`
+                    : `/listings/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -194,7 +194,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
             key="-"
             category={{ image: null, name: "Others" }}
             active={false}
-            href="/listing-list/?others-categories=true"
+            href="/listings/?others-categories=true"
           />
         </div>
 
@@ -218,7 +218,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list/?categories=${category.name}`
+                    : `/listings/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -247,7 +247,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
               <CategoryOption
                 key={category.id}
                 category={category}
-                href={`/listing-list/?categories=${category.name}`}
+                href={`/listings/?categories=${category.name}`}
                 onClick={() => setActive(false)}
               />
             ))}

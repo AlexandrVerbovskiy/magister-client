@@ -3,7 +3,7 @@ export const getFullListingSearchLink = ({
   searchCategory,
   searchListing,
 }) => {
-  let searchLink = "/listing-list/";
+  let searchLink = "/listings/";
   let hasPrev = false;
 
   if (searchCity) {
@@ -24,7 +24,7 @@ export const getFullListingSearchLink = ({
 };
 
 export const getListingSearchLink = (searchCategory) => {
-  let searchLink = "/listing-list/";
+  let searchLink = "/listings/";
 
   if (searchCategory) {
     searchLink += `?search-category=${searchCategory}`;

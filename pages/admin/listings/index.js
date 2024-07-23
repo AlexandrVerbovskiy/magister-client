@@ -119,49 +119,51 @@ const Listings = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Listings" }]} />
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
+                <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                  <div className="flex gap-2">
+                    <SearchForm value={filter} onInput={changeFilter} />
 
-                  <BaseListSubHeaderDropdown
-                    listFilters={[
-                      {
-                        name: "active",
-                        label: "Active",
-                        options: [
-                          {
-                            value: "active",
-                            title: "Active",
-                          },
-                          {
-                            value: "inactive",
-                            title: "Inactive",
-                          },
-                          { value: "all", title: "All" },
-                        ],
-                        value: activeFilter,
-                        onChange: handleChangeActiveFilter,
-                      },
-                      {
-                        name: "approved",
-                        label: "Approved",
-                        options: [
-                          {
-                            value: "approved",
-                            title: "Approved",
-                          },
-                          {
-                            value: "unapproved",
-                            title: "Unapproved",
-                          },
-                          { value: "all", title: "All" },
-                        ],
-                        value: approvedFilter,
-                        onChange: handleChangeApprovedFilter,
-                      },
-                    ]}
-                  />
+                    <BaseListSubHeaderDropdown
+                      listFilters={[
+                        {
+                          name: "active",
+                          label: "Active",
+                          options: [
+                            {
+                              value: "active",
+                              title: "Active",
+                            },
+                            {
+                              value: "inactive",
+                              title: "Inactive",
+                            },
+                            { value: "all", title: "All" },
+                          ],
+                          value: activeFilter,
+                          onChange: handleChangeActiveFilter,
+                        },
+                        {
+                          name: "approved",
+                          label: "Approved",
+                          options: [
+                            {
+                              value: "approved",
+                              title: "Approved",
+                            },
+                            {
+                              value: "unapproved",
+                              title: "Unapproved",
+                            },
+                            { value: "all", title: "All" },
+                          ],
+                          value: approvedFilter,
+                          onChange: handleChangeApprovedFilter,
+                        },
+                      ]}
+                    />
+                  </div>
 
                   <Link
                     href="/admin/listings/create/"
@@ -173,7 +175,7 @@ const Listings = (pageProps) => {
                     >
                       <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
-                    <span className="hidden xs:block ml-2">Add Listing</span>
+                    <span className="ml-2">Add Listing</span>
                   </Link>
                 </div>
               </div>

@@ -26,17 +26,21 @@ const BaseListSubHeader = ({
         />
       )}
 
-      <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+      <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col sm:flex-row">
         <SearchForm
           value={filter}
           onInput={handleChangeFilter}
           placeholder={filterPlaceholder}
         />
-        <DateSelect
-          value={timeFilterType}
-          setValue={(value) => handleChangeTimeFilterType(value, rebuild)}
-        />
-        {listFilters && <BaseListSubHeaderDropdown listFilters={listFilters} />}
+        <div className="flex gap-2">
+          <DateSelect
+            value={timeFilterType}
+            setValue={(value) => handleChangeTimeFilterType(value, rebuild)}
+          />
+          {listFilters && (
+            <BaseListSubHeaderDropdown listFilters={listFilters} />
+          )}
+        </div>
       </div>
     </div>
   );

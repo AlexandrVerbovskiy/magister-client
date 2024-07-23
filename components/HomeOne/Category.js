@@ -35,7 +35,7 @@ const Category = ({ topCategories, needShowMore }) => {
                     <span className="row-dots-end">{info.countListings} Listings</span>
                   </div>
                   <Link
-                    href={`/listing-list/?categories=${info.name}`}
+                    href={`/listings/?categories=${info.name}`}
                     className="link-btn row-dots-end"
                   ></Link>
                 </div>
@@ -50,7 +50,7 @@ const Category = ({ topCategories, needShowMore }) => {
                     <h3>More Categories</h3>
                     <span>0 Listings</span>
                   </div>
-                  <Link href="/listing-list/" className="link-btn"></Link>
+                  <Link href="/listings/" className="link-btn"></Link>
                 </div>
               </div>
             )}

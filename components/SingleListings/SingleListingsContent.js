@@ -135,7 +135,6 @@ const SingleListingsContent = ({
                         <span
                           className="meta"
                           key={category.name}
-                          style={index > 0 ? { marginLeft: "10px" } : {}}
                         >
                           <i className="flaticon-furniture-and-household"></i>
                           {category.name}
@@ -291,7 +290,7 @@ const SingleListingsContent = ({
                   </div>
 
                   <h3>Collection Location</h3>
-                  <div style={{ height: "500px" }}>
+                  <div className="card-widget" style={{ height: "500px" }}>
                     <MultyMarkersMap
                       markers={[
                         {
@@ -580,7 +579,7 @@ const SingleListingsContent = ({
                           <div className="title row-dots-end">
                             <h4 className="row-dots-end">
                               <a
-                                href={"/owner-listing-list/" + listing.ownerId}
+                                href={"/owner-listings/" + listing.ownerId}
                               >
                                 {listing.userName}
                               </a>

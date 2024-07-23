@@ -50,7 +50,7 @@ const ProfileEdit = ({ newPaypalId }) => {
     if (newPaypalId) {
       updateUserFields({ paypalId: newPaypalId });
       router.replace("/dashboard/profile-edit/");
-      success.set("Paypal id successfully saved")
+      success.set("Paypal id successfully saved");
     }
   }, []);
 
@@ -543,17 +543,21 @@ const ProfileEdit = ({ newPaypalId }) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>Profile</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">Profile</li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Profile</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">Profile</li>
+              </ol>
+            </div>
+          </div>
         </div>
 
         <div className="row">

@@ -21,18 +21,20 @@ const Wrapper = ({ children }) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Orders</h1>
-            <ol className="breadcrumb">
-              <li className="item">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="item">
-                <Link href="/dashboard/">Dashboard</Link>
-              </li>
-              <li className="item">Orders</li>
-            </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Orders</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">Orders</li>
+              </ol>
+            </div>
           </div>
         </div>
 
@@ -110,6 +112,7 @@ const Orders = (pageProps) => {
     getCurrentPaginationProps,
     updatePaginationState,
     loading: paginationLoading,
+    updateItemsParticularly
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -168,6 +171,7 @@ const Orders = (pageProps) => {
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
+    updateItemsParticularly
   });
 
   return (
@@ -184,16 +188,16 @@ const Orders = (pageProps) => {
         <PaginationLoadingWrapper active={paginationLoading}>
           {orders.length > 0 && (
             <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th style={{ width: "40%" }}>Customer</th>
-                    <th style={{ width: "40%" }}>Details</th>
-                    <th style={{ width: "20%" }}>Action</th>
-                  </tr>
-                </thead>
+              <div className="table orders-table">
+                <div className="thead">
+                  <div className="tr">
+                    <div className="th">Customer</div>
+                    <div className="th">Details</div>
+                    <div className="th">Action</div>
+                  </div>
+                </div>
 
-                <tbody>
+                <div className="tbody">
                   {orders.map((order) => (
                     <OrderItem
                       filterType={type}
@@ -209,8 +213,8 @@ const Orders = (pageProps) => {
                       handleClickExtend={handleClickExtendOrder}
                     />
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
           )}
 

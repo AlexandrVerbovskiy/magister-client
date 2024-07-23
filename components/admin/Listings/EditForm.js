@@ -632,7 +632,7 @@ const EditForm = ({ listing, categories, save }) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs
                   links={[
                     { title: "Listings", href: "/admin/listings" },
@@ -779,7 +779,7 @@ const EditForm = ({ listing, categories, save }) => {
                       </section>
 
                       <section>
-                        <div className="flex w-full gap-2">
+                        <div className="flex w-full gap-2 flex-col md:flex-row">
                           <div className="w-full sm:w-1/2">
                             <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                               Collection Location

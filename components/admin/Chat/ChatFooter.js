@@ -19,7 +19,7 @@ function ChatFooter(props) {
   } = props;
 
   return (
-    <div className="relative bottom-0">
+    <div className="message-footer relative bottom-0">
       {updatingMessage && (
         <div className="text-sm absolute top-0 w-full flex items-center mb-2 editable-message-panel -translate-y-full border-t h-10 px-4 sm:px-6 md:px-5 bg-white">
           <div className="flex items-center w-full text-gray-600">

@@ -7,16 +7,11 @@ import UserImage04 from '../../public/admin_images/user-32-04.jpg';
 import UserImage05 from '../../public/admin_images/user-32-05.jpg';
 import UserImage06 from '../../public/admin_images/user-32-06.jpg';
 
-function InboxSidebar({
-  inboxSidebarOpen,
-  setInboxSidebarOpen
-}) {
+function InboxSidebar() {
   return (
     <div
       id="inbox-sidebar"
-      className={`absolute z-20 top-0 bottom-0 w-full md:w-auto md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out ${
-        inboxSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      }`}
+      className={`w-full md:w-auto md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out`}
     >
       <div className="sticky top-16 bg-white dark:bg-slate-900 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-r border-slate-200 dark:border-slate-700 md:w-72 xl:w-80 h-[calc(100dvh-64px)]">
         {/* #Marketing group */}
@@ -81,7 +76,7 @@ function InboxSidebar({
               <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-3">Inbox (44)</div>
               <ul className="mb-6">
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded bg-indigo-100 dark:bg-indigo-500/30 text-left" onClick={() => setInboxSidebarOpen(false)}>
+                  <button className="flex w-full p-2 rounded bg-indigo-100 dark:bg-indigo-500/30 text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage01} width="32" height="32" alt="User 01" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">
@@ -96,7 +91,7 @@ function InboxSidebar({
                   </button>
                 </li>
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded text-left" onClick={() => setInboxSidebarOpen(false)}>
+                  <button className="flex w-full p-2 rounded text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage05} width="32" height="32" alt="User 05" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">
@@ -111,7 +106,7 @@ function InboxSidebar({
                   </button>
                 </li>
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded text-left" onClick={() => setInboxSidebarOpen(false)}>
+                  <button className="flex w-full p-2 rounded text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage06} width="32" height="32" alt="User 05" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">
@@ -126,7 +121,7 @@ function InboxSidebar({
                   </button>
                 </li>
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded text-left" onClick={() => setInboxSidebarOpen(false)}>
+                  <button className="flex w-full p-2 rounded text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage04} width="32" height="32" alt="User 05" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">
@@ -141,7 +136,7 @@ function InboxSidebar({
                   </button>
                 </li>
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded text-left" onClick={() => setInboxSidebarOpen(false)}>
+                  <button className="flex w-full p-2 rounded text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage02} width="32" height="32" alt="User 05" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">
