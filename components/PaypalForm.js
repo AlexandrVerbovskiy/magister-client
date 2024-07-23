@@ -93,21 +93,16 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
         components: "card-fields",
       }}
     >
-      {window.paypal && window.paypal.Buttons && (
-        <PayPalCardFieldsProvider
-          createOrder={createOrder}
-          onApprove={onApprove}
-        >
-          <PayPalNumberField style={paypalFieldStyle} />
+      <PayPalCardFieldsProvider createOrder={createOrder} onApprove={onApprove}>
+        <PayPalNumberField style={paypalFieldStyle} />
 
-          <div className="paypal-payment-card">
-            <PayPalExpiryField style={paypalFieldStyle} />
-            <PayPalCVVField style={paypalFieldStyle} />
-          </div>
+        <div className="paypal-payment-card">
+          <PayPalExpiryField style={paypalFieldStyle} />
+          <PayPalCVVField style={paypalFieldStyle} />
+        </div>
 
-          <SubmitPayment disabled={disabled} setDisabled={setDisabled} />
-        </PayPalCardFieldsProvider>
-      )}
+        <SubmitPayment disabled={disabled} setDisabled={setDisabled} />
+      </PayPalCardFieldsProvider>
     </PayPalScriptProvider>
   );
 };

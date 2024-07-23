@@ -3,6 +3,7 @@ import useAdminChatList from "./useAdminChatList";
 import useAdminChatMessageList from "./useAdminChatMessageList";
 import useChatBase from "./useChatBase";
 import { useRouter } from "next/router";
+import useChatWindowsChanger from "./useChatWindowsChanger";
 
 const useAdminChat = ({
   chatId: baseChatId = null,
@@ -20,10 +21,10 @@ const useAdminChat = ({
 }) => {
   const router = useRouter();
   const firstUpdateChatRef = useRef(true);
-  const chatBodyTriggerRef = useRef(null);
   const [selectedChatId, setSelectedChatId] = useState(baseChatId);
   const [mainSelectedChatId, setMainSelectedChatId] =
     useState(baseMainSearchChatId);
+  const windowProps = useChatWindowsChanger(selectedChatId);
 
   const onChatIdUpdate = async (chatId) => {
     let mainSelectedChatInfo = chats.find((chat) =>
@@ -69,19 +70,15 @@ const useAdminChat = ({
     searchChatType,
   });
 
-  const scrollBodyBottom = () =>
-    setTimeout(() => {
-      const interval = setInterval(() => {
-        if (chatBodyTriggerRef.current) {
-          chatBodyTriggerRef.current.scrollIntoView({ behavior: "smooth" });
-          clearInterval(interval);
-        }
-      }, 100);
-    }, 0);
-
   useEffect(() => {
-    scrollBodyBottom();
+    if (!selectedChatId) {
+      return;
+    }
+
+    windowProps.scrollBodyBottom();
   }, [selectedChatId]);
+
+  const scrollBodyBottom = () => windowProps.scrollBodyBottom();
 
   const handleSelectChat = async (chatId) => {
     router.push(`/admin/chats/${chatId}/`);
@@ -112,13 +109,13 @@ const useAdminChat = ({
     handleSelectChat,
     handleSelectSubChat,
     selectedChat,
-    chatBodyTriggerRef,
     bodyProps,
     order: bodyProps.order,
     dispute: bodyProps.dispute,
     selectedChatId,
     actions: { ...chatActions },
     updateDisputeStatus,
+    windowProps,
   };
 };
 

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import Footer from "../components/_App/Footer";
-import ListingsWithMap from "../components/GridListings/ListingsWithMap";
-import NavbarTwo from "../components/_App/NavbarTwo";
-import { userSideProps } from "../middlewares";
-import { getListingListOptions, getListingList } from "../services";
-import { listingListBaseServerSideProps } from "../utils";
-import { IndiceContext } from "../contexts";
+import Footer from "../../components/_App/Footer";
+import ListingsWithMap from "../../components/GridListings/ListingsWithMap";
+import NavbarTwo from "../../components/_App/NavbarTwo";
+import { userSideProps } from "../../middlewares";
+import { getListingListOptions, getListingList } from "../../services";
+import { listingListBaseServerSideProps } from "../../utils";
+import { IndiceContext } from "../../contexts";
 
 const GridListingsFullMap = ({
   categories,

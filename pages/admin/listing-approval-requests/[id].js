@@ -265,7 +265,7 @@ const ListingApprovalRequest = (baseProps) => {
 
                         <div className="w-full sm:w-1/2">
                           <div
-                            className="flex w-full admin-map-parent mb-2"
+                            className="flex w-full admin-map-parent flex-col md:flex-row mb-2"
                             style={{ height: "240px" }}
                           >
                             <MultyMarkersMap

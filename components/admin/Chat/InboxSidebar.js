@@ -49,8 +49,6 @@ const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
 };
 
 const InboxSidebar = ({
-  msgSidebarOpen,
-  setMsgSidebarOpen,
   selectedChat,
   chats,
   handleSelectChat,
@@ -89,11 +87,9 @@ const InboxSidebar = ({
   return (
     <div
       id="messages-sidebar"
-      className={`absolute z-20 top-0 bottom-0 w-full md:w-auto md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out ${
-        msgSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
+      className={`w-full md:w-96 md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out`}
     >
-      <div className="sticky top-16 bg-white dark:bg-slate-900 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-r border-slate-200 dark:border-slate-700 md:w-72 xl:w-80 h-[calc(100dvh-64px)]">
+      <div className="sticky top-0 bg-white dark:bg-slate-900 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-r border-slate-200 dark:border-slate-700 h-[calc(100dvh-64px)]">
         <div className="px-5 py-4">
           <form className="relative -mx-2" onSubmit={handleSubmit}>
             <label htmlFor="msg-search" className="sr-only">
@@ -122,7 +118,7 @@ const InboxSidebar = ({
               </svg>
             </button>
           </form>
-          <div className="mt-4">
+          <div className="mt-2 md:mt-4">
             {loading && <SmallLoader />}
 
             {!loading && filter.length > 0 && (

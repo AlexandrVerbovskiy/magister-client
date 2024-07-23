@@ -66,6 +66,9 @@ const OrderChatBody = ({
       offerEndDate,
       duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
+      requestId: null,
+      newEndDate: null,
+      newStartDate: null,
     };
 
     if (status) {

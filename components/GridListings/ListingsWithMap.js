@@ -53,6 +53,7 @@ const ListingsWithMap = ({
   const listingListParentRef = useRef(null);
   const isFirstRefOptionsChange = useRef(true);
   const filterFullRef = useRef(null);
+  const orderRef = useRef(null);
 
   const [listingListMaxHeight, setListingListMaxHeight] = useState(null);
 
@@ -181,6 +182,7 @@ const ListingsWithMap = ({
   const [searchCity, setSearchCity] = useState(
     basePageProps.options.searchCity
   );
+  const [favorites, setFavorites] = useState(pageProps.options?.favorites);
 
   useEffect(() => {
     if (isFirstRefOptionsChange.current) {
@@ -261,6 +263,11 @@ const ListingsWithMap = ({
       distance: {
         value: selectedDistance,
       },
+      favorites: {
+        value: favorites,
+        name: "favorites",
+        hidden: (value) => !value,
+      },
     }),
     defaultData: pageProps,
     needInit: false,
@@ -286,9 +293,9 @@ const ListingsWithMap = ({
   });
 
   const handleSelectedCategories = (categories, needRemoveSearch = false) => {
+    const rebuildProps = { categories };
     setSelectedCategories(cloneObject(categories));
 
-    const rebuildProps = { categories };
     if (needRemoveSearch) {
       rebuildProps["searchCategory"] = null;
     }
@@ -303,17 +310,16 @@ const ListingsWithMap = ({
 
   const handleChangeMinPrice = (value) => {
     if (validatePrice(value) !== true) {
-      error.set("Invalid min price filter value");
-    } else {
-      setMinPrice(value);
-      rebuild({ minPrice: value });
+      value = minLimitPrice;
     }
+
+    setMinPrice(value);
+    rebuild({ minPrice: value });
   };
 
   const handleChangeMaxPrice = (value) => {
     if (validatePrice(value) !== true) {
-      error.set("Invalid max price filter value");
-      return;
+      value = maxLimitPrice;
     }
 
     setMaxPrice(value);
@@ -322,13 +328,11 @@ const ListingsWithMap = ({
 
   const handleChangePrices = (minValue, maxValue) => {
     if (validatePrice(minValue) !== true) {
-      error.set("Invalid min price filter value");
-      return;
+      minValue = minLimitPrice;
     }
 
     if (validatePrice(maxValue) !== true) {
-      error.set("Invalid max price filter value");
-      return;
+      maxValue = maxLimitPrice;
     }
 
     setMinPrice(minValue);
@@ -441,6 +445,12 @@ const ListingsWithMap = ({
     setMapCenter(center);
   };
 
+  const handleChangeFavorite = () => {
+    const newFavorites = !favorites;
+    setFavorites(newFavorites);
+    rebuild({ favorites: newFavorites });
+  };
+
   const categoriesNames = [];
 
   Object.keys(categories).forEach((level) => {
@@ -499,85 +509,106 @@ const ListingsWithMap = ({
                     maxLimitPrice={maxLimitPrice}
                     othersCategories={othersCategories}
                     setOthersCategories={handleChangeOthersCategories}
+                    favorites={favorites}
+                    changeFavorites={handleChangeFavorite}
                   />
                 </div>
 
                 <div className="col-lg-8 col-md-12">
-                  <div
-                    className={`all-listings-list ${
-                      listings.length < 1 ? "d-flex justify-content-center" : ""
-                    }`}
-                  >
+                  <div className={`all-listings-list`}>
+                    <div
+                      className="listings-grid-sorting row align-items-center"
+                      ref={filterFullRef}
+                    >
+                      <div className="col-lg-4 col-md-6 result-count">
+                        <p>
+                          <span className="count">
+                            {paginationLoading ? 0 : countItems}
+                          </span>{" "}
+                          Results
+                        </p>
+                      </div>
+
+                      <div className="col-lg-8 col-md-6 ordering">
+                        <div className="d-flex justify-content-end">
+                          <div
+                            className="d-flex select-box"
+                            style={{
+                              zIndex: "999",
+                              alignItems: "center",
+                            }}
+                          >
+                            <label
+                              htmlFor="listing-order-select"
+                              onClick={(e) => orderRef.current.focus()}
+                            >
+                              Sort By:
+                            </label>
+
+                            <AdaptiveSelect
+                              options={orderOptions}
+                              value={
+                                orderOptions.find(
+                                  (option) => option.value === order
+                                ) ?? orderOptions[0]
+                              }
+                              onChange={(e) => handleChangeOrder(e.value)}
+                              isSearchable={false}
+                              className="custom-search-select blog-select"
+                              name="listing-order-select"
+                              selectRef={orderRef}
+                              openMenuOnFocus={true}
+                            />
+
+                            <button
+                              type="button"
+                              className={`filter-bookmark-save${
+                                favorites ? " checked" : ""
+                              }`}
+                              onClick={handleChangeFavorite}
+                            >
+                              <i className="flaticon-heart"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     {paginationLoading ? (
                       <Loading />
                     ) : (
                       <>
                         {listings.length > 0 && (
-                          <div
-                            className="listings-grid-sorting row align-items-center"
-                            ref={filterFullRef}
-                          >
-                            <div className="col-lg-5 col-md-6 result-count">
-                              <p>
-                                <span className="count">{countItems}</span>{" "}
-                                Results
-                              </p>
-                            </div>
-
-                            <div className="col-lg-7 col-md-6 ordering">
-                              <div className="d-flex justify-content-end">
-                                <div
-                                  className="d-flex select-box"
-                                  style={{
-                                    zIndex: "999",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <label>Sort By:</label>
-
-                                  <AdaptiveSelect
-                                    options={orderOptions}
-                                    value={
-                                      orderOptions.find(
-                                        (option) => option.value === order
-                                      ) ?? orderOptions[0]
-                                    }
-                                    onChange={(e) => handleChangeOrder(e.value)}
-                                    isSearchable={false}
-                                    className="custom-search-select blog-select"
-                                    name="listing-order-select"
-                                  />
-                                </div>
+                          <div ref={listingListParentRef} className="row">
+                            {listings.map((listing) => (
+                              <div
+                                key={listing.id}
+                                className="col-xl-6 col-lg-6 col-md-6 d-flex"
+                                onMouseOver={() =>
+                                  setListingMarkerActive(listing.id)
+                                }
+                                onMouseLeave={() =>
+                                  setMarkerUnactive(listing.id)
+                                }
+                              >
+                                <ListingItem
+                                  listing={listing}
+                                  hovered={activeListingIds.includes(
+                                    listing.id
+                                  )}
+                                />
                               </div>
-                            </div>
+                            ))}
+
+                            {dopListingCards.map((card, index) => (
+                              <div
+                                key={index}
+                                className="col-xl-6 col-lg-6 col-md-6 d-none d-xl-flex p-0"
+                                style={{ height: "420px" }}
+                              ></div>
+                            ))}
                           </div>
                         )}
-
-                        <div ref={listingListParentRef} className="row">
-                          {listings.map((listing) => (
-                            <div
-                              key={listing.id}
-                              className="col-xl-6 col-lg-6 col-md-6 d-flex"
-                              onMouseOver={() =>
-                                setListingMarkerActive(listing.id)
-                              }
-                              onMouseLeave={() => setMarkerUnactive(listing.id)}
-                            >
-                              <ListingItem
-                                listing={listing}
-                                hovered={activeListingIds.includes(listing.id)}
-                              />
-                            </div>
-                          ))}
-
-                          {dopListingCards.map((card, index) => (
-                            <div
-                              key={index}
-                              className="col-xl-6 col-lg-6 col-md-6 d-none d-xl-flex p-0"
-                              style={{ height: "420px" }}
-                            ></div>
-                          ))}
-                        </div>
 
                         {!hasListings && canSendCreateNotifyRequest && (
                           <div className="send-create-listing-category-notification">

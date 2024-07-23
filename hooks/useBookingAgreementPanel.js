@@ -8,7 +8,7 @@ import {
 import STATIC from "../static";
 
 const useBookingAgreementPanel = ({
-  setUpdatedOffer,
+  setUpdatedOffer = null,
   setActualUpdateRequest = null,
   setPrevUpdateRequest = null,
   onAcceptOrder = null,
@@ -21,9 +21,9 @@ const useBookingAgreementPanel = ({
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(false);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
-  const { sessionUser, authToken, error, success } = useContext(IndiceContext);
+  const { authToken, error, success, sessionUser } = useContext(IndiceContext);
   const handleCreateUpdateRequest = async ({
-    orderId,
+    order,
     price,
     fromDate,
     toDate,
@@ -38,7 +38,7 @@ const useBookingAgreementPanel = ({
 
       const { chatMessage, request } = await createOrderUpdateRequest(
         {
-          orderId: orderId,
+          orderId: order.id,
           newStartDate: fromDate,
           newEndDate: toDate,
           newPricePerDay: price,
@@ -47,13 +47,22 @@ const useBookingAgreementPanel = ({
       );
 
       onCreateUpdateRequest({
-        orderId,
+        orderId: order.id,
         price,
         fromDate,
         toDate,
         request,
         chatMessage,
       });
+
+      return {
+        orderId: order.id,
+        price,
+        fromDate,
+        toDate,
+        request,
+        chatMessage,
+      };
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -61,7 +70,7 @@ const useBookingAgreementPanel = ({
     }
   };
 
-  const handleAcceptAcceptOrder = async (orderId) => {
+  const handleAcceptAcceptOrder = async (order) => {
     if (disabled) {
       return;
     }
@@ -69,16 +78,20 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      const result = await acceptOrder(orderId, authToken);
+      const result = await acceptOrder(order.id, authToken);
 
       if (onAcceptOrder) {
         onAcceptOrder(result);
       }
 
-      setUpdatedOffer(
-        { status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT },
-        orderId
-      );
+      const updatedOrderInfo = {
+        id: order.id,
+        status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+      };
+
+      if (setUpdatedOffer) {
+        setUpdatedOffer(updatedOrderInfo);
+      }
 
       setTimeout(() => {
         if (setActualUpdateRequest) {
@@ -89,7 +102,9 @@ const useBookingAgreementPanel = ({
           setPrevUpdateRequest(null);
         }
       }, 0);
+
       success.set("Order accepted successfully");
+      return updatedOrderInfo;
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -97,7 +112,7 @@ const useBookingAgreementPanel = ({
     }
   };
 
-  const handleAcceptRejectOrder = async (orderId, isOwner) => {
+  const handleAcceptRejectOrder = async (order) => {
     if (disabled) {
       return;
     }
@@ -105,22 +120,24 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      const result = await rejectOrder(orderId, authToken);
+      const result = await rejectOrder(order.id, authToken);
 
       if (onRejectOrder) {
         onRejectOrder(result);
       }
 
-      if (isOwner) {
-        setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED }, orderId);
+      const updatedOrderInfo = { id: order.id };
+
+      if (sessionUser.id == order.ownerId) {
+        updatedOrderInfo["status"] = STATIC.ORDER_STATUSES.REJECTED;
       } else {
-        setUpdatedOffer(
-          {
-            status: null,
-            cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-          },
-          orderId
-        );
+        updatedOrderInfo["status"] = null;
+        updatedOrderInfo["cancelStatus"] =
+          STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
+      }
+
+      if (setUpdatedOffer) {
+        setUpdatedOffer(updatedOrderInfo);
       }
 
       setTimeout(() => {
@@ -134,6 +151,8 @@ const useBookingAgreementPanel = ({
       }, 0);
 
       success.set("Order cancelled successfully");
+
+      return updatedOrderInfo;
     } catch (e) {
       error.set(e.message);
     } finally {

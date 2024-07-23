@@ -3,10 +3,10 @@ import { initAxios } from "../utils";
 const { get, post, getPdfByPath } =
   initAxios("/sender-payments");
 
-export const paypalCreateOrder = async (amount, orderId, authToken) => {
+export const paypalCreateOrder = async (orderId, authToken) => {
   const data = await post(
     `/paypal-create-order`,
-    { orderId, amount },
+    { orderId },
     authToken
   );
   return data.body.id;

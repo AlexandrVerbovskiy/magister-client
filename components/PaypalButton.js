@@ -13,15 +13,13 @@ const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
         components: "buttons",
       }}
     >
-      {window.paypal && window.paypal.Buttons && (
-        <PayPalButtons
-          className="paypal-payment-buttons"
-          createOrder={(data) => createOrder(data)}
-          forceReRender={[amount, orderId]}
-          onApprove={onApprove}
-          style={{ color: "blue", disableMaxWidth: true }}
-        />
-      )}
+      <PayPalButtons
+        className="paypal-payment-buttons"
+        createOrder={(data) => createOrder(data)}
+        forceReRender={[amount, orderId]}
+        onApprove={onApprove}
+        style={{ color: "blue", disableMaxWidth: true }}
+      />
     </PayPalScriptProvider>
   );
 };

@@ -67,12 +67,14 @@ const CreateDispute = (baseProps) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Dispute</h1>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Dispute</h1>
+            </div>
           </div>
         </div>
-
+        
         <CreateDisputeSection
           {...disputeOptions}
           onGoBack={handleGoBack}
@@ -88,7 +90,7 @@ const CreateDispute = (baseProps) => {
         <SuccessIconPopup
           modalActive={successIconPopupState.active}
           closeModal={successIconPopupState.onClose}
-          text="Dispute created success"
+          text="Dispute created successfully"
         />
 
         <YesNoModal
