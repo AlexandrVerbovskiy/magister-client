@@ -3412,10 +3412,14 @@ Listings Area CSS
   z-index: 2;
   bottom: 0;
 }
+
+.filter-bookmark-save{
+  border: 0;
+  margin-left: 5px;
+}
+
+.filter-bookmark-save,
 .single-listings-box .listings-image .bookmark-save {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   z-index: 3;
   display: inline-block;
   color: var(--whiteColor);
@@ -3428,15 +3432,20 @@ Listings Area CSS
   font-size: 16px;
 }
 
+.single-listings-box .listings-image .bookmark-save {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.filter-bookmark-save.checked,
+.filter-bookmark-save:hover,
 .single-listings-box .listings-image .bookmark-save.checked,
 .single-listings-box .listings-image .bookmark-save:hover {
   background-color: var(--mainColor);
   color: var(--whiteColor);
 }
 .single-listings-box .listings-image .category {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   z-index: 3;
   display: inline-block;
   color: var(--whiteColor);
@@ -17228,7 +17237,7 @@ button.button-danger:hover {
 }
 
 .map-container {
-  height: 400px;
+  min-height: 600px;
 }
 
 @media only screen and (min-width: 1140px) {

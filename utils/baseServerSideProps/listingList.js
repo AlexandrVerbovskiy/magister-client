@@ -30,6 +30,7 @@ const listingList = (context) => {
   const searchListing = context.query["search-listing"];
   const othersCategories = !!context.query["others-categories"];
   const distance = context.query["distance"];
+  const favorites = context.query["favorites"];
 
   return {
     ...baseTimeListPageParams(context.query),
@@ -44,6 +45,7 @@ const listingList = (context) => {
     maxPrice,
     othersCategories,
     searchListing,
+    favorites
   };
 };
 
