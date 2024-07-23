@@ -445,7 +445,30 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     handleAcceptAcceptOrder,
   } = useBookingAgreementPanel({
     setUpdatedOffer: (data, orderId) => {
-      autoParentOrderSetItemField({ ...data }, orderId);
+      const order = findCurrentOrderById(orderId);
+
+      const offerPricePerDay = order.requestId
+        ? order.newPricePerDay
+        : order.offerPricePerDay;
+      const offerStartDate = order.requestId
+        ? order.newStartDate
+        : order.offerStartDate;
+      const offerEndDate = order.requestId
+        ? order.newEndDate
+        : order.offerEndDate;
+
+      autoParentOrderSetItemField(
+        {
+          ...data,
+          offerPricePerDay,
+          offerStartDate,
+          offerEndDate,
+          requestId: null,
+          newEndDate: null,
+          newStartDate: null,
+        },
+        orderId
+      );
       setRejectOrderModalActiveId(null);
       setAcceptOrderModalActiveId(null);
     },
@@ -461,9 +484,10 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const handleAcceptUpdateRequest = (data) => {
+    const order = findCurrentOrderById(updateRequestModalActiveOrder.id);
     handleCreateUpdateRequest({
       ...data,
-      orderId: updateRequestModalActiveOrder.id,
+      order,
     });
   };
 
@@ -474,10 +498,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleAcceptReject = () => {
     const order = findCurrentOrderById(rejectOrderModalActiveId);
-    handleAcceptRejectOrder(
-      rejectOrderModalActiveId,
-      order.ownerId === sessionUser?.id
-    );
+    handleAcceptRejectOrder(order);
   };
 
   const handleClickAccept = (orderId) => {
@@ -487,12 +508,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const handleAcceptAccept = () => {
     const order = findCurrentOrderById(acceptOrderModalActiveId);
-
-    handleAcceptAcceptOrder(
-      acceptOrderModalActiveId,
-      order.ownerId === sessionUser?.id
-    );
-
+    handleAcceptAcceptOrder(order);
     addConflictOrder(order);
   };
 

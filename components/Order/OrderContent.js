@@ -328,6 +328,9 @@ const OrderContent = ({
       offerEndDate,
       duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
+      requestId: null,
+      newEndDate: null,
+      newStartDate: null,
     };
 
     if (status) {
@@ -1002,11 +1005,9 @@ const OrderContent = ({
                   </li>
                 )}
                 {checkErrorData(order.offerStartDate).blocked && (
-                  <li>
-                    <ErrorBlockMessage>
-                      {checkErrorData(order.offerStartDate).tooltipErrorMessage}
-                    </ErrorBlockMessage>
-                  </li>
+                  <ErrorBlockMessage dopClassName="mb-0">
+                    {checkErrorData(order.offerStartDate).tooltipErrorMessage}
+                  </ErrorBlockMessage>
                 )}
               </ul>
             </div>
@@ -1016,7 +1017,7 @@ const OrderContent = ({
 
       {order.cancelStatus == null && actualUpdateRequest && (
         <div className="row listings-sidebar mt-0">
-          <div className="col col-12 col-md-6 form-group mb-0">
+          <div className="col col-12 col-md-6 form-group mb-0 h-100">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
@@ -1116,7 +1117,7 @@ const OrderContent = ({
             </div>
           </div>
 
-          <div className="col col-12 col-md-6 mt-4 mt-md-0 form-group">
+          <div className="col col-12 col-md-6 mt-4 mt-md-0 form-group mb-0 h-100">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
@@ -1215,14 +1216,12 @@ const OrderContent = ({
                 </li>
 
                 {checkErrorData(actualUpdateRequest.newStartDate).blocked && (
-                  <li>
-                    <ErrorBlockMessage>
-                      {
-                        checkErrorData(actualUpdateRequest.newStartDate)
-                          .tooltipErrorMessage
-                      }
-                    </ErrorBlockMessage>
-                  </li>
+                  <ErrorBlockMessage dopClassName="mb-0">
+                    {
+                      checkErrorData(actualUpdateRequest.newStartDate)
+                        .tooltipErrorMessage
+                    }
+                  </ErrorBlockMessage>
                 )}
               </ul>
             </div>

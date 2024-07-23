@@ -21,9 +21,9 @@ const useBookingAgreementPanel = ({
   const [acceptOrderModalActive, setAcceptOrderModalActive] = useState(false);
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
-  const { sessionUser, authToken, error, success } = useContext(IndiceContext);
+  const { authToken, error, success, sessionUser } = useContext(IndiceContext);
   const handleCreateUpdateRequest = async ({
-    orderId,
+    order,
     price,
     fromDate,
     toDate,
@@ -38,7 +38,7 @@ const useBookingAgreementPanel = ({
 
       const { chatMessage, request } = await createOrderUpdateRequest(
         {
-          orderId: orderId,
+          orderId: order.id,
           newStartDate: fromDate,
           newEndDate: toDate,
           newPricePerDay: price,
@@ -47,7 +47,7 @@ const useBookingAgreementPanel = ({
       );
 
       onCreateUpdateRequest({
-        orderId,
+        orderId: order.id,
         price,
         fromDate,
         toDate,
@@ -61,7 +61,7 @@ const useBookingAgreementPanel = ({
     }
   };
 
-  const handleAcceptAcceptOrder = async (orderId) => {
+  const handleAcceptAcceptOrder = async (order) => {
     if (disabled) {
       return;
     }
@@ -69,7 +69,7 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      const result = await acceptOrder(orderId, authToken);
+      const result = await acceptOrder(order.id, authToken);
 
       if (onAcceptOrder) {
         onAcceptOrder(result);
@@ -77,7 +77,7 @@ const useBookingAgreementPanel = ({
 
       setUpdatedOffer(
         { status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT },
-        orderId
+        order.id
       );
 
       setTimeout(() => {
@@ -97,7 +97,7 @@ const useBookingAgreementPanel = ({
     }
   };
 
-  const handleAcceptRejectOrder = async (orderId, isOwner) => {
+  const handleAcceptRejectOrder = async (order) => {
     if (disabled) {
       return;
     }
@@ -105,21 +105,21 @@ const useBookingAgreementPanel = ({
     try {
       setDisabled(true);
 
-      const result = await rejectOrder(orderId, authToken);
+      const result = await rejectOrder(order.id, authToken);
 
       if (onRejectOrder) {
         onRejectOrder(result);
       }
 
-      if (isOwner) {
-        setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED }, orderId);
+      if (sessionUser.id == order.ownerId) {
+        setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED }, order.id);
       } else {
         setUpdatedOffer(
           {
             status: null,
             cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
           },
-          orderId
+          order.id
         );
       }
 
