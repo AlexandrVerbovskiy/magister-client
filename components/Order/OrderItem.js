@@ -367,7 +367,8 @@ const OrderItem = ({
   const userPhone =
     filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
-  let extendOrders = objDateSort(order.extendOrders, "offerStartDate");
+  let extendOrders = order.extendOrders.sort((a, b) => a.id - b.id);
+
   extendOrders = extendOrders.reverse();
 
   if (!showedAllExtends) {

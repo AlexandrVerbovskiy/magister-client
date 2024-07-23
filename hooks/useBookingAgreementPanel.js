@@ -8,7 +8,7 @@ import {
 import STATIC from "../static";
 
 const useBookingAgreementPanel = ({
-  setUpdatedOffer,
+  setUpdatedOffer = null,
   setActualUpdateRequest = null,
   setPrevUpdateRequest = null,
   onAcceptOrder = null,
@@ -54,6 +54,15 @@ const useBookingAgreementPanel = ({
         request,
         chatMessage,
       });
+
+      return {
+        orderId: order.id,
+        price,
+        fromDate,
+        toDate,
+        request,
+        chatMessage,
+      };
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -75,10 +84,14 @@ const useBookingAgreementPanel = ({
         onAcceptOrder(result);
       }
 
-      setUpdatedOffer(
-        { status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT },
-        order.id
-      );
+      const updatedOrderInfo = {
+        id: order.id,
+        status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+      };
+
+      if (setUpdatedOffer) {
+        setUpdatedOffer(updatedOrderInfo);
+      }
 
       setTimeout(() => {
         if (setActualUpdateRequest) {
@@ -89,7 +102,9 @@ const useBookingAgreementPanel = ({
           setPrevUpdateRequest(null);
         }
       }, 0);
+
       success.set("Order accepted successfully");
+      return updatedOrderInfo;
     } catch (e) {
       error.set(e.message);
     } finally {
@@ -111,16 +126,18 @@ const useBookingAgreementPanel = ({
         onRejectOrder(result);
       }
 
+      const updatedOrderInfo = { id: order.id };
+
       if (sessionUser.id == order.ownerId) {
-        setUpdatedOffer({ status: STATIC.ORDER_STATUSES.REJECTED }, order.id);
+        updatedOrderInfo["status"] = STATIC.ORDER_STATUSES.REJECTED;
       } else {
-        setUpdatedOffer(
-          {
-            status: null,
-            cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-          },
-          order.id
-        );
+        updatedOrderInfo["status"] = null;
+        updatedOrderInfo["cancelStatus"] =
+          STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
+      }
+
+      if (setUpdatedOffer) {
+        setUpdatedOffer(updatedOrderInfo);
       }
 
       setTimeout(() => {
@@ -134,6 +151,8 @@ const useBookingAgreementPanel = ({
       }, 0);
 
       success.set("Order cancelled successfully");
+
+      return updatedOrderInfo;
     } catch (e) {
       error.set(e.message);
     } finally {

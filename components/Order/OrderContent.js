@@ -381,7 +381,7 @@ const OrderContent = ({
 
   const onPayedFastCancel = () => {
     activateSuccessOrderPopup({
-      text: `Order cancelled successfully. The money was returned to your paypal`,
+      text: `Order cancelled successfully. A refund request has been sent to the administrator`,
     });
 
     setOrder((prev) => ({
