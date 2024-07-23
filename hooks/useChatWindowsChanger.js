@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 const useChatWindowsChanger = (chatId) => {
   const [activeWindow, setActiveWindow] = useState(chatId ? "chat" : "list");
-  const bodyRef = useRef(null);
+  const chatRef = useRef(null);
   const bodyTriggerRef = useRef(null);
 
   const scrollByWidth = (width) => {
@@ -19,7 +19,7 @@ const useChatWindowsChanger = (chatId) => {
 
     const smoothScroll = () => {
       if (currentStep < steps) {
-        bodyRef.current.scrollBy(scrollStep, 0);
+        chatRef.current.scrollBy(scrollStep, 0);
         currentStep++;
         setTimeout(smoothScroll, interval);
       }
@@ -30,22 +30,22 @@ const useChatWindowsChanger = (chatId) => {
 
   const scrollToChatList = () => {
     scrollByWidth(
-      -bodyRef.current.firstElementChild.getBoundingClientRect().width
+      -chatRef.current.firstElementChild.getBoundingClientRect().width
     );
   };
 
   const scrollToChatBody = () => {
     scrollByWidth(
-      bodyRef.current.firstElementChild.getBoundingClientRect().width
+      chatRef.current.firstElementChild.getBoundingClientRect().width
     );
   };
 
   useEffect(() => {
-    if (bodyRef.current && activeWindow == "list") {
+    if (chatRef.current && activeWindow == "list") {
       scrollToChatList();
     }
 
-    if (bodyRef.current && activeWindow == "chat") {
+    if (chatRef.current && activeWindow == "chat") {
       scrollToChatBody();
     }
   }, [activeWindow]);
@@ -78,7 +78,7 @@ const useChatWindowsChanger = (chatId) => {
   };
 
   return {
-    bodyRef,
+    chatRef,
     setListWindow: handleSetListWindow,
     setChatWindow: handleSetChatWindow,
     scrollBodyBottom,

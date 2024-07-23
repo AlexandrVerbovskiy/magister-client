@@ -25,7 +25,7 @@ const BaseChat = ({
   setMsgSidebarOpen,
   selectedChat = null,
   handleSelectChat,
-  chatBodyTriggerRef,
+  windowProps,
   order,
   dispute,
   selectedChatId,
@@ -43,12 +43,15 @@ const BaseChat = ({
   const [statusPopupActive, setStatusPopupActive] = useState(false);
 
   const onSelectChat = (chatId) => {
-    setMsgSidebarOpen(false);
     handleSelectChat(chatId);
+    windowProps.setChatWindow();
+  };
+
+  const showChatListWindow = () => {
+    windowProps.setListWindow();
   };
 
   const onSelectSubChat = (chatId) => {
-    setMsgSidebarOpen(false);
     handleSelectSubChat(chatId);
   };
 
@@ -180,10 +183,11 @@ const BaseChat = ({
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main className="grow">
-          <div className="relative w-full h-full flex">
+          <div
+            className="overflow-x-hidden md:overflow-x-auto relative w-full h-full flex"
+            ref={windowProps.chatRef}
+          >
             <InboxSidebar
-              msgSidebarOpen={msgSidebarOpen}
-              setMsgSidebarOpen={setMsgSidebarOpen}
               selectedChat={selectedChat}
               chats={listProps.chats}
               handleSelectChat={onSelectChat}
@@ -196,15 +200,12 @@ const BaseChat = ({
             />
 
             <div
-              className={`w-full h-full grow flex flex-col md:translate-x-0 transition-transform duration-300 ease-in-out ${
-                msgSidebarOpen ? "translate-x-1/3" : "translate-x-0"
-              }`}
+              id="messages-list"
+              className={`w-full h-full grow flex flex-col transition-transform duration-300 ease-in-out`}
             >
               {selectedChat ? (
                 <>
                   <ChatHeader
-                    msgSidebarOpen={msgSidebarOpen}
-                    setMsgSidebarOpen={setMsgSidebarOpen}
                     order={order}
                     dispute={dispute}
                     selectedChat={selectedChat}
@@ -214,9 +215,10 @@ const BaseChat = ({
                     activateUnsolvePopup={activateUnsolvePopup}
                     activateSolvePopup={activateSolvePopup}
                     statusPopupActive={statusPopupActive}
+                    showChatListWindow={showChatListWindow}
                     setStatusPopupActive={setStatusPopupActive}
                   />
-                  <div className="grow px-4 sm:px-6 md:px-5 py-6 z-0">
+                  <div className="messages-list-body grow px-4 sm:px-6 md:px-5 py-6 z-0 overflow-x-hidden overflow-y-auto no-scrollbar">
                     {messagesToView.map((message) => {
                       if (message.type == "date") {
                         return (
@@ -264,7 +266,7 @@ const BaseChat = ({
                       );
                     })}
                     <div
-                      ref={chatBodyTriggerRef}
+                      ref={windowProps.bodyTriggerRef}
                       className="right-sidebar-bottom"
                     />
                   </div>
