@@ -130,6 +130,8 @@ const Orders = (pageProps) => {
     rebuild({ type: value });
   };
 
+  console.log(orders)
+
   const {
     handleAcceptCancel,
     handleClickCancel,

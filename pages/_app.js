@@ -147,7 +147,7 @@ function MyApp({ Component, pageProps }) {
         categories={categories}
         io={io}
       >
-        <Layout sessionUser={sessionUser}>
+        <Layout>
           {!loading && <Component {...pageProps} />}
 
           <Loader loading={loading} />

@@ -319,7 +319,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .admin-table{
-  width: 1000px;
+  width: 100%;
 }
 
 .overflow-separate,
@@ -661,5 +661,12 @@ div.add-listings-box.dropzone > .gallery-flex {
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .error-content h3 {
     font-size: 30px;
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  .admin-table{
+    width: 1000px;
   }
 }

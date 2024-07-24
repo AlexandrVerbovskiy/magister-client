@@ -4,19 +4,9 @@ import OrderActions from "../Order/OrderActions";
 import { IndiceContext } from "../../contexts";
 import STATIC from "../../static";
 
-const OrderMessageActions = ({
-  content,
-  order,
-  popupsData,
-  senderId,
-  type = null,
-}) => {
+const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
   let canActions = false;
-  const { sessionUser } = useContext(IndiceContext);
   const currentActionButtons = useOrderActions({ order });
-
-  const isOwner = sessionUser.id == order.ownerId;
-  const isTenant = sessionUser.id == order.tenantId;
 
   if (order.disputeStatus) {
     if (
@@ -64,8 +54,11 @@ const OrderMessageActions = ({
       }
 
       if (
-        type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT
+        (type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
+          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) ||
+        (order.orderParentId &&
+          type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
+          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER)
       ) {
         canActions = true;
       }
