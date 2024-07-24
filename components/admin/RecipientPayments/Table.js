@@ -1,11 +1,9 @@
 import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
-import { failedRecipientMarkAsDone } from "../../../services";
+import { waitingRefundMarkAsDone } from "../../../services";
 import AcceptModal from "../SenderPayments/AcceptModal";
 import { IndiceContext } from "../../../contexts";
-import STATIC from "../../../static";
-import { isPayedUsedPaypal } from "../../../utils";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
 
@@ -44,14 +42,7 @@ const RecipientPaymentsTable = ({
   const handleAccept = async () => {
     const payment = payments.find((payment) => payment.id === popupApproveId);
 
-    const paymentNumber = isPayedUsedPaypal(payment.type)
-      ? payment.data?.paypalId ?? "-"
-      : payment.data?.cardNumber ?? "-";
-
-    await failedRecipientMarkAsDone(
-      { id: payment.id, paymentNumber },
-      authToken
-    );
+    await waitingRefundMarkAsDone({ id: payment.id }, authToken);
 
     setItemFields(
       { adminApproved: true, waitingApproved: false, status: "completed" },

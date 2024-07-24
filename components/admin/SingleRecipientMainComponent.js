@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { failedRecipientMarkAsDone } from "../../services";
+import { waitingRefundMarkAsDone } from "../../services";
 import { useAdminPage } from "../../hooks";
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
@@ -14,7 +14,6 @@ import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
-import Input from "./Form/Input";
 import AcceptModal from "./RecipientPayments/AcceptModal";
 import STATIC from "../../static";
 
@@ -23,20 +22,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const router = useRouter();
-  const [paymentNumber, setPaymentNumber] = useState(
-    isPayedUsedPaypal(recipient.type)
-      ? recipient.data?.paypalId ?? "-"
-      : recipient.data?.cardNumber ?? "-"
-  );
-  const [paymentNumberError, setPaymentNumberError] = useState(null);
   const [doneAcceptModalOpen, setDoneAcceptModalOpen] = useState(false);
 
   const handleDoneAcceptClick = async () => {
-    await failedRecipientMarkAsDone(
-      { id: recipient.id, paymentNumber },
-      authToken
-    );
-
+    await waitingRefundMarkAsDone({ id: recipient.id }, authToken);
     router.push("/admin/payments/recipients/");
   };
 
@@ -331,31 +320,18 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               </div>
 
                               <div className="w-full sm:w-1/2">
-                                {recipient.status == "failed" &&
-                                recipient.receivedType == "rental" &&
-                                recipient.type ==
-                                  STATIC.PAYMENT_TYPES.PAYPAL ? (
-                                  <Input
-                                    value={paymentNumber}
-                                    label="Payment Number(editable)"
-                                    name="payment-number"
-                                    placeholder="Payment Number"
-                                    labelClassName="block text-sm font-medium mb-1"
-                                    inputClassName="form-input w-full"
-                                    error={paymentNumberError}
-                                    setValue={setPaymentNumber}
-                                    setError={setPaymentNumberError}
-                                  />
-                                ) : (
-                                  <InputView
-                                    value={paymentNumber}
-                                    label="Payment Number"
-                                    name="payment-money"
-                                    placeholder="Payment Number"
-                                    labelClassName="block text-sm font-medium mb-1"
-                                    inputClassName="form-input w-full"
-                                  />
-                                )}
+                                <InputView
+                                  value={
+                                    isPayedUsedPaypal(recipient.type)
+                                      ? recipient.data?.paypalId ?? "-"
+                                      : recipient.data?.cardNumber ?? "-"
+                                  }
+                                  label="Payment Number"
+                                  name="payment-money"
+                                  placeholder="Payment Number"
+                                  labelClassName="block text-sm font-medium mb-1"
+                                  inputClassName="form-input w-full"
+                                />
                               </div>
                             </div>
 
