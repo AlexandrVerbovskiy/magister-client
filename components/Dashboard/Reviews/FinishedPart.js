@@ -8,13 +8,22 @@ const FinishedPart = ({ isReviewerOwner = true }) => {
   return (
     <div
       style={{
-        marginTop: "100px",
+        marginTop: "60px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <h3>Thank you for your review! We appreciate your feedback</h3>
+      <img
+        height="300px"
+        width="300px"
+        src="/images/how-it-works/earn-money.png"
+      />
+
+      <h3 className="mt-4 mb-4">
+        Thank you for your review!
+        <br /> We appreciate your feedback
+      </h3>
 
       <Link className="base-main-button" href={link}>
         Go to orders

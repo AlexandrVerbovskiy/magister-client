@@ -112,7 +112,7 @@ const Orders = (pageProps) => {
     getCurrentPaginationProps,
     updatePaginationState,
     loading: paginationLoading,
-    updateItemsParticularly
+    updateItemsParticularly,
   } = usePagination({
     getItemsFunc: (data) => getOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -171,7 +171,7 @@ const Orders = (pageProps) => {
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
-    updateItemsParticularly
+    updateItemsParticularly,
   });
 
   return (

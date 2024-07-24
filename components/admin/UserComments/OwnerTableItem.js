@@ -9,8 +9,9 @@ import { generateProfileFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import RatingInfoRow from "../RatingInfoRow";
 
-const TableItem = ({
+const OwnerTableItem = ({
   id,
   description,
 
@@ -193,30 +194,36 @@ const TableItem = ({
                       Review Info
                     </div>
 
-                    <SubInfoRow
+                    <RatingInfoRow
                       label="Item description accuracy"
                       value={itemDescriptionAccuracy}
                     />
-                    <SubInfoRow label="Photo accuracy" value={photoAccuracy} />
-                    <SubInfoRow
+                    <RatingInfoRow
+                      label="Photo accuracy"
+                      value={photoAccuracy}
+                    />
+                    <RatingInfoRow
                       label="Pickup condition"
                       value={pickupCondition}
                     />
-                    <SubInfoRow label="Cleanliness" value={cleanliness} />
-                    <SubInfoRow label="Responsiveness" value={responsiveness} />
-                    <SubInfoRow label="Clarity" value={clarity} />
-                    <SubInfoRow
+                    <RatingInfoRow label="Cleanliness" value={cleanliness} />
+                    <RatingInfoRow
+                      label="Responsiveness"
+                      value={responsiveness}
+                    />
+                    <RatingInfoRow label="Clarity" value={clarity} />
+                    <RatingInfoRow
                       label="Scheduling flexibility"
                       value={schedulingFlexibility}
                     />
-                    <SubInfoRow
+                    <RatingInfoRow
                       label="Issue resolution"
                       value={issueResolution}
                     />
 
-                    <SubInfoRow
+                    <RatingInfoRow
                       label="Average"
-                      value={(
+                      value={
                         (itemDescriptionAccuracy +
                           pickupCondition +
                           photoAccuracy +
@@ -226,10 +233,12 @@ const TableItem = ({
                           schedulingFlexibility +
                           issueResolution) /
                         8
-                      ).toFixed(2)}
+                      }
+                      bold={true}
                     />
-                    <div style={{ textWrap: "wrap" }}>
-                      Description: {description}
+                    <div style={{ textWrap: "wrap", color: "black" }}>
+                      <span className="font-bold">Description: </span>
+                      {description}
                     </div>
                   </div>
                 </td>
@@ -280,4 +289,4 @@ const TableItem = ({
   );
 };
 
-export default TableItem;
+export default OwnerTableItem;

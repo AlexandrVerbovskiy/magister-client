@@ -25,7 +25,7 @@ const ContractDetails = ({
       <h3>Rental Details</h3>
 
       <div>
-        {needFeeSwitch && (
+        {/*needFeeSwitch && (
           <div className="date-fee-switch">
             <Switch
               title="Fee-free option"
@@ -33,7 +33,7 @@ const ContractDetails = ({
               onChange={setFeeActive}
             />
           </div>
-        )}
+        )*/}
         <div>
           <div
             className="d-flex"

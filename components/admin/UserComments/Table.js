@@ -9,6 +9,37 @@ import ApproveModal from "../Comments/ApproveModal";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
 
+const sumRatingByType = (type, comment) => {
+  let keys = [
+    `care`,
+    `timeliness`,
+    `responsiveness`,
+    `clarity`,
+    `usageGuidelines`,
+    `termsOfService`,
+    `honesty`,
+    `reliability`,
+    `satisfaction`,
+  ];
+
+  if (type == "owner") {
+    keys = [
+      `itemDescriptionAccuracy`,
+      `photoAccuracy`,
+      `pickupCondition`,
+      `cleanliness`,
+      `responsiveness`,
+      `clarity`,
+      `schedulingFlexibility`,
+      `issueResolution`,
+    ];
+  }
+
+  let sum = 0;
+  keys.forEach((key) => (sum += comment[key]));
+  return sum / keys.length;
+};
+
 const UserCommentsTable = ({
   reviews,
   orderField,
@@ -66,13 +97,7 @@ const UserCommentsTable = ({
 
     const totalPoints =
       approvedReview.userAverageRating * approvedReview.userCommentCount +
-      (approvedReview.quality +
-        approvedReview.listingAccuracy +
-        approvedReview.utility +
-        approvedReview.condition +
-        approvedReview.performance +
-        approvedReview.location) /
-        6;
+      sumRatingByType(type, approvedReview);
 
     const newCount = approvedReview.userCommentCount + 1;
     const newAveragePoints = totalPoints / newCount;

@@ -1,6 +1,4 @@
 import Link from "next/link";
-import View from "../FastActions/View";
-import Tooltip from "../Tooltip";
 import TableDateView from "../../admin/TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
@@ -8,14 +6,11 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { generateProfileFilePath, getListingImageByType } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import RatingInfoRow from "../RatingInfoRow";
 
 const TableItem = ({
   id,
@@ -219,72 +214,35 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <SubInfoRowWithChild label="Punctuality">
-                      <SingleRatingStar
-                        value={punctuality}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
+                    <RatingInfoRow label="Punctuality" value={punctuality} />
+                    <RatingInfoRow
+                      label="General Experience"
+                      value={generalExperience}
+                    />
+                    <RatingInfoRow
+                      label="Communication"
+                      value={communication}
+                    />
+                    <RatingInfoRow label="Reliability" value={reliability} />
+                    <RatingInfoRow label="Kindness" value={kindness} />
+                    <RatingInfoRow label="Flexibility" value={flexibility} />
+                    <RatingInfoRow
+                      label="Average"
+                      value={
+                        (flexibility +
+                          communication +
+                          kindness +
+                          reliability +
+                          generalExperience +
+                          punctuality) /
+                        6
+                      }
+                      bold={true}
+                    />
 
-                    <SubInfoRowWithChild label="General Experience">
-                      <SingleRatingStar
-                        value={generalExperience}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Communication">
-                      <SingleRatingStar
-                        value={communication}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Reliability">
-                      <SingleRatingStar
-                        value={reliability}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Kindness">
-                      <SingleRatingStar
-                        value={kindness}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Flexibility">
-                      <SingleRatingStar
-                        value={flexibility}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Average" bold={true}>
-                      <SingleRatingStar
-                        value={
-                          (flexibility +
-                            communication +
-                            kindness +
-                            reliability +
-                            generalExperience +
-                            punctuality) /
-                          6
-                        }
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <div className="font-bold" style={{ textWrap: "wrap" }}>
-                      Description: {description}
+                    <div style={{ textWrap: "wrap", color: "black" }}>
+                      <span className="font-bold">Description: </span>
+                      {description}
                     </div>
                   </div>
                 </td>

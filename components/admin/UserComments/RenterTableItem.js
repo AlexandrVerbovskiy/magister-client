@@ -1,19 +1,17 @@
 import Link from "next/link";
-import View from "../FastActions/View";
-import Tooltip from "../Tooltip";
 import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
-import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath } from "../../../utils";
+import { generateProfileFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import RatingInfoRow from "../RatingInfoRow";
 
-const TableItem = ({
+const RenterTableItem = ({
   id,
   description,
 
@@ -197,25 +195,28 @@ const TableItem = ({
                       Review Info
                     </div>
 
-                    <SubInfoRow label="Care" value={care} />
-                    <SubInfoRow label="Timeliness" value={timeliness} />
+                    <RatingInfoRow label="Care" value={care} />
+                    <RatingInfoRow label="Timeliness" value={timeliness} />
 
-                    <SubInfoRow label="Responsiveness" value={responsiveness} />
-                    <SubInfoRow label="Clarity" value={clarity} />
-                    <SubInfoRow
+                    <RatingInfoRow
+                      label="Responsiveness"
+                      value={responsiveness}
+                    />
+                    <RatingInfoRow label="Clarity" value={clarity} />
+                    <RatingInfoRow
                       label="UsageGuidelines"
                       value={usageGuidelines}
                     />
-                    <SubInfoRow
+                    <RatingInfoRow
                       label="Terms of service"
                       value={termsOfService}
                     />
-                    <SubInfoRow label="Honesty" value={honesty} />
-                    <SubInfoRow label="Reliability" value={reliability} />
-                    <SubInfoRow label="Satisfaction" value={satisfaction} />
-                    <SubInfoRow
+                    <RatingInfoRow label="Honesty" value={honesty} />
+                    <RatingInfoRow label="Reliability" value={reliability} />
+                    <RatingInfoRow label="Satisfaction" value={satisfaction} />
+                    <RatingInfoRow
                       label="Average"
-                      value={(
+                      value={
                         (care +
                           timeliness +
                           clarity +
@@ -226,9 +227,11 @@ const TableItem = ({
                           reliability +
                           satisfaction) /
                         9
-                      ).toFixed(2)}
+                      }
+                      bold={true}
                     />
-                    <div style={{ textWrap: "wrap" }}>
+                    <div style={{ textWrap: "wrap", color: "black" }}>
+                      <span className="font-bold">Description: </span>
                       Description: {description}
                     </div>
                   </div>
@@ -280,4 +283,4 @@ const TableItem = ({
   );
 };
 
-export default TableItem;
+export default RenterTableItem;

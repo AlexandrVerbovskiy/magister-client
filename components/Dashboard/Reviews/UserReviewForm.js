@@ -1,6 +1,5 @@
-import MainReviewPart from "./MainReviewPart";
-import { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
+import MainUserReviewPart from "./MainUserReviewPart";
+import { useState } from "react";
 import { validateBigText } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 import OwnerInfo from "../../Order/OrderApprovementParts/OwnerInfo";
@@ -100,7 +99,7 @@ const UserReviewForm = ({
 
               <form>
                 <div className="row">
-                  <MainReviewPart
+                  <MainUserReviewPart
                     stars={starOptions}
                     handleChangeStars={handleChangeValue}
                     description={description}
@@ -109,7 +108,7 @@ const UserReviewForm = ({
                 </div>
               </form>
 
-              <h3>Leave Private Feedback</h3>
+              <h3 className="mt-2">Leave Private Feedback</h3>
               <p className="comment-notes">
                 Share your feedback privately. Your comments will only be
                 visible to the owner.
@@ -119,9 +118,6 @@ const UserReviewForm = ({
                 <div className="row">
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
-                      <label className="mb-2 fw-bold">
-                        Private message <span className="required">*</span>
-                      </label>
                       <textarea
                         placeholder="Your review"
                         className="form-control"

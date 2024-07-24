@@ -12,7 +12,7 @@ import UserReviewForm from "../../../components/Dashboard/Reviews/UserReviewForm
 import { useRouter } from "next/router";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import { IndiceContext } from "../../../contexts";
-import { useUserReview } from "../../../hooks";
+import { useRenterReview } from "../../../hooks";
 import {useIdPage} from "../../../hooks";
 
 const FullReview = (baseProps) => {
@@ -35,7 +35,7 @@ const FullReview = (baseProps) => {
     leaveFeedback: leaveTenantDescription,
     setLeaveFeedback: setLeaveTenantDescription,
     dataToSubmit: tenantDataToSubmit,
-  } = useUserReview();
+  } = useRenterReview();
 
   const [disabled, setDisabled] = useState(false);
 
