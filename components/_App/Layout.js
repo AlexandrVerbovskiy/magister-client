@@ -3,8 +3,8 @@ import env from "../../env";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const getPaypalInsertScript = ({ sessionUser, currentPath }) => {
-  if (!sessionUser || currentPath.includes("/dashboard/profile-edit/")) {
+const getPaypalInsertScript = ({ currentPath }) => {
+  if (currentPath.includes("/dashboard/profile-edit/")) {
     return "https://www.paypalobjects.com/js/external/api.js";
   } else {
     if (currentPath.includes("/dashboard/")) {
@@ -23,6 +23,10 @@ const Layout = ({ sessionUser, children }) => {
     const currentPath = router.asPath;
     setInsertPaypalScript(getPaypalInsertScript({ sessionUser, currentPath }));
   }, [router, sessionUser]);
+
+  useEffect(() => {
+    //delete window.paypal;
+  }, [insertPaypalScript]);
 
   return (
     <>

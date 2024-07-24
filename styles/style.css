@@ -13735,11 +13735,10 @@ Dashboard CSS
   vertical-align: middle;
   color: var(--blackColor);
   padding: 11px 25px 10px;
-  border-bottom: 1px dashed #eeeeee;
   border-top: none;
-  border-right: 1px dashed #eeeeee;
   font-size: var(--fontSize);
   font-weight: 600;
+  border-bottom: 1px dashed #eeeeee;
 }
 
 .bookings-listings-box .table .tbody .td,
@@ -13748,9 +13747,16 @@ Dashboard CSS
   vertical-align: middle;
   padding: 30px 25px;
   border-bottom: 1px dashed #eeeeee;
-  border-right: 1px dashed #eeeeee;
   border-top: 1px dashed #eeeeee;
 }
+
+.bookings-listings-box .table .tbody .td:not(:last-of-type),
+.bookings-listings-box table tbody td:not(:last-of-type),
+.bookings-listings-box .table .thead .th:not(:last-of-type),
+.bookings-listings-box table thead th:not(:last-of-type){
+  border-right: 1px dashed #eeeeee;
+}
+
 
 .bookings-listings-box .table .tbody .td.name,
 .bookings-listings-box table tbody td.name {
@@ -13861,7 +13867,7 @@ Dashboard CSS
   margin-bottom: 15px;
   font-size: 17px;
 }
-.bookings-listings-box .table .tbody .td.details h4 .bookings-status
+.bookings-listings-box .table .tbody .td.details h4 .bookings-status,
 .bookings-listings-box table tbody td.details h4 .bookings-status {
   border-radius: 30px;
   color: var(--whiteColor);
