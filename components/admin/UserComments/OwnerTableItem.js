@@ -1,14 +1,11 @@
 import Link from "next/link";
-import View from "../FastActions/View";
-import Tooltip from "../Tooltip";
 import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
-import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath } from "../../../utils";
+import { generateProfileFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
@@ -17,12 +14,14 @@ const TableItem = ({
   id,
   description,
 
-  quality,
-  listingAccuracy,
-  utility,
-  condition,
-  performance,
-  location,
+  itemDescriptionAccuracy,
+  photoAccuracy,
+  pickupCondition,
+  cleanliness,
+  responsiveness,
+  clarity,
+  schedulingFlexibility,
+  issueResolution,
 
   userId,
   userName,
@@ -68,39 +67,39 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-            <Link
-              href={`/admin/users/edit/${userId}/`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullUserPhotoPath}
-                width="32"
-                height="32"
-                alt="User"
-              />
-              {userName}
-            </Link>
+          <Link
+            href={`/admin/users/edit/${userId}/`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
+            style={canMoveToUser ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullUserPhotoPath}
+              width="32"
+              height="32"
+              alt="User"
+            />
+            {userName}
+          </Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-            <Link
-              href={`/admin/users/edit/${reviewerId}/`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
-              style={canMoveToReviewer ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullReviewerPhotoPath}
-                width="32"
-                height="32"
-                alt="Reviewer"
-              />
-              {reviewerName}
-            </Link>
+          <Link
+            href={`/admin/users/edit/${reviewerId}/`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
+            style={canMoveToReviewer ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullReviewerPhotoPath}
+              width="32"
+              height="32"
+              alt="Reviewer"
+            />
+            {reviewerName}
+          </Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -193,25 +192,40 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <SubInfoRow label="Quality" value={quality} />
+
                     <SubInfoRow
-                      label="Listing Accuracy"
-                      value={listingAccuracy}
+                      label="Item description accuracy"
+                      value={itemDescriptionAccuracy}
                     />
-                    <SubInfoRow label="Utility" value={utility} />
-                    <SubInfoRow label="Condition" value={condition} />
-                    <SubInfoRow label="Performance" value={performance} />
-                    <SubInfoRow label="Location" value={location} />
+                    <SubInfoRow label="Photo accuracy" value={photoAccuracy} />
+                    <SubInfoRow
+                      label="Pickup condition"
+                      value={pickupCondition}
+                    />
+                    <SubInfoRow label="Cleanliness" value={cleanliness} />
+                    <SubInfoRow label="Responsiveness" value={responsiveness} />
+                    <SubInfoRow label="Clarity" value={clarity} />
+                    <SubInfoRow
+                      label="Scheduling flexibility"
+                      value={schedulingFlexibility}
+                    />
+                    <SubInfoRow
+                      label="Issue resolution"
+                      value={issueResolution}
+                    />
+
                     <SubInfoRow
                       label="Average"
                       value={(
-                        (quality +
-                          listingAccuracy +
-                          utility +
-                          condition +
-                          performance +
-                          location) /
-                        6
+                        (itemDescriptionAccuracy +
+                          pickupCondition +
+                          photoAccuracy +
+                          cleanliness +
+                          responsiveness +
+                          clarity +
+                          schedulingFlexibility +
+                          issueResolution) /
+                        8
                       ).toFixed(2)}
                     />
                     <div style={{ textWrap: "wrap" }}>

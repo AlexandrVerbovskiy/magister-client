@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
-import TableItem from "./TableItem";
+import OwnerTableItem from "./OwnerTableItem";
+import RenterTableItem from "./RenterTableItem";
 import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
@@ -17,9 +18,17 @@ const UserCommentsTable = ({
   setItemFields,
   rejectReview,
   approveReview,
-  userColumnTitle = "Tenant",
   loading,
+  type = "renter",
 }) => {
+  let userColumnTitle = "Renter";
+  let TableItem = RenterTableItem;
+
+  if (type == "owner") {
+    userColumnTitle = "Owner";
+    TableItem = OwnerTableItem;
+  }
+
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
   const [popupRejectId, setPopupRejectId] = useState(null);

@@ -1,70 +1,67 @@
 import Link from "next/link";
 import View from "../FastActions/View";
 import Tooltip from "../Tooltip";
-import TableDateView from "../../admin/TableDateView";
+import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { generateProfileFilePath, getFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
-import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
 
 const TableItem = ({
   id,
   description,
-  punctuality,
-  generalExperience,
-  communication,
+
+  care,
+  timeliness,
+  responsiveness,
+  clarity,
+  usageGuidelines,
+  termsOfService,
+  honesty,
   reliability,
-  kindness,
-  flexibility,
+  satisfaction,
+
+  userId,
+  userName,
+  userEmail,
+  userPhone,
+  userPhoto,
+
   approved,
   waitingAdmin,
   createdAt,
-  orderId,
   reviewerId,
   reviewerName,
   reviewerEmail,
   reviewerPhone,
   reviewerPhoto,
-  listingId,
-  listingName,
-  listingCity,
-  listingPricePerDay,
-  listingMinRentalDays,
-  listingCountStoredItems,
-  listingCategoryId,
-  listingCategoryName = null,
-  listingOtherCategory = null,
-  images,
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
+  userColumnTitle,
+
   reviewerAverageRating,
+  userAverageRating,
   reviewerCommentCount,
-  listingAverageRating,
-  listingCommentCount,
+  userCommentCount,
+
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToUser = isAdmin && sessionUser?.id != reviewerId;
+  const canMoveToReviewer = isAdmin && sessionUser?.id != reviewerId;
+  const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
   const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
-
-  const fullListingPhotoPath = images[0]
-    ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULTS.PHOTO_LINK;
+  const fullUserPhotoPath = generateProfileFilePath(userPhoto);
 
   return (
     <>
@@ -74,15 +71,29 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link href={`/admin/listings/edit/${listingId}/`}>{listingName}</Link>
+          <Link
+            href={`/admin/users/edit/${userId}/`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
+            style={canMoveToUser ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullUserPhotoPath}
+              width="32"
+              height="32"
+              alt="User"
+            />
+            {userName}
+          </Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
             href={`/admin/users/edit/${reviewerId}/`}
             className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
+            onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
+            style={canMoveToReviewer ? {} : { cursor: "auto" }}
           >
             <img
               className="w-8 h-8 rounded-full mr-1"
@@ -123,10 +134,9 @@ const TableItem = ({
           <table className="w-full h-full table-fixed">
             <thead>
               <tr>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
+                <th style={{ width: "25%", padding: 0 }}></th>
+                <th style={{ width: "25%", padding: 0 }}></th>
+                <th style={{ width: "30%", padding: 0 }}></th>
                 <th style={{ width: "20%", padding: 0 }}></th>
               </tr>
             </thead>
@@ -137,7 +147,7 @@ const TableItem = ({
                     <SubInfoTitle
                       title="Reviewer"
                       href={`/admin/users/edit/${reviewerId}`}
-                      canMove={canMoveToUser}
+                      canMove={canMoveToReviewer}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
                     <SubInfoRow label="Email" value={reviewerEmail} />
@@ -161,57 +171,24 @@ const TableItem = ({
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div>
                     <SubInfoTitle
-                      title="Item Details"
-                      href={`/listings/${listingId}`}
+                      title={userColumnTitle}
+                      href={`/admin/users/edit/${userId}`}
+                      canMove={canMoveToUser}
                     />
-                    <SubInfoRow label="Name" value={listingName} />
+                    <SubInfoRow label="Name" value={userName} />
+                    <SubInfoRow label="Email" value={userEmail} />
                     <SubInfoRow
-                      label="Category"
-                      value={listingCategoryName ?? listingOtherCategory}
+                      label="Phone"
+                      value={
+                        userPhone && userPhone.length ? userPhone.length : "-"
+                      }
                     />
-                    <SubInfoRow
-                      label="Price Per Day"
-                      value={listingPricePerDay}
-                    />
-                    <SubInfoRow
-                      label="Count Stored"
-                      value={listingCountStoredItems}
-                    />
-                    <SubInfoRow
-                      label="Minimum Rental Days"
-                      value={listingMinRentalDays ?? "-"}
-                    />
-
                     <SubInfoRowWithChild label="Rating">
                       <SingleRatingStar
-                        value={listingAverageRating}
-                        count={listingCommentCount}
+                        value={userAverageRating}
+                        count={userCommentCount}
                       />
                     </SubInfoRowWithChild>
-                  </div>
-                </td>
-                <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
-                  <div>
-                    <span className="font-semibold flex items-center">
-                      Item Photo
-                    </span>
-
-                    <div
-                      className="mt-2 p-1 outline-gray-200 outline-dashed"
-                      style={{ width: "150px", height: "200px" }}
-                    >
-                      <div
-                        className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullListingPhotoPath)}
-                      >
-                        <img
-                          src={fullListingPhotoPath}
-                          alt="image"
-                          width="200px"
-                          height="200px"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </td>
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
@@ -219,71 +196,39 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <SubInfoRowWithChild label="Punctuality">
-                      <SingleRatingStar
-                        value={punctuality}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
 
-                    <SubInfoRowWithChild label="General Experience">
-                      <SingleRatingStar
-                        value={generalExperience}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
+                    <SubInfoRow label="Care" value={care} />
+                    <SubInfoRow label="Timeliness" value={timeliness} />
 
-                    <SubInfoRowWithChild label="Communication">
-                      <SingleRatingStar
-                        value={communication}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Reliability">
-                      <SingleRatingStar
-                        value={reliability}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Kindness">
-                      <SingleRatingStar
-                        value={kindness}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Flexibility">
-                      <SingleRatingStar
-                        value={flexibility}
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <SubInfoRowWithChild label="Average" bold={true}>
-                      <SingleRatingStar
-                        value={
-                          (flexibility +
-                            communication +
-                            kindness +
-                            reliability +
-                            generalExperience +
-                            punctuality) /
-                          6
-                        }
-                        count={1}
-                        commentName=""
-                      />
-                    </SubInfoRowWithChild>
-
-                    <div className="font-bold" style={{ textWrap: "wrap" }}>
+                    <SubInfoRow label="Responsiveness" value={responsiveness} />
+                    <SubInfoRow label="Clarity" value={clarity} />
+                    <SubInfoRow
+                      label="UsageGuidelines"
+                      value={usageGuidelines}
+                    />
+                    <SubInfoRow
+                      label="Terms of service"
+                      value={termsOfService}
+                    />
+                    <SubInfoRow label="Honesty" value={honesty} />
+                    <SubInfoRow label="Reliability" value={reliability} />
+                    <SubInfoRow label="Satisfaction" value={satisfaction} />
+                    <SubInfoRow
+                      label="Average"
+                      value={(
+                        (care +
+                          timeliness +
+                          clarity +
+                          responsiveness +
+                          usageGuidelines +
+                          termsOfService +
+                          honesty +
+                          reliability +
+                          satisfaction) /
+                        9
+                      ).toFixed(2)}
+                    />
+                    <div style={{ textWrap: "wrap" }}>
                       Description: {description}
                     </div>
                   </div>
