@@ -31,6 +31,7 @@ import {
   PaypalSection,
 } from "../../components/ProfileEdit";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const ProfileEdit = ({ newPaypalId }) => {
   const router = useRouter();
