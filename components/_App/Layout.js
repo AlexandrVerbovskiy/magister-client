@@ -3,7 +3,7 @@ import env from "../../env";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const getPaypalInsertScript = ({ currentPath }) => {
+const getPaypalInsertScript = ({ sessionUser, currentPath }) => {
   if (currentPath.includes("/dashboard/profile-edit/")) {
     return "https://www.paypalobjects.com/js/external/api.js";
   } else {
@@ -25,8 +25,26 @@ const Layout = ({ sessionUser, children }) => {
   }, [router, sessionUser]);
 
   useEffect(() => {
-    //delete window.paypal;
-  }, [insertPaypalScript]);
+    if (window.paypal) {
+      if (window.paypal.use && window.paypal.getElementsByAttribute) {
+        window.paypalLogin = window.paypal;
+      } else {
+        window.paypalPay = window.paypal;
+      }
+    }
+
+    if (router.asPath.includes("/dashboard/profile-edit/")) {
+      if (window.paypalLogin) {
+        window.paypal = window.paypalLogin;
+      }
+    } else {
+      if (router.asPath.includes("/dashboard")) {
+        if (window.paypalLogin) {
+          window.paypal = window.paypalPay;
+        }
+      }
+    }
+  }, [router.asPath]);
 
   return (
     <>
