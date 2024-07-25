@@ -5,10 +5,7 @@ import {
   usePagination,
 } from "../../../hooks";
 import { supportSideProps } from "../../../middlewares";
-import {
-  baseAdminTimeListPageParams,
-  baseTimeTypePageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
 import OrdersTable from "../../../components/admin/Orders/Table";
@@ -24,9 +21,7 @@ import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const Orders = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
-  const [toDeleteOrderInfo, setToDeleteOrderInfo] = useState({});
-  const [dangerModalOpen, setDangerModalOpen] = useState(false);
+  const { error, authToken } = useContext(IndiceContext);
   const [statusCount, setStatusCount] = useState(pageProps.statusCount);
 
   const {
@@ -57,6 +52,7 @@ const Orders = (pageProps) => {
     canMovePrevPage,
     items: orders,
     rebuild,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminOrderList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -64,28 +60,6 @@ const Orders = (pageProps) => {
     defaultData: pageProps,
     onRebuild,
   });
-
-  const handleCloseDeleteModal = () => {
-    setToDeleteOrderInfo(null);
-    setDangerModalOpen(false);
-  };
-
-  const handleOpenDeleteModal = (id) => {
-    setToDeleteOrderInfo({ id });
-    setDangerModalOpen(true);
-  };
-
-  const onDeleteAccept = async () => {
-    try {
-      const { id } = toDeleteOrderInfo;
-      await deleteOrder(id, authToken);
-      handleCloseDeleteModal();
-      await rebuild();
-      success.set(`Order #${id} deleted successfully!`);
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
@@ -97,7 +71,7 @@ const Orders = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs links={[{ title: "Rentals" }]} />
               </div>
 
@@ -144,8 +118,8 @@ const Orders = (pageProps) => {
                 orderField={order}
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
-                openDeleteModal={handleOpenDeleteModal}
                 totalCount={countItems}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

@@ -136,7 +136,7 @@ function DropdownClassicAjax({
         aria-expanded={dropdownOpen}
         style={{ minHeight: "37.6px" }}
       >
-        <span className="flex items-center">
+        <span className="block text-start w-full overflow-separate">
           {selectedTitleToView ? (
             <span>{selectedTitleToView}</span>
           ) : (
@@ -176,7 +176,7 @@ function DropdownClassicAjax({
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => handleChangeSearchTerm(e.target.value)}
-            maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+            maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
           />
 
           <div className="select-options-list">

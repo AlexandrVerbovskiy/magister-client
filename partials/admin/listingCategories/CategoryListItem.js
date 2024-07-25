@@ -4,7 +4,7 @@ import DropdownClassic from "../../../components/admin/DropdownClassic";
 import ModalBlank from "../../../components/admin/ModalBlank";
 import ErrorSpan from "../../../components/admin/ErrorSpan";
 import ImageInput from "../../../components/admin/Form/ImageInput";
-import env from "../../../env";
+import STATIC from "../../../static";
 import { getFilePath, getNumberLevelByName } from "../../../utils";
 
 const CategoryListItem = ({
@@ -155,7 +155,7 @@ const CategoryListItem = ({
             </div>
           </div>
           <div
-            className="flex flex-col sm:flex-row space-x-4 gap-4 items-start sm:items-center sm:justify-between md:justify-start"
+            className="flex flex-col xs:flex-row space-x-4 gap-4 items-start sm:items-center sm:justify-between md:justify-start"
             style={{ marginLeft: "0" }}
           >
             <div
@@ -165,7 +165,7 @@ const CategoryListItem = ({
               <ImageInput
                 btnText="Change"
                 photoUrl={photoUrl}
-                fileSizeLimit={env.MAX_SMALL_FILE_SIZE}
+                fileSizeLimit={STATIC.LIMITS.SMALL_FILE_SIZE}
                 onChange={onChangePhoto}
               />
             </div>

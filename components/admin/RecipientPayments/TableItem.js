@@ -1,23 +1,21 @@
 import Link from "next/link";
 import View from "../FastActions/View";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  moneyFormat,
-} from "../../../utils";
+import { moneyFormat } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
-import STATIC from "../../../static";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
+import TableDateView from "../TableDateView";
+import STATIC from "../../../static";
+import TableUserLink from "../TableUserLink";
 
 const TypeSpan = ({ type }) => {
   let dopClass =
     "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
   let text = "Rental";
 
-  if (type == "returned") {
+  if (type == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND) {
     dopClass =
       "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400";
     text = "Refund";
@@ -73,7 +71,7 @@ const TableItem = ({
   tenantPhoto,
   money,
   status,
-  recipientType,
+  receivedType,
   plannedTime,
   recipientId,
   recipientName,
@@ -89,17 +87,13 @@ const TableItem = ({
   listingMinRentalDays,
   listingCountStoredItems,
   handleApproveClick,
+  createdAt,
+  type,
+  data,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
-
   const { sessionUser, isAdmin } = useContext(IndiceContext);
-
-  const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
   const canMoveToRecipient = isAdmin && sessionUser?.id != recipientId;
-
-  const fullRecipientPhotoPath = generateProfileFilePath(recipientPhoto);
-
-  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
 
   return (
     <>
@@ -108,36 +102,18 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${tenantId}`}
-            onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullTenantPhotoPath}
-              width="32"
-              height="32"
-              alt="Renter"
-            />
-            {tenantName}
-          </Link>
+          <TableUserLink
+            id={tenantId}
+            name={tenantName}
+            photo={tenantPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${recipientId}`}
-            onClick={(e) => (canMoveToRecipient ? {} : e.preventDefault())}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullRecipientPhotoPath}
-              width="32"
-              height="32"
-              alt="Recipient"
-            />
-            {recipientName}
-          </Link>
+          <TableUserLink
+            id={recipientId}
+            name={recipientName}
+            photo={recipientPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
@@ -145,7 +121,10 @@ const TableItem = ({
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TypeSpan type={recipientType} />
+          <TypeSpan type={receivedType} />
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+          <TableDateView date={createdAt} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <StatusSpan status={status} />
@@ -168,8 +147,8 @@ const TableItem = ({
           !descriptionOpen && "hidden"
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td colSpan={5} className="overflow-separate border-r align-top">
-          <table>
+        <td colSpan={6} className="overflow-separate border-r align-top">
+          <table className="w-full table-fixed">
             <thead>
               <tr>
                 <th style={{ width: "calc(100% / 3)", padding: 0 }}></th>
@@ -185,7 +164,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Renter"
-                    href={"/admin/users/edit/" + tenantId}
+                    href={`/admin/users/edit/${tenantId}`}
                     canMove={canMoveToRecipient}
                   />
                   <SubInfoRow label="Name" value={tenantName} />
@@ -203,7 +182,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Recipient"
-                    href={"/admin/users/edit/" + recipientId}
+                    href={`/admin/users/edit/${recipientId}`}
                     canMove={canMoveToRecipient}
                   />
                   <SubInfoRow label="Name" value={recipientName} />
@@ -216,6 +195,28 @@ const TableItem = ({
                         : "-"
                     }
                   />
+                  {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND && (
+                    <>
+                      {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
+                        <>
+                          <SubInfoRow
+                            label="Recipient Type"
+                            value="Credit Card"
+                          />
+                          <SubInfoRow
+                            label="Card Number"
+                            value={data.cardNumber}
+                          />
+                        </>
+                      )}
+                      {type == STATIC.PAYMENT_TYPES.PAYPAL && (
+                        <>
+                          <SubInfoRow label="Recipient Type" value="Paypal" />
+                          <SubInfoRow label="Paypal Id" value={data.paypalId} />
+                        </>
+                      )}
+                    </>
+                  )}
                 </td>
                 <td
                   style={{ overflow: "hidden" }}
@@ -223,7 +224,7 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Item Details"
-                    href={"/admin/listings/edit/" + listingId}
+                    href={`/admin/listings/edit/${listingId}`}
                   />
                   <SubInfoRow label="Name" value={listingName} />
                   <SubInfoRow label="Address" value={listingAddress} />
@@ -233,7 +234,7 @@ const TableItem = ({
                     value={listingPricePerDay}
                   />
                   <SubInfoRow
-                    label="Min Rental Days"
+                    label="Minimum Rental Days"
                     value={listingMinRentalDays}
                   />
                   <SubInfoRow
@@ -263,7 +264,7 @@ const TableItem = ({
               </button>
             )}
 
-            <View href={`/admin${viewPath}/${id}`} />
+            <View href={`/admin${viewPath}/${id}/`} />
           </div>
         </td>
       </tr>

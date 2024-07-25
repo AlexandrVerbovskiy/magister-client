@@ -563,32 +563,48 @@
   margin-right: 0 !important;
   margin-left: 0.25rem !important;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.name .info ul,
 [dir="rtl"] .bookings-listings-box table tbody td.name .info ul {
   padding-right: 0;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.name .info ul li,
 [dir="rtl"] .bookings-listings-box table tbody td.name .info ul li {
   margin-right: 0;
   margin-left: 15px;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.name .info ul li::before,
 [dir="rtl"] .bookings-listings-box table tbody td.name .info ul li::before {
   right: auto;
   left: -10px;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.name .default-btn,
 [dir="rtl"] .bookings-listings-box table tbody td.name .default-btn {
   padding-left: 20px;
   padding-right: 40px;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.name .default-btn i,
 [dir="rtl"] .bookings-listings-box table tbody td.name .default-btn i {
   left: auto;
   right: 20px;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.details ul,
 [dir="rtl"] .bookings-listings-box table tbody td.details ul {
   padding-right: 0;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.details ul li i,
 [dir="rtl"] .bookings-listings-box table tbody td.details ul li i {
   margin-right: 0;
   margin-left: 5px;
 }
+
+[dir="rtl"] .bookings-listings-box .table .tbody .td.action .default-btn.danger,
 [dir="rtl"] .bookings-listings-box table tbody td.action .default-btn.danger {
   margin-left: 0;
   margin-right: 8px;
@@ -1450,12 +1466,12 @@
   .about-us-goals .second-goals-row>div:nth-of-type(1) .circle-icon,
   .about-us-goals .third-goals-row>div:nth-of-type(1) .circle-icon{
     margin-left: 0!important;
-    margin-right: 10px!important;
+    margin-right: 20px!important;
   }
 
   .about-us-goals .first-goals-row>div:nth-of-type(2) .circle-icon,
   .about-us-goals .second-goals-row>div:nth-of-type(2) .circle-icon{
-    margin-left: 10px!important;
+    margin-left: 20px!important;
     margin-right: 0!important;
   }
 }

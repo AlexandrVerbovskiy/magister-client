@@ -148,14 +148,12 @@ function ApplicationsCard01(props) {
             </ul>
           </div>
           {/* Card footer */}
-          <div>
             <Link
               className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white"
               href={props.link}
             >
               Install
             </Link>
-          </div>
         </div>
       </div>
     </div>

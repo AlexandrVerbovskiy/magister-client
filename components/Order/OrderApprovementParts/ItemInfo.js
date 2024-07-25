@@ -32,9 +32,9 @@ const ItemInfo = ({ setCurrentOpenImg, listing }) => {
         </div>
       </div>
 
-      <div className="title" style={{ fontSize: "20px", marginBottom: "15px" }}>
+      <div className="title row-dots-end" style={{ fontSize: "20px", marginBottom: "15px" }}>
         <h4 className="row-dots-end">
-          <a href={`/listing/${listing.id}`}>{listing.name}</a>
+          <a href={`/listings/${listing.id}`}>{listing.name}</a>
         </h4>
       </div>
 

@@ -5,7 +5,7 @@ import SuccessIcon from "../../Icons/SuccessIcon";
 import ErrorIcon from "../../Icons/ErrorIcon";
 import SingleRatingStar from "../SingleRatingStar";
 import ENV from "../../../env";
-import { calculateCurrentTotalPrice, getDaysDifference } from "../../../utils";
+import { calculateCurrentTotalPrice, getFactOrderDays } from "../../../utils";
 
 const DownloadButton = ({ src }) => {
   return (
@@ -26,11 +26,121 @@ const DownloadButton = ({ src }) => {
   );
 };
 
-const PointStarInfo = ({ label, value }) => {
+const PointStarInfo = ({
+  label,
+  value,
+  commentName = "item",
+  width = "150px",
+}) => {
   return (
-    <div style={{ width: "150px" }}>
+    <div style={{ width: width }}>
       <label>{label}</label>
-      <SingleRatingStar value={value} />
+      <SingleRatingStar commentName={commentName} value={value} count={1} />
+    </div>
+  );
+};
+
+const OwnerCommentMessage = ({ content }) => {
+  const items = [
+    {
+      label: "Item description accuracy",
+      value: content.itemDescriptionAccuracy,
+    },
+    { label: "Photo accuracy", value: content.photoAccuracy },
+    { label: "Pickup condition", value: content.pickupCondition },
+    { label: "Cleanliness", value: content.cleanliness },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Scheduling flexibility", value: content.schedulingFlexibility },
+    { label: "Issue resolution", value: content.issueResolution },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              key={idx}
+              label={item.label}
+              value={item.value}
+              width="230px"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const TenantCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Care", value: content.care },
+    { label: "Timeliness", value: content.timeliness },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Usage Guidelines", value: content.usageGuidelines },
+    { label: "Terms of service", value: content.termsOfService },
+    { label: "Honesty", value: content.honesty },
+    { label: "Reliability", value: content.reliability },
+    { label: "Satisfaction", value: content.satisfaction },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              key={idx}
+              label={item.label}
+              value={item.value}
+              width="230px"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const ListingCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Punctuality", value: content.punctuality },
+    { label: "General Experience", value: content.generalExperience },
+    { label: "Communication", value: content.communication },
+    { label: "Reliability", value: content.reliability },
+    { label: "Kindness", value: content.kindness },
+    { label: "Flexibility", value: content.flexibility },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 3) {
+    chunkedItems.push(items.slice(i, i + 3));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo key={idx} label={item.label} value={item.value} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
@@ -67,9 +177,9 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
     return (
       <div className="flex items-center w-max">
         <img
-          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          style={{ maxWidth: "200px", maxHeight: "280px" }}
           className="rounded-lg shadow-md mb-1"
-          height="200px"
+          height="280px"
           src={src}
         />
         <DownloadButton src={src} />
@@ -82,8 +192,8 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
       <div className="flex items-center w-max">
         <video
           className="rounded-lg shadow-md mb-1"
-          height="200px"
-          style={{ maxWidth: "200px", maxHeight: "200px" }}
+          height="280px"
+          style={{ maxWidth: "200px", maxHeight: "280px" }}
           controls
           src={src}
         />
@@ -150,7 +260,7 @@ const orderMessageContent = ({
       tenantFee: order.tenantFee,
     });
 
-    const duration = getDaysDifference(
+    const duration = getFactOrderDays(
       content.offerDateStart,
       content.offerDateEnd
     );
@@ -178,7 +288,8 @@ const orderMessageContent = ({
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.TENANT_PAYED,
-      STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT,
+      STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.PENDED_TO_TENANT,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
     ].includes(type)
@@ -189,7 +300,11 @@ const orderMessageContent = ({
       title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {
+    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
+      title = "Request for confirmation of rent payment was successfully sent";
+    }
+
+    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT) {
       title = "Got the item";
     }
 
@@ -263,22 +378,7 @@ const orderMessageContent = ({
           <b>Listing review</b>
         </div>
 
-        <div className="mb-1">
-          <div className="flex">
-            <PointStarInfo label="Punctuality" value={content.punctuality} />
-            <PointStarInfo label="General" value={content.generalExperience} />
-            <PointStarInfo
-              label="Communication"
-              value={content.communication}
-            />
-          </div>
-
-          <div className="flex">
-            <PointStarInfo label="Reliability" value={content.reliability} />
-            <PointStarInfo label="Kindness" value={content.kindness} />
-            <PointStarInfo label="Flexibility" value={content.flexibility} />
-          </div>
-        </div>
+        <ListingCommentMessage content={content} />
 
         <div className="w-full">
           <b>Description: </b>
@@ -288,25 +388,25 @@ const orderMessageContent = ({
     );
   }
 
-  if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+  if (
+    [
+      STATIC.MESSAGE_TYPES.OWNER_REVIEW,
+      STATIC.MESSAGE_TYPES.TENANT_REVIEW,
+    ].includes(type)
+  ) {
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.TENANT_REVIEW;
+
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
-          <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div className="mb-1">
-          <div className="flex">
-            <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
-            <PointStarInfo label="Utility" value={content.utility} />
-          </div>
-          <div className="flex">
-            <PointStarInfo label="Condition" value={content.condition} />
-            <PointStarInfo label="Performance" value={content.performance} />
-            <PointStarInfo label="Location" value={content.location} />
-          </div>
-        </div>
+        {isRenterReview ? (
+          <TenantCommentMessage content={content} />
+        ) : (
+          <OwnerCommentMessage content={content} />
+        )}
 
         <div className="w-full">
           <b>Description: </b>

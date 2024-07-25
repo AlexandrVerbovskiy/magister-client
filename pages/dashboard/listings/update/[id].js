@@ -3,27 +3,35 @@ import React, { useState } from "react";
 import { authSideProps } from "../../../../middlewares";
 import { getUpdateListingOptions, updateListing } from "../../../../services";
 import EditForm from "../../../../components/Listings/EditForm";
+import { useIdPage } from "../../../../hooks";
 
-const UpdateListing = ({
-  categories,
-  listing: baseListing,
-  id,
-  lastRequestInfo = {},
-  canChange,
-}) => {
-  const baseCanSendRequest =
-    !baseListing.approved &&
-    (!lastRequestInfo || lastRequestInfo.approved !== null);
-  const baseRejectDescription = lastRequestInfo.rejectDescription;
+const getBaseCanSendRequest = (props) =>
+  !props.listing.approved &&
+  (!props.lastRequestInfo || props.lastRequestInfo.approved !== null);
 
-  const [listing, setListing] = useState(baseListing);
-  const [canSendRequest, setCanSendRequest] = useState(baseCanSendRequest);
+const getRejectDescription = (props) => props.lastRequestInfo.rejectDescription;
+
+const UpdateListing = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getUpdateListingOptions(field, authToken),
+    onUpdate: (newProps) => {
+      setCanSendRequest(getBaseCanSendRequest(newProps));
+      setRejectDescription(getRejectDescription(newProps));
+    },
+  });
+
+  const [listing, setListing] = useState(props.listing);
+  const [canSendRequest, setCanSendRequest] = useState(
+    getBaseCanSendRequest(props)
+  );
   const [rejectDescription, setRejectDescription] = useState(
-    baseRejectDescription
+    getRejectDescription(props)
   );
 
   const save = async (formData, authToken) => {
-    formData.append("id", id);
+    formData.append("id", props.id);
     const res = await updateListing(formData, authToken);
     const updatedListing = res.listing;
     setListing(updatedListing);
@@ -33,7 +41,7 @@ const UpdateListing = ({
 
   return (
     <EditForm
-      categories={categories}
+      categories={props.categories}
       listing={listing}
       save={save}
       messageOnSuccess="Updated successfully"
@@ -41,7 +49,7 @@ const UpdateListing = ({
       setCanSendRequest={setCanSendRequest}
       rejectDescription={rejectDescription}
       clearRejectDescription={() => setRejectDescription(null)}
-      canChange={canChange}
+      canChange={props.canChange}
     />
   );
 };

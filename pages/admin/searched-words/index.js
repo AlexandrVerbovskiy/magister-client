@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -23,7 +23,7 @@ const SearchedWords = (pageProps) => {
   const router = useRouter();
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const baseViewedFilter = router.query.viewed ?? "all";
   const baseAcceptedFilter = router.query.accepted ?? "all";
@@ -47,16 +47,18 @@ const SearchedWords = (pageProps) => {
     canMovePrevPage,
     items: searchedWords,
     rebuild,
-    options,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getSearchedWordList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: () => ({
       viewed: {
         value: viewedFilter,
+        hidden: (newValue) => newValue == "all",
       },
       accepted: {
         value: acceptedFilter,
+        hidden: (newValue) => newValue == "all",
       },
     }),
     defaultData: pageProps,
@@ -82,52 +84,54 @@ const SearchedWords = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Users Search Story" }]} />
 
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <DropdownFilter align="right">
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Is Viewed
-                    </div>
-                    <ul className="mb-4">
-                      {[
-                        { value: "yes", label: "Viewed" },
-                        { value: "no", label: "Unviewed" },
-                        { value: "all", label: "All" },
-                      ].map((option) => (
-                        <FilterRadioOption
-                          key={option.value}
-                          name="viewed"
-                          label={option.label}
-                          value={option.value}
-                          currentValue={viewedFilter}
-                          setCurrentValue={handleChangeViewedFilter}
-                        />
-                      ))}
-                    </ul>
+                <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                  <div className="flex gap-2">
+                    <SearchForm value={filter} onInput={changeFilter} />
+                    <DropdownFilter align="right">
+                      <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
+                        Is Viewed
+                      </div>
+                      <ul className="mb-4">
+                        {[
+                          { value: "yes", label: "Viewed" },
+                          { value: "no", label: "Unviewed" },
+                          { value: "all", label: "All" },
+                        ].map((option) => (
+                          <FilterRadioOption
+                            key={option.value}
+                            name="viewed"
+                            label={option.label}
+                            value={option.value}
+                            currentValue={viewedFilter}
+                            setCurrentValue={handleChangeViewedFilter}
+                          />
+                        ))}
+                      </ul>
 
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Is Accepted
-                    </div>
-                    <ul className="mb-4">
-                      {[
-                        { value: "yes", label: "Accepted" },
-                        { value: "no", label: "Unaccepted" },
-                        { value: "all", label: "All" },
-                      ].map((option) => (
-                        <FilterRadioOption
-                          key={option.value}
-                          name="accepted"
-                          label={option.label}
-                          value={option.value}
-                          currentValue={acceptedFilter}
-                          setCurrentValue={handleChangeAcceptedFilter}
-                        />
-                      ))}
-                    </ul>
-                  </DropdownFilter>
+                      <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
+                        Is Accepted
+                      </div>
+                      <ul className="mb-4">
+                        {[
+                          { value: "yes", label: "Accepted" },
+                          { value: "no", label: "Unaccepted" },
+                          { value: "all", label: "All" },
+                        ].map((option) => (
+                          <FilterRadioOption
+                            key={option.value}
+                            name="accepted"
+                            label={option.label}
+                            value={option.value}
+                            currentValue={acceptedFilter}
+                            setCurrentValue={handleChangeAcceptedFilter}
+                          />
+                        ))}
+                      </ul>
+                    </DropdownFilter>
+                  </div>
                 </div>
               </div>
 
@@ -137,6 +141,7 @@ const SearchedWords = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

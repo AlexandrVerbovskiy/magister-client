@@ -11,15 +11,17 @@ const AuthCodeModal = ({
 }) => {
   return (
     <BaseModal active={codeModalActive} closeModal={handleClose}>
-      <span className="sub-title mb-2">
+      <span className="sub-title mb-0">
         <span>Enter Verified Code</span>
       </span>
 
-      <form method="get" onSubmit={(e) => e.preventDefault}>
-        You received a verification code on your{" "}
-        {type == "email" ? "email" : "mobile phone"}. Copy and paste it in the field
-        below
-        <div className="form-group mt-1">
+      <form className="mt-0" method="get" onSubmit={(e) => e.preventDefault}>
+        <span className="small-text">
+          You received a verification code on your{" "}
+          {type == "email" ? "email" : "mobile phone"}. Copy and paste it in the
+          field below
+        </span>
+        <div className="form-group mt-2">
           <input
             name="verifyCode"
             value={code}

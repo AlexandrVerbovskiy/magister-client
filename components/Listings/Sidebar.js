@@ -1,10 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import DateInput from "../FormComponents/DateInput";
-import {
-  dateToInputString,
-  leveliseCategories,
-  separateDate,
-} from "../../utils";
+import { leveliseCategories } from "../../utils";
 import SidebarCheckboxesSection from "./SidebarCheckboxesSection";
 import PriceRangeSlider from "../FormComponents/PriceRangeSlider";
 
@@ -16,10 +11,6 @@ const Sidebar = ({
   setSelectedCategories,
   selectedDistance,
   setSelectedDistance,
-  fromDateFilter,
-  setFromDateFilter,
-  toDateFilter,
-  setToDateFilter,
   cities: baseCities,
   searchCity,
   searchCategory,
@@ -31,6 +22,10 @@ const Sidebar = ({
   handleChangePrices,
   minLimitPrice,
   maxLimitPrice,
+  othersCategories,
+  setOthersCategories,
+  favorites,
+  changeFavorites,
 }) => {
   const [selectedCategoriesLower, setSelectedCategoriesLower] = useState([]);
   const [selectedCitiesLower, setSelectedCitiesLower] = useState([]);
@@ -59,11 +54,11 @@ const Sidebar = ({
 
   const categories = leveliseCategories(baseCategories);
 
-  const [mainFilterOpen, setMainFilterOpen] = useState(true);
   const [priceFilterOpen, setPriceFilterOpen] = useState(true);
   const [categoriesOpen, setCategoriesOpen] = useState(true);
   const [cityOpen, setCityOpen] = useState(true);
   const [distanceOpen, setDistanceOpen] = useState(true);
+  const [otherOpen, setOtherOpen] = useState(true);
 
   const mainFilterFullUlRef = useRef(null);
   const priceFilterFullUlRef = useRef(null);
@@ -93,26 +88,31 @@ const Sidebar = ({
     setInterval(updateTimeFilterHeight, 250);
   }, []);
 
-  const handleChangeCheckedCategory = (value) => {
-    let newSelectedCategories = selectedCategories;
-    let needRemoveSearch = false;
-
-    if (
-      selectedCategories.includes(value) ||
-      (searchCategory && value.toLowerCase() === searchCategory.toLowerCase())
-    ) {
-      newSelectedCategories = newSelectedCategories.filter(
-        (category) => category != value
-      );
-
-      if (searchCategory) {
-        needRemoveSearch = value.toLowerCase() === searchCategory.toLowerCase();
-      }
+  const handleChangeCheckedCategory = (value, id) => {
+    if (id === "-") {
+      setOthersCategories(!othersCategories);
     } else {
-      newSelectedCategories = [...newSelectedCategories, value];
-    }
+      let newSelectedCategories = selectedCategories;
+      let needRemoveSearch = false;
 
-    setSelectedCategories(newSelectedCategories, needRemoveSearch);
+      if (
+        selectedCategories.includes(value) ||
+        (searchCategory && value.toLowerCase() === searchCategory.toLowerCase())
+      ) {
+        newSelectedCategories = newSelectedCategories.filter(
+          (category) => category != value
+        );
+
+        if (searchCategory) {
+          needRemoveSearch =
+            value.toLowerCase() === searchCategory.toLowerCase();
+        }
+      } else {
+        newSelectedCategories = [...newSelectedCategories, value];
+      }
+
+      setSelectedCategories(newSelectedCategories, needRemoveSearch);
+    }
   };
 
   const handleChangeCheckedCity = (value) => {
@@ -143,31 +143,28 @@ const Sidebar = ({
     }
   };
 
-  const handleFromDateFilterChange = (value) => {
-    setFromDateFilter(value);
+  const CategoryLi = ({ category, style = {} }) => {
+    const checked =
+      category.id === "-"
+        ? othersCategories
+        : selectedCategoriesLower.includes(category.name.toLowerCase());
 
-    if (!toDateFilter || value > toDateFilter) {
-      setToDateFilter(value);
-    }
+    return (
+      <li key={category.name} style={style}>
+        <input
+          id={category.name}
+          type="checkbox"
+          name={`categories[${category.name}]`}
+          onChange={() =>
+            handleChangeCheckedCategory(category.name, category.id)
+          }
+          checked={checked}
+          value={category.name}
+        />
+        <label htmlFor={category.name}>{category.name} </label>
+      </li>
+    );
   };
-
-  const handleToDateFilterChange = (value) => {
-    setToDateFilter(value);
-  };
-
-  const CategoryLi = ({ category, style = {} }) => (
-    <li key={category.name} style={style}>
-      <input
-        id={category.name}
-        type="checkbox"
-        name={`categories[${category.name}]`}
-        onChange={() => handleChangeCheckedCategory(category.name)}
-        checked={selectedCategoriesLower.includes(category.name.toLowerCase())}
-        value={category.name}
-      />
-      <label htmlFor={category.name}>{category.name} </label>
-    </li>
-  );
 
   const FirstCategoryLevelLi = ({ item }) => (
     <>
@@ -215,6 +212,20 @@ const Sidebar = ({
     </li>
   );
 
+  const OtherLi = ({ item }) => (
+    <li>
+      <input
+        id={item.name}
+        type="checkbox"
+        value={item.value}
+        name={`others[${item.name}]`}
+        onChange={() => item.handleChange(item.value)}
+        checked={item.checked}
+      />
+      <label htmlFor={item.name}>{item.title} </label>
+    </li>
+  );
+
   return (
     <>
       <aside className="listings-widget-area">
@@ -256,8 +267,6 @@ const Sidebar = ({
           open={cityOpen}
           setOpen={setCityOpen}
           items={baseCities}
-          selectedItems={selectedCities}
-          handleChangeChecked={handleChangeCheckedCity}
           LiItemElement={CityLi}
         />
 
@@ -266,74 +275,34 @@ const Sidebar = ({
           open={distanceOpen}
           setOpen={setDistanceOpen}
           items={baseDistances}
-          selectedItems={[selectedDistance]}
-          handleChangeChecked={handleChangeCheckedDistance}
           LiItemElement={DistanceLi}
         />
-
-        {/*<section
-          className={`widget widget_filters ${mainFilterOpen ? "" : "close"}`}
-        >
-          <h3
-            className="widget-title"
-            onClick={() => setMainFilterOpen(!mainFilterOpen)}
-          >
-            Rental Period
-          </h3>
-
-          <div
-            className="widget-body"
-            style={
-              !mainFilterMaxHeight
-                ? null
-                : { maxHeight: `${mainFilterMaxHeight}px` }
-            }
-          >
-            <ul ref={mainFilterFullUlRef}>
-              <li className="d-flex align-items-end date-filter-row">
-                <div className="d-flex flex-column date-filter">
-                  <label htmlFor="from_date">From</label>
-                  <DateInput
-                    min={separateDate(new Date())}
-                    name="from_date"
-                    value={
-                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
-                    }
-                    onInput={(value) => handleFromDateFilterChange(value)}
-                  />
-                </div>
-
-                <div style={{ marginLeft: "10px", marginRight: "10px" }}>-</div>
-
-                <div className="d-flex flex-column date-filter">
-                  <label htmlFor="to_date">To</label>
-                  <DateInput
-                    min={
-                      fromDateFilter ? dateToInputString(fromDateFilter) : ""
-                    }
-                    name="to_date"
-                    value={toDateFilter ? dateToInputString(toDateFilter) : ""}
-                    onInput={(value) => handleToDateFilterChange(value)}
-                  />
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>*/}
 
         {categories.length > 0 && (
           <SidebarCheckboxesSection
             title="Categories"
             open={categoriesOpen}
             setOpen={setCategoriesOpen}
-            items={categories.sort((a, b) =>
-              ("" + a.name).localeCompare(b.name)
-            )}
-            selectedItems={selectedCategories}
-            handleChangeChecked={handleChangeCheckedCategory}
+            items={categories}
             LiItemElement={FirstCategoryLevelLi}
           />
         )}
+
+        <SidebarCheckboxesSection
+          title="Other Criteria"
+          open={otherOpen}
+          setOpen={setOtherOpen}
+          items={[
+            {
+              value: "favorites",
+              name: "favorites",
+              title: "Favorites",
+              checked: favorites,
+              handleChange: changeFavorites,
+            },
+          ]}
+          LiItemElement={OtherLi}
+        />
       </aside>
     </>
   );

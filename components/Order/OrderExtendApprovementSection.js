@@ -5,7 +5,6 @@ import RentalMessage from "./OrderApprovementParts/RentalMessage";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 
 const OrderExtendApprovementSection = ({
-  handleApprove,
   setCurrentOpenImg,
   listing,
   handleGoBack,

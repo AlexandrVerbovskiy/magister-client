@@ -11,11 +11,10 @@ import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByDaysCount,
   downloadFileUrl,
-  getDaysDifference,
+  getFactOrderDays,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
-import env from "../../../env";
 import { IndiceContext } from "../../../contexts";
 import ErrorSpan from "../../../components/ErrorSpan";
 import OrderIconPopup from "../../../components/IconPopups/OrderIconPopup";
@@ -32,7 +31,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
@@ -56,7 +55,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
     });
 
   const totalPrice = calculateFullTotalByDaysCount(
-    getDaysDifference(order.offerStartDate, order.offerEndDate),
+    getFactOrderDays(order.offerStartDate, order.offerEndDate),
     order.offerPricePerDay,
     order.tenantFee,
     "sum"
@@ -109,7 +108,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
         text: "Request sent successfully",
         closeButtonText: "Go to bookings page",
         onClose: () => {
-          router.push(`/dashboard/orders/${orderId}`);
+          router.push(`/dashboard/orders/${orderId}/`);
         },
         textWeight: 600,
       });
@@ -126,21 +125,23 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="header-section">
-          <div className="breadcrumb-area">
-            <h1>Bookings</h1>
-            <ol className="breadcrumb">
-              <li className="item">
-                <Link href="/">Home</Link>
-              </li>
-              <li className="item">
-                <Link href="/dashboard/">Dashboard</Link>
-              </li>
-              <li className="item">
-                <Link href={"/dashboard/orders/" + orderId}>Bookings</Link>
-              </li>
-              <li className="item">#{orderId}</li>
-            </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Bookings</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href={"/dashboard/orders/" + orderId}>Bookings</Link>
+                </li>
+                <li className="item">#{orderId}</li>
+              </ol>
+            </div>
           </div>
         </div>
 
@@ -152,9 +153,8 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                 <div>
                   <button
                     disabled={disabled}
-                    className="pay-download-invoice"
+                    className="pay-download-invoice small-text"
                     type="button"
-                    style={{ fontSize: "14px" }}
                     onClick={handlePdfDownload}
                   >
                     Download Invoice
@@ -172,6 +172,31 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                 >
                   <b>Booking:</b> #{orderId}
                 </li>
+
+                <li
+                  style={{
+                    padding: "10px 25px",
+                    background: "white",
+                    borderBottom: "0",
+                    color: "black",
+                  }}
+                >
+                  <b>Sort Code: </b>
+                  {bankAccount?.bankAccountReferenceConceptCode ?? ""}
+                </li>
+
+                <li
+                  style={{
+                    padding: "10px 25px",
+                    background: "white",
+                    borderBottom: "0",
+                    color: "black",
+                  }}
+                >
+                  <b>Account No: </b>
+                  {bankAccount?.bankAccountBeneficiary ?? ""}
+                </li>
+
                 <li
                   style={{
                     padding: "10px 25px",
@@ -192,34 +217,11 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                     color: "black",
                   }}
                 >
-                  <b>SWIFT/BIC: </b>
+                  <b>BIC: </b>
                   {bankAccount?.bankAccountSwiftBic ?? ""}
                   {}
                 </li>
 
-                <li
-                  style={{
-                    padding: "10px 25px",
-                    background: "white",
-                    borderBottom: "0",
-                    color: "black",
-                  }}
-                >
-                  <b>Beneficiary Name and Address: </b>
-                  {bankAccount?.bankAccountBeneficiary ?? ""}
-                </li>
-
-                <li
-                  style={{
-                    padding: "10px 25px",
-                    background: "white",
-                    borderBottom: "0",
-                    color: "black",
-                  }}
-                >
-                  <b>Reference/Concept Code: </b>
-                  {bankAccount?.bankAccountReferenceConceptCode ?? ""}
-                </li>
                 <li
                   style={{
                     margin: "0 25px",

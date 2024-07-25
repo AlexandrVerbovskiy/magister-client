@@ -112,29 +112,16 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
       return;
     }
 
-    let redirectLink = "/";
-
     if (session?.user) {
       setIsAuth(true);
-
-      redirectLink = "/dashboard";
-
-      if (session.user.needRegularViewInfoForm) {
-        redirectLink = "/dashboard/profile-edit";
-      }
-
-      handleSetSuccess("Successfully logged in");
     } else {
       setUser(null);
       setIsAuth(false);
       setIsAdmin(false);
       setIsSupport(false);
-      handleSetSuccess("Successfully logged out");
     }
 
     setPrevSessionUser(session?.user ?? null);
-
-    router.push(redirectLink);
   }, [session]);
 
   useEffect(() => {

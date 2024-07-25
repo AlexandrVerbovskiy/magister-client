@@ -53,7 +53,7 @@ const HowItWorks = () => {
       <div className="main-banner-area how-it-works-main-section">
         <div className="container">
           <div className="row">
-            <div className="col-12 col-md-6 earn-money-section">
+            <div className="col-12 col-md-6 earn-money-section text-center text-md-start">
               <span className="underlined">Earn money</span> by renting out
             </div>
             <div className="col-12 col-md-6 mt-4 mt-lg-0">
@@ -69,38 +69,22 @@ const HowItWorks = () => {
             <h2>Renting is easy</h2>
           </div>
           <div className="row justify-content-center">
-            {rentingEasyOptions.map((option, index) => {
-              let marginLeft = 0;
-              let marginRight = 0;
-
-              if (index != 0) {
-                marginLeft = "40px";
-              }
-
-              if (rentingEasyOptions.length - 1 != index) {
-                marginRight = "40px";
-              }
-
-              return (
-                <div
-                  key={option.title}
-                  className="col-lg-4 col-md-6 col-sm-6 d-flex"
-                >
-                  <div
-                    className="how-it-works-box"
-                    style={{ marginLeft, marginRight }}
-                  >
-                    <div className="w-100 icon small-icon-image">
-                      <img src={option.image} />
-                    </div>
-                    <div className="w-100 d-flex flex-column">
-                      <h3>{option.title}</h3>
-                      <p>{option.description}</p>
-                    </div>
+            {rentingEasyOptions.map((option) => (
+              <div
+                key={option.title}
+                className="how-it-works-box-wrapper col-lg-4 col-md-6 col-sm-6 d-flex"
+              >
+                <div className="how-it-works-box">
+                  <div className="w-100 icon small-icon-image">
+                    <img src={option.image} />
+                  </div>
+                  <div className="w-100 d-flex flex-column">
+                    <h3>{option.title}</h3>
+                    <p>{option.description}</p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
           <div className="row justify-content-center">
             <button
@@ -117,41 +101,25 @@ const HowItWorks = () => {
       <div className="listings-area ptb-100 pb-0 how-it-works-section">
         <div className="container">
           <div className="section-title max-w-max m-0">
-            <h2>Renting is easy</h2>
+            <h2>Earn money safely and securely</h2>
           </div>
           <div className="row justify-content-center">
-            {rentingSafelyAndSecurityOptions.map((option, index) => {
-              let marginLeft = 0;
-              let marginRight = 0;
-
-              if (index != 0) {
-                marginLeft = "40px";
-              }
-
-              if (rentingSafelyAndSecurityOptions.length - 1 != index) {
-                marginRight = "40px";
-              }
-
-              return (
-                <div
-                  key={option.title}
-                  className="col-lg-4 col-md-6 col-sm-6 d-flex"
-                >
-                  <div
-                    className="how-it-works-box"
-                    style={{ marginLeft, marginRight }}
-                  >
-                    <div className="w-100 icon small-icon-image">
-                      <img src={option.image} />
-                    </div>
-                    <div className="w-100 d-flex flex-column">
-                      <h3>{option.title}</h3>
-                      <p>{option.description}</p>
-                    </div>
+            {rentingSafelyAndSecurityOptions.map((option) => (
+              <div
+                key={option.title}
+                className="how-it-works-box-wrapper col-lg-4 col-md-6 col-sm-6 d-flex"
+              >
+                <div className="how-it-works-box">
+                  <div className="w-100 icon small-icon-image">
+                    <img src={option.image} />
+                  </div>
+                  <div className="w-100 d-flex flex-column">
+                    <h3>{option.title}</h3>
+                    <p>{option.description}</p>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
           <div className="row justify-content-center">
             <button

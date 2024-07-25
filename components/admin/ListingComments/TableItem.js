@@ -1,6 +1,4 @@
 import Link from "next/link";
-import View from "../FastActions/View";
-import Tooltip from "../Tooltip";
 import TableDateView from "../../admin/TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
@@ -8,10 +6,12 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import RatingInfoRow from "../RatingInfoRow";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   id,
@@ -38,26 +38,25 @@ const TableItem = ({
   listingMinRentalDays,
   listingCountStoredItems,
   listingCategoryId,
-  listingCategoryName,
+  listingCategoryName = null,
+  listingOtherCategory = null,
   images,
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
   reviewerAverageRating,
+  reviewerCommentCount,
   listingAverageRating,
+  listingCommentCount,
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
-
   const { sessionUser, isAdmin } = useContext(IndiceContext);
-
   const canMoveToUser = isAdmin && sessionUser?.id != reviewerId;
-
-  const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>
@@ -67,29 +66,15 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link href={`/admin/listings/edit/${listingId}`}>{listingName}</Link>
-          </div>
+          <Link href={`/admin/listings/edit/${listingId}/`}>{listingName}</Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              href={`/admin/users/edit/${reviewerId}`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullReviewerPhotoPath}
-                width="32"
-                height="32"
-                alt="Reviewer"
-              />
-              {reviewerName}
-            </Link>
-          </div>
+          <TableUserLink
+            id={reviewerId}
+            name={reviewerName}
+            photo={reviewerPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -133,7 +118,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Reviewer"
-                      href={"/admin/users/edit/" + reviewerId}
+                      href={`/admin/users/edit/${reviewerId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
@@ -147,7 +132,11 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={reviewerAverageRating} />
+                      <SingleRatingStar
+                        value={reviewerAverageRating}
+                        count={reviewerCommentCount}
+                        commentName="renter"
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -155,10 +144,13 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Item Details"
-                      href={"/listing/" + listingId}
+                      href={`/listings/${listingId}`}
                     />
                     <SubInfoRow label="Name" value={listingName} />
-                    <SubInfoRow label="Category" value={listingCategoryName} />
+                    <SubInfoRow
+                      label="Category"
+                      value={listingCategoryName ?? listingOtherCategory}
+                    />
                     <SubInfoRow
                       label="Price Per Day"
                       value={listingPricePerDay}
@@ -168,12 +160,15 @@ const TableItem = ({
                       value={listingCountStoredItems}
                     />
                     <SubInfoRow
-                      label="Min Rental Days"
+                      label="Minimum Rental Days"
                       value={listingMinRentalDays ?? "-"}
                     />
 
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={listingAverageRating} />
+                      <SingleRatingStar
+                        value={listingAverageRating}
+                        count={listingCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -206,18 +201,21 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <SubInfoRow label="Punctuality" value={punctuality} />
-                    <SubInfoRow
+                    <RatingInfoRow label="Punctuality" value={punctuality} />
+                    <RatingInfoRow
                       label="General Experience"
                       value={generalExperience}
                     />
-                    <SubInfoRow label="Communication" value={communication} />
-                    <SubInfoRow label="Reliability" value={reliability} />
-                    <SubInfoRow label="Kindness" value={kindness} />
-                    <SubInfoRow label="Flexibility" value={flexibility} />
-                    <SubInfoRow
+                    <RatingInfoRow
+                      label="Communication"
+                      value={communication}
+                    />
+                    <RatingInfoRow label="Reliability" value={reliability} />
+                    <RatingInfoRow label="Kindness" value={kindness} />
+                    <RatingInfoRow label="Flexibility" value={flexibility} />
+                    <RatingInfoRow
                       label="Average"
-                      value={(
+                      value={
                         (flexibility +
                           communication +
                           kindness +
@@ -225,10 +223,13 @@ const TableItem = ({
                           generalExperience +
                           punctuality) /
                         6
-                      ).toFixed(2)}
+                      }
+                      bold={true}
                     />
-                    <div style={{ textWrap: "wrap" }}>
-                      Description: {description}
+
+                    <div style={{ textWrap: "wrap", color: "black" }}>
+                      <span className="font-bold">Description: </span>
+                      {description}
                     </div>
                   </div>
                 </td>

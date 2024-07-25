@@ -75,7 +75,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(
           0,
@@ -103,7 +103,7 @@ const EditPhotosSection = ({
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: env.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
@@ -188,7 +188,7 @@ const EditPhotosSection = ({
       <div {...getRootPropsBase()} className="dropzone add-listings-box">
         <h3>
           Photos
-          <div style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
+          <div className="form-hint">
             You can add maximum 5 files with maximum summary size 20 MB
           </div>
         </h3>

@@ -51,10 +51,10 @@ function DropdownFilter({ align, children }) {
       <Transition
         show={dropdownOpen}
         tag="div"
-        className={`origin-top-right z-10 absolute top-full left-0 right-auto min-w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 pt-1.5 rounded shadow-lg overflow-hidden mt-1 ${
+        className={`origin-top-right z-10 absolute top-full min-w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 pt-1.5 rounded shadow-lg overflow-hidden mt-1 ${
           align === "right"
-            ? "md:left-auto md:right-0"
-            : "md:left-0 md:right-auto"
+            ? "left-auto right-0 md:left-auto md:right-0"
+            : "left-0 right-auto md:left-0 md:right-auto"
         }`}
         enter="transition ease-out duration-200 transform"
         enterStart="opacity-0 -translate-y-2"

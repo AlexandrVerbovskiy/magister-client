@@ -6,6 +6,20 @@ const authSideProps = async (context, callback = null) => {
   const { sessionUser } = props;
 
   if (!sessionUser) {
+    const cookies = context.req.headers.cookie;
+
+    if (cookies) {
+      const cookieArray = cookies.split(";");
+
+      cookieArray.forEach((cookie) => {
+        const [name] = cookie.split("=");
+        context.res.setHeader(
+          "Set-Cookie",
+          `${name}=; Max-Age=0; Path=/; HttpOnly; SameSite=Strict`
+        );
+      });
+    }
+
     return {
       notFound: true,
     };

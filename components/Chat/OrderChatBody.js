@@ -8,7 +8,7 @@ import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
   dateName,
-  getDaysDifference,
+  getFactOrderDays,
 } from "../../utils";
 import STATIC from "../../static";
 import DisputeModal from "../Order/DisputeModal";
@@ -33,7 +33,7 @@ const OrderChatBody = ({
   });
 
   const { error, sessionUser, success } = useContext(IndiceContext);
-  const isOwner = sessionUser.id == order.ownerId;
+  const isOwner = sessionUser?.id == order.ownerId;
   const actualUpdateRequest = order.actualUpdateRequest;
 
   const setActualUpdateRequest = (request) => {
@@ -64,8 +64,11 @@ const OrderChatBody = ({
       offerPricePerDay,
       offerStartDate,
       offerEndDate,
-      duration: getDaysDifference(offerStartDate, offerEndDate),
+      duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
+      requestId: null,
+      newEndDate: null,
+      newStartDate: null,
     };
 
     if (status) {

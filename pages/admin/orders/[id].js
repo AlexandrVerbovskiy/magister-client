@@ -1,4 +1,4 @@
-import { adminSideProps, supportSideProps } from "../../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 import { getAdminOrderInfo } from "../../../services";
 import { useAdminPage } from "../../../hooks";
 import Sidebar from "../../../partials/admin/Sidebar";
@@ -7,18 +7,19 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
   calculateCurrentTotalPrice,
-  getDaysDifference,
+  getFactOrderDays,
   getListingImageByType,
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
 } from "../../../utils";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
+import { useIdPage } from "../../../hooks";
 
 const PreviousProposalElem = ({
   index,
@@ -110,7 +111,13 @@ const PreviousProposalElem = ({
   );
 };
 
-const Order = (order) => {
+const Order = (baseProps) => {
+  const { props: order } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminOrderInfo(field, authToken),
+  });
+
   const { requestsToUpdate, listingImages, categoryInfo } = order;
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [mapCenter, setMapCenter] = useState(null);
@@ -130,7 +137,7 @@ const Order = (order) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs
                   links={[
                     { title: "Orders", href: "/admin/orders" },
@@ -144,7 +151,7 @@ const Order = (order) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}
@@ -153,7 +160,10 @@ const Order = (order) => {
                         ) : (
                           <Status
                             status={order.status}
-                            baseClass="form-input w-max ml-2"
+                            payedId={order.payedId}
+                            payedAdminApproved={order.payedAdminApproved}
+                            payedWaitingApproved={order.payedWaitingApproved}
+                            baseClass="min-w-fit form-input w-max ml-2"
                           />
                         )}
                       </h2>
@@ -178,7 +188,10 @@ const Order = (order) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={order.listingCategoryName}
+                                value={
+                                  order.listingCategoryName ??
+                                  order.listingOtherCategory
+                                }
                                 label="Category"
                                 placeholder="category"
                                 name="categoryName"
@@ -277,14 +290,14 @@ const Order = (order) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                           activeRequestsToUpdate.newPricePerDay
                                       )
                                     : moneyFormat(
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) * order.offerPricePerDay
@@ -310,8 +323,8 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_fee"
-                                label="Tenant Fee, %"
-                                placeholder="Tenant Fee"
+                                label="Renter Fee, %"
+                                placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={order.tenantFee}
                                 inputClassName="form-input w-full"
@@ -329,14 +342,14 @@ const Order = (order) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? (order.ownerFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                         activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (order.ownerFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) *
@@ -350,20 +363,20 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_total_fee"
-                                label="Tenant Total Fee, $"
-                                placeholder="Tenant Fee"
+                                label="Renter Total Fee, $"
+                                placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
                                     ? (order.tenantFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
                                         ) *
                                         activeRequestsToUpdate.newPricePerDay) /
                                       100
                                     : (order.tenantFee *
-                                        getDaysDifference(
+                                        getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
                                         ) *
@@ -408,8 +421,8 @@ const Order = (order) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_price"
-                                label="Tenant Send Total Price, $"
-                                placeholder="Tenant Send Total Price"
+                                label="Renter Send Total Price, $"
+                                placeholder="Renter Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
@@ -438,13 +451,13 @@ const Order = (order) => {
                       </section>
 
                       <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Location
-                        </h2>
+                        <div className="flex w-full gap-2">
+                          <div className="w-full sm:w-1/2">
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Collection Location
+                            </h2>
 
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <InputView
                                 name="city"
                                 label="City"
@@ -455,7 +468,7 @@ const Order = (order) => {
                               />
                             </div>
 
-                            <div className="w-full sm:w-1/2">
+                            <div className="w-full mb-2">
                               <InputView
                                 name="postcode"
                                 label="Postcode"
@@ -465,41 +478,43 @@ const Order = (order) => {
                                 inputClassName="form-input w-full"
                               />
                             </div>
+
+                            <div className="w-full mb-2">
+                              <InputView
+                                name="address"
+                                label="Address"
+                                placeholder="e.g. 55 County Laois"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={order.listingAddress}
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
                           </div>
 
-                          <div className="w-full">
-                            <InputView
-                              name="address"
-                              label="Address"
-                              placeholder="e.g. 55 County Laois"
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={order.listingAddress}
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div
-                            className="flex w-full admin-map-parent"
-                            style={{ height: "500px" }}
-                          >
-                            <MultyMarkersMap
-                              userLocation={userLocation}
-                              setUserLocation={setUserLocation}
-                              markers={[
-                                {
-                                  id: 1,
+                          <div className="w-full sm:w-1/2">
+                            <div
+                              className="flex w-full admin-map-parent flex-col md:flex-row mb-2"
+                              style={{ height: "240px" }}
+                            >
+                              <MultyMarkersMap
+                                userLocation={userLocation}
+                                setUserLocation={setUserLocation}
+                                markers={[
+                                  {
+                                    id: 1,
+                                    lat: order.listingRentalLat,
+                                    lng: order.listingRentalLng,
+                                    radius: order.rentalRadius,
+                                  },
+                                ]}
+                                baseCenter={{
                                   lat: order.listingRentalLat,
                                   lng: order.listingRentalLng,
-                                  radius: order.rentalRadius,
-                                },
-                              ]}
-                              baseCenter={{
-                                lat: order.listingRentalLat,
-                                lng: order.listingRentalLng,
-                              }}
-                              center={mapCenter}
-                              setCenter={setMapCenter}
-                            />
+                                }}
+                                center={mapCenter}
+                                setCenter={setMapCenter}
+                              />
+                            </div>
                           </div>
                         </div>
                       </section>
@@ -527,7 +542,7 @@ const Order = (order) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Listing Details
+                          Item Description
                         </h2>
 
                         <div className="w-full">

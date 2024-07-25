@@ -6,10 +6,12 @@ const OrderUpdateStatusMessageContent = ({
   popupsData,
   type,
   title,
+  senderId,
   Icon = null,
+  style = {},
 }) => {
   return (
-    <div className="d-flex flex-column align-items-center">
+    <div className="d-flex flex-column align-items-center" style={style}>
       <div>
         <b>{title}</b>
         {Icon && (
@@ -21,17 +23,13 @@ const OrderUpdateStatusMessageContent = ({
         )}
       </div>
 
-      <div
-        className="d-flex flex-column"
-        style={{ gap: "10px", marginTop: "10px" }}
-      >
-        <OrderMessageActions
-          type={type}
-          order={entity}
-          popupsData={popupsData}
-          content={content}
-        />
-      </div>
+      <OrderMessageActions
+        type={type}
+        order={entity}
+        popupsData={popupsData}
+        content={content}
+        senderId={senderId}
+      />
     </div>
   );
 };

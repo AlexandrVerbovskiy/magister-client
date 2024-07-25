@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
@@ -21,7 +21,7 @@ import { baseTimeListPageParams } from "../../utils";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [panelItem, setPanelItem] = useState(false);
 
   const { fromTime, setFromTime, toTime, setToTime, getTimeFilterProps } =
@@ -44,6 +44,7 @@ const Logs = (pageProps) => {
     items: logs,
     rebuild,
     options,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getLogList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -75,16 +76,18 @@ const Logs = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Logs" }]} />
 
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm value={filter} onInput={changeFilter} />
-                  <Datepicker
-                    value={[fromTime, toTime]}
-                    onChange={handleChangeTimeFilter}
-                    placeholder="Filter by create time"
-                  />
+                <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                  <div className="flex gap-2 flex-col xs:flex-row">
+                    <SearchForm value={filter} onInput={changeFilter} />
+                    <Datepicker
+                      value={[fromTime, toTime]}
+                      onChange={handleChangeTimeFilter}
+                      placeholder="Filter by create time"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -95,6 +98,7 @@ const Logs = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 onSelectPanelItem={handleSelectPanelItem}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

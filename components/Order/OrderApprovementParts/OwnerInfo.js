@@ -1,9 +1,7 @@
 import {
   autoMultiEnding,
   generateProfileFilePath,
-  getFilePath,
 } from "../../../utils";
-import STATIC from "../../../static";
 import StarRating from "../../StarRating";
 
 const OwnerInfo = ({
@@ -11,6 +9,7 @@ const OwnerInfo = ({
   countItemsType = "for rental",
   title = "Owner",
 }) => {
+
   return (
     <div className="listings-widget listings_author">
       <h3>{title}</h3>
@@ -21,8 +20,8 @@ const OwnerInfo = ({
             src={generateProfileFilePath(data.userPhoto)}
             alt={data.userName}
           />
-          <div className="title">
-            <h4>
+          <div className="title row-dots-end">
+            <h4 className="row-dots-end">
               <a href="#">{data.userName}</a>
             </h4>
             <span style={{ color: "#666666" }}>
@@ -40,6 +39,7 @@ const OwnerInfo = ({
           centerAlign={true}
           countClass="rating-count"
           pointsValue={true}
+          commentName="owner"
         />
       </div>
     </div>

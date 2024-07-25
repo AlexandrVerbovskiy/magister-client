@@ -1,5 +1,6 @@
 import Footer from "../components/_App/Footer";
 import Navbar from "../components/_App/Navbar";
+import PageBanner from "../components/Common/PageBanner";
 import { userSideProps } from "../middlewares";
 import { getViewPageWithCategoriesOptions } from "../services";
 
@@ -7,7 +8,10 @@ const OurMission = () => {
   return (
     <>
       <Navbar canShowSearch={false} />
-      <div className="listings-area ptb-100">
+
+      <PageBanner pageTitle="Our Mission" pageName="Our Mission" />
+
+      <div className="listings-area ptb-70">
         <div className="container mt-4">
           <div className="row m-0">
             <h3>Our Mission</h3>

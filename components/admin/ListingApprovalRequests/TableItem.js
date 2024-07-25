@@ -8,13 +8,10 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active }) => {
   const text = active === null ? "WAITING" : active ? "APPROVED" : "REJECTED";
@@ -50,6 +47,7 @@ const TableItem = ({
   name,
   city,
   categoryName,
+  otherCategory,
   categoryId,
   approved,
   createdAt,
@@ -68,6 +66,7 @@ const TableItem = ({
   handleApproveClick,
   handleRejectClick,
   ownerAverageRating,
+  ownerCommentCount,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -75,11 +74,9 @@ const TableItem = ({
 
   const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullOwnerPhotoPath = generateProfileFilePath(userPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>
@@ -88,30 +85,14 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link href={`/admin/listing-approval-requests/${id}`}>{name}</Link>
-          </div>
+          <Link href={`/admin/listing-approval-requests/${id}/`}>{name}</Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${userId}`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {userName}
-          </Link>
+          <TableUserLink id={userId} name={userName} photo={userPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div className="font-medium">{categoryName}</div>
+          <div className="font-medium">{categoryName ?? otherCategory}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <ActiveSpan active={approved} />
@@ -144,14 +125,17 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Item Details"
-              href={"/admin/listings/edit/" + listingId}
+              href={`/admin/listings/edit/${listingId}`}
             />
             <SubInfoRow label="Name" value={name} />
-            <SubInfoRow label="Category" value={categoryName} />
-            <SubInfoRow label="Location" value={address} />
+            <SubInfoRow
+              label="Category"
+              value={categoryName ?? otherCategory}
+            />
+            <SubInfoRow label="Collection Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays} />
+            <SubInfoRow label="Minimum Rental Days" value={minRentalDays} />
           </div>
         </td>
 
@@ -196,7 +180,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Owner"
-                      href={"/admin/users/edit/" + userId}
+                      href={`/admin/users/edit/${userId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={userName} />
@@ -206,7 +190,11 @@ const TableItem = ({
                       value={userPhone && userPhone.length ? userPhone : "-"}
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={ownerAverageRating} />
+                      <SingleRatingStar
+                        value={ownerAverageRating}
+                        count={ownerCommentCount}
+                        commentName="owner"
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -237,7 +225,7 @@ const TableItem = ({
                       </>
                     )}
 
-                    <View href={`/admin/listing-approval-requests/${id}`} />
+                    <View href={`/admin/listing-approval-requests/${id}/`} />
                   </div>
                 </td>
               </tr>

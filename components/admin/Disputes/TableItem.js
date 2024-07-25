@@ -6,10 +6,11 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
-import { generateProfileFilePath, getListingImageByType } from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import Link from "next/link";
 import SubInfoTitle from "../SubInfoTitle";
 import ActiveSpan from "./ActiveSpan";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   ownerId,
@@ -44,13 +45,9 @@ const TableItem = ({
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
   const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
 
-  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
-
-  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>
@@ -62,42 +59,22 @@ const TableItem = ({
           <ActiveSpan status={status} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${ownerId}`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
-            style={canMoveToOwner ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {ownerName} <LinkIcon />
-          </Link>
+          <TableUserLink
+            id={ownerId}
+            name={ownerName}
+            photo={ownerPhoto}
+          />
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+          <TableUserLink
+            id={tenantId}
+            name={tenantName}
+            photo={tenantPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/users/edit/${tenantId}`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
-            style={canMoveToTenant ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullTenantPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {tenantName} <LinkIcon />
-          </Link>
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/listing/${listingId}`}
+            href={`/listings/${listingId}/`}
             className="flex items-center"
             onClick={(e) => (isAdmin ? {} : e.preventDefault())}
             style={isAdmin ? {} : { cursor: "auto" }}
@@ -164,7 +141,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Owner"
-              href={"/admin/users/edit/" + ownerId}
+              href={`/admin/users/edit/${ownerId}`}
               canMove={canMoveToOwner}
             />
             <SubInfoRow label="Name" value={ownerName} />
@@ -180,7 +157,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Renter"
-              href={"/admin/users/edit/" + tenantId}
+              href={`/admin/users/edit/${tenantId}`}
               canMove={canMoveToTenant}
             />
             <SubInfoRow label="Name" value={tenantName} />
@@ -198,13 +175,7 @@ const TableItem = ({
           colSpan={3}
           className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
         >
-          <div
-            className="mt-1"
-            style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
+          <div className="mt-1 overflow-separate">
             <span className="text-black mr-1">Description:</span>
             <span className="text-gray-400" style={{ textWrap: "wrap" }}>
               {description}
@@ -244,7 +215,7 @@ const TableItem = ({
             )}
 
             <Link
-              href={"/admin/chats/" + chatId}
+              href={`/admin/chats/${chatId}/`}
               className="bg-indigo-100 hover:bg-indigo-200  flex items-center text-indigo-500 hover:text-indigo-600 rounded-full py-2 px-4"
             >
               Chat

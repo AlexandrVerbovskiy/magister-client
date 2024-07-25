@@ -3,6 +3,7 @@ import { IndiceContext } from "../contexts";
 import {
   checkStringDateLowerOrEqualCurrentDate,
   dateConverter,
+  isOrderCanBeAccepted,
 } from "../utils";
 import STATIC from "../static";
 
@@ -59,11 +60,7 @@ const useOrderDateError = ({ order }) => {
         blocked = true;
       }
 
-      if (
-        order.conflictOrders &&
-        order.conflictOrders.length > 0 &&
-        order.ownerId == sessionUser?.id
-      ) {
+      if (!isOrderCanBeAccepted(order) && order.ownerId == sessionUser?.id) {
         tooltipErrorMessage =
           "There are more priority bookings or orders for these dates";
         blocked = true;

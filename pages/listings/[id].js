@@ -4,24 +4,25 @@ import Footer from "../../components/_App/Footer";
 import SingleListingsContent from "../../components/SingleListings/SingleListingsContent";
 import { userSideProps } from "../../middlewares";
 import { getListingFullByIdOptions } from "../../services";
+import {useIdPage} from "../../hooks";
 
-const Listing = ({
-  listing,
-  tenantBaseCommissionPercent,
-  comments,
-  listingRatingInfo,
-  ownerRatingInfo,
-}) => {
+const Listing = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getListingFullByIdOptions(field, authToken),
+  });
+
   return (
     <>
       <NavbarTwo />
 
       <SingleListingsContent
-        listing={listing}
-        comments={comments}
-        tenantBaseCommissionPercent={tenantBaseCommissionPercent}
-        listingRatingInfo={listingRatingInfo}
-        ownerRatingInfo={ownerRatingInfo}
+        listing={props.listing}
+        comments={props.comments}
+        tenantBaseCommissionPercent={props.tenantBaseCommissionPercent}
+        listingRatingInfo={props.listingRatingInfo}
+        ownerRatingInfo={props.ownerRatingInfo}
       />
 
       <Footer bgColor="bg-f5f5f5" />

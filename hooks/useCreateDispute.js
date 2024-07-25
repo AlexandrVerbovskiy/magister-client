@@ -12,8 +12,8 @@ const useCreateDispute = ({ order = null }) => {
   const [opponentPhoto, setOpponentPhoto] = useState(null);
   const [opponentCountItems, setOpponentCountItems] = useState(0);
   const [opponentItemsType, setOpponentItemsType] = useState("for rental");
-  const [opponentCommentCountName, setOpponentCommentCountName] = useState(0);
-  const [opponentAverageRatingName, setOpponentAverageRatingName] = useState(0);
+  const [opponentCommentCount, setOpponentCommentCount] = useState(0);
+  const [opponentAverageRating, setOpponentAverageRating] = useState(0);
 
   const [listing, setListing] = useState({});
 
@@ -36,18 +36,19 @@ const useCreateDispute = ({ order = null }) => {
       );
       setOpponentItemsType(isOwnerCreateDispute ? "are rented" : "for rental");
 
-      setOpponentAverageRatingName(
-        isOwnerCreateDispute
-          ? order.tenantCommentCount
-          : order.ownerCommentCount
-      );
-      setOpponentCommentCountName(
+      setOpponentAverageRating(
         isOwnerCreateDispute
           ? order.tenantAverageRating
           : order.ownerAverageRating
       );
+      setOpponentCommentCount(
+        isOwnerCreateDispute
+          ? order.tenantCommentCount
+          : order.ownerCommentCount
+      );
 
       setListing({
+        id: order.listingId,
         listingImages: order.images ?? order.listingImages,
         name: order.listingName,
         averageRating: order.listingAverageRating,
@@ -75,8 +76,8 @@ const useCreateDispute = ({ order = null }) => {
     opponentPhoto,
     opponentCountItems,
     opponentItemsType,
-    opponentCommentCountName,
-    opponentAverageRatingName,
+    opponentCommentCount,
+    opponentAverageRating,
 
     listing,
     isOwnerCreateDispute,

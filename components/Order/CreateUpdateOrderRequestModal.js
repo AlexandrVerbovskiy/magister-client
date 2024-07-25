@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
 import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
   dateToSeconds,
   findFirstAvailableDate,
-  getDateByCurrentAdd,
-  getDaysDifference,
+  getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
   moneyFormat,
@@ -19,6 +17,7 @@ import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
+//import "flatpickr/dist/flatpickr.min.css";
 
 const CreateUpdateOrderRequestModal = ({
   handleCreateUpdateRequest,
@@ -34,10 +33,8 @@ const CreateUpdateOrderRequestModal = ({
   blockedDates,
   commissionType,
 }) => {
-  const proposalCountDays = getDaysDifference(
-    proposalStartDate,
-    proposalEndDate
-  );
+  const proposalCountDays =
+  getFactOrderDays(proposalStartDate, proposalEndDate);
 
   const baseFromDate = new Date();
   const baseToDate = new Date();
@@ -65,7 +62,7 @@ const CreateUpdateOrderRequestModal = ({
   const [fullTotal, setFullTotal] = useState(0);
 
   const recalculateTotalInfo = ({ fromDate, toDate, price, fee }) => {
-    const countDays = getDaysDifference(fromDate, toDate);
+    const countDays = getFactOrderDays(fromDate, toDate);
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
     setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
@@ -174,7 +171,10 @@ const CreateUpdateOrderRequestModal = ({
   const handleSubmit = () => {
     let hasError = false;
 
-    if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
+    if (
+      minRentalDays &&
+      getFactOrderDays(fromDate, toDate) < minRentalDays
+    ) {
       setCalendarError(
         `You can only rent a listing for more than ${minRentalDays} days`
       );

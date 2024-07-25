@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
   generateProfileFilePath,
-  getDaysDifference,
+  getFactOrderDays,
   getPaymentNameByType,
+  isOrderCanBeAccepted,
   moneyFormat,
   objDateSort,
 } from "../../utils";
@@ -12,7 +13,8 @@ import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
+const baseShowedExtendsCount = 5;
 
 const OrderInfo = ({
   order,
@@ -25,7 +27,6 @@ const OrderInfo = ({
   handleClickPay,
   handleClickExtend,
   extension = false,
-  handleDisputeCreate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -41,7 +42,7 @@ const OrderInfo = ({
 
   return (
     <>
-      <td className="details">
+      <div className="td details">
         <h4 className="order-item-title-row">
           <div>{extension ? "Extension" : order.listingName}</div>
           <StatusBlock
@@ -60,11 +61,13 @@ const OrderInfo = ({
         </h4>
 
         <ul>
-          <li className="row-dots-end">
-            <i className="bx bx-map"></i>
-            <span>Address: </span>
-            <span>{order.listingCity}</span>
-          </li>
+          {!extension && (
+            <li className="row-dots-end">
+              <i className="bx bx-map"></i>
+              <span>Address: </span>
+              <span>{order.listingCity}</span>
+            </li>
+          )}
           <li className="order-list-item-date">
             <i className="bx bx-calendar"></i>
             <CanBeErrorBaseDateSpan
@@ -81,14 +84,11 @@ const OrderInfo = ({
               {order.requestId
                 ? moneyFormat(
                     order.newPricePerDay *
-                      getDaysDifference(order.newStartDate, order.newEndDate)
+                      getFactOrderDays(order.newStartDate, order.newEndDate)
                   )
                 : moneyFormat(
                     order.offerPricePerDay *
-                      getDaysDifference(
-                        order.offerStartDate,
-                        order.offerEndDate
-                      )
+                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}
             </span>
           </li>
@@ -97,8 +97,8 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+                STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
                 STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
                 STATIC.ORDER_STATUSES.FINISHED,
               ].includes(order.status) && paymentType ? (
@@ -147,10 +147,10 @@ const OrderInfo = ({
               </li>
             )}
         </ul>
-      </td>
+      </div>
 
-      <td className="action d-flex flex-column align-items-start">
-        <Link href={link + "/" + order.id} className="default-btn">
+      <div className="td action">
+        <Link href={`${link}/${order.id}/`} className="default-btn">
           <i className="bx bx-detail"></i> View details
         </Link>
 
@@ -158,9 +158,7 @@ const OrderInfo = ({
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
         ) && (
           <>
-            {!checkErrorData(
-              order.requestId ? order.newStartDate : order.offerStartDate
-            ).blocked && (
+            {isOrderCanBeAccepted(order) && (
               <button
                 type="button"
                 onClick={(e) => {
@@ -215,7 +213,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/pay-by-bank-transfer/` + order.id}
+            href={`/dashboard/pay-by-bank-transfer/${order.id}`}
           >
             <i className="bx bx-wallet"></i> Update payment
           </Link>
@@ -226,7 +224,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={link + "/" + order.id + "?scroll-to=tenant-qr-code"}
+            href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
           >
             <i className="bx bx-comment-detail"></i> Start the rental
           </Link>
@@ -237,7 +235,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={link + "/" + order.id + "?scroll-to=owner-qr-code"}
+            href={`${link}/${order.id}/?scroll-to=owner-qr-code`}
           >
             <i className="bx bx-comment-detail"></i> Finish the rental
           </Link>
@@ -248,7 +246,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-renter-review/` + order.id}
+            href={`/dashboard/creating-renter-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -259,7 +257,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-owner-review/` + order.id}
+            href={`/dashboard/creating-owner-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -268,16 +266,13 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
         ) && (
-          <button
+          <Link
             className="default-btn"
-            onClick={() => {
-              handleDisputeCreate(order.id);
-            }}
-            type="button"
+            href={`/dashboard/orders/create-dispute/${order.id}/`}
           >
             <i className="bx bx-transfer-alt"></i>
             Open dispute
-          </button>
+          </Link>
         )}
 
         {currentActionButtons.includes(
@@ -330,7 +325,7 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chats/${order.chatId}`}
+            href={`/dashboard/chats/${order.chatId}/`}
           >
             <i className="bx bx-chat"></i> Chat
           </Link>
@@ -341,12 +336,12 @@ const OrderInfo = ({
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/chats/${order.disputeChatId}`}
+            href={`/dashboard/chats/${order.disputeChatId}/`}
           >
             <i className="bx bx-chat"></i> Dispute Chat
           </Link>
         )}
-      </td>
+      </div>
     </>
   );
 };
@@ -362,10 +357,8 @@ const OrderItem = ({
   handleClickAccept,
   handleClickPay,
   handleClickExtend,
-  handleDisputeCreate,
 }) => {
-  const router = useRouter();
-  const userId = filterType == "tenant" ? order.ownerId : order.tenantId;
+  const [showedAllExtends, setShowedAllExtends] = useState(false);
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
   const userEmail =
     filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
@@ -374,11 +367,19 @@ const OrderItem = ({
   const userPhone =
     filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
+  let extendOrders = order.extendOrders.sort((a, b) => a.id - b.id);
+
+  extendOrders = extendOrders.reverse();
+
+  if (!showedAllExtends) {
+    extendOrders = extendOrders.slice(0, baseShowedExtendsCount);
+  }
+
   return (
     <>
-      <tr>
-        <td
-          className="name"
+      <div className="tr">
+        <div
+          className="td name"
           style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
         >
           <img src={generateProfileFilePath(userPhoto)} alt="image" />
@@ -400,14 +401,14 @@ const OrderItem = ({
             </ul>
             {order.chatId && (
               <Link
-                href={`/dashboard/chats/${order.chatId}`}
+                href={`/dashboard/chats/${order.chatId}/`}
                 className="default-btn"
               >
                 <i className="bx bx-envelope"></i> Send Message
               </Link>
             )}
           </div>
-        </td>
+        </div>
 
         <OrderInfo
           order={order}
@@ -419,21 +420,22 @@ const OrderItem = ({
           handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
-          handleDisputeCreate={handleDisputeCreate}
         />
-      </tr>
+      </div>
 
-      {objDateSort(order.extendOrders, "offerStartDate").map(
-        (extendOrder, index) => (
-          <tr key={extendOrder.id}>
-            <td
-              className="name"
+      {extendOrders.map((extendOrder, index) => {
+        extendOrder["extendOrders"] = order.extendOrders;
+
+        return (
+          <div className="tr extension-tr" key={extendOrder.id}>
+            <div
+              className="td name"
               style={
                 order.extendOrders.length != index + 1
                   ? { borderBottom: 0, borderTop: 0 }
                   : { borderTop: 0 }
               }
-            ></td>
+            ></div>
 
             <OrderInfo
               order={extendOrder}
@@ -444,12 +446,25 @@ const OrderItem = ({
               handleClickAccept={handleClickAccept}
               handleClickPay={handleClickPay}
               handleClickExtend={handleClickExtend}
-              handleDisputeCreate={handleDisputeCreate}
               link={link}
               extension={true}
             />
-          </tr>
-        )
+          </div>
+        );
+      })}
+
+      {order.extendOrders.length > baseShowedExtendsCount && (
+        <div className="tr extension-tr">
+          <div colSpan={3} className="td show-more-table-rows">
+            <button
+              onClick={() => setShowedAllExtends(!showedAllExtends)}
+              type="button"
+              className="default-btn"
+            >
+              {showedAllExtends ? "Show Less" : "Show More"}
+            </button>
+          </div>
+        </div>
       )}
     </>
   );

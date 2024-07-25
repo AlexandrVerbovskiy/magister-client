@@ -2,7 +2,6 @@ import Link from "next/link";
 import TableDateView from "../TableDateView";
 import {
   fullDateConverter,
-  generateProfileFilePath,
   getFilePath,
   getPaymentNameByType,
   moneyFormat,
@@ -10,12 +9,12 @@ import {
 } from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
-import { IndiceContext } from "../../../contexts";
 import PaypalCheck from "../PaypalCheck";
 import STATIC from "../../../static";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = (props) => {
   const {
@@ -44,35 +43,19 @@ const TableItem = (props) => {
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
-  const fullPayerPhotoPath = generateProfileFilePath(payerPhoto);
-
   const proofPath = payedProof
     ? getFilePath(payedProof)
-    : STATIC.DEFAULT_PHOTO_LINK;
-
-  const { sessionUser, isAdmin } = useContext(IndiceContext);
-
-  const canMoveToUser = isAdmin && sessionUser?.id != payerId;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${payerId}`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullPayerPhotoPath}
-              width="32"
-              height="32"
-              alt="Payer"
-            />
-            {payerName}
-          </Link>
+          <TableUserLink
+            id={payerId}
+            name={payerName}
+            photo={payerPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           {getPaymentNameByType(type)}
@@ -82,7 +65,7 @@ const TableItem = (props) => {
           style={{ paddingRight: "calc(1rem + 10px)", paddingLeft: "10px" }}
         >
           <Link
-            href={`/admin${viewPath}/${id}`}
+            href={`/admin${viewPath}/${id}/`}
             className="font-medium text-sky-500"
           >
             #{id}
@@ -263,7 +246,7 @@ const TableItem = (props) => {
               </>
             )}
 
-            <View href={`/admin${viewPath}/${id}`} />
+            <View href={`/admin${viewPath}/${id}/`} />
           </div>
         </td>
       </tr>

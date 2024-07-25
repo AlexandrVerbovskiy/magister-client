@@ -9,7 +9,6 @@ import {
   checkMyPhoneVerifyCode,
   generateMyPhoneVerifyCode,
   changeTwoFactorAuth,
-  noNeedRegularViewInfoForm,
   getUserProfileEditPageOptions,
 } from "../../services";
 import {
@@ -19,7 +18,6 @@ import {
   validatePassword,
   validatePhoneNumber,
   validateUrl,
-  changeLocation,
 } from "../../utils";
 import YesNoModal from "../../components/_App/YesNoModal";
 import BaseModal from "../../components/_App/BaseModal";
@@ -32,8 +30,10 @@ import {
   DocumentVerificationSection,
   PaypalSection,
 } from "../../components/ProfileEdit";
+import { useRouter } from "next/router";
 
 const ProfileEdit = ({ newPaypalId }) => {
+  const router = useRouter();
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
 
@@ -49,9 +49,9 @@ const ProfileEdit = ({ newPaypalId }) => {
   useEffect(() => {
     if (newPaypalId) {
       updateUserFields({ paypalId: newPaypalId });
+      router.replace("/dashboard/profile-edit/");
+      success.set("Paypal id successfully saved");
     }
-
-    changeLocation("/dashboard/profile-edit");
   }, []);
 
   const [activeVerifyPhoneModal, setActiveVerifyPhoneModal] = useState(false);
@@ -504,14 +504,16 @@ const ProfileEdit = ({ newPaypalId }) => {
         active={activeCodePhoneModal}
         closeModal={toggleCodePhoneModal}
       >
-        <span className="sub-title mb-2">
+        <span className="sub-title mb-0">
           <span>Enter Verified Code</span>
         </span>
 
-        <form method="get">
-          You received a verification code on your mobile phone. Copy and paste it in
-          the field below
-          <div className="form-group">
+        <form className="mt-0" method="get">
+          <span className="small-text">
+            You received a verification code on your mobile phone. Copy and
+            paste it in the field below
+          </span>
+          <div className="form-group mt-2">
             <input
               value={phoneCode}
               onInput={handleInputPhoneCode}
@@ -541,17 +543,21 @@ const ProfileEdit = ({ newPaypalId }) => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>Profile</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">Profile</li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Profile</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">Profile</li>
+              </ol>
+            </div>
+          </div>
         </div>
 
         <div className="row">
@@ -575,10 +581,6 @@ const ProfileEdit = ({ newPaypalId }) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const paypalCode = context.query["code"] ?? null;
-
-  if (baseSideProps.sessionUser.needRegularViewInfoForm) {
-    noNeedRegularViewInfoForm(baseSideProps.authToken);
-  }
 
   const options = await getUserProfileEditPageOptions(
     paypalCode,

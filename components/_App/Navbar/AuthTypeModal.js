@@ -14,7 +14,7 @@ const AuthTypeModal = ({
       <span className="sub-title mb-2">
         <span>Choose where you will receive the code</span>
       </span>
-      <form method="get">
+      <form method="get" className="mt-3">
         {typeModalError && (
           <div className="col-12">
             <div

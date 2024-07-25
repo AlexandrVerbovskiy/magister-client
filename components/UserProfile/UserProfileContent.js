@@ -102,7 +102,7 @@ const UserProfileContent = () => {
                                 alt="image"
                               />
                               <Link
-                                href="/single-listings"
+                                href="/single-listings/"
                                 className="link-btn"
                               ></Link>
                             </div>
@@ -115,7 +115,7 @@ const UserProfileContent = () => {
                                 alt="image"
                               />
                               <Link
-                                href="/single-listings"
+                                href="/single-listings/"
                                 className="link-btn"
                               ></Link>
                             </div>
@@ -397,7 +397,7 @@ const UserProfileContent = () => {
                                 alt="image"
                               />
                               <Link
-                                href="/single-listings"
+                                href="/single-listings/"
                                 className="link-btn"
                               ></Link>
                             </div>
@@ -410,7 +410,7 @@ const UserProfileContent = () => {
                                 alt="image"
                               />
                               <Link
-                                href="/single-listings"
+                                href="/single-listings/"
                                 className="link-btn"
                               ></Link>
                             </div>

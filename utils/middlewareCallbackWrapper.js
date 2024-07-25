@@ -31,6 +31,7 @@ const middlewareCallbackWrapper = async ({ callback, res, context }) => {
 
       return {
         props: {
+          ...res,
           globalError: { status: status, message: e.message },
         },
       };

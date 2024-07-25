@@ -26,14 +26,14 @@ const Footer = ({ bgColor }) => {
                 <ul className="link-list">
                   {!sessionUser && (
                     <li>
-                      <Link href="/#" onClick={handleSignInClick}>
+                      <Link href="/" onClick={handleSignInClick}>
                         <i className="flaticon-left-chevron"></i> Login/sign-up
                       </Link>
                     </li>
                   )}
                   <li>
                     <Link
-                      href="#"
+                      href="/"
                       onClick={(e) => {
                         e.preventDefault();
                         handleListingListClick();
@@ -44,7 +44,7 @@ const Footer = ({ bgColor }) => {
                   </li>
                   <li>
                     <Link
-                      href="#"
+                      href="/"
                       onClick={(e) => {
                         e.preventDefault();
                         handleListingListClick();
@@ -63,17 +63,17 @@ const Footer = ({ bgColor }) => {
 
                 <ul className="link-list">
                   <li>
-                    <Link href="/our-mission">
+                    <Link href="/our-mission/">
                       <i className="flaticon-left-chevron"></i>Our Mission
                     </Link>
                   </li>
                   <li>
-                    <Link href="/about-us">
+                    <Link href="/about-us/">
                       <i className="flaticon-left-chevron"></i> About us
                     </Link>
                   </li>
                   <li>
-                    <Link href="/how-it-works">
+                    <Link href="/how-it-works/">
                       <i className="flaticon-left-chevron"></i> How it works
                     </Link>
                   </li>
@@ -87,17 +87,17 @@ const Footer = ({ bgColor }) => {
 
                 <ul className="link-list">
                   <li>
-                    <Link href="/terms-of-service">
+                    <Link href="/terms-of-service/">
                       <i className="flaticon-left-chevron"></i> Terms of service
                     </Link>
                   </li>
                   <li>
-                    <Link href="/owner-guarantee">
+                    <Link href="/owner-guarantee/">
                       <i className="flaticon-left-chevron"></i> Owner guarantee
                     </Link>
                   </li>
                   <li>
-                    <Link href="/privacy-policy">
+                    <Link href="/privacy-policy/">
                       <i className="flaticon-left-chevron"></i> Privacy policy
                     </Link>
                   </li>

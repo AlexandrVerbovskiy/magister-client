@@ -8,7 +8,6 @@ import {
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import STATIC from "../../static";
 import StarRating from "../StarRating";
 import { changeListingFavorite } from "../../services";
 import { useContext, useState } from "react";
@@ -62,7 +61,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
                     alt="image"
                   />
                   <Link
-                    href={`/listing/${listing.id}`}
+                    href={`/listings/${listing.id}/`}
                     className="link-btn"
                   ></Link>
                 </div>
@@ -72,7 +71,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         )}
 
         {images.length <= 1 && (
-          <Link href={`/listing/${listing.id}`} className="link-btn"></Link>
+          <Link href={`/listings/${listing.id}/`} className="link-btn"></Link>
         )}
 
         <a
@@ -89,7 +88,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           className="author row-dots-end"
           style={{ maxWidth: "calc(100% - 40px)" }}
         >
-          <Link href={`/owner-listing-list/${listing.userId}`}>
+          <Link href={`/listings/${listing.userId}/`}>
             <div className="d-flex align-items-center">
               <img
                 src={generateProfileFilePath(listing.userPhoto)}
@@ -101,13 +100,17 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         </div>
         <ul className="listings-meta">
           <li>
-            <Link href={`/listing-list?categories=${listing.categoryName}`}>
+            <Link
+              href={`/listings/?categories=${
+                listing.categoryName ?? listing.otherCategory
+              }`}
+            >
               <i className="flaticon-furniture-and-household"></i>
-              <span>{listing.categoryName}</span>
+              <span>{listing.categoryName ?? listing.otherCategory}</span>
             </Link>
           </li>
           <li>
-            <Link href={`/listing-list?cities=${listing.city}`}>
+            <Link href={`/listings/?cities=${listing.city}`}>
               <i className="flaticon-pin"></i>
               <span>{listing.city}</span>
             </Link>
@@ -115,7 +118,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         </ul>
 
         <h3 className="row-dots-end">
-          <Link className="row-dots-end" href={`/listing/${listing.id}`}>
+          <Link className="row-dots-end" href={`/listings/${listing.id}/`}>
             {listing.name}
           </Link>
         </h3>
@@ -132,6 +135,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           <StarRating
             averageRating={listing["averageRating"] ?? 0}
             commentCount={listing["commentCount"] ?? 0}
+            emptyMaxWidth="120px"
           />
 
           <div className="price">

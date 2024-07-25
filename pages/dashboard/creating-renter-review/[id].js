@@ -12,9 +12,16 @@ import UserReviewForm from "../../../components/Dashboard/Reviews/UserReviewForm
 import { useRouter } from "next/router";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import { IndiceContext } from "../../../contexts";
-import { useUserReview } from "../../../hooks";
+import { useRenterReview } from "../../../hooks";
+import { useIdPage } from "../../../hooks";
 
-const FullReview = (pageProps) => {
+const FullReview = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getOrderReviewByOwnerOptions(field, authToken),
+  });
+
   const router = useRouter();
   const { id } = router.query;
   const [currentStep, setCurrentStep] = useState("renter");
@@ -28,7 +35,7 @@ const FullReview = (pageProps) => {
     leaveFeedback: leaveTenantDescription,
     setLeaveFeedback: setLeaveTenantDescription,
     dataToSubmit: tenantDataToSubmit,
-  } = useUserReview();
+  } = useRenterReview();
 
   const [disabled, setDisabled] = useState(false);
 
@@ -76,9 +83,11 @@ const FullReview = (pageProps) => {
         {currentStep == "renter" && (
           <UserReviewForm
             data={{
-              userName: pageProps.order.tenantName,
-              userPhoto: pageProps.order.tenantPhoto,
-              userCountItems: pageProps.order.tenantCountItems,
+              userName: props.order.tenantName,
+              userPhoto: props.order.tenantPhoto,
+              userCountItems: props.order.tenantCountItems,
+              userAverageRating: props.order.tenantAverageRating,
+              userCommentCount: props.order.tenantCommentCount,
             }}
             onSubmit={handleRenterReviewSubmit}
             disabled={disabled}
@@ -88,6 +97,7 @@ const FullReview = (pageProps) => {
             setDescription={setTenantDescription}
             leaveFeedback={leaveTenantDescription}
             setLeaveFeedback={setLeaveTenantDescription}
+            type="renter"
           />
         )}
 

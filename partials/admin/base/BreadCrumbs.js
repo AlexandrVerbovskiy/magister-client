@@ -3,12 +3,12 @@ import React from "react";
 const BreadCrumbs = ({ links }) => {
   return (
     <div className="mb-4 sm:mb-0">
-      <ul className="inline-flex flex-wrap text-sm font-medium">
+      <ul className="max-w-full inline-flex flex-wrap text-sm font-medium">
         {links.map((link, index) => {
           return (
             <li
               key={index}
-              className="text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
+              className="overflow-separate max-w-full text-2xl md:text-3xl after:content-['/'] last:after:hidden after:text-slate-400 dark:after:text-slate-600 after:px-2"
             >
               {link.href && (
                 <a
@@ -20,12 +20,12 @@ const BreadCrumbs = ({ links }) => {
               )}
 
               {!link.href && (
-                <span
+                <div
                   style={{ transition: "0.5s" }}
-                  className="cursor-pointer text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
+                  className="max-w-full overflow-separate cursor-pointer text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
                 >
                   {link.title}
-                </span>
+                </div>
               )}
             </li>
           );

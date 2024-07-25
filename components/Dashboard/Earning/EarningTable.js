@@ -1,9 +1,8 @@
-import React, { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
+import React from "react";
 import InputView from "../../FormComponents/InputView";
 import {
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -11,11 +10,6 @@ import {
   getPaymentNameByType,
   isPayedUsedPaypal,
 } from "../../../utils";
-import PayedCancelModal from "../../Order/PayedCancelModal";
-import SuccessIconPopup from "../../../components/IconPopups/SuccessIconPopup";
-import { useRouter } from "next/router";
-import { updateRecipientPaymentData } from "../../../services";
-import STATIC from "../../../static";
 
 const Status = ({ status, receivedType }) => {
   let statusName = "Unknown";
@@ -66,28 +60,6 @@ const EarningTable = ({
   orderId,
   id,
 }) => {
-  const router = useRouter();
-  const { authToken, error } = useContext(IndiceContext);
-  const [disabled, setDisabled] = useState(false);
-  const [updatePopupActive, setUpdatePopupActive] = useState(false);
-
-  const [successIconPopupState, setSuccessIconPopupState] = useState({});
-
-  const activateSuccessOrderPopup = () => {
-    const handleClose = () => {
-      router.push("/dashboard/wallet");
-      setSuccessIconPopupState({});
-    };
-
-    setSuccessIconPopupState({
-      active: true,
-      text: "Refund details successfully updated. The retry was sent successfully",
-      closeButtonText: "Move to Wallet",
-      onClose: handleClose,
-      textWeight: 600,
-    });
-  };
-
   let typeText = "Unknown";
   let recipientNumber = "-";
 
@@ -96,25 +68,10 @@ const EarningTable = ({
 
     if (isPayedUsedPaypal(type)) {
       recipientNumber = data.paypalId;
-    }else{
+    } else {
       recipientNumber = data.cardNumber;
-
     }
   }
-
-  const onPayedFastCancel = async ({ type, paypalId, cardNumber }) => {
-    try {
-      await updateRecipientPaymentData(
-        { id, type, paypalId, cardNumber },
-        authToken
-      );
-
-      setUpdatePopupActive(false);
-      activateSuccessOrderPopup();
-    } catch (e) {
-      error.set(e.message);
-    }
-  };
 
   return (
     <>
@@ -166,7 +123,7 @@ const EarningTable = ({
               placeholder="Subtotal Price"
               icon="bx bx-dollar-circle"
               value={`${calculateTotalPriceByDaysCount(
-                getDaysDifference(offerStartDate, offerEndDate),
+                getFactOrderDays(offerStartDate, offerEndDate),
                 offerPricePerDay
               )}`}
             />
@@ -284,46 +241,9 @@ const EarningTable = ({
             >
               {failedDescription}
             </div>
-
-            <div className="add-listings-box footer-section">
-              <div className="d-flex gap-2 justify-content-end">
-                <button
-                  type="button"
-                  className="default-btn d-flex align-items-center"
-                  disabled={disabled}
-                  style={{ width: "fit-content" }}
-                  onClick={() => setUpdatePopupActive(true)}
-                >
-                  <i
-                    className="bx bx-credit-card me-1"
-                    style={{ fontSize: "16px" }}
-                  ></i>{" "}
-                  Update payment info
-                </button>
-              </div>
-            </div>
           </>
         )}
       </div>
-
-      {receivedType == "refund" && status == "failed" && (
-        <>
-          <PayedCancelModal
-            modalActive={updatePopupActive}
-            handleClose={() => setUpdatePopupActive(false)}
-            disabled={disabled}
-            setDisabled={setDisabled}
-            handleCancel={onPayedFastCancel}
-          />
-          <SuccessIconPopup
-            modalActive={successIconPopupState.active}
-            closeModal={successIconPopupState.onClose}
-            textWeight={successIconPopupState.textWeight}
-            text={successIconPopupState.text}
-            mainCloseButtonText={successIconPopupState.closeButtonText}
-          />
-        </>
-      )}
     </>
   );
 };

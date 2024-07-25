@@ -6,7 +6,6 @@ import SidebarTypicalLink from "./SidebarTypicalLink";
 import SidebarGroupedLinks from "./SidebarGroupedLinks";
 
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
-  const trigger = useRef(null);
   const sidebar = useRef(null);
   const { isAdmin, isSupport } = useContext(IndiceContext);
 
@@ -28,19 +27,18 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (!sidebar.current || !trigger.current) return;
-      if (
-        !sidebarOpen ||
-        sidebar.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
-      setSidebarOpen(false);
-    };
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
-  });
+    if (sidebarOpen) {
+      const clickHandler = ({ target }) => {
+        if (!sidebar.current || !sidebarOpen || sidebar.current.contains(target)) {
+          return;
+        }
+
+        setSidebarOpen(false);
+      };
+      document.addEventListener("click", clickHandler);
+      return () => document.removeEventListener("click", clickHandler);
+    }
+  }, [sidebarOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -200,7 +198,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 title="Reviews"
                 sublinks={[
                   { href: "owner-reviews", title: "Owner Reviews" },
-                  { href: "tenant-reviews", title: "Tenant Reviews" },
+                  { href: "renter-reviews", title: "Renter Reviews" },
                   { href: "listing-reviews", title: "Listing Reviews" },
                 ]}
                 SVG={({ current }) => (
@@ -250,6 +248,10 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                       title: "Approval Requests",
                     },
                     { href: "listing-categories", title: "Categories" },
+                    {
+                      href: "others-listing-categories",
+                      title: "Others Categories",
+                    },
                   ]}
                   SVG={({ current }) => (
                     <svg
@@ -366,6 +368,39 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                         current ? "text-indigo-500" : "text-slate-600"
                       }`}
                       d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0"
+                    />
+                  </svg>
+                )}
+              />
+
+              <SidebarTypicalLink
+                title="Chat"
+                link="chats"
+                SVG={({ current }) => (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="icon icon-tabler icon-tabler-brand-messenger"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="#2c3e50"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1"
+                    />
+                    <path
+                      className={`stroke-current ${
+                        current ? "text-indigo-500" : "text-slate-600"
+                      }`}
+                      d="M8 13l3 -2l2 2l3 -2"
                     />
                   </svg>
                 )}

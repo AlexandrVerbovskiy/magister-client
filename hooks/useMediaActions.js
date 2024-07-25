@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { generateRandomString, splitBlob, splitDataIntoChunks } from "../utils";
 import STATIC from "../static";
 
@@ -11,11 +11,14 @@ const useMediaActions = () => {
     dataType,
     filetype,
     filename,
+    fileSrc,
   }) {
     const tempFileKey = generateRandomString();
     let arr = null;
+    let contentPath = null;
 
     if (dataType == "media") {
+      contentPath = fileSrc;
       arr = await splitBlob(data, STATIC.BLOB_CHUNK_SIZE, data.type);
     } else if (dataType == "notmedia") {
       arr = splitDataIntoChunks(data, STATIC.UNBLOB_CHUNK_SIZE, data.type);
@@ -31,7 +34,7 @@ const useMediaActions = () => {
       filetype,
       filename,
       chatId,
-      contentPath: data,
+      contentPath,
       createdAt: new Date(),
     };
 

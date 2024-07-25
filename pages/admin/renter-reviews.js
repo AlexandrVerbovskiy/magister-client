@@ -18,7 +18,7 @@ import UserCommentsTable from "../../components/admin/UserComments/Table";
 
 const TenantReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
@@ -50,6 +50,7 @@ const TenantReviews = (pageProps) => {
     items: reviews,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getTenantCommentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -68,8 +69,8 @@ const TenantReviews = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Tenant Reviews" }]} />
+              <div className="mb-8">
+                <BreadCrumbs links={[{ title: "Renter Reviews" }]} />
               </div>
 
               <BaseListSubHeader
@@ -114,6 +115,8 @@ const TenantReviews = (pageProps) => {
                 userColumnTitle="Tenant"
                 rejectReview={tenantCommentReject}
                 approveReview={tenantCommentApprove}
+                loading={paginationLoading}
+                type="renter"
               />
 
               <div className="mt-8">

@@ -33,8 +33,8 @@ export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
 
   const baseURL = path
-    ? env.SERVER_URL + env.SERVER_API + path
-    : env.SERVER_URL + env.SERVER_API;
+    ? env.SERVER_URL + STATIC.SERVER_API + path
+    : env.SERVER_URL + STATIC.SERVER_API;
 
   const axiosInstance = axios.create({
     baseURL,
@@ -72,8 +72,8 @@ export const initAxios = (path = null) => {
 };
 
 export const getFilePath = (part) =>
-  env.SERVER_URL + env.SERVER_STORAGE + "/" + part;
+  env.SERVER_URL + STATIC.SERVER_STORAGE + "/" + part;
 
 export const generateProfileFilePath = (path) => {
-  return path ? getFilePath(path) : STATIC.DEFAULT_PHOTO_LINK;
+  return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
 };

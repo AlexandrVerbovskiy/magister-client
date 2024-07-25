@@ -1,12 +1,11 @@
-import Link from "next/link";
 import View from "../FastActions/View";
 import TableDateView from "../../admin/TableDateView";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import { IndiceContext } from "../../../contexts";
-import { generateProfileFilePath, getFilePath } from "../../../utils";
-import STATIC from "../../../static";
+import { generateProfileFilePath } from "../../../utils";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   id,
@@ -19,7 +18,6 @@ const TableItem = ({
   userId,
   createdAt,
   failedDescription,
-  userPlaceWork,
   userContactDetails,
   userTwitterUrl,
   userFacebookUrl,
@@ -47,20 +45,11 @@ const TableItem = ({
 
   const canMoveToUser = sessionUser?.id != userId;
 
-  let approvementPhoto = null;
-
-  for (let i = 0; i < Object.keys(documents).length; i++) {
-    const document = documents[Object.keys(documents)[i]];
-
-    if (document) {
-      approvementPhoto = document;
-      break;
-    }
-  }
-
-  const fullApprovementPhotoPath = approvementPhoto
-    ? getFilePath(approvementPhoto)
-    : STATIC.DEFAULT_PHOTO_LINK;
+  const userPhotoPath = generateProfileFilePath(documents.userPhoto);
+  const frontDocumentPhotoPath = generateProfileFilePath(
+    documents.documentFront
+  );
+  const backDocumentPhotoPath = generateProfileFilePath(documents.documentBack);
 
   return (
     <>
@@ -69,26 +58,14 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}`}
-            >
-              {userName}
-            </Link>
-          </div>
+          <TableUserLink
+            id={userId}
+            name={userName}
+            photo={userPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}`}
-            >
-              {userEmail}
-            </Link>
-          </div>
+          <TableUserLink id={userId} name={userEmail} needPhoto={false} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div
@@ -197,7 +174,7 @@ const TableItem = ({
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div className="h-full">
                     <div className="font-semibold flex items-center">
-                      Picture
+                      User Photo
                     </div>
 
                     <div
@@ -206,10 +183,10 @@ const TableItem = ({
                     >
                       <div
                         className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullPhotoPath)}
+                        onClick={() => openPopupImage(userPhotoPath)}
                       >
                         <img
-                          src={fullPhotoPath}
+                          src={userPhotoPath}
                           alt="image"
                           width="200px"
                           height="200px"
@@ -229,10 +206,27 @@ const TableItem = ({
                     >
                       <div
                         className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullApprovementPhotoPath)}
+                        onClick={() => openPopupImage(frontDocumentPhotoPath)}
                       >
                         <img
-                          src={fullApprovementPhotoPath}
+                          src={frontDocumentPhotoPath}
+                          alt="image"
+                          width="200px"
+                          height="200px"
+                        />
+                      </div>
+                    </div>
+
+                    <div
+                      className="mt-2 p-1 outline-gray-200 outline-dashed"
+                      style={{ width: "150px", height: "200px" }}
+                    >
+                      <div
+                        className="image-box cursor-zoom-in"
+                        onClick={() => openPopupImage(backDocumentPhotoPath)}
+                      >
+                        <img
+                          src={backDocumentPhotoPath}
                           alt="image"
                           width="200px"
                           height="200px"
@@ -268,7 +262,7 @@ const TableItem = ({
                       </>
                     )}
 
-                    <View href={`/admin/user-verify-requests/${id}`} />
+                    <View href={`/admin/user-verify-requests/${id}/`} />
                   </div>
                 </td>
               </tr>

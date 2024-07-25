@@ -1,20 +1,16 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import Navbar from "../components/_App/Navbar";
 import Banner from "../components/HomeOne/Banner";
 import Footer from "../components/_App/Footer";
 import { userSideProps } from "../middlewares";
 import { getIndexOptions } from "../services";
 import YourBusiness from "../components/HomeOne/YourBusiness";
-import ListingArea from "../components/Common/ListingArea";
 import Category from "../components/HomeOne/Category";
 import DestinationsTwo from "../components/Common/DestinationsTwo";
 import Feedback from "../components/Common/Feedback";
-import AppDownload from "../components/Common/AppDownload";
-import Blog from "../components/Common/Blog";
 import SafeWithUs from "../components/Common/SafeWithUs";
 import BeforeTheRental from "../components/Common/BeforeTheRental";
 import DuringRental from "../components/Common/DuringRental";
-import HowItWorks from "../components/HomeOne/HowItWorks";
 
 const Index = ({ categories }) => {
   const popularCategories = [];

@@ -3,7 +3,7 @@ import { getFilePath, leveliseCategories } from "../utils";
 
 const NavbarLi = ({ category }) => {
   const hasChildren = category.children && category.children.length > 0;
-  const link = `/listing-list/?search_category=${category.name}`;
+  const link = `/listings/?search_category=${category.name}`;
 
   return (
     <li className="nav-item">

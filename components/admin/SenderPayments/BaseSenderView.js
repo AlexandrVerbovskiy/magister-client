@@ -9,7 +9,7 @@ import {
 } from "../../../services";
 import {
   calculateTotalPriceByDaysCount,
-  getDaysDifference,
+  getFactOrderDays,
   getFilePath,
   moneyFormat,
   dateConverter,
@@ -32,15 +32,15 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   const [openProofImage, setOpenProofImage] = useState(false);
 
   let parentName = "Senders";
-  let parentLink = "/admin/payments/senders";
+  let parentLink = "/admin/payments/senders/";
 
   if (parentType == "failed-senders") {
     parentName = "Failed Paypal Payments";
-    parentLink = "/admin/payments/failed-senders-paypal";
+    parentLink = "/admin/payments/failed-senders-paypal/";
   }
 
   const subtotalPrice = calculateTotalPriceByDaysCount(
-    getDaysDifference(payment.offerStartDate, payment.offerEndDate),
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
     payment.offerPricePerDay
   );
 
@@ -82,7 +82,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs
                   links={[
                     {
@@ -99,7 +99,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title">{`Payment by ${payment.payerName}`}</div>
+                        <div className="max-w-full overflow-separate order-form-title">{`Payment by ${payment.payerName}`}</div>
                       </h2>
 
                       <section>

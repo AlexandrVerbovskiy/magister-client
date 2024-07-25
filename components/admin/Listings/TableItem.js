@@ -2,16 +2,16 @@ import React, { useContext, useState } from "react";
 import Tooltip from "../../../components/admin/Tooltip";
 import View from "../FastActions/View";
 import Edit from "../FastActions/Edit";
-import Delete from "../FastActions/Delete";
 import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath, getListingImageByType } from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
@@ -47,6 +47,7 @@ const TableItem = ({
   ownerPhoto,
   ownerPhone,
   categoryName,
+  otherCategory,
   countStoredItems,
   pricePerDay,
   approved,
@@ -57,19 +58,17 @@ const TableItem = ({
   address,
   minRentalDays,
   averageRating,
+  commentCount,
   ownerAverageRating,
+  ownerCommentsCount,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
-
-  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULT_PHOTO_LINK;
+    : STATIC.DEFAULTS.PHOTO_LINK;
 
   return (
     <>
@@ -79,31 +78,21 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
-            href={`/admin/listings/edit/${id}`}
+            href={`/admin/listings/edit/${id}/`}
             className="flex items-center"
           >
             {name}
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${ownerId}`}
-            onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
-            style={canMoveToOwner ? {} : { cursor: "auto" }}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="Payer"
-            />
-            {ownerName}
-          </Link>
+          <TableUserLink
+            id={ownerId}
+            name={ownerName}
+            photo={ownerPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {categoryName}
+          {categoryName ?? otherCategory}
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -148,16 +137,22 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Item Details"
-              href={"/admin/listings/edit/" + id}
+              href={`/admin/listings/edit/${id}`}
             />
             <SubInfoRow label="Name" value={name} />
-            <SubInfoRow label="Category" value={categoryName} />
+            <SubInfoRow
+              label="Category"
+              value={categoryName ?? otherCategory}
+            />
             <SubInfoRow label="Location" value={address} />
             <SubInfoRow label="Price Per Day" value={pricePerDay} />
             <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Min Rental Days" value={minRentalDays || "-"} />
+            <SubInfoRow
+              label="Minimum Rental Days"
+              value={minRentalDays || "-"}
+            />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={averageRating} />
+              <SingleRatingStar value={averageRating} count={commentCount} />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -192,7 +187,7 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Owner"
-              href={"/admin/users/edit/" + ownerId}
+              href={`/admin/users/edit/${ownerId}`}
               canMove={sessionUser?.id != ownerId}
             />
             <SubInfoRow label="Name" value={ownerName} />
@@ -202,7 +197,11 @@ const TableItem = ({
               value={ownerPhone && ownerPhone.length ? ownerPhone.length : "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={ownerAverageRating} />
+              <SingleRatingStar
+                value={ownerAverageRating}
+                count={ownerCommentsCount}
+                commentName="owner"
+              />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -212,8 +211,8 @@ const TableItem = ({
           className="last:pr-5 px-2 py-3 whitespace-nowrap overflow-separate align-top"
         >
           <div className="flex items-center justify-start gap-2 flex-wrap">
-            <View href={`/listing/${id}`} />
-            <Edit href={`/admin/listings/edit/${id}`} />
+            <View href={`/listings/${id}/`} />
+            <Edit href={`/admin/listings/edit/${id}/`} />
           </div>
         </td>
       </tr>

@@ -36,7 +36,7 @@ const useOrderActions = ({ order }) => {
       }
 
       if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT &&
         isTenant
       ) {
         if (order.paymentInfo) {
@@ -57,19 +57,19 @@ const useOrderActions = ({ order }) => {
         (isOwner &&
           [
             STATIC.ORDER_STATUSES.PENDING_TENANT,
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
           ].includes(order.status)) ||
         (isTenant &&
           [
             STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
           ].includes(order.status))
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
       }
 
       if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
         isOwner
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE);
@@ -82,7 +82,7 @@ const useOrderActions = ({ order }) => {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE);
       }
 
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
         if (isTenant) {
           if (order.canAcceptTenantListing) {
             newActionButtons.push(
@@ -124,31 +124,56 @@ const useOrderActions = ({ order }) => {
       if (
         [
           STATIC.ORDER_STATUSES.FINISHED,
-          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
           STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-        ].includes(order.status)
+        ].includes(order.status) ||
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
+          isOwner)
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
       }
 
-      const hasProcessedExtends =
+      if (order.orderParentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
+      }
+
+      if (
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        (!order.orderParentId || order.extendOrders.length > 1)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
+      }
+
+      const hasFinishedExtends =
         order.extendOrders &&
         order.extendOrders.length > 0 &&
         !order.extendOrders.find(
           (extendOrder) =>
             [
-              STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
               STATIC.ORDER_STATUSES.PENDING_OWNER,
               STATIC.ORDER_STATUSES.PENDING_TENANT,
               STATIC.ORDER_STATUSES.REJECTED,
             ].includes(extendOrder.status) || extendOrder.cancelStatus
         );
 
+      const hasUnstartedExtends =
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        order.extendOrders.find(
+          (extendOrder) =>
+            [
+              STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+              STATIC.ORDER_STATUSES.PENDING_OWNER,
+              STATIC.ORDER_STATUSES.PENDING_TENANT,
+              STATIC.ORDER_STATUSES.REJECTED,
+            ].includes(extendOrder.status) && !extendOrder.cancelStatus
+        );
+
       if (
-        !order.orderParentId &&
         isTenant &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER ||
-          hasProcessedExtends)
+        !hasUnstartedExtends &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
       ) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
       }

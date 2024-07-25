@@ -80,7 +80,7 @@ export default NextAuth({
       return token;
     },
     session({ session, token }) {
-      if (token && session.user) {
+      if (token && session?.user) {
         session.user.authToken = token.authToken;
       }
 

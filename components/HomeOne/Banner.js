@@ -6,8 +6,11 @@ import SearchTipsPopup from "../SearchTipsPopup";
 import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
+import { useRouter } from "next/router";
 
 const Banner = () => {
+  const router = useRouter();
+
   const {
     handleChangeCity,
     handleCategoryTipClick,
@@ -25,6 +28,8 @@ const Banner = () => {
     closeCategoryTipsPopup,
     categoryFilterRef,
     cityFilterRef,
+    handleChangeSearchListingName,
+    searchListingName,
   } = useCategoryCity();
 
   const handleKeyPress = (event) => {
@@ -49,6 +54,18 @@ const Banner = () => {
     "Cameras",
     "Bikes",
   ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const link = getFullListingSearchLink({
+      searchCity,
+      searchCategory,
+      searchListing: searchListingName,
+    });
+
+    router.push(link);
+  };
 
   return (
     <div className="main-banner-area">
@@ -95,11 +112,9 @@ const Banner = () => {
             </h1>
           </div>
 
-          <p>Expolore top-rated attractions, activities and more...</p>
-
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="row m-0 align-items-center">
-              <div className="col-lg-6 col-md-6 p-0">
+              <div className="col-lg-4 col-md-12 p-0">
                 <div className="form-group">
                   <label>
                     <i className="flaticon-search"></i>
@@ -107,21 +122,11 @@ const Banner = () => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Search by category"
-                    name="category"
-                    ref={categoryFilterRef}
-                    onFocus={() => openCategoryTipsPopup(searchCategory)}
-                    onBlur={closeCategoryTipsPopup}
-                    value={searchCategory}
-                    onInput={handleChangeCategory}
-                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
-                    onKeyPress={handleKeyPress}
-                  />
-
-                  <SearchTipsPopup
-                    active={categoryTipsPopupActive}
-                    tips={categoryTips}
-                    handleTipClick={handleCategoryTipClick}
+                    placeholder="What are you looking for?"
+                    name="listing"
+                    value={searchListingName}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+                    onInput={handleChangeSearchListingName}
                   />
                 </div>
               </div>
@@ -141,7 +146,7 @@ const Banner = () => {
                     onBlur={closeCityTipsPopup}
                     value={searchCity}
                     onInput={handleChangeCity}
-                    maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     onKeyPress={handleKeyPress}
                   />
 
@@ -153,13 +158,36 @@ const Banner = () => {
                 </div>
               </div>
 
-              <div className="col-lg-3 col-md-12 p-0">
+              <div className="col-lg-3 col-md-6 p-0">
+                <div className="form-group">
+                  <label>
+                    <i className="flaticon-category"></i>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search by category"
+                    name="category"
+                    ref={categoryFilterRef}
+                    onFocus={() => openCategoryTipsPopup(searchCategory)}
+                    onBlur={closeCategoryTipsPopup}
+                    value={searchCategory}
+                    onInput={handleChangeCategory}
+                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+                    onKeyPress={handleKeyPress}
+                  />
+
+                  <SearchTipsPopup
+                    active={categoryTipsPopupActive}
+                    tips={categoryTips}
+                    handleTipClick={handleCategoryTipClick}
+                  />
+                </div>
+              </div>
+
+              <div className="col-lg-2 col-md-12 p-0">
                 <div id="filter-search-btn" className="submit-btn">
-                  <Link
-                    href={getFullListingSearchLink(searchCity, searchCategory)}
-                  >
-                    <button type="button">Search Now</button>
-                  </Link>
+                  <button type="submit">Search Now</button>
                 </div>
               </div>
             </div>

@@ -1,28 +1,28 @@
-import Link from "next/link";
-import View from "../FastActions/View";
-import Tooltip from "../Tooltip";
 import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
-import STATIC from "../../../static";
-import { generateProfileFilePath, getFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
+import RatingInfoRow from "../RatingInfoRow";
+import TableUserLink from "../TableUserLink";
 
-const TableItem = ({
+const RenterTableItem = ({
   id,
   description,
 
-  quality,
-  listingAccuracy,
-  utility,
-  condition,
-  performance,
-  location,
+  care,
+  timeliness,
+  responsiveness,
+  clarity,
+  usageGuidelines,
+  termsOfService,
+  honesty,
+  reliability,
+  satisfaction,
 
   userId,
   userName,
@@ -45,6 +45,8 @@ const TableItem = ({
 
   reviewerAverageRating,
   userAverageRating,
+  reviewerCommentCount,
+  userCommentCount,
 
   rejectedDescription = null,
 }) => {
@@ -55,9 +57,6 @@ const TableItem = ({
   const canMoveToReviewer = isAdmin && sessionUser?.id != reviewerId;
   const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
-  const fullUserPhotoPath = generateProfileFilePath(userPhoto);
-
   return (
     <>
       <tr>
@@ -66,43 +65,19 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              href={`/admin/users/edit/${reviewerId}`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullUserPhotoPath}
-                width="32"
-                height="32"
-                alt="User"
-              />
-              {userName}
-            </Link>
-          </div>
+          <TableUserLink
+            id={userId}
+            name={userName}
+            photo={userPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <div>
-            <Link
-              href={`/admin/users/edit/${reviewerId}`}
-              className="flex items-center"
-              onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
-              style={canMoveToReviewer ? {} : { cursor: "auto" }}
-            >
-              <img
-                className="w-8 h-8 rounded-full mr-1"
-                src={fullReviewerPhotoPath}
-                width="32"
-                height="32"
-                alt="Reviewer"
-              />
-              {reviewerName}
-            </Link>
-          </div>
+          <TableUserLink
+            id={reviewerId}
+            name={reviewerName}
+            photo={reviewerPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -145,8 +120,8 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title="Reviewer"
-                      href={"/admin/users/edit/" + reviewerId}
-                      canMove={canMoveToUser}
+                      href={`/admin/users/edit/${reviewerId}`}
+                      canMove={canMoveToReviewer}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
                     <SubInfoRow label="Email" value={reviewerEmail} />
@@ -159,7 +134,11 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={reviewerAverageRating} />
+                      <SingleRatingStar
+                        value={reviewerAverageRating}
+                        count={reviewerCommentCount}
+                        commentName="renter"
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -167,7 +146,7 @@ const TableItem = ({
                   <div>
                     <SubInfoTitle
                       title={userColumnTitle}
-                      href={"/admin/users/edit/" + userId}
+                      href={`/admin/users/edit/${userId}`}
                       canMove={canMoveToUser}
                     />
                     <SubInfoRow label="Name" value={userName} />
@@ -179,7 +158,10 @@ const TableItem = ({
                       }
                     />
                     <SubInfoRowWithChild label="Rating">
-                      <SingleRatingStar value={userAverageRating} />
+                      <SingleRatingStar
+                        value={userAverageRating}
+                        count={userCommentCount}
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -188,28 +170,44 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <SubInfoRow label="Quality" value={quality} />
-                    <SubInfoRow
-                      label="Listing Accuracy"
-                      value={listingAccuracy}
+
+                    <RatingInfoRow label="Care" value={care} />
+                    <RatingInfoRow label="Timeliness" value={timeliness} />
+
+                    <RatingInfoRow
+                      label="Responsiveness"
+                      value={responsiveness}
                     />
-                    <SubInfoRow label="Utility" value={utility} />
-                    <SubInfoRow label="Condition" value={condition} />
-                    <SubInfoRow label="Performance" value={performance} />
-                    <SubInfoRow label="Location" value={location} />
-                    <SubInfoRow
+                    <RatingInfoRow label="Clarity" value={clarity} />
+                    <RatingInfoRow
+                      label="UsageGuidelines"
+                      value={usageGuidelines}
+                    />
+                    <RatingInfoRow
+                      label="Terms of service"
+                      value={termsOfService}
+                    />
+                    <RatingInfoRow label="Honesty" value={honesty} />
+                    <RatingInfoRow label="Reliability" value={reliability} />
+                    <RatingInfoRow label="Satisfaction" value={satisfaction} />
+                    <RatingInfoRow
                       label="Average"
-                      value={(
-                        (quality +
-                          listingAccuracy +
-                          utility +
-                          condition +
-                          performance +
-                          location) /
-                        6
-                      ).toFixed(2)}
+                      value={
+                        (care +
+                          timeliness +
+                          clarity +
+                          responsiveness +
+                          usageGuidelines +
+                          termsOfService +
+                          honesty +
+                          reliability +
+                          satisfaction) /
+                        9
+                      }
+                      bold={true}
                     />
-                    <div style={{ textWrap: "wrap" }}>
+                    <div style={{ textWrap: "wrap", color: "black" }}>
+                      <span className="font-bold">Description: </span>
                       Description: {description}
                     </div>
                   </div>
@@ -261,4 +259,4 @@ const TableItem = ({
   );
 };
 
-export default TableItem;
+export default RenterTableItem;

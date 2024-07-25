@@ -13,6 +13,7 @@ const EditMap = ({
   changeCoords,
   radius,
   setRadius,
+  height = "300px",
 }) => {
   const mapRef = useRef(null);
   const circleRef = useRef(null);
@@ -39,6 +40,7 @@ const EditMap = ({
           setMarkerActive(true);
           changeCoords({ lat, lng });
         }}
+        height={height}
       >
         <Marker
           ref={markerRef}

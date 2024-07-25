@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React from "react";
 import Footer from "../../components/_App/Footer";
 import ListingsWithMap from "../../components/GridListings/ListingsWithMap";
 import NavbarTwo from "../../components/_App/NavbarTwo";
@@ -8,37 +8,35 @@ import {
   getOwnerListingListOptions,
 } from "../../services";
 import { listingListBaseServerSideProps } from "../../utils";
-import { IndiceContext } from "../../contexts";
+import {useIdPage} from "../../hooks";
 
-const GridListingsFullMap = ({
-  categories,
-  items,
-  options,
-  countItems,
-  authToken: baseAuthToken,
-  hasListings,
-  priceLimits,
-}) => {
-  const [authToken, setAuthToken] = useState(baseAuthToken);
-  const { authToken: sessionAuthToken } = useContext(IndiceContext);
-
-  useEffect(() => {
-    setAuthToken(sessionAuthToken);
-  }, [sessionAuthToken]);
+const GridListingsFullMap = (baseProps) => {
+  const { authToken, props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken, currentProps }) =>
+      getOwnerListingListOptions(
+        { ...currentProps.options, ownerId: field },
+        authToken
+      ),
+  });
 
   return (
     <>
-      <NavbarTwo canShowSearch={false} />
+      <NavbarTwo />
 
       <ListingsWithMap
         authToken={authToken}
-        categories={categories}
-        pageProps={{ items, options, countItems }}
+        categories={props.categories}
+        pageProps={{
+          items: props.items,
+          options: props.options,
+          countItems: props.countItems,
+        }}
         needSubscriptionNewCategory={false}
-        hasListings={hasListings}
-        ownerId={options.userId}
+        hasListings={props.hasListings}
+        ownerId={props.options.userId}
         getListingListRequest={getOwnerListingList}
-        priceLimits={priceLimits}
+        priceLimits={props.priceLimits}
       />
 
       <Footer bgColor="bg-f5f5f5" />

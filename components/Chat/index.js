@@ -17,7 +17,7 @@ const Chat = ({
       <DashboardNavbar />
       <div className="main-content d-flex flex-column">
         <NavbarThree />
-        <div className="chat-content-area" ref={windowProps.bodyRef}>
+        <div className="chat-content-area" ref={windowProps.chatRef}>
           <LeftSidebar
             selectedChat={selectedChat}
             handleSelectChat={handleSelectChat}

@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { SessionProvider } from "next-auth/react";
 
 import { IndiceProvider } from "../contexts";
@@ -154,7 +154,7 @@ function MyApp({ Component, pageProps }) {
 
           <div className="message-site-warning-alert-list">
             <UnverifiedAlert {...pageProps} />
-            <CookieBanner />
+            {pageType != "admin" && <CookieBanner />}
           </div>
 
           <div className="message-site-success-alert-list">

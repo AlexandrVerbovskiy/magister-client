@@ -1,306 +1,140 @@
-import React, { useState, useContext, useEffect } from "react";
-import Link from "next/link";
-import { IndiceContext } from "../../contexts";
-import ErrorBlockMessage from "../../components/_App/ErrorBlockMessage";
+import { useContext, useRef, useState } from "react";
+import { authSideProps } from "../../middlewares";
+import {
+  getCurrentUserDocumentsPageOptions,
+  saveMyDocuments,
+} from "../../services";
 import NavbarThree from "../../components/_App/NavbarThree";
 import DashboardNavbar from "../../components/Dashboard/DashboardNavbar";
-import ImageInput from "../../components/DashboardComponents/ImageInput";
-import {
-  saveMyDocuments,
-  userVerifyRequestCreate,
-  getCurrentUserDocumentsPageOptions,
-} from "../../services";
-import { authSideProps } from "../../middlewares";
-import { byteConverter, getFilePath } from "../../utils";
-import YesNoModal from "../../components/_App/YesNoModal";
-import env from "../../env";
+import Link from "next/link";
+import MainSection from "../../components/Dashboard/DocumentVerification/MainSection";
+import StatusBar from "../../components/StatusBar";
+import UserPhotoSection from "../../components/Dashboard/DocumentVerification/UserPhotoSection";
+import DocumentPhotoSection from "../../components/Dashboard/DocumentVerification/DocumentPhotoSection";
+import FinishedSection from "../../components/Dashboard/DocumentVerification/FinishedSection";
+import { useRouter } from "next/router";
+import { IndiceContext } from "../../contexts";
+import { base64ToBlob } from "../../utils";
 
-const DocumentsVerification = ({
-  documents,
-  canSend,
-  lastAnswerDescription,
-  canChange,
-}) => {
-  const [formError, setFormError] = useState(null);
-  const { success, setLoading, sessionUser, authToken, setVerified, error } =
-    useContext(IndiceContext);
-  const [activeSendRequestBtn, setActiveSendRequestBtn] = useState(canSend);
-  const [userVerified, setUserVerified] = useState(
-    sessionUser?.verified ?? false
-  );
-  const [activeReverifiedModal, setActiveReverifiedModal] = useState(false);
+const accessCameraDenied =
+  "Access to the camera is not granted. Please grant access to the camera and refresh page";
 
-  const [saveDocumentsDisabled, setSaveDocumentsDisabled] = useState(false);
-  const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
+const SECTION_NAMES = {
+  MAIN: "main",
+  USER_PHOTO: "user-photo",
+  DOCUMENT_PHOTO: "document-photo",
+  FINISHED: "finished",
+};
 
-  const [newProofOfAddress, setNewProofOfAddress] = useState(null);
-  const [proofOfAddressLink, setProofOfAddressLink] = useState(null);
+const DocumentsVerification = () => {
+  const [error, setError] = useState(null);
+  const [disabled, setDisabled] = useState(false);
+  const [userPhoto, setUserPhoto] = useState(null);
+  const [frontDocumentPhoto, setFrontDocumentPhoto] = useState(null);
+  const [backDocumentPhoto, setBackDocumentPhoto] = useState(null);
+  const [currentSection, setCurrentSection] = useState(SECTION_NAMES.MAIN);
+  const { authToken, success } = useContext(IndiceContext);
 
-  const handleProofOfAddressChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
+  const userPhotoVideoRef = useRef(null);
+  const userPhotoStreamRef = useRef(null);
 
-    setNewProofOfAddress(img);
-    setProofOfAddressLink(url);
-  };
+  const router = useRouter();
 
-  const [newReputableBankId, setNewReputableBankId] = useState(null);
-  const [reputableBankIdLink, setReputableBankIdLink] = useState(null);
-
-  const handleReputableBankIdChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewReputableBankId(img);
-    setReputableBankIdLink(url);
-  };
-
-  const [newUtility, setNewUtility] = useState(null);
-  const [utilityLink, setUtilityLink] = useState(null);
-
-  const handleUtilityChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewUtility(img);
-    setUtilityLink(url);
-  };
-
-  const [newHmrc, setNewHmrc] = useState(null);
-  const [hmrcLink, setHmrcLink] = useState(null);
-
-  const handleHmrcChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewHmrc(img);
-    setHmrcLink(url);
-  };
-
-  const [newCouncilTaxBill, setNewCouncilTaxBill] = useState(null);
-  const [councilTaxBillLink, setCouncilTaxBillLink] = useState(null);
-
-  const handleCouncilTaxBillChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewCouncilTaxBill(img);
-    setCouncilTaxBillLink(url);
-  };
-
-  const [newPassportOrDrivingId, setNewPassportOrDrivingId] = useState(null);
-  const [passportOrDrivingIdLink, setPassportOrDrivingIdLink] = useState(null);
-
-  const handlePassportOrDrivingIdChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewPassportOrDrivingId(img);
-    setPassportOrDrivingIdLink(url);
-  };
-
-  const [
-    newConfirmMoneyLaunderingChecksAndCompliance,
-    setNewConfirmMoneyLaunderingChecksAndCompliance,
-  ] = useState(null);
-  const [
-    confirmMoneyLaunderingChecksAndComplianceLink,
-    setConfirmMoneyLaunderingChecksAndComplianceLink,
-  ] = useState(null);
-
-  const handleConfirmMoneyLaunderingChecksAndComplianceChange = (e) => {
-    const img = e.target.files[0];
-    const url = URL.createObjectURL(img);
-
-    setNewConfirmMoneyLaunderingChecksAndCompliance(img);
-    setConfirmMoneyLaunderingChecksAndComplianceLink(url);
-  };
-
-  const initDocuments = async () => {
-    if (documents.proofOfAddressLink) {
-      setProofOfAddressLink(getFilePath(documents.proofOfAddressLink));
-    } else {
-      setProofOfAddressLink(null);
-    }
-
-    if (documents.reputableBankIdLink) {
-      setReputableBankIdLink(getFilePath(documents.reputableBankIdLink));
-    } else {
-      setReputableBankIdLink(null);
-    }
-
-    if (documents.utilityLink) {
-      setUtilityLink(getFilePath(documents.utilityLink));
-    } else {
-      setUtilityLink(null);
-    }
-
-    if (documents.hmrcLink) {
-      setHmrcLink(getFilePath(documents.hmrcLink));
-    } else {
-      setHmrcLink(null);
-    }
-
-    if (documents.councilTaxBillLink) {
-      setCouncilTaxBillLink(getFilePath(documents.councilTaxBillLink));
-    } else {
-      setCouncilTaxBillLink(null);
-    }
-
-    if (documents.passportOrDrivingIdLink) {
-      setPassportOrDrivingIdLink(
-        getFilePath(documents.passportOrDrivingIdLink)
-      );
-    } else {
-      setPassportOrDrivingIdLink(null);
-    }
-
-    if (documents.confirmMoneyLaunderingChecksAndComplianceLink) {
-      setConfirmMoneyLaunderingChecksAndComplianceLink(
-        getFilePath(documents.confirmMoneyLaunderingChecksAndComplianceLink)
-      );
-    } else {
-      setConfirmMoneyLaunderingChecksAndComplianceLink(null);
+  const stopUserPhotoStream = () => {
+    if (userPhotoStreamRef.current) {
+      userPhotoStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
     }
   };
 
-  const dataToSave = () => {
-    const formData = new FormData();
-
-    let hasUpdates = false;
-    let totalSize = 0;
-
-    const addFileToFormData = (key, file) => {
-      const maxFileSize = Number(env.MAX_SUMMARY_FILE_SIZE);
-
-      if (totalSize + file.size > maxFileSize) {
-        throw new Error(
-          "The total size of the files cannot be larger than " +
-            byteConverter(maxFileSize)
-        );
-      }
-
-      formData.append(key, file);
-      totalSize += file.size;
-      hasUpdates = true;
-    };
-
-    if (newProofOfAddress) {
-      addFileToFormData("proofOfAddress", newProofOfAddress);
-    }
-
-    if (newReputableBankId) {
-      addFileToFormData("reputableBankId", newReputableBankId);
-    }
-
-    if (newUtility) {
-      formData.append("utility", newUtility);
-      hasUpdates = true;
-    }
-
-    if (newHmrc) {
-      addFileToFormData("hmrc", newHmrc);
-    }
-
-    if (newCouncilTaxBill) {
-      addFileToFormData("councilTaxBill", newCouncilTaxBill);
-    }
-
-    if (newPassportOrDrivingId) {
-      addFileToFormData("passportOrDrivingId", newPassportOrDrivingId);
-    }
-
-    if (newConfirmMoneyLaunderingChecksAndCompliance) {
-      addFileToFormData(
-        "confirmMoneyLaunderingChecksAndCompliance",
-        newConfirmMoneyLaunderingChecksAndCompliance
-      );
-    }
-
-    return hasUpdates ? formData : null;
+  const startUserPhotoStream = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 250 },
+        height: { ideal: 300 },
+        facingMode: "user",
+      },
+    });
+    const video = userPhotoVideoRef.current;
+    video.srcObject = stream;
+    video.play();
+    userPhotoStreamRef.current = stream;
   };
 
-  const handleSaveClick = async () => {
-    if (!canChange) {
-      setFormError(
-        "You have an unfinished booking or order. Please finish all your orders and bookings before updating"
-      );
+  const goToUserPhotoSection = async () => {
+    if (disabled) {
       return;
     }
 
-    if (saveDocumentsDisabled) {
+    setDisabled(true);
+    setError(null);
+
+    try {
+      await startUserPhotoStream();
+      setCurrentSection(SECTION_NAMES.USER_PHOTO);
+    } catch (err) {
+      let message = err.message;
+
+      if (
+        err.message.toLowerCase() === "permission dismissed" ||
+        err.message.toLowerCase() === "permission denied"
+      ) {
+        message = accessCameraDenied;
+      }
+
+      setError(message);
+    }
+
+    setDisabled(false);
+  };
+
+  const goToDocumentPhotoSection = () =>
+    setCurrentSection(SECTION_NAMES.DOCUMENT_PHOTO);
+
+  const goToFinishedSection = async () => {
+    if (disabled) {
       return;
     }
 
+    setDisabled(true);
+
     try {
-      setFormError(null);
-      const formData = dataToSave();
-
-      if (formData) {
-        setSaveDocumentsDisabled(true);
-
-        await saveMyDocuments(formData, authToken);
-        setUserVerified(false);
-        setVerified(false);
-      }
-
-      success.set("Documents updated successfully");
+      const formData = new FormData();
+      const userPhotoFile = await base64ToBlob(userPhoto);
+      formData.append("userPhoto", userPhotoFile);
+      formData.append("documentFront", frontDocumentPhoto);
+      formData.append("documentBack", backDocumentPhoto);
+      await saveMyDocuments(formData, authToken);
+      success.set("Request successfully sent");
+      setCurrentSection(SECTION_NAMES.FINISHED);
     } catch (e) {
-      setFormError(e.message);
-    } finally {
-      setSaveDocumentsDisabled(false);
+      setError(e.message);
     }
+
+    setDisabled(false);
   };
 
-  const handleBeforeSaveClick = async (e) => {
-    e.preventDefault();
-
-    try {
-      const formData = dataToSave();
-
-      if (formData) {
-        setActiveReverifiedModal(true);
-      } else {
-        handleSaveClick();
-      }
-    } catch (error) {
-      setFormError(error);
-    }
+  const goBackToProfile = () => {
+    router.push("/dashboard/profile-edit/");
   };
 
-  const handleSendRequestToVerify = async () => {
-    if (saveDocumentsDisabled || sendRequestDisabled) return;
-
-    setSaveDocumentsDisabled(true);
-    setSendRequestDisabled(true);
-    setFormError(null);
-
-    try {
-      const formData = dataToSave();
-
-      if (formData) {
-        await saveMyDocuments(formData, authToken);
-      }
-
-      const message = await userVerifyRequestCreate(authToken);
-      success.set(message);
-      setActiveSendRequestBtn(false);
-    } catch (e) {
-      setFormError(e.message);
-    } finally {
-      setSaveDocumentsDisabled(false);
-      setSendRequestDisabled(false);
-    }
-  };
-
-  const handleUpdateAccept = async () => {
-    await handleSaveClick();
-    setActiveSendRequestBtn(false);
-  };
-
-  useEffect(() => {
-    initDocuments();
-  }, [documents]);
+  const statuses = [
+    {
+      title: "Facial verification",
+      finished: ["user-photo", "document-photo", "finished"].includes(
+        currentSection
+      ),
+    },
+    {
+      title: "Documents verification",
+      finished: ["document-photo", "finished"].includes(currentSection),
+    },
+    {
+      title: "Finish",
+      finished: ["finished"].includes(currentSection),
+    },
+  ];
 
   return (
     <>
@@ -308,159 +142,84 @@ const DocumentsVerification = ({
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="breadcrumb-area">
-          <h1>Documents Verification</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/profile-edit/">Profile</Link>
-            </li>
-            <li className="item">Documents Verification</li>
-          </ol>
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>Documents Verification</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/profile-edit/">Profile</Link>
+                </li>
+                <li className="item">Documents Verification</li>
+              </ol>
+            </div>
+          </div>
         </div>
 
         <div className="row">
           <div className="col-12">
             <div className="my-profile-box document-verification">
-              <h3>Documents</h3>
+              <form
+                method="post"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <MainSection
+                  goNext={goToUserPhotoSection}
+                  error={error}
+                  disabled={disabled}
+                  active={currentSection == SECTION_NAMES.MAIN}
+                />
 
-              {!sessionUser?.verified && lastAnswerDescription && (
-                <div className="row" style={{ padding: "0 25px" }}>
-                  <div className="col-lg-12 col-md-12">
-                    <ErrorBlockMessage>
-                      <b>Rejected feedback: </b>
-                      {lastAnswerDescription}
-                    </ErrorBlockMessage>
-                  </div>
-                </div>
-              )}
+                {currentSection != SECTION_NAMES.MAIN && (
+                  <StatusBar statuses={statuses} />
+                )}
 
-              <form method="get">
-                <div className="row">
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Proof of Address"
-                      photoUrl={proofOfAddressLink}
-                      onChange={handleProofOfAddressChange}
-                      name="proofOfAddressLink"
-                    />
-                  </div>
+                <UserPhotoSection
+                  goNext={goToDocumentPhotoSection}
+                  videoRef={userPhotoVideoRef}
+                  streamRef={userPhotoStreamRef}
+                  error={error}
+                  setError={setError}
+                  disabled={disabled}
+                  setDisabled={setDisabled}
+                  stopStream={stopUserPhotoStream}
+                  startStream={startUserPhotoStream}
+                  active={currentSection == SECTION_NAMES.USER_PHOTO}
+                  image={userPhoto}
+                  setImage={setUserPhoto}
+                />
 
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Reputable Bank Id"
-                      photoUrl={reputableBankIdLink}
-                      onChange={handleReputableBankIdChange}
-                      name="reputableBankIdLink"
-                    />
-                  </div>
+                <DocumentPhotoSection
+                  active={currentSection == SECTION_NAMES.DOCUMENT_PHOTO}
+                  goNext={goToFinishedSection}
+                  error={error}
+                  setError={setError}
+                  disabled={disabled}
+                  setDisabled={setDisabled}
+                  frontPhoto={frontDocumentPhoto}
+                  setFrontPhoto={setFrontDocumentPhoto}
+                  backPhoto={backDocumentPhoto}
+                  setBackPhoto={setBackDocumentPhoto}
+                />
 
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Utility"
-                      photoUrl={utilityLink}
-                      onChange={handleUtilityChange}
-                      name="utilityLink"
-                    />
-                  </div>
-
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="HMRC"
-                      photoUrl={hmrcLink}
-                      onChange={handleHmrcChange}
-                      name="hmrcLink"
-                    />
-                  </div>
-
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Council Tax Bill"
-                      photoUrl={councilTaxBillLink}
-                      onChange={handleCouncilTaxBillChange}
-                      name="councilTaxBillLink"
-                    />
-                  </div>
-
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Passport Or Driving Id"
-                      photoUrl={passportOrDrivingIdLink}
-                      onChange={handlePassportOrDrivingIdChange}
-                      name="passportOrDrivingIdLink"
-                    />
-                  </div>
-
-                  <div className="col-12 col-lg-3 col-md-4 document-view">
-                    <ImageInput
-                      label="Confirm Money Laundering Check And Compliance"
-                      photoUrl={confirmMoneyLaunderingChecksAndComplianceLink}
-                      onChange={
-                        handleConfirmMoneyLaunderingChecksAndComplianceChange
-                      }
-                      name="confirmMoneyLaunderingChecksAndComplianceLink"
-                    />
-                  </div>
-
-                  {formError && (
-                    <div className="col-12 mb-2">
-                      <div
-                        className="alert-dismissible fade show alert alert-danger"
-                        role="alert"
-                      >
-                        {formError}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="col-12">
-                    <div className="form-group d-flex gap-2 justify-content-between">
-                      <button
-                        type="button"
-                        style={{ width: "300px" }}
-                        onClick={
-                          userVerified ? handleBeforeSaveClick : handleSaveClick
-                        }
-                        disabled={saveDocumentsDisabled}
-                      >
-                        Save Changes
-                      </button>
-
-                      {!userVerified && activeSendRequestBtn && (
-                        <button
-                          type="button"
-                          style={{ width: "300px" }}
-                          onClick={handleSendRequestToVerify}
-                          disabled={sendRequestDisabled}
-                        >
-                          Send Request To Verify
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <FinishedSection
+                  active={currentSection == SECTION_NAMES.FINISHED}
+                  goNext={goBackToProfile}
+                />
               </form>
             </div>
           </div>
         </div>
       </div>
-
-      {userVerified && (
-        <YesNoModal
-          active={activeReverifiedModal}
-          closeModal={() => setActiveReverifiedModal(false)}
-          title="Are you sure you want update documents?"
-          body="When you update your documents, your profile will automatically be transferred to an unverified status. Until the administrator confirms your profile, you will not be able to manage the listings. A verification request will be sent automatically"
-          onAccept={handleUpdateAccept}
-          acceptText="Update Documents"
-          actionsParentClass="mt-4"
-        />
-      )}
     </>
   );
 };

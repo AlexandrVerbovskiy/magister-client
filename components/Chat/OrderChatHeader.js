@@ -21,7 +21,7 @@ const OrderChatHeader = ({
           <i className="bx bx-menu-alt-left" />
         </div>
       </div>
-      <div className="header-left d-flex align-items-center me-2">
+      <div className="header-left d-flex align-items-center me-2 w-100 row-dots-end">
         <div className="avatar me-2">
           <img
             src={generateProfileFilePath(opponentPhoto)}
@@ -33,9 +33,9 @@ const OrderChatHeader = ({
           />
           <OnlineStatus online={opponentOnline} />
         </div>
-        <h6 className="mb-0">{opponentName}</h6>
+        <h6 className="mb-0 row-dots-end">{opponentName}</h6>
       </div>
-      <div className="header-right text-right w-100">
+      <div className="header-right text-right">
         <ul className="list-unstyled mb-0">
           <li>
             <div className="dropdown">

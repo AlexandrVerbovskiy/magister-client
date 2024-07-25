@@ -13,8 +13,8 @@ const PrivacyPolicy = () => {
 
       <div className="faq-area bg-f9f9f9 pt-100 pb-70">
         <div className="container">
-          <div class="row">
-            <div class="col-12">
+          <div className="row">
+            <div className="col-12">
               <h2>Privacy Policy</h2>
               <div className="faq-item">
                 <p>
@@ -76,7 +76,7 @@ const PrivacyPolicy = () => {
             <div className="col-12">
               <div className="faq-item">
                 <h3>How do we use your information?</h3>
-                <p>
+                <div className="p-0">
                   <ul>
                     <li>
                       To provide and improve our services: We use your data to
@@ -98,14 +98,14 @@ const PrivacyPolicy = () => {
                       like.
                     </li>
                   </ul>
-                </p>
+                </div>
               </div>
             </div>
 
             <div className="col-12">
               <div className="faq-item">
                 <h3>Who do we share your information with?</h3>
-                <p>
+                <div className="p-0">
                   <ul>
                     <li>
                       Internal use: Only employees who need your data to do
@@ -127,14 +127,14 @@ const PrivacyPolicy = () => {
                       rights, property, or safety of our users.
                     </li>
                   </ul>
-                </p>
+                </div>
               </div>
             </div>
 
             <div className="col-12">
               <div className="faq-item">
                 <h3>Your rights:</h3>
-                <p>
+                <div className="p-0">
                   <ul>
                     <li>
                       Access and update: You can access and update your
@@ -164,7 +164,7 @@ const PrivacyPolicy = () => {
                       us.
                     </li>
                   </ul>
-                </p>
+                </div>
               </div>
             </div>
 

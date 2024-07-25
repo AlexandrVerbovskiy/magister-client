@@ -7,10 +7,10 @@ function AccountPanel() {
   const [sync, setSync] = useState(false);
 
   return (
-    <div className="grow">
+    <div className="grow w-full">
       {/* Panel body */}
       <div className="p-6 space-y-6">
-        <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">My Account</h2>
+        <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">My Account</h2>
         {/* Picture */}
         <section>
           <div className="flex items-center">

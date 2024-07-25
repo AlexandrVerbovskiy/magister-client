@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import Tooltip from "../../../components/admin/Tooltip";
-import Link from "next/link";
-import Delete from "../FastActions/Delete";
 import Edit from "../FastActions/Edit";
 import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
-import STATIC from "../../../static";
 import TableDateView from "../TableDateView";
-import { generateProfileFilePath, getFilePath, moneyFormat, dateConverter } from "../../../utils";
+import { moneyFormat, dateConverter } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "Active" : "Suspended";
@@ -81,13 +79,11 @@ const TableItem = ({
   id,
   name,
   emailVerified,
-  phoneVerified,
   email,
   phone,
   photo,
   active,
   verified,
-  onDeleteClick,
   onChangeRole,
   onChangeActive,
   onChangeVerified,
@@ -104,6 +100,8 @@ const TableItem = ({
   twitterUrl,
   ownerAverageRating,
   tenantAverageRating,
+  ownerCommentCount,
+  tenantCommentCount,
   tenantDisputesCount,
   ownerDisputesCount,
 }) => {
@@ -139,29 +137,11 @@ const TableItem = ({
     onChangeVerified();
   };
 
-  const fullPhotoPath = generateProfileFilePath(photo);
-
-  const canMoveToUser = sessionUser?.id != id && isAdmin;
-
   return (
     <>
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${id}`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullPhotoPath}
-              width="32"
-              height="32"
-              alt="Payer"
-            />
-            {name}
-          </Link>
+          <TableUserLink id={id} name={name} photo={photo} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <EmailSpan email={email} verified={emailVerified} />
@@ -306,7 +286,7 @@ const TableItem = ({
                       newRow={true}
                     />
                     <SubInfoRow
-                      label="Tenant Disputes"
+                      label="Renter Disputes"
                       value={tenantDisputesCount}
                       newRow={true}
                     />
@@ -316,11 +296,19 @@ const TableItem = ({
                       newRow={true}
                     />
 
-                    <SubInfoRowWithChild label="Tenant">
-                      <SingleRatingStar value={tenantAverageRating} />
+                    <SubInfoRowWithChild label="Renter">
+                      <SingleRatingStar
+                        value={tenantAverageRating}
+                        count={tenantCommentCount}
+                        commentName="renter"
+                      />
                     </SubInfoRowWithChild>
                     <SubInfoRowWithChild label="Owner">
-                      <SingleRatingStar value={ownerAverageRating} />
+                      <SingleRatingStar
+                        value={ownerAverageRating}
+                        count={ownerCommentCount}
+                        commentName="owner"
+                      />
                     </SubInfoRowWithChild>
                   </div>
                 </td>
@@ -341,7 +329,7 @@ const TableItem = ({
               <Edit href={`/admin/users/edit/${id}`} />
             )}
             {!isCurrent && role !== "admin" && (
-              <Documents href={`/admin/users/documents/${id}`} />
+              <Documents href={`/admin/users/documents/${id}/`} />
             )}
           </div>
         </td>

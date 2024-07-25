@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
   createCategoryBySearchWord,
   getSearchedWordById,
@@ -15,14 +15,60 @@ import ImageInput from "../../../../components/admin/Form/ImageInput";
 import Link from "next/link";
 import ImageView from "../../../../components/admin/Form/ImageView";
 import STATIC from "../../../../static";
-import ENV from "../../../../env";
 import { getFilePath } from "../../../../utils";
+import YesNoModal from "../../../../components/admin/YesNoModal";
+import {useIdPage} from "../../../../hooks";
 
-const createCategoryBySearch = ({
+const getParentOptions = (groupedCategories, level) =>
+  groupedCategories[level].map((elem, index) => ({
+    value: elem.id,
+    title: elem.name,
+    default: index === 0,
+  }));
+
+const getBaseCategoryInfo = ({
   searchedWord,
-  groupedCategories,
   createdCategory,
+  groupedCategories,
 }) => {
+  const baseLevel = createdCategory ? createdCategory["level"] : 1;
+  const baseParentId = createdCategory ? createdCategory["parentId"] : null;
+  const baseName = createdCategory
+    ? createdCategory["name"]
+    : searchedWord["name"];
+
+  let baseParentOptions = [];
+
+  if (baseLevel == 2) {
+    baseParentOptions = getParentOptions(groupedCategories, "firstLevel");
+  }
+
+  if (baseLevel == 3) {
+    baseParentOptions = getParentOptions(groupedCategories, "secondLevel");
+  }
+
+  return { baseLevel, baseParentId, baseName, baseParentOptions };
+};
+
+const createCategoryBySearch = (baseProps) => {
+  const { props, authToken } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getSearchedWordById(field, authToken),
+    onUpdate: (newProps) => {
+      const { baseLevel, baseParentId, baseName, baseParentOptions } =
+        getBaseCategoryInfo(newProps);
+
+      setPrevCategory(newProps.createdCategory);
+      setLevel(baseLevel);
+      setName(baseName);
+      setParentId(baseParentId);
+      setParentIdOptions(baseParentOptions);
+    },
+  });
+
+  const { searchedWord, groupedCategories, createdCategory } = props;
+
   const [prevCategory, setPrevCategory] = useState(createdCategory);
   const [submitting, setSubmitting] = useState(false);
 
@@ -31,6 +77,7 @@ const createCategoryBySearch = ({
     prevCategory?.image ? getFilePath(prevCategory.image) : null
   );
   const [openImage, setOpenImage] = useState(false);
+  const [confirmModalActive, setConfirmModalActive] = useState(true);
 
   const handlePhotoChange = (e) => {
     const img = e.target.files[0];
@@ -40,36 +87,16 @@ const createCategoryBySearch = ({
     setPhotoUrl(url);
   };
 
-  const baseLevel = createdCategory ? createdCategory["level"] : 1;
-  const baseParentId = createdCategory ? createdCategory["parentId"] : null;
+  const { baseLevel, baseParentId, baseName, baseParentOptions } =
+    getBaseCategoryInfo(props);
 
-  const baseName = createdCategory
-    ? createdCategory["name"]
-    : searchedWord["name"];
-
-  const getParentOptions = (level) =>
-    groupedCategories[level].map((elem, index) => ({
-      value: elem.id,
-      title: elem.name,
-      default: index === 0,
-    }));
-
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { success } = useContext(IndiceContext);
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
+  const [formError, setFormError] = useState(null);
+
   const [level, setLevel] = useState(baseLevel);
   const [name, setName] = useState(baseName);
   const [parentId, setParentId] = useState(baseParentId);
-
-  let baseParentOptions = [];
-
-  if (baseLevel == 2) {
-    baseParentOptions = getParentOptions("firstLevel");
-  }
-
-  if (baseLevel == 3) {
-    baseParentOptions = getParentOptions("secondLevel");
-  }
-
   const [parentIdOptions, setParentIdOptions] = useState(baseParentOptions);
 
   const levelOptions = [
@@ -90,8 +117,6 @@ const createCategoryBySearch = ({
     },
   ];
 
-  const [formError, setFormError] = useState(null);
-
   const handleChangeName = (name) => {
     setName(name);
     setFormError(null);
@@ -106,15 +131,18 @@ const createCategoryBySearch = ({
     }
 
     if (level == 2) {
-      const options = getParentOptions("firstLevel");
+      const options = getParentOptions(groupedCategories, "firstLevel");
+
       if (options.length > 0) {
         setParentId(groupedCategories["firstLevel"][0]["id"]);
       }
+
       setParentIdOptions(options);
     }
 
     if (level == 3) {
-      const options = getParentOptions("secondLevel");
+      const options = getParentOptions(groupedCategories, "secondLevel");
+
       if (options.length > 0) {
         setParentId(groupedCategories["secondLevel"][0]["id"]);
       }
@@ -210,7 +238,7 @@ const createCategoryBySearch = ({
                             <div className="single-image-bpx">
                               <img
                                 className="w-20 h-20"
-                                src={photoUrl ?? STATIC.DEFAULT_PHOTO_LINK}
+                                src={photoUrl ?? STATIC.DEFAULTS.PHOTO_LINK}
                                 alt={`${name} image`}
                               />
                             </div>
@@ -277,7 +305,7 @@ const createCategoryBySearch = ({
                           <ImageInput
                             photoUrl={photoUrl}
                             onChange={handlePhotoChange}
-                            fileSizeLimit={ENV.MAX_SMALL_FILE_SIZE}
+                            fileSizeLimit={STATIC.LIMITS.SMALL_FILE_SIZE}
                           />
                         </section>
 
@@ -343,7 +371,7 @@ const createCategoryBySearch = ({
                   <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                     <div className="flex self-end">
                       <Link
-                        href="/admin/searched-words"
+                        href="/admin/searched-words/"
                         aria-controls="access-leave-modal"
                         className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
                       >
@@ -352,7 +380,10 @@ const createCategoryBySearch = ({
                       {!prevCategory && (
                         <button
                           type="button"
-                          onClick={handleSaveClick}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmModalActive(true);
+                          }}
                           className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
                         >
                           Create
@@ -365,6 +396,16 @@ const createCategoryBySearch = ({
             </div>
           </div>
         </main>
+
+        <YesNoModal
+          title="Confirm action"
+          body={`Confirmation is required to continue. Are you sure you want to create category "${name}"?`}
+          modalOpen={confirmModalActive}
+          handleCloseModal={() => setConfirmModalActive(false)}
+          onAccept={handleSaveClick}
+          acceptText="Confirm"
+          cancelText="Cancel"
+        />
       </div>
     </div>
   );

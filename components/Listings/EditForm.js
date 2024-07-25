@@ -25,14 +25,12 @@ import { IndiceContext } from "../../contexts";
 import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";
 import YesNoModal from "../_App/YesNoModal";
+import DeleteModal from "./DeleteModal";
 import {
   createListingApprovalRequest,
-  deleteListing,
   changeActiveListing,
 } from "../../services";
-import Switch from "../FormComponents/Switch";
 import { useRouter } from "next/router";
-import ENV from "../../env";
 import ErrorSpan from "../ErrorSpan";
 import { useDropzone } from "react-dropzone";
 
@@ -55,8 +53,7 @@ const EditForm = ({
   canChange,
 }) => {
   const { success, authToken, error } = useContext(IndiceContext);
-  const router = useRouter();
-  categories = convertToSelectPopupCategories(categories);
+  categories = convertToSelectPopupCategories(categories, true);
 
   let baseCategoryId = categories["firstLevel"][0]?.id ?? null;
 
@@ -97,9 +94,7 @@ const EditForm = ({
 
   const [disabled, setDisabled] = useState(false);
   const [sendRequestDisabled, setSendRequestDisabled] = useState(false);
-  const [deleteDisabled, setDeleteDisabled] = useState(false);
   const [changeActiveDisabled, setChangeActiveDisabled] = useState(false);
-  const [activeDeletePopup, setActiveDeletePopup] = useState(false);
   const [activeSentRequestPopup, setActiveSentRequestPopup] = useState(false);
   const [activeUpdatePopup, setActiveUpdatePopup] = useState(false);
 
@@ -107,6 +102,8 @@ const EditForm = ({
   const [nameError, setNameError] = useState(null);
 
   const [category, setCategory] = useState(null);
+  const [otherCategory, setOtherCategory] = useState("");
+  const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
   const [description, setDescription] = useState("");
@@ -134,6 +131,7 @@ const EditForm = ({
   const [backgroundPhoto, setBackgroundPhoto] = useState(null);
   const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
   const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
+  const [changePopupActive, setChangePopupActive] = useState(null);
 
   const [active, setActive] = useState(true);
 
@@ -145,7 +143,9 @@ const EditForm = ({
 
   const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
   const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
-  const [radius, setRadius] = useState(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+  const [radius, setRadius] = useState(
+    STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
+  );
 
   const [mainError, setMainError] = useState(null);
 
@@ -154,6 +154,12 @@ const EditForm = ({
   const handleChangeName = (e) => {
     setName(e.target.value);
     setNameError(null);
+    setMainError(null);
+  };
+
+  const handleChangeOtherCategory = (e) => {
+    setOtherCategory(e.target.value);
+    setCategoryError(null);
     setMainError(null);
   };
 
@@ -207,6 +213,7 @@ const EditForm = ({
 
   const handleChangeCategory = (categoryId) => {
     setCategory(categoryId);
+    setIsOtherCategory(categoryId == "-");
     setCategoryError(null);
     setMainError(null);
   };
@@ -217,7 +224,6 @@ const EditForm = ({
     setMainError(null);
   };
 
-
   const handleChangeCity = (e) => {
     const city = e.value;
     const lat = STATIC.CITY_COORDS[city].lat;
@@ -227,7 +233,7 @@ const EditForm = ({
     setCenter({ lat, lng });
     setLat(lat);
     setLng(lng);
-    setRadius(STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS);
+    setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
     setMainError(null);
   };
 
@@ -288,10 +294,13 @@ const EditForm = ({
       id: elem.id,
     }));
 
-    return {
+    const categoryId = !!listing.otherCategory
+      ? undefined
+      : listing.categoryId ?? null;
+
+    const data = {
       address: listing.address ?? "",
       name: listing.name ?? "",
-      categoryId: listing.categoryId ?? null,
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
@@ -301,19 +310,26 @@ const EditForm = ({
       minRentalDays: listing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
-      rentalRadius: listing.radius ?? STATIC.BASE_LISTING_MAP_CIRCLE_RADIUS,
+      rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
       backgroundPhotoUrl: listing.backgroundPhoto
         ? getFilePath(listing.backgroundPhoto)
         : null,
+      otherCategory: listing.otherCategory ?? "",
     };
+
+    if (categoryId) {
+      data["categoryId"] = categoryId;
+    }
+
+    return data;
   };
 
   const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: ENV.MAX_FILE_SIZE,
+      maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFile = acceptedFiles[0];
 
@@ -328,7 +344,7 @@ const EditForm = ({
             }
 
             const photoWithPreview = Object.assign(newFile, {
-              preview: img.src, // Використовуємо вже створений URL
+              preview: img.src,
               localId: uniqueImageId(),
               date: Date.now(),
             });
@@ -360,10 +376,9 @@ const EditForm = ({
       id: elem.id,
     }));
 
-    return {
+    const dataToSave = {
       address: address.trim(),
       name: name.trim(),
-      categoryId: category,
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
@@ -377,12 +392,26 @@ const EditForm = ({
       listingImages,
       active,
     };
+
+    if (isOtherCategory) {
+      dataToSave["otherCategory"] = otherCategory.trim();
+    } else {
+      dataToSave["categoryId"] = category;
+    }
+
+    return dataToSave;
   };
 
   useEffect(() => {
     const data = listingToState();
+    let categoryInfo = data.categoryId ?? null;
+
+    if (!categoryInfo && data.otherCategory) {
+      categoryInfo = "-";
+    }
+
     setName(data.name);
-    setCategory(data.categoryId);
+    setCategory(categoryInfo);
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
@@ -396,6 +425,8 @@ const EditForm = ({
     setAddress(data.address);
     setActive(data.active);
     setBackgroundPhotoUrl(data.backgroundPhotoUrl);
+    setIsOtherCategory(!!data.otherCategory);
+    setOtherCategory(data.otherCategory);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -413,6 +444,7 @@ const EditForm = ({
 
     const dataToSave = objectToSave();
     const listingToCheck = listingToState();
+    delete listingToCheck["backgroundPhotoUrl"];
     return !lodash.isEqual(listingToCheck, dataToSave);
   };
 
@@ -434,7 +466,7 @@ const EditForm = ({
         totalSize += file.size;
       });
 
-      const maxFileSize = Number(ENV.MAX_SUMMARY_FILE_SIZE);
+      const maxFileSize = Number(STATIC.LIMITS.SUMMARY_FILE_SIZE);
 
       if (totalSize > maxFileSize) {
         throw new Error(
@@ -469,9 +501,21 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!category) {
-      setCategoryError("Required field");
-      hasError = true;
+    if (isOtherCategory) {
+      if (!otherCategory.trim()) {
+        setCategoryError("required field");
+        hasError = true;
+      }
+
+      if (validateSmallText(otherCategory) !== true) {
+        setCategoryError(validateSmallText(otherCategory));
+        hasError = true;
+      }
+    } else {
+      if (!category) {
+        setCategoryError("Required field");
+        hasError = true;
+      }
     }
 
     if (!postcode.trim()) {
@@ -489,9 +533,9 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (minRentalDays && minRentalDays > 350) {
+    if (minRentalDays && minRentalDays > STATIC.LIMITS.RENTAL_DURATION) {
       setMinRentalDaysError(
-        "You cannot make the minimum rental duration longer than 350 days"
+        `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
       );
       hasError = true;
     }
@@ -617,30 +661,6 @@ const EditForm = ({
     setActiveSentRequestPopup(true);
   };
 
-  const activateDeletePopup = (e) => {
-    e.preventDefault();
-
-    if (!canChange) {
-      return;
-    }
-
-    setActiveDeletePopup(true);
-  };
-
-  const handleAcceptDelete = async () => {
-    try {
-      setDeleteDisabled(true);
-      await deleteListing(listing.id, authToken);
-      setActiveDeletePopup(false);
-      router.push("/dashboard/listings");
-      success.set("Deleted successfully");
-    } catch (e) {
-      error.set(e.message);
-    } finally {
-      setDeleteDisabled(false);
-    }
-  };
-
   const activateUpdatePopup = (e) => {
     e.preventDefault();
 
@@ -683,21 +703,27 @@ const EditForm = ({
 
       <div className="main-content d-flex flex-column">
         <NavbarThree />
-        <div className="breadcrumb-area">
-          <h1>{listing.name ?? "Add Listings"}</h1>
-          <ol className="breadcrumb">
-            <li className="item">
-              <Link href="/">Home</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/">Dashboard</Link>
-            </li>
-            <li className="item">
-              <Link href="/dashboard/listings">Listings</Link>
-            </li>
-            <li className="item">{listing.name ?? "Add Listings"}</li>
-          </ol>
+
+        <div className="miran-grid-sorting row align-items-center">
+          <div className="col-12 result-count">
+            <div className="breadcrumb-area">
+              <h1>{listing.name ?? "Add Listings"}</h1>
+              <ol className="breadcrumb">
+                <li className="item">
+                  <Link href="/">Home</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/">Dashboard</Link>
+                </li>
+                <li className="item">
+                  <Link href="/dashboard/listings/">Listings</Link>
+                </li>
+                <li className="item">{listing.name ?? "Add Listings"}</li>
+              </ol>
+            </div>
+          </div>
         </div>
+
         {rejectDescription && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -710,7 +736,7 @@ const EditForm = ({
           <h3>Basic Informations</h3>
 
           <div className="row">
-            <div className="col-lg-6 col-md-6">
+            <div className={isOtherCategory ? "" : "col-lg-6 col-md-6"}>
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
@@ -731,11 +757,25 @@ const EditForm = ({
                 <CategorySelect
                   categories={categories}
                   selectedCategoryId={category}
-                  categoryError={categoryError}
+                  categoryError={isOtherCategory ? null : categoryError}
                   handleChangeCategory={handleChangeCategory}
                 />
               </ErrorIconWrapper>
             </div>
+
+            {isOtherCategory && (
+              <div className="col-lg-6 col-md-6">
+                <InputWithIcon
+                  label="Category Name:"
+                  icon="bx bx-duplicate"
+                  placeholder="Describe category..."
+                  value={otherCategory}
+                  onInput={handleChangeOtherCategory}
+                  error={categoryError}
+                  name="category_name"
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="add-listings-box">
@@ -767,7 +807,7 @@ const EditForm = ({
 
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label="Min rental days(not required):"
+                label="Minimum rental days:"
                 icon="bx bx-menu-alt-left"
                 placeholder="0"
                 value={minRentalDays}
@@ -791,57 +831,71 @@ const EditForm = ({
           </div>
         </div>
         <div className="add-listings-box">
-          <h3>Location</h3>
-
+          <h3>
+            Collection Location{" "}
+            <div className="form-hint">
+              The location is where you plan to hand over the item to the
+              renter. It could be your home, workplace, or any other convenient
+              place. <br />
+              <b>Note:</b> Your safety is our priority. The exact location will
+              only be shared with the renter once you approve the rental.
+            </div>
+          </h3>
           <div className="row">
-            <div className="col-lg-6 col-md-6">
-              <SelectWithIcon
-                onChange={handleChangeCity}
-                value={city}
-                label="City:"
-                icon="bx bx-menu-alt-left"
-                options={cityOptions}
-                isSearchable={false}
-                name="city"
-              />
+            <div className="col-md-6">
+              <div className="row">
+                <div className="col-12">
+                  <SelectWithIcon
+                    onChange={handleChangeCity}
+                    value={city}
+                    label="City:"
+                    icon="bx bx-menu-alt-left"
+                    options={cityOptions}
+                    isSearchable={false}
+                    name="city"
+                  />
+                </div>
+
+                <div className="col-12">
+                  <InputWithIcon
+                    label="Postcode:"
+                    icon="bx bx-menu-alt-left"
+                    placeholder="WA1 1AF"
+                    value={postcode}
+                    onInput={handleChangePostcode}
+                    error={postcodeError}
+                    name="postcode"
+                  />
+                </div>
+
+                <div className="col-12">
+                  <InputWithIcon
+                    label="Address:"
+                    icon="bx bx-menu-alt-left"
+                    placeholder="e.g. 55 County Laois"
+                    value={address}
+                    onInput={handleChangeAddress}
+                    error={addressError}
+                    name="address"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Postcode:"
-                icon="bx bx-menu-alt-left"
-                placeholder="WA1 1AF"
-                value={postcode}
-                onInput={handleChangePostcode}
-                error={postcodeError}
-                name="postcode"
-              />
-            </div>
-
-            <div className="col-12 mb-1">
-              <InputWithIcon
-                label="Address:"
-                icon="bx bx-menu-alt-left"
-                placeholder="e.g. 55 County Laois"
-                value={address}
-                onInput={handleChangeAddress}
-                error={addressError}
-                name="address"
+            <div className="col-md-6">
+              <EditMap
+                markerActive={markerActive}
+                setMarkerActive={setMarkerActive}
+                center={center}
+                setCenter={setCenter}
+                lat={lat}
+                changeCoords={handleChangeCoords}
+                lng={lng}
+                radius={radius}
+                setRadius={setRadius}
               />
             </div>
           </div>
-
-          <EditMap
-            markerActive={markerActive}
-            setMarkerActive={setMarkerActive}
-            center={center}
-            setCenter={setCenter}
-            lat={lat}
-            changeCoords={handleChangeCoords}
-            lng={lng}
-            radius={radius}
-            setRadius={setRadius}
-          />
         </div>
 
         <EditPhotosSection
@@ -872,9 +926,7 @@ const EditForm = ({
         <div className="add-listings-box">
           <h3>
             Listing Background Photo
-            <div
-              style={{ fontSize: "12px", fontWeight: 400, marginTop: "2px" }}
-            >
+            <div className="form-hint">
               You can add file with maximum size 5 MB. Valid photo format is 3
               to 1
             </div>
@@ -925,7 +977,7 @@ const EditForm = ({
         </div>
 
         <div className="add-listings-box">
-          <h3>Details</h3>
+          <h3>Item Description</h3>
 
           <div className="row">
             <div className="col-lg-12 col-md-12">
@@ -934,9 +986,9 @@ const EditForm = ({
                 value={description}
                 onChange={handleChangeDescription}
                 icon="bx bx-text"
-                label="How Item Is Stored:"
+                label="Describe your Item:"
                 error={descriptionError}
-                placeholder="Details..."
+                placeholder="DETAILS"
               />
             </div>
           </div>
@@ -985,8 +1037,12 @@ const EditForm = ({
               {listing.id && (
                 <button
                   type="button"
-                  onClick={handleChangeActive}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setChangePopupActive(true);
+                  }}
                   disabled={changeActiveDisabled}
+                  className={active ? "button-danger" : ""}
                 >
                   {active ? "Delete" : "Restore"}
                 </button>
@@ -1032,14 +1088,13 @@ const EditForm = ({
           body={"Confirmation is required to send a listing approval request"}
           acceptText="Send"
         />
-        {/*<YesNoModal
-          active={activeDeletePopup}
-          closeModal={() => setActiveDeletePopup(false)}
-          onAccept={handleAcceptDelete}
-          title="Confirm Action"
-          body={`Confirmation is required to continue. Are you sure you want to delete listing "${listing.name}"?`}
-          acceptText="Send"
-        />*/}
+        <DeleteModal
+          active={changePopupActive}
+          onAccept={handleChangeActive}
+          closeModal={() => setChangePopupActive(false)}
+          activeListing={active}
+          listingName={listing.name}
+        />
       </div>
     </>
   );

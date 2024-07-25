@@ -1,7 +1,5 @@
 import { useState, useRef } from "react";
-import env from "../../../env";
 import ErrorSpan from "../ErrorSpan";
-
 import STATIC from "../../../static";
 import { byteConverter } from "../../../utils";
 
@@ -14,12 +12,16 @@ const ImageInput = ({
   name = "file",
   fileSizeLimit = null,
 }) => {
-  if (!fileSizeLimit) fileSizeLimit = env.MAX_FILE_SIZE;
+  if (!fileSizeLimit) {
+    fileSizeLimit = STATIC.LIMITS.FILE_SIZE;
+  }
 
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
 
-  if (!defaultUrl) defaultUrl = STATIC.DEFAULT_PHOTO_LINK;
+  if (!defaultUrl) {
+    defaultUrl = STATIC.DEFAULTS.PHOTO_LINK;
+  }
 
   const handleChange = (e) => {
     setError(null);

@@ -16,14 +16,14 @@ const useNavListingCategories = () => {
 
   const handleChangeCategory = (categoryId = null) => {
     if (!categoryId) {
-      router.push(`/listing-list`);
+      router.push(`/listings/`);
       return;
     }
 
     Object.keys(categories).forEach((level) => {
       categories[level].forEach((category) => {
         if (category.id === categoryId) {
-          const link = `/listing-list?categories=${category.name}`;
+          const link = `/listings/?categories=${category.name}`;
           router.push(link);
         }
       });
@@ -34,7 +34,7 @@ const useNavListingCategories = () => {
     e.preventDefault();
     setActivePopup(true);
   };
-
+  
   return {
     navbarCategories,
     handleChangeCategory,

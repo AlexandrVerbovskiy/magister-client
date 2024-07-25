@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Input from "../../FormComponents/Input";
 import SocialAuth from "./SocialAuth";
-import { validatePassword, validateEmail } from "../../../utils";
-import { generateMyEmailVerifyCode, login } from "../../../services";
-import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
+import PasswordInput from "../../FormComponents/PasswordInput";
+import { useLogin } from "../../../hooks";
+import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
-import PasswordInput from "../../FormComponents/PasswordInput";
+import STATIC from "../../../static";
 
 const LoginTab = ({
   email,
@@ -25,25 +25,53 @@ const LoginTab = ({
   setRememberMe,
   activePopup,
 }) => {
-  const router = useRouter();
+  const onLoginPartSuccess = async (res) => {
+    closeModal();
 
-  const [formError, setFormError] = useState(null);
-  const [emailError, setEmailError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
-  const [resendEmailView, setRememberMeView] = useState(false);
-  const [wasResendEmailView, setWasRememberMeView] = useState(false);
-
-  const { success: mainSuccess, onLogin } = useContext(IndiceContext);
-
-  const handleInputEmail = (e) => {
-    setEmail(e.target.value);
-    setEmailError(null);
+    if (res.needCode) {
+      if (res.codeSent) {
+        setCanChangeType(false);
+        setType("email");
+        setCodeModalActive(true);
+      } else {
+        setCanChangeType(true);
+        setTypeModalActive(true);
+      }
+    } else {
+      await signIn("credentials", {
+        userId: res.userId,
+        authToken: res.authToken,
+        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
+        needRegularViewInfoForm: res.needRegularViewInfoForm,
+      });
+    }
   };
 
-  const handleInputPassword = (e) => {
-    setPassword(e.target.value);
-    setPasswordError(null);
-  };
+  const {
+    formError,
+    emailError,
+    passwordError,
+    resendEmailView,
+    wasResendEmailView,
+    setFormError,
+    setEmailError,
+    setPasswordError,
+    setRememberMeView,
+    setWasRememberMeView,
+    handleInputEmail,
+    handleInputPassword,
+    handleLogin: handleSubmit,
+    handleResendEmailVerify,
+  } = useLogin({
+    onLoginPartSuccess,
+    setUser,
+    setEmail,
+    setPassword,
+    setRememberMe,
+    email,
+    password,
+    rememberMe,
+  });
 
   useEffect(() => {
     if (activePopup) {
@@ -54,86 +82,6 @@ const LoginTab = ({
       setPassword("");
     }
   }, [activePopup]);
-
-  const handleResendEmailVerify = async (e) => {
-    e.preventDefault();
-    setWasRememberMeView(true);
-    setRememberMeView(false);
-
-    try {
-      const res = await generateMyEmailVerifyCode(email);
-      mainSuccess.set(res);
-    } catch (e) {
-      setFormError(e.message);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setRememberMeView(false);
-    setFormError(null);
-
-    let error = false;
-
-    const resPasswordValid = validatePassword(password);
-    if (resPasswordValid !== true) {
-      error = true;
-      setPasswordError(resPasswordValid);
-    }
-
-    const resEmailValid = validateEmail(email);
-    if (resEmailValid !== true) {
-      error = true;
-      setEmailError(resEmailValid);
-    }
-
-    if (error) return;
-
-    try {
-      const res = await login({
-        email,
-        password,
-        rememberMe,
-      });
-
-      setUser(res.user);
-      closeModal();
-
-      if (res.needCode) {
-        if (res.codeSent) {
-          setCanChangeType(false);
-          setType("email");
-          setCodeModalActive(true);
-        } else {
-          setCanChangeType(true);
-          setTypeModalActive(true);
-        }
-      } else {
-        await signIn("credentials", {
-          userId: res.userId,
-          authToken: res.authToken,
-          redirect: false,
-          needRegularViewInfoForm: rememberMe.needRegularViewInfoForm,
-        });
-
-        onLogin(res.user);
-
-        setPassword("");
-
-        mainSuccess.set("Successfully logged in");
-
-        if (res.user.needRegularViewInfoForm) {
-          router.push("/dashboard/profile-edit");
-        }
-      }
-    } catch (e) {
-      setFormError(e.message);
-
-      if (e.message.includes("The mail was not confirmed.")) {
-        setRememberMeView(true);
-      }
-    }
-  };
 
   return (
     <>
@@ -199,7 +147,7 @@ const LoginTab = ({
 
             <span className="dont-account mt-0 mb-3">
               Forgot or lost your password?{" "}
-              <Link href="/password-reset-send">Reset It Now</Link>
+              <Link href="/password-reset-send/">Reset It Now</Link>
             </span>
 
             <button type="submit">Login Now</button>

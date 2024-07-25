@@ -99,11 +99,6 @@ export const changeTwoFactorAuth = async (authToken) => {
   return data;
 };
 
-export const noNeedRegularViewInfoForm = async (authToken) => {
-  const data = await post("/no-need-regular-view-info-form", null, authToken);
-  return data;
-};
-
 export const authByProvider = async (body) => {
   const data = await post("/auth-by-provider", body);
   return data.body;

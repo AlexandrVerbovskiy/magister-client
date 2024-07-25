@@ -9,7 +9,7 @@ const Input = ({
   placeholder = "",
   setError = () => {},
   labelClassName = "sr-only",
-  inputClassName = "form-input",
+  inputClassName = "form-input w-full",
   name = null,
 }) => {
   const handleInput = (e) => {

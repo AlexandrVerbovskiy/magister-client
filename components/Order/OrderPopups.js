@@ -4,10 +4,14 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import { calculateCurrentTotalPrice, increaseDateByOneDay } from "../../utils";
+import {
+  calculateCurrentTotalPrice,
+  getOrderBlockedDatesToExtend,
+  getOrderBlockedDatesToUpdate,
+  getStartExtendOrderDate,
+} from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import DisputeModal from "./DisputeModal";
 
 const OrderPopups = ({
   order,
@@ -48,7 +52,12 @@ const OrderPopups = ({
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
-  const isOwner = sessionUser.id == order.ownerId;
+  const isOwner = sessionUser?.id == order.ownerId;
+
+  const extendStartDate = getStartExtendOrderDate(
+    order.offerEndDate,
+    order.extendOrders
+  );
 
   return (
     <>
@@ -56,7 +65,7 @@ const OrderPopups = ({
         STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
       ) && (
         <BookingActionModals
-          orderId={order.id}
+          order={order}
           listingPricePerDay={order.listingPricePerDay}
           proposalPrice={
             actualUpdateRequest
@@ -81,7 +90,7 @@ const OrderPopups = ({
               : "sum"
           }
           listingName={order.listingName}
-          blockedDates={order.blockedDates}
+          blockedDates={getOrderBlockedDatesToUpdate(order)}
           updateRequestModalActive={updateRequestModalActive}
           setUpdateRequestModalActive={setUpdateRequestModalActive}
           handleCreateUpdateRequest={handleCreateUpdateRequest}
@@ -103,12 +112,11 @@ const OrderPopups = ({
           price={order.offerPricePerDay}
           minRentalDays={order.listingMinRentalDays}
           listingName={order.listingName}
-          blockedDates={order.blockedDates}
+          blockedDates={getOrderBlockedDatesToExtend(order)}
           title="Extend Now"
-          startDate={
-            order.offerEndDate ? increaseDateByOneDay(order.offerEndDate) : null
-          }
+          startDate={extendStartDate}
           fullVersion={true}
+          isExtend={true}
         />
       )}
 
@@ -136,7 +144,7 @@ const OrderPopups = ({
         modalActive={paypalModalActive}
         closeModal={() => setPaypalModalActive(false)}
         amount={calculateCurrentTotalPrice({
-          isOwner,
+          isOwner: false,
           startDate: order.offerStartDate,
           endDate: order.offerEndDate,
           pricePerDay: order.offerPricePerDay,

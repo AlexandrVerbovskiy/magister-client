@@ -152,19 +152,8 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
       await signIn("credentials", {
         authToken: res.authToken,
-        redirect: false,
+        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
       });
-
-      onLogin(res.user);
-
-      setCodeModalActive(false);
-
-      if (res.user.needRegularViewInfoForm) {
-        router.push("/dashboard/profile-edit");
-      }
-
-      mainSuccess.set("Successfully logged in");
-      setCode("");
     } catch (e) {
       setCodeModalError(e.message);
     }
@@ -270,7 +259,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                       onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
-                      maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     />
                     <SearchTipsPopup
                       active={categoryTipsPopupActive}
@@ -308,7 +297,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                     </li>
                   ) : (
                     <li className="nav-item">
-                      <Link href="/how-it-works" className="nav-link">
+                      <Link href="/how-it-works/" className="nav-link">
                         How it works
                       </Link>
                     </li>
@@ -383,7 +372,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                           onFocus={() => openCategoryTipsPopup(searchCategory)}
                           onBlur={closeCategoryTipsPopup}
                           onInput={handleChangeCategory}
-                          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                          maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                         />
 
                         <SearchTipsPopup
@@ -423,7 +412,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                   )}
 
                   {/*<div className="option-item">
-                    <Link href="/dashboard/add-listing" className="default-btn">
+                    <Link href="/dashboard/add-listing/" className="default-btn">
                       <i className="flaticon-more"></i> Add Listing
                     </Link>
                   </div>*/}

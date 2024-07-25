@@ -1,27 +1,47 @@
-const convertToSelectPopupCategories = (categories) => {
-  categories["firstLevel"].forEach(
+import cloneObject from "./cloneObject";
+
+const convertToSelectPopupCategories = (categories, needOthers = false) => {
+  const newCategories = cloneObject(categories);
+
+  newCategories["firstLevel"].forEach(
     (category, index) =>
-      (categories["firstLevel"][index]["countChildren"] = categories[
+      (newCategories["firstLevel"][index]["countChildren"] = newCategories[
         "secondLevel"
       ].filter((subCategory) => subCategory.parentId == category.id).length)
   );
 
-  categories["secondLevel"].forEach(
+  newCategories["secondLevel"].forEach(
     (category, index) =>
-      (categories["secondLevel"][index]["countChildren"] = categories[
+      (newCategories["secondLevel"][index]["countChildren"] = newCategories[
         "thirdLevel"
       ].filter((subCategory) => subCategory.parentId == category.id).length)
   );
 
-  categories["thirdLevel"].forEach(
-    (category, index) => (categories["thirdLevel"][index]["countChildren"] = 0)
+  newCategories["thirdLevel"].forEach(
+    (category, index) =>
+      (newCategories["thirdLevel"][index]["countChildren"] = 0)
   );
 
-  categories["firstLevel"].sort((a, b) => b.countChildren - a.countChildren);
-  categories["secondLevel"].sort((a, b) => b.countChildren - a.countChildren);
-  categories["thirdLevel"].sort((a, b) => b.countChildren - a.countChildren);
+  newCategories["firstLevel"].sort((a, b) => b.countChildren - a.countChildren);
+  newCategories["secondLevel"].sort(
+    (a, b) => b.countChildren - a.countChildren
+  );
+  newCategories["thirdLevel"].sort((a, b) => b.countChildren - a.countChildren);
 
-  return categories;
+  if (needOthers) {
+    newCategories["firstLevel"].push({
+      countChildren: 0,
+      id: "-",
+      image: null,
+      level: 1,
+      name: "Others",
+      orderIndex: null,
+      parentId: null,
+      popular: false,
+    });
+  }
+
+  return newCategories;
 };
 
 export default convertToSelectPopupCategories;

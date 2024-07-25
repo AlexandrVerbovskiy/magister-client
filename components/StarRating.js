@@ -9,7 +9,21 @@ const StarRating = ({
   centerAlign = false,
   checkedOnlyActive = false,
   uncheckedStarClassName = "bx-star",
+  emptyMaxWidth = null,
+  needCommentsCount = true,
+  commentName = "item",
 }) => {
+  if (!commentCount) {
+    return (
+      <div
+        className="no-comments-rating"
+        style={emptyMaxWidth ? { maxWidth: emptyMaxWidth } : {}}
+      >
+        No reviews added to this {commentName}
+      </div>
+    );
+  }
+
   return (
     <div className={`rating ${centerAlign ? "d-flex align-items-center" : ""}`}>
       {[0, 1, 2, 3, 4].map((value) => {
@@ -42,7 +56,7 @@ const StarRating = ({
         <span className="overall-rating">{averageRating.toFixed(1)}</span>
       )}
 
-      {commentCount > 0 && (
+      {needCommentsCount && (
         <span className={countClass}>
           ({commentCount}
           {pointsValue && ` ${autoMultiEnding(commentCount, "review")}`})

@@ -1,6 +1,5 @@
-import MainReviewPart from "./MainReviewPart";
-import { useContext, useState } from "react";
-import { IndiceContext } from "../../../contexts";
+import MainListingReviewPart from "./MainListingReviewPart";
+import { useState } from "react";
 import { validateBigText } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 import ContractDetailsLight from "../../Order/OrderApprovementParts/ContractDetailsLight";
@@ -103,7 +102,7 @@ const ListingReviewForm = ({
 
               <form>
                 <div className="row">
-                  <MainReviewPart
+                  <MainListingReviewPart
                     stars={starOptions}
                     handleChangeStars={handleChangeValue}
                     description={description}

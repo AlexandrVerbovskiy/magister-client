@@ -1,5 +1,11 @@
 import STATIC from "../static";
 import {
+  checkStartEndHasConflict,
+  generateDatesBetween,
+  getMaxDate,
+  increaseDateByOneDay,
+} from "./dateHelpers";
+import {
   ownerGetsCalculate,
   tenantPaymentCalculate,
 } from "./priceCalculations";
@@ -42,9 +48,6 @@ export const checkIsFileHasExtension = (file, extensions) => {
 
   return result;
 };
-
-export const changeLocation = (location) =>
-  window.history.pushState(null, "", location);
 
 export const indicateMediaTypeByExtension = (type) => {
   if (STATIC.VIDEO_EXTENSIONS.includes(type.toLowerCase()))
@@ -103,3 +106,98 @@ export const isPayedUsedPaypal = (type) =>
   [STATIC.PAYMENT_TYPES.PAYPAL, STATIC.PAYMENT_TYPES.CREDIT_CARD].includes(
     type
   );
+
+export const hasPayError = ({ sessionUser, order }) => {
+  if (!sessionUser?.verified) {
+    return "You need to be verified to make a payment";
+  }
+
+  if (!order.ownerVerified) {
+    return "To make a payment, the owner of the product must be verified";
+  }
+
+  if (!order.ownerPaypalId) {
+    return "To make a payment, the owner of the product must confirm his PayPal account";
+  }
+
+  return null;
+};
+
+export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
+  let lastOrderDate = offerEndDate;
+
+  if (extendOrders && extendOrders.length) {
+    const extendOrderDates = extendOrders
+      .filter(
+        (order) =>
+          [
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+            STATIC.ORDER_STATUSES.FINISHED,
+          ].includes(order.status) && !order.cancelStatus
+      )
+      .map((extendOrder) => extendOrder.offerEndDate);
+
+    lastOrderDate = getMaxDate(extendOrderDates);
+  }
+
+  return increaseDateByOneDay(lastOrderDate);
+};
+
+export const getOrderBlockedDatesToUpdate = (order) => {
+  if (!order) {
+    return [];
+  }
+
+  let blockedDatesToUpdate = [];
+
+  order.conflictOrders.map((conflictOrder) => {
+    const startDate = conflictOrder.requestId
+      ? conflictOrder.newStartDate
+      : conflictOrder.offerStartDate;
+
+    const endDate = conflictOrder.requestId
+      ? conflictOrder.newEndDate
+      : conflictOrder.offerEndDate;
+
+    blockedDatesToUpdate = [
+      ...blockedDatesToUpdate,
+      ...generateDatesBetween(startDate, endDate),
+    ];
+  });
+
+  return removeDuplicates(blockedDatesToUpdate);
+};
+
+export const getOrderBlockedDatesToExtend = (order) => {
+  if (!order) {
+    return [];
+  }
+
+  return removeDuplicates([
+    ...getOrderBlockedDatesToUpdate(order),
+    ...generateDatesBetween(order.offerStartDate, order.offerEndDate),
+  ]);
+};
+
+export const isOrderCanBeAccepted = (order) => {
+  if (
+    order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
+    order.disputeId ||
+    order.cancelStatus
+  ) {
+    return true;
+  }
+
+  const orderStartDate = order.requestId
+    ? order.newStartDate
+    : order.offerStartDate;
+
+  const orderEndDate = order.requestId ? order.newEndDate : order.offerEndDate;
+  const blockedDates = getOrderBlockedDatesToUpdate(order);
+
+  return !checkStartEndHasConflict(orderStartDate, orderEndDate, blockedDates);
+};
+
+export const removeDuplicates = (arr) => [...new Set(arr)];

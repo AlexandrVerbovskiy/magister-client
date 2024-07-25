@@ -3,7 +3,7 @@ import STATIC from "../../../static";
 
 function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
   return (
-    <form className="relative" onSubmit={(e) => e.preventDefault()}>
+    <form className="relative w-full md:w-auto" onSubmit={(e) => e.preventDefault()}>
       <label htmlFor="action-search" className="sr-only">
         Search
       </label>
@@ -11,11 +11,11 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
         value={value}
         onInput={(e) => onInput(e.target.value)}
         id="action-search"
-        className="form-input pl-9 bg-white dark:bg-slate-800"
+        className="form-input pl-9 bg-white dark:bg-slate-800 w-full md:w-auto"
         type="text"
         placeholder={placeholder}
         name="search"
-        maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+        maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
       />
       <button
         className="absolute inset-0 right-auto group"

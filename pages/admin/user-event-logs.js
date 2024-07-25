@@ -2,17 +2,13 @@ import React, { useContext, useState } from "react";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import LogsTable from "../../components/admin/UserLogs/Table";
-import Datepicker from "../../components/admin/Datepicker";
 import { adminSideProps } from "../../middlewares";
 
 import {
   useAdminPage,
   usePagination,
-  useInitPaginationTimeFilter,
-  useChangeTimeFilter,
   useBaseAdminFilter,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
@@ -20,12 +16,12 @@ import {
   getAdminUserEventLogListPageOptions,
   getUserEventLogList,
 } from "../../services";
-import { baseTimeListPageParams, baseTimeTypePageParams } from "../../utils";
+import { baseTimeTypePageParams } from "../../utils";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 
 const Logs = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typeCount, setTypeCount] = useState(pageProps.typeCount);
 
   const onRebuild = (data) => {
@@ -57,6 +53,7 @@ const Logs = (pageProps) => {
     items: logs,
     rebuild,
     options,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getUserEventLogList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -75,7 +72,7 @@ const Logs = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs links={[{ title: "Logs" }]} />
               </div>
 
@@ -109,6 +106,7 @@ const Logs = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

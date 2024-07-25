@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
-  getDaysDifference,
+  getFactOrderDays,
   moneyFormat,
   tenantPaymentCalculate,
   dateConverter,
@@ -23,8 +23,8 @@ const Status = ({ adminApproved, waitingApproved }) => {
 
   return (
     <div
-      className={`bookings-status order-item-status ${className}`}
-      style={{ fontSize: "14px", marginLeft: "10px" }}
+      className={`small-text bookings-status order-item-status ${className}`}
+      style={{ marginLeft: "10px" }}
     >
       {statusName}
     </div>
@@ -48,7 +48,7 @@ const InvoiceTable = ({
   const [disabled, setDisabled] = useState(false);
 
   const subTotalPrice =
-    offer.pricePerDay * getDaysDifference(offer.startDate, offer.endDate);
+    offer.pricePerDay * getFactOrderDays(offer.startDate, offer.endDate);
 
   const handlePdfDownload = async () => {
     try {
@@ -121,7 +121,7 @@ const InvoiceTable = ({
                   <sub>
                     <Link
                       style={{ color: "inherit" }}
-                      href={`/dashboard/orders/${purchaseOrderId}`}
+                      href={`/dashboard/orders/${purchaseOrderId}/`}
                     >
                       Ord-{purchaseOrderId ?? "-"}
                     </Link>

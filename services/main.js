@@ -306,30 +306,6 @@ export const getAdminListingCommentListOptions = async (params, authToken) => {
   return data.body;
 };
 
-export const createRenterReview = async (
-  { tenantCommentInfo, orderId },
-  authToken
-) => {
-  const data = await post(
-    `/create-tenant-review`,
-    { userCommentInfo: tenantCommentInfo, orderId },
-    authToken
-  );
-  return data.body;
-};
-
-export const createOwnerReview = async (
-  { ownerCommentInfo, listingCommentInfo, orderId },
-  authToken
-) => {
-  const data = await post(
-    `/create-owner-review`,
-    { userCommentInfo: ownerCommentInfo, listingCommentInfo, orderId },
-    authToken
-  );
-  return data.body;
-};
-
 export const getAdminDisputeListOptions = async (params, authToken) => {
   const data = await post(`/admin-dispute-list-options`, params, authToken);
   return data.body;
@@ -345,5 +321,22 @@ export const getUserChatOptions = async (
 
 export const getAdminChatOptions = async ({ id = null }, authToken) => {
   const data = await post(`/admin-chat-options`, { id }, authToken);
+  return data.body;
+};
+
+export const getAdminOthersListingCategoriesOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-searched-others-categories-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
+export const getAdminCreateCategoryByOthersOptions = async (authToken) => {
+  const data = await get(`/admin-create-category-by-others-options`, authToken);
   return data.body;
 };

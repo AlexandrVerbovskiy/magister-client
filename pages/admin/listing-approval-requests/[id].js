@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { IndiceContext } from "../../../contexts";
 import Sidebar from "../../../partials/admin/Sidebar";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -12,20 +12,26 @@ import {
 } from "../../../services";
 import InputView from "../../../components/admin/Form/InputView";
 import TextareaView from "../../../components/admin/Form/TextareaView";
-import ModalBlank from "../../../components/admin/ModalBlank";
-import ErrorSpan from "../../../components/admin/ErrorSpan";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
 import { getFilePath, getListingImageByType } from "../../../utils";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
 import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
+import {useIdPage} from "../../../hooks";
 
-const ListingApprovalRequest = ({
-  request: baseRequest,
-  listing: baseListing,
-}) => {
-  const [listing, setListing] = useState(baseListing);
-  const [request, setRequest] = useState(baseRequest);
+const ListingApprovalRequest = (baseProps) => {
+  const { props } = useIdPage({
+    baseProps,
+    getPagePropsFunc: ({ field, authToken }) =>
+      getAdminListingApprovalRequestOption(field, authToken),
+    onUpdate: (newProps) => {
+      setListing(newProps.listing);
+      setRequest(newProps.request);
+    },
+  });
+
+  const [listing, setListing] = useState(props.listing);
+  const [request, setRequest] = useState(props.request);
   const [mapCenter, setMapCenter] = useState(null);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
@@ -99,7 +105,7 @@ const ListingApprovalRequest = ({
               <div className="flex flex-col md:flex-row md:-mr-px">
                 <div className="grow w-full">
                   <div className="p-6 space-y-6">
-                    <h2 className="text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
+                    <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
                       {listing.name}
                     </h2>
 
@@ -146,7 +152,9 @@ const ListingApprovalRequest = ({
 
                           <div className="w-1/2">
                             <InputView
-                              value={listing.categoryName}
+                              value={
+                                listing.categoryName ?? listing.otherCategory
+                              }
                               label="Category"
                               placeholder="category"
                               name="categoryName"
@@ -193,7 +201,7 @@ const ListingApprovalRequest = ({
                             <InputView
                               value={listing.minRentalDays}
                               name="minRentalDays"
-                              label="Min rental days"
+                              label="Minimum rental days"
                               placeholder="0"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -215,13 +223,13 @@ const ListingApprovalRequest = ({
                     </section>
 
                     <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Location
-                      </h2>
+                      <div className="flex w-full gap-2">
+                        <div className="w-full sm:w-1/2">
+                          <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                            Collection Location
+                          </h2>
 
-                      <div className="flex flex-col gap-2">
-                        <div className="flex w-full gap-2">
-                          <div className="w-full sm:w-1/2">
+                          <div className="w-full mb-2">
                             <InputView
                               name="city"
                               label="City"
@@ -232,7 +240,7 @@ const ListingApprovalRequest = ({
                             />
                           </div>
 
-                          <div className="w-full sm:w-1/2">
+                          <div className="w-full mb-2">
                             <InputView
                               name="postcode"
                               label="Postcode"
@@ -242,41 +250,43 @@ const ListingApprovalRequest = ({
                               inputClassName="form-input w-full"
                             />
                           </div>
+
+                          <div className="w-full mb-2">
+                            <InputView
+                              name="address"
+                              label="Address"
+                              placeholder="e.g. 55 County Laois"
+                              labelClassName="block text-sm font-medium mb-1"
+                              value={listing.address}
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
                         </div>
 
-                        <div className="w-full mb-2">
-                          <InputView
-                            name="address"
-                            label="Address"
-                            placeholder="e.g. 55 County Laois"
-                            labelClassName="block text-sm font-medium mb-1"
-                            value={listing.address}
-                            inputClassName="form-input w-full"
-                          />
-                        </div>
-
-                        <div
-                          className="flex w-full admin-map-parent"
-                          style={{ height: "500px" }}
-                        >
-                          <MultyMarkersMap
-                            userLocation={userLocation}
-                            setUserLocation={setUserLocation}
-                            markers={[
-                              {
-                                id: 1,
+                        <div className="w-full sm:w-1/2">
+                          <div
+                            className="flex w-full admin-map-parent flex-col md:flex-row mb-2"
+                            style={{ height: "240px" }}
+                          >
+                            <MultyMarkersMap
+                              userLocation={userLocation}
+                              setUserLocation={setUserLocation}
+                              markers={[
+                                {
+                                  id: 1,
+                                  lat: listing.rentalLat,
+                                  lng: listing.rentalLng,
+                                  radius: listing.rentalRadius,
+                                },
+                              ]}
+                              baseCenter={{
                                 lat: listing.rentalLat,
                                 lng: listing.rentalLng,
-                                radius: listing.rentalRadius,
-                              },
-                            ]}
-                            baseCenter={{
-                              lat: listing.rentalLat,
-                              lng: listing.rentalLng,
-                            }}
-                            center={mapCenter}
-                            setCenter={setMapCenter}
-                          />
+                              }}
+                              center={mapCenter}
+                              setCenter={setMapCenter}
+                            />
+                          </div>
                         </div>
                       </div>
                     </section>
@@ -336,7 +346,7 @@ const ListingApprovalRequest = ({
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Details
+                        Item Description
                       </h2>
 
                       <div className="w-full">
@@ -344,6 +354,7 @@ const ListingApprovalRequest = ({
                           name="description"
                           value={listing.description}
                           row="7"
+                          placeholder="Details..."
                         />
                       </div>
                     </section>

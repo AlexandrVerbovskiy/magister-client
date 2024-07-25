@@ -1,9 +1,13 @@
-export const getFullListingSearchLink = (searchLocation, searchCategory) => {
-  let searchLink = "/listing-list";
+export const getFullListingSearchLink = ({
+  searchCity,
+  searchCategory,
+  searchListing,
+}) => {
+  let searchLink = "/listings/";
   let hasPrev = false;
 
-  if (searchLocation) {
-    searchLink += `?search-city=${searchLocation}`;
+  if (searchCity) {
+    searchLink += `?search-city=${searchCity}`;
     hasPrev = true;
   }
 
@@ -11,15 +15,19 @@ export const getFullListingSearchLink = (searchLocation, searchCategory) => {
     searchLink += `${hasPrev ? "&" : "?"}search-category=${searchCategory}`;
   }
 
+  if (searchListing) {
+    searchLink += `${hasPrev ? "&" : "?"}search-listing=${searchListing}`;
+    hasPrev = true;
+  }
+
   return searchLink;
 };
 
 export const getListingSearchLink = (searchCategory) => {
-  let searchLink = "/listing-list";
-  let hasPrev = false;
+  let searchLink = "/listings/";
 
   if (searchCategory) {
-    searchLink += `${hasPrev ? "&" : "?"}search-category=${searchCategory}`;
+    searchLink += `?search-category=${searchCategory}`;
   }
 
   return searchLink;

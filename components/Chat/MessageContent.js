@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import ENV from "../../env";
 import STATIC from "../../static";
-import { getDaysDifference, calculateCurrentTotalPrice } from "../../utils";
+import { getFactOrderDays, calculateCurrentTotalPrice } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
 import SuccessIcon from "../Icons/SuccessIcon";
@@ -10,16 +10,127 @@ import OrderUpdateStatusMessageContent from "./OrderUpdateStatusMessageContent";
 import OrderMessageActions from "./OrderMessageActions";
 import StarRating from "../StarRating";
 
-const PointStarInfo = ({ label, value }) => {
+const PointStarInfo = ({
+  label,
+  value,
+  commentName = "item",
+  width = "120px",
+}) => {
   return (
-    <div style={{ width: "120px" }}>
+    <div style={{ width: width }}>
       <label>{label}</label>
       <StarRating
         averageRating={value}
         checked={true}
         checkedOnlyActive={true}
         uncheckedStarClassName="bxs-star"
+        commentCount={1}
+        needCommentsCount={false}
+        commentName={commentName}
       />
+    </div>
+  );
+};
+
+const OwnerCommentMessage = ({ content }) => {
+  const items = [
+    {
+      label: "Item description accuracy",
+      value: content.itemDescriptionAccuracy,
+    },
+    { label: "Photo accuracy", value: content.photoAccuracy },
+    { label: "Cleanliness", value: content.cleanliness },
+    { label: "Pickup condition", value: content.pickupCondition },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Scheduling flexibility", value: content.schedulingFlexibility },
+    { label: "Issue resolution", value: content.issueResolution },
+  ];
+
+  const chunkedItems = [];
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="my-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="d-flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              width="200px"
+              key={idx}
+              label={item.label}
+              value={item.value}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const TenantCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Care", value: content.care },
+    { label: "Timeliness", value: content.timeliness },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Usage Guidelines", value: content.usageGuidelines },
+    { label: "Terms of service", value: content.termsOfService },
+    { label: "Honesty", value: content.honesty },
+    { label: "Reliability", value: content.reliability },
+    { label: "Satisfaction", value: content.satisfaction },
+  ];
+
+  const chunkedItems = [];
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="my-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="d-flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              width="200px"
+              key={idx}
+              label={item.label}
+              value={item.value}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const ListingCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Punctuality", value: content.punctuality },
+    { label: "General", value: content.generalExperience },
+    { label: "Communication", value: content.communication },
+    { label: "Reliability", value: content.reliability },
+    { label: "Kindness", value: content.kindness },
+    { label: "Flexibility", value: content.flexibility },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 3) {
+    chunkedItems.push(items.slice(i, i + 3));
+  }
+
+  return (
+    <div className="my-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="d-flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo key={idx} label={item.label} value={item.value} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
@@ -40,8 +151,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
     ].includes(type)
   ) {
     if (isTemp) {
-      const blob = new Blob([content.path], { type: content.path["type"] });
-      src = URL.createObjectURL(blob);
+      src = content.path;
     } else {
       src = ENV.SERVER_URL + "/" + content.path;
     }
@@ -50,7 +160,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   if (type === STATIC.MESSAGE_TYPES.IMAGE) {
     return (
       <img
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
+        style={{ maxWidth: "200px", maxHeight: "280px" }}
         height="200px"
         className=""
         src={src}
@@ -61,8 +171,8 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   if (type === STATIC.MESSAGE_TYPES.VIDEO) {
     return (
       <video
-        style={{ maxWidth: "200px", maxHeight: "200px" }}
-        height="200px"
+        style={{ maxWidth: "200px", maxHeight: "280px" }}
+        height="280px"
         controls
         className=""
         src={src}
@@ -88,7 +198,13 @@ const baseMessageContent = ({ isTemp, type, content }) => {
   return null;
 };
 
-const orderMessageContent = ({ type, content, entity, popupsData }) => {
+const orderMessageContent = ({
+  type,
+  content,
+  entity,
+  popupsData,
+  senderId,
+}) => {
   const { sessionUser } = useContext(IndiceContext);
 
   if (
@@ -100,12 +216,12 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
       endDate: content.offerDateEnd,
       pricePerDay: content.offerPrice,
       type,
-      isOwner: sessionUser.id == entity.ownerId,
+      isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,
       tenantFee: entity.tenantFee,
     });
 
-    const duration = getDaysDifference(
+    const duration = getFactOrderDays(
       content.offerDateStart,
       content.offerDateEnd
     );
@@ -124,6 +240,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
             : "Request"
         }
         hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
+        senderId={senderId}
       />
     );
   }
@@ -132,18 +249,25 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.TENANT_PAYED,
-      STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT,
+      STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.PENDED_TO_TENANT,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
     ].includes(type)
   ) {
     let title = "Proposal accepted";
+    let style = {};
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED) {
       title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_CLIENT) {
+    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
+      title = "Request for confirmation of rent payment was successfully sent";
+      style = { maxWidth: "200px", textAlign: "center" };
+    }
+
+    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT) {
       title = "Got the item";
     }
 
@@ -163,6 +287,8 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         type={type}
         title={title}
         Icon={SuccessIcon}
+        style={style}
+        senderId={senderId}
       />
     );
   }
@@ -192,6 +318,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
         type={type}
         title={title}
         Icon={ErrorIcon}
+        senderId={senderId}
       />
     );
   }
@@ -213,17 +340,13 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
           {content.description}
         </div>
 
-        <div
-          className="d-flex flex-column align-items-center"
-          style={{ gap: "10px", marginTop: "10px" }}
-        >
-          <OrderMessageActions
-            type={type}
-            order={entity}
-            popupsData={popupsData}
-            content={content}
-          />
-        </div>
+        <OrderMessageActions
+          type={type}
+          order={entity}
+          popupsData={popupsData}
+          content={content}
+          senderId={senderId}
+        />
       </div>
     );
   }
@@ -235,22 +358,7 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
           <b>Listing review</b>
         </div>
 
-        <div className="my-1">
-          <div className="d-flex">
-            <PointStarInfo label="Punctuality" value={content.punctuality} />
-            <PointStarInfo label="General" value={content.generalExperience} />
-            <PointStarInfo
-              label="Communication"
-              value={content.communication}
-            />
-          </div>
-
-          <div className="d-flex">
-            <PointStarInfo label="Reliability" value={content.reliability} />
-            <PointStarInfo label="Kindness" value={content.kindness} />
-            <PointStarInfo label="Flexibility" value={content.flexibility} />
-          </div>
-        </div>
+        <ListingCommentMessage content={content} />
 
         <div className="my-1 text-start w-100">
           <b>Description: </b>
@@ -260,26 +368,25 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
     );
   }
 
-  if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+  if (
+    [
+      STATIC.MESSAGE_TYPES.OWNER_REVIEW,
+      STATIC.MESSAGE_TYPES.TENANT_REVIEW,
+    ].includes(type)
+  ) {
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.TENANT_REVIEW;
+
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="mb-2">
-          <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div className="my-1">
-          <div className="d-flex">
-            <PointStarInfo label="Quality" value={content.quality} />
-            <PointStarInfo label="Accuracy" value={content.listingAccuracy} />
-            <PointStarInfo label="Utility" value={content.utility} />
-          </div>
-
-          <div className="d-flex">
-            <PointStarInfo label="Condition" value={content.condition} />
-            <PointStarInfo label="Performance" value={content.performance} />
-            <PointStarInfo label="Location" value={content.location} />
-          </div>
-        </div>
+        {isRenterReview ? (
+          <TenantCommentMessage content={content} />
+        ) : (
+          <OwnerCommentMessage content={content} />
+        )}
 
         <div className="my-1 text-start w-100">
           <b>Description: </b>
@@ -299,13 +406,26 @@ const orderMessageContent = ({ type, content, entity, popupsData }) => {
   return null;
 };
 
-const MessageContent = ({ isTemp, type, content, entity, popupsData }) => {
+const MessageContent = ({
+  isTemp,
+  type,
+  content,
+  entity,
+  popupsData,
+  senderId,
+}) => {
   const isOrder = entity["type"] == STATIC.CHAT_TYPES.ORDER;
 
   let messageContent = baseMessageContent({ isTemp, type, content });
 
   if (!messageContent && isOrder) {
-    messageContent = orderMessageContent({ type, content, entity, popupsData });
+    messageContent = orderMessageContent({
+      type,
+      content,
+      entity,
+      popupsData,
+      senderId,
+    });
   }
 
   if (!messageContent) {

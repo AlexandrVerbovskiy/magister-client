@@ -18,7 +18,7 @@ import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
 
-const NavbarTwo = ({ canShowSearch = true }) => {
+const NavbarTwo = ({ canShowSearch = false }) => {
   const {
     isAuth,
     success: mainSuccess,
@@ -163,19 +163,8 @@ const NavbarTwo = ({ canShowSearch = true }) => {
 
       await signIn("credentials", {
         authToken: res.authToken,
-        redirect: false,
+        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
       });
-
-      onLogin(res.user);
-
-      setCodeModalActive(false);
-
-      if (res.user.needRegularViewInfoForm) {
-        router.push("/dashboard/profile-edit");
-      }
-
-      mainSuccess.set("Successfully logged in");
-      setCode("");
     } catch (e) {
       setCodeModalError(e.message);
     }
@@ -271,7 +260,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                       onFocus={() => openCategoryTipsPopup(searchCategory)}
                       onBlur={closeCategoryTipsPopup}
                       onInput={handleChangeCategory}
-                      maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                     />
 
                     <SearchTipsPopup
@@ -310,7 +299,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                     </li>
                   ) : (
                     <li className="nav-item">
-                      <Link href="/how-it-works" className="nav-link">
+                      <Link href="/how-it-works/" className="nav-link">
                         How it works
                       </Link>
                     </li>
@@ -376,7 +365,7 @@ const NavbarTwo = ({ canShowSearch = true }) => {
                           type="text"
                           className="input-search"
                           placeholder="Search by category"
-                          maxLength={STATIC.MAX_SEARCH_INPUT_LENGTH}
+                          maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
                           name="listingCategorySearch"
                           ref={smallCategoryFilterRef}
                           value={searchCategory}

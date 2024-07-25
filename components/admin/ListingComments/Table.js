@@ -6,6 +6,8 @@ import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
 import ApproveModal from "../Comments/ApproveModal";
 import { listingCommentApprove, listingCommentReject } from "../../../services";
+import PaginationLoading from "../PaginationLoading";
+import EmptyTable from "../EmptyTable";
 
 const ListingCommentsTable = ({
   reviews,
@@ -14,6 +16,7 @@ const ListingCommentsTable = ({
   onClickTh,
   totalCount,
   setItemFields,
+  loading,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
@@ -64,7 +67,7 @@ const ListingCommentsTable = ({
     const newAveragePoints = totalPoints / newCount;
 
     await listingCommentApprove({ id: popupApproveId }, authToken);
-    
+
     setItemFields(
       {
         approved: true,
@@ -77,19 +80,21 @@ const ListingCommentsTable = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
+    <div className="base-pagination-table bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700 relative">
       <header className="px-5 py-4">
         <h2 className="font-semibold text-slate-800 dark:text-slate-100">
           All Reviews{" "}
-          <span className="text-slate-400 dark:text-slate-500 font-medium">
-            {totalCount}
-          </span>
+          {!loading && (
+            <span className="text-slate-400 dark:text-slate-500 font-medium">
+              {totalCount}
+            </span>
+          )}
         </h2>
       </header>
 
       <div>
         <div className="overflow-x-auto">
-          <table className="admin-table table-fixed w-full dark:text-slate-300">
+          <table className="admin-table table-fixed dark:text-slate-300">
             <thead className="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
               <tr>
                 {ths.map((th) => (
@@ -103,17 +108,22 @@ const ListingCommentsTable = ({
               </tr>
             </thead>
             <tbody className="text-sm divide-y divide-slate-200 dark:divide-slate-700 border-b border-slate-200 dark:border-slate-700">
-              {reviews.map((review) => (
-                <TableItem
-                  key={review.id}
-                  {...review}
-                  openPopupImage={(image) => setPopupImage(image)}
-                  handleApproveClick={(id) => setPopupApproveId(id)}
-                  handleRejectClick={(id) => setPopupRejectId(id)}
-                />
-              ))}
+              {!loading &&
+                reviews.map((review) => (
+                  <TableItem
+                    key={review.id}
+                    {...review}
+                    openPopupImage={(image) => setPopupImage(image)}
+                    handleApproveClick={(id) => setPopupApproveId(id)}
+                    handleRejectClick={(id) => setPopupRejectId(id)}
+                  />
+                ))}
             </tbody>
           </table>
+
+          {loading && <PaginationLoading />}
+
+          {!loading && reviews.length < 1 && <EmptyTable name="reviews"/>}
         </div>
       </div>
 

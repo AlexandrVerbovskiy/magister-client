@@ -2,9 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import useSearchCategory from "./useSearchCategory";
 import useSearchCity from "./useSearchCity";
 
-const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
+const useCategoryCity = ({
+  baseCity = "",
+  baseCategory = "",
+  baseListing = "",
+} = {}) => {
   const categoryFilterRef = useRef(null);
   const cityFilterRef = useRef(null);
+  const [searchListingName, setSearchListingName] = useState(baseListing);
 
   const {
     categoryTipsPopupActive,
@@ -57,6 +62,11 @@ const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
     cityFilterRef.current.blur();
   };
 
+  const handleChangeSearchListingName = (e) => {
+    const newName = e.target.value;
+    setSearchListingName(newName);
+  };
+
   return {
     handleChangeCity,
     handleCategoryTipClick,
@@ -74,6 +84,8 @@ const useCategoryCity = ({ baseCity = "", baseCategory = "" } = {}) => {
     closeCategoryTipsPopup,
     categoryFilterRef,
     cityFilterRef,
+    handleChangeSearchListingName,
+    searchListingName,
   };
 };
 

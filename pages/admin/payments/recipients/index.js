@@ -15,10 +15,7 @@ import Header from "../../../../partials/admin/Header";
 import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import PaginationNumeric from "../../../../components/admin/PaginationNumeric";
 import DropdownFilter from "../../../../components/admin/DropdownFilter";
-import {
-  baseAdminTimeListPageParams,
-  baseTimeListPageParams,
-} from "../../../../utils";
+import { baseAdminTimeListPageParams } from "../../../../utils";
 import { adminSideProps } from "../../../../middlewares";
 import { useRouter } from "next/router";
 import FilterRadioOption from "../../../../components/admin/Form/FilterRadioOption";
@@ -28,7 +25,7 @@ import DateSelect from "../../../../components/admin/DateSelect";
 const RecipientPayments = (pageProps) => {
   const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const [type, setType] = useState(router.query.type ?? "all");
   const [status, setStatus] = useState(router.query.status ?? "all");
@@ -53,6 +50,7 @@ const RecipientPayments = (pageProps) => {
     items: payments,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminRecipientPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -90,64 +88,69 @@ const RecipientPayments = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "Recipient Payments" }]} />
-                <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                  <SearchForm
-                    placeholder="Search by Transfer Id"
-                    value={filter}
-                    onInput={changeFilter}
-                  />
 
-                  <DateSelect
-                    value={timeFilterType}
-                    setValue={(value) =>
-                      handleChangeTimeFilterType(value, rebuild)
-                    }
-                  />
+                <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                  <div className="flex gap-2 flex-col xs:flex-row">
+                    <SearchForm
+                      placeholder="Search by Transfer Id"
+                      value={filter}
+                      onInput={changeFilter}
+                    />
 
-                  <DropdownFilter align="right">
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Status
+                    <div className="flex gap-2">
+                      <DateSelect
+                        value={timeFilterType}
+                        setValue={(value) =>
+                          handleChangeTimeFilterType(value, rebuild)
+                        }
+                      />
+
+                      <DropdownFilter align="right">
+                        <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
+                          Status
+                        </div>
+                        <ul className="mb-4">
+                          {[
+                            { value: "waiting", label: "Waiting" },
+                            { value: "failed", label: "Failed" },
+                            { value: "completed", label: "Completed" },
+                            { value: "cancelled", label: "Cancelled" },
+                            { value: "all", label: "All" },
+                          ].map((option) => (
+                            <FilterRadioOption
+                              key={option.value}
+                              name="status"
+                              label={option.label}
+                              value={option.value}
+                              currentValue={status}
+                              setCurrentValue={handleChangeStatusFilter}
+                            />
+                          ))}
+                        </ul>
+                        <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
+                          Type
+                        </div>
+                        <ul className="mb-4">
+                          {[
+                            { value: "rental", label: "Rental" },
+                            { value: "refund", label: "Refund" },
+                            { value: "all", label: "All" },
+                          ].map((option) => (
+                            <FilterRadioOption
+                              key={option.value}
+                              name="type"
+                              label={option.label}
+                              value={option.value}
+                              currentValue={type}
+                              setCurrentValue={handleChangeTypeFilter}
+                            />
+                          ))}
+                        </ul>
+                      </DropdownFilter>
                     </div>
-                    <ul className="mb-4">
-                      {[
-                        { value: "waiting", label: "Waiting" },
-                        { value: "failed", label: "Failed" },
-                        { value: "completed", label: "Completed" },
-                        { value: "cancelled", label: "Cancelled" },
-                        { value: "all", label: "All" },
-                      ].map((option) => (
-                        <FilterRadioOption
-                          key={option.value}
-                          name="status"
-                          label={option.label}
-                          value={option.value}
-                          currentValue={status}
-                          setCurrentValue={handleChangeStatusFilter}
-                        />
-                      ))}
-                    </ul>
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase pt-1.5 pb-2 px-3">
-                      Type
-                    </div>
-                    <ul className="mb-4">
-                      {[
-                        { value: "rental", label: "Rental" },
-                        { value: "refund", label: "Refund" },
-                        { value: "all", label: "All" },
-                      ].map((option) => (
-                        <FilterRadioOption
-                          key={option.value}
-                          name="type"
-                          label={option.label}
-                          value={option.value}
-                          currentValue={type}
-                          setCurrentValue={handleChangeTypeFilter}
-                        />
-                      ))}
-                    </ul>
-                  </DropdownFilter>
+                  </div>
                 </div>
               </div>
 
@@ -159,6 +162,7 @@ const RecipientPayments = (pageProps) => {
                 totalCount={countItems}
                 viewPath="/payments/recipients"
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

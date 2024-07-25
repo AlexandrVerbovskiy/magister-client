@@ -21,7 +21,7 @@ import STATIC from "../../../../static";
 
 const SenderPayments = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typeCount, setTypeCount] = useState(pageProps.typesCount);
   const [status, setStatus] = useState(pageProps.options.status ?? "all");
   const {
@@ -52,8 +52,8 @@ const SenderPayments = (pageProps) => {
     canMovePrevPage,
     items: payments,
     rebuild,
-    options,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getAdminSenderPaymentList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -83,7 +83,7 @@ const SenderPayments = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs links={[{ title: "Sender Payments" }]} />
               </div>
 
@@ -146,6 +146,7 @@ const SenderPayments = (pageProps) => {
                 totalCount={countItems}
                 viewPath="/payments/senders"
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

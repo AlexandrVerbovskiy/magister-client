@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -18,10 +18,7 @@ import {
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import { supportSideProps } from "../../../middlewares";
-import {
-  baseAdminTimeListPageParams,
-  baseListPageParams,
-} from "../../../utils";
+import { baseAdminTimeListPageParams } from "../../../utils";
 import DateSelect from "../../../components/admin/DateSelect";
 import BaseListSubHeaderDropdown from "../../../components/admin/BaseListSubHeaderDropdown";
 
@@ -56,6 +53,7 @@ const Users = (pageProps) => {
     items: users,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getUserList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -157,82 +155,86 @@ const Users = (pageProps) => {
 
         <main className="grow">
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <div className="sm:flex sm:justify-between sm:items-center mb-8">
+            <div className="md:flex md:justify-between md:items-center mb-8">
               <BreadCrumbs links={[{ title: "Users" }]} />
 
-              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                <SearchForm value={filter} onInput={changeFilter} />
+              <div className="flex md:auto-cols-max justify-start md:justify-end gap-2 mt-2 md:mt-0 flex-col md:flex-row">
+                <div className="flex gap-2 flex-col xs:flex-row">
+                  <SearchForm value={filter} onInput={changeFilter} />
 
-                <DateSelect
-                  value={timeFilterType}
-                  setValue={(value) =>
-                    handleChangeTimeFilterType(value, rebuild)
-                  }
-                />
+                  <div className="flex gap-2">
+                    <DateSelect
+                      value={timeFilterType}
+                      setValue={(value) =>
+                        handleChangeTimeFilterType(value, rebuild)
+                      }
+                    />
 
-                <BaseListSubHeaderDropdown
-                  listFilters={[
-                    {
-                      name: "active",
-                      label: "Active",
-                      options: [
+                    <BaseListSubHeaderDropdown
+                      listFilters={[
                         {
-                          value: "active",
-                          title: "Active",
+                          name: "active",
+                          label: "Active",
+                          options: [
+                            {
+                              value: "active",
+                              title: "Active",
+                            },
+                            {
+                              value: "inactive",
+                              title: "Inactive",
+                            },
+                            { value: "all", title: "All" },
+                          ],
+                          value: activeFilter,
+                          onChange: handleChangeActiveFilter,
                         },
                         {
-                          value: "inactive",
-                          title: "Inactive",
-                        },
-                        { value: "all", title: "All" },
-                      ],
-                      value: activeFilter,
-                      onChange: handleChangeActiveFilter,
-                    },
-                    {
-                      name: "verified",
-                      label: "Verified",
-                      options: [
-                        {
-                          value: "verified",
-                          title: "Verified",
-                        },
-                        {
-                          value: "unverified",
-                          title: "Unverified",
-                        },
-                        { value: "all", title: "All" },
-                      ],
-                      value: verifiedFilter,
-                      onChange: handleChangeVerifiedFilter,
-                    },
-                    {
-                      name: "role",
-                      label: "Role",
-                      options: [
-                        {
-                          value: "user",
-                          title: "User",
+                          name: "verified",
+                          label: "Verified",
+                          options: [
+                            {
+                              value: "verified",
+                              title: "Verified",
+                            },
+                            {
+                              value: "unverified",
+                              title: "Unverified",
+                            },
+                            { value: "all", title: "All" },
+                          ],
+                          value: verifiedFilter,
+                          onChange: handleChangeVerifiedFilter,
                         },
                         {
-                          value: "support",
-                          title: "Support",
+                          name: "role",
+                          label: "Role",
+                          options: [
+                            {
+                              value: "user",
+                              title: "User",
+                            },
+                            {
+                              value: "support",
+                              title: "Support",
+                            },
+                            {
+                              value: "admin",
+                              title: "Admin",
+                            },
+                            { value: "all", title: "All" },
+                          ],
+                          value: roleFilter,
+                          onChange: handleChangeRoleFilter,
                         },
-                        {
-                          value: "admin",
-                          title: "Admin",
-                        },
-                        { value: "all", title: "All" },
-                      ],
-                      value: roleFilter,
-                      onChange: handleChangeRoleFilter,
-                    },
-                  ]}
-                />
+                      ]}
+                    />
+                  </div>
+                </div>
 
                 {isAdmin && (
                   <Link
-                    href="/admin/users/create"
+                    href="/admin/users/create/"
                     className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
                   >
                     <svg
@@ -241,7 +243,7 @@ const Users = (pageProps) => {
                     >
                       <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
-                    <span className="hidden xs:block ml-2">Add Member</span>
+                    <span className="ml-2">Add Member</span>
                   </Link>
                 )}
               </div>
@@ -256,6 +258,7 @@ const Users = (pageProps) => {
               handleSetRole={handleSetRole}
               handleChangeActive={handleChangeActive}
               totalCount={countItems}
+              loading={paginationLoading}
               handleChangeVerified={handleChangeVerified}
             />
 

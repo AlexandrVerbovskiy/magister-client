@@ -2,9 +2,7 @@ import React, { useContext, useState } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
-import SearchForm from "../../../partials/admin/actions/SearchForm";
 import PaginationNumeric from "../../../components/admin/PaginationNumeric";
-import Datepicker from "../../../components/admin/Datepicker";
 import UserVerifyRequestsTable from "../../../components/admin/UserVerifyRequests/Table";
 import { supportSideProps } from "../../../middlewares";
 
@@ -23,7 +21,7 @@ import BaseListSubHeader from "../../../components/admin/BaseListSubHeader";
 
 const UserVerifyRequests = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
 
   const [status, setStatus] = useState(pageProps.status ?? "suspended");
 
@@ -51,8 +49,8 @@ const UserVerifyRequests = (pageProps) => {
     canMovePrevPage,
     items: userVerifyRequests,
     rebuild,
-    options,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getUserVerifyRequestList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -81,7 +79,7 @@ const UserVerifyRequests = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs links={[{ title: "User Verify Requests" }]} />
 
                 <BaseListSubHeader
@@ -126,6 +124,7 @@ const UserVerifyRequests = (pageProps) => {
                 orderType={orderType}
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
+                loading={paginationLoading}
                 setItemFields={setItemFields}
               />
 

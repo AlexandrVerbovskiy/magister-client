@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import BaseModal from "../BaseModal";
-import { getFilePath } from "../../../utils";
+import { getFilePath, getListingSearchLink } from "../../../utils";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ const BurgerIcon = () => (
 
 const CategoryOption = ({
   category,
-  onClick,
+  onClick = () => {},
   href = null,
   active = false,
   Icon = null,
@@ -99,12 +99,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
   }, []);
 
   const handleClickCategory = (categoryName = null) => {
-    let link = "";
-
-    if (categoryName) {
-      link += ``;
-    }
-
+    const link = getListingSearchLink(categoryName);
     router.push(link);
     setActive(false);
   };
@@ -146,14 +141,14 @@ const ListingPopup = ({ active, setActive, categories }) => {
     (c) => c.id === selectedSecondCategory
   );
 
-  const firstAllLink = `/listing-list`;
+  const firstAllLink = `/listings/`;
 
   const secondAllLink = firstSelectedCategoryInfo
-    ? `/listing-list?categories=${firstSelectedCategoryInfo.name}`
+    ? `listings/?categories=${firstSelectedCategoryInfo.name}`
     : firstAllLink;
 
   const thirdAllLink = secondSelectedCategoryInfo
-    ? `/listing-list?categories=${secondSelectedCategoryInfo.name}`
+    ? `listings/?categories=${secondSelectedCategoryInfo.name}`
     : secondAllLink;
 
   return (
@@ -163,7 +158,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
       closeModal={() => setActive(false)}
       needCloseBtn={false}
     >
-      <div className="d-flex w-100" style={{height: "max-content"}}>
+      <div className="d-flex w-100" style={{ height: "max-content" }}>
         <div className="categories-select-level-column sidebar-left">
           <CategoryOption
             key="all"
@@ -183,7 +178,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list?categories=${category.name}`
+                    : `/listings/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -194,6 +189,13 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 }}
               />
             ))}
+
+          <CategoryOption
+            key="-"
+            category={{ image: null, name: "Others" }}
+            active={false}
+            href="/listings/?others-categories=true"
+          />
         </div>
 
         <div className="categories-select-level-column sidebar-left">
@@ -216,7 +218,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listing-list?categories=${category.name}`
+                    : `/listings/?categories=${category.name}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -245,7 +247,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
               <CategoryOption
                 key={category.id}
                 category={category}
-                href={`/listing-list?categories=${category.name}`}
+                href={`/listings/?categories=${category.name}`}
                 onClick={() => setActive(false)}
               />
             ))}

@@ -2,6 +2,9 @@ import Link from "next/link";
 import STATIC from "../../static";
 import { useOrderDateError } from "../../hooks";
 import { useRouter } from "next/router";
+import { hasPayError, isOrderCanBeAccepted } from "../../utils";
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
 
 const OrderActions = ({
   currentActionButtons,
@@ -13,6 +16,7 @@ const OrderActions = ({
   canActions = true,
 }) => {
   const router = useRouter();
+  const { sessionUser, error } = useContext(IndiceContext);
 
   const { checkErrorData } = useOrderDateError({
     order,
@@ -20,26 +24,60 @@ const OrderActions = ({
 
   const handleDisputeChatClick = (e) => {
     e.preventDefault();
-    router
-      .push(`/dashboard/chats/${order.disputeChatId}`)
-      .then(() => window.location.reload());
+    router.push(`/dashboard/chats/${order.disputeChatId}/`);
+  };
+
+  const handlePayClick = (e) => {
+    e.stopPropagation();
+    const payError = hasPayError({ order, sessionUser });
+
+    if (payError) {
+      error.set(payError);
+    } else {
+      popupsData.setPaypalModalActive(true);
+    }
+  };
+
+  const handleMoveToOrder = (id) => {
+    router.push(`/dashboard/orders/${id}/`);
   };
 
   return (
     <>
-      <Link className={actionClass} href={link + "/" + order.id}>
+      <Link className={actionClass} href={`${link}/${order.id}/`}>
         {needIcon && <i className="bx bx-detail"></i>} View details
       </Link>
+
+      {currentActionButtons.includes(
+        STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW
+      ) && (
+        <button
+          type="button"
+          className={actionClass}
+          onClick={() => handleMoveToOrder(order.orderParentId)}
+        >
+          {needIcon && <i className="bx bx-detail"></i>} View main order
+        </button>
+      )}
 
       {canActions && (
         <>
           {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
+          ) && (
+            <Link
+              className={actionClass}
+              href={`/dashboard/pay-by-bank-transfer/${order.id}/`}
+            >
+              {needIcon && <i className="bx bx-wallet"></i>} Update payment
+            </Link>
+          )}
+
+          {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
           ) && (
             <>
-              {!checkErrorData(
-                order.requestId ? order.newStartDate : order.offerStartDate
-              ).blocked && (
+              {isOrderCanBeAccepted(order) && (
                 <button
                   type="button"
                   className={actionClass}
@@ -74,21 +112,10 @@ const OrderActions = ({
             <button
               type="button"
               className={actionClass}
-              onClick={() => popupsData.setPaypalModalActive(true)}
+              onClick={handlePayClick}
             >
               {needIcon && <i className="bx bx-wallet"></i>} Pay
             </button>
-          )}
-
-          {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.PAY_UPDATE_BUTTON
-          ) && (
-            <Link
-              className={actionClass}
-              href={`/dashboard/pay-by-bank-transfer/` + order.id}
-            >
-              {needIcon && <i className="bx bx-wallet"></i>} Update payment
-            </Link>
           )}
 
           {currentActionButtons.includes(
@@ -96,7 +123,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={link + "/" + order.id + "?scroll-to=tenant-qr-code"}
+              href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Start the
               rental
@@ -120,7 +147,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/creating-renter-review/` + order.id}
+              href={`/dashboard/creating-renter-review/${order.id}/`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review
@@ -132,7 +159,7 @@ const OrderActions = ({
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/creating-owner-review/` + order.id}
+              href={`/dashboard/creating-owner-review/${order.id}`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review
@@ -154,14 +181,13 @@ const OrderActions = ({
           {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
           ) && (
-            <button
-              type="button"
+            <Link
               className={actionClass}
-              onClick={() => popupsData.setActiveDisputeWindow(true)}
+              href={`/dashboard/orders/create-dispute/${order.id}`}
             >
               {needIcon && <i className="bx bx-transfer-alt"></i>}
               Open dispute
-            </button>
+            </Link>
           )}
 
           {currentActionButtons.includes(

@@ -6,14 +6,14 @@ import { baseAdminTimeListPageParams } from "../../utils";
 import { supportSideProps } from "../../middlewares";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 import PaginationNumeric from "../../components/admin/PaginationNumeric";
-import DisputesTable  from "../../components/admin/Disputes/Table";
+import DisputesTable from "../../components/admin/Disputes/Table";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 
 const Disputes = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { error, success, authToken } = useContext(IndiceContext);
+  const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
 
   const {
@@ -22,7 +22,7 @@ const Disputes = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({ props: pageProps, defaultTypeValue: "suspended" });
+  } = useBaseAdminFilter({ props: pageProps, defaultTypeValue: "all" });
 
   const onRebuild = (data) => {
     setTypesCount(data.typesCount);
@@ -45,6 +45,7 @@ const Disputes = (pageProps) => {
     items: disputes,
     rebuild,
     setItemFields,
+    loading: paginationLoading,
   } = usePagination({
     getItemsFunc: (data) => getDisputeList(data, authToken),
     onError: (e) => error.set(e.message),
@@ -63,7 +64,7 @@ const Disputes = (pageProps) => {
         <main className="grow">
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <div className="sm:flex sm:justify-between sm:items-center mb-8">
+              <div className="mb-8">
                 <BreadCrumbs links={[{ title: "Disputes" }]} />
               </div>
 
@@ -106,6 +107,7 @@ const Disputes = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
+                loading={paginationLoading}
               />
 
               <div className="mt-8">

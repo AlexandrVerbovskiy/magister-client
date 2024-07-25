@@ -24,9 +24,9 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (ownerId == userId) {
-      text = "Request received";
+      text = "Request Received";
     } else {
-      text = "Waiting for confirmation";
+      text = "Waiting for Confirmation";
     }
   }
 
@@ -34,41 +34,41 @@ const StatusBlock = ({
     color = "status-background-base";
 
     if (tenantId == userId) {
-      text = "Waiting for confirmation";
+      text = "Waiting for Confirmation";
     } else {
-      text = "Request received";
+      text = "Request Received";
     }
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT) {
+  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT) {
     color = "status-background-green";
-    text = "Waiting for payment";
+    text = "Waiting for Payment";
 
     if (payedId) {
       if (waitingApproved) {
         color = "status-background-base";
-        text = "Waiting for payment confirmation";
+        text = "Waiting for Payment Confirmation";
       }
 
       if (!adminApproved && !waitingApproved) {
         color = "status-background-red";
-        text = "Payment rejected";
+        text = "Payment Rejected";
       }
     }
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT) {
+  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
     color = "status-background-green";
     text = "Approved";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
     if (separateDate(new Date()) < endDate) {
-      color = "status-background-base";
-      text = "Rental in progress";
+      color = "status-background-orange";
+      text = "Rental in Progress";
     } else {
-      color = "status-background-base";
-      text = "Rental in progress";
+      color = "status-background-orange";
+      text = "Rental in Progress";
     }
   }
 
@@ -91,21 +91,21 @@ const StatusBlock = ({
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_OWNER_APPROVE
   ) {
     color = "status-background-red";
-    text = "In dispute";
+    text = "In Dispute";
   }
 
   if (
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
   ) {
     color = "status-background-red";
-    text = "In dispute";
+    text = "In Dispute";
   }
 
   if (
     statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_ADMIN_APPROVE
   ) {
     color = "status-background-red";
-    text = "In dispute";
+    text = "In Dispute";
   }
 
   if (
@@ -113,12 +113,12 @@ const StatusBlock = ({
     disputeStatus == STATIC.DISPUTE_STATUSES.UNSOLVED
   ) {
     color = "status-background-orange";
-    text = "In dispute";
+    text = "In Dispute";
   }
 
   if (disputeStatus == STATIC.DISPUTE_STATUSES.SOLVED) {
     color = "status-background-green";
-    text = "Dispute solved";
+    text = "Dispute Solved";
   }
 
   return (

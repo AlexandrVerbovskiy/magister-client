@@ -16,10 +16,10 @@ const DisputeChatHeader = ({ entity, handleGoBackClick }) => {
           <i className="bx bx-menu-alt-left" />
         </div>
       </div>
-      <div className="header-left d-flex align-items-center me-2">
+      <div className="header-left d-flex align-items-center me-2 w-100 row-dots-end">
         <div className="avatar me-2">
           <img
-            src={STATIC.ADMIN_CHAT_LOGO}
+            src={STATIC.DEFAULTS.ADMIN_CHAT_LOGO}
             width="40"
             height="40"
             className="rounded-circle"
@@ -27,9 +27,9 @@ const DisputeChatHeader = ({ entity, handleGoBackClick }) => {
             style={{ width: "40px", height: "40px" }}
           />
         </div>
-        <h6 className="mb-0">RENT ABOUT SUPPORT CHAT</h6>
+        <h6 className="mb-0 row-dots-end">RENT ABOUT SUPPORT CHAT</h6>
       </div>
-      <div className="header-right text-right w-100">
+      <div className="header-right text-right">
         <ul className="list-unstyled mb-0">
           <li>
             <div className="dropdown">

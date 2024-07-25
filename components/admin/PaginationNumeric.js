@@ -10,6 +10,7 @@ function PaginationNumeric({
   page,
   countPages,
   totalCount,
+  loading
 }) {
   const visiblePages = generatePagination(page, countPages);
 

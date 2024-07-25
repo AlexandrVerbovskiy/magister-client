@@ -60,7 +60,7 @@
 }
 
 .table-change-role-popup.active {
-  max-height: 100%;
+  max-height: max-content;
 }
 
 .table-change-role-popup:not(.active) {
@@ -318,6 +318,11 @@ div.add-listings-box.dropzone > .gallery-flex {
   border-radius: 0 !important;
 }
 
+.admin-table{
+  width: 100%;
+}
+
+.overflow-separate,
 .admin-table .overflow-separate,
 .admin-table td:not(:has(*)) {
   overflow: hidden;
@@ -528,9 +533,14 @@ div.add-listings-box.dropzone > .gallery-flex {
   text-wrap: nowrap !important;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 767.9px) {
   .main-site-alert {
     max-width: 80%;
+  }
+
+  #messages-list,
+  #messages-sidebar{
+    min-width: 100%;
   }
 }
 
@@ -549,4 +559,114 @@ div.add-listings-box.dropzone > .gallery-flex {
 
 .chat-message:has(+ .right-sidebar-bottom):has(.message-actions.show) {
   margin-bottom: 60px !important;
+}
+
+.merchant-details p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  width: 100%;
+}
+
+.error-content {
+  text-align: center;
+}
+
+.error-content,
+.error-content * {
+  font-family: "Work Sans", sans-serif;
+}
+
+.error-content h3 {
+  font-size: 35px;
+  margin-bottom: 20px;
+  margin-top: 45px;
+  font-weight: 700;
+}
+.error-content p {
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  color: #666666;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.error-content .default-btn {
+  margin-top: 30px;
+}
+
+.global-error-title {
+  color: #ccd2e0;
+}
+
+.default-btn {
+  display: inline-block;
+  transition: 0.5s;
+  border: none;
+  text-align: center;
+  border: 1px solid #594fbf;
+  box-shadow: 4px 4px #aba5ea;
+  background-color: #ffffff;
+  color: #221638;
+  font-size: 15px;
+  font-weight: 600;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  cursor: pointer !important;
+}
+.default-btn:hover {
+  border-color: #594fbf;
+  box-shadow: 4px 4px #594fbf;
+  color: #221638;
+}
+
+.bg-f9f9f9 {
+  background-color: #f9f9f9;
+}
+
+.base-pagination-table:not(:has(.admin-table tbody tr)) {
+  min-height: 400px;
+}
+
+.messages-list-body{
+  height: calc(100vh - 160px);
+}
+
+#messages-list:has(.message-footer) .messages-list-body{
+  height: calc(100vh - 224px);
+}
+
+@media only screen and (max-width: 768px) {
+  .error-content h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-top: 35px;
+  }
+  .error-content .default-btn {
+    margin-top: 20px;
+  }
+
+  .messages-list-body{
+    height: calc(100vh - 112px);
+  }
+  
+  #messages-list:has(.message-footer) .messages-list-body{
+    height: calc(100vh - 176px);
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .error-content h3 {
+    font-size: 30px;
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  .admin-table{
+    width: 1000px;
+  }
 }

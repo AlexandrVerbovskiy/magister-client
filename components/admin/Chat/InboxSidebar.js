@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
 import { generateProfileFilePath } from "../../../utils";
 import SmallLoader from "../SmallLoader";
 
 const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
   return (
-    <li className="-mx-2">
+    <li className="-mx-2" id={`chat-${chat.id}`}>
       <button
         className={`flex items-center justify-between w-full p-2 rounded ${
           selectedChat?.id == chat.id
@@ -48,8 +49,6 @@ const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
 };
 
 const InboxSidebar = ({
-  msgSidebarOpen,
-  setMsgSidebarOpen,
   selectedChat,
   chats,
   handleSelectChat,
@@ -57,19 +56,40 @@ const InboxSidebar = ({
   setFilter,
   loading,
   filterChats,
+  canShowMore,
+  handleShowMore,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
+  const [lastShowedChatId, setLastShowedChatId] = useState(null);
+
+  useEffect(() => {
+    if (lastShowedChatId) {
+      setTimeout(() => {
+        const lastChat = document.querySelector("#chat-" + lastShowedChatId);
+
+        if (lastChat) {
+          lastChat.scrollIntoView({ behavior: "instant", block: "end" });
+        }
+      }, 0);
+
+      setLastShowedChatId(null);
+    }
+  }, [JSON.stringify(chats)]);
+
+  const handleShowMoreClick = () => {
+    setLastShowedChatId(chats[chats.length - 1].id);
+    handleShowMore();
+  };
+
   return (
     <div
       id="messages-sidebar"
-      className={`absolute z-20 top-0 bottom-0 w-full md:w-auto md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out ${
-        msgSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
+      className={`w-full md:w-96 md:static md:top-auto md:bottom-auto -mr-px md:translate-x-0 transition-transform duration-200 ease-in-out`}
     >
-      <div className="sticky top-16 bg-white dark:bg-slate-900 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-r border-slate-200 dark:border-slate-700 md:w-72 xl:w-80 h-[calc(100dvh-64px)]">
+      <div className="sticky top-0 bg-white dark:bg-slate-900 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-r border-slate-200 dark:border-slate-700 h-[calc(100dvh-64px)]">
         <div className="px-5 py-4">
           <form className="relative -mx-2" onSubmit={handleSubmit}>
             <label htmlFor="msg-search" className="sr-only">
@@ -98,7 +118,7 @@ const InboxSidebar = ({
               </svg>
             </button>
           </form>
-          <div className="mt-4">
+          <div className="mt-2 md:mt-4">
             {loading && <SmallLoader />}
 
             {!loading && filter.length > 0 && (
@@ -134,6 +154,16 @@ const InboxSidebar = ({
                     handleSelectChat={handleSelectChat}
                   />
                 ))}
+                <li className="-mx-2">
+                  {canShowMore && (
+                    <div
+                      className="transition text-indigo-400 hover:text-indigo-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
+                      onClick={handleShowMoreClick}
+                    >
+                      Show more
+                    </div>
+                  )}
+                </li>
               </ul>
             )}
           </div>

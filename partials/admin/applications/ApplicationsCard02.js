@@ -35,14 +35,12 @@ function ApplicationsCard02(props) {
             </div>
           </div>
           {/* Card footer */}
-          <div>
             <Link
               className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white"
               href={props.link}
             >
               Buy Now
             </Link>
-          </div>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import STATIC from "../../../static";
 
 const DocumentView = ({ label, url }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const imgSrc = url ? getFilePath(url) : STATIC.DEFAULT_PHOTO_LINK;
+  const imgSrc = url ? getFilePath(url) : STATIC.DEFAULTS.PHOTO_LINK;
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -17,7 +17,7 @@ const DocumentView = ({ label, url }) => {
   };
 
   return (
-    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end document-view">
+    <div className="w-full lg:w-1/4 md:w-1/3 p-3 flex flex-col justify-end document-view items-center md:items-start">
       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
         {label}
       </h2>
@@ -36,34 +36,9 @@ const DocumentView = ({ label, url }) => {
 const DocumentList = (documents) => {
   return (
     <div className="flex flex-row flex-wrap p-6 space-y-6 pt-0">
-      <DocumentView
-        url={documents.proofOfAddressLink}
-        label="Proof of Address"
-      />
-
-      <DocumentView
-        url={documents.reputableBankIdLink}
-        label="Reputable Bank Id"
-      />
-
-      <DocumentView url={documents.utilityLink} label="Utility" />
-
-      <DocumentView url={documents.hmrcLink} label="HMRC" />
-
-      <DocumentView
-        url={documents.councilTaxBillLink}
-        label="Council Tax Bill"
-      />
-
-      <DocumentView
-        url={documents.passportOrDrivingIdLink}
-        label="Passport Or Driving Id"
-      />
-
-      <DocumentView
-        url={documents.confirmMoneyLaunderingChecksAndComplianceLink}
-        label="Confirm Money Laundering Check And Compliance"
-      />
+      <DocumentView url={documents.userPhoto} label="User Photo" />
+      <DocumentView url={documents.documentFront} label="Document Front" />
+      <DocumentView url={documents.documentBack} label="Document Back" />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import AcceptAcceptOrderModal from "./AcceptAcceptOrderModal";
 import AcceptRejectOrderModal from "./AcceptRejectOrderModal";
 
 const BookingActionModals = ({
-  orderId,
+  order,
   listingPricePerDay,
   proposalPrice,
   proposalStartDate,
@@ -30,7 +30,7 @@ const BookingActionModals = ({
     <>
       <CreateUpdateOrderRequestModal
         handleCreateUpdateRequest={({ price, fromDate, toDate }) =>
-          handleCreateUpdateRequest({ orderId, price, fromDate, toDate })
+          handleCreateUpdateRequest({ order, price, fromDate, toDate })
         }
         price={listingPricePerDay}
         proposalPrice={proposalPrice}
@@ -48,13 +48,13 @@ const BookingActionModals = ({
       <AcceptAcceptOrderModal
         acceptOrderModalActive={acceptOrderModalActive}
         closeAcceptOrderModal={() => setAcceptOrderModalActive(false)}
-        handleAcceptAcceptOrder={() => handleAcceptAcceptOrder(orderId)}
+        handleAcceptAcceptOrder={() => handleAcceptAcceptOrder(order)}
       />
 
       <AcceptRejectOrderModal
         rejectOrderModalActive={rejectOrderModalActive}
         closeRejectOrderModal={() => setRejectOrderModalActive(false)}
-        handleAcceptRejectOrder={() => handleAcceptRejectOrder(orderId)}
+        handleAcceptRejectOrder={() => handleAcceptRejectOrder(order)}
       />
     </>
   );

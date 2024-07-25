@@ -3,9 +3,12 @@ import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
   checkStringDateLowerOrEqualCurrentDate,
+  dateConverter,
   generateProfileFilePath,
-  getDaysDifference,
+  getFactOrderDays,
   getListingImageByType,
+  hasPayError,
+  isOrderCanBeAccepted,
   moneyFormat,
   validateBigText,
 } from "../../utils";
@@ -28,17 +31,93 @@ import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
 import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
-import CreateDisputeSection from "../Dispute/CreateDisputeSection";
 import OrderPopups from "./OrderPopups";
 import TenantGotListingApproveModal from "./TenantGotListingApproveModal";
 import FinishOrderModal from "./FinishOrderModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
-  STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
+
+const SubOrderItem = ({
+  subOrder,
+  isOwner,
+  localCalculateCurrentTotalPrice,
+  BaseDateSpan,
+}) => {
+  const { sessionUser } = useContext(IndiceContext);
+  const tenantName = subOrder.tenantName;
+  const tenantId = subOrder.tenantId;
+
+  const startDate = subOrder.newStartDate ?? subOrder.offerStartDate;
+
+  const endDate = subOrder.newEndDate ?? subOrder.offerEndDate;
+
+  const pricePerDay = subOrder.newPricePerDay ?? subOrder.offerPricePerDay;
+
+  const totalPrice = localCalculateCurrentTotalPrice({
+    startDate,
+    endDate,
+    pricePerDay,
+  });
+
+  return (
+    <li className="form-group">
+      <div className="d-flex justify-content-between">
+        <div>
+          Id:{" "}
+          <Link href={`/dashboard/orders/${subOrder.id}/`}>#{subOrder.id}</Link>
+        </div>
+
+        <Link href={`/dashboard/orders/${subOrder.id}/`}>
+          <StatusBlock
+            status={subOrder.status}
+            statusCancelled={subOrder.cancelStatus}
+            disputeStatus={subOrder.disputeStatus}
+            ownerId={subOrder.ownerId}
+            tenantId={subOrder.tenantId}
+            userId={sessionUser?.id}
+            dopClass="order-status-small-span"
+            endDate={subOrder.offerEndDate}
+            payedId={subOrder.paymentInfo?.id}
+            adminApproved={subOrder.paymentInfo?.adminApproved}
+            waitingApproved={subOrder.paymentInfo?.waitingApproved}
+          />
+        </Link>
+      </div>
+
+      <div>
+        Type: {bookingStatuses.includes(subOrder.status) ? "Booking" : "Order"}
+      </div>
+
+      <div className="w-100 row-dots-end">
+        Rental:{" "}
+        <Link
+          className="w-100 row-dots-end"
+          href={`/owner-listings/${tenantId}/`}
+        >
+          {tenantName}
+        </Link>
+      </div>
+
+      <div>
+        <BaseDateSpan startDate={startDate} endDate={endDate} />
+      </div>
+
+      <div>Price per day: ${moneyFormat(pricePerDay)}</div>
+
+      <div>
+        <b>
+          Total price {isOwner ? "to get" : "to pay"}: $
+          {moneyFormat(totalPrice)}
+        </b>
+      </div>
+    </li>
+  );
+};
 
 const OrderContent = ({
   order: baseOrder,
@@ -85,6 +164,10 @@ const OrderContent = ({
     });
 
   useEffect(() => {
+    setOrder(baseOrder);
+  }, [baseOrder?.id]);
+
+  useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
     setIsTenant(order.tenantId == sessionUser?.id);
 
@@ -116,8 +199,8 @@ const OrderContent = ({
       if (!onClose) {
         onClose = () => {
           router.push(
-            `/dashboard/orders?type=${
-              sessionUser.id == order.ownerId ? "owner" : "tenant"
+            `/dashboard/orders/?type=${
+              sessionUser?.id == order.ownerId ? "owner" : "tenant"
             }`
           );
         };
@@ -243,8 +326,11 @@ const OrderContent = ({
       offerPricePerDay,
       offerStartDate,
       offerEndDate,
-      duration: getDaysDifference(offerStartDate, offerEndDate),
+      duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
+      requestId: null,
+      newEndDate: null,
+      newStartDate: null,
     };
 
     if (status) {
@@ -271,7 +357,7 @@ const OrderContent = ({
     setTimeout(() => {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT,
+        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
       }));
     }, 100);
   };
@@ -295,7 +381,7 @@ const OrderContent = ({
 
   const onPayedFastCancel = () => {
     activateSuccessOrderPopup({
-      text: `Order cancelled successfully. The money was returned to your paypal`,
+      text: `Order cancelled successfully. A refund request has been sent to the administrator`,
     });
 
     setOrder((prev) => ({
@@ -306,7 +392,11 @@ const OrderContent = ({
 
   const onExtendOrder = ({ id }) => {
     success.set("Order extended successfully");
-    router.push("/dashboard/orders");
+    router.push("/dashboard/orders/");
+  };
+
+  const handleMoveToOrder = (id) => {
+    router.push(`/dashboard/orders/${id}/`);
   };
 
   const handleTenantGotListingApprove = async () => {
@@ -392,7 +482,7 @@ const OrderContent = ({
         {
           title: "Accepted",
           finished:
-            order.status == STATIC.ORDER_STATUSES.PENDING_CLIENT_PAYMENT,
+            order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
         },
         {
           title: "Payment Confirmation",
@@ -419,17 +509,6 @@ const OrderContent = ({
         },
       ];
 
-  const onDisputeOpened = async ({ orderPart }) => {
-    setOrder((prev) => ({
-      ...prev,
-      ...orderPart,
-    }));
-
-    orderPopupsData.setActiveDisputeWindow(false);
-
-    success.set("Dispute created success");
-  };
-
   const orderPopupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -440,7 +519,6 @@ const OrderContent = ({
     onPayedFastCancel,
     setError: error.set,
     onExtendOrder,
-    onDisputeOpened,
   });
 
   const onMakeExtend = ({ price, fromDate, toDate }) => {
@@ -477,6 +555,17 @@ const OrderContent = ({
     setDefectError(null);
   };
 
+  const handlePayClick = (e) => {
+    e.stopPropagation();
+    const payError = hasPayError({ order, sessionUser });
+
+    if (payError) {
+      error.set(payError);
+    } else {
+      orderPopupsData.setPaypalModalActive(true);
+    }
+  };
+
   if (orderPopupsData.extendApproveData) {
     return (
       <OrderExtendApprovementSection
@@ -502,34 +591,6 @@ const OrderContent = ({
       />
     );
   }
-
-  if (orderPopupsData.activeDisputeWindow) {
-    return (
-      <>
-        <CreateDisputeSection
-          {...orderPopupsData.createDisputeData}
-          onGoBack={() => orderPopupsData.setActiveDisputeWindow(false)}
-          setCurrentOpenImg={setCurrentOpenImg}
-          needWrapping={false}
-          onSubmit={orderPopupsData.handleOpenDispute}
-        />
-        <ImagePopup
-          photoUrl={currentOpenImg}
-          open={!!currentOpenImg}
-          close={closeCurrentOpenImg}
-        />
-      </>
-    );
-  }
-
-  const bookingAcceptView =
-    ((actualUpdateRequest &&
-      !checkStringDateLowerOrEqualCurrentDate(
-        actualUpdateRequest.newStartDate
-      )) ||
-      (!actualUpdateRequest &&
-        !checkStringDateLowerOrEqualCurrentDate(order.offerStartDate))) &&
-    (!order.conflictOrders || order.conflictOrders.length < 1);
 
   return (
     <>
@@ -563,7 +624,7 @@ const OrderContent = ({
               label="Listing Category:"
               icon="bx bx-duplicate"
               placeholder="Category name of tool"
-              value={order.listingCategoryName}
+              value={order.listingCategoryName ?? order.listingOtherCategory}
             />
           </div>
 
@@ -612,58 +673,67 @@ const OrderContent = ({
       )}
 
       <div className="add-listings-box">
-        <h3>Listing Location</h3>
+        <h3>Collection Location</h3>
 
         <div className="row">
-          <div className="col-lg-6 col-md-6">
-            <InputView
-              value={order.listingCity}
-              label="City:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing City"
-            />
+          <div className="col-md-6">
+            <div className="row">
+              <div className="col-12 mb-1">
+                <InputView
+                  value={order.listingCity}
+                  label="City:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing City"
+                />
+              </div>
+
+              <div className="col-12 mb-1">
+                <InputView
+                  label="Postcode:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing Postcode"
+                  value={order.listingPostcode}
+                />
+              </div>
+
+              <div className="col-12 mb-1">
+                <InputView
+                  label="Address:"
+                  icon="bx bx-menu-alt-left"
+                  placeholder="Listing Address"
+                  value={order.listingAddress}
+                />
+              </div>
+            </div>
           </div>
 
-          <div className="col-lg-6 col-md-6">
-            <InputView
-              label="Postcode:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing Postcode"
-              value={order.listingPostcode}
-            />
-          </div>
-
-          <div className="col-12 mb-1">
-            <InputView
-              label="Address:"
-              icon="bx bx-menu-alt-left"
-              placeholder="Listing Address"
-              value={order.listingAddress}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <div className="form-group" style={{ height: "500px" }}>
-              <MultyMarkersMap
-                markers={[
-                  {
-                    id: 1,
-                    lat: order.listingRentalLat,
-                    lng: order.listingRentalLng,
-                    radius: order.listingRentalRadius,
-                  },
-                ]}
-                baseCenter={{
-                  lat: order.listingRentalLat,
-                  lng: order.listingRentalLng,
-                }}
-                userLocation={userLocation}
-                setUserLocation={setUserLocation}
-                center={mapCenter}
-                setCenter={setMapCenter}
-              />
+          <div className="col-md-6">
+            <div className="row">
+              <div className="col">
+                <div
+                  className="add-listings-box form-group px-0"
+                  style={{ height: "300px" }}
+                >
+                  <MultyMarkersMap
+                    markers={[
+                      {
+                        id: 1,
+                        lat: order.listingRentalLat,
+                        lng: order.listingRentalLng,
+                        radius: order.listingRentalRadius,
+                      },
+                    ]}
+                    baseCenter={{
+                      lat: order.listingRentalLat,
+                      lng: order.listingRentalLng,
+                    }}
+                    userLocation={userLocation}
+                    setUserLocation={setUserLocation}
+                    center={mapCenter}
+                    setCenter={setMapCenter}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -776,8 +846,8 @@ const OrderContent = ({
       )}
 
       {(order.cancelStatus != null || !actualUpdateRequest) && (
-        <div className="row listings-sidebar" style={{ marginTop: 0 }}>
-          <div className="col form-group">
+        <div className="row listings-sidebar mt-0">
+          <div className="col form-group mb-0">
             <div className="listings-widget order_widget order-proposal-info">
               <h3>Proposal Info</h3>
 
@@ -835,7 +905,7 @@ const OrderContent = ({
                       Subtotal price with listing price per day $
                       {moneyFormat(
                         order.listingPricePerDay *
-                          getDaysDifference(
+                          getFactOrderDays(
                             order.offerStartDate,
                             order.offerEndDate
                           )
@@ -847,10 +917,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     order.offerPricePerDay *
-                      getDaysDifference(
-                        order.offerStartDate,
-                        order.offerEndDate
-                      )
+                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}
                 </li>
 
@@ -858,7 +925,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (order.offerPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         order.offerStartDate,
                         order.offerEndDate
                       ) *
@@ -938,11 +1005,9 @@ const OrderContent = ({
                   </li>
                 )}
                 {checkErrorData(order.offerStartDate).blocked && (
-                  <li>
-                    <ErrorBlockMessage>
-                      {checkErrorData(order.offerStartDate).tooltipErrorMessage}
-                    </ErrorBlockMessage>
-                  </li>
+                  <ErrorBlockMessage dopClassName="mb-0">
+                    {checkErrorData(order.offerStartDate).tooltipErrorMessage}
+                  </ErrorBlockMessage>
                 )}
               </ul>
             </div>
@@ -951,8 +1016,8 @@ const OrderContent = ({
       )}
 
       {order.cancelStatus == null && actualUpdateRequest && (
-        <div className="row listings-sidebar" style={{ marginTop: 0 }}>
-          <div className="col col-12 col-md-6 form-group">
+        <div className="row listings-sidebar mt-0">
+          <div className="col col-12 col-md-6 form-group mb-0 h-100">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
@@ -988,7 +1053,7 @@ const OrderContent = ({
                       Subtotal price with listing price per day $
                       {moneyFormat(
                         prevUpdateRequest.pricePerDay *
-                          getDaysDifference(
+                          getFactOrderDays(
                             prevUpdateRequest.startDate,
                             prevUpdateRequest.endDate
                           )
@@ -1000,7 +1065,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     prevUpdateRequest.pricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         prevUpdateRequest.startDate,
                         prevUpdateRequest.endDate
                       )
@@ -1011,7 +1076,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (prevUpdateRequest.pricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         prevUpdateRequest.startDate,
                         prevUpdateRequest.endDate
                       ) *
@@ -1052,7 +1117,7 @@ const OrderContent = ({
             </div>
           </div>
 
-          <div className="col col-12 col-md-6 mt-4 mt-md-0 form-group">
+          <div className="col col-12 col-md-6 mt-4 mt-md-0 form-group mb-0 h-100">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
@@ -1088,7 +1153,7 @@ const OrderContent = ({
                     Subtotal price with listing price per day $
                     {moneyFormat(
                       actualUpdateRequest.newPricePerDay *
-                        getDaysDifference(
+                        getFactOrderDays(
                           actualUpdateRequest.newStartDate,
                           actualUpdateRequest.newEndDate
                         )
@@ -1100,7 +1165,7 @@ const OrderContent = ({
                   Fact offer subtotal price: $
                   {moneyFormat(
                     actualUpdateRequest.newPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
                       )
@@ -1111,7 +1176,7 @@ const OrderContent = ({
                   Total fee price: $
                   {moneyFormat(
                     (actualUpdateRequest.newPricePerDay *
-                      getDaysDifference(
+                      getFactOrderDays(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
                       ) *
@@ -1151,14 +1216,12 @@ const OrderContent = ({
                 </li>
 
                 {checkErrorData(actualUpdateRequest.newStartDate).blocked && (
-                  <li>
-                    <ErrorBlockMessage>
-                      {
-                        checkErrorData(actualUpdateRequest.newStartDate)
-                          .tooltipErrorMessage
-                      }
-                    </ErrorBlockMessage>
-                  </li>
+                  <ErrorBlockMessage dopClassName="mb-0">
+                    {
+                      checkErrorData(actualUpdateRequest.newStartDate)
+                        .tooltipErrorMessage
+                    }
+                  </ErrorBlockMessage>
                 )}
               </ul>
             </div>
@@ -1174,10 +1237,12 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {(order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) && (
+      {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
+        order.canAcceptTenantListing) ||
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
+          order.canAcceptOwnerListing)) && (
         <div className="order_widget add-listings-box">
-          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_CLIENT && (
+          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT && (
             <h3>Any defects</h3>
           )}
           {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
@@ -1270,88 +1335,26 @@ const OrderContent = ({
               className="conflicted-orders"
               style={{ listStyle: "none", padding: "0" }}
             >
-              {order.conflictOrders.map((conflictOrder) => {
-                const tenantName = conflictOrder.tenantName;
-                const tenantId = conflictOrder.tenantId;
-
-                const startDate =
-                  conflictOrder.newStartDate ?? conflictOrder.offerStartDate;
-
-                const endDate =
-                  conflictOrder.newEndDate ?? conflictOrder.offerEndDate;
-
-                const pricePerDay =
-                  conflictOrder.newPricePerDay ??
-                  conflictOrder.offerPricePerDay;
-
-                const totalPrice = localCalculateCurrentTotalPrice({
-                  startDate,
-                  endDate,
-                  pricePerDay,
-                });
-
-                return (
-                  <li className="form-group" key={conflictOrder.id}>
-                    <div className="d-flex justify-content-between">
-                      <div>
-                        Id:{" "}
-                        <Link href={`/dashboard/orders/${conflictOrder.id}`}>
-                          #{conflictOrder.id}
-                        </Link>
-                      </div>
-
-                      <Link href={`/dashboard/orders/${conflictOrder.id}`}>
-                        <StatusBlock
-                          status={conflictOrder.status}
-                          statusCancelled={order.cancelStatus}
-                          disputeStatus={order.disputeStatus}
-                          ownerId={conflictOrder.ownerId}
-                          tenantId={conflictOrder.tenantId}
-                          userId={sessionUser?.id}
-                          dopClass="order-status-small-span"
-                          endDate={order.offerEndDate}
-                          payedId={order.paymentInfo?.id}
-                          adminApproved={order.paymentInfo?.adminApproved}
-                          waitingApproved={order.paymentInfo?.waitingApproved}
-                        />
-                      </Link>
-                    </div>
-
-                    <div>
-                      Type:{" "}
-                      {bookingStatuses.includes(conflictOrder.status)
-                        ? "Booking"
-                        : "Order"}
-                    </div>
-
-                    <div>
-                      Rental:{" "}
-                      <Link href={`/owner-listing-list/${tenantId}`}>
-                        {tenantName}
-                      </Link>
-                    </div>
-
-                    <div>
-                      <BaseDateSpan startDate={startDate} endDate={endDate} />
-                    </div>
-
-                    <div>Price per day: ${moneyFormat(pricePerDay)}</div>
-
-                    <div>
-                      <b>
-                        Total price {isOwner ? "to get" : "to pay"}: $
-                        {moneyFormat(totalPrice)}
-                      </b>
-                    </div>
-                  </li>
-                );
-              })}
+              {order.conflictOrders.map((conflictOrder) => (
+                <SubOrderItem
+                  key={conflictOrder.id}
+                  subOrder={conflictOrder}
+                  isOwner={isOwner}
+                  BaseDateSpan={BaseDateSpan}
+                  localCalculateCurrentTotalPrice={
+                    localCalculateCurrentTotalPrice
+                  }
+                />
+              ))}
             </ul>
           </div>
         )}
 
       {currentActionButtons.length > countDopAction && (
-        <div className="order_widget add-listings-box">
+        <div
+          className="order_widget add-listings-box"
+          style={{ marginTop: "30px" }}
+        >
           <h3>Operations</h3>
 
           {currentActionButtons.includes(
@@ -1368,10 +1371,22 @@ const OrderContent = ({
 
           <div className="booking-operations form-group">
             {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW
+            ) && (
+              <button
+                type="button"
+                className="default-btn"
+                onClick={() => handleMoveToOrder(order.orderParentId)}
+              >
+                View Main Order
+              </button>
+            )}
+
+            {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
             ) && (
               <>
-                {bookingAcceptView && (
+                {isOrderCanBeAccepted(order) && (
                   <button
                     className="default-btn"
                     type="button"
@@ -1414,7 +1429,7 @@ const OrderContent = ({
               <button
                 className="default-btn"
                 type="button"
-                onClick={() => orderPopupsData.setPaypalModalActive(true)}
+                onClick={handlePayClick}
               >
                 Pay
               </button>
@@ -1425,7 +1440,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/pay-by-bank-transfer/` + order.id}
+                href={`/dashboard/pay-by-bank-transfer/${order.id}/`}
               >
                 Update payment
               </Link>
@@ -1436,7 +1451,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/creating-renter-review/` + order.id}
+                href={`/dashboard/creating-renter-review/${order.id}`}
               >
                 Leave a review
               </Link>
@@ -1447,7 +1462,7 @@ const OrderContent = ({
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/creating-owner-review/` + order.id}
+                href={`/dashboard/creating-owner-review/${order.id}`}
               >
                 Leave a review
               </Link>
@@ -1492,13 +1507,13 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE
             ) && (
-              <button
+              <Link
                 type="button"
                 className="default-btn error-btn"
-                onClick={() => orderPopupsData.setActiveDisputeWindow(true)}
+                href={`/dashboard/orders/create-dispute/${order.id}`}
               >
                 Open dispute
-              </button>
+              </Link>
             )}
 
             {currentActionButtons.includes(
@@ -1579,6 +1594,55 @@ const OrderContent = ({
                 onFinish={handleFinishOrder}
               />
             )}
+          </div>
+        </div>
+      )}
+
+      {currentActionButtons.includes(
+        STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST
+      ) && (
+        <div
+          className="add-listings-box listings-sidebar listings-widget order_widget"
+          style={{ marginTop: 0 }}
+        >
+          <h3>Extensions</h3>
+
+          <div className="booking-operations form-group">
+            <ul
+              className="conflicted-orders w-100"
+              style={{ listStyle: "none", padding: "0" }}
+            >
+              {order.extendOrders
+                .filter((extension) => extension.id != order.id)
+                .sort((e1, e2) => {
+                  if (
+                    dateConverter(e1.offerStartDate) >
+                    dateConverter(e2.offerStartDate)
+                  ) {
+                    return 1;
+                  }
+
+                  if (
+                    dateConverter(e1.offerStartDate) <
+                    dateConverter(e2.offerStartDate)
+                  ) {
+                    return -1;
+                  }
+
+                  return 0;
+                })
+                .map((extension) => (
+                  <SubOrderItem
+                    key={extension.id}
+                    subOrder={extension}
+                    isOwner={isOwner}
+                    BaseDateSpan={BaseDateSpan}
+                    localCalculateCurrentTotalPrice={
+                      localCalculateCurrentTotalPrice
+                    }
+                  />
+                ))}
+            </ul>
           </div>
         </div>
       )}
