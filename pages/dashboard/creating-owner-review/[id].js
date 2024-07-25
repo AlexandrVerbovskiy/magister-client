@@ -138,6 +138,7 @@ const FullReview = (baseProps) => {
             setDescription={setOwnerDescription}
             leaveFeedback={leaveOwnerDescription}
             setLeaveFeedback={setLeaveOwnerDescription}
+            type="owner"
           />
         )}
 
