@@ -6,11 +6,12 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import { generateProfileFilePath, getListingImageByType } from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
 import RatingInfoRow from "../RatingInfoRow";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   id,
@@ -50,12 +51,8 @@ const TableItem = ({
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
-
   const { sessionUser, isAdmin } = useContext(IndiceContext);
-
   const canMoveToUser = isAdmin && sessionUser?.id != reviewerId;
-
-  const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
@@ -73,21 +70,11 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${reviewerId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullReviewerPhotoPath}
-              width="32"
-              height="32"
-              alt="Reviewer"
-            />
-            {reviewerName}
-          </Link>
+          <TableUserLink
+            id={reviewerId}
+            name={reviewerName}
+            photo={reviewerPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

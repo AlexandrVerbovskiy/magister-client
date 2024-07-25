@@ -1,6 +1,6 @@
 import Link from "next/link";
 import View from "../FastActions/View";
-import { generateProfileFilePath, moneyFormat } from "../../../utils";
+import { moneyFormat } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
@@ -8,6 +8,7 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import TableDateView from "../TableDateView";
 import STATIC from "../../../static";
+import TableUserLink from "../TableUserLink";
 
 const TypeSpan = ({ type }) => {
   let dopClass =
@@ -91,15 +92,8 @@ const TableItem = ({
   data,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
-
   const { sessionUser, isAdmin } = useContext(IndiceContext);
-
-  const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
   const canMoveToRecipient = isAdmin && sessionUser?.id != recipientId;
-
-  const fullRecipientPhotoPath = generateProfileFilePath(recipientPhoto);
-
-  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
 
   return (
     <>
@@ -108,36 +102,18 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${tenantId}/`}
-            onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullTenantPhotoPath}
-              width="32"
-              height="32"
-              alt="Renter"
-            />
-            {tenantName}
-          </Link>
+          <TableUserLink
+            id={tenantId}
+            name={tenantName}
+            photo={tenantPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${recipientId}/`}
-            onClick={(e) => (canMoveToRecipient ? {} : e.preventDefault())}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullRecipientPhotoPath}
-              width="32"
-              height="32"
-              alt="Recipient"
-            />
-            {recipientName}
-          </Link>
+          <TableUserLink
+            id={recipientId}
+            name={recipientName}
+            photo={recipientPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
