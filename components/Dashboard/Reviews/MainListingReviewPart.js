@@ -1,4 +1,4 @@
-const MainReviewPart = ({
+const MainListingReviewPart = ({
   stars,
   handleChangeStars,
   description,
@@ -72,9 +72,6 @@ const MainReviewPart = ({
 
       <div className="col-lg-12 col-md-12">
         <div className="form-group">
-          <label className="mb-2 fw-bold">
-            Your review <span className="required">*</span>
-          </label>
           <textarea
             placeholder="Your review"
             className="form-control"
@@ -89,4 +86,4 @@ const MainReviewPart = ({
   );
 };
 
-export default MainReviewPart;
+export default MainListingReviewPart;

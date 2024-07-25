@@ -14,7 +14,7 @@ import FinishedPart from "../../../components/Dashboard/Reviews/FinishedPart";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../contexts";
 import YesNoModal from "../../../components/_App/YesNoModal";
-import { useListingReview, useUserReview } from "../../../hooks";
+import { useListingReview, useOwnerReview } from "../../../hooks";
 import { useIdPage } from "../../../hooks";
 
 const FullReview = (baseProps) => {
@@ -45,7 +45,7 @@ const FullReview = (baseProps) => {
     leaveFeedback: leaveOwnerDescription,
     setLeaveFeedback: setLeaveOwnerDescription,
     dataToSubmit: ownerDataToSubmit,
-  } = useUserReview();
+  } = useOwnerReview();
 
   const { authToken, error } = useContext(IndiceContext);
   const [activeSaveModal, setActiveSaveModal] = useState(false);

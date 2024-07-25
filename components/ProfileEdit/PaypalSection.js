@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 import { IndiceContext } from "../../contexts";
 import ENV from "../../env";
-import { generateUpdatePaypalIdLink } from "../../services";
 
 const PaypalSection = () => {
   const { sessionUser } = useContext(IndiceContext);

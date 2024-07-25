@@ -26,11 +26,121 @@ const DownloadButton = ({ src }) => {
   );
 };
 
-const PointStarInfo = ({ label, value, commentName = "item" }) => {
+const PointStarInfo = ({
+  label,
+  value,
+  commentName = "item",
+  width = "150px",
+}) => {
   return (
-    <div style={{ width: "150px" }}>
+    <div style={{ width: width }}>
       <label>{label}</label>
       <SingleRatingStar commentName={commentName} value={value} count={1} />
+    </div>
+  );
+};
+
+const OwnerCommentMessage = ({ content }) => {
+  const items = [
+    {
+      label: "Item description accuracy",
+      value: content.itemDescriptionAccuracy,
+    },
+    { label: "Photo accuracy", value: content.photoAccuracy },
+    { label: "Pickup condition", value: content.pickupCondition },
+    { label: "Cleanliness", value: content.cleanliness },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Scheduling flexibility", value: content.schedulingFlexibility },
+    { label: "Issue resolution", value: content.issueResolution },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              key={idx}
+              label={item.label}
+              value={item.value}
+              width="230px"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const TenantCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Care", value: content.care },
+    { label: "Timeliness", value: content.timeliness },
+    { label: "Responsiveness", value: content.responsiveness },
+    { label: "Clarity", value: content.clarity },
+    { label: "Usage Guidelines", value: content.usageGuidelines },
+    { label: "Terms of service", value: content.termsOfService },
+    { label: "Honesty", value: content.honesty },
+    { label: "Reliability", value: content.reliability },
+    { label: "Satisfaction", value: content.satisfaction },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 2) {
+    chunkedItems.push(items.slice(i, i + 2));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo
+              key={idx}
+              label={item.label}
+              value={item.value}
+              width="230px"
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const ListingCommentMessage = ({ content }) => {
+  const items = [
+    { label: "Punctuality", value: content.punctuality },
+    { label: "General Experience", value: content.generalExperience },
+    { label: "Communication", value: content.communication },
+    { label: "Reliability", value: content.reliability },
+    { label: "Kindness", value: content.kindness },
+    { label: "Flexibility", value: content.flexibility },
+  ];
+
+  const chunkedItems = [];
+
+  for (let i = 0; i < items.length; i += 3) {
+    chunkedItems.push(items.slice(i, i + 3));
+  }
+
+  return (
+    <div className="mb-1">
+      {chunkedItems.map((chunk, index) => (
+        <div className="flex" key={index}>
+          {chunk.map((item, idx) => (
+            <PointStarInfo key={idx} label={item.label} value={item.value} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
@@ -268,22 +378,7 @@ const orderMessageContent = ({
           <b>Listing review</b>
         </div>
 
-        <div className="mb-1">
-          <div className="flex">
-            <PointStarInfo label="Punctuality" value={content.punctuality} />
-            <PointStarInfo label="General" value={content.generalExperience} />
-            <PointStarInfo
-              label="Communication"
-              value={content.communication}
-            />
-          </div>
-
-          <div className="flex">
-            <PointStarInfo label="Reliability" value={content.reliability} />
-            <PointStarInfo label="Kindness" value={content.kindness} />
-            <PointStarInfo label="Flexibility" value={content.flexibility} />
-          </div>
-        </div>
+        <ListingCommentMessage content={content} />
 
         <div className="w-full">
           <b>Description: </b>
@@ -294,50 +389,17 @@ const orderMessageContent = ({
   }
 
   if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
-    const commentName = content.type == "tenant" ? "reviewer" : "owner";
-
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
           <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
         </div>
 
-        <div className="mb-1">
-          <div className="flex">
-            <PointStarInfo
-              commentName={commentName}
-              label="Quality"
-              value={content.quality}
-            />
-            <PointStarInfo
-              commentName={commentName}
-              label="Accuracy"
-              value={content.listingAccuracy}
-            />
-            <PointStarInfo
-              commentName={commentName}
-              label="Utility"
-              value={content.utility}
-            />
-          </div>
-          <div className="flex">
-            <PointStarInfo
-              commentName={commentName}
-              label="Condition"
-              value={content.condition}
-            />
-            <PointStarInfo
-              commentName={commentName}
-              label="Performance"
-              value={content.performance}
-            />
-            <PointStarInfo
-              commentName={commentName}
-              label="Location"
-              value={content.location}
-            />
-          </div>
-        </div>
+        {content.type == "tenant" ? (
+          <TenantCommentMessage content={content} />
+        ) : (
+          <OwnerCommentMessage content={content} />
+        )}
 
         <div className="w-full">
           <b>Description: </b>

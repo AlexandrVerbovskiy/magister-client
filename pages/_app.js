@@ -154,7 +154,7 @@ function MyApp({ Component, pageProps }) {
 
           <div className="message-site-warning-alert-list">
             <UnverifiedAlert {...pageProps} />
-            <CookieBanner />
+            {pageType != "admin" && <CookieBanner />}
           </div>
 
           <div className="message-site-success-alert-list">

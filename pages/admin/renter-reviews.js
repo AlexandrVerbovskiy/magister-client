@@ -116,6 +116,7 @@ const TenantReviews = (pageProps) => {
                 rejectReview={tenantCommentReject}
                 approveReview={tenantCommentApprove}
                 loading={paginationLoading}
+                type="renter"
               />
 
               <div className="mt-8">
