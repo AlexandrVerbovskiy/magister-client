@@ -289,7 +289,7 @@ const Sidebar = ({
         )}
 
         <SidebarCheckboxesSection
-          title="Other Criterions"
+          title="Other Criteria"
           open={otherOpen}
           setOpen={setOtherOpen}
           items={[
