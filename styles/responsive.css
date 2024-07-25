@@ -2573,6 +2573,11 @@
   .miran-grid-sorting {
     margin-bottom: 20px;
   }
+
+  .how-it-works-box .icon,
+  .how-it-works-box .icon img {
+    height: 180px !important;
+  }
 }
 /* Min width 576px to Max width 768px */
 @media only screen and (min-width: 576px) and (max-width: 767.9px) {
@@ -4267,10 +4272,6 @@
 }
 
 @media only screen and (max-width: 575.9px) {
-  .how-it-works-box .icon {
-    height: 180px !important;
-  }
-
   .how-it-works-box-wrapper:not(:first-of-type) {
     margin-right: 0;
   }
