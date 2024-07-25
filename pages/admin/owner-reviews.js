@@ -112,10 +112,10 @@ const OwnerReviews = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
-                userColumnTitle="Owner"
                 rejectReview={ownerCommentReject}
                 approveReview={ownerCommentApprove}
                 loading={paginationLoading}
+                type="owner"
               />
 
               <div className="mt-8">

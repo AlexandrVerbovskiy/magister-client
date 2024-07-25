@@ -4987,6 +4987,12 @@ Listings Details Area CSS
 .listings-details-desc .review-form-wrapper form .add-sub-rating {
   margin-bottom: 10px;
 }
+.listings-details-desc .review-form-wrapper form .add-sub-rating p {
+  line-height: 1.4;
+}
+.listings-details-desc .review-form-wrapper form .sub-ratings-border-bottom{
+  border-bottom: 1px solid #e3e3e3;
+}
 .listings-details-desc .review-form-wrapper form .sub-ratings {
   border-bottom: 1px solid #e3e3e3;
   padding-bottom: 5px;

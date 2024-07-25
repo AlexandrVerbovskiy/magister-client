@@ -7,7 +7,6 @@ import PaypalForm from "./PaypalForm";
 import { paypalCreateOrder, paypalOrderPayed } from "../services";
 import Link from "next/link";
 import STATIC from "../static";
-import env from "../env";
 
 const getPaymentFormStyles = (type) => {
   switch (type) {

@@ -1,65 +1,64 @@
 import Link from "next/link";
-import TableDateView from "../../admin/TableDateView";
+import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
-import STATIC from "../../../static";
-import { generateProfileFilePath, getListingImageByType } from "../../../utils";
+import { generateProfileFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
-import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import RatingInfoRow from "../RatingInfoRow";
 
-const TableItem = ({
+const OwnerTableItem = ({
   id,
   description,
-  punctuality,
-  generalExperience,
-  communication,
-  reliability,
-  kindness,
-  flexibility,
+
+  itemDescriptionAccuracy,
+  photoAccuracy,
+  pickupCondition,
+  cleanliness,
+  responsiveness,
+  clarity,
+  schedulingFlexibility,
+  issueResolution,
+
+  userId,
+  userName,
+  userEmail,
+  userPhone,
+  userPhoto,
+
   approved,
   waitingAdmin,
   createdAt,
-  orderId,
   reviewerId,
   reviewerName,
   reviewerEmail,
   reviewerPhone,
   reviewerPhoto,
-  listingId,
-  listingName,
-  listingCity,
-  listingPricePerDay,
-  listingMinRentalDays,
-  listingCountStoredItems,
-  listingCategoryId,
-  listingCategoryName = null,
-  listingOtherCategory = null,
-  images,
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
+  userColumnTitle,
+
   reviewerAverageRating,
+  userAverageRating,
   reviewerCommentCount,
-  listingAverageRating,
-  listingCommentCount,
+  userCommentCount,
+
   rejectedDescription = null,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToUser = isAdmin && sessionUser?.id != reviewerId;
+  const canMoveToReviewer = isAdmin && sessionUser?.id != reviewerId;
+  const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
   const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
-
-  const fullListingPhotoPath = images[0]
-    ? getListingImageByType(images[0].link, images[0].type)
-    : STATIC.DEFAULTS.PHOTO_LINK;
+  const fullUserPhotoPath = generateProfileFilePath(userPhoto);
 
   return (
     <>
@@ -69,15 +68,29 @@ const TableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link href={`/admin/listings/edit/${listingId}/`}>{listingName}</Link>
+          <Link
+            href={`/admin/users/edit/${userId}/`}
+            className="flex items-center"
+            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
+            style={canMoveToUser ? {} : { cursor: "auto" }}
+          >
+            <img
+              className="w-8 h-8 rounded-full mr-1"
+              src={fullUserPhotoPath}
+              width="32"
+              height="32"
+              alt="User"
+            />
+            {userName}
+          </Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
             href={`/admin/users/edit/${reviewerId}/`}
             className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
+            onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
+            style={canMoveToReviewer ? {} : { cursor: "auto" }}
           >
             <img
               className="w-8 h-8 rounded-full mr-1"
@@ -118,10 +131,9 @@ const TableItem = ({
           <table className="w-full h-full table-fixed">
             <thead>
               <tr>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
-                <th style={{ width: "20%", padding: 0 }}></th>
+                <th style={{ width: "25%", padding: 0 }}></th>
+                <th style={{ width: "25%", padding: 0 }}></th>
+                <th style={{ width: "30%", padding: 0 }}></th>
                 <th style={{ width: "20%", padding: 0 }}></th>
               </tr>
             </thead>
@@ -132,7 +144,7 @@ const TableItem = ({
                     <SubInfoTitle
                       title="Reviewer"
                       href={`/admin/users/edit/${reviewerId}`}
-                      canMove={canMoveToUser}
+                      canMove={canMoveToReviewer}
                     />
                     <SubInfoRow label="Name" value={reviewerName} />
                     <SubInfoRow label="Email" value={reviewerEmail} />
@@ -156,57 +168,24 @@ const TableItem = ({
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div>
                     <SubInfoTitle
-                      title="Item Details"
-                      href={`/listings/${listingId}`}
+                      title={userColumnTitle}
+                      href={`/admin/users/edit/${userId}`}
+                      canMove={canMoveToUser}
                     />
-                    <SubInfoRow label="Name" value={listingName} />
+                    <SubInfoRow label="Name" value={userName} />
+                    <SubInfoRow label="Email" value={userEmail} />
                     <SubInfoRow
-                      label="Category"
-                      value={listingCategoryName ?? listingOtherCategory}
+                      label="Phone"
+                      value={
+                        userPhone && userPhone.length ? userPhone.length : "-"
+                      }
                     />
-                    <SubInfoRow
-                      label="Price Per Day"
-                      value={listingPricePerDay}
-                    />
-                    <SubInfoRow
-                      label="Count Stored"
-                      value={listingCountStoredItems}
-                    />
-                    <SubInfoRow
-                      label="Minimum Rental Days"
-                      value={listingMinRentalDays ?? "-"}
-                    />
-
                     <SubInfoRowWithChild label="Rating">
                       <SingleRatingStar
-                        value={listingAverageRating}
-                        count={listingCommentCount}
+                        value={userAverageRating}
+                        count={userCommentCount}
                       />
                     </SubInfoRowWithChild>
-                  </div>
-                </td>
-                <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
-                  <div>
-                    <span className="font-semibold flex items-center">
-                      Item Photo
-                    </span>
-
-                    <div
-                      className="mt-2 p-1 outline-gray-200 outline-dashed"
-                      style={{ width: "150px", height: "200px" }}
-                    >
-                      <div
-                        className="image-box cursor-zoom-in"
-                        onClick={() => openPopupImage(fullListingPhotoPath)}
-                      >
-                        <img
-                          src={fullListingPhotoPath}
-                          alt="image"
-                          width="200px"
-                          height="200px"
-                        />
-                      </div>
-                    </div>
                   </div>
                 </td>
                 <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
@@ -214,32 +193,49 @@ const TableItem = ({
                     <div className="font-semibold flex items-center">
                       Review Info
                     </div>
-                    <RatingInfoRow label="Punctuality" value={punctuality} />
+
                     <RatingInfoRow
-                      label="General Experience"
-                      value={generalExperience}
+                      label="Item description accuracy"
+                      value={itemDescriptionAccuracy}
                     />
                     <RatingInfoRow
-                      label="Communication"
-                      value={communication}
+                      label="Photo accuracy"
+                      value={photoAccuracy}
                     />
-                    <RatingInfoRow label="Reliability" value={reliability} />
-                    <RatingInfoRow label="Kindness" value={kindness} />
-                    <RatingInfoRow label="Flexibility" value={flexibility} />
+                    <RatingInfoRow
+                      label="Pickup condition"
+                      value={pickupCondition}
+                    />
+                    <RatingInfoRow label="Cleanliness" value={cleanliness} />
+                    <RatingInfoRow
+                      label="Responsiveness"
+                      value={responsiveness}
+                    />
+                    <RatingInfoRow label="Clarity" value={clarity} />
+                    <RatingInfoRow
+                      label="Scheduling flexibility"
+                      value={schedulingFlexibility}
+                    />
+                    <RatingInfoRow
+                      label="Issue resolution"
+                      value={issueResolution}
+                    />
+
                     <RatingInfoRow
                       label="Average"
                       value={
-                        (flexibility +
-                          communication +
-                          kindness +
-                          reliability +
-                          generalExperience +
-                          punctuality) /
-                        6
+                        (itemDescriptionAccuracy +
+                          pickupCondition +
+                          photoAccuracy +
+                          cleanliness +
+                          responsiveness +
+                          clarity +
+                          schedulingFlexibility +
+                          issueResolution) /
+                        8
                       }
                       bold={true}
                     />
-
                     <div style={{ textWrap: "wrap", color: "black" }}>
                       <span className="font-bold">Description: </span>
                       {description}
@@ -293,4 +289,4 @@ const TableItem = ({
   );
 };
 
-export default TableItem;
+export default OwnerTableItem;

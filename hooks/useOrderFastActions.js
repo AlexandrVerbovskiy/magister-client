@@ -111,8 +111,6 @@ const useOrderFastActions = ({
       const newExtendOrders = orderWithCurrentListing.extendOrders.map(
         (extendOrder) => {
           if (extendOrder.id == order.id) {
-            console.log({ ...extendOrder, ...order });
-
             return { ...extendOrder, ...order };
           } else {
             const extendConflictOrders = extendOrder.conflictOrders.filter(

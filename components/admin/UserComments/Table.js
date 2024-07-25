@@ -1,12 +1,44 @@
 import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
-import TableItem from "./TableItem";
+import OwnerTableItem from "./OwnerTableItem";
+import RenterTableItem from "./RenterTableItem";
 import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
 import ApproveModal from "../Comments/ApproveModal";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
+
+const sumRatingByType = (type, comment) => {
+  let keys = [
+    `care`,
+    `timeliness`,
+    `responsiveness`,
+    `clarity`,
+    `usageGuidelines`,
+    `termsOfService`,
+    `honesty`,
+    `reliability`,
+    `satisfaction`,
+  ];
+
+  if (type == "owner") {
+    keys = [
+      `itemDescriptionAccuracy`,
+      `photoAccuracy`,
+      `pickupCondition`,
+      `cleanliness`,
+      `responsiveness`,
+      `clarity`,
+      `schedulingFlexibility`,
+      `issueResolution`,
+    ];
+  }
+
+  let sum = 0;
+  keys.forEach((key) => (sum += comment[key]));
+  return sum / keys.length;
+};
 
 const UserCommentsTable = ({
   reviews,
@@ -17,9 +49,17 @@ const UserCommentsTable = ({
   setItemFields,
   rejectReview,
   approveReview,
-  userColumnTitle = "Tenant",
   loading,
+  type = "renter",
 }) => {
+  let userColumnTitle = "Renter";
+  let TableItem = RenterTableItem;
+
+  if (type == "owner") {
+    userColumnTitle = "Owner";
+    TableItem = OwnerTableItem;
+  }
+
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
   const [popupRejectId, setPopupRejectId] = useState(null);
@@ -57,13 +97,7 @@ const UserCommentsTable = ({
 
     const totalPoints =
       approvedReview.userAverageRating * approvedReview.userCommentCount +
-      (approvedReview.quality +
-        approvedReview.listingAccuracy +
-        approvedReview.utility +
-        approvedReview.condition +
-        approvedReview.performance +
-        approvedReview.location) /
-        6;
+      sumRatingByType(type, approvedReview);
 
     const newCount = approvedReview.userCommentCount + 1;
     const newAveragePoints = totalPoints / newCount;

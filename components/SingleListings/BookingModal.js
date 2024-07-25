@@ -277,7 +277,7 @@ const BookingModal = ({
           )}
           {fullVersion && (
             <>
-              <div className="popup-widget order-info-widget popup-date-fee-switch-widget">
+              {/*<div className="popup-widget order-info-widget popup-date-fee-switch-widget">
                 <div className="form-group">
                   <div className="date-fee-switch">
                     <Switch
@@ -287,7 +287,7 @@ const BookingModal = ({
                     />
                   </div>
                 </div>
-              </div>
+              </div>*/}
 
               <div className="form-group mb-0">
                 <span className="sub-title mb-2">
