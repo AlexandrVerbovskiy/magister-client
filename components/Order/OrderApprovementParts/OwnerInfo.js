@@ -1,9 +1,7 @@
 import {
   autoMultiEnding,
   generateProfileFilePath,
-  getFilePath,
 } from "../../../utils";
-import STATIC from "../../../static";
 import StarRating from "../../StarRating";
 
 const OwnerInfo = ({
