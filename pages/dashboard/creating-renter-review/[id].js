@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import { IndiceContext } from "../../../contexts";
 import { useRenterReview } from "../../../hooks";
-import {useIdPage} from "../../../hooks";
+import { useIdPage } from "../../../hooks";
 
 const FullReview = (baseProps) => {
   const { props } = useIdPage({
@@ -97,6 +97,7 @@ const FullReview = (baseProps) => {
             setDescription={setTenantDescription}
             leaveFeedback={leaveTenantDescription}
             setLeaveFeedback={setLeaveTenantDescription}
+            type="renter"
           />
         )}
 

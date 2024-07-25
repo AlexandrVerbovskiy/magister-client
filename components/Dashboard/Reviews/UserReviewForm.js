@@ -16,6 +16,7 @@ const UserReviewForm = ({
   setLeaveFeedback,
   submitButtonText = "Submit",
   disabled,
+  type,
 }) => {
   const [error, setError] = useState(null);
 
@@ -84,6 +85,7 @@ const UserReviewForm = ({
               userAverageRating: data.userAverageRating,
               userCommentCount: data.userCommentCount,
             }}
+            title={type == "renter" ? "Renter" : "Owner"}
           />
         </div>
       </div>
