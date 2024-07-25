@@ -1,7 +1,5 @@
-import Link from "next/link";
-import { useContext } from "react";
-import { IndiceContext } from "../../../contexts";
 import TableDateView from "../TableDateView";
+import TableUserLink from "../TableUserLink";
 
 const RoleSpan = ({ role }) => {
   let dopClassName =
@@ -33,12 +31,11 @@ const TableItem = ({
   id,
   userId,
   userEmail,
+  userPhoto,
   userRole,
   eventName,
   createdAt,
 }) => {
-  const { sessionUser } = useContext(IndiceContext);
-
   return (
     <tr>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
@@ -48,10 +45,11 @@ const TableItem = ({
         {eventName}
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        {sessionUser?.id != userId && (
-          <Link href={`/admin/users/edit/${userId}/`}>{userEmail}</Link>
-        )}
-        {sessionUser?.id == userId && userEmail}
+        <TableUserLink
+          id={userId}
+          name={userEmail}
+          photo={userPhoto}
+        />
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-semibold">

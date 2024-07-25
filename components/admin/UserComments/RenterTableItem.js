@@ -1,15 +1,14 @@
-import Link from "next/link";
 import TableDateView from "../TableDateView";
 import ShowMore from "../FastActions/ShowMore";
 import { useContext, useState } from "react";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
-import { generateProfileFilePath } from "../../../utils";
 import ActiveSpan from "../Comments/ActiveSpan";
 import SingleRatingStar from "../SingleRatingStar";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import RatingInfoRow from "../RatingInfoRow";
+import TableUserLink from "../TableUserLink";
 
 const RenterTableItem = ({
   id,
@@ -58,9 +57,6 @@ const RenterTableItem = ({
   const canMoveToReviewer = isAdmin && sessionUser?.id != reviewerId;
   const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullReviewerPhotoPath = generateProfileFilePath(reviewerPhoto);
-  const fullUserPhotoPath = generateProfileFilePath(userPhoto);
-
   return (
     <>
       <tr>
@@ -69,39 +65,19 @@ const RenterTableItem = ({
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${userId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullUserPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {userName}
-          </Link>
+          <TableUserLink
+            id={userId}
+            name={userName}
+            photo={userPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${reviewerId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToReviewer ? {} : e.preventDefault())}
-            style={canMoveToReviewer ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullReviewerPhotoPath}
-              width="32"
-              height="32"
-              alt="Reviewer"
-            />
-            {reviewerName}
-          </Link>
+          <TableUserLink
+            id={reviewerId}
+            name={reviewerName}
+            photo={reviewerPhoto}
+          />
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

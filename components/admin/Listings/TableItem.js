@@ -2,20 +2,16 @@ import React, { useContext, useState } from "react";
 import Tooltip from "../../../components/admin/Tooltip";
 import View from "../FastActions/View";
 import Edit from "../FastActions/Edit";
-import Delete from "../FastActions/Delete";
 import ShowMore from "../FastActions/ShowMore";
 import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import STATIC from "../../../static";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import SubInfoTitle from "../SubInfoTitle";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active, activeText, inactiveText, onClick = null }) => {
   const text = active ? "YES" : "NO";
@@ -70,10 +66,6 @@ const TableItem = ({
 
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
-  const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
-
-  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULTS.PHOTO_LINK;
@@ -93,21 +85,11 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${ownerId}/`}
-            onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
-            style={canMoveToOwner ? {} : { cursor: "auto" }}
-            className="flex items-center"
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="Payer"
-            />
-            {ownerName}
-          </Link>
+          <TableUserLink
+            id={ownerId}
+            name={ownerName}
+            photo={ownerPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           {categoryName ?? otherCategory}

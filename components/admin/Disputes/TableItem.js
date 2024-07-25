@@ -6,10 +6,11 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
-import { generateProfileFilePath, getListingImageByType } from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import Link from "next/link";
 import SubInfoTitle from "../SubInfoTitle";
 import ActiveSpan from "./ActiveSpan";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   ownerId,
@@ -44,10 +45,6 @@ const TableItem = ({
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
   const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
 
-  const fullOwnerPhotoPath = generateProfileFilePath(ownerPhoto);
-
-  const fullTenantPhotoPath = generateProfileFilePath(tenantPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULTS.PHOTO_LINK;
@@ -62,38 +59,18 @@ const TableItem = ({
           <ActiveSpan status={status} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${ownerId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToOwner ? {} : e.preventDefault())}
-            style={canMoveToOwner ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {ownerName} <LinkIcon />
-          </Link>
+          <TableUserLink
+            id={ownerId}
+            name={ownerName}
+            photo={ownerPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${tenantId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToTenant ? {} : e.preventDefault())}
-            style={canMoveToTenant ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullTenantPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {tenantName} <LinkIcon />
-          </Link>
+          <TableUserLink
+            id={tenantId}
+            name={tenantName}
+            photo={tenantPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link

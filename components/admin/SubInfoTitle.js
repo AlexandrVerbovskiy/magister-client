@@ -2,16 +2,20 @@ import Link from "next/link";
 import LinkIcon from "./Icons/LinkIcon";
 
 const SubInfoTitle = ({ title, href, canMove = true }) => {
+  if (canMove) {
+    return (
+      <Link href={href} className="font-semibold flex items-center">
+        {title}
+        <LinkIcon />
+      </Link>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className="font-semibold flex items-center"
-      onClick={(e) => (canMove ? {} : e.preventDefault())}
-      style={canMove ? {} : { cursor: "auto" }}
-    >
+    <span className="font-semibold flex items-center">
       {title}
       <LinkIcon />
-    </Link>
+    </span>
   );
 };
 

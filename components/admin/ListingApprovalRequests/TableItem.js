@@ -8,13 +8,10 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
 import { IndiceContext } from "../../../contexts";
 import STATIC from "../../../static";
-import {
-  generateProfileFilePath,
-  getFilePath,
-  getListingImageByType,
-} from "../../../utils";
+import { getListingImageByType } from "../../../utils";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active }) => {
   const text = active === null ? "WAITING" : active ? "APPROVED" : "REJECTED";
@@ -77,8 +74,6 @@ const TableItem = ({
 
   const canMoveToUser = isAdmin && sessionUser?.id != userId;
 
-  const fullOwnerPhotoPath = generateProfileFilePath(userPhoto);
-
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
     : STATIC.DEFAULTS.PHOTO_LINK;
@@ -90,25 +85,11 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-            <Link href={`/admin/listing-approval-requests/${id}/`}>{name}</Link>
+          <Link href={`/admin/listing-approval-requests/${id}/`}>{name}</Link>
         </td>
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${userId}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullOwnerPhotoPath}
-              width="32"
-              height="32"
-              alt="User"
-            />
-            {userName}
-          </Link>
+          <TableUserLink id={userId} name={userName} photo={userPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium">{categoryName ?? otherCategory}</div>

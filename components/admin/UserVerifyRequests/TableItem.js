@@ -1,4 +1,3 @@
-import Link from "next/link";
 import View from "../FastActions/View";
 import TableDateView from "../../admin/TableDateView";
 import { useContext, useState } from "react";
@@ -6,6 +5,7 @@ import ShowMore from "../FastActions/ShowMore";
 import SubInfoRow from "../SubInfoRow";
 import { IndiceContext } from "../../../contexts";
 import { generateProfileFilePath } from "../../../utils";
+import TableUserLink from "../TableUserLink";
 
 const TableItem = ({
   id,
@@ -58,22 +58,14 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-            <Link
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}/`}
-            >
-              {userName}
-            </Link>
+          <TableUserLink
+            id={userId}
+            name={userName}
+            photo={userPhoto}
+          />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-            <Link
-              onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-              style={canMoveToUser ? {} : { cursor: "auto" }}
-              href={`/admin/users/edit/${userId}/`}
-            >
-              {userEmail}
-            </Link>
+          <TableUserLink id={userId} name={userEmail} needPhoto={false} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div

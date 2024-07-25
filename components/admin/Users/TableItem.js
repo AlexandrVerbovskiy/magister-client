@@ -1,19 +1,15 @@
 import React, { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import Tooltip from "../../../components/admin/Tooltip";
-import Link from "next/link";
 import Edit from "../FastActions/Edit";
 import Documents from "../FastActions/Documents";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../TableDateView";
-import {
-  generateProfileFilePath,
-  moneyFormat,
-  dateConverter,
-} from "../../../utils";
+import { moneyFormat, dateConverter } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
+import TableUserLink from "../TableUserLink";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "Active" : "Suspended";
@@ -141,29 +137,11 @@ const TableItem = ({
     onChangeVerified();
   };
 
-  const fullPhotoPath = generateProfileFilePath(photo);
-
-  const canMoveToUser = sessionUser?.id != id && isAdmin;
-
   return (
     <>
       <tr>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/admin/users/edit/${id}/`}
-            className="flex items-center"
-            onClick={(e) => (canMoveToUser ? {} : e.preventDefault())}
-            style={canMoveToUser ? {} : { cursor: "auto" }}
-          >
-            <img
-              className="w-8 h-8 rounded-full mr-1"
-              src={fullPhotoPath}
-              width="32"
-              height="32"
-              alt="Payer"
-            />
-            {name}
-          </Link>
+          <TableUserLink id={id} name={name} photo={photo} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <EmailSpan email={email} verified={emailVerified} />
