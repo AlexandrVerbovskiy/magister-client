@@ -388,14 +388,21 @@ const orderMessageContent = ({
     );
   }
 
-  if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+  if (
+    [
+      STATIC.MESSAGE_TYPES.OWNER_REVIEW,
+      STATIC.MESSAGE_TYPES.TENANT_REVIEW,
+    ].includes(type)
+  ) {
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.TENANT_REVIEW;
+
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
-          <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        {content.type == "tenant" ? (
+        {isRenterReview ? (
           <TenantCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
