@@ -117,7 +117,7 @@ const ListingCommentMessage = ({ content }) => {
   ];
 
   const chunkedItems = [];
-  
+
   for (let i = 0; i < items.length; i += 3) {
     chunkedItems.push(items.slice(i, i + 3));
   }
@@ -368,14 +368,21 @@ const orderMessageContent = ({
     );
   }
 
-  if (STATIC.MESSAGE_TYPES.USER_REVIEW == type) {
+  if (
+    [
+      STATIC.MESSAGE_TYPES.OWNER_REVIEW,
+      STATIC.MESSAGE_TYPES.TENANT_REVIEW,
+    ].includes(type)
+  ) {
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.TENANT_REVIEW;
+
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="mb-2">
-          <b>{content.type == "tenant" ? "Renter review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        {content.type == "tenant" ? (
+        {isRenterReview ? (
           <TenantCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
