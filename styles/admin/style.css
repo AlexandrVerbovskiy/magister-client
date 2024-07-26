@@ -335,7 +335,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .adaptive-logo-image {
-  background-image: url("/images/rent-about-logo.svg");
+  background-image: url("/images/rent-about-logo-small.png");
   background-size: auto 100%;
   background-repeat: no-repeat;
 }
