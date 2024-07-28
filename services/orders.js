@@ -61,8 +61,8 @@ export const acceptOrder = async (id, authToken) => {
   return data.body;
 };
 
-export const paypalOrderPayed = async ({ orderId, type }, authToken) => {
-  const data = await post(`/paypal-order-payed`, { orderId, type }, authToken);
+export const paypalOrderPayed = async (orderId, authToken) => {
+  const data = await post(`/paypal-order-payed`, { orderId }, authToken);
   return data.body;
 };
 
