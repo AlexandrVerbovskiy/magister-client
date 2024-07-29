@@ -37,25 +37,22 @@ const PayModal = ({
   const [type, setType] = useState(STATIC.PAYMENT_TYPES.PAYPAL);
   const [disabled, setDisabled] = useState(false);
 
-  const onApprove = async (data) => {
+  const onApprove = async (data, err) => {
     try {
-      const result = await paypalOrderPayed(
-        data.orderID,
-        authToken
-      );
+      const result = await paypalOrderPayed(data.orderID, authToken);
 
       setTimeout(() => {
         onTenantPayed(result);
         closeModal();
       }, 100);
     } catch (e) {
-      error.set(e.message);
+      error.set(e);
     }
   };
 
   const createOrder = async (data, paymentType) => {
     try {
-      return await paypalCreateOrder({orderId, type: paymentType}, authToken);
+      return await paypalCreateOrder({ orderId, type: paymentType }, authToken);
     } catch (e) {
       error.set(e.message);
     }

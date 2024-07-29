@@ -18736,7 +18736,7 @@ input[type="number"] {
   flex-wrap: wrap;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
 }
 
 [id*="zoid-paypal-card-number-field-uid"] {
@@ -19468,13 +19468,13 @@ span.flatpickr-weekday {
 
 .about-us-goals .first-goals-row > div:nth-of-type(1),
 .about-us-goals .second-goals-row > div:nth-of-type(1) {
-  justify-content: end;
+  justify-content: flex-end;
   text-align: end;
 }
 
 .about-us-goals .first-goals-row > div:nth-of-type(2),
 .about-us-goals .second-goals-row > div:nth-of-type(2) {
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .about-us-goals .first-goals-row > div:nth-of-type(1) .circle-icon {
@@ -19788,13 +19788,6 @@ span.flatpickr-weekday {
   padding-bottom: 20px;
 }
 
-.bookings-listings-box td.show-more-table-rows{
-  width: 100%!important;
-  display: flex!important;
-  align-items: center!important;
-  justify-content: center!important;
-}
-
 video::-webkit-media-controls-panel {
   width: 100%;
 }
@@ -19816,4 +19809,12 @@ video::-webkit-media-controls-panel {
 .orders-table .tr>.th:nth-of-type(3),
 .orders-table .tr>.td:nth-of-type(3){
   width: 20%;
+}
+
+.bookings-listings-box .td.show-more-table-rows,
+.bookings-listings-box td.show-more-table-rows{
+  width: 100%!important;
+  display: flex!important;
+  align-items: center!important;
+  justify-content: center!important;
 }

@@ -1,11 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import Input from "../../FormComponents/Input";
 import SocialAuth from "./SocialAuth";
 import Link from "next/link";
 import PasswordInput from "../../FormComponents/PasswordInput";
 import { useLogin } from "../../../hooks";
-import { IndiceContext } from "../../../contexts";
-import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import STATIC from "../../../static";
 
