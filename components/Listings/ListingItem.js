@@ -88,7 +88,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           className="author row-dots-end"
           style={{ maxWidth: "calc(100% - 40px)" }}
         >
-          <Link href={`/listings/${listing.userId}/`}>
+          <Link href={`/owner-listings/${listing.userId}/`}>
             <div className="d-flex align-items-center">
               <img
                 src={generateProfileFilePath(listing.userPhoto)}
