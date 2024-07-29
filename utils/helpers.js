@@ -201,3 +201,14 @@ export const isOrderCanBeAccepted = (order) => {
 };
 
 export const removeDuplicates = (arr) => [...new Set(arr)];
+
+export const extractDataBetweenBraces = (str) => {
+  const firstIndex = str.indexOf("{");
+  const lastIndex = str.lastIndexOf("}");
+
+  if (firstIndex !== -1 && lastIndex !== -1 && lastIndex > firstIndex) {
+    return str.slice(firstIndex, lastIndex + 1);
+  } else {
+    return null;
+  }
+};

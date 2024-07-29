@@ -18,12 +18,7 @@ import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
 
 const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
-  const {
-    isAuth,
-    success: mainSuccess,
-    isSupport,
-    onLogin,
-  } = useContext(IndiceContext);
+  const { isAuth, isSupport } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);

@@ -586,6 +586,7 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     paypalCode,
     baseSideProps.authToken
   );
+
   return { ...options };
 };
 

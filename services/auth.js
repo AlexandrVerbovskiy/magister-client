@@ -41,7 +41,7 @@ export const register = async (userInfo) => {
 };
 
 export const getMyInfo = async (authToken) => {
-  const data = await post("/my-info", null, authToken);
+  const data = await get("/my-info", authToken);
   return data.body.user;
 };
 

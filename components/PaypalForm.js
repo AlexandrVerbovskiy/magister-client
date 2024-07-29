@@ -9,6 +9,8 @@ import {
 } from "@paypal/react-paypal-js";
 import env from "../env";
 import { IndiceContext } from "../contexts";
+import STATIC from "../static";
+import { extractDataBetweenBraces } from "../utils";
 
 const SubmitPayment = ({ disabled, setDisabled }) => {
   const data = usePayPalCardFields();
@@ -27,33 +29,29 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
       let info = message;
 
       if (message.includes(`{"name":`)) {
-        const startIndex = message.indexOf('{"name":');
-        const endIndex = message.lastIndexOf("}");
+        let description = "Unpredictable error";
+        const errorBodyStr = extractDataBetweenBraces(message);
+        const errorBody = JSON.parse(errorBodyStr);
 
-        if (endIndex != -1 && startIndex != -1) {
-          const extractedData = message
-            .substring(startIndex, endIndex + 1)
-            .trim();
+        if (errorBody) {
+          description = errorBody.message;
 
-          let description = "Unpredictable error";
-          const obj = JSON.parse(extractedData);
-
-          if (obj) {
-            if (obj.details && obj.details[0] && obj.details[0].description) {
-              description = obj.details[0].description;
-            } else {
-              description = obj.message;
+          if (errorBody.name.toLowerCase() == "unpredictable_entity") {
+            if (
+              errorBody.details &&
+              errorBody.details[0] &&
+              errorBody.details[0].description
+            ) {
+              description = errorBody.details[0].description;
             }
           }
-
-          if (description) {
-            info = description;
-          }
         }
 
-        if (info.toLowerCase() == "INVALID_NUMBER") {
-          info = "Invalid card number";
-        }
+        info = description;
+      }
+
+      if (message.toLowerCase() == "invalid_number") {
+        info = "Invalid card number";
       }
 
       error.set(info);
@@ -93,7 +91,13 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
         components: "card-fields",
       }}
     >
-      <PayPalCardFieldsProvider createOrder={createOrder} onApprove={onApprove}>
+      <PayPalCardFieldsProvider
+        createOrder={(data) =>
+          createOrder(data, STATIC.PAYMENT_TYPES.CREDIT_CARD)
+        }
+        onApprove={onApprove}
+        onError={() => {}}
+      >
         <PayPalNumberField style={paypalFieldStyle} />
 
         <div className="paypal-payment-card">
