@@ -434,7 +434,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 [role="dialog"]:has(.category-select-modal) {
-  align-items: start;
+  align-items: flex-start;
 }
 
 [role="dialog"]:has(.category-select-modal) > div {

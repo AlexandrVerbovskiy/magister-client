@@ -102,6 +102,11 @@ const SenderPayments = (pageProps) => {
                     count: typeCount["paypalCount"],
                   },
                   {
+                    value: STATIC.PAYMENT_TYPES.CREDIT_CARD,
+                    title: "Credit Card",
+                    count: typeCount["creditCardCount"],
+                  },
+                  {
                     value: STATIC.PAYMENT_TYPES.BANK_TRANSFER,
                     title: "Bank Transfer",
                     count: typeCount["bankTransferCount"],

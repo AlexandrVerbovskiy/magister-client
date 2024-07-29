@@ -3,6 +3,7 @@ import env from "../env";
 import STATIC from "../static";
 
 const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
+
   return (
     <PayPalScriptProvider
       options={{
@@ -20,6 +21,7 @@ const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
         forceReRender={[amount, orderId]}
         onApprove={onApprove}
         style={{ color: "blue", disableMaxWidth: true }}
+        onError={() => {}}
       />
     </PayPalScriptProvider>
   );
