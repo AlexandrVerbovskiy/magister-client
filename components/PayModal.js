@@ -40,7 +40,7 @@ const PayModal = ({
   const onApprove = async (data) => {
     try {
       const result = await paypalOrderPayed(
-        { orderId: data.orderID, type },
+        data.orderID,
         authToken
       );
 
@@ -53,9 +53,9 @@ const PayModal = ({
     }
   };
 
-  const createOrder = async (data) => {
+  const createOrder = async (data, paymentType) => {
     try {
-      return await paypalCreateOrder(orderId, authToken);
+      return await paypalCreateOrder({orderId, type: paymentType}, authToken);
     } catch (e) {
       error.set(e.message);
     }

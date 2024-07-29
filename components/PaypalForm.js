@@ -9,6 +9,7 @@ import {
 } from "@paypal/react-paypal-js";
 import env from "../env";
 import { IndiceContext } from "../contexts";
+import STATIC from "../static";
 
 const SubmitPayment = ({ disabled, setDisabled }) => {
   const data = usePayPalCardFields();
@@ -93,7 +94,12 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
         components: "card-fields",
       }}
     >
-      <PayPalCardFieldsProvider createOrder={createOrder} onApprove={onApprove}>
+      <PayPalCardFieldsProvider
+        createOrder={(data) =>
+          createOrder(data, STATIC.PAYMENT_TYPES.CREDIT_CARD)
+        }
+        onApprove={onApprove}
+      >
         <PayPalNumberField style={paypalFieldStyle} />
 
         <div className="paypal-payment-card">
