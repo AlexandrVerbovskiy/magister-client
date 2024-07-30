@@ -189,6 +189,7 @@ const EditForm = ({
       const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
       setAddress(newAddress);
     } catch (e) {
+      console.log(e);
       error.set(e.message);
     }
   };
