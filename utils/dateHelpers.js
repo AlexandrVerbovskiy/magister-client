@@ -1,3 +1,4 @@
+import { removeDuplicates } from "./helpers";
 import { dateSort } from "./sort";
 import { format, isToday, isYesterday } from "date-fns";
 
@@ -263,4 +264,51 @@ export const checkStartEndHasConflict = (startDate, endDate, conflictDates) => {
   );
 
   return !!hasBlockedDate;
+};
+
+export const getOrderBlockedDatesToUpdate = (order) => {
+  if (!order) {
+    return [];
+  }
+
+  let blockedDatesToUpdate = [];
+
+  order.conflictOrders.map((conflictOrder) => {
+    const startDate = conflictOrder.requestId
+      ? conflictOrder.newStartDate
+      : conflictOrder.offerStartDate;
+
+    const endDate = conflictOrder.requestId
+      ? conflictOrder.newEndDate
+      : conflictOrder.offerEndDate;
+
+    blockedDatesToUpdate = [
+      ...blockedDatesToUpdate,
+      ...generateDatesBetween(startDate, endDate),
+    ];
+  });
+
+  return removeDuplicates(blockedDatesToUpdate);
+};
+
+export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
+  let lastOrderDate = offerEndDate;
+
+  if (extendOrders && extendOrders.length) {
+    const extendOrderDates = extendOrders
+      .filter(
+        (order) =>
+          [
+            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+            STATIC.ORDER_STATUSES.FINISHED,
+          ].includes(order.status) && !order.cancelStatus
+      )
+      .map((extendOrder) => extendOrder.offerEndDate);
+
+    lastOrderDate = getMaxDate(extendOrderDates);
+  }
+
+  return increaseDateByOneDay(lastOrderDate);
 };
