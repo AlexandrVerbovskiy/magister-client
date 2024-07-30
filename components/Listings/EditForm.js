@@ -7,6 +7,7 @@ import STATIC from "../../static";
 import {
   byteConverter,
   convertToSelectPopupCategories,
+  getCityCoords,
   getFilePath,
   onCurrentUserLocation,
   uniqueImageId,
@@ -135,14 +136,12 @@ const EditForm = ({
 
   const [active, setActive] = useState(true);
 
-  const [center, setCenter] = useState({
-    lat: STATIC.CITY_COORDS[baseCity].lat,
-    lng: STATIC.CITY_COORDS[baseCity].lng,
-  });
+  const baseCoords = getCityCoords(baseCity);
+  const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
-  const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
+  const [lat, setLat] = useState(baseCoords.lat);
+  const [lng, setLng] = useState(baseCoords.lng);
   const [radius, setRadius] = useState(
     STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
   );
@@ -226,13 +225,12 @@ const EditForm = ({
 
   const handleChangeCity = (e) => {
     const city = e.value;
-    const lat = STATIC.CITY_COORDS[city].lat;
-    const lng = STATIC.CITY_COORDS[city].lng;
+    const cityCords = getCityCoords(city);
 
     setCity(city);
-    setCenter({ lat, lng });
-    setLat(lat);
-    setLng(lng);
+    setCenter(cityCords);
+    setLat(cityCords.lat);
+    setLng(cityCords.lng);
     setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
     setMainError(null);
   };
@@ -281,12 +279,10 @@ const EditForm = ({
 
   const listingToState = () => {
     const city = listing.city ?? baseCity;
-    const lat = listing.rentalLat
-      ? Number(listing.rentalLat)
-      : STATIC.CITY_COORDS[city].lat;
-    const lng = listing.rentalLng
-      ? Number(listing.rentalLng)
-      : STATIC.CITY_COORDS[city].lng;
+    const cityCords = getCityCoords(city);
+
+    const lat = listing.rentalLat ? Number(listing.rentalLat) : cityCords.lat;
+    const lng = listing.rentalLng ? Number(listing.rentalLng) : cityCords.lng;
 
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -477,7 +473,7 @@ const EditForm = ({
     }
 
     if (backgroundPhoto) {
-      formData.append("background_photo", backgroundPhoto);
+      formData.append("backgroundPhoto", backgroundPhoto);
     }
 
     const info = objectToSave();
