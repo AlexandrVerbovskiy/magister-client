@@ -21,7 +21,6 @@ const SelectWithIcon = ({
         onChange={onChange}
         isSearchable={isSearchable}
         style={style}
-        className="custom-search-select"
         name={name}
       />
       <ErrorSpan error={error} />
