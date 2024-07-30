@@ -16756,8 +16756,12 @@ Dashboard CSS
   color: var(--blackColor) !important;
   font-weight: 400;
   font-size: var(--fontSize);
-  padding: 0 5px;
+  padding: 0 15px!important;
   box-shadow: none !important;
+}
+
+.custom-search-select.listing-sort-select > [class*="-control"] {
+  padding: 0 5px;
 }
 
 .custom-search-select > [class*="-control"]:hover {
@@ -18099,10 +18103,13 @@ input:-internal-autofill-selected {
   overflow: hidden !important;
   padding: 2px 8px !important;
   box-sizing: border-box !important;
-  font-weight: 600;
   font-size: 15px !important;
   padding: 0 !important;
   text-align: left !important;
+}
+
+.custom-search-select.listing-sort-select [class*="-control"] > div:nth-of-type(1) {
+  font-weight: 600!important;
 }
 
 .custom-search-select [class*="-control"] > div:nth-of-type(2) {

@@ -14,8 +14,6 @@ const hoveredMarker = require("../../public/images/maps/hovered-marker.svg")
 const userMarker = require("../../public/images/maps/user-marker.svg").default
   .src;
 
-const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
-
 const MultyMarkersMap = ({
   markers = [],
   onMouseOver = () => {},
@@ -32,11 +30,11 @@ const MultyMarkersMap = ({
   if (baseCenter) {
     baseCenter = { lat: Number(baseCenter.lat), lng: Number(baseCenter.lng) };
   } else {
-    baseCenter = defaultCenter;
+    baseCenter = STATIC.DEFAULTS.CITY_COORDS;
   }
 
   useEffect(() => {
-    if (defaultLocation) {      
+    if (defaultLocation) {
       const defaultCoords = {
         lat: Number(defaultLocation.lat),
         lng: Number(defaultLocation.lng),
