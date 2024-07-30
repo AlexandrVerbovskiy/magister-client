@@ -140,9 +140,9 @@ export default {
     PHOTO_LINK: "/images/admin/default-photo.png",
     ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
   },
-  RECIPIENT_PAYMENT_TYPES:{
-    REFUND:"refund",
-    RENTAL:"rental",
+  RECIPIENT_PAYMENT_TYPES: {
+    REFUND: "refund",
+    RENTAL: "rental",
   },
   FILE_ACCEPT:
     ".txt, .doc, .docx, .pdf, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .gif, .mp3, .wav, .mp4, .avi, .mov, .csv, .html, .css, .js, .xml, .json, .svg, .bmp, .ico, .tif, .tiff, .psd, .ai, .eps, .wmv, .flv, .mkv, .ogg, .aac, .wma, .flac, .exe, .dll, .bat, .cmd, .apk, .jar, .cpp, .c, .java, .py, .php, .html, .htm, .asp, .aspx, .jsp, .rb, .pl, .sql, .db, .bak, .tar, .gz, .tgz, .deb, .rpm, .iso, .img, .dmg, .swf, .mpg, .mpeg, .3gp, .wmv, .mov, .ogg, .m4a, .aac, .ac3, .aiff, .au, .mid, .midi, .wma, .rtf, .odt, .ods, .odp, .odg, .odf, .log, .yaml, .m3u, .pls, .log, .ini, .cfg, .inf, .nfo, .url, .torrent, .bak, .tmp, .tmp, .old, .temp, .part, .bak, .dmp, .crash, .swp, .srt, .sub, .ass, .vtt, .ttf, .otf, .woff, .woff2, .eot, .tsv, .webp",
@@ -151,4 +151,5 @@ export default {
 
   SERVER_API: "/api",
   SERVER_STORAGE: "/public",
+  SUPPORT_EMAIL: "support@rentabout.com",
 };
