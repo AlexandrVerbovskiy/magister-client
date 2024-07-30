@@ -1,4 +1,7 @@
-import { checkStartEndHasConflict, getOrderBlockedDatesToUpdate } from "./dateHelpers";
+import {
+  checkStartEndHasConflict,
+  getOrderBlockedDatesToUpdate,
+} from "./dateHelpers";
 
 const isOrderCanBeAccepted = (order) => {
   if (
