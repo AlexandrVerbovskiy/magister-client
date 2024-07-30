@@ -93,8 +93,6 @@ const Orders = (pageProps) => {
   const { error, authToken } = useContext(IndiceContext);
   const [type, setType] = useState(router.query.type ?? "tenant");
 
-  const tenantCancelFee = pageProps.tenantCancelFee;
-
   const {
     page,
     countPages,
