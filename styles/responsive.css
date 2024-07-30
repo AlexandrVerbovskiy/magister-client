@@ -2153,6 +2153,7 @@
     padding: 0 0 6px;
     font-size: 16px;
   }
+  .provider-login-section .login-with-account ul li a,
   .loginRegisterModal
     .modal-dialog
     .modal-content
@@ -2167,6 +2168,8 @@
     padding-left: 15px;
     padding-right: 15px;
   }
+
+  .provider-login-section .login-with-account ul li a i,
   .loginRegisterModal
     .modal-dialog
     .modal-content

@@ -3,6 +3,7 @@ import Navbar from "../components/_App/Navbar";
 import { userSideProps } from "../middlewares";
 import { getViewPageWithCategoriesOptions } from "../services";
 import PageBanner from "../components/Common/PageBanner";
+import SupportEmailLink from "../components/SupportEmailLink";
 
 const PrivacyPolicy = () => {
   return (
@@ -22,7 +23,7 @@ const PrivacyPolicy = () => {
                   and we take that responsibility seriously. This Privacy Policy
                   outlines what data we collect, how we use it, and how we
                   protect it. If you have any questions, please contact us at{" "}
-                  <a href="mailto:hello@rentabout.com">hello@rentabout.com</a>.
+                  <SupportEmailLink />.
                 </p>
               </div>
             </div>
@@ -196,11 +197,9 @@ const PrivacyPolicy = () => {
               <div className="faq-item">
                 <h3>How to contact us or make a complaint:</h3>
                 <p>
-                  Contact us at{" "}
-                  <a href="mailto:hello@rentabout.com">hello@rentabout.com</a>{" "}
-                  with any questions or complaints. If you’re not satisfied with
-                  our response, you can refer your complaint to the Financial
-                  Ombudsman Service.
+                  Contact us at <SupportEmailLink /> with any questions or
+                  complaints. If you’re not satisfied with our response, you can
+                  refer your complaint to the Financial Ombudsman Service.
                 </p>
               </div>
             </div>
@@ -222,8 +221,6 @@ const PrivacyPolicy = () => {
     </>
   );
 };
-
-getViewPageWithCategoriesOptions;
 
 const boostServerSideProps = async () => {
   const options = await getViewPageWithCategoriesOptions();

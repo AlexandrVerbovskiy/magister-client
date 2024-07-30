@@ -1,6 +1,7 @@
 import Footer from "../components/_App/Footer";
 import Navbar from "../components/_App/Navbar";
 import PageBanner from "../components/Common/PageBanner";
+import SupportEmailLink from "../components/SupportEmailLink";
 import { userSideProps } from "../middlewares";
 import { getViewPageWithCategoriesOptions } from "../services";
 
@@ -80,8 +81,8 @@ const TermsOfService = () => {
 
             <h4>Contact Us</h4>
             <p>
-              If you have any questions about these Terms, please contact us at
-              test@gmail.com.
+              If you have any questions about these Terms, please contact us at{" "}
+              <SupportEmailLink />.
             </p>
           </div>
         </div>
@@ -90,8 +91,6 @@ const TermsOfService = () => {
     </>
   );
 };
-
-getViewPageWithCategoriesOptions;
 
 const boostServerSideProps = async () => {
   const options = await getViewPageWithCategoriesOptions();
