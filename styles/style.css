@@ -11638,6 +11638,8 @@ All Modal CSS
 .loginRegisterModal .modal-dialog .modal-content .tab-content {
   margin-top: 30px;
 }
+
+.provider-login-section .login-with-account,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11646,6 +11648,8 @@ All Modal CSS
   .login-with-account {
   margin-bottom: 30px;
 }
+
+.provider-login-section .login-with-account span,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11657,6 +11661,8 @@ All Modal CSS
   color: #666666;
   font-weight: 500;
 }
+
+.provider-login-section .login-with-account ul,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11673,6 +11679,8 @@ All Modal CSS
   margin-left: -7px;
   margin-right: -7px;
 }
+
+.provider-login-section .login-with-account ul li,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11686,6 +11694,8 @@ All Modal CSS
   padding-left: 7px;
   padding-right: 7px;
 }
+
+.provider-login-section .login-with-account ul li a,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11706,6 +11716,8 @@ All Modal CSS
   padding-left: 25px;
   padding-right: 25px;
 }
+
+.provider-login-section .login-with-account ul li a i,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11722,6 +11734,8 @@ All Modal CSS
   top: 4px;
   margin-right: 2px;
 }
+
+.provider-login-section .login-with-account ul li a.facebook,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11734,6 +11748,8 @@ All Modal CSS
   background-color: #4267b2;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.facebook:hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11746,6 +11762,8 @@ All Modal CSS
   background-color: #6d8bc8;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.twitter,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11758,6 +11776,8 @@ All Modal CSS
   background-color: #1da1f2;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.twitter:hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11770,6 +11790,8 @@ All Modal CSS
   background-color: #0982cc;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.linkedin,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11782,6 +11804,8 @@ All Modal CSS
   background-color: #0982cc;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.linkedin:hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11794,6 +11818,8 @@ All Modal CSS
   background-color: rgb(110, 155, 182);
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.google,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11806,6 +11832,8 @@ All Modal CSS
   background-color: #d93025;
   color: var(--whiteColor);
 }
+
+.provider-login-section .login-with-account ul li a.google:hover,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11818,6 +11846,8 @@ All Modal CSS
   background-color: #da584f;
   color: var(--whiteColor);
 }
+
+.provider-login-section .sub-title,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11838,6 +11868,7 @@ All Modal CSS
   font-weight: 400;
 }
 
+.provider-login-section .sub-title::before,
 .loginRegisterModal
   .modal-dialog
   .modal-content
@@ -11853,6 +11884,8 @@ All Modal CSS
   z-index: -1;
   background: #f0f0f0;
 }
+
+.provider-login-section .sub-title span,
 .loginRegisterModal
   .modal-dialog
   .modal-content

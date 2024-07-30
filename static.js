@@ -151,4 +151,5 @@ export default {
   UNBLOB_CHUNK_SIZE: 256 * 1024,
   SERVER_API: "/api",
   SERVER_STORAGE: "/public",
+  SUPPORT_EMAIL: "support@rentabout.com",
 };
