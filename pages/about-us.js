@@ -21,6 +21,7 @@ const AboutUs = () => {
   return (
     <>
       <Navbar canShowSearch={false} alwaysSticky={true}/>
+      
       <div className="listings-area ptb-100 bg-f1f1f1">
         <div className="container mt-8 position-relative">
           <div className="row justify-center align-items-center mb-8">
@@ -299,8 +300,6 @@ const AboutUs = () => {
     </>
   );
 };
-
-getViewPageWithCategoriesOptions;
 
 const boostServerSideProps = async () => {
   const options = await getViewPageWithCategoriesOptions();

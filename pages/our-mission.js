@@ -64,8 +64,6 @@ const OurMission = () => {
   );
 };
 
-getViewPageWithCategoriesOptions;
-
 const boostServerSideProps = async () => {
   const options = await getViewPageWithCategoriesOptions();
   return { ...options };

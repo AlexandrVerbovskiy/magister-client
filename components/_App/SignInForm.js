@@ -9,6 +9,7 @@ import { checkTwoFactorCode, generateTwoFactorCode } from "../../services";
 import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn } from "next-auth/react";
+import SocialAuth from "./Navbar/SocialAuth";
 
 const SignInForm = () => {
   const router = useRouter();
@@ -155,8 +156,18 @@ const SignInForm = () => {
 
               <h2>Sign in</h2>
 
+              <div className="provider-login-section mt-8">
+                <div className="login-with-account">
+                  <SocialAuth />
+                </div>
+
+                <span className="sub-title">
+                  <span>Or login with</span>
+                </span>
+              </div>
+
               <form
-                className="login-form"
+                className="login-form mt-2"
                 method="get"
                 onSubmit={handleLoginSubmit}
               >
