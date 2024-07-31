@@ -43,6 +43,7 @@ const InvoiceTable = ({
   waitingApproved,
   adminApproved,
   failedDescription,
+  canUpdate,
 }) => {
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
@@ -222,7 +223,7 @@ const InvoiceTable = ({
           </div>
         )}
 
-        {!waitingApproved && !adminApproved ? (
+        {canUpdate && !waitingApproved && !adminApproved ? (
           <div className="invoice-btn-box d-flex justify-content-between">
             <a
               className="default-btn"
