@@ -144,3 +144,25 @@ export const extractDataBetweenBraces = (str) => {
     return null;
   }
 };
+
+export const sortListingImages = (files) => {
+  files.sort((a, b) => {
+    if (a.id && b.id) {
+      return a.id - b.id;
+    } else if (a.id && !b.id) {
+      return 1;
+    } else if (!a.id && b.id) {
+      return -1;
+    } else {
+      const dateComparison =
+        new Date(a.date).getTime() - new Date(b.date).getTime();
+
+      if (dateComparison === 0) {
+        return a.localId.localeCompare(b.localId);
+      }
+      return dateComparison;
+    }
+  });
+
+  return files;
+};
