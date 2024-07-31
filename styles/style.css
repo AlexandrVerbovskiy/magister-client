@@ -16791,6 +16791,7 @@ Dashboard CSS
   font-size: var(--fontSize);
   padding: 0 15px!important;
   box-shadow: none !important;
+  display: flex!important;
 }
 
 .custom-search-select.listing-sort-select > [class*="-control"] {
