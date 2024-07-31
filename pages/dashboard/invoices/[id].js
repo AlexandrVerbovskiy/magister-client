@@ -5,6 +5,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import Link from "next/link";
 import { useIdPage } from "../../../hooks";
+import STATIC from "../../../static";
 
 const Invoice = (baseProps) => {
   const { props } = useIdPage({
@@ -59,6 +60,11 @@ const Invoice = (baseProps) => {
           waitingApproved={payment.waitingApproved}
           adminApproved={payment.adminApproved}
           failedDescription={payment.failedDescription}
+          canUpdate={
+            !payment.disputeStatus &&
+            !payment.orderCancelStatus &&
+            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
+          }
         />
       </div>
     </>

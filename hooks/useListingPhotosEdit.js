@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { uniqueImageId, validateBigText } from "../utils";
 
-const useListingPhotoEdit = () => {
+const useListingPhotosEdit = () => {
   const [files, setFiles] = useState([]);
   const [linkFiles, setLinkFiles] = useState([]);
   const [fileError, setFileError] = useState(null);
@@ -69,7 +69,13 @@ const useListingPhotoEdit = () => {
             success = false;
             return file;
           } else {
-            found = { ...file, preview: URL.createObjectURL(photoPopupPhoto) };
+            found = Object.assign(photoPopupPhoto, {
+              preview: URL.createObjectURL(photoPopupPhoto),
+              id: file.id,
+              localId: file.localId,
+              date: file.date,
+            });
+
             return found;
           }
         });
@@ -224,4 +230,4 @@ const useListingPhotoEdit = () => {
   };
 };
 
-export default useListingPhotoEdit;
+export default useListingPhotosEdit;

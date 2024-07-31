@@ -1,6 +1,7 @@
 import { removeDuplicates } from "./helpers";
 import { dateSort } from "./sort";
 import { format, isToday, isYesterday } from "date-fns";
+import STATIC from "../static";
 
 export const dateToInputString = (date) => {
   const year = date.getFullYear();

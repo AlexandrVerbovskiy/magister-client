@@ -27,6 +27,7 @@ import {
   byteConverter,
   getFilePath,
   getCityCoords,
+  sortListingImages,
 } from "../../../utils";
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
@@ -579,7 +580,7 @@ const EditForm = ({ listing, categories, save }) => {
           let indexCount = 0;
           let totalSize = 0;
 
-          files.forEach((file) => {
+          sortListingImages(files).forEach((file) => {
             if (file.id) {
               formData.append(`files[id][${file.id}]`, file);
             } else {

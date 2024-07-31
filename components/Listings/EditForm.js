@@ -10,6 +10,7 @@ import {
   getCityCoords,
   getFilePath,
   onCurrentUserLocation,
+  sortListingImages,
   uniqueImageId,
   validateBigText,
   validateInteger,
@@ -31,7 +32,6 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
-import { useRouter } from "next/router";
 import ErrorSpan from "../ErrorSpan";
 import { useDropzone } from "react-dropzone";
 
@@ -481,7 +481,7 @@ const EditForm = ({
       let indexCount = 0;
       let totalSize = 0;
 
-      files.forEach((file) => {
+      sortListingImages(files).forEach((file) => {
         if (file.id) {
           formData.append(`files[id][${file.id}]`, file);
         } else {

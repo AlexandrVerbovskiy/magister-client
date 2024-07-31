@@ -1,6 +1,10 @@
 import { useDropzone } from "react-dropzone";
 import ModalBlank from "../ModalBlank";
-import { getListingImageByType, uniqueImageId } from "../../../utils";
+import {
+  getListingImageByType,
+  sortListingImages,
+  uniqueImageId,
+} from "../../../utils";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
@@ -157,7 +161,7 @@ const EditPhotosSection = ({
     setPhotoPopupActive(true);
   };
 
-  const infosToView = [
+  const infosToView = sortListingImages([
     ...files.map((file) => ({
       type: "storage",
       localId: file.localId,
@@ -172,14 +176,7 @@ const EditPhotosSection = ({
       date: info.date,
       full: false,
     })),
-  ].sort((a, b) => {
-    const dateComparison =
-      new Date(a.date).getTime() - new Date(b.date).getTime();
-    if (dateComparison === 0) {
-      return a.localId.localeCompare(b.localId);
-    }
-    return dateComparison;
-  });
+  ]);
 
   return (
     <>
