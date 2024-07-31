@@ -340,3 +340,13 @@ export const getAdminCreateCategoryByOthersOptions = async (authToken) => {
   const data = await get(`/admin-create-category-by-others-options`, authToken);
   return data.body;
 };
+
+export const getAddressCoords = async (address, authToken) => {
+  const data = await post(`/address-to-coords`, { address }, authToken);
+  return data.body;
+};
+
+export const getCoordsAddress = async ({ lat, lng }, authToken) => {
+  const data = await post(`/coords-to-address`, { lat, lng }, authToken);
+  return data.body;
+};

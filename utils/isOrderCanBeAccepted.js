@@ -2,6 +2,7 @@ import {
   checkStartEndHasConflict,
   getOrderBlockedDatesToUpdate,
 } from "./dateHelpers";
+import STATIC from "../static";
 
 const isOrderCanBeAccepted = (order) => {
   if (

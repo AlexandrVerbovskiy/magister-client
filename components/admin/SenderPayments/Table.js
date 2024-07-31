@@ -24,16 +24,10 @@ const SenderPaymentsTable = ({
   loading,
 }) => {
   const ths = [
+    { title: "Id", value: "sender_payments.id", width: "10%" },
     { title: "User", value: "users.name", width: "20%" },
-    { title: "Payment Method", value: "sender_payments.type", width: "15%" },
-    {
-      title: "Previous Transfers",
-      value: "count_transfers",
-      canOrder: false,
-      width: "10%",
-    },
-    { title: "Transfer Id", value: "sender_payments.id", width: "10%" },
-    { title: "Amount", value: "sender_payments.money", width: "15%" },
+    { title: "Payment Method", value: "sender_payments.type", width: "20%" },
+    { title: "Amount", value: "sender_payments.money", width: "20%" },
     { title: "Uploaded on", value: "sender_payments.created_at", width: "15%" },
     { title: "Status", value: "status", canOrder: false, width: "10%" },
     { title: "", value: "actions", canOrder: false, width: "5%" },
@@ -103,7 +97,7 @@ const SenderPaymentsTable = ({
                     orderType={orderField == th.value ? orderType : null}
                     onClick={onClickTh}
                     align={
-                      ["count_transfers", "sender_payments.id"].includes(
+                      ["count_transfers"].includes(
                         th.value
                       )
                         ? "center"
