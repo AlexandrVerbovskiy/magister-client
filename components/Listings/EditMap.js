@@ -26,7 +26,10 @@ const EditMap = ({
         center={center}
         onRightClick={() => setMarkerActive(false)}
         onDragEnd={() => {
-          if (!mapRef.current) return;
+          if (!mapRef.current || !mapRef.current.center) {
+            return;
+          }
+
           const center = mapRef.current.center;
           const lat = center.lat();
           const lng = center.lng();

@@ -1,10 +1,5 @@
 import STATIC from "../static";
-import {
-  checkStartEndHasConflict,
-  generateDatesBetween,
-  getMaxDate,
-  increaseDateByOneDay,
-} from "./dateHelpers";
+import { generateDatesBetween } from "./dateHelpers";
 import {
   ownerGetsCalculate,
   tenantPaymentCalculate,
@@ -123,53 +118,6 @@ export const hasPayError = ({ sessionUser, order }) => {
   return null;
 };
 
-export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
-  let lastOrderDate = offerEndDate;
-
-  if (extendOrders && extendOrders.length) {
-    const extendOrderDates = extendOrders
-      .filter(
-        (order) =>
-          [
-            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-            STATIC.ORDER_STATUSES.FINISHED,
-          ].includes(order.status) && !order.cancelStatus
-      )
-      .map((extendOrder) => extendOrder.offerEndDate);
-
-    lastOrderDate = getMaxDate(extendOrderDates);
-  }
-
-  return increaseDateByOneDay(lastOrderDate);
-};
-
-export const getOrderBlockedDatesToUpdate = (order) => {
-  if (!order) {
-    return [];
-  }
-
-  let blockedDatesToUpdate = [];
-
-  order.conflictOrders.map((conflictOrder) => {
-    const startDate = conflictOrder.requestId
-      ? conflictOrder.newStartDate
-      : conflictOrder.offerStartDate;
-
-    const endDate = conflictOrder.requestId
-      ? conflictOrder.newEndDate
-      : conflictOrder.offerEndDate;
-
-    blockedDatesToUpdate = [
-      ...blockedDatesToUpdate,
-      ...generateDatesBetween(startDate, endDate),
-    ];
-  });
-
-  return removeDuplicates(blockedDatesToUpdate);
-};
-
 export const getOrderBlockedDatesToExtend = (order) => {
   if (!order) {
     return [];
@@ -179,25 +127,6 @@ export const getOrderBlockedDatesToExtend = (order) => {
     ...getOrderBlockedDatesToUpdate(order),
     ...generateDatesBetween(order.offerStartDate, order.offerEndDate),
   ]);
-};
-
-export const isOrderCanBeAccepted = (order) => {
-  if (
-    order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
-    order.disputeId ||
-    order.cancelStatus
-  ) {
-    return true;
-  }
-
-  const orderStartDate = order.requestId
-    ? order.newStartDate
-    : order.offerStartDate;
-
-  const orderEndDate = order.requestId ? order.newEndDate : order.offerEndDate;
-  const blockedDates = getOrderBlockedDatesToUpdate(order);
-
-  return !checkStartEndHasConflict(orderStartDate, orderEndDate, blockedDates);
 };
 
 export const removeDuplicates = (arr) => [...new Set(arr)];

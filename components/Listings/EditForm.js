@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Link from "next/link";
 import NavbarThree from "../_App/NavbarThree";
 import DashboardNavbar from "../Dashboard/DashboardNavbar";
@@ -7,6 +7,7 @@ import STATIC from "../../static";
 import {
   byteConverter,
   convertToSelectPopupCategories,
+  getCityCoords,
   getFilePath,
   onCurrentUserLocation,
   uniqueImageId,
@@ -135,14 +136,12 @@ const EditForm = ({
 
   const [active, setActive] = useState(true);
 
-  const [center, setCenter] = useState({
-    lat: STATIC.CITY_COORDS[baseCity].lat,
-    lng: STATIC.CITY_COORDS[baseCity].lng,
-  });
+  const baseCoords = getCityCoords(baseCity);
+  const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
-  const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
+  const [lat, setLat] = useState(baseCoords.lat);
+  const [lng, setLng] = useState(baseCoords.lng);
   const [radius, setRadius] = useState(
     STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
   );
@@ -150,6 +149,9 @@ const EditForm = ({
   const [mainError, setMainError] = useState(null);
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
+
+  const getAddressByCoordsTimeoutRef = useRef(null);
+  const getCoordsByAddressTimeoutRef = useRef(null);
 
   const handleChangeName = (e) => {
     setName(e.target.value);
@@ -163,6 +165,19 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const setMainAddressError = (e) => {
+    if (e.message.includes("REQUEST_DENIED")) {
+      error.set("Information not found");
+      return;
+    }
+
+    if (e.message.includes("ZERO_RESULTS")) {
+      return;
+    }
+
+    error.set(e.message);
+  };
+
   const handleChangeAddress = async (event) => {
     try {
       const newAddress = event.target.value;
@@ -170,16 +185,20 @@ const EditForm = ({
       setAddressError(null);
       setMainError(null);
 
-      const newCoords = await getCoordsByAddress(newAddress);
-      if (!newCoords) return;
-
-      setLat(newCoords.lat);
-      setLng(newCoords.lng);
-      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
-    } catch (e) {
-      if (!e.message.includes("ZERO_RESULTS")) {
-        error.set(e.message);
+      if (getCoordsByAddressTimeoutRef.current) {
+        clearTimeout(getCoordsByAddressTimeoutRef.current);
       }
+
+      getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+        const newCoords = await getCoordsByAddress(newAddress);
+        if (!newCoords) return;
+
+        setLat(newCoords.lat);
+        setLng(newCoords.lng);
+        setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      }, 500);
+    } catch (e) {
+      setMainAddressError(e);
     }
   };
 
@@ -187,10 +206,20 @@ const EditForm = ({
     try {
       setLat(newLat);
       setLng(newLng);
-      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
-      setAddress(newAddress);
+
+      if (getAddressByCoordsTimeoutRef.current) {
+        clearTimeout(getAddressByCoordsTimeoutRef.current);
+      }
+
+      getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+        const newAddress = await getAddressByCoords({
+          lat: newLat,
+          lng: newLng,
+        });
+        setAddress(newAddress);
+      }, 100);
     } catch (e) {
-      error.set(e.message);
+      setMainAddressError(e);
     }
   };
 
@@ -226,13 +255,12 @@ const EditForm = ({
 
   const handleChangeCity = (e) => {
     const city = e.value;
-    const lat = STATIC.CITY_COORDS[city].lat;
-    const lng = STATIC.CITY_COORDS[city].lng;
+    const cityCords = getCityCoords(city);
 
     setCity(city);
-    setCenter({ lat, lng });
-    setLat(lat);
-    setLng(lng);
+    setCenter(cityCords);
+    setLat(cityCords.lat);
+    setLng(cityCords.lng);
     setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
     setMainError(null);
   };
@@ -281,12 +309,10 @@ const EditForm = ({
 
   const listingToState = () => {
     const city = listing.city ?? baseCity;
-    const lat = listing.rentalLat
-      ? Number(listing.rentalLat)
-      : STATIC.CITY_COORDS[city].lat;
-    const lng = listing.rentalLng
-      ? Number(listing.rentalLng)
-      : STATIC.CITY_COORDS[city].lng;
+    const cityCords = getCityCoords(city);
+
+    const lat = listing.rentalLat ? Number(listing.rentalLat) : cityCords.lat;
+    const lng = listing.rentalLng ? Number(listing.rentalLng) : cityCords.lng;
 
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -477,7 +503,7 @@ const EditForm = ({
     }
 
     if (backgroundPhoto) {
-      formData.append("background_photo", backgroundPhoto);
+      formData.append("backgroundPhoto", backgroundPhoto);
     }
 
     const info = objectToSave();

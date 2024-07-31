@@ -2,7 +2,7 @@ import Link from "next/link";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import { getOrderList, getOrderListOptions } from "../../../services";
-import { baseTimeListPageParams } from "../../../utils";
+import { baseListPageParams } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import { authSideProps } from "../../../middlewares";
@@ -93,24 +93,15 @@ const Orders = (pageProps) => {
   const { error, authToken } = useContext(IndiceContext);
   const [type, setType] = useState(router.query.type ?? "tenant");
 
-  const tenantCancelFee = pageProps.tenantCancelFee;
-
   const {
     page,
-    countItems,
     countPages,
     moveToPage,
-    filter,
-    changeFilter,
     canMoveNextPage,
     canMovePrevPage,
     items: orders,
     rebuild,
-    options,
-    isFirstCall: isFirstBookingCall,
     setItemFields,
-    getCurrentPaginationProps,
-    updatePaginationState,
     loading: paginationLoading,
     updateItemsParticularly,
   } = usePagination({
@@ -272,7 +263,7 @@ const Orders = (pageProps) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const type = context.query.type === "owner" ? "owner" : "tenant";
-  const params = { ...baseTimeListPageParams(context.query), type };
+  const params = { ...baseListPageParams(context.query), type };
   const options = await getOrderListOptions(params, baseSideProps.authToken);
   return { ...options };
 };

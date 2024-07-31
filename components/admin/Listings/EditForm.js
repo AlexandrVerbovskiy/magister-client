@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -26,6 +26,7 @@ import {
   validateSmallText,
   byteConverter,
   getFilePath,
+  getCityCoords,
 } from "../../../utils";
 import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
@@ -194,28 +195,29 @@ const EditForm = ({ listing, categories, save }) => {
   const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
   const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
 
-  const [center, setCenter] = useState({
-    lat: STATIC.CITY_COORDS[baseCity].lat,
-    lng: STATIC.CITY_COORDS[baseCity].lng,
-  });
+  const baseCoords = getCityCoords(baseCity);
+
+  const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [lat, setLat] = useState(STATIC.CITY_COORDS[baseCity].lat);
-  const [lng, setLng] = useState(STATIC.CITY_COORDS[baseCity].lng);
+  const [lat, setLat] = useState(baseCoords.lat);
+  const [lng, setLng] = useState(baseCoords.lng);
   const [radius, setRadius] = useState(
     STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS
   );
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
+  const getAddressByCoordsTimeoutRef = useRef(null);
+  const getCoordsByAddressTimeoutRef = useRef(null);
+
   const handleChangeCity = (city) => {
-    const lat = STATIC.CITY_COORDS[city].lat;
-    const lng = STATIC.CITY_COORDS[city].lng;
+    const coords = getCityCoords(city);
 
     setCity(city);
-    setCenter({ lat, lng });
-    setLat(lat);
-    setLng(lng);
+    setCenter(coords);
+    setLat(coords.lat);
+    setLng(coords.lng);
     setRadius(STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS);
   };
 
@@ -224,12 +226,18 @@ const EditForm = ({ listing, categories, save }) => {
       setAddress(newAddress);
       setAddressError(null);
 
-      const newCoords = await getCoordsByAddress(newAddress);
-      if (!newCoords) return;
+      if (getCoordsByAddressTimeoutRef.current) {
+        clearTimeout(getCoordsByAddressTimeoutRef.current);
+      }
 
-      setLat(newCoords.lat);
-      setLng(newCoords.lng);
-      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+        const newCoords = await getCoordsByAddress(newAddress);
+        if (!newCoords) return;
+
+        setLat(newCoords.lat);
+        setLng(newCoords.lng);
+        setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      }, 500);
     } catch (e) {
       if (!e.message.includes("ZERO_RESULTS")) {
         error.set(e.message);
@@ -237,21 +245,31 @@ const EditForm = ({ listing, categories, save }) => {
     }
   };
 
-  const handleChangeOtherCategory = (e) => {
-    setOtherCategory(e.target.value);
-    setCategoryError(null);
-    setMainError(null);
-  };
-
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
     try {
       setLat(newLat);
       setLng(newLng);
-      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
-      setAddress(newAddress);
+
+      if (getAddressByCoordsTimeoutRef.current) {
+        clearTimeout(getAddressByCoordsTimeoutRef.current);
+      }
+
+      getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+        const newAddress = await getAddressByCoords({
+          lat: newLat,
+          lng: newLng,
+        });
+        setAddress(newAddress);
+      }, 100);
     } catch (e) {
       error.set(e.message);
     }
+  };
+
+  const handleChangeOtherCategory = (e) => {
+    setOtherCategory(e.target.value);
+    setCategoryError(null);
+    setMainError(null);
   };
 
   const handleChangeCategory = (newCategoryId) => {
@@ -301,12 +319,14 @@ const EditForm = ({ listing, categories, save }) => {
 
   const listingToState = () => {
     const city = prevListing.city ?? baseCity;
+    const cityCoords = getCityCoords(city);
+
     const lat = prevListing.rentalLat
       ? Number(prevListing.rentalLat)
-      : STATIC.CITY_COORDS[city].lat;
+      : cityCoords.lat;
     const lng = prevListing.rentalLng
       ? Number(prevListing.rentalLng)
-      : STATIC.CITY_COORDS[city].lng;
+      : cityCoords.lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -583,7 +603,7 @@ const EditForm = ({ listing, categories, save }) => {
         const info = objectToSave();
 
         if (backgroundPhoto) {
-          formData.append("background_photo", backgroundPhoto);
+          formData.append("backgroundPhoto", backgroundPhoto);
         }
 
         info["listingImages"] = JSON.stringify(info["listingImages"]);
@@ -697,7 +717,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 category={category}
                                 isOtherCategory={isOtherCategory}
                                 categoryError={categoryError}
-                                handleChangeCategory={handleChangeCategory}
+                                handleChangeCategory={handleChangeOtherCategory}
                               />
                               <OtherCategorySection
                                 otherCategory={otherCategory}

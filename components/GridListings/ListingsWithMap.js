@@ -12,12 +12,17 @@ import PopularPlacesFilter from "../Common/PopularPlacesFilter";
 import { createListingCategoryCreateNotification } from "../../services/listingCategoryCreateNotification";
 import ListingItem from "../../components/Listings/ListingItem";
 import { useRouter } from "next/router";
-import { cloneObject, getDateByCurrentAdd, validatePrice } from "../../utils";
+import {
+  cloneObject,
+  getCityCoords,
+  getDateByCurrentAdd,
+  validatePrice,
+} from "../../utils";
 import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 import Loading from "../../components/GridListings/Loading";
 
-const defaultCenter = STATIC.CITY_COORDS[Object.keys(STATIC.CITY_COORDS)[0]];
+const defaultCenter = STATIC.DEFAULTS.CITY_COORDS;
 const baseItemsPerPage = 6;
 
 const cities = [
@@ -341,16 +346,14 @@ const ListingsWithMap = ({
   };
 
   const handleSelectedCities = (cities, needRemoveSearch = false) => {
-    const searchCenter =
-      userLocation ?? STATIC.CITY_COORDS[cities[0]] ?? defaultCenter;
-
-    setSelectedCities(cloneObject(cities));
-
+    const searchCenter = userLocation ?? getCityCoords(cities[0]);
     const rebuildProps = { cities, ...searchCenter };
+
     if (needRemoveSearch) {
       rebuildProps["searchCity"] = null;
     }
 
+    setSelectedCities(cloneObject(cities));
     rebuild(rebuildProps);
     setMapCenter(searchCenter);
   };
@@ -435,12 +438,8 @@ const ListingsWithMap = ({
     );
 
   const changeUserLocation = (location) => {
+    let center = location ?? getCityCoords(selectedCities[0]);
     setUserLocation(location);
-
-    let center = location
-      ? location
-      : STATIC.CITY_COORDS[selectedCities[0]] ?? defaultCenter;
-
     setSearchLocation(center);
     setMapCenter(center);
   };
@@ -554,7 +553,7 @@ const ListingsWithMap = ({
                               }
                               onChange={(e) => handleChangeOrder(e.value)}
                               isSearchable={false}
-                              className="custom-search-select blog-select"
+                              className="blog-select listing-sort-select"
                               name="listing-order-select"
                               selectRef={orderRef}
                               openMenuOnFocus={true}
