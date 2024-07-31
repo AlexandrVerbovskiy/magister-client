@@ -1,76 +1,31 @@
-import React, { useEffect } from "react";
-import { setKey, fromLatLng, fromAddress } from "react-geocode";
-import ENV from "../env";
+import { IndiceContext } from "../contexts";
+import { useContext } from "react";
+import { getAddressCoords, getCoordsAddress } from "../services/main";
 
 const useCoordsAddress = () => {
-  useEffect(() => {
-    if (ENV.GOOGLE_GEOCODE_API_KEY) {
-      setKey(ENV.GOOGLE_GEOCODE_API_KEY);
+  const { authToken } = useContext(IndiceContext);
+
+  const responseWrapper = (response) => {
+    if (response.error) {
+      throw new Error(response.error);
     }
-  }, []);
 
-  const getAddressInfo = (elem) => {
-    const info = {};
-    const value = elem.long_name;
-
-    switch (elem.types[0]) {
-      case "street_number": {
-        info.streetNumber = value;
-        break;
-      }
-      case "route": {
-        info.street = value;
-        break;
-      }
-      case "locality": {
-        info.city = value;
-        break;
-      }
-      case "administrative_area_level_1": {
-        info.oblast = value;
-        break;
-      }
-      case "country": {
-        info.country = value;
-        break;
-      }
-      default:
-        break;
-    }
-    return info;
-  };
-
-  const fullAddressToString = (address) => {
-    let res = [];
-    Object.keys(address).forEach((key) => res.push(address[key]));
-    return res.join(", ");
+    return response.result;
   };
 
   const getAddressByCoords = async ({ lat, lng }) => {
-    const res = await fromLatLng(lat, lng, null, "en");
-
-    const addressArray = res.results[0].address_components;
-
-    if (!addressArray) throw new Error("Undefined coords");
-
-    const info = {};
-    addressArray.forEach((elem) => {
-      const newObj = getAddressInfo(elem);
-      Object.assign(info, newObj);
-    });
-
-    return fullAddressToString(info);
+    const response = await getCoordsAddress({ lat, lng }, authToken);
+    return responseWrapper(response);
   };
 
   const getCoordsByAddress = async (address) => {
     if (!address) return null;
-    const res = await fromAddress(address);
-    const coords = res.results[0].geometry.location;
-    if (!coords) throw new Error("Undefined address");
-    return coords;
+
+    const response = await getAddressCoords(address, authToken);
+    return responseWrapper(response);
   };
 
-  return { getAddressByCoords, getCoordsByAddress, fullAddressToString };
+  return { getAddressByCoords, getCoordsByAddress };
 };
 
 export default useCoordsAddress;
