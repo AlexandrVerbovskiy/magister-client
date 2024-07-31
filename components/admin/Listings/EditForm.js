@@ -222,48 +222,48 @@ const EditForm = ({ listing, categories, save }) => {
   };
 
   const handleChangeAddress = async (newAddress) => {
-    try {
-      setAddress(newAddress);
-      setAddressError(null);
+    setAddress(newAddress);
+    setAddressError(null);
 
-      if (getCoordsByAddressTimeoutRef.current) {
-        clearTimeout(getCoordsByAddressTimeoutRef.current);
-      }
+    if (getCoordsByAddressTimeoutRef.current) {
+      clearTimeout(getCoordsByAddressTimeoutRef.current);
+    }
 
-      getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+    getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+      try {
         const newCoords = await getCoordsByAddress(newAddress);
         if (!newCoords) return;
 
         setLat(newCoords.lat);
         setLng(newCoords.lng);
         setCenter({ lat: newCoords.lat, lng: newCoords.lng });
-      }, 500);
-    } catch (e) {
-      if (!e.message.includes("ZERO_RESULTS")) {
-        error.set(e.message);
+      } catch (e) {
+        if (!e.message.includes("ZERO_RESULTS")) {
+          error.set(e.message);
+        }
       }
-    }
+    }, 500);
   };
 
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
-    try {
-      setLat(newLat);
-      setLng(newLng);
+    setLat(newLat);
+    setLng(newLng);
 
-      if (getAddressByCoordsTimeoutRef.current) {
-        clearTimeout(getAddressByCoordsTimeoutRef.current);
-      }
+    if (getAddressByCoordsTimeoutRef.current) {
+      clearTimeout(getAddressByCoordsTimeoutRef.current);
+    }
 
-      getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+    getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+      try {
         const newAddress = await getAddressByCoords({
           lat: newLat,
           lng: newLng,
         });
         setAddress(newAddress);
-      }, 100);
-    } catch (e) {
-      error.set(e.message);
-    }
+      } catch (e) {
+        error.set(e.message);
+      }
+    }, 100);
   };
 
   const handleChangeOtherCategory = (e) => {
