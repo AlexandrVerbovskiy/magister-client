@@ -50,18 +50,8 @@ const TableItem = (props) => {
   return (
     <>
       <tr>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={payerId}
-            name={payerName}
-            photo={payerPhoto}
-          />
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          {getPaymentNameByType(type)}
-        </td>
         <td
-          className="first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate text-center"
+          className="first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate"
           style={{ paddingRight: "calc(1rem + 10px)", paddingLeft: "10px" }}
         >
           <Link
@@ -71,11 +61,11 @@ const TableItem = (props) => {
             #{id}
           </Link>
         </td>
-        <td
-          className="first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate text-center"
-          style={{ paddingRight: "calc(1rem + 10px)", paddingLeft: "10px" }}
-        >
-          0
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+          <TableUserLink id={payerId} name={payerName} photo={payerPhoto} />
+        </td>
+        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+          {getPaymentNameByType(type)}
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Link from "next/link";
 import NavbarThree from "../_App/NavbarThree";
 import DashboardNavbar from "../Dashboard/DashboardNavbar";
@@ -150,6 +150,9 @@ const EditForm = ({
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
+  const getAddressByCoordsTimeoutRef = useRef(null);
+  const getCoordsByAddressTimeoutRef = useRef(null);
+
   const handleChangeName = (e) => {
     setName(e.target.value);
     setNameError(null);
@@ -162,6 +165,19 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const setMainAddressError = (e) => {
+    if (e.message.includes("REQUEST_DENIED")) {
+      error.set("Information not found");
+      return;
+    }
+
+    if (e.message.includes("ZERO_RESULTS")) {
+      return;
+    }
+
+    error.set(e.message);
+  };
+
   const handleChangeAddress = async (event) => {
     try {
       const newAddress = event.target.value;
@@ -169,16 +185,20 @@ const EditForm = ({
       setAddressError(null);
       setMainError(null);
 
-      const newCoords = await getCoordsByAddress(newAddress);
-      if (!newCoords) return;
-
-      setLat(newCoords.lat);
-      setLng(newCoords.lng);
-      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
-    } catch (e) {
-      if (!e.message.includes("ZERO_RESULTS")) {
-        error.set(e.message);
+      if (getCoordsByAddressTimeoutRef.current) {
+        clearTimeout(getCoordsByAddressTimeoutRef.current);
       }
+
+      getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+        const newCoords = await getCoordsByAddress(newAddress);
+        if (!newCoords) return;
+
+        setLat(newCoords.lat);
+        setLng(newCoords.lng);
+        setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      }, 500);
+    } catch (e) {
+      setMainAddressError(e);
     }
   };
 
@@ -186,10 +206,20 @@ const EditForm = ({
     try {
       setLat(newLat);
       setLng(newLng);
-      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
-      setAddress(newAddress);
+
+      if (getAddressByCoordsTimeoutRef.current) {
+        clearTimeout(getAddressByCoordsTimeoutRef.current);
+      }
+
+      getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+        const newAddress = await getAddressByCoords({
+          lat: newLat,
+          lng: newLng,
+        });
+        setAddress(newAddress);
+      }, 100);
     } catch (e) {
-      error.set(e.message);
+      setMainAddressError(e);
     }
   };
 

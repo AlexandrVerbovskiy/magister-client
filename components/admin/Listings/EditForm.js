@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import Sidebar from "../../../partials/admin/Sidebar";
 import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
@@ -208,6 +208,9 @@ const EditForm = ({ listing, categories, save }) => {
 
   const { getAddressByCoords, getCoordsByAddress } = useCoordsAddress();
 
+  const getAddressByCoordsTimeoutRef = useRef(null);
+  const getCoordsByAddressTimeoutRef = useRef(null);
+
   const handleChangeCity = (city) => {
     const coords = getCityCoords(city);
 
@@ -223,12 +226,18 @@ const EditForm = ({ listing, categories, save }) => {
       setAddress(newAddress);
       setAddressError(null);
 
-      const newCoords = await getCoordsByAddress(newAddress);
-      if (!newCoords) return;
+      if (getCoordsByAddressTimeoutRef.current) {
+        clearTimeout(getCoordsByAddressTimeoutRef.current);
+      }
 
-      setLat(newCoords.lat);
-      setLng(newCoords.lng);
-      setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      getCoordsByAddressTimeoutRef.current = setTimeout(async () => {
+        const newCoords = await getCoordsByAddress(newAddress);
+        if (!newCoords) return;
+
+        setLat(newCoords.lat);
+        setLng(newCoords.lng);
+        setCenter({ lat: newCoords.lat, lng: newCoords.lng });
+      }, 500);
     } catch (e) {
       if (!e.message.includes("ZERO_RESULTS")) {
         error.set(e.message);
@@ -236,21 +245,31 @@ const EditForm = ({ listing, categories, save }) => {
     }
   };
 
-  const handleChangeOtherCategory = (e) => {
-    setOtherCategory(e.target.value);
-    setCategoryError(null);
-    setMainError(null);
-  };
-
   const handleChangeCoords = async ({ lat: newLat, lng: newLng }) => {
     try {
       setLat(newLat);
       setLng(newLng);
-      const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
-      setAddress(newAddress);
+
+      if (getAddressByCoordsTimeoutRef.current) {
+        clearTimeout(getAddressByCoordsTimeoutRef.current);
+      }
+
+      getAddressByCoordsTimeoutRef.current = setTimeout(async () => {
+        const newAddress = await getAddressByCoords({
+          lat: newLat,
+          lng: newLng,
+        });
+        setAddress(newAddress);
+      }, 100);
     } catch (e) {
       error.set(e.message);
     }
+  };
+
+  const handleChangeOtherCategory = (e) => {
+    setOtherCategory(e.target.value);
+    setCategoryError(null);
+    setMainError(null);
   };
 
   const handleChangeCategory = (newCategoryId) => {
@@ -698,7 +717,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 category={category}
                                 isOtherCategory={isOtherCategory}
                                 categoryError={categoryError}
-                                handleChangeCategory={handleChangeCategory}
+                                handleChangeCategory={handleChangeOtherCategory}
                               />
                               <OtherCategorySection
                                 otherCategory={otherCategory}
