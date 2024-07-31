@@ -162,6 +162,19 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const setMainAddressError = (e)=>{
+    if(e.message.includes("REQUEST_DENIED")){
+      error.set("Information not found");
+      return;
+    }
+
+    if (e.message.includes("ZERO_RESULTS")) {
+      return;
+    }
+
+    error.set(e.message);
+  }
+
   const handleChangeAddress = async (event) => {
     try {
       const newAddress = event.target.value;
@@ -176,9 +189,7 @@ const EditForm = ({
       setLng(newCoords.lng);
       setCenter({ lat: newCoords.lat, lng: newCoords.lng });
     } catch (e) {
-      if (!e.message.includes("ZERO_RESULTS")) {
-        error.set(e.message);
-      }
+      setMainAddressError(e);
     }
   };
 
@@ -189,7 +200,7 @@ const EditForm = ({
       const newAddress = await getAddressByCoords({ lat: newLat, lng: newLng });
       setAddress(newAddress);
     } catch (e) {
-      error.set(e.message);
+      setMainAddressError(e);
     }
   };
 
