@@ -166,3 +166,8 @@ export const sortListingImages = (files) => {
 
   return files;
 };
+
+export const getDisputeTitle = (name) => {
+  const title = STATIC.DISPUTE_TYPE_TITLE[name];
+  return title ?? STATIC.DISPUTE_TYPE_TITLE.others;
+};
