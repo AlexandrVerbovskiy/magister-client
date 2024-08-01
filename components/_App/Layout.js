@@ -1,30 +1,11 @@
 import Head from "next/head";
-import env from "../../env";
 import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect } from "react";
 
-const getPaypalInsertScript = ({ sessionUser, currentPath }) => {
-  if (currentPath.includes("/dashboard/profile-edit/")) {
-    return "https://www.paypalobjects.com/js/external/api.js";
-  } else {
-    if (currentPath.includes("/dashboard/")) {
-      return "https://www.paypal.com/sdk/js?client-id=" + env.PAYPAL_CLIENT_ID;
-    }
-  }
-};
-
-const Layout = ({ sessionUser, children }) => {
+const Layout = ({ children }) => {
   const router = useRouter();
-  const [insertPaypalScript, setInsertPaypalScript] = useState(
-    getPaypalInsertScript({ sessionUser, currentPath: router.asPath })
-  );
 
-  useLayoutEffect(() => {
-    const currentPath = router.asPath;
-    setInsertPaypalScript(getPaypalInsertScript({ sessionUser, currentPath }));
-  }, [router, sessionUser]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (window.paypal) {
       if (window.paypal.use && window.paypal.getElementsByAttribute) {
         window.paypalLogin = window.paypal;
@@ -37,11 +18,9 @@ const Layout = ({ sessionUser, children }) => {
       if (window.paypalLogin) {
         window.paypal = window.paypalLogin;
       }
-    } else {
-      if (router.asPath.includes("/dashboard")) {
-        if (window.paypalLogin) {
-          window.paypal = window.paypalPay;
-        }
+    } else if (router.asPath.includes("/dashboard")) {
+      if (window.paypalLogin) {
+        window.paypal = window.paypalPay;
       }
     }
   }, [router.asPath]);
@@ -58,7 +37,10 @@ const Layout = ({ sessionUser, children }) => {
           type="image/x-icon"
           href="/images/rent-about-logo.ico"
         />
-        {insertPaypalScript && <script src={insertPaypalScript} async></script>}
+        <script
+          src="https://www.paypalobjects.com/js/external/api.js"
+          async
+        ></script>
       </Head>
 
       {children}

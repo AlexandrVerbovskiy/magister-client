@@ -8,9 +8,14 @@ const PaypalSection = () => {
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://www.paypalobjects.com/js/external/api.js";
+    script.async = true;
 
     script.onload = () => {
-      if (window.paypal) {
+      if (
+        window.paypal &&
+        window.paypal.use &&
+        window.paypal.getElementsByAttribute
+      ) {
         window.paypal.use(["login"], function (login) {
           const loginRenderObj = {
             appid: ENV.PAYPAL_CLIENT_ID,
