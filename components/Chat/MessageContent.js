@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import ENV from "../../env";
 import STATIC from "../../static";
-import { getFactOrderDays, calculateCurrentTotalPrice } from "../../utils";
+import { getFactOrderDays, calculateCurrentTotalPrice, getDisputeTitle } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
 import SuccessIcon from "../Icons/SuccessIcon";
@@ -332,7 +332,7 @@ const orderMessageContent = ({
 
         <div className="my-1 text-start w-100">
           <b>Type: </b>
-          {STATIC.DISPUTE_TYPE_TITLE[content.type]}
+          {getDisputeTitle(content.type)}
         </div>
 
         <div className="my-1 text-start w-100">
