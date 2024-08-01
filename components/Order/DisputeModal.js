@@ -3,13 +3,7 @@ import { IndiceContext } from "../../contexts";
 import BaseModal from "../_App/BaseModal";
 import STATIC from "../../static";
 
-const options = Object.keys({
-  damage: "Damage",
-  "problems-with-withdrawal": "Problems with withdrawal",
-  communication: "Communication",
-  payment: "Payment",
-  others: "Others",
-}).map((value) => ({
+const options = Object.keys(STATIC.DISPUTE_TYPE_TITLE).map((value) => ({
   title: STATIC.DISPUTE_TYPE_TITLE[value],
   value,
 }));

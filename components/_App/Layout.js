@@ -1,7 +1,7 @@
 import Head from "next/head";
 import env from "../../env";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const getPaypalInsertScript = ({ sessionUser, currentPath }) => {
   if (currentPath.includes("/dashboard/profile-edit/")) {
@@ -19,12 +19,12 @@ const Layout = ({ sessionUser, children }) => {
     getPaypalInsertScript({ sessionUser, currentPath: router.asPath })
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentPath = router.asPath;
     setInsertPaypalScript(getPaypalInsertScript({ sessionUser, currentPath }));
   }, [router, sessionUser]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (window.paypal) {
       if (window.paypal.use && window.paypal.getElementsByAttribute) {
         window.paypalLogin = window.paypal;

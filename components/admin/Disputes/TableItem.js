@@ -6,7 +6,7 @@ import LinkIcon from "../Icons/LinkIcon";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import TableDateView from "../TableDateView";
-import { getListingImageByType } from "../../../utils";
+import { getDisputeTitle, getListingImageByType } from "../../../utils";
 import Link from "next/link";
 import SubInfoTitle from "../SubInfoTitle";
 import ActiveSpan from "./ActiveSpan";
@@ -59,18 +59,10 @@ const TableItem = ({
           <ActiveSpan status={status} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={ownerId}
-            name={ownerName}
-            photo={ownerPhoto}
-          />
+          <TableUserLink id={ownerId} name={ownerName} photo={ownerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={tenantId}
-            name={tenantName}
-            photo={tenantPhoto}
-          />
+          <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link
@@ -122,7 +114,7 @@ const TableItem = ({
         >
           <div>
             <span className="font-semibold flex items-center">Issue</span>
-            <SubInfoRow value={STATIC.DISPUTE_TYPE_TITLE[type]} />
+            <SubInfoRow value={getDisputeTitle(type)} />
 
             {solution && (
               <>

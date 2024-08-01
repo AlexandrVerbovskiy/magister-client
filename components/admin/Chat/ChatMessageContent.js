@@ -5,7 +5,11 @@ import SuccessIcon from "../../Icons/SuccessIcon";
 import ErrorIcon from "../../Icons/ErrorIcon";
 import SingleRatingStar from "../SingleRatingStar";
 import ENV from "../../../env";
-import { calculateCurrentTotalPrice, getFactOrderDays } from "../../../utils";
+import {
+  calculateCurrentTotalPrice,
+  getDisputeTitle,
+  getFactOrderDays,
+} from "../../../utils";
 
 const DownloadButton = ({ src }) => {
   return (
@@ -360,7 +364,7 @@ const orderMessageContent = ({
 
         <div className="w-full">
           <b>Type: </b>
-          {STATIC.DISPUTE_TYPE_TITLE[content.type]}
+          {getDisputeTitle(content.type)}
         </div>
 
         <div className="w-full">
