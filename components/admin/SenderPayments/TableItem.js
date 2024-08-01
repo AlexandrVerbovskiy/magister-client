@@ -91,6 +91,7 @@ const TableItem = (props) => {
           </div>
         </td>
       </tr>
+
       <tr
         id={`order-${id}`}
         role="region"
@@ -98,53 +99,49 @@ const TableItem = (props) => {
           !descriptionOpen && "hidden"
         }  bg-slate-50 dark:bg-slate-900/30 dark:text-slate-400`}
       >
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div>
-            <div className="font-semibold flex items-center">Details</div>
-            <SubInfoRow label="Name" value={payerName} />
-            <SubInfoRow label="Email" value={payerEmail} />
-            <SubInfoRow
-              label="Phone"
-              value={payerPhone && payerPhone.length ? payerPhone : "-"}
-            />
-          </div>
-        </td>
-        <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-          <div className="font-semibold flex items-center">
-            Transaction Detail
-          </div>
-          <SubInfoRow label="Sender's Name" value={payerName} />
-          <SubInfoRow
-            label="Upload Date"
-            value={fullDateConverter(createdAt)}
-          />
-          <SubInfoRow label="Rental Id" value={orderId} />
-        </td>
-        <td
-          colSpan={4}
-          className="whitespace-nowrap overflow-separate border-r align-top p-0"
-        >
+        <td colSpan={7} className="overflow-separate border-r align-top">
           <table className="w-full table-fixed">
             <thead>
               <tr>
-                <th style={{ width: "50%", padding: 0 }}></th>
-                <th style={{ width: "50%", padding: 0 }}></th>
+                <th style={{ width: "calc(20%)", padding: 0 }}></th>
+                <th style={{ width: "calc(20%)", padding: 0 }}></th>
+                <th style={{ width: "calc(25%)", padding: 0 }}></th>
+                <th style={{ width: "calc(20%)", padding: 0 }}></th>
+                <th style={{ width: "calc(15%)", padding: 0 }}></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td
-                  style={{ overflow: "hidden" }}
-                  className="px-2 py-3 overflow-separate border-r align-top"
-                >
+                <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
+                  <div>
+                    <div className="font-semibold flex items-center">
+                      Details
+                    </div>
+                    <SubInfoRow label="Name" value={payerName} />
+                    <SubInfoRow label="Email" value={payerEmail} />
+                    <SubInfoRow
+                      label="Phone"
+                      value={payerPhone && payerPhone.length ? payerPhone : "-"}
+                    />
+                  </div>
+                </td>
+                <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
+                  <div className="font-semibold flex items-center">
+                    Transaction Detail
+                  </div>
+                  <SubInfoRow label="Sender's Name" value={payerName} />
+                  <SubInfoRow
+                    label="Upload Date"
+                    value={fullDateConverter(createdAt)}
+                  />
+                  <SubInfoRow label="Rental Id" value={orderId} />
+                </td>
+                <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div className="font-semibold flex items-center">Rent</div>
                   <SubInfoRow label="Item" value={listingName} />
                   <SubInfoRow label="Item Id" value={listingId} />
                 </td>
-                <td
-                  style={{ overflow: "hidden" }}
-                  className="px-2 py-3 overflow-separate align-top"
-                >
+                <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div className="font-semibold flex items-center">
                     Receipt Uploaded:
                   </div>
@@ -201,43 +198,39 @@ const TableItem = (props) => {
                     </div>
                   )}
                 </td>
+                <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+                  <div className="flex text-left gap-2 flex-wrap">
+                    {waitingApproved && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleApproveClick(orderId);
+                          }}
+                          className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+                        >
+                          Accept
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRejectClick(orderId);
+                          }}
+                          className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
+                        >
+                          Decline
+                        </button>
+                      </>
+                    )}
+
+                    <View href={`/admin${viewPath}/${id}/`} />
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
-        </td>
-
-        <td
-          colSpan={2}
-          className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate"
-        >
-          <div className="flex text-left gap-2 flex-wrap">
-            {waitingApproved && (
-              <>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleApproveClick(orderId);
-                  }}
-                  className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
-                >
-                  Accept
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRejectClick(orderId);
-                  }}
-                  className="bg-rose-100 hover:bg-rose-200  flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
-                >
-                  Decline
-                </button>
-              </>
-            )}
-
-            <View href={`/admin${viewPath}/${id}/`} />
-          </div>
         </td>
       </tr>
     </>
