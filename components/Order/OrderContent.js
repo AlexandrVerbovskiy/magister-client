@@ -5,6 +5,7 @@ import {
   checkStringDateLowerOrEqualCurrentDate,
   dateConverter,
   generateProfileFilePath,
+  getDisputeTitle,
   getFactOrderDays,
   getListingImageByType,
   hasPayError,
@@ -1649,7 +1650,7 @@ const OrderContent = ({
 
       {order.disputeId && (
         <ErrorBlockMessage>
-          <b>Dispute type:</b> {STATIC.DISPUTE_TYPE_TITLE[order.disputeType]}
+          <b>Dispute type:</b> {getDisputeTitle(order.disputeType)}
           <br />
           <b>Dispute description:</b> {order.disputeDescription}
         </ErrorBlockMessage>
