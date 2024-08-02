@@ -10,11 +10,7 @@ const Chat = (props) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const chatType =
-    context.query["chat-type"] === STATIC.CHAT_TYPES.DISPUTE
-      ? STATIC.CHAT_TYPES.DISPUTE
-      : STATIC.CHAT_TYPES.ORDER;
-
+  const chatType = context.query["chat-type"];
   const chatId = +context.params.id;
 
   const options = await getUserChatOptions(
