@@ -27,6 +27,12 @@ const FileUploadSection = ({
     const file = e.target.files[0];
     setError(null);
 
+    if(!file){
+      setPhoto(null);
+      setPhotoImg(null);
+      return;
+    }
+
     if (file.size > fileSizeLimit) {
       setError("File can't be larger than " + byteConverter(fileSizeLimit));
       setPhoto(null);

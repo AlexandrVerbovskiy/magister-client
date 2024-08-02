@@ -1,11 +1,10 @@
-import { useEffect, useRef } from "react";
 import { getChatList } from "../services/chat";
 import STATIC from "../static";
 import useChatListBase from "./useChatListBase";
 import { useRouter } from "next/router";
 
 const useChatList = (props) => {
-  const { options, authToken, typeRef } = props;
+  const { authToken, typeRef } = props;
   const router = useRouter();
 
   const onChatTypeUpdate = async (newType) => {
