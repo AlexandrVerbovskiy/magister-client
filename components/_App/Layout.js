@@ -37,10 +37,6 @@ const Layout = ({ children }) => {
           type="image/x-icon"
           href="/images/rent-about-logo.ico"
         />
-        <script
-          src="https://www.paypalobjects.com/js/external/api.js"
-          async
-        ></script>
       </Head>
 
       {children}
