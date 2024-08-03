@@ -1,48 +1,19 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import ENV from "../../env";
-import Script from "next/script";
+import Link from "next/link";
 
 const PaypalSection = () => {
   const { sessionUser } = useContext(IndiceContext);
 
-  const onLoadScript = () => {
-    console.log("test");
-
-    if (window.paypal && window.paypal.use) {
-      window.paypal.use(["login"], function (login) {
-        const loginRenderObj = {
-          appid: ENV.PAYPAL_CLIENT_ID,
-          containerid: "paypal-connect",
-          responseType: "code",
-          scopes: "https://uri.paypal.com/services/paypalattributes",
-          locale: "en-us",
-          buttonType: "LWP",
-          buttonShape: "pill",
-          buttonSize: "lg",
-          fullPage: "true",
-          returnurl: ENV.CLIENT_URL + "/dashboard/profile-edit/",
-        };
-
-        if (ENV.PAYPAL_TYPE != "production") {
-          loginRenderObj["authend"] = ENV.PAYPAL_TYPE;
-        }
-
-        login.render(loginRenderObj);
-      });
-    } else {
-      setTimeout(onLoadScript, 100);
-    }
-  };
+  const clientId = ENV.PAYPAL_CLIENT_ID;
+  const redirectUri = ENV.CLIENT_URL + "/dashboard/profile-edit/";
+  const scope = "https://uri.paypal.com/services/paypalattributes";
+  const responseType = "code";
+  const loginUrl = `https://www.paypal.com/signin/authorize?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectUri}`;
 
   return (
     <>
-      <Script
-        src="https://www.paypalobjects.com/js/external/api.js"
-        strategy="lazyOnload"
-        onReady={onLoadScript}
-      />
-
       <div className="my-profile-box">
         <h3 className="edit-profile-document-section-title">
           PayPal Connection{" "}
@@ -57,13 +28,14 @@ const PaypalSection = () => {
           <div className="row">
             <div className="col-lg-12 col-md-12">
               <div className="form-group">
-                <button
-                  type="button"
+                <div
                   id="paypal-connect"
                   className={
                     sessionUser?.paypalId ? "update-paypal" : "connect-paypal"
                   }
-                ></button>
+                >
+                  <Link href={loginUrl}></Link>
+                </div>
               </div>
             </div>
           </div>

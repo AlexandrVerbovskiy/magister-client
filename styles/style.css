@@ -19339,6 +19339,7 @@ span.flatpickr-weekday {
   max-width: unset !important;
   font-size: var(--fontSize) !important;
   font-family: var(--fontFamily) !important;
+  font-weight: 600;
 }
 
 #paypal-connect a:hover {
