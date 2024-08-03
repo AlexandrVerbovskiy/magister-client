@@ -40,7 +40,7 @@ const PaypalSection = () => {
       <Script
         src="https://www.paypalobjects.com/js/external/api.js"
         strategy="lazyOnload"
-        onReady={onLoadScript}
+        onLoad={onLoadScript}
       />
 
       <div className="my-profile-box">
