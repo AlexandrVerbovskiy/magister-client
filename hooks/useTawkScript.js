@@ -12,7 +12,7 @@ const useTawkScript = (type) => {
     const widgetVisible = document.querySelector(".widget-visible");
     console.log(router.asPath);
 
-    /*if (type == "admin") {
+    if (type == "admin") {
       if (widgetVisible) {
         widgetVisible.style.setProperty("display", "none", "important");
       }
@@ -38,7 +38,7 @@ const useTawkScript = (type) => {
           widgetVisible.style.removeProperty("display");
         }
       }
-    }*/
+    }
   }, [router.asPath, type]);
 
   return null;
