@@ -24,8 +24,8 @@ const DocumentVerificationSection = () => {
               <Link href="/dashboard/documents-verification/">
                 <button type="button">
                   {sessionUser?.verified
-                    ? "Update documents"
-                    : "Verify profile"}
+                    ? "Update Documents"
+                    : "Verify Profile"}
                 </button>
               </Link>
             </div>
