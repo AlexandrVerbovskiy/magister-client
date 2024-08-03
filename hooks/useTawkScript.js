@@ -1,13 +1,16 @@
 import { useEffect, useRef } from "react";
 import ENV from "../env";
+import { useRouter } from "next/router";
 
 const tawkScriptId = "tawk-script";
 
 const useTawkScript = (type) => {
   const firstActionRef = useRef(true);
+  const router = useRouter();
 
   useEffect(() => {
     const widgetVisible = document.querySelector(".widget-visible");
+    console.log(router.asPath);
 
     if (type == "admin") {
       if (widgetVisible) {
@@ -36,7 +39,7 @@ const useTawkScript = (type) => {
         }
       }
     }
-  }, [type]);
+  }, [router.asPath, type]);
 
   return null;
 };
