@@ -10,7 +10,6 @@ const useTawkScript = (type) => {
 
   useEffect(() => {
     const widgetVisible = document.querySelector(".widget-visible");
-    console.log(router.asPath);
 
     if (type == "admin") {
       if (widgetVisible) {
