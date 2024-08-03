@@ -13,7 +13,6 @@ const PaypalSection = () => {
   const loginUrl = `https://www.paypal.com/signin/authorize?client_id=${clientId}&response_type=${responseType}&scope=${scope}&redirect_uri=${redirectUri}`;
 
   return (
-    <>
       <div className="my-profile-box">
         <h3 className="edit-profile-document-section-title">
           PayPal Connection{" "}
@@ -41,7 +40,6 @@ const PaypalSection = () => {
           </div>
         </form>
       </div>
-    </>
   );
 };
 
