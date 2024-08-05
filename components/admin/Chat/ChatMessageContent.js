@@ -122,7 +122,7 @@ const TenantCommentMessage = ({ content }) => {
 const ListingCommentMessage = ({ content }) => {
   const items = [
     { label: "Punctuality", value: content.punctuality },
-    { label: "General Experience", value: content.generalExperience },
+    { label: "Experience", value: content.generalExperience },
     { label: "Communication", value: content.communication },
     { label: "Reliability", value: content.reliability },
     { label: "Kindness", value: content.kindness },
