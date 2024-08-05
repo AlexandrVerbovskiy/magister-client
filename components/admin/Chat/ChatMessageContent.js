@@ -4,7 +4,6 @@ import OrderUpdateStatusMessageContent from "./OrderUpdateStatusMessageContent";
 import SuccessIcon from "../../Icons/SuccessIcon";
 import ErrorIcon from "../../Icons/ErrorIcon";
 import SingleRatingStar from "../SingleRatingStar";
-import ENV from "../../../env";
 import {
   calculateCurrentTotalPrice,
   getDisputeTitle,
@@ -173,7 +172,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
       const blob = new Blob([content.path], { type: content.path["type"] });
       src = URL.createObjectURL(blob);
     } else {
-      src = ENV.SERVER_URL + "/" + content.path;
+      src = process.env.NEXT_PUBLIC_SERVER_URL + "/" + content.path;
     }
   }
 

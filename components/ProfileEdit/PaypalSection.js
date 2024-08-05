@@ -1,17 +1,17 @@
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import ENV from "../../env";
 import Link from "next/link";
 
 const PaypalSection = () => {
   const { sessionUser } = useContext(IndiceContext);
 
-  const clientId = ENV.PAYPAL_CLIENT_ID;
-  const redirectUri = ENV.CLIENT_URL + "/dashboard/profile-edit/";
+  const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+  const redirectUri =
+    process.env.NEXT_PUBLIC_CLIENT_URL + "/dashboard/profile-edit/";
   const scope = "https://uri.paypal.com/services/paypalattributes";
   const responseType = "code";
   const mainUrl =
-    ENV.PAYPAL_TYPE == "sandbox"
+    process.env.NEXT_PUBLIC_PAYPAL_TYPE == "sandbox"
       ? "https://www.sandbox.paypal.com"
       : "https://www.paypal.com";
 

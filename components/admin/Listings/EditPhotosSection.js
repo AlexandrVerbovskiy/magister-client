@@ -8,7 +8,6 @@ import {
 import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
-import env from "../../../env";
 import STATIC from "../../../static";
 
 const linkTypeOptions = [

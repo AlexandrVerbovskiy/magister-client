@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import ENV from "../../env";
 import STATIC from "../../static";
 import { getFactOrderDays, calculateCurrentTotalPrice, getDisputeTitle } from "../../utils";
 import { IndiceContext } from "../../contexts";
@@ -153,7 +152,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
     if (isTemp) {
       src = content.path;
     } else {
-      src = ENV.SERVER_URL + "/" + content.path;
+      src = process.env.NEXT_PUBLIC_SERVER_URL + "/" + content.path;
     }
   }
 
