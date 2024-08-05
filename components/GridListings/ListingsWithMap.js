@@ -388,11 +388,10 @@ const ListingsWithMap = ({
 
   const handleSendSubscribeNotificationOnCreateCategory = async () => {
     if (authToken) {
+      const category = searchCategory ?? selectedCategories[0];
+
       try {
-        await createListingCategoryCreateNotification(
-          searchCategory,
-          authToken
-        );
+        await createListingCategoryCreateNotification(category, authToken);
         setCanSendCreateNotifyRequest(false);
         success.set("Subscription done success");
       } catch (e) {
