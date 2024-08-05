@@ -39,7 +39,7 @@ const StatusBlock = ({
       text = "Request Received";
     }
   }
-
+  
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for Payment";
