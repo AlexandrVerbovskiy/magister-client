@@ -13,8 +13,14 @@ const Layout = ({ children }) => {
           type="image/x-icon"
           href="/images/rent-about-logo.ico"
         />
-        <meta name="description" content="RentAbout is a great site"/>
-        <meta name="keywords" content="RentAbout"/>
+        <meta
+          name="description"
+          content="Rent and lease tools effortlessly in Warrington and Manchester. RentAbout makes it easy for users to lend and borrow tools with convenience."
+        />
+        <meta
+          name="keywords"
+          content="tool rental, tool leasing, rent tools in Warrington, rent tools in Manchester, RentAbout"
+        />
       </Head>
 
       {children}
