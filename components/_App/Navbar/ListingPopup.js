@@ -144,11 +144,15 @@ const ListingPopup = ({ active, setActive, categories }) => {
   const firstAllLink = `/listings/`;
 
   const secondAllLink = firstSelectedCategoryInfo
-    ? `listings/?categories=${firstSelectedCategoryInfo.name}`
+    ? `listings/?categories=${encodeURIComponent(
+        firstSelectedCategoryInfo.name
+      )}`
     : firstAllLink;
 
   const thirdAllLink = secondSelectedCategoryInfo
-    ? `listings/?categories=${secondSelectedCategoryInfo.name}`
+    ? `listings/?categories=${encodeURIComponent(
+        secondSelectedCategoryInfo.name
+      )}`
     : secondAllLink;
 
   return (
@@ -178,7 +182,9 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listings/?categories=${category.name}`
+                    : `/listings/?categories=${encodeURIComponent(
+                        category.name
+                      )}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -218,7 +224,9 @@ const ListingPopup = ({ active, setActive, categories }) => {
                 href={
                   category.countChildren
                     ? null
-                    : `/listings/?categories=${category.name}`
+                    : `/listings/?categories=${encodeURIComponent(
+                        category.name
+                      )}`
                 }
                 onClick={() => {
                   if (category.countChildren) {
@@ -247,7 +255,9 @@ const ListingPopup = ({ active, setActive, categories }) => {
               <CategoryOption
                 key={category.id}
                 category={category}
-                href={`/listings/?categories=${category.name}`}
+                href={`/listings/?categories=${encodeURIComponent(
+                  category.name
+                )}`}
                 onClick={() => setActive(false)}
               />
             ))}

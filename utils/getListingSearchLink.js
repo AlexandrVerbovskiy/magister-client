@@ -7,16 +7,20 @@ export const getFullListingSearchLink = ({
   let hasPrev = false;
 
   if (searchCity) {
-    searchLink += `?search-city=${searchCity}`;
+    searchLink += `?search-city=${encodeURIComponent(searchCity)}`;
     hasPrev = true;
   }
 
   if (searchCategory) {
-    searchLink += `${hasPrev ? "&" : "?"}search-category=${searchCategory}`;
+    searchLink += `${hasPrev ? "&" : "?"}search-category=${encodeURIComponent(
+      searchCategory
+    )}`;
   }
 
   if (searchListing) {
-    searchLink += `${hasPrev ? "&" : "?"}search-listing=${searchListing}`;
+    searchLink += `${hasPrev ? "&" : "?"}search-listing=${encodeURIComponent(
+      searchListing
+    )}`;
     hasPrev = true;
   }
 
