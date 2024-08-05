@@ -1,0 +1,27 @@
+version: 0.2
+env:
+  variables:
+    REPO_NAME: "client"
+
+phases:
+  install:
+    commands: 
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      # Conditionally set the tag based on the environment
+      - if [ "$ENVIRONMENT" == "dev" ]; then
+          TAG="dev-latest";
+        else
+          TAG="latest";
+        fi
+      # Build and push the Docker image with the appropriate tag
+      - docker build -t $(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.eu-west-2.amazonaws.com/$REPO_NAME:$TAG -t $(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.eu-west-2.amazonaws.com/$REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker push $(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.eu-west-2.amazonaws.com/$REPO_NAME:$TAG
+      - docker push $(aws sts get-caller-identity --query 'Account' --output text).dkr.ecr.eu-west-2.amazonaws.com/$REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+
