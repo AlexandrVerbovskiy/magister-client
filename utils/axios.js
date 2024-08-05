@@ -1,5 +1,4 @@
 import axios from "axios";
-import env from "../env";
 import STATIC from "../static";
 
 const serviceWrapper = async (promise) => {
@@ -32,9 +31,8 @@ const serviceWrapper = async (promise) => {
 export const initAxios = (path = null) => {
   axios.defaults.withCredentials = true;
 
-  const baseURL = path
-    ? env.SERVER_URL + STATIC.SERVER_API + path
-    : env.SERVER_URL + STATIC.SERVER_API;
+  const baseURL =
+    process.env.NEXT_PUBLIC_SERVER_URL + STATIC.SERVER_API + (path ?? "");
 
   const axiosInstance = axios.create({
     baseURL,
@@ -72,7 +70,7 @@ export const initAxios = (path = null) => {
 };
 
 export const getFilePath = (part) =>
-  env.SERVER_URL + STATIC.SERVER_STORAGE + "/" + part;
+  process.env.NEXT_PUBLIC_SERVER_URL + STATIC.SERVER_STORAGE + "/" + part;
 
 export const generateProfileFilePath = (path) => {
   return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;

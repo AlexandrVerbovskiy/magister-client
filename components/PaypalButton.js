@@ -1,5 +1,4 @@
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import env from "../env";
 import STATIC from "../static";
 
 const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
@@ -7,7 +6,7 @@ const PaypalButton = ({ createOrder, onApprove, amount, orderId }) => {
   return (
     <PayPalScriptProvider
       options={{
-        "client-id": env.PAYPAL_CLIENT_ID,
+        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
         currency: "USD",
         intent: "capture",
         locale: "en_US",

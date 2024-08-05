@@ -1,5 +1,4 @@
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import ENV from "../../env";
 import { forwardRef } from "react";
 
 const Map = forwardRef(
@@ -19,7 +18,7 @@ const Map = forwardRef(
   ) => {
     const { isLoaded } = useJsApiLoader({
       id: "google-map-script",
-      googleMapsApiKey: ENV.GOOGLE_MAP_API_KEY,
+      googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
     });
 
     const onLoad = (map) => {
