@@ -15,6 +15,7 @@
 # production
 /build
 /public/css
+/public/sitemap.xml
 
 # misc
 .DS_Store
@@ -69,4 +70,3 @@ override.tf.json
 terraform.rc
 
 robots.txt
-sitemap.xml
