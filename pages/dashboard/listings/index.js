@@ -317,10 +317,10 @@ const ListingList = (pageProps) => {
                               <ul className="listings-meta">
                                 <li>
                                   <Link
-                                    href={`/listings/?categories=${
+                                    href={`/listings/?categories=${encodeURIComponent(
                                       listing.categoryName ??
-                                      listing.otherCategory
-                                    }`}
+                                        listing.otherCategory
+                                    )}`}
                                   >
                                     <i className="flaticon-furniture-and-household"></i>
                                     <span className="row-dots-end">
@@ -331,7 +331,9 @@ const ListingList = (pageProps) => {
                                 </li>
                                 <li>
                                   <Link
-                                    href={`/listings/?city=${listing.city}`}
+                                    href={`/listings/?cities=${encodeURIComponent(
+                                      listing.city
+                                    )}`}
                                   >
                                     <i className="flaticon-pin"></i>
                                     <span className="row-dots-end">

@@ -32,10 +32,14 @@ const Category = ({ topCategories, needShowMore }) => {
                   </div>
                   <div className="row-dots-end">
                     <h3 className="row-dots-end">{info.name}</h3>
-                    <span className="row-dots-end">{info.countListings} Listings</span>
+                    <span className="row-dots-end">
+                      {info.countListings} Listings
+                    </span>
                   </div>
                   <Link
-                    href={`/listings/?categories=${info.name}`}
+                    href={`/listings/?categories=${encodeURIComponent(
+                      info.name
+                    )}`}
                     className="link-btn row-dots-end"
                   ></Link>
                 </div>
