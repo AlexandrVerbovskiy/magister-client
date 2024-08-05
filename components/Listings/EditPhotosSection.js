@@ -4,7 +4,6 @@ import SelectWithIcon from "../FormComponents/SelectWithIcon";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import { getListingImageByType, uniqueImageId } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
-import env from "../../env";
 import STATIC from "../../static";
 
 const linkTypeOptions = [

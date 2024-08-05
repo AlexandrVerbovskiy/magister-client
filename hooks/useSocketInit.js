@@ -1,13 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
-import ENV from "../env";
 
 const useSocketInit = ({ authToken }) => {
   const [socketIo, setSocketIo] = useState(null);
 
   useEffect(() => {
     if (authToken) {
-      const newSocketIo = io(ENV.SERVER_URL, {
+      const newSocketIo = io(process.env.NEXT_PUBLIC_SERVER_URL, {
         query: {
           token: authToken,
         },

@@ -7,7 +7,6 @@ import {
   PayPalCVVField,
   usePayPalCardFields,
 } from "@paypal/react-paypal-js";
-import env from "../env";
 import { IndiceContext } from "../contexts";
 import STATIC from "../static";
 import { extractDataBetweenBraces } from "../utils";
@@ -84,7 +83,7 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
   return (
     <PayPalScriptProvider
       options={{
-        "client-id": env.PAYPAL_CLIENT_ID,
+        "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
         currency: "USD",
         intent: "capture",
         locale: "en_US",
