@@ -138,15 +138,6 @@ const ListingCategories = ({ categories: baseCategories }) => {
           return;
         }
 
-        const forbiddenChars = /[&\?:!=%\/#<>]/;
-
-        if (forbiddenChars.test(category.name)) {
-          localIdErrors[category.localId] =
-            "Cannot save category with specific symbols in name. Specific list: &, ?, :, !, =, %, #, <, /, >";
-          hasError = true;
-          return;
-        }
-
         if (category.name.toLowerCase() === "all") {
           localIdErrors[category.localId] = "Name cannot be 'All'";
           hasError = true;
