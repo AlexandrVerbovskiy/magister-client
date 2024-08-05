@@ -23,7 +23,9 @@ const useNavListingCategories = () => {
     Object.keys(categories).forEach((level) => {
       categories[level].forEach((category) => {
         if (category.id === categoryId) {
-          const link = `/listings/?categories=${category.name}`;
+          const link = `/listings/?categories=${encodeURIComponent(
+            category.name
+          )}`;
           router.push(link);
         }
       });
@@ -34,7 +36,7 @@ const useNavListingCategories = () => {
     e.preventDefault();
     setActivePopup(true);
   };
-  
+
   return {
     navbarCategories,
     handleChangeCategory,

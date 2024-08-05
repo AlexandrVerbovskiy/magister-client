@@ -101,16 +101,18 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         <ul className="listings-meta">
           <li>
             <Link
-              href={`/listings/?categories=${
+              href={`/listings/?categories=${encodeURIComponent(
                 listing.categoryName ?? listing.otherCategory
-              }`}
+              )}`}
             >
               <i className="flaticon-furniture-and-household"></i>
               <span>{listing.categoryName ?? listing.otherCategory}</span>
             </Link>
           </li>
           <li>
-            <Link href={`/listings/?cities=${listing.city}`}>
+            <Link
+              href={`/listings/?cities=${encodeURIComponent(listing.city)}`}
+            >
               <i className="flaticon-pin"></i>
               <span>{listing.city}</span>
             </Link>
