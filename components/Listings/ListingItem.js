@@ -2,7 +2,6 @@ import Link from "next/link";
 import {
   activateAuthPopup,
   generateProfileFilePath,
-  getFilePath,
   getListingImageByType,
   moneyFormat,
 } from "../../utils";

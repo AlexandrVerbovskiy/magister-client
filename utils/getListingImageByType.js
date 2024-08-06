@@ -1,4 +1,4 @@
-import { getFilePath } from "./axios";
+import { getFilePath } from "./helpers";
 
 const getListingImageByType = (link, type) => {
   if (type == "storage") {
