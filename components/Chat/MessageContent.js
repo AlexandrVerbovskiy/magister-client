@@ -1,6 +1,11 @@
 import { useContext } from "react";
 import STATIC from "../../static";
-import { getFactOrderDays, calculateCurrentTotalPrice, getDisputeTitle } from "../../utils";
+import {
+  getFactOrderDays,
+  calculateCurrentTotalPrice,
+  getDisputeTitle,
+  getFilePath,
+} from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
 import SuccessIcon from "../Icons/SuccessIcon";
@@ -152,7 +157,7 @@ const baseMessageContent = ({ isTemp, type, content }) => {
     if (isTemp) {
       src = content.path;
     } else {
-      src = process.env.NEXT_PUBLIC_SERVER_URL + "/" + content.path;
+      src = getFilePath(content.path);
     }
   }
 

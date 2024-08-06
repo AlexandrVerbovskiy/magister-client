@@ -171,3 +171,10 @@ export const getDisputeTitle = (name) => {
   const title = STATIC.DISPUTE_TYPE_TITLE[name];
   return title ?? STATIC.DISPUTE_TYPE_TITLE.others;
 };
+
+export const getFilePath = (part) =>
+  process.env.NEXT_PUBLIC_BUCKET_URL + "/" + part;
+
+export const generateProfileFilePath = (path) => {
+  return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
+};

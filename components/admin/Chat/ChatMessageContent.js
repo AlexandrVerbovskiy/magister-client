@@ -8,6 +8,7 @@ import {
   calculateCurrentTotalPrice,
   getDisputeTitle,
   getFactOrderDays,
+  getFilePath,
 } from "../../../utils";
 
 const DownloadButton = ({ src }) => {
@@ -172,7 +173,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
       const blob = new Blob([content.path], { type: content.path["type"] });
       src = URL.createObjectURL(blob);
     } else {
-      src = process.env.NEXT_PUBLIC_SERVER_URL + "/" + content.path;
+      src = getFilePath(content.path);
     }
   }
 
