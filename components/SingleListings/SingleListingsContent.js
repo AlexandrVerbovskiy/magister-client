@@ -12,7 +12,6 @@ import {
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
-import STATIC from "../../static";
 import BookingModal from "./BookingModal";
 import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";

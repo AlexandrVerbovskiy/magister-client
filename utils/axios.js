@@ -68,10 +68,3 @@ export const initAxios = (path = null) => {
 
   return { get, post, generateFullUrl, getPdfByPath };
 };
-
-export const getFilePath = (part) =>
-  process.env.NEXT_PUBLIC_SERVER_URL + STATIC.SERVER_STORAGE + "/" + part;
-
-export const generateProfileFilePath = (path) => {
-  return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
-};
