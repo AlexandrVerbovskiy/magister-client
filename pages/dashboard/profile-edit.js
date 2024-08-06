@@ -107,17 +107,45 @@ const ProfileEdit = ({ newPaypalId }) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
   const [currentPasswordError, setCurrentPasswordError] = useState(null);
 
-  const objectToSave = () => ({
-    name: name.trim(),
-    phone: phone.trim(),
-    facebookUrl: facebookUrl.trim(),
-    linkedinUrl: linkedinUrl.trim(),
-    instagramUrl: instagramUrl.trim(),
-    twitterUrl: twitterUrl.trim(),
-    briefBio: briefBio.trim(),
-    contactDetails: contactDetails.trim(),
-    placeWork: placeWork.trim(),
-  });
+  const objectToSave = () => {
+    const obj = {
+      name: name.trim(),
+    };
+
+    if (phone.trim()) {
+      obj["phone"] = phone.trim();
+    }
+
+    if (facebookUrl.trim()) {
+      obj["facebookUrl"] = facebookUrl.trim();
+    }
+
+    if (linkedinUrl.trim()) {
+      obj["linkedinUrl"] = linkedinUrl.trim();
+    }
+
+    if (instagramUrl.trim()) {
+      obj["instagramUrl"] = instagramUrl.trim();
+    }
+
+    if (twitterUrl.trim()) {
+      obj["twitterUrl"] = twitterUrl.trim();
+    }
+
+    if (briefBio.trim()) {
+      obj["briefBio"] = briefBio.trim();
+    }
+
+    if (contactDetails.trim()) {
+      obj["contactDetails"] = contactDetails.trim();
+    }
+    
+    if (placeWork.trim()) {
+      obj["placeWork"] = placeWork.trim();
+    }
+
+    return obj;
+  };
 
   const userToState = () => ({
     name: sessionUser?.name ?? "",
