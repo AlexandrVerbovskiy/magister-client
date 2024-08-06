@@ -173,7 +173,7 @@ export const getDisputeTitle = (name) => {
 };
 
 export const getFilePath = (part) =>
-  process.env.NEXT_PUBLIC_BUCKET_URL + "/" + part;
+  process.env.NEXT_PUBLIC_BUCKET_URL + "/public/" + part;
 
 export const generateProfileFilePath = (path) => {
   return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
