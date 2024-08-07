@@ -428,7 +428,6 @@ const EditForm = ({ listing, categories, save }) => {
       compensationCost,
       countStoredItems,
       pricePerDay,
-      minRentalDays,
       rentalLat: lat,
       rentalLng: lng,
       rentalRadius: radius,
@@ -437,6 +436,10 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId,
       active,
     };
+
+    if (minRentalDays.trim()) {
+      dataToSave["minRentalDays"] = minRentalDays;
+    }
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
