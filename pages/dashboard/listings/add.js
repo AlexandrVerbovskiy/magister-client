@@ -29,7 +29,9 @@ const AddListing = ({ categories }) => {
       const createdListing = res.listing;
       const listingId = createdListing.listingId;
 
-      router.replace("/dashboard/listings/update/" + listingId);
+      router.replace("/dashboard/listings/update/" + listingId, undefined, {
+        shallow: true,
+      });
       setListing(createdListing);
       setCanSendRequest(!res.createdVerifiedRequest);
 
