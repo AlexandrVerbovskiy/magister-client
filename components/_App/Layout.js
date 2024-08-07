@@ -7,6 +7,9 @@ const Layout = ({ children }) => {
         {/* Required meta tags */}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {process.env.NEXT_PUBLIC_PROJECT_MODE == "dev" && (
+          <meta name="robots" content="noindex" />
+        )}
         <title>RentAbout</title>
         <link
           rel="shortcut icon"
