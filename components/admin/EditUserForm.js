@@ -117,26 +117,57 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setPaypalId(resUserToState.paypalId);
   }, [user.id]);
 
-  const getObjectToSave = () => ({
-    name: name.trim(),
-    role: role.trim(),
-    email: email.trim(),
-    phone: phone.trim(),
-    verified,
-    emailVerified,
-    phoneVerified,
-    contactDetails: contactDetails.trim(),
-    briefBio: briefBio.trim(),
-    linkedinUrl: linkedinUrl.trim(),
-    facebookUrl: facebookUrl.trim(),
-    twitterUrl: twitterUrl.trim(),
-    instagramUrl: instagramUrl.trim(),
-    twoFactorAuthentication,
-    active,
-    suspicious,
-    placeWork: placeWork.trim(),
-    paypalId: paypalId.trim(),
-  });
+  const getObjectToSave = () => {
+    const obj = {
+      name: name.trim(),
+      role: role.trim(),
+      email: email.trim(),
+      verified,
+      emailVerified,
+      phoneVerified,
+      twoFactorAuthentication,
+      active,
+      suspicious,
+    };
+
+    if (phone.trim()) {
+      obj["phone"] = phone.trim();
+    }
+
+    if (facebookUrl.trim()) {
+      obj["facebookUrl"] = facebookUrl.trim();
+    }
+
+    if (linkedinUrl.trim()) {
+      obj["linkedinUrl"] = linkedinUrl.trim();
+    }
+
+    if (instagramUrl.trim()) {
+      obj["instagramUrl"] = instagramUrl.trim();
+    }
+
+    if (twitterUrl.trim()) {
+      obj["twitterUrl"] = twitterUrl.trim();
+    }
+
+    if (briefBio.trim()) {
+      obj["briefBio"] = briefBio.trim();
+    }
+
+    if (contactDetails.trim()) {
+      obj["contactDetails"] = contactDetails.trim();
+    }
+
+    if (placeWork.trim()) {
+      obj["placeWork"] = placeWork.trim();
+    }
+
+    if (paypalId.trim()) {
+      obj["paypalId"] = paypalId.trim();
+    }
+
+    return obj;
+  };
 
   const userToState = (user) => ({
     name: user.name ?? "",
