@@ -89,7 +89,7 @@ const Dashboard = (props) => {
               <h1>Dashboard</h1>
               <ol className="breadcrumb">
                 <li className="item">
-                  <Link href="/dashboard/">Home</Link>
+                  <Link href="/">Home</Link>
                 </li>
               </ol>
             </div>
