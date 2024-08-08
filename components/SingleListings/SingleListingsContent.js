@@ -106,6 +106,8 @@ const SingleListingsContent = ({
     }
   };
 
+  console.log(comments, listing.categoryInfo, comments);
+
   return (
     <>
       <section className="listings-details-area pb-70">
@@ -499,7 +501,7 @@ const SingleListingsContent = ({
                                           </h4>
                                           <span>
                                             {comment.reviewerPhone &&
-                                            comment.reviewerPhone.length > 0
+                                            comment.reviewerPhone.length
                                               ? comment.reviewerPhone
                                               : "-"}
                                           </span>
