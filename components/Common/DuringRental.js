@@ -10,7 +10,7 @@ const DuringRental = () => {
           <div className="col-lg-4 col-md-12 d-flex justify-content-center overflow-hidden">
             <img
               src="/images/left-rental-info.svg"
-              style={{ transform: "scale(2)" }}
+              style={{ transform: "scale(1.7)" }}
             />
           </div>
           <div className="col-lg-8 col-md-12">
