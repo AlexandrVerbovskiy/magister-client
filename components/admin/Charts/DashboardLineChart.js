@@ -8,10 +8,12 @@ function DashboardLineChart({
   valueType = "number",
   getTotalType = "sum",
   timeType = "days",
+  totalCount = null,
 }) {
   const { sum, comparePercents, needCompare, chartData } = lineChartOptions({
     data,
     getTotalType,
+    totalCount,
   });
 
   return (
