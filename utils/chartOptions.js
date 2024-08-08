@@ -53,7 +53,11 @@ export const doughnutChartOptions = ({ title, data, labelPrefix = "" }) => {
   };
 };
 
-export const lineChartOptions = ({ data, getTotalType = "sum" }) => {
+export const lineChartOptions = ({
+  data,
+  getTotalType = "sum",
+  totalCount = null,
+}) => {
   const labels = dateSort(Object.keys(data[0]));
   const datasets = data.map((rowInfo, i) => ({
     data: labels.map((label) => rowInfo[label]),
@@ -83,23 +87,28 @@ export const lineChartOptions = ({ data, getTotalType = "sum" }) => {
   let prevSum = 0;
   const needCompare = data.length > 1;
 
-  if (getTotalType == "sum") {
-    sum = labels.reduce(
-      (accumulator, label) => accumulator + data[0][label],
-      0
-    );
-
-    if (needCompare) {
-      prevSum = labels.reduce(
-        (accumulator, label) => accumulator + data[1][label],
+  if (totalCount) {
+    sum = totalCount;
+    prevSum = totalCount;
+  } else {
+    if (getTotalType == "sum") {
+      sum = labels.reduce(
+        (accumulator, label) => accumulator + data[0][label],
         0
       );
-    }
-  } else {
-    sum = data[0][labels[labels.length - 1]] ?? 0;
 
-    if (needCompare) {
-      prevSum = data[1][labels[labels.length - 1]] ?? 0;
+      if (needCompare) {
+        prevSum = labels.reduce(
+          (accumulator, label) => accumulator + data[1][label],
+          0
+        );
+      }
+    } else {
+      sum = data[0][labels[labels.length - 1]] ?? 0;
+
+      if (needCompare) {
+        prevSum = data[1][labels[labels.length - 1]] ?? 0;
+      }
     }
   }
 

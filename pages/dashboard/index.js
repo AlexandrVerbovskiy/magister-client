@@ -23,6 +23,7 @@ const Dashboard = (props) => {
     transactionDatesCount: props.transactionDatesCount,
     transactionDatesSum: props.transactionDatesSum,
     rentListingCounts: props.rentListingCounts,
+    rentListingTotalCounts: props.rentListingTotalCounts,
     disputeTotalDatesCount: props.disputeTotalDatesCount,
     disputeStatisticInfo: props.disputeStatisticInfo,
   });
@@ -144,6 +145,7 @@ const Dashboard = (props) => {
               title="Total items listed"
               data={[statistic.rentListingCounts]}
               timeType={timeType}
+              totalCount={statistic.rentListingTotalCounts}
             />
           </div>
         </div>
