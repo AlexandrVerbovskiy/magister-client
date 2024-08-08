@@ -104,7 +104,7 @@ const Banner = () => {
                 >
                   {categories.map((category) => (
                     <SwiperSlide key={category}>
-                      <span className="color-d6e30f">{category}</span>
+                      <span className="color-main">{category}</span>
                     </SwiperSlide>
                   ))}
                 </Swiper>

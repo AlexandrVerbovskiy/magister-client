@@ -232,38 +232,6 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
               </Link>
 
               <div className="collapse navbar-collapse mean-menu">
-                {canShowSearch && (
-                  <form
-                    onSubmit={handleSearchSubmit}
-                    className="navbar-search-box search-box-one position-absolute"
-                  >
-                    <label
-                      onClick={handleSearchClick}
-                      className="cursor-pointer"
-                    >
-                      <i className="flaticon-search"></i>
-                    </label>
-
-                    <input
-                      type="text"
-                      className="input-search"
-                      placeholder="Search by category"
-                      name="listingCategorySearch"
-                      ref={categoryFilterRef}
-                      value={searchCategory}
-                      onFocus={() => openCategoryTipsPopup(searchCategory)}
-                      onBlur={closeCategoryTipsPopup}
-                      onInput={handleChangeCategory}
-                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-                    />
-                    <SearchTipsPopup
-                      active={categoryTipsPopupActive}
-                      tips={categoryTips}
-                      handleTipClick={handleCategoryTipClick}
-                    />
-                  </form>
-                )}
-
                 <ul className="navbar-nav">
                   <li className="nav-item">
                     <Link href="/" className="nav-link">
@@ -294,6 +262,27 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                     <li className="nav-item">
                       <Link href="/how-it-works/" className="nav-link">
                         How it works
+                      </Link>
+                    </li>
+                  )}
+
+                  {isAuth ? (
+                    <li className="nav-item d-block d-xl-none">
+                      <Link
+                        href="#"
+                        className="nav-link"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSignOutModalActive(true);
+                        }}
+                      >
+                        Sign out
+                      </Link>
+                    </li>
+                  ) : (
+                    <li className="nav-item d-block d-xl-none">
+                      <Link href="#" className="nav-link" onClick={toggleAuth}>
+                        Login / Register
                       </Link>
                     </li>
                   )}
@@ -329,91 +318,6 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
                 </div>
               </div>
             </nav>
-          </div>
-        </div>
-
-        <div className="others-option-for-responsive">
-          <div className="container">
-            <div className="dot-menu" onClick={toggleMiniAuth}>
-              <div className="inner">
-                <div className="circle circle-one"></div>
-                <div className="circle circle-two"></div>
-                <div className="circle circle-three"></div>
-              </div>
-            </div>
-
-            <div className={displayMiniAuth ? "container active" : "container"}>
-              <div className="option-inner">
-                <div className="others-option">
-                  {canShowSearch && (
-                    <div className="option-item">
-                      <form
-                        onSubmit={handleSearchSubmit}
-                        className="navbar-search-box"
-                      >
-                        <label
-                          onClick={handleSearchClick}
-                          className="cursor-pointer"
-                        >
-                          <i className="flaticon-search"></i>
-                        </label>
-                        <input
-                          type="text"
-                          className="input-search"
-                          placeholder="Search by category"
-                          name="listingCategorySearch"
-                          ref={smallCategoryFilterRef}
-                          value={searchCategory}
-                          onFocus={() => openCategoryTipsPopup(searchCategory)}
-                          onBlur={closeCategoryTipsPopup}
-                          onInput={handleChangeCategory}
-                          maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-                        />
-
-                        <SearchTipsPopup
-                          active={categoryTipsPopupActive}
-                          tips={categoryTips}
-                          handleTipClick={handleCategoryTipClick}
-                        />
-                      </form>
-                    </div>
-                  )}
-
-                  {!isAuth && (
-                    <div className="option-item">
-                      <span
-                        data-toggle="modal"
-                        className="sign-form-trigger"
-                        onClick={toggleAuth}
-                      >
-                        <i className="flaticon-user"></i> Login / Register
-                      </span>
-                    </div>
-                  )}
-
-                  {isAuth && (
-                    <div className="option-item">
-                      <span
-                        data-toggle="modal"
-                        className="sign-out-trigger"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setSignOutModalActive(true);
-                        }}
-                      >
-                        <i className="bx bx-log-out"></i> Sign out
-                      </span>
-                    </div>
-                  )}
-
-                  {/*<div className="option-item">
-                    <Link href="/dashboard/add-listing/" className="default-btn">
-                      <i className="flaticon-more"></i> Add Listing
-                    </Link>
-                  </div>*/}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
