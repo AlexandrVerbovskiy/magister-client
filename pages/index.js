@@ -17,15 +17,13 @@ const Index = ({ categories }) => {
   let topCategories = [];
   const maxTopCategoriesSectionView = 8;
 
-  Object.keys(categories).forEach((level) => {
-    categories[level].map((category) => {
+    categories["firstLevel"].map((category) => {
       if (category.popular) {
         popularCategories.push(category.name);
       }
 
       topCategories.push(category);
     });
-  });
 
   topCategories.sort((a, b) => a.countListings - b.countListings);
   const moreCategoriesThanView =

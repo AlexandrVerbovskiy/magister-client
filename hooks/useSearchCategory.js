@@ -16,10 +16,14 @@ const useSearchCategory = () => {
 
   const updateCategoryTips = async (search) => {
     try {
-      const firstLevelCategories = categories["firstLevel"] ?? [];
+      const secondLevelCategories = categories["secondLevel"] ?? [];
+      const thirdLevelCategories = categories["thirdLevel"] ?? [];
 
       const categoryNames = [
-        ...firstLevelCategories
+        ...secondLevelCategories
+          .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
+          .map((c) => c.name),
+        ...thirdLevelCategories
           .filter((c) => c.name.toLowerCase().includes(search.toLowerCase()))
           .map((c) => c.name),
       ];
