@@ -72,8 +72,6 @@ const SubmitPayment = ({ disabled, setDisabled }) => {
 };
 
 const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
-  console.log(window.paypal)
-
   const paypalFieldStyle = {
     input: {
       fontSize: "14px",
