@@ -126,7 +126,7 @@ const ChatMessage = ({
               {formatTimeWithAmPm(createdAt)}
             </div>
 
-            {!isSubChat && contentStory && contentStory.length > 1 && (
+            {!isSubChat && contentStory && contentStory.length && (
               <div
                 onClick={(e) => handleOpenContentStoryPopup(e, contentStory)}
                 className="cursor-pointer text-xs text-emerald-500 font-medium bg-emerald-100 py-0.5 px-2 rounded-lg ml-2"
