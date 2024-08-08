@@ -184,6 +184,10 @@ p:last-child {
   color: var(--blackColor);
 }
 
+.color-main {
+  color: var(--mainColor);
+}
+
 .color-d6e30f {
   color: var(--yellowColor);
 }
@@ -2213,6 +2217,7 @@ Main Banner Area CSS
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
+  opacity: 0.8;
 }
 
 .main-banner-area .container {
@@ -3362,7 +3367,6 @@ Listings Area CSS
 
 .single-listings-box {
   position: relative;
-  box-shadow: 5px 5px var(--mainColorShadow2);
   transition: var(--transition);
   background-color: var(--whiteColor);
   border: 1px solid var(--mainColorBorder2);
@@ -3620,7 +3624,6 @@ Listings Area CSS
 
 .single-listings-box.hovered,
 .single-listings-box:hover {
-  box-shadow: 5px 5px var(--mainColor);
   border-color: var(--mainColor);
 }
 
@@ -4718,9 +4721,6 @@ Listings Details Area CSS
 }
 .listings-details-desc .pricing-list li:last-child {
   margin-bottom: 5px;
-}
-.listings-details-desc .pricing-list li:hover {
-  box-shadow: 5px 5px var(--mainColor);
 }
 .listings-details-desc .single-listings-box {
   margin-top: 5px;
@@ -6444,9 +6444,6 @@ Destinations Area CSS
   box-shadow: 5px 5px var(--mainColorShadow);
   transition: var(--transition);
 }
-.single-destinations-box.color-box-shadow:hover {
-  box-shadow: 5px 5px var(--mainColor);
-}
 
 /*================================================
 Places Area CSS
@@ -6715,7 +6712,6 @@ How It Works Area CSS
   line-height: 80px;
   background-color: var(--whiteColor);
   border: 1px solid var(--mainColor);
-  box-shadow: 5px 5px var(--mainColor);
   text-align: center;
   color: var(--mainColor);
   font-size: 40px;
@@ -6823,7 +6819,6 @@ Events Area CSS
 }
 .single-events-item:hover {
   border-color: var(--mainColor);
-  box-shadow: 5px 5px var(--mainColor);
 }
 .single-events-item:hover .link-btn {
   opacity: 1;
@@ -6916,7 +6911,6 @@ Events Area CSS
 }
 .single-events-box:hover {
   border-color: var(--mainColor);
-  box-shadow: 5px 5px var(--mainColor);
 }
 
 .events-box {
@@ -6991,9 +6985,6 @@ Events Area CSS
   font-size: 20px;
   color: var(--whiteColor);
   margin-bottom: 0;
-}
-.events-box:hover {
-  box-shadow: 5px 5px var(--mainColor);
 }
 .events-box:hover img {
   transform: scale(1.12);
@@ -7331,7 +7322,6 @@ Blog Area CSS
 }
 .single-blog-post:hover {
   border-color: var(--mainColor);
-  box-shadow: 5px 5px var(--mainColor);
 }
 
 /*================================================
@@ -8625,7 +8615,6 @@ Page Title Area CSS
 }
 .page-title-bg form {
   background-color: var(--whiteColor);
-  box-shadow: 5px 5px var(--mainColor);
   border-radius: 5px;
   max-width: 900px;
   z-index: 2;
@@ -10567,7 +10556,6 @@ Pagination CSS
   width: 40px;
   height: 40px;
   background-color: var(--whiteColor);
-  box-shadow: 3px 3px #d5d5d5;
   color: var(--optionalColor);
   text-align: center;
   display: inline-block;
@@ -10590,21 +10578,19 @@ Pagination CSS
   top: 2px;
 }
 .pagination-area .page-numbers.prev {
-  box-shadow: -2px 3px var(--mainColor);
   border-color: var(--mainColor);
 }
-.pagination-area .page-numbers.prev:hover {
+/*.pagination-area .page-numbers.prev:hover {
   color: var(--blackColor);
   background-color: var(--whiteColor);
-}
+}*/
 .pagination-area .page-numbers.next {
-  box-shadow: 2px 3px var(--mainColor);
   border-color: var(--mainColor);
 }
-.pagination-area .page-numbers.next:hover {
+/*.pagination-area .page-numbers.next:hover {
   color: var(--blackColor);
   background-color: var(--whiteColor);
-}
+}*/
 
 /*================================================
 Widget Sidebar CSS
@@ -11549,7 +11535,6 @@ All Modal CSS
   background-color: var(--whiteColor);
   border: none;
   border-radius: 0;
-  box-shadow: 5px 5px var(--mainColor);
   border: 1px solid var(--mainColor);
   padding: 40px;
   position: relative;
@@ -17612,12 +17597,7 @@ button.button-danger:hover {
 .page-numbers.disabled {
   color: gray !important;
   cursor: auto;
-  box-shadow: -2px 3px #d5d5d5 !important;
   border-color: #d5d5d5 !important;
-}
-
-.page-numbers.disabled.next {
-  box-shadow: 3px 3px #d5d5d5 !important;
 }
 
 .page-numbers.disabled:hover {
