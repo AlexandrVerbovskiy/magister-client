@@ -131,10 +131,7 @@ const SingleListingsContent = ({
                   {listing.categoryInfo.length > 0 ? (
                     <>
                       {listing.categoryInfo.map((category, index) => (
-                        <span
-                          className="meta"
-                          key={category.name}
-                        >
+                        <span className="meta" key={category.name}>
                           <i className="flaticon-furniture-and-household"></i>
                           {category.name}
                         </span>
@@ -501,7 +498,8 @@ const SingleListingsContent = ({
                                             {comment.reviewerName}
                                           </h4>
                                           <span>
-                                            {comment.reviewerPhone.length > 0
+                                            {comment.reviewerPhone &&
+                                            comment.reviewerPhone.length > 0
                                               ? comment.reviewerPhone
                                               : "-"}
                                           </span>
@@ -577,9 +575,7 @@ const SingleListingsContent = ({
                           />
                           <div className="title row-dots-end">
                             <h4 className="row-dots-end">
-                              <a
-                                href={"/owner-listings/" + listing.ownerId}
-                              >
+                              <a href={"/owner-listings/" + listing.ownerId}>
                                 {listing.userName}
                               </a>
                             </h4>
