@@ -398,10 +398,6 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                         Business Profile
                       </h2>
-                      <div className="text-sm">
-                        Excepteur sint occaecat cupidatat non proident, sunt in
-                        culpa qui officia deserunt mollit.
-                      </div>
                       <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <Input

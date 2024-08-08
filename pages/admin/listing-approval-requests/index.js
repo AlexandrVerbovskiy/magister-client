@@ -86,7 +86,7 @@ const UserVerifyRequests = (pageProps) => {
                   type={type}
                   handleChangeType={handleChangeType}
                   filter={filter}
-                  filterPlaceholder="Search by Transfer Id"
+                  filterPlaceholder="Search by Request Id"
                   handleChangeFilter={changeFilter}
                   timeFilterType={timeFilterType}
                   handleChangeTimeFilterType={handleChangeTimeFilterType}
