@@ -32,6 +32,7 @@ const AdminIndex = (props) => {
     transactionDatesSum: props.transactionDatesSum,
     userTotalDatesCount: props.userTotalDatesCount,
     rentListingCounts: props.rentListingCounts,
+    rentListingTotalCounts: props.rentListingTotalCounts,
     totalNewInactiveUsers: 0,
     totalNewUsers: 0,
     disputeTotalDatesCount: props.disputeTotalDatesCount,
@@ -155,6 +156,7 @@ const AdminIndex = (props) => {
                   title="Total items listed"
                   data={[statistic.rentListingCounts]}
                   timeType={timeType}
+                  totalCount={statistic.rentListingTotalCounts}
                 />
               </div>
               <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
