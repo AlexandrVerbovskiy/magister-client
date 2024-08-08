@@ -106,8 +106,6 @@ const SingleListingsContent = ({
     }
   };
 
-  console.log(comments, listing.categoryInfo, comments);
-
   return (
     <>
       <section className="listings-details-area pb-70">
