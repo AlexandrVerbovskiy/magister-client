@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useAdminPage } from "../../../hooks";
-import { adminSideProps } from "../../../middlewares";
+import { supportSideProps } from "../../../middlewares";
 import BaseChat from "../../../components/admin/Chat/BaseChat";
 import useAdminChat from "../../../hooks/useAdminChat";
 import { getAdminChatOptions } from "../../../services";
@@ -39,6 +39,6 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  supportSideProps(context, boostServerSideProps);
 
 export default Chats;
