@@ -57,10 +57,10 @@ const UpdateListing = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getUpdateListingOptions(id, baseSideProps.authToken);
-  return { ...options, id };
+  return { ...options, id, pageTitle: options.listing?.name };
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({ context, callback: boostServerSideProps });
 
 export default UpdateListing;

@@ -546,6 +546,10 @@ const boostServerSideProps = async ({ baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Settings" },
+  });
 
 export default Settings;

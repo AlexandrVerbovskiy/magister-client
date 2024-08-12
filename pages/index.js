@@ -17,13 +17,13 @@ const Index = ({ categories }) => {
   let topCategories = [];
   const maxTopCategoriesSectionView = 8;
 
-    categories["firstLevel"].map((category) => {
-      if (category.popular) {
-        popularCategories.push(category.name);
-      }
+  categories["firstLevel"].map((category) => {
+    if (category.popular) {
+      popularCategories.push(category.name);
+    }
 
-      topCategories.push(category);
-    });
+    topCategories.push(category);
+  });
 
   topCategories.sort((a, b) => a.countListings - b.countListings);
   const moreCategoriesThanView =
@@ -38,22 +38,23 @@ const Index = ({ categories }) => {
 
       <YourBusiness />
 
-      <Feedback bgColor="bg-f9f9f9" />
-
-      <SafeWithUs />
-
       <Category
         topCategories={topCategories}
         needShowMore={moreCategoriesThanView}
+        bgColor="bg-f9f9f9"
       />
+
+      <Feedback />
+
+      <DestinationsTwo bgColor="bg-f9f9f9" />
+
+      <SafeWithUs />
 
       <BeforeTheRental />
 
       <DuringRental />
 
       {/*<ListingArea listings={topListings} />*/}
-
-      <DestinationsTwo bgColor="bg-f9f9f9" />
 
       <Footer />
     </>
@@ -66,6 +67,6 @@ const boostServerSideProps = async ({ baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({ context, callback: boostServerSideProps });
 
 export default Index;

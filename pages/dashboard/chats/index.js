@@ -23,6 +23,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
   return { ...options };
 };
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Chats" },
+  });
 
 export default Chat;

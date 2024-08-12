@@ -1,8 +1,6 @@
-import { useListingListClick } from "../../hooks";
+import Link from "next/link";
 
 const DuringRental = () => {
-  const { handleClick: handleStartEarningClick } = useListingListClick();
-
   return (
     <section className="category-area pt-100 pb-100">
       <div className="container">
@@ -31,13 +29,9 @@ const DuringRental = () => {
               </div>
 
               <div className="d-flex justify-content-center">
-                <button
-                  type="button"
-                  className="base-main-button"
-                  onClick={handleStartEarningClick}
-                >
+                <Link className="base-main-button" href="/how-it-works/">
                   Start earning
-                </button>
+                </Link>
               </div>
             </div>
           </div>

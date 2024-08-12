@@ -95,6 +95,7 @@ const PasswordResetSend = () => {
   );
 };
 
-export const getServerSideProps = notAuthSideProps;
+export const getServerSideProps = (context) =>
+  notAuthSideProps({ context, baseProps: { pageTitle: "Email verification" } });
 
 export default PasswordResetSend;

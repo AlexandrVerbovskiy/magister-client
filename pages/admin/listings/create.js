@@ -30,13 +30,7 @@ const ListingCreate = ({ categories }) => {
     }
   };
 
-  return (
-    <EditForm
-      categories={categories}
-      listing={listing}
-      save={save}
-    />
-  );
+  return <EditForm categories={categories} listing={listing} save={save} />;
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
@@ -48,6 +42,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Create listing" },
+  });
 
 export default ListingCreate;

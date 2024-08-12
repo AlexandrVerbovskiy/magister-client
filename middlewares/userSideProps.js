@@ -2,7 +2,7 @@ import { getSession } from "next-auth/react";
 import { getMyInfo } from "../services";
 import { middlewareCallbackWrapper } from "../utils";
 
-const userSideProps = async (context, callback = null) => {
+const userSideProps = async ({context, callback = null, baseProps = null}) => {
   const res = { sessionUser: null };
 
   try {
@@ -30,6 +30,7 @@ const userSideProps = async (context, callback = null) => {
     callback,
     res,
     context,
+    baseProps
   });
 };
 

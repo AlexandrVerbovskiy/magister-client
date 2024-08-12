@@ -3,13 +3,14 @@ import { IndiceContext } from "../contexts";
 import { useContext } from "react";
 import { activateAuthPopup } from "../utils";
 
-const useListingListClick = () => {
+const useListingListClick = (props) => {
   const { sessionUser } = useContext(IndiceContext);
   const router = useRouter();
+  const link = props?.link ?? "/listings/";
 
   const handleClick = () => {
     if (sessionUser) {
-      router.push("/listings/");
+      router.push(link);
     } else {
       activateAuthPopup();
     }

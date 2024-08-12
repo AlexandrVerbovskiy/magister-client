@@ -17,7 +17,6 @@ const PasswordResetSend = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState(null);
 
-
   const handleSendClick = async () => {
     setFormError(null);
     let error = false;
@@ -128,6 +127,7 @@ const PasswordResetSend = () => {
   );
 };
 
-export const getServerSideProps = notAuthSideProps;
+export const getServerSideProps = (context) =>
+  notAuthSideProps({ context, baseProps: { pageTitle: "Reset password" } });
 
 export default PasswordResetSend;
