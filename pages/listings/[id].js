@@ -4,7 +4,7 @@ import Footer from "../../components/_App/Footer";
 import SingleListingsContent from "../../components/SingleListings/SingleListingsContent";
 import { userSideProps } from "../../middlewares";
 import { getListingFullByIdOptions } from "../../services";
-import {useIdPage} from "../../hooks";
+import { useIdPage } from "../../hooks";
 
 const Listing = (baseProps) => {
   const { props } = useIdPage({
@@ -33,11 +33,13 @@ const Listing = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getListingFullByIdOptions(id, baseSideProps.authToken);
-
-  return { ...options, id };
+  return { ...options, id, pageTitle: options.listing?.name };
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+  });
 
 export default Listing;

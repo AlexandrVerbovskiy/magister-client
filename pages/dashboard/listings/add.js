@@ -54,11 +54,14 @@ const AddListing = ({ categories }) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const options = await getCreateListingOptions(baseSideProps.authToken);
-
   return { ...options };
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Create Listing" },
+  });
 
 export default AddListing;

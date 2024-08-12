@@ -17,7 +17,7 @@ import { getFilePath, getListingImageByType } from "../../../utils";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
 import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
-import {useIdPage} from "../../../hooks";
+import { useIdPage } from "../../../hooks";
 
 const ListingApprovalRequest = (baseProps) => {
   const { props } = useIdPage({
@@ -463,10 +463,13 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     baseSideProps.authToken
   );
 
-  return { ...options };
+  return { ...options, pageTitle: `Approval requests #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+  });
 
 export default ListingApprovalRequest;

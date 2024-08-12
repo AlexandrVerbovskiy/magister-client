@@ -20,8 +20,8 @@ const Circle = ({ color }) => (
 const AboutUs = () => {
   return (
     <>
-      <Navbar canShowSearch={false} alwaysSticky={true}/>
-      
+      <Navbar canShowSearch={false} alwaysSticky={true} />
+
       <div className="listings-area ptb-100 bg-f1f1f1">
         <div className="container mt-8 position-relative">
           <div className="row justify-center align-items-center mb-8">
@@ -307,6 +307,10 @@ const boostServerSideProps = async () => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "About us" },
+  });
 
 export default AboutUs;

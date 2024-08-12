@@ -8,7 +8,7 @@ import {
   getOwnerListingListOptions,
 } from "../../services";
 import { listingListBaseServerSideProps } from "../../utils";
-import {useIdPage} from "../../hooks";
+import { useIdPage } from "../../hooks";
 
 const GridListingsFullMap = (baseProps) => {
   const { authToken, props } = useIdPage({
@@ -56,6 +56,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Listings" },
+  });
 
 export default GridListingsFullMap;

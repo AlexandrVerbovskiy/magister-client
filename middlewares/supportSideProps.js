@@ -1,8 +1,13 @@
 import { middlewareCallbackWrapper } from "../utils";
 import userSideProps from "./userSideProps";
 
-const supportSideProps = async (context, callback = null) => {
-  const { props } = await userSideProps(context);
+const supportSideProps = async ({
+  context,
+  callback = null,
+  baseProps = null,
+}) => {
+  const { props } = await userSideProps({ context });
+
   const { sessionUser, authToken } = props;
 
   if (
@@ -20,6 +25,7 @@ const supportSideProps = async (context, callback = null) => {
     callback,
     res,
     context,
+    baseProps,
   });
 };
 

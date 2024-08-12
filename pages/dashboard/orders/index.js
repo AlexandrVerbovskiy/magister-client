@@ -269,6 +269,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Orders" },
+  });
 
 export default Orders;

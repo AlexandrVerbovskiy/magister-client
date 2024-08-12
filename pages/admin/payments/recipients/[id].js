@@ -1,7 +1,7 @@
 import { adminSideProps } from "../../../../middlewares";
 import { getAdminRecipientPaymentOptions } from "../../../../services";
 import SingleRecipientMainComponent from "../../../../components/admin/SingleRecipientMainComponent";
-import {useIdPage} from "../../../../hooks";
+import { useIdPage } from "../../../../hooks";
 
 const Recipient = (baseProps) => {
   const { props } = useIdPage({
@@ -25,10 +25,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     baseSideProps.authToken
   );
 
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Recipient #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({ context, callback: boostServerSideProps });
 
 export default Recipient;

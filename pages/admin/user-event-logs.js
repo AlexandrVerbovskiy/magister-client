@@ -6,11 +6,7 @@ import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import LogsTable from "../../components/admin/UserLogs/Table";
 import { adminSideProps } from "../../middlewares";
 
-import {
-  useAdminPage,
-  usePagination,
-  useBaseAdminFilter,
-} from "../../hooks";
+import { useAdminPage, usePagination, useBaseAdminFilter } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import {
   getAdminUserEventLogListPageOptions,
@@ -34,7 +30,7 @@ const Logs = (pageProps) => {
     handleChangeTimeFilterType,
     type,
     handleChangeType,
-  } = useBaseAdminFilter({props: pageProps});
+  } = useBaseAdminFilter({ props: pageProps });
 
   const {
     page,
@@ -139,6 +135,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "User event logs" },
+  });
 
 export default Logs;

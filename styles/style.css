@@ -6381,7 +6381,13 @@ Destinations Area CSS
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 35px;
+  cursor: pointer;
 }
+
+.single-destinations-box:hover img {
+  transform: scale(1.12);
+}
+
 .single-destinations-box img {
   width: 100%;
   border-radius: 10px;

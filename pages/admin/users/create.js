@@ -26,6 +26,7 @@ const UserCreate = () => {
   return <EditUserForm user={{}} save={handleSave} currentTitle="New User" />;
 };
 
-export const getServerSideProps = adminSideProps;
+export const getServerSideProps = (context) =>
+  adminSideProps({ context, baseProps: { pageTitle: "Create User" } });
 
 export default UserCreate;
