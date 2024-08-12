@@ -38,10 +38,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     baseSideProps.authToken
   );
 
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Listing #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({ context, callback: boostServerSideProps });
 
 export default ListingEdit;

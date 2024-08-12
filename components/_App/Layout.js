@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, title }) => {
   return (
     <>
       <Head>
@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
         {process.env.NEXT_PUBLIC_PROJECT_MODE == "dev" && (
           <meta name="robots" content="noindex" />
         )}
-        <title>RentAbout</title>
+        <title>{title}</title>
         <link
           rel="shortcut icon"
           type="image/x-icon"

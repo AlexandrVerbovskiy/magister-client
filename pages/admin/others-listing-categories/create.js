@@ -296,6 +296,10 @@ const boostServerSideProps = async ({ baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Create category" },
+  });
 
 export default CreateCategory;

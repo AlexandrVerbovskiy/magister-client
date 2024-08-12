@@ -170,10 +170,10 @@ const UserVerifyRequest = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const info = await getUserVerifyRequestById(id, baseSideProps.authToken);
-  return { info };
+  return { info, pageTitle: `User verify request #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  supportSideProps(context, boostServerSideProps);
+  supportSideProps({context, callback: boostServerSideProps});
 
 export default UserVerifyRequest;

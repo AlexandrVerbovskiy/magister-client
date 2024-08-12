@@ -53,6 +53,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Listings" },
+  });
 
 export default GridListingsFullMap;

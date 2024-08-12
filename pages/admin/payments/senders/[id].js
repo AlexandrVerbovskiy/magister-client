@@ -1,5 +1,5 @@
 import BaseSenderView from "../../../../components/admin/SenderPayments/BaseSenderView";
-import {useIdPage} from "../../../../hooks";
+import { useIdPage } from "../../../../hooks";
 import { adminSideProps } from "../../../../middlewares";
 import { getAdminSenderPaymentOptions } from "../../../../services";
 
@@ -20,10 +20,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     baseSideProps.authToken
   );
 
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Payment #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({ context, callback: boostServerSideProps });
 
 export default Sender;

@@ -139,7 +139,7 @@ const ProfileEdit = ({ newPaypalId }) => {
     if (contactDetails.trim()) {
       obj["contactDetails"] = contactDetails.trim();
     }
-    
+
     if (placeWork.trim()) {
       obj["placeWork"] = placeWork.trim();
     }
@@ -619,6 +619,10 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Profile edit" },
+  });
 
 export default ProfileEdit;

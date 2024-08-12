@@ -661,10 +661,10 @@ const Order = (baseProps) => {
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
   const options = await getAdminOrderInfo(id, baseSideProps.authToken);
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Order #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  supportSideProps(context, boostServerSideProps);
+  supportSideProps({ context, callback: boostServerSideProps });
 
 export default Order;

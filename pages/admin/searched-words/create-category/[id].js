@@ -17,7 +17,7 @@ import ImageView from "../../../../components/admin/Form/ImageView";
 import STATIC from "../../../../static";
 import { getFilePath } from "../../../../utils";
 import YesNoModal from "../../../../components/admin/YesNoModal";
-import {useIdPage} from "../../../../hooks";
+import { useIdPage } from "../../../../hooks";
 
 const getParentOptions = (groupedCategories, level) =>
   groupedCategories[level].map((elem, index) => ({
@@ -417,10 +417,16 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     id,
     baseSideProps.authToken
   );
-  return { ...searchedWordInfo };
+  return {
+    ...searchedWordInfo,
+    pageTitle: searchedWordInfo?.searchedWord?.name,
+  };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+  });
 
 export default createCategoryBySearch;

@@ -98,6 +98,10 @@ const boostServerSideProps = async () => {
 };
 
 export const getServerSideProps = (context) =>
-  userSideProps(context, boostServerSideProps);
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Terms of service" },
+  });
 
 export default TermsOfService;

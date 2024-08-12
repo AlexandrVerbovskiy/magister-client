@@ -74,10 +74,10 @@ const Invoice = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getOrderInvoiceOptions(id, baseSideProps.authToken);
-  return { ...options };
+  return { ...options, pageTitle: `Invoice #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({ context, callback: boostServerSideProps });
 
 export default Invoice;

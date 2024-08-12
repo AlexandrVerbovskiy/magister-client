@@ -96,6 +96,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Listing categories" },
+  });
 
 export default OthersList;

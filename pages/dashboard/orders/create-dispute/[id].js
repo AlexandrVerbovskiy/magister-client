@@ -74,7 +74,7 @@ const CreateDispute = (baseProps) => {
             </div>
           </div>
         </div>
-        
+
         <CreateDisputeSection
           {...disputeOptions}
           onGoBack={handleGoBack}
@@ -110,10 +110,10 @@ const CreateDispute = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getOrderFullByIdOptions(id, baseSideProps.authToken);
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Dispute ${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({ context, callback: boostServerSideProps });
 
 export default CreateDispute;

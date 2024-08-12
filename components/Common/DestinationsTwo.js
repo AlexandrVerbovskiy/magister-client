@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useListingListClick } from "../../hooks";
 
 const campaigns = [
   {
@@ -60,6 +61,28 @@ const campaigns = [
   },
 ];
 
+const DestinationItem = (campaign) => {
+  const { handleClick } = useListingListClick({
+    link: `/listings/?categories=${campaign.title}`,
+  });
+
+  return (
+    <div
+      key={campaign.id}
+      className={`col-lg-${campaign.col} col-sm-12 col-md-12`}
+      onClick={handleClick}
+    >
+      <div
+        className="single-destinations-box"
+        style={{ backgroundColor: campaign.backgroundColor }}
+      >
+        <img src={campaign.img} alt="image" />
+        <div className="country">{campaign.title}</div>
+      </div>
+    </div>
+  );
+};
+
 const Destinations = ({ bgColor = "", bgImage = "" }) => {
   return (
     <>
@@ -73,18 +96,7 @@ const Destinations = ({ bgColor = "", bgImage = "" }) => {
 
           <div className="row">
             {campaigns.map((campaign) => (
-              <div
-                key={campaign.id}
-                className={`col-lg-${campaign.col} col-sm-12 col-md-12`}
-              >
-                <div
-                  className="single-destinations-box"
-                  style={{ backgroundColor: campaign.backgroundColor }}
-                >
-                  <img src={campaign.img} alt="image" />
-                  <div className="country">{campaign.title}</div>
-                </div>
-              </div>
+              <DestinationItem {...campaign} />
             ))}
           </div>
         </div>

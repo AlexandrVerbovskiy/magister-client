@@ -307,6 +307,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  supportSideProps(context, boostServerSideProps);
+  supportSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Users" },
+  });
 
 export default Users;
