@@ -8,7 +8,7 @@ const Category = ({ bgColor, topCategories, needShowMore }) => {
         <div className="container">
           <div className="section-title">
             <h2>
-              Browse by <span>Listing</span>
+              Browse by <span>Category</span>
             </h2>
           </div>
 
