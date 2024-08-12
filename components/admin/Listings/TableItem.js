@@ -61,6 +61,7 @@ const TableItem = ({
   commentCount,
   ownerAverageRating,
   ownerCommentsCount,
+  openPopupImage,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -85,11 +86,7 @@ const TableItem = ({
           </Link>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={ownerId}
-            name={ownerName}
-            photo={ownerPhoto}
-          />
+          <TableUserLink id={ownerId} name={ownerName} photo={ownerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           {categoryName ?? otherCategory}

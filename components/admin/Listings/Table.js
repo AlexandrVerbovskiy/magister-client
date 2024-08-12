@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
+import ImageView from "../Form/ImageView";
 
 const ListingsTable = ({
   listings,
@@ -14,6 +15,8 @@ const ListingsTable = ({
   onClickChangeActive,
   loading,
 }) => {
+  const [popupImage, setPopupImage] = useState(null);
+
   const ths = [
     { title: "Id", value: "id", width: "10%" },
     { title: "Name", value: "name", width: "20%" },
@@ -65,6 +68,7 @@ const ListingsTable = ({
                     onChangeActive={(e) =>
                       onClickChangeActive(listing.id, listing.name)
                     }
+                    openPopupImage={(image) => setPopupImage(image)}
                   />
                 ))}
             </tbody>
@@ -75,6 +79,12 @@ const ListingsTable = ({
           {!loading && listings.length < 1 && <EmptyTable name="listings" />}
         </div>
       </div>
+
+      <ImageView
+        open={popupImage}
+        imgSrc={popupImage}
+        close={() => setPopupImage(null)}
+      />
     </div>
   );
 };
