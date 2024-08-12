@@ -2217,7 +2217,6 @@ Main Banner Area CSS
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
-  opacity: 0.8;
 }
 
 .main-banner-area .container {
@@ -19845,4 +19844,13 @@ video::-webkit-media-controls-panel {
   display: flex!important;
   align-items: center!important;
   justify-content: center!important;
+}
+
+.background-image-black{
+  background-color: rgba(0, 0, 0, 0.16);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
