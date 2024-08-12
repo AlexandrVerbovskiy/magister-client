@@ -11,7 +11,7 @@ import Header from "../../../../partials/admin/Header";
 import { useAdminPage } from "../../../../hooks";
 import DocumentList from "../../../../components/admin/Users/DocumentList";
 import { supportSideProps } from "../../../../middlewares";
-import {useIdPage} from "../../../../hooks";
+import { useIdPage } from "../../../../hooks";
 
 const UserDocuments = (baseProps) => {
   const { props, authToken } = useIdPage({
@@ -96,10 +96,13 @@ const UserDocuments = (baseProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
   const options = await getUserDocumentsPageOption(id, baseSideProps.authToken);
-  return { ...options };
+  return { ...options, pageTitle: `Document #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  supportSideProps(context, boostServerSideProps);
+  supportSideProps({
+    context,
+    callback: boostServerSideProps,
+  });
 
 export default UserDocuments;

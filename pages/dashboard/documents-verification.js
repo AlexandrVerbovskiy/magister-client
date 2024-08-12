@@ -232,6 +232,10 @@ const boostServerSideProps = async ({ baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Documents Verification" },
+  });
 
 export default DocumentsVerification;

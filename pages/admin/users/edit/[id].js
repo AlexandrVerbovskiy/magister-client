@@ -29,7 +29,6 @@ const UserEdit = (baseProps) => {
 };
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
-  const res = context.res;
   const id = context.params.id;
   const editableUser = await getFullUserById(id, baseSideProps.authToken);
   const currentUser = baseSideProps.sessionUser;
@@ -38,10 +37,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
     throw new HttpError(403, "Permission denied");
   }
 
-  return { editableUser };
+  return { editableUser, pageTitle: editableUser?.name };
 };
 
 export const getServerSideProps = (context) =>
-  adminSideProps(context, boostServerSideProps);
+  adminSideProps({ context, callback: boostServerSideProps });
 
 export default UserEdit;

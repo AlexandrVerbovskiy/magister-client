@@ -1,6 +1,11 @@
 import HttpError from "./HttpError";
 
-const middlewareCallbackWrapper = async ({ callback, res, context }) => {
+const middlewareCallbackWrapper = async ({
+  callback,
+  res,
+  context,
+  baseProps,
+}) => {
   if (callback) {
     try {
       const callbackRes = await callback({ baseSideProps: res, context });
@@ -11,7 +16,7 @@ const middlewareCallbackWrapper = async ({ callback, res, context }) => {
         };
       }
 
-      res = { ...res, ...callbackRes };
+      res = { ...res, ...callbackRes, ...baseProps };
     } catch (e) {
       console.error("Middleware error: " + e.message);
 

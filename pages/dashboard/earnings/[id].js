@@ -50,11 +50,10 @@ const Earning = (baseProps) => {
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
   const options = await getWaitingRefundOptions(id, baseSideProps.authToken);
-
-  return { ...options, id };
+  return { ...options, id, pageTitle: `Earnings #${id}` };
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({ context, callback: boostServerSideProps });
 
 export default Earning;

@@ -127,6 +127,10 @@ const boostServerSideProps = async ({ context, baseSideProps }) => {
 };
 
 export const getServerSideProps = (context) =>
-  authSideProps(context, boostServerSideProps);
+  authSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Creating review" },
+  });
 
 export default FullReview;
