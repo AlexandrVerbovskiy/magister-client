@@ -32,7 +32,7 @@ import {
 } from "../../components/ProfileEdit";
 import { useRouter } from "next/router";
 
-const ProfileEdit = ({ newPaypalId }) => {
+const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
   const router = useRouter();
   const [profileFormError, setProfileFormError] = useState(null);
   const [passwordFormError, setPasswordFormError] = useState(null);
@@ -514,7 +514,7 @@ const ProfileEdit = ({ newPaypalId }) => {
     />
   );
 
-  const verifyDocumentsSection = <DocumentVerificationSection />;
+  const verifyDocumentsSection = <DocumentVerificationSection verifiedInfo={verifiedInfo}/>;
 
   return (
     <>

@@ -8,6 +8,7 @@ import {
 import StatusBlock from "../Listings/StatusBlock";
 import { IndiceContext } from "../../contexts";
 import OrderMessageActions from "./OrderMessageActions";
+import STATIC from "../../static";
 
 const OrderInfoMessageContent = ({
   totalPrice,
@@ -38,7 +39,10 @@ const OrderInfoMessageContent = ({
       />
 
       <div className="my-1">
-        <b>Total price: ${moneyFormat(totalPrice)}</b>
+        <b>
+          Total price: {STATIC.CURRENCY}
+          {moneyFormat(totalPrice)}
+        </b>
       </div>
 
       <div className="mb-1">

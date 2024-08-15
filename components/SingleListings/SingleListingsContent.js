@@ -20,6 +20,7 @@ import { Autoplay } from "swiper/modules";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 import StarRating from "../StarRating";
+import STATIC from "../../static";
 
 const SingleListingsContent = ({
   comments,
@@ -64,7 +65,6 @@ const SingleListingsContent = ({
     try {
       const id = await createOrder(
         {
-          pricePerDay: currentApprovePrice,
           startDate: currentApproveFromDate,
           endDate: currentApproveToDate,
           listingId: listing.id,
@@ -117,13 +117,7 @@ const SingleListingsContent = ({
                 delay: 8000,
               }}
               modules={[Autoplay]}
-            >
-              {listing.backgroundPhoto && (
-                <SwiperSlide key="main">
-                  <img src={getFilePath(listing.backgroundPhoto)} alt="image" />
-                </SwiperSlide>
-              )}
-            </Swiper>
+            ></Swiper>
 
             <div className="container">
               <div className="container">
@@ -280,7 +274,10 @@ const SingleListingsContent = ({
                     <ul className="pricing-list">
                       <li>
                         Rental price per day{" "}
-                        <span>${moneyFormat(listing.pricePerDay)}</span>
+                        <span>
+                          {STATIC.CURRENCY}
+                          {moneyFormat(listing.pricePerDay)}
+                        </span>
                       </li>
                     </ul>
                   </div>
@@ -560,7 +557,8 @@ const SingleListingsContent = ({
                           className="default-btn w-100"
                           onClick={handleMakeBookingTriggerClick}
                         >
-                          Book Now ${moneyFormat(listing.pricePerDay)}/day
+                          Book Now {STATIC.CURRENCY}
+                          {moneyFormat(listing.pricePerDay)}/day
                         </button>
                       </div>
                     )}
@@ -633,6 +631,10 @@ const SingleListingsContent = ({
               toDate={currentApproveToDate}
               price={currentApprovePrice}
               fee={tenantBaseCommissionPercent}
+              setToDate={setCurrentApproveToDate}
+              setFromDate={setCurrentApproveFromDate}
+              blockedDates={listing.blockedDates}
+              minRentalDays={listing.minRentalDays}
             />
           )}
         </div>

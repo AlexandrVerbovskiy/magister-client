@@ -15,11 +15,12 @@ import {
   dateConverter,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Pagination from "../../components/Pagination";
 import { usePagination } from "../../hooks";
 import EmptyTable from "../../components/DashboardComponents/Table/EmptyTable";
 import PaginationLoadingWrapper from "../../components/_App/PaginationLoadingWrapper";
+import STATIC from "../../static";
 
 const Wallet = ({
   totalPayed,
@@ -98,7 +99,7 @@ const Wallet = ({
                 <i className="bx bx-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Earnings <strong className="wallet-currency">USD</strong>
+                Total Earnings <strong className="wallet-currency">{STATIC.CURRENCY_NAME}</strong>
               </span>
               <h3>{moneyFormat(totalGet)}</h3>
             </div>
@@ -109,7 +110,7 @@ const Wallet = ({
                 <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Paid <strong className="wallet-currency">USD</strong>
+                Total Paid <strong className="wallet-currency">{STATIC.CURRENCY_NAME}</strong>
               </span>
               <h3>{moneyFormat(totalPayed)}</h3>
             </div>
@@ -158,14 +159,19 @@ const Wallet = ({
                               </li>
                               <li>Order: #{earning.orderId}</li>
                               <li className="price">
-                                ${moneyFormat(pricePerDuration)}
+                                {STATIC.CURRENCY}
+                                {moneyFormat(pricePerDuration)}
                               </li>
                               <li className="fee-price">
-                                Fee: ${moneyFormat(feePerDuration)}
+                                Fee: {STATIC.CURRENCY}
+                                {moneyFormat(feePerDuration)}
                               </li>
                               <li className="price">
                                 Net Earning:{" "}
-                                <strong>${moneyFormat(earning.money)}</strong>
+                                <strong>
+                                  {STATIC.CURRENCY}
+                                  {moneyFormat(earning.money)}
+                                </strong>
                               </li>
                               {earning.receivedType == "refund" &&
                                 earning.status == "failed" && (
@@ -253,14 +259,19 @@ const Wallet = ({
                               <li>Date: {dateConverter(sending.createdAt)}</li>
                               <li>Order: #{sending.orderId}</li>
                               <li className="price">
-                                ${moneyFormat(pricePerDuration)}
+                                {STATIC.CURRENCY}
+                                {moneyFormat(pricePerDuration)}
                               </li>
                               <li className="fee-price">
-                                Fee: ${moneyFormat(feePerDuration)}
+                                Fee: {STATIC.CURRENCY}
+                                {moneyFormat(feePerDuration)}
                               </li>
                               <li className="price">
                                 Net Paid:{" "}
-                                <strong>${moneyFormat(sending.money)}</strong>
+                                <strong>
+                                  {STATIC.CURRENCY}
+                                  {moneyFormat(sending.money)}
+                                </strong>
                               </li>
                               {!sending.adminApproved &&
                                 sending.waitingApproved && (

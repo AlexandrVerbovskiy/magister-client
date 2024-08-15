@@ -84,7 +84,7 @@ const PaypalForm = ({ createOrder, onApprove, disabled, setDisabled }) => {
     <PayPalScriptProvider
       options={{
         "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-        currency: "USD",
+        currency: STATIC.CURRENCY_NAME,
         intent: "capture",
         locale: "en_US",
         components: "card-fields",

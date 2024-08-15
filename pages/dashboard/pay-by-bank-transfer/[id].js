@@ -236,7 +236,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                   }}
                 >
                   <b>Total Amount to Transfer: </b>
-                  <span className="pay-by-card-price">${totalPrice}</span>
+                  <span className="pay-by-card-price">{STATIC.CURRENCY}{totalPrice}</span>
                 </li>
               </ul>
             </div>

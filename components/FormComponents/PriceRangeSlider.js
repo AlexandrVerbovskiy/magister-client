@@ -94,7 +94,7 @@ const PriceRangeSlider = ({
         </div>
 
         <div className="price-input-container mt-4">
-          From ${minPrice} to ${maxPrice}
+          From {STATIC.CURRENCY}{minPrice} to {STATIC.CURRENCY}{maxPrice}
         </div>
       </div>
     </div>

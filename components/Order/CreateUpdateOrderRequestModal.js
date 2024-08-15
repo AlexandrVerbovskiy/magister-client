@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
+  autoMultiEnding,
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
@@ -17,7 +18,7 @@ import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
-//import "flatpickr/dist/flatpickr.min.css";
+import STATIC from "../../static";
 
 const CreateUpdateOrderRequestModal = ({
   handleCreateUpdateRequest,
@@ -33,8 +34,10 @@ const CreateUpdateOrderRequestModal = ({
   blockedDates,
   commissionType,
 }) => {
-  const proposalCountDays =
-  getFactOrderDays(proposalStartDate, proposalEndDate);
+  const proposalCountDays = getFactOrderDays(
+    proposalStartDate,
+    proposalEndDate
+  );
 
   const baseFromDate = new Date();
   const baseToDate = new Date();
@@ -171,10 +174,7 @@ const CreateUpdateOrderRequestModal = ({
   const handleSubmit = () => {
     let hasError = false;
 
-    if (
-      minRentalDays &&
-      getFactOrderDays(fromDate, toDate) < minRentalDays
-    ) {
+    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
       setCalendarError(
         `You can only rent a listing for more than ${minRentalDays} days`
       );
@@ -219,6 +219,7 @@ const CreateUpdateOrderRequestModal = ({
       className="scrollable-modal make-order-modal modal-xxl"
       active={updateRequestModalActive}
       closeModal={closeActiveUpdateRequest}
+      size="big"
     >
       <div className="row d-none d-md-flex">
         <div className="col col-6">
@@ -233,7 +234,6 @@ const CreateUpdateOrderRequestModal = ({
           </span>
         </div>
       </div>
-
       <div className="mt-3 booking-form left-scrollable">
         <div className="row">
           <div className="col col-12 col-md-6">
@@ -243,40 +243,6 @@ const CreateUpdateOrderRequestModal = ({
 
             <div className="flatpickr-parent-wrapper popup-widget">
               <div ref={prevCalendarContainer}></div>
-            </div>
-
-            <div className="popup-widget order-info-widget">
-              <div>Offered Price Per Day: ${moneyFormat(proposalPrice)}</div>
-              {fee && <div>Fee: {fee}%</div>}
-              {fee && (
-                <div>
-                  Price: $
-                  {calculateTotalPriceByDaysCount(
-                    proposalCountDays,
-                    proposalPrice,
-                    fee
-                  )}
-                </div>
-              )}
-              {fee && (
-                <div>
-                  Total Fee: $
-                  {calculateFeeByDaysCount(
-                    proposalCountDays,
-                    proposalPrice,
-                    fee
-                  )}
-                </div>
-              )}
-              <div style={{ fontWeight: 700 }}>
-                Total: $
-                {calculateFullTotalByDaysCount(
-                  proposalCountDays,
-                  proposalPrice,
-                  fee,
-                  commissionType
-                )}
-              </div>
             </div>
           </div>
           <div className="col col-12 col-md-6">
@@ -301,44 +267,6 @@ const CreateUpdateOrderRequestModal = ({
               )}
             </div>
 
-            <div className="popup-widget order-info-widget">
-              <div className="d-flex align-items-center">
-                Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
-                {!(price != defaultPrice) && (
-                  <i
-                    className="bx bx-pencil ms-1"
-                    onClick={handleOfferYourPrice}
-                    style={{ cursor: "pointer" }}
-                  ></i>
-                )}
-              </div>
-              {price != defaultPrice && (
-                <div className="d-flex align-items-center">
-                  Offered price: ${moneyFormat(price)}{" "}
-                  <i
-                    className="bx bx-pencil ms-1"
-                    onClick={handleOfferYourPrice}
-                    style={{ cursor: "pointer" }}
-                  ></i>
-                </div>
-              )}
-              {fee && <div>Fee: {fee}%</div>}
-              {minRentalDays > 0 && (
-                <div>Minimal Count Rental Days: {minRentalDays}</div>
-              )}
-              {fee && <div>Price: ${totalPrice}</div>}
-              {fee && <div>Total Fee: ${totalFee}</div>}
-              <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
-            </div>
-
-            <button
-              className="mt-4 default-modal-button"
-              type="button"
-              onClick={handleSubmit}
-            >
-              Send Request
-            </button>
-
             <OfferOwnPrice
               offerPriceActive={offerPriceActive}
               setOfferPriceActive={setOfferPriceActive}
@@ -354,14 +282,52 @@ const CreateUpdateOrderRequestModal = ({
               acceptText="Confirm"
               body={
                 fromDate.toDateString() == toDate.toDateString()
-                  ? `'${listingName}' rental during ${fromDate.toDateString()} for $${moneyFormat(
-                      price
-                    )} per day`
-                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for $${moneyFormat(
-                      price
-                    )} per day`
+                  ? `'${listingName}' rental during ${fromDate.toDateString()} for ${
+                      STATIC.CURRENCY
+                    }${moneyFormat(price)} per day`
+                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for ${
+                      STATIC.CURRENCY
+                    }${moneyFormat(price)} per day`
               }
             />
+          </div>
+        </div>
+        <div className="border-top d-flex justify-content-between">
+          <div className="d-flex flex-column mt-4 ">
+            <div>
+              <b>Previous duration: </b>
+              {proposalCountDays} {autoMultiEnding(proposalCountDays, "day")}
+            </div>
+            <div>
+              <b>Duration: </b>
+              {getFactOrderDays(fromDate, toDate)}{" "}
+              {autoMultiEnding(getFactOrderDays(fromDate, toDate), "day")}
+            </div>
+            <div className="total-booking-price">
+              <b>
+                Total:{" "}
+                <span>
+                  {STATIC.CURRENCY}
+                  {fullTotal}
+                </span>
+              </b>
+            </div>
+          </div>
+          <div className="d-flex justify-content-end mt-4 align-items-center">
+            <button
+              className="cancel-modal-button"
+              type="button"
+              onClick={closeActiveUpdateRequest}
+            >
+              Close
+            </button>
+            <button
+              className="ms-2 default-modal-button"
+              type="button"
+              onClick={handleSubmit}
+            >
+              Send Request
+            </button>
           </div>
         </div>
       </div>

@@ -96,7 +96,6 @@ const useSingleOrderActions = ({
     try {
       const result = await extendOrder(
         {
-          pricePerDay: price,
           startDate: fromDate,
           endDate: toDate,
           listingId: order.listingId,

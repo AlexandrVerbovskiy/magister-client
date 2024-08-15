@@ -24,7 +24,9 @@ const UserReviewForm = ({
     setError(null);
     setStarOptions((prev) =>
       prev.map((option) =>
-        option.key == key ? { ...option, value: newValue } : { ...option }
+        option.key == key
+          ? { ...option, error: null, value: newValue }
+          : { ...option }
       )
     );
   };
@@ -44,13 +46,12 @@ const UserReviewForm = ({
       return;
     }
 
-    for (let i = 0; i < starOptions.length; i++) {
-      const element = starOptions[i];
-      if (!element.value) {
-        setError(element.title + " is required");
-        return;
-      }
-    }
+    let newStarOptions = starOptions.map((option) => ({
+      ...option,
+      error: option.value ? null : `${option.title} required field!`,
+    }));
+
+    setStarOptions(newStarOptions);
 
     if (description.trim().length < 1) {
       setError("Review description is required");

@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
 import { IndiceContext } from "../../../contexts";
+import STATIC from "../../../static";
 
 const Status = ({ adminApproved, waitingApproved }) => {
   let statusName = "Completed";
@@ -151,7 +152,10 @@ const InvoiceTable = ({
               <tr>
                 <td>01</td>
                 <td>{offer.listingName}</td>
-                <td className="text-right">${offer.pricePerDay}</td>
+                <td className="text-right">
+                  {STATIC.CURRENCY}
+                  {offer.pricePerDay}
+                </td>
                 <td className="text-right">
                   {offer.startDate == offer.endDate
                     ? dateConverter(offer.startDate)
@@ -159,21 +163,28 @@ const InvoiceTable = ({
                         offer.endDate
                       )}`}
                 </td>
-                <td className="text-right">${moneyFormat(subTotalPrice)}</td>
+                <td className="text-right">
+                  {STATIC.CURRENCY}
+                  {moneyFormat(subTotalPrice)}
+                </td>
               </tr>
 
               <tr>
                 <td className="text-right" colSpan="4">
                   <strong>Subtotal</strong>
                 </td>
-                <td className="text-right">${moneyFormat(subTotalPrice)}</td>
+                <td className="text-right">
+                  {STATIC.CURRENCY}
+                  {moneyFormat(subTotalPrice)}
+                </td>
               </tr>
               <tr>
                 <td className="text-right" colSpan="4">
                   <strong>Sales Tax {offer.fee}%</strong>
                 </td>
                 <td className="text-right">
-                  ${moneyFormat((subTotalPrice * offer.fee) / 100)}
+                  {STATIC.CURRENCY}
+                  {moneyFormat((subTotalPrice * offer.fee) / 100)}
                 </td>
               </tr>
               <tr>
@@ -182,7 +193,7 @@ const InvoiceTable = ({
                 </td>
                 <td className="text-right total-price">
                   <strong>
-                    $
+                    {STATIC.CURRENCY}
                     {tenantPaymentCalculate(
                       offer.startDate,
                       offer.endDate,
@@ -198,7 +209,7 @@ const InvoiceTable = ({
                 </td>
                 <td className="text-right total-price">
                   <strong>
-                    $
+                    {STATIC.CURRENCY}
                     {adminApproved
                       ? tenantPaymentCalculate(
                           offer.startDate,

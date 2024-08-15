@@ -191,10 +191,6 @@ const EditForm = ({ listing, categories, save }) => {
   const [minRentalDays, setMinRentalDays] = useState("");
   const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
-  const [backgroundPhoto, setBackgroundPhoto] = useState(null);
-  const [backgroundPhotoUrl, setBackgroundPhotoUrl] = useState(null);
-  const [backgroundPhotoError, setBackgroundPhotoError] = useState(null);
-
   const baseCoords = getCityCoords(baseCity);
 
   const [center, setCenter] = useState(baseCoords);
@@ -304,7 +300,6 @@ const EditForm = ({ listing, categories, save }) => {
     setOwnerName(prevListing.userName);
     setAddress(data.address);
     setActive(data.active);
-    setBackgroundPhotoUrl(data.backgroundPhotoUrl);
     setIsOtherCategory(!!data.otherCategory);
     setOtherCategory(data.otherCategory);
 
@@ -356,9 +351,6 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId: prevListing.ownerId,
       address: prevListing.address ?? "",
       active: prevListing.active ?? true,
-      backgroundPhotoUrl: prevListing.backgroundPhoto
-        ? getFilePath(prevListing.backgroundPhoto)
-        : null,
       otherCategory: prevListing.otherCategory ?? "",
     };
 
@@ -368,49 +360,6 @@ const EditForm = ({ listing, categories, save }) => {
 
     return data;
   };
-
-  const { getRootProps: getRootPropsPopup, getInputProps: getInputPropsPopup } =
-    useDropzone({
-      accept: STATIC.ACCEPT_IMAGE_FORMAT,
-      maxSize: STATIC.LIMITS.FILE_SIZE,
-      onDrop: (acceptedFiles, fileRejections) => {
-        const newFile = acceptedFiles[0];
-
-        if (newFile) {
-          const img = new Image();
-          img.src = URL.createObjectURL(newFile);
-
-          img.onload = () => {
-            if (3 * img.height > img.width) {
-              setBackgroundPhotoError("Need more wider photo");
-              return;
-            }
-
-            const photoWithPreview = Object.assign(newFile, {
-              preview: img.src, // Використовуємо вже створений URL
-              localId: uniqueImageId(),
-              date: Date.now(),
-            });
-
-            setBackgroundPhoto(photoWithPreview);
-            setBackgroundPhotoError(null);
-          };
-
-          img.onerror = (err) => {
-            console.error("Error loading image:", err);
-            setBackgroundPhotoError("Error loading image");
-          };
-        } else {
-          setBackgroundPhoto(null);
-        }
-
-        if (fileRejections.length > 0) {
-          setBackgroundPhotoError(fileRejections[0].errors[0].message);
-        } else {
-          setBackgroundPhotoError(null);
-        }
-      },
-    });
 
   const objectToSave = () => {
     const listingImages = linkFiles.map((elem) => ({
@@ -437,7 +386,7 @@ const EditForm = ({ listing, categories, save }) => {
       active,
     };
 
-    if (minRentalDays.trim()) {
+    if (`${minRentalDays}`.trim()) {
       dataToSave["minRentalDays"] = minRentalDays;
     }
 
@@ -451,13 +400,12 @@ const EditForm = ({ listing, categories, save }) => {
   };
 
   const hasChanges = () => {
-    if (files.length > 0 || backgroundPhoto) {
+    if (files.length > 0) {
       return true;
     }
 
     const dataToSave = objectToSave();
     const listingToCheck = listingToState();
-    delete listingToCheck["backgroundPhotoUrl"];
     return !lodash.isEqual(listingToCheck, dataToSave);
   };
 
@@ -605,10 +553,6 @@ const EditForm = ({ listing, categories, save }) => {
 
         const info = objectToSave();
 
-        if (backgroundPhoto) {
-          formData.append("backgroundPhoto", backgroundPhoto);
-        }
-
         info["listingImages"] = JSON.stringify(info["listingImages"]);
 
         Object.keys(info).forEach((key) => formData.append(key, info[key]));
@@ -617,11 +561,6 @@ const EditForm = ({ listing, categories, save }) => {
 
         setFiles([]);
         setLinkFiles(adaptLinkPropsToLocal([...res.listingImages]));
-
-        if (res.backgroundPhoto) {
-          setBackgroundPhoto(null);
-          setBackgroundPhotoUrl(getFilePath(res.backgroundPhoto));
-        }
 
         setPrevListing((prev) => ({
           ...prev,
@@ -895,77 +834,6 @@ const EditForm = ({ listing, categories, save }) => {
                         linkSuccessPhoto={linkSuccessPhoto}
                         successLoadLinkPhoto={successLoadLinkPhoto}
                       />
-
-                      <section>
-                        <h2 className="small-text text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Listing Background Photo
-                          <div
-                            style={{
-                              fontWeight: 400,
-                              marginTop: "2px",
-                            }}
-                          >
-                            You can add file with maximum size 5 MB. Valid photo
-                            format is 3 to 1
-                          </div>
-                        </h2>
-
-                        <div className="flex w-full gap-2">
-                          <div className="w-full">
-                            <div
-                              className="dropzone flex-col cursor-pointer flex justify-center p-0"
-                              {...getRootPropsPopup()}
-                              style={{ marginBottom: "25px" }}
-                            >
-                              {backgroundPhotoUrl || backgroundPhoto ? (
-                                <div
-                                  className="invoice-btn-box gallery-flex form-group bg-gray-100"
-                                  style={{
-                                    height: "400px",
-                                    marginBottom: "20px",
-                                  }}
-                                >
-                                  <img
-                                    src={
-                                      backgroundPhoto
-                                        ? backgroundPhoto.preview
-                                        : backgroundPhotoUrl
-                                    }
-                                    style={{
-                                      height: "100%",
-                                      width: "100%",
-                                      objectFit: "contain",
-                                    }}
-                                  />
-                                  <input
-                                    name="modalImage"
-                                    {...getInputPropsPopup()}
-                                  />
-                                </div>
-                              ) : (
-                                <div
-                                  className="gallery-flex form-group bg-gray-100"
-                                  style={{
-                                    height: "400px",
-                                    marginBottom: "22px",
-                                  }}
-                                >
-                                  <div className="add-more-image">
-                                    Drag 'n' drop some file here, or click to
-                                    select file
-                                  </div>
-                                </div>
-                              )}
-
-                              <ErrorSpan
-                                error={backgroundPhotoError}
-                                className="d-block mb-3"
-                                style={{ marginTop: "-22px" }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </section>
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
