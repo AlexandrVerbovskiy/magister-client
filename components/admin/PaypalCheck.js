@@ -1,4 +1,5 @@
 import { capitalizeFirstLetter } from "../../utils";
+import STATIC from "../../static";
 
 const PaypalCheck = ({
   rentalPrice,
@@ -68,7 +69,11 @@ const PaypalCheck = ({
               </svg>
             </div>
             <h1>
-              You paid <span className="amount">${rentalPrice} USD</span>
+              You paid{" "}
+              <span className="amount">
+                {STATIC.CURRENCY}
+                {rentalPrice} {STATIC.CURRENCY_NAME}
+              </span>
             </h1>
             <p>to RentAbout</p>
             <p className="details-link">Details</p>
@@ -82,10 +87,15 @@ const PaypalCheck = ({
                 </thead>
                 <tbody>
                   <tr className="row">
-                    <td className="title max-w-full overflow-separate">Rent x {listingName}</td>
+                    <td className="title max-w-full overflow-separate">
+                      Rent x {listingName}
+                    </td>
                     <td className="price max-w-full overflow-separate">
-                      <span className="amount">${rentalPrice}</span>
-                      <span className="currency">USD</span>
+                      <span className="amount">
+                        {STATIC.CURRENCY}
+                        {rentalPrice}
+                      </span>
+                      <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -118,10 +128,15 @@ const PaypalCheck = ({
                 </thead>
                 <tbody>
                   <tr className="row">
-                    <td className="title max-w-full overflow-separate">Subtotal:</td>
+                    <td className="title max-w-full overflow-separate">
+                      Subtotal:
+                    </td>
                     <td className="price max-w-full overflow-separate">
-                      <span className="amount">${rentalPrice}</span>
-                      <span className="currency">USD</span>
+                      <span className="amount">
+                        {STATIC.CURRENCY}
+                        {rentalPrice}
+                      </span>
+                      <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -136,10 +151,15 @@ const PaypalCheck = ({
                 </thead>
                 <tbody>
                   <tr className="row total">
-                    <td className="title max-w-full overflow-separate">Total:</td>
+                    <td className="title max-w-full overflow-separate">
+                      Total:
+                    </td>
                     <td className="price max-w-full overflow-separate">
-                      <span className="amount">${rentalPrice}</span>
-                      <span className="currency">USD</span>
+                      <span className="amount">
+                        {STATIC.CURRENCY}
+                        {rentalPrice}
+                      </span>
+                      <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -162,10 +182,15 @@ const PaypalCheck = ({
                 </thead>
                 <tbody>
                   <tr className="row total">
-                    <td className="title max-w-full overflow-separate">{paidWith}</td>
+                    <td className="title max-w-full overflow-separate">
+                      {paidWith}
+                    </td>
                     <td className="price max-w-full overflow-separate">
-                      <span className="amount">${rentalPrice}</span>
-                      <span className="currency">USD</span>
+                      <span className="amount">
+                        {STATIC.CURRENCY}
+                        {rentalPrice}
+                      </span>
+                      <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
                   </tr>
                 </tbody>

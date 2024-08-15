@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { IndiceContext } from "../../contexts";
-import { validateBigText } from "../../utils";
+import { getFactOrderDays, validateBigText } from "../../utils";
+import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
-  handleApprove,
+  handleApprove: baseHandleApprove,
   setCurrentOpenImg,
   listing,
   handleGoBack,
@@ -15,12 +15,63 @@ const OrderApprovementSection = ({
   toDate,
   price,
   fee,
+  setToDate,
+  setFromDate,
+  blockedDates,
+  minRentalDays,
 }) => {
   const [feeActive, setFeeActive] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
+  const [sendingMessageError, setSendingMessageError] = useState(null);
+  const [dateError, setDateError] = useState(null);
+  const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
+    useState(false);
 
-  const onApproved = () => {
-    handleApprove({ feeActive, sendingMessage });
+  const handleApprove = () => {
+    baseHandleApprove({ feeActive, sendingMessage });
+    setActiveAcceptSendBookingRequest(false);
+  };
+
+  const duration = getFactOrderDays(fromDate, toDate);
+  const subtotalPrice = price * duration;
+  const totalFee = (subtotalPrice * fee) / 100;
+  const totalPrice = subtotalPrice + totalFee;
+
+  const onSendClick = (e) => {
+    e.preventDefault();
+
+    let hasError = false;
+
+    if (!sendingMessage.trim()) {
+      hasError = true;
+      setSendingMessageError("Required field");
+    }
+
+    if (validateBigText(sendingMessage) !== true) {
+      hasError = true;
+      setSendingMessageError(validateBigText(sendingMessage));
+    }
+
+    if (fromDate > toDate) {
+      hasError = true;
+      setDateError('"From date" can\'t be larger than "To date"');
+    }
+
+    if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
+      hasError = true;
+      setDateError(
+        `Rental duration can't be lower than ${getDaysDifference(
+          fromDate,
+          toDate
+        )} days`
+      );
+    }
+
+    if (hasError) {
+      return;
+    }
+
+    setActiveAcceptSendBookingRequest(true);
   };
 
   return (
@@ -28,7 +79,7 @@ const OrderApprovementSection = ({
       <div className="col-lg-8 col-md-12">
         <div className="listings-details-desc">
           <RentalMessage
-            onApproved={onApproved}
+            handleApprove={handleApprove}
             handleGoBack={handleGoBack}
             setSendingMessage={setSendingMessage}
             sendingMessage={sendingMessage}
@@ -36,6 +87,11 @@ const OrderApprovementSection = ({
             toDate={toDate}
             price={price}
             listing={listing}
+            minRentalDays={minRentalDays}
+            totalPrice={totalPrice}
+            sendingMessageError={sendingMessageError}
+            setSendingMessageError={setSendingMessageError}
+            onSendClick={onSendClick}
           />
         </div>
       </div>
@@ -43,12 +99,20 @@ const OrderApprovementSection = ({
         <div className="listings-sidebar">
           <ContractDetails
             needFeeSwitch={true}
-            fee={fee}
             feeActive={feeActive}
             setFeeActive={setFeeActive}
             fromDate={fromDate}
             toDate={toDate}
             price={price}
+            setToDate={setToDate}
+            setFromDate={setFromDate}
+            blockedDates={blockedDates}
+            totalPrice={totalPrice}
+            subtotalPrice={subtotalPrice}
+            dateError={dateError}
+            duration={duration}
+            totalFee={totalFee}
+            setDateError={setDateError}
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
@@ -63,6 +127,17 @@ const OrderApprovementSection = ({
           />
         </div>
       </div>
+
+      <YesNoRentalModal
+        fromDate={fromDate}
+        toDate={toDate}
+        price={price}
+        listing={listing}
+        handleApprove={handleApprove}
+        totalPrice={totalPrice}
+        activeAcceptSendBookingRequest={activeAcceptSendBookingRequest}
+        setActiveAcceptSendBookingRequest={setActiveAcceptSendBookingRequest}
+      />
     </div>
   );
 };

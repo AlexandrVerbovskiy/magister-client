@@ -102,11 +102,7 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={tenantId}
-            name={tenantName}
-            photo={tenantPhoto}
-          />
+          <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TableUserLink
@@ -117,7 +113,8 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            ${moneyFormat(money)}
+            {STATIC.CURRENCY}
+            {moneyFormat(money)}
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">

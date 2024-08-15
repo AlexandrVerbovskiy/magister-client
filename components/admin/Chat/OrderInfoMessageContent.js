@@ -6,6 +6,7 @@ import {
 } from "../../../utils";
 import StatusBlock from "../Orders/Status";
 import CancelStatus from "../Orders/CancelStatus";
+import STATIC from "../../../static";
 
 const OrderInfoMessageContent = ({
   forOwnerPrice,
@@ -33,9 +34,14 @@ const OrderInfoMessageContent = ({
         style={{ width: "200px", height: "200px" }}
       />
       <div className="my-1">
-        <b>Owner get: ${moneyFormat(forOwnerPrice)}</b>
+        <b>
+          Owner get: {STATIC.CURRENCY}{moneyFormat(forOwnerPrice)}
+        </b>
         <br />
-        <b>Renter payed: ${moneyFormat(forTenantPrice)}</b>
+        <b>
+          Renter payed: {STATIC.CURRENCY}
+          {moneyFormat(forTenantPrice)}
+        </b>
       </div>
       <div className="mb-1">
         {duration} {autoMultiEnding(duration, "day")} (

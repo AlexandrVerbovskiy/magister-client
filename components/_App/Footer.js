@@ -19,7 +19,7 @@ const Footer = ({ bgColor }) => {
       <footer className={`footer-area ${bgColor ?? ""}`}>
         <div className="container" style={{ paddingBottom: "3rem" }}>
           <div className="row">
-            <div className="col-lg-3 col-sm-6 col-md-6">
+            <div className="col-lg-4 col-sm-6 col-md-6">
               <div className="single-footer-widget">
                 <h3>Find</h3>
 
@@ -57,7 +57,7 @@ const Footer = ({ bgColor }) => {
               </div>
             </div>
 
-            <div className="col-lg-3 col-sm-6 col-md-6">
+            <div className="col-lg-4 col-sm-6 col-md-6">
               <div className="single-footer-widget">
                 <h3>Rentabout </h3>
 
@@ -81,7 +81,7 @@ const Footer = ({ bgColor }) => {
               </div>
             </div>
 
-            <div className="col-lg-3 col-sm-6 col-md-6">
+            <div className="col-lg-4 col-sm-6 col-md-6">
               <div className="single-footer-widget">
                 <h3>The boring stuff</h3>
 
@@ -105,7 +105,7 @@ const Footer = ({ bgColor }) => {
               </div>
             </div>
 
-            <div className="col-lg-3 col-sm-6 col-md-6">
+            {/*<div className="col-lg-3 col-sm-6 col-md-6">
               <div className="single-footer-widget">
                 <h3>Languages</h3>
 
@@ -121,7 +121,7 @@ const Footer = ({ bgColor }) => {
                   </select>
                 </div>
               </div>
-            </div>
+            </div>*/}
           </div>
         </div>
       </footer>

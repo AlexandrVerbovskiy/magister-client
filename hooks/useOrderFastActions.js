@@ -348,7 +348,6 @@ const useOrderFastActions = ({
 
       await extendOrder(
         {
-          pricePerDay: price,
           startDate: fromDate,
           endDate: toDate,
           listingId: extendModalActiveOrder.listingId,
