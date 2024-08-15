@@ -1,6 +1,7 @@
 import React from "react";
 import LineChart from "../../../charts/LineChart01";
 import { lineChartOptions } from "../../../utils";
+import STATIC from "../../../static";
 
 function DashboardLineChart({
   title,
@@ -26,7 +27,7 @@ function DashboardLineChart({
         </header>
         <div className="flex items-start">
           <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">
-            {valueType == "money" && "$"}
+            {valueType == "money" && STATIC.CURRENCY}
             {sum}
           </div>
           {needCompare && (

@@ -1,3 +1,5 @@
+import ErrorSpan from "../../ErrorSpan";
+
 const MainUserReviewPart = ({
   stars,
   handleChangeStars,
@@ -21,7 +23,8 @@ const MainUserReviewPart = ({
                 <div className="row add-sub-rating">
                   <div className="col-12 col-md-9">
                     <h4>{option.title} *</h4>
-                    <p>{option.description}</p>
+                    <p className="mb-0">{option.description}</p>
+                    <ErrorSpan error={option.error} className="d-block" />
                   </div>
                   <div className="col-12 col-md-3 d-flex align-items-center mt-2 mt-md-0 md-justify-content-end">
                     <div className="cleanliness-rating">

@@ -104,7 +104,7 @@ const TabHeaderSection = ({
   </ul>
 );
 
-const StatusBlock = ({ requestId, requestApproved }) => {
+const StatusBlock = ({ requestId, requestApproved, active = false }) => {
   const { sessionUser } = useContext(IndiceContext);
   let listingStatus = "unapproved";
   let icon = "bx bx-x-circle";
@@ -124,6 +124,12 @@ const StatusBlock = ({ requestId, requestApproved }) => {
     tooltip = sessionUser?.verified
       ? "The item has been approved. Users can now view and submit rental requests for your item"
       : "Account still unverified and item cannot be rented";
+  }
+
+  if(!active){
+    listingStatus = "deleted";
+    icon = "bx bx-x-circle";
+    tooltip = "The item has been deleted. Users can't now view and submit rental requests for your item";
   }
 
   return (
@@ -247,10 +253,12 @@ const ListingList = (pageProps) => {
                         <div
                           key={listing.id}
                           className="col-xl-4 col-lg-6 col-md-6 listing-list-elem-parent"
-                          style={listing.active ? {} : { opacity: 0.5 }}
                         >
                           <div className="single-listings-box">
-                            <div className="listings-image">
+                            <div
+                              className="listings-image"
+                              style={listing.active ? {} : { opacity: 0.5 }}
+                            >
                               {listing.images.length < 1 && (
                                 <Link
                                   href={`/listings/${listing.id}/`}
@@ -311,9 +319,13 @@ const ListingList = (pageProps) => {
                                   : listing.requestApproved
                               }
                               requestId={listing.requestId}
+                              active={listing.active}
                             />
 
-                            <div className="listings-content">
+                            <div
+                              className="listings-content"
+                              style={listing.active ? {} : { opacity: 0.5 }}
+                            >
                               <ul className="listings-meta">
                                 <li>
                                   <Link

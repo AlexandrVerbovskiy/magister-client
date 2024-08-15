@@ -8,8 +8,7 @@ const FinishedSection = ({ active, goNext }) => {
       <div className="col col-12 col-md-6">
         <div className="d-flex flex-column align-items-center">
           <div className="sub-title text-center">
-            Your profile is currently being verified. This may take a few
-            minutes. <br />
+            Your profile is currently being verified. This may take up to 24 hours. <br />
             Thank you for your patience
           </div>
 

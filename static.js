@@ -152,4 +152,6 @@ export default {
   SERVER_API: "/api",
   SERVER_STORAGE: "/public",
   SUPPORT_EMAIL: "support@rentabout.com",
+  CURRENCY: "£", //"$"
+  CURRENCY_NAME: "GBP", //"USD"
 };

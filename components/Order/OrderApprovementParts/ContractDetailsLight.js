@@ -1,4 +1,5 @@
 import { autoMultiEnding, getFactOrderDays, moneyFormat } from "../../../utils";
+import STATIC from "../../../static";
 
 const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
   const duration = getFactOrderDays(fromDate, toDate);
@@ -27,9 +28,13 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>
-            ${price} x {duration} {autoMultiEnding(duration, "day")}
+            {STATIC.CURRENCY}
+            {price} x {duration} {autoMultiEnding(duration, "day")}
           </div>
-          <div>${moneyFormat(subtotalPrice)}</div>
+          <div>
+            {STATIC.CURRENCY}
+            {moneyFormat(subtotalPrice)}
+          </div>
         </div>
 
         <div
@@ -37,13 +42,20 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>Service Fee</div>
-          <div>${moneyFormat(totalFee)}</div>
+          <div>
+            {STATIC.CURRENCY}
+            {moneyFormat(totalFee)}
+          </div>
         </div>
       </div>
 
       <ul>
         <li className="d-flex justify-content-between px-0">
-          <div>Total:</div> <div>${moneyFormat(totalPrice)}</div>
+          <div>Total:</div>{" "}
+          <div>
+            {STATIC.CURRENCY}
+            {moneyFormat(totalPrice)}
+          </div>
         </li>
       </ul>
     </div>

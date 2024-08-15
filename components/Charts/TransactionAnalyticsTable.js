@@ -1,5 +1,6 @@
 import React from "react";
 import { moneyFormat, transactionTableOptions } from "../../utils";
+import STATIC from "../../static";
 
 const TransactionAnalyticsTable = ({ title, data }) => {
   const { paypalInfo, bankTransferInfo } = transactionTableOptions({
@@ -66,7 +67,8 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                 </td>
                 <td className="px-2 py-4">
                   <div className="text-center text-success">
-                    ${moneyFormat(paypalInfo["amount"])}
+                    {STATIC.CURRENCY}
+                    {moneyFormat(paypalInfo["amount"])}
                   </div>
                 </td>
                 <td className="px-2 py-4">
@@ -102,7 +104,8 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                 </td>
                 <td className="px-2 py-4">
                   <div className="text-center text-success">
-                    ${moneyFormat(bankTransferInfo["amount"])}
+                    {STATIC.CURRENCY}
+                    {moneyFormat(bankTransferInfo["amount"])}
                   </div>
                 </td>
                 <td className="px-2 py-4">

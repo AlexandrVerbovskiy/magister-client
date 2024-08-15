@@ -187,6 +187,9 @@ const ListingsWithMap = ({
   const [searchCity, setSearchCity] = useState(
     basePageProps.options.searchCity
   );
+  const [searchListing, setSearchListing] = useState(
+    basePageProps.options.searchListing
+  );
   const [favorites, setFavorites] = useState(pageProps.options?.favorites);
 
   useEffect(() => {
@@ -246,6 +249,10 @@ const ListingsWithMap = ({
       },
       lat: { value: searchLocation?.lat, hidden: () => true },
       lng: { value: searchLocation?.lng, hidden: () => true },
+      searchListing: {
+        value: searchListing,
+        name: "search-listing",
+      },
       searchCity: {
         value: searchCity,
         name: "search-city",
@@ -285,6 +292,7 @@ const ListingsWithMap = ({
   useEffect(() => {
     setSearchCategory(options.searchCategory);
     setSearchCity(options.searchCity);
+    setSearchListing(options.searchListing)
   }, [options]);
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
@@ -473,7 +481,7 @@ const ListingsWithMap = ({
         cities={cityNames}
         searchCity={searchCity}
         searchCategory={searchCategory}
-        searchListing={basePageProps.options.searchListing}
+        searchListing={searchListing}
       />
 
       <div className="listings-area ptb-100">

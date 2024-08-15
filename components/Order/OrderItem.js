@@ -78,9 +78,10 @@ const OrderInfo = ({
               endDate={order.requestId ? order.newEndDate : order.offerEndDate}
             />
           </li>
-          <li className="row-dots-end">
+          <li className="row-dots-end" style={{ color: "black" }}>
             <i className="bx bx-purchase-tag"></i>
-            <span>Price: </span>$
+            <span>Price: </span>
+            {STATIC.CURRENCY}
             <span>
               {order.requestId
                 ? moneyFormat(

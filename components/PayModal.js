@@ -98,13 +98,13 @@ const PayModal = ({
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">
-              Price per day: ${moneyFormat(pricePerDay)}
+              Price per day: {STATIC.CURRENCY}{moneyFormat(pricePerDay)}
             </div>
             <div className="form-group">Duration: {durationInfo}</div>
-            <div className="form-group">Subtotal: ${moneyFormat(subtotal)}</div>
+            <div className="form-group">Subtotal: {STATIC.CURRENCY}{moneyFormat(subtotal)}</div>
             <div className="form-group">Fee: {offerFee}% </div>
             <div className="form-group">
-              <b>Total to pay: ${moneyFormat(total)}</b>
+              <b>Total to pay: {STATIC.CURRENCY}{moneyFormat(total)}</b>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@ const PayModal = ({
                         }}
                       >
                         <b>Total Amount to Transfer: </b>
-                        <span className="pay-by-card-price">${total}</span>
+                        <span className="pay-by-card-price">{STATIC.CURRENCY}{total}</span>
                       </li>
                     </ul>
                   </div>

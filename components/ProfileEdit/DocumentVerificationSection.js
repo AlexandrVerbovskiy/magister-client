@@ -2,20 +2,27 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import Link from "next/link";
 
-const DocumentVerificationSection = () => {
+const DocumentVerificationSection = ({ verifiedInfo }) => {
   const { sessionUser } = useContext(IndiceContext);
+
+  let verifiedText = "Profile verified";
+  let verifyIconClass = "bx bx-check-circle icon-success";
+
+  if (sessionUser?.verified) {
+    if (verifiedInfo.id && !verifiedInfo.hasResponse) {
+      verifiedText = "Verification in progress";
+      verifyIconClass = "bx bx-time icon-success";
+    } else {
+      verifiedText = "Profile not verified";
+      verifyIconClass = "bx bx-x-circle icon-danger";
+    }
+  }
 
   return (
     <div className="my-profile-box">
-      {sessionUser?.verified ? (
-        <h3 className="edit-profile-document-section-title">
-          Profile verified <i className="bx bx-check-circle icon-success"></i>
-        </h3>
-      ) : (
-        <h3 className="edit-profile-document-section-title">
-          Profile not verified <i className="bx bx-x-circle icon-danger"></i>
-        </h3>
-      )}
+      <h3 className="edit-profile-document-section-title">
+        {verifiedText} <i className={verifyIconClass}></i>
+      </h3>
 
       <form method="get" onSubmit={(e) => e.preventDefault()}>
         <div className="row">

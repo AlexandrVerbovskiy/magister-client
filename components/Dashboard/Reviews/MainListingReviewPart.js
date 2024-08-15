@@ -1,3 +1,5 @@
+import ErrorSpan from "../../ErrorSpan";
+
 const MainListingReviewPart = ({
   stars,
   handleChangeStars,
@@ -63,6 +65,7 @@ const MainListingReviewPart = ({
                     />
                     <label htmlFor={option.key + "Star1"}></label>
                   </div>
+                  <ErrorSpan error={option.error} className="d-block" />
                 </div>
               </div>
             ))}

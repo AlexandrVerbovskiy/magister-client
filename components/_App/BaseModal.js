@@ -8,12 +8,17 @@ const BaseModal = ({
   needCloseBtn = true,
   style = {},
   hidden = false,
+  size = "normal",
 }) => {
   if (className) {
     className += " ";
   }
 
   className += "modal loginRegisterModal base-modal";
+
+  if(size=="big"){
+    className += " modal-xxl";
+  }
 
   if (active && !hidden) {
     className += " show";
@@ -31,7 +36,11 @@ const BaseModal = ({
 
   return (
     <>
-      <div className={active && !hidden ? "body_overlay open test" : "body_overlay"}></div>
+      <div
+        className={
+          active && !hidden ? "body_overlay open test" : "body_overlay"
+        }
+      ></div>
       <div
         style={style}
         className={className}

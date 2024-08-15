@@ -60,7 +60,9 @@ const useRenterReview = () => {
   const baseOptions = options.map((option) => ({
     ...option,
     value: 0,
+    error: null,
   }));
+  
   const [starOptions, setStarOptions] = useState(baseOptions);
   const [description, setDescription] = useState("");
   const [leaveFeedback, setLeaveFeedback] = useState("");
