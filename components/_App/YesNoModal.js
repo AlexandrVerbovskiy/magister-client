@@ -9,6 +9,7 @@ const YesNoModal = ({
   closeModalText = "Cancel",
   closeModalClassName = "button-danger",
   acceptModalClassName = "",
+  bodyType = "text",
 }) => {
   const handleAccept = () => {
     onAccept();
@@ -37,8 +38,14 @@ const YesNoModal = ({
                   <div className="w-100 sub-title mb-2">
                     <div className="w-100 row-dots-end">{title}</div>
                   </div>
-
-                  <div className="w-100 row-dots-end">{body}</div>
+                  {bodyType == "html" ? (
+                    <div
+                      className="w-100 row-dots-end"
+                      dangerouslySetInnerHTML={{ __html: body }}
+                    ></div>
+                  ) : (
+                    <div className="w-100 row-dots-end">{body}</div>
+                  )}
 
                   <form
                     method="get"

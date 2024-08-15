@@ -1,71 +1,22 @@
-import { useState } from "react";
-import { moneyFormat, dateConverter, validateBigText } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
-import YesNoModal from "../../_App/YesNoModal";
 
 const RentalMessage = ({
   handleGoBack,
   setSendingMessage,
   sendingMessage,
-  fromDate,
-  toDate,
-  price,
-  listing,
-  onApproved,
+  sendingMessageError,
+  setSendingMessageError,
+  onSendClick,
 }) => {
-  const [sendingMessageError, setSendingMessageError] = useState(null);
-  const [activeAcceptSendBookingRequest, setActiveAcceptSendBookingRequest] =
-    useState(false);
-
-  const onSendClick = (e) => {
-    e.preventDefault();
-
-    let hasError = false;
-
-    if (!sendingMessage.trim()) {
-      hasError = true;
-      setSendingMessageError("Required field");
-    }
-
-    if (validateBigText(sendingMessage) !== true) {
-      hasError = true;
-      setSendingMessageError(validateBigText(sendingMessage));
-    }
-
-    if (hasError) {
-      return;
-    }
-
-    setActiveAcceptSendBookingRequest(true);
-  };
-
-  const handleApprove = () => {
-    onApproved();
-    setActiveAcceptSendBookingRequest(false);
-  };
-
   return (
-    <>
       <div id="rental-message">
         <div className="review-form-wrapper">
-          <h3>Check Availability</h3>
+          <h3>Message the owner</h3>
           <p className="comment-notes">
-            Request confirmation of availability from the owner before you pay
-            and verify.
+            We recommend checking availability of multiple options / owner to
+            maximise the change of finding an item that suits your dates and
+            pickup.
           </p>
-          <div className="d-flex align-items-center">
-            <h3 className="mb-0">Message the owner </h3>
-            <span
-              style={{
-                marginTop: "2px",
-                color: "#6D6D6D",
-                fontWeight: 500,
-              }}
-              className="mx-1"
-            >
-              (required)
-            </span>
-          </div>
           <form onSubmit={onSendClick}>
             <div className="row">
               <div className="col-lg-12 col-md-12">
@@ -89,12 +40,6 @@ const RentalMessage = ({
                   </div>
                 </div>
               </div>
-
-              <p className="comment-notes">
-                We recommend checking availability of multiple options / owner
-                to maximise the change of finding an item that suits your dates
-                and pickup.
-              </p>
 
               <div className="col-lg-12 col-md-12">
                 <div
@@ -123,23 +68,6 @@ const RentalMessage = ({
           </form>
         </div>
       </div>
-      <YesNoModal
-        active={activeAcceptSendBookingRequest}
-        closeModal={() => setActiveAcceptSendBookingRequest(false)}
-        title="Please confirm the booking"
-        onAccept={handleApprove}
-        acceptText="Confirm"
-        body={
-          new Date(fromDate).toDateString() == new Date(toDate).toDateString()
-            ? `'${listing.name}' rental during ${dateConverter(
-                fromDate
-              )} for $${moneyFormat(price)} per day`
-            : `'${listing.name}' rental from ${dateConverter(
-                fromDate
-              )} to ${dateConverter(toDate)} for $${moneyFormat(price)} per day`
-        }
-      />
-    </>
   );
 };
 

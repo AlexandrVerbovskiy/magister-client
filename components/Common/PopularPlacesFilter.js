@@ -74,7 +74,7 @@ const PopularPlacesFilter = ({
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
-      handleSubmit();
+      document.querySelector("#searchForm button[type='submit']").click();
     }
   };
 
@@ -95,7 +95,7 @@ const PopularPlacesFilter = ({
       <div className="page-title-bg">
         <div className="container">
           <h2>What would you like to rent?</h2>
-          <form onSubmit={handleSubmit}>
+          <form id="searchForm" onSubmit={handleSubmit}>
             <div className="row m-0 align-items-center">
               <div className="col-lg-4 col-md-12 p-0">
                 <div className="form-group">

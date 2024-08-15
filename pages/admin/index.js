@@ -15,6 +15,7 @@ import TransactionAnalyticsTable from "../../components/admin/Charts/Transaction
 import DashboardDoughnutChart from "../../components/admin/Charts/DashboardDoughnutChart";
 import { IndiceContext } from "../../contexts";
 import { baseTimeTypePageParams } from "../../utils";
+import STATIC from "../../static";
 
 const AdminIndex = (props) => {
   const router = useRouter();
@@ -186,7 +187,7 @@ const AdminIndex = (props) => {
               </div>
               <div className="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <TransactionAnalyticsTable
-                  title="Total amount ($) by type of payment"
+                  title={`Total amount (${STATIC.CURRENCY}) by type of payment`}
                   data={statistic.transactionsDetailInfo}
                 />
               </div>

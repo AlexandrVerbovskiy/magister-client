@@ -10,6 +10,7 @@ import { baseTimeTypePageParams } from "../../utils";
 import { useRouter } from "next/router";
 import TransactionAnalyticsTable from "../../components/Charts/TransactionAnalyticsTable";
 import DashboardDoughnutChart from "../../components/Charts/DashboardDoughnutChart";
+import STATIC from "../../static";
 
 const Dashboard = (props) => {
   const router = useRouter();
@@ -162,7 +163,7 @@ const Dashboard = (props) => {
 
           <div className="col-12 col-sm-6">
             <TransactionAnalyticsTable
-              title="Total amount ($) by type of payment"
+              title={`Total amount (${STATIC.CURRENCY}) by type of payment`}
               data={statistic.transactionsDetailInfo}
             />
           </div>

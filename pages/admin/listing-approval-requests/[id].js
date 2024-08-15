@@ -311,41 +311,6 @@ const ListingApprovalRequest = (baseProps) => {
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Listing Background Photo
-                      </h2>
-
-                      <div className="flex w-full gap-2">
-                        <div className="w-full">
-                          {listing.backgroundPhoto ? (
-                            <div
-                              className="invoice-btn-box gallery-flex form-group bg-gray-100"
-                              style={{ height: "400px" }}
-                            >
-                              <img
-                                src={getFilePath(listing.backgroundPhoto)}
-                                style={{
-                                  height: "100%",
-                                  width: "100%",
-                                  objectFit: "contain",
-                                }}
-                              />
-                            </div>
-                          ) : (
-                            <div
-                              className="gallery-flex form-group bg-gray-100"
-                              style={{ height: "400px" }}
-                            >
-                              <div className="add-more-image">
-                                No background photo
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                         Item Description
                       </h2>
 

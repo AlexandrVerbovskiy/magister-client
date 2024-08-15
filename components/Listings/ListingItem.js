@@ -11,6 +11,7 @@ import StarRating from "../StarRating";
 import { changeListingFavorite } from "../../services";
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
+import STATIC from "../../static";
 
 const ListingItem = ({ listing: prevListing, hovered = false }) => {
   const [listing, setListing] = useState({ ...prevListing });
@@ -140,7 +141,11 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           />
 
           <div className="price">
-            Per Day <span>${moneyFormat(listing.pricePerDay)}</span>
+            Per Day{" "}
+            <span>
+              {STATIC.CURRENCY}
+              {moneyFormat(listing.pricePerDay)}
+            </span>
           </div>
         </div>
       </div>

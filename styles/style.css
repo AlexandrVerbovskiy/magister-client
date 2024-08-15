@@ -250,7 +250,6 @@ p:last-child {
   border: none;
   text-align: center;
   border: 1px solid var(--mainColorBorder);
-  box-shadow: 4px 4px var(--mainColorShadow);
   background-color: var(--whiteColor);
   color: var(--blackColor);
   font-size: var(--fontSize);
@@ -262,8 +261,8 @@ p:last-child {
 }
 .default-btn:hover {
   border-color: var(--mainColor);
-  box-shadow: 4px 4px var(--mainColor);
-  color: var(--blackColor);
+  background-color:var(--mainColor);
+  color: var(--whiteColor);
 }
 
 /*form-control*/
@@ -4702,7 +4701,6 @@ Listings Details Area CSS
   color: var(--optionalColor);
   position: relative;
   background-color: #f5f5f5;
-  box-shadow: 5px 5px #dedede;
   transition: var(--transition);
   font-size: 16px;
   font-weight: 600;
@@ -4838,13 +4836,13 @@ Listings Details Area CSS
 }
 
 .default-btn.error-btn {
-  box-shadow: 4px 4px rgb(255, 157, 157);
   border-color: red;
 }
 
 .default-btn.error-btn:hover {
-  box-shadow: 4px 4px red;
   border-color: red;
+  background-color:red;
+  color: var(--whiteColor);
 }
 
 .order_widget .default-btn {
@@ -4857,13 +4855,8 @@ Listings Details Area CSS
   background-color: red;
   color: white;
   border-color: red;
-  box-shadow: 4px 4px rgb(255, 157, 157);
 }
 
-.order_widget .default-btn:hover,
-.listings-details-desc .write-a-review .default-btn:hover {
-  box-shadow: 5px 5px var(--blackColor);
-}
 .listings-details-desc .listings-review-comments {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -4966,7 +4959,6 @@ Listings Details Area CSS
 }
 .listings-details-desc .review-form-wrapper {
   background-color: #f5f5f5;
-  box-shadow: 5px 5px #dedede;
   padding: 30px;
   margin-bottom: 35px;
 }
@@ -5495,9 +5487,7 @@ Listings Details Area CSS
   color: var(--whiteColor);
   border-color: var(--mainColor);
 }
-.listings-sidebar .book_listings .default-btn:hover {
-  box-shadow: 5px 5px var(--blackColor);
-}
+
 .listings-sidebar .book_listings span {
   display: block;
   color: var(--optionalColor);
@@ -8206,12 +8196,10 @@ Manage Your Business Area CSS
 }
 .manage-your-business-content .default-btn {
   margin-top: 10px;
-  box-shadow: 4px 4px var(--mainColor);
   border-color: var(--mainColor);
 }
 .manage-your-business-content .default-btn:hover {
   border-color: var(--blackColor);
-  box-shadow: 4px 4px var(--blackColor);
 }
 
 /*================================================
@@ -8633,7 +8621,6 @@ Page Title Area CSS
   margin: 0;
   position: relative;
   border-right: 1px solid var(--mainColor);
-  margin-left: 12px;
 }
 
 .page-title-bg.map-home-area form {
@@ -8653,6 +8640,7 @@ Page Title Area CSS
   font-size: 23px;
   color: #646464;
   z-index: 2;
+  margin-left: 12px;
 }
 .page-title-bg form .form-group.category-select {
   border-right: none;
@@ -8669,7 +8657,7 @@ Page Title Area CSS
   font-weight: 400;
   padding-top: 2px;
   padding-bottom: 0;
-  padding-left: 30px;
+  padding-left: 42px;
   padding-right: 15px;
 }
 .page-title-bg form .form-group .form-control::-moz-placeholder {
@@ -11526,13 +11514,14 @@ Go Top CSS
 /*================================================
 All Modal CSS
 =================================================*/
-.loginRegisterModal .modal-dialog {
-  max-width: 500px;
+.modal-xxl > .modal-dialog,
+.loginRegisterModal.modal-xxl .modal-dialog {
+  max-width: 800px;
   margin-bottom: 0;
 }
 
-.modal-xxl > .modal-dialog {
-  max-width: 800px;
+.loginRegisterModal .modal-dialog {
+  max-width: 500px;
   margin-bottom: 0;
 }
 
@@ -17760,6 +17749,7 @@ button.button-danger:hover {
   background-color: var(--mainColor);
 }
 
+.listing-request-status.deleted,
 .listing-request-status.unapproved {
   background-color: red;
 }
@@ -18201,22 +18191,9 @@ input:-internal-autofill-selected {
 .flatpickr-day.selected.endRange,
 .flatpickr-day.startRange.endRange,
 .flatpickr-day.endRange.endRange {
-  border-radius: 50% !important;
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
-  background-color: var(--mainColor) !important;
-  color: white !important;
 }
-
-.flatpickr-day.inRange {
-  background-color: var(--mainColor2) !important;
-}
-
-/*.flatpickr-day.today.startRange,
-.flatpickr-day.today.endRange,
-.flatpickr-day.today.inRange {
-  background-color: var(--blackColor) !important;
-}*/
 
 .flatpickr-parent-wrapper {
   display: flex;
@@ -18376,20 +18353,38 @@ input[type="number"] {
   overflow: hidden;
 }
 
+.listings-details-desc .review-form-wrapper form button[type="submit"],
 .default-modal-button {
   background-color: var(--mainColor);
   color: var(--whiteColor);
   border: none;
   font-weight: 600;
   display: block;
-  width: 100%;
-  border-radius: 5px;
-  padding: 14px 30px 13px;
+  padding: 12px 50px; 
   transition: var(--transition);
+  border-radius: 30px;
 }
 
+.listings-details-desc .review-form-wrapper form button[type="submit"]:hover,
 .default-modal-button:hover {
-  background-color: var(--blackColor);
+  background-color: var(--mainColor2);
+  color: var(--optionalColor);
+}
+
+.cancel-modal-button {
+  background-color: var(--mainColor2);
+  border: none;
+  font-weight: 600;
+  display: block;
+  padding: 12px 50px;
+  transition: var(--transition);
+  color: var(--optionalColor);
+  border-radius: 30px;
+}
+
+.cancel-modal-button:hover {
+  background-color: var(--mainColor);
+  color: var(--whiteColor);
 }
 
 .shaked {
@@ -18822,6 +18817,10 @@ input[type="number"] {
   color: #ff5f5f;
 }
 
+.icon-gray {
+  color: var(--optionalColor);
+}
+
 .icon-success {
   color: var(--mainColor);
 }
@@ -18903,21 +18902,25 @@ span.flatpickr-weekday {
 }
 
 .flatpickr-day.inRange,
-.flatpickr-day.selected.startRange,
-.flatpickr-day.startRange.startRange,
 .flatpickr-day.endRange.startRange,
-.flatpickr-day.selected.endRange,
+.flatpickr-day.endRange,
 .flatpickr-day.startRange.endRange,
-.flatpickr-day.endRange.endRange {
+.flatpickr-day.selected.endRange,
+.flatpickr-day.endRange{
+  border-radius: 0 !important;
+  background-color: #594fbf !important;
+  color: var(--whiteColor) !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+}
+
+.flatpickr-day.startRange,
+.flatpickr-day.selected{
   border-radius: 0 !important;
   background-color: #ede7f6 !important;
   color: #212529 !important;
-}
-
-.flatpickr-day.selected.today,
-.flatpickr-day.today {
-  background-color: #594fbf !important;
-  color: var(--whiteColor) !important;
+  font-weight: 600 !important;
+  text-decoration: underline !important;
 }
 
 .flatpickr-parent-wrapper.flatpickr-date-filter {
@@ -18977,6 +18980,8 @@ span.flatpickr-weekday {
   border: 1px solid #e5e5e5;
   padding: 7px;
   background-color: #ffffff;
+  position: relative;
+  cursor: pointer;
 }
 
 .listings_contact_details .date-info-label {
@@ -18991,6 +18996,11 @@ span.flatpickr-weekday {
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+}
+
+.listings_contact_details .date-info-value input {
+  width: 100%;
+  border: 0;
 }
 
 .date-fee-switch {
@@ -19853,4 +19863,13 @@ video::-webkit-media-controls-panel {
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+.total-booking-price{
+  font-size: 18px;
+}
+
+.total-booking-price span{
+  color: var(--mainColor);
+
 }

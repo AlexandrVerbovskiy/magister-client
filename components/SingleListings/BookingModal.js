@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
+  autoMultiEnding,
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
@@ -15,7 +16,6 @@ import {
   separateDate,
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
-import Switch from "../FormComponents/Switch";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../static";
 import YesNoModal from "../_App/YesNoModal";
@@ -183,7 +183,17 @@ const BookingModal = ({
       return;
     }
 
-    setYesNoActive(true);
+    if (fullVersion) {
+      setYesNoActive(true);
+    } else {
+      handleMakeBooking({
+        price,
+        fromDate: separateDate(fromDate),
+        toDate: separateDate(toDate),
+        feeActive,
+        sendingMessage: sendingMessage.trim(),
+      });
+    }
   };
 
   const handleOfferYourPrice = (e) => {
@@ -216,10 +226,11 @@ const BookingModal = ({
   return (
     <>
       <BaseModal
-        className={`scrollable-modal make-order-modal`}
+        className={`scrollable-modal make-order-modal `}
         active={createOrderModalActive}
         closeModal={closeModal}
         hidden={yesNoActive}
+        size="big"
       >
         <span className="sub-title mb-2">
           <span>{title}</span>
@@ -236,35 +247,7 @@ const BookingModal = ({
           <div className="flatpickr-parent-wrapper popup-widget">
             <div ref={calendarContainer}></div>
           </div>
-          <div className="popup-widget order-info-widget">
-            <div className="d-flex align-items-center">
-              Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
-              {!(price != defaultPrice) && (
-                <i
-                  className="bx bx-pencil ms-1"
-                  onClick={handleOfferYourPrice}
-                  style={{ cursor: "pointer" }}
-                ></i>
-              )}
-            </div>
-            {price != defaultPrice && (
-              <div className="d-flex align-items-center">
-                Offered price: ${moneyFormat(price)}{" "}
-                <i
-                  className="bx bx-pencil ms-1"
-                  onClick={handleOfferYourPrice}
-                  style={{ cursor: "pointer" }}
-                ></i>
-              </div>
-            )}
-            {fee && <div>Fee: {fee}%</div>}
-            {!isExtend && minRentalDays > 0 && (
-              <div>Minimal Count Rental Days: {minRentalDays}</div>
-            )}
-            {fee && <div>Price: ${totalPrice}</div>}
-            {fee && <div>Total Fee: ${totalFee}</div>}
-            <div style={{ fontWeight: 700 }}>Total: ${fullTotal}</div>
-          </div>
+
           {calendarError && (
             <div className="form-group">
               <div
@@ -275,21 +258,10 @@ const BookingModal = ({
               </div>
             </div>
           )}
+
           {fullVersion && (
             <>
-              {/*<div className="popup-widget order-info-widget popup-date-fee-switch-widget">
-                <div className="form-group">
-                  <div className="date-fee-switch">
-                    <Switch
-                      title="Fee-free option"
-                      active={feeActive}
-                      onChange={setFeeActive}
-                    />
-                  </div>
-                </div>
-              </div>*/}
-
-              <div className="form-group mb-0">
+              <div className="form-group">
                 <span className="sub-title mb-2">
                   <span>Message the owner</span>
                 </span>
@@ -322,30 +294,60 @@ const BookingModal = ({
               </div>
             </>
           )}
+          <div className="border-top d-flex justify-content-between">
+            <div className="d-flex flex-column mt-4 ">
+              <div>
+                <b>Duration: </b>
+                {getFactOrderDays(fromDate, toDate)}{" "}
+                {autoMultiEnding(getFactOrderDays(fromDate, toDate), "day")}
+              </div>
+              <div className="total-booking-price">
+                <b>
+                  Total:{" "}
+                  <span>
+                    {STATIC.CURRENCY}
+                    {fullTotal}
+                  </span>
+                </b>
+              </div>
+            </div>
 
-          <button
-            className="mt-4 default-modal-button"
-            type="button"
-            onClick={handleSubmit}
-          >
-            Send Request
-          </button>
-          <OfferOwnPrice
-            offerPriceActive={offerPriceActive}
-            setOfferPriceActive={setOfferPriceActive}
-            price={price}
-            setPrice={setPrice}
-          />
+            <div className="d-flex justify-content-end mt-4 align-items-center">
+              <button
+                className="cancel-modal-button"
+                type="button"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+
+              <button
+                className="ms-2 default-modal-button"
+                type="button"
+                onClick={handleSubmit}
+              >
+                Send Request
+              </button>
+            </div>
+          </div>
         </div>
+        <OfferOwnPrice
+          offerPriceActive={offerPriceActive}
+          setOfferPriceActive={setOfferPriceActive}
+          price={price}
+          setPrice={setPrice}
+        />
       </BaseModal>
-      <YesNoModal
-        active={yesNoActive}
-        closeModal={handleCloseYesNoModal}
-        title={yesNoTitle}
-        onAccept={onYesNoAccept}
-        acceptText="Confirm"
-        closeModalClassName={"button-danger"}
-      />
+      {fullVersion && (
+        <YesNoModal
+          active={yesNoActive}
+          closeModal={handleCloseYesNoModal}
+          title={yesNoTitle}
+          onAccept={onYesNoAccept}
+          acceptText="Confirm"
+          closeModalClassName={"button-danger"}
+        />
+      )}
     </>
   );
 };

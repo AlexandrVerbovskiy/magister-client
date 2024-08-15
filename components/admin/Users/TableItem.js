@@ -10,6 +10,8 @@ import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
 import TableUserLink from "../TableUserLink";
+import STATIC from "../../../static";
+import { useRouter } from "next/router";
 
 const ActiveSpan = ({ active, onClick, clickable = true }) => {
   const text = active ? "Active" : "Suspended";
@@ -18,6 +20,42 @@ const ActiveSpan = ({ active, onClick, clickable = true }) => {
     : "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
 
   if (clickable) dopClass += " cursor-pointer";
+
+  return (
+    <div
+      onClick={onClick}
+      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1 overflow-separate`}
+    >
+      {text}
+    </div>
+  );
+};
+
+const VerifiedSpan = ({
+  verified,
+  inProcess = false,
+  onClick,
+  clickable = true,
+}) => {
+  let text = "Verified";
+  let dopClass =
+    "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
+
+  if (!verified && !inProcess) {
+    text = "Unverified";
+    dopClass =
+      "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+  }
+
+  if (inProcess) {
+    text = "In progress";
+    dopClass =
+      "bg-gray-100 dark:bg-gray-500/30 text-gray-500 dark:text-gray-400";
+  }
+
+  if (clickable) {
+    dopClass += " cursor-pointer";
+  }
 
   return (
     <div
@@ -104,7 +142,10 @@ const TableItem = ({
   tenantCommentCount,
   tenantDisputesCount,
   ownerDisputesCount,
+  verifyRequestId,
+  verifyRequestHasResponse,
 }) => {
+  const router = useRouter();
   const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [rolePopupActive, setRolePopupActive] = useState(false);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -133,7 +174,14 @@ const TableItem = ({
   };
 
   const handleChangeVerified = () => {
-    if (isCurrent || role === "admin") return;
+    if (verifyRequestId && !verifyRequestHasResponse) {
+      return router.push(`/admin/users/documents/${id}/`);
+    }
+
+    if (isCurrent || role === "admin") {
+      return;
+    }
+
     onChangeVerified();
   };
 
@@ -157,7 +205,8 @@ const TableItem = ({
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <div className="font-medium text-green-600">
-            ${moneyFormat(totalSpent ?? 0)}
+            {STATIC.CURRENCY}
+            {moneyFormat(totalSpent ?? 0)}
           </div>
         </td>
 
@@ -313,10 +362,14 @@ const TableItem = ({
                   </div>
                 </td>
                 <td className="px-2 py-3 border-r">
-                  <ActiveSpan
+                  <VerifiedSpan
                     active={verified}
                     onClick={handleChangeVerified}
-                    clickable={!isCurrent && role !== "admin"}
+                    clickable={
+                      (!isCurrent && role !== "admin") ||
+                      (verifyRequestId && !verifyRequestHasResponse)
+                    }
+                    inProcess={verifyRequestId && !verifyRequestHasResponse}
                   />
                 </td>
               </tr>
