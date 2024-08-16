@@ -18,6 +18,7 @@ import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView"
 import RejectModal from "../../../components/admin/ListingApprovalRequests/RejectModal";
 import ApproveModal from "../../../components/admin/ListingApprovalRequests/ApproveModal";
 import { useIdPage } from "../../../hooks";
+import STATIC from "../../../static";
 
 const ListingApprovalRequest = (baseProps) => {
   const { props } = useIdPage({
@@ -177,7 +178,7 @@ const ListingApprovalRequest = (baseProps) => {
                             <InputView
                               value={listing.pricePerDay}
                               name="pricePerDay"
-                              label="Rental price per day"
+                              label={`Rental price per day, ${STATIC.CURRENCY}`}
                               placeholder="12.00"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -186,7 +187,7 @@ const ListingApprovalRequest = (baseProps) => {
 
                           <div className="w-full sm:w-1/2">
                             <InputView
-                              label="Item value"
+                              label={`Item value, ${STATIC.CURRENCY}`}
                               name="compensationCost"
                               placeholder="532.00"
                               labelClassName="block text-sm font-medium mb-1"

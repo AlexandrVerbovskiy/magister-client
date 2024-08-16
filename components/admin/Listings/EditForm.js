@@ -71,6 +71,7 @@ const CategorySection = ({
   isOtherCategory,
   categoryError,
   handleChangeCategory,
+  otherCategoryParentId,
 }) => (
   <div className="w-full sm:w-1/2">
     <label className="block text-sm font-medium mb-1" htmlFor="role">
@@ -81,6 +82,7 @@ const CategorySection = ({
       selectedCategoryId={category}
       categoryError={isOtherCategory ? null : categoryError}
       handleChangeCategory={handleChangeCategory}
+      otherCategoryParentId={otherCategoryParentId}
     />
   </div>
 );
@@ -165,6 +167,7 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [category, setCategory] = useState(baseCategoryId);
   const [otherCategory, setOtherCategory] = useState("");
+  const [otherCategoryParentId, setOtherCategoryParentId] = useState(null);
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
@@ -262,16 +265,18 @@ const EditForm = ({ listing, categories, save }) => {
     }, 100);
   };
 
-  const handleChangeOtherCategory = (e) => {
-    setOtherCategory(e.target.value);
-    setCategoryError(null);
-    setMainError(null);
-  };
-
-  const handleChangeCategory = (newCategoryId) => {
+  const handleChangeCategory = (
+    newCategoryId,
+    newOtherCategoryParentId = null
+  ) => {
     setCategory(newCategoryId);
     setIsOtherCategory(newCategoryId == "-");
+    setOtherCategoryParentId(newOtherCategoryParentId);
     setCategoryError(null);
+
+    if (newOtherCategoryParentId != otherCategoryParentId) {
+      setOtherCategory("");
+    }
   };
 
   useEffect(() => {
@@ -302,6 +307,7 @@ const EditForm = ({ listing, categories, save }) => {
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);
     setOtherCategory(data.otherCategory);
+    setOtherCategoryParentId(data.otherCategoryParentId);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -352,6 +358,7 @@ const EditForm = ({ listing, categories, save }) => {
       address: prevListing.address ?? "",
       active: prevListing.active ?? true,
       otherCategory: prevListing.otherCategory ?? "",
+      otherCategoryParentId: listing.otherCategoryParentId ?? null,
     };
 
     if (categoryId) {
@@ -392,6 +399,7 @@ const EditForm = ({ listing, categories, save }) => {
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
+      dataToSave["otherCategoryParentId"] = otherCategoryParentId;
     } else {
       dataToSave["categoryId"] = category;
     }
@@ -648,6 +656,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 isOtherCategory={isOtherCategory}
                                 categoryError={categoryError}
                                 handleChangeCategory={handleChangeCategory}
+                                otherCategoryParentId={otherCategoryParentId}
                               />
                             )}
                           </div>
@@ -659,7 +668,8 @@ const EditForm = ({ listing, categories, save }) => {
                                 category={category}
                                 isOtherCategory={isOtherCategory}
                                 categoryError={categoryError}
-                                handleChangeCategory={handleChangeOtherCategory}
+                                handleChangeCategory={handleChangeCategory}
+                                otherCategoryParentId={otherCategoryParentId}
                               />
                               <OtherCategorySection
                                 otherCategory={otherCategory}
@@ -686,7 +696,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 setValue={setPricePerDay}
                                 error={pricePerDayError}
                                 setError={setPricePerDayError}
-                                label="Rental price per day"
+                                label={`Rental price per day, ${STATIC.CURRENCY}`}
                                 placeholder="12.00"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
@@ -696,7 +706,7 @@ const EditForm = ({ listing, categories, save }) => {
                             <div className="w-full sm:w-1/2">
                               <Input
                                 name="compensationCost"
-                                label="Item value"
+                                label={`Item value ${STATIC.CURRENCY}`}
                                 placeholder="532.00"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={compensationCost}
