@@ -30,7 +30,11 @@ const CategorySelect = ({
             src={getFilePath(selectedCategoryInfo.image)}
           />
         )}
-        <span>{selectedCategoryInfo.name ?? ""}</span>
+        {selectedCategoryInfo.name ? (
+          <span>{selectedCategoryInfo.name}</span>
+        ) : (
+          <span className="text-slate-400">Select Category</span>
+        )}
       </div>
 
       <ErrorSpan error={categoryError} />

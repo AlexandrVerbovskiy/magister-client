@@ -34,7 +34,7 @@ const CategorySelect = ({
               />
             )}
             <span className="overflow-separate">
-              {selectedCategoryInfo.name ?? ""}
+              {selectedCategoryInfo.name??""}
             </span>
           </>
         ) : (
