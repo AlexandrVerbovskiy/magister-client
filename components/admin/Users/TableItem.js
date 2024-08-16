@@ -363,7 +363,7 @@ const TableItem = ({
                 </td>
                 <td className="px-2 py-3 border-r">
                   <VerifiedSpan
-                    active={verified}
+                    verified={verified}
                     onClick={handleChangeVerified}
                     clickable={
                       (!isCurrent && role !== "admin") ||
