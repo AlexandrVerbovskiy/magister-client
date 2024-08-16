@@ -8,8 +8,8 @@ const DocumentVerificationSection = ({ verifiedInfo }) => {
   let verifiedText = "Profile verified";
   let verifyIconClass = "bx bx-check-circle icon-success";
 
-  if (sessionUser?.verified) {
-    if (verifiedInfo.id && !verifiedInfo.hasResponse) {
+  if (!sessionUser?.verified) {
+    if (verifiedInfo?.id && !verifiedInfo?.hasResponse) {
       verifiedText = "Verification in progress";
       verifyIconClass = "bx bx-time icon-success";
     } else {
