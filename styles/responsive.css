@@ -4276,11 +4276,11 @@
 
 @media only screen and (max-width: 575.9px) {
   .how-it-works-box-wrapper:not(:first-of-type) {
-    margin-right: 0;
+    padding-right: 0;
   }
 
   .how-it-works-box-wrapper:not(:last-of-type) {
-    margin-left: 0;
+    padding-left: 0;
   }
 
   .how-it-works-section .default-btn {
