@@ -4,8 +4,10 @@ const MainUserReviewPart = ({
   stars,
   handleChangeStars,
   description,
+  descriptionError,
   handleDescriptionChange,
 }) => {
+  console.log(descriptionError);
   return (
     <>
       <div className="col-lg-12 col-md-12">
@@ -93,6 +95,14 @@ const MainUserReviewPart = ({
             onInput={handleDescriptionChange}
           ></textarea>
         </div>
+
+        {descriptionError && (
+          <div className="w-full form-group mb-0">
+            <div className="is-invalid" style={{ marginTop: "-15px" }}>
+              <ErrorSpan error={descriptionError} />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

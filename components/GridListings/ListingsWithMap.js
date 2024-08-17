@@ -172,14 +172,35 @@ const ListingsWithMap = ({
     return router.query.distance ?? null;
   };
 
+  const initOthersCategories = () => {
+    const pagePropsOthersCategories = pageProps.options?.othersCategories;
+    if (pagePropsOthersCategories)
+      return cloneObject(pagePropsOthersCategories);
+
+    const routerOthersCategories = router.query.othersCategories;
+
+    if (routerOthersCategories) {
+      if (typeof routerOthersCategories === "string") {
+        return [routerOthersCategories];
+      } else {
+        return [...routerOthersCategories];
+      }
+    }
+
+    return [];
+  };
+
   const [selectedCategories, setSelectedCategories] = useState(
     initCategories()
   );
 
   const [selectedCities, setSelectedCities] = useState(initCities());
   const [selectedDistance, setSelectedDistance] = useState(initDistance());
-  const [othersCategories, setOthersCategories] = useState(
-    basePageProps.options.othersCategories
+  const [selectedOthersCategories, setSelectedOthersCategories] = useState(
+    initOthersCategories()
+  );
+  const [totalOthersCategories, setTotalOthersCategories] = useState(
+    basePageProps.options.totalOthersCategories
   );
   const [searchCategory, setSearchCategory] = useState(
     basePageProps.options.searchCategory
@@ -201,6 +222,7 @@ const ListingsWithMap = ({
     setSelectedCities(initCities());
     setSelectedCategories(initCategories());
     setSelectedDistance(initDistance());
+    setSelectedOthersCategories(initOthersCategories());
   }, [pageProps.options]);
 
   useEffect(() => setPageProps(basePageProps), [basePageProps]);
@@ -239,9 +261,15 @@ const ListingsWithMap = ({
         hidden: (newValue) => newValue.length == 0,
       },
       othersCategories: {
-        value: othersCategories,
-        hidden: (newValue) => !newValue,
+        value:
+          selectedOthersCategories.length > 0 ? selectedOthersCategories : null,
+        hidden: (newValue) => newValue.length == 0,
         name: "others-categories",
+      },
+      totalOthersCategories: {
+        value: totalOthersCategories,
+        hidden: (newValue) => !newValue,
+        name: "total-others-categories",
       },
       cities: {
         value: selectedCities.length > 0 ? selectedCities : null,
@@ -292,7 +320,7 @@ const ListingsWithMap = ({
   useEffect(() => {
     setSearchCategory(options.searchCategory);
     setSearchCity(options.searchCity);
-    setSearchListing(options.searchListing)
+    setSearchListing(options.searchListing);
   }, [options]);
 
   const { handleChangeFromDate, handleChangeToDate } = useChangeTimeFilter({
@@ -316,9 +344,15 @@ const ListingsWithMap = ({
     rebuild(rebuildProps);
   };
 
-  const handleChangeOthersCategories = (value) => {
-    setOthersCategories(value);
-    rebuild({ othersCategories: value });
+  const handleSelectedOthersCategories = (othersCategories) => {
+    const rebuildProps = { othersCategories };
+    setSelectedOthersCategories(cloneObject(othersCategories));
+    rebuild(rebuildProps);
+  };
+
+  const handleChangeTotalOthersCategories = (value) => {
+    setTotalOthersCategories(value);
+    rebuild({ totalOthersCategories: value });
   };
 
   const handleChangeMinPrice = (value) => {
@@ -501,6 +535,8 @@ const ListingsWithMap = ({
                     setSelectedDistance={handleSelectedDistance}
                     selectedCategories={selectedCategories}
                     setSelectedCategories={handleSelectedCategories}
+                    selectedOthersCategories={selectedOthersCategories}
+                    setSelectedOthersCategories={handleSelectedOthersCategories}
                     categories={categories}
                     cities={cities}
                     distances={distances}
@@ -513,8 +549,8 @@ const ListingsWithMap = ({
                     handleChangePrices={handleChangePrices}
                     minLimitPrice={minLimitPrice}
                     maxLimitPrice={maxLimitPrice}
-                    othersCategories={othersCategories}
-                    setOthersCategories={handleChangeOthersCategories}
+                    totalOthersCategories={totalOthersCategories}
+                    setTotalOthersCategories={handleChangeTotalOthersCategories}
                     favorites={favorites}
                     changeFavorites={handleChangeFavorite}
                   />

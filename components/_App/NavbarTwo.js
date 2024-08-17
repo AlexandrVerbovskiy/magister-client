@@ -18,13 +18,8 @@ import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
 
-const NavbarTwo = ({ canShowSearch = false }) => {
-  const {
-    isAuth,
-    success: mainSuccess,
-    isSupport,
-    onLogin,
-  } = useContext(IndiceContext);
+const NavbarTwo = () => {
+  const { isAuth, isSupport } = useContext(IndiceContext);
 
   const {
     navbarCategories,
@@ -38,13 +33,7 @@ const NavbarTwo = ({ canShowSearch = false }) => {
   const smallCategoryFilterRef = useRef(null);
   const [signOutModalActive, setSignOutModalActive] = useState(false);
 
-  const {
-    categoryTipsPopupActive,
-    categoryTips,
-    openCategoryTipsPopup,
-    closeCategoryTipsPopup,
-    updateCategoryTips,
-  } = useSearchCategory();
+  const { updateCategoryTips } = useSearchCategory();
 
   const [searchCategory, setSearchCategory] = useState("");
 

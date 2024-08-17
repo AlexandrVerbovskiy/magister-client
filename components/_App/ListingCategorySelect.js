@@ -53,19 +53,33 @@ const ListingCategorySelect = ({
   setActive,
   categories,
   onChange,
+  otherCategoryParentId = null,
   setSelectedCategoryInfo = () => {},
   selectedCategoryId = null,
   needAll = false,
 }) => {
+  const [selectedByLevels, setSelectedByLevels] = useState({
+    firstLevel: null,
+    secondLevel: null,
+    thirdLevel: null,
+  });
+
   useEffect(() => {
     let foundCategory = {};
     let searchId = selectedCategoryId;
 
     Object.keys(categories).forEach((level) => {
       const resSearch =
-        categories[level].filter(
-          (category) => category.id == selectedCategoryId
-        )[0] ?? null;
+        categories[level].filter((category) => {
+          if (selectedCategoryId == "-") {
+            return (
+              category.parentId == otherCategoryParentId &&
+              category.id == selectedCategoryId
+            );
+          } else {
+            return category.id == selectedCategoryId;
+          }
+        })[0] ?? null;
 
       if (resSearch) {
         foundCategory = resSearch;
@@ -75,13 +89,17 @@ const ListingCategorySelect = ({
     setSelectedCategoryInfo(foundCategory);
 
     do {
-      const needId = searchId;
-      searchId = null;
-
       Object.keys(categories).forEach((level) => {
-        const foundCategory = categories[level].filter(
-          (category) => category.id == needId
-        )[0];
+        const foundCategory = categories[level].filter((category) => {
+          if (searchId == "-") {
+            return (
+              category.parentId == otherCategoryParentId &&
+              category.id == searchId
+            );
+          } else {
+            return category.id == searchId;
+          }
+        })[0];
 
         if (foundCategory) {
           searchId = foundCategory.parentId;
@@ -96,19 +114,18 @@ const ListingCategorySelect = ({
     } while (searchId);
   }, [selectedCategoryId]);
 
-  const [selectedByLevels, setSelectedByLevels] = useState({
-    firstLevel: null,
-    secondLevel: null,
-    thirdLevel: null,
-  });
-
-  const handleOptionClick = (categoryId, level, hasChild = false) => {
+  const handleOptionClick = (
+    categoryId,
+    level,
+    hasChild = false,
+    parentId = null
+  ) => {
     if (
       !hasChild ||
       (!categoryId &&
         (level == "firstLevel" || !selectedByLevels["firstLevel"]))
     ) {
-      onChange(categoryId);
+      onChange(categoryId, parentId);
       setActive(false);
       setSelectedByLevels({
         firstLevel: null,
@@ -166,7 +183,9 @@ const ListingCategorySelect = ({
             <CategoryOption
               key="all"
               category={{ image: null, name: "All" }}
-              onClick={() => handleOptionClick(null, "firstLevel", false)}
+              onClick={() =>
+                handleOptionClick(null, "firstLevel", false, category.parentId)
+              }
               active={false}
               Icon={BurgerIcon}
             />
@@ -180,7 +199,8 @@ const ListingCategorySelect = ({
                 handleOptionClick(
                   category.id,
                   "firstLevel",
-                  !!category.countChildren
+                  !!category.countChildren,
+                  category.parentId
                 )
               }
               active={category.id == selectedByLevels["firstLevel"]}
@@ -194,7 +214,14 @@ const ListingCategorySelect = ({
               <CategoryOption
                 key="all"
                 category={{ image: null, name: "All" }}
-                onClick={() => handleOptionClick(null, "secondLevel", false)}
+                onClick={() =>
+                  handleOptionClick(
+                    null,
+                    "secondLevel",
+                    false,
+                    category.parentId
+                  )
+                }
                 active={false}
                 Icon={BurgerIcon}
               />
@@ -213,7 +240,8 @@ const ListingCategorySelect = ({
                     handleOptionClick(
                       category.id,
                       "secondLevel",
-                      !!category.countChildren
+                      !!category.countChildren,
+                      category.parentId
                     )
                   }
                   active={category.id == selectedByLevels["secondLevel"]}
@@ -228,7 +256,14 @@ const ListingCategorySelect = ({
               <CategoryOption
                 key="all"
                 category={{ image: null, name: "All" }}
-                onClick={() => handleOptionClick(null, "thirdLevel", false)}
+                onClick={() =>
+                  handleOptionClick(
+                    null,
+                    "thirdLevel",
+                    false,
+                    category.parentId
+                  )
+                }
                 active={false}
                 Icon={BurgerIcon}
               />
@@ -243,7 +278,12 @@ const ListingCategorySelect = ({
                 <CategoryOption
                   key={category.id}
                   onClick={() =>
-                    handleOptionClick(category.id, "thirdLevel", false)
+                    handleOptionClick(
+                      category.id,
+                      "thirdLevel",
+                      false,
+                      category.parentId
+                    )
                   }
                   active={category.id == selectedByLevels["thirdLevel"]}
                   category={category}

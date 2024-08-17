@@ -1,4 +1,5 @@
 import cloneObject from "./cloneObject";
+import { initOthersCategory } from "./helpers";
 
 const convertToSelectPopupCategories = (categories, needOthers = false) => {
   const newCategories = cloneObject(categories);
@@ -29,15 +30,20 @@ const convertToSelectPopupCategories = (categories, needOthers = false) => {
   newCategories["thirdLevel"].sort((a, b) => b.countChildren - a.countChildren);
 
   if (needOthers) {
-    newCategories["firstLevel"].push({
-      countChildren: 0,
-      id: "-",
-      image: null,
-      level: 1,
-      name: "Others",
-      orderIndex: null,
-      parentId: null,
-      popular: false,
+    newCategories["firstLevel"].push(initOthersCategory());
+    newCategories["firstLevel"].forEach((firstLevelCategory) => {
+      if (!firstLevelCategory.isOther && firstLevelCategory.countChildren) {
+        newCategories["secondLevel"].push(
+          initOthersCategory({ level: 2, parentId: firstLevelCategory.id })
+        );
+      }
+    });
+    newCategories["secondLevel"].forEach((secondLevelCategory) => {
+      if (!secondLevelCategory.isOther && secondLevelCategory.countChildren) {
+        newCategories["thirdLevel"].push(
+          initOthersCategory({ level: 3, parentId: secondLevelCategory.id })
+        );
+      }
     });
   }
 

@@ -32,8 +32,6 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
-import ErrorSpan from "../ErrorSpan";
-import { useDropzone } from "react-dropzone";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -104,6 +102,7 @@ const EditForm = ({
 
   const [category, setCategory] = useState(null);
   const [otherCategory, setOtherCategory] = useState("");
+  const [otherCategoryParentId, setOtherCategoryParentId] = useState(null);
   const [isOtherCategory, setIsOtherCategory] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
@@ -237,11 +236,19 @@ const EditForm = ({
     }
   };
 
-  const handleChangeCategory = (categoryId) => {
+  const handleChangeCategory = (
+    categoryId,
+    newOtherCategoryParentId = null
+  ) => {
     setCategory(categoryId);
     setIsOtherCategory(categoryId == "-");
+    setOtherCategoryParentId(newOtherCategoryParentId);
     setCategoryError(null);
     setMainError(null);
+
+    if (newOtherCategoryParentId != otherCategoryParentId) {
+      setOtherCategory("");
+    }
   };
 
   const handleChangeDescription = (e) => {
@@ -337,6 +344,7 @@ const EditForm = ({
       listingImages,
       active: listing.active ?? true,
       otherCategory: listing.otherCategory ?? "",
+      otherCategoryParentId: listing.otherCategoryParentId ?? null,
     };
 
     if (categoryId) {
@@ -375,6 +383,7 @@ const EditForm = ({
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
+      dataToSave["otherCategoryParentId"] = otherCategoryParentId;
     } else {
       dataToSave["categoryId"] = category;
     }
@@ -406,6 +415,7 @@ const EditForm = ({
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);
     setOtherCategory(data.otherCategory);
+    setOtherCategoryParentId(data.otherCategoryParentId);
 
     const adaptedImages = data.listingImages.map((image) => ({
       ...image,
@@ -723,6 +733,7 @@ const EditForm = ({
                   selectedCategoryId={category}
                   categoryError={isOtherCategory ? null : categoryError}
                   handleChangeCategory={handleChangeCategory}
+                  otherCategoryParentId={otherCategoryParentId}
                 />
               </ErrorIconWrapper>
             </div>
@@ -748,7 +759,7 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label="Rental price per day:"
+                label={`Rental price per day, ${STATIC.CURRENCY}:`}
                 icon="bx bx-purchase-tag"
                 placeholder="12.00"
                 value={pricePerDay}
@@ -759,7 +770,7 @@ const EditForm = ({
             </div>
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label="Item value:"
+                label={`Item value, ${STATIC.CURRENCY}:`}
                 icon="bx bx-purchase-tag"
                 placeholder="532.00"
                 value={compensationCost}

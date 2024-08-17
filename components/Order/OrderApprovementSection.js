@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { getFactOrderDays, validateBigText } from "../../utils";
+import { getDaysDifference, getFactOrderDays, validateBigText } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
