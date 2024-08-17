@@ -96,7 +96,7 @@ const Destinations = ({ bgColor = "", bgImage = "" }) => {
 
           <div className="row">
             {campaigns.map((campaign) => (
-              <DestinationItem {...campaign} />
+              <DestinationItem key={campaign.id} {...campaign} />
             ))}
           </div>
         </div>

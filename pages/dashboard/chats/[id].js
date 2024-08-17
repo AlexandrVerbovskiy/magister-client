@@ -2,7 +2,6 @@ import BaseChat from "../../../components/Chat";
 import useChat from "../../../hooks/useChat";
 import { authSideProps } from "../../../middlewares";
 import { getUserChatOptions } from "../../../services";
-import STATIC from "../../../static";
 
 const Chat = (props) => {
   const chatProps = useChat(props);

@@ -31,9 +31,16 @@ const ListingCategorySelectPopup = ({
   setActive,
   categories,
   onChange,
+  otherCategoryParentId,
   setSelectedCategoryInfo = () => {},
   selectedCategoryId = null,
 }) => {
+  const [selectedByLevels, setSelectedByLevels] = useState({
+    firstLevel: null,
+    secondLevel: null,
+    thirdLevel: null,
+  });
+
   useEffect(() => {
     let foundCategory = {};
     let searchId = selectedCategoryId;
@@ -52,13 +59,17 @@ const ListingCategorySelectPopup = ({
     setSelectedCategoryInfo(foundCategory);
 
     do {
-      const needId = searchId;
-      searchId = null;
-
       Object.keys(categories).forEach((level) => {
-        const foundCategory = categories[level].filter(
-          (category) => category.id == needId
-        )[0];
+        const foundCategory = categories[level].filter((category) => {
+          if (searchId == "-") {
+            return (
+              category.parentId == otherCategoryParentId &&
+              category.id == searchId
+            );
+          } else {
+            return category.id == searchId;
+          }
+        })[0];
 
         if (foundCategory) {
           searchId = foundCategory.parentId;
@@ -73,15 +84,14 @@ const ListingCategorySelectPopup = ({
     } while (searchId);
   }, [selectedCategoryId]);
 
-  const [selectedByLevels, setSelectedByLevels] = useState({
-    firstLevel: null,
-    secondLevel: null,
-    thirdLevel: null,
-  });
-
-  const handleOptionClick = (categoryId, level, hasChild = false) => {
+  const handleOptionClick = (
+    categoryId,
+    level,
+    hasChild = false,
+    parentId = null
+  ) => {
     if (!hasChild) {
-      onChange(categoryId);
+      onChange(categoryId, parentId);
       setActive(false);
       setSelectedByLevels({
         firstLevel: null,
@@ -114,7 +124,7 @@ const ListingCategorySelectPopup = ({
       setModalOpen={setActive}
     >
       <div className="category-select-modal">
-        <div className="flex w-100" style={{height: "max-content"}}>
+        <div className="flex w-100" style={{ height: "max-content" }}>
           <div className="categories-select-level-column sidebar-left">
             {categories["firstLevel"].map((category) => (
               <CategoryOption
@@ -124,7 +134,8 @@ const ListingCategorySelectPopup = ({
                   handleOptionClick(
                     category.id,
                     "firstLevel",
-                    !!category.countChildren
+                    !!category.countChildren,
+                    category.parentId
                   )
                 }
                 active={category.id == selectedByLevels["firstLevel"]}
@@ -147,7 +158,8 @@ const ListingCategorySelectPopup = ({
                       handleOptionClick(
                         category.id,
                         "secondLevel",
-                        !!category.countChildren
+                        !!category.countChildren,
+                        category.parentId
                       )
                     }
                     active={category.id == selectedByLevels["secondLevel"]}
@@ -167,7 +179,12 @@ const ListingCategorySelectPopup = ({
                   <CategoryOption
                     key={category.id}
                     onClick={() =>
-                      handleOptionClick(category.id, "thirdLevel", false)
+                      handleOptionClick(
+                        category.id,
+                        "thirdLevel",
+                        false,
+                        category.parentId
+                      )
                     }
                     active={category.id == selectedByLevels["thirdLevel"]}
                     category={category}

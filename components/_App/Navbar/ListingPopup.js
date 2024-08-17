@@ -155,6 +155,14 @@ const ListingPopup = ({ active, setActive, categories }) => {
       )}`
     : secondAllLink;
 
+  const secondLevelCategories = categories["secondLevel"]
+    .filter((category) => category.parentId == selectedFirstCategory)
+    .sort((a, b) => a.orderIndex - b.orderIndex);
+
+  const thirdLevelCategories = categories["thirdLevel"]
+    .filter((category) => category.parentId == selectedSecondCategory)
+    .sort((a, b) => a.orderIndex - b.orderIndex);
+
   return (
     <BaseModal
       className="category-select-modal category-navbar-popup"
@@ -200,7 +208,7 @@ const ListingPopup = ({ active, setActive, categories }) => {
             key="-"
             category={{ image: null, name: "Others" }}
             active={false}
-            href="/listings/?others-categories=true"
+            href="/listings/?total-others-categories=true"
           />
         </div>
 
@@ -213,30 +221,37 @@ const ListingPopup = ({ active, setActive, categories }) => {
             onClick={() => setActive(false)}
           />
 
-          {categories["secondLevel"]
-            .filter((category) => category.parentId == selectedFirstCategory)
-            .sort((a, b) => a.orderIndex - b.orderIndex)
-            .map((category) => (
-              <CategoryOption
-                key={category.id}
-                category={category}
-                active={selectedSecondCategory == category.id}
-                href={
-                  category.countChildren
-                    ? null
-                    : `/listings/?categories=${encodeURIComponent(
-                        category.name
-                      )}`
+          {secondLevelCategories.map((category) => (
+            <CategoryOption
+              key={category.id}
+              category={category}
+              active={selectedSecondCategory == category.id}
+              href={
+                category.countChildren
+                  ? null
+                  : `/listings/?categories=${encodeURIComponent(category.name)}`
+              }
+              onClick={() => {
+                if (category.countChildren) {
+                  handleClickSecondCategory(category.id);
+                } else {
+                  setActive(false);
                 }
-                onClick={() => {
-                  if (category.countChildren) {
-                    handleClickSecondCategory(category.id);
-                  } else {
-                    setActive(false);
-                  }
-                }}
-              />
-            ))}
+              }}
+            />
+          ))}
+
+          {firstSelectedCategoryInfo && secondLevelCategories.length > 0 && (
+            <CategoryOption
+              key="-"
+              category={{ image: null, name: "Others" }}
+              active={false}
+              href={
+                "/listings/?others-categories=" + firstSelectedCategoryInfo.id
+              }
+              onClick={() => setActive(false)}
+            />
+          )}
         </div>
 
         <div className="categories-select-level-column sidebar-left">
@@ -248,19 +263,28 @@ const ListingPopup = ({ active, setActive, categories }) => {
             onClick={() => setActive(false)}
           />
 
-          {categories["thirdLevel"]
-            .filter((category) => category.parentId == selectedSecondCategory)
-            .sort((a, b) => a.orderIndex - b.orderIndex)
-            .map((category) => (
-              <CategoryOption
-                key={category.id}
-                category={category}
-                href={`/listings/?categories=${encodeURIComponent(
-                  category.name
-                )}`}
-                onClick={() => setActive(false)}
-              />
-            ))}
+          {thirdLevelCategories.map((category) => (
+            <CategoryOption
+              key={category.id}
+              category={category}
+              href={`/listings/?categories=${encodeURIComponent(
+                category.name
+              )}`}
+              onClick={() => setActive(false)}
+            />
+          ))}
+
+          {secondSelectedCategoryInfo && thirdLevelCategories.length > 0 && (
+            <CategoryOption
+              key="-"
+              category={{ image: null, name: "Others" }}
+              active={false}
+              href={
+                "/listings/?others-categories=" + secondSelectedCategoryInfo.id
+              }
+              onClick={() => setActive(false)}
+            />
+          )}
         </div>
       </div>
     </BaseModal>

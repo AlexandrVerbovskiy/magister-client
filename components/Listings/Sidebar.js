@@ -9,6 +9,8 @@ const Sidebar = ({
   setSelectedCities,
   selectedCategories,
   setSelectedCategories,
+  selectedOthersCategories,
+  setSelectedOthersCategories,
   selectedDistance,
   setSelectedDistance,
   cities: baseCities,
@@ -22,8 +24,8 @@ const Sidebar = ({
   handleChangePrices,
   minLimitPrice,
   maxLimitPrice,
-  othersCategories,
-  setOthersCategories,
+  totalOthersCategories,
+  setTotalOthersCategories,
   favorites,
   changeFavorites,
 }) => {
@@ -88,9 +90,26 @@ const Sidebar = ({
     setInterval(updateTimeFilterHeight, 250);
   }, []);
 
-  const handleChangeCheckedCategory = (value, id) => {
+  const handleChangeCheckedCategory = (value, id, parentId = null) => {
     if (id === "-") {
-      setOthersCategories(!othersCategories);
+      if (parentId) {
+        let newSelectedOthersCategories = selectedOthersCategories;
+
+        if (newSelectedOthersCategories.includes(parentId)) {
+          newSelectedOthersCategories = newSelectedOthersCategories.filter(
+            (category) => category != parentId
+          );
+        } else {
+          newSelectedOthersCategories = [
+            ...newSelectedOthersCategories,
+            parentId,
+          ];
+        }
+
+        setSelectedOthersCategories(newSelectedOthersCategories);
+      } else {
+        setTotalOthersCategories(!totalOthersCategories);
+      }
     } else {
       let newSelectedCategories = selectedCategories;
       let needRemoveSearch = false;
@@ -144,10 +163,17 @@ const Sidebar = ({
   };
 
   const CategoryLi = ({ category, style = {} }) => {
-    const checked =
-      category.id === "-"
-        ? othersCategories
-        : selectedCategoriesLower.includes(category.name.toLowerCase());
+    let checked = false;
+
+    if (category.id === "-") {
+      if (category.parentId) {
+        checked = selectedOthersCategories.includes(category.parentId);
+      } else {
+        checked = totalOthersCategories;
+      }
+    } else {
+      checked = selectedCategoriesLower.includes(category.name.toLowerCase());
+    }
 
     return (
       <li key={category.name} style={style}>
@@ -156,7 +182,11 @@ const Sidebar = ({
           type="checkbox"
           name={`categories[${category.name}]`}
           onChange={() =>
-            handleChangeCheckedCategory(category.name, category.id)
+            handleChangeCheckedCategory(
+              category.name,
+              category.id,
+              category.parentId
+            )
           }
           checked={checked}
           value={category.name}
@@ -169,18 +199,42 @@ const Sidebar = ({
   const FirstCategoryLevelLi = ({ item }) => (
     <>
       <CategoryLi category={item} />
-      {item.children.map((sCategory) => (
-        <React.Fragment key={sCategory.name}>
-          <CategoryLi style={{ paddingLeft: "25px" }} category={sCategory} />
-          {sCategory.children.map((tCategory) => (
-            <CategoryLi
-              style={{ paddingLeft: "50px" }}
-              category={tCategory}
-              key={tCategory.name}
-            />
+      {item.children.length > 0 && (
+        <>
+          {item.children.map((sCategory) => (
+            <React.Fragment key={sCategory.name}>
+              <CategoryLi
+                style={{ paddingLeft: "25px" }}
+                category={sCategory}
+              />
+
+              {sCategory.children.length > 0 && (
+                <>
+                  {sCategory.children.map((tCategory) => (
+                    <CategoryLi
+                      style={{ paddingLeft: "50px" }}
+                      category={tCategory}
+                      key={tCategory.name}
+                    />
+                  ))}
+                  <CategoryLi
+                    style={{ paddingLeft: "50px" }}
+                    category={{
+                      name: "Others",
+                      id: "-",
+                      parentId: sCategory.id,
+                    }}
+                  />
+                </>
+              )}
+            </React.Fragment>
           ))}
-        </React.Fragment>
-      ))}
+          <CategoryLi
+            style={{ paddingLeft: "25px" }}
+            category={{ name: "Others", id: "-", parentId: item.id }}
+          />
+        </>
+      )}
     </>
   );
 
