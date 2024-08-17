@@ -5,9 +5,9 @@ import { IndiceContext } from "../contexts";
 const VerificateAlert = () => {
   const { sessionUser } = useContext(IndiceContext);
 
-  /*if (sessionUser.verified) {
+  if (sessionUser.verified) {
     return <></>;
-  }*/
+  }
 
   return (
     <div
