@@ -4,12 +4,15 @@ const listingList = (context) => {
   const { categories: baseCategories = [], cities: baseCities = [] } =
     context.query;
 
+  const baseOthersCategories = context.query["others-categories"] ?? [];
+
   const clientIp =
     context.req.headers["x-forwarded-for"] ||
     context.req.connection.remoteAddress;
 
   const categories = [];
   const cities = [];
+  const othersCategories = [];
 
   if (typeof baseCategories == "string") {
     categories.push(baseCategories);
@@ -23,12 +26,20 @@ const listingList = (context) => {
     baseCities.forEach((city) => cities.push(city));
   }
 
+  if (typeof baseOthersCategories == "string") {
+    othersCategories.push(baseOthersCategories);
+  } else {
+    baseOthersCategories.forEach((othersCategory) =>
+      othersCategories.push(othersCategory)
+    );
+  }
+
   const minPrice = context.query["min-price"];
   const maxPrice = context.query["max-price"];
   const searchCity = context.query["search-city"];
   const searchCategory = context.query["search-category"];
   const searchListing = context.query["search-listing"];
-  const othersCategories = !!context.query["others-categories"];
+  const totalOthersCategories = !!context.query["total-others-categories"];
   const distance = context.query["distance"];
   const favorites = context.query["favorites"];
 
@@ -43,9 +54,10 @@ const listingList = (context) => {
     distance,
     minPrice,
     maxPrice,
-    othersCategories,
+    totalOthersCategories,
     searchListing,
-    favorites
+    favorites,
+    othersCategories,
   };
 };
 

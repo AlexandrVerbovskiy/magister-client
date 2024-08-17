@@ -8,6 +8,7 @@ const CategorySelect = ({
   selectedCategoryId,
   categoryError,
   handleChangeCategory,
+  otherCategoryParentId,
 }) => {
   const [active, setActive] = useState(false);
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState({});
@@ -46,6 +47,7 @@ const CategorySelect = ({
         onChange={handleChangeCategory}
         setSelectedCategoryInfo={setSelectedCategoryInfo}
         selectedCategoryId={selectedCategoryId}
+        otherCategoryParentId={otherCategoryParentId}
       />
     </>
   );

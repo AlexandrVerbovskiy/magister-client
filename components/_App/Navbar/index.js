@@ -185,7 +185,9 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
     router.push(link);
   };
 
-  const { handleClick: handleListingClick } = useListingListClick();
+  const { handleClick: handleListingClick } = useListingListClick({
+    link: "/dashboard/listings/add/",
+  });
 
   return (
     <>

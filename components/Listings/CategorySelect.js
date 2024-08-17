@@ -7,6 +7,7 @@ const CategorySelect = ({
   selectedCategoryId,
   handleChangeCategory,
   categoryError,
+  otherCategoryParentId,
 }) => {
   const [active, setActive] = useState(false);
   const [selectedCategoryInfo, setSelectedCategoryInfo] = useState({});
@@ -34,7 +35,7 @@ const CategorySelect = ({
               />
             )}
             <span className="overflow-separate">
-              {selectedCategoryInfo.name??""}
+              {selectedCategoryInfo.name ?? ""}
             </span>
           </>
         ) : (
@@ -55,6 +56,7 @@ const CategorySelect = ({
         categories={categories}
         onChange={handleChangeCategory}
         selectedCategoryId={selectedCategoryId}
+        otherCategoryParentId={otherCategoryParentId}
         setSelectedCategoryInfo={setSelectedCategoryInfo}
       />
     </>

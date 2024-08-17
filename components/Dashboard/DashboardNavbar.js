@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import SignOutModal from "../_App/SignOutModal";
+import VerificateAlert from "../VerificateAlert";
 
 const DashboardNavbar = () => {
   // Add active class
@@ -173,6 +174,8 @@ const DashboardNavbar = () => {
           closeModal={() => setSignOutModalActive(false)}
         />
       )}
+
+      <VerificateAlert />
     </>
   );
 };

@@ -18,10 +18,9 @@ const UserReviewForm = ({
   disabled,
   type,
 }) => {
-  const [error, setError] = useState(null);
+  const [descriptionError, setDescriptionError] = useState(null);
 
   const handleChangeValue = (newValue, key) => {
-    setError(null);
     setStarOptions((prev) =>
       prev.map((option) =>
         option.key == key
@@ -32,12 +31,11 @@ const UserReviewForm = ({
   };
 
   const handleDescriptionChange = (e) => {
-    setError(null);
+    setDescriptionError(null);
     setDescription(e.target.value);
   };
 
   const handleLeaveFeedbackChange = (e) => {
-    setError(null);
     setLeaveFeedback(e.target.value);
   };
 
@@ -51,15 +49,23 @@ const UserReviewForm = ({
       error: option.value ? null : `${option.title} required field!`,
     }));
 
+    let hasError = false;
+
+    if (newStarOptions.find((option) => option.error)) {
+      hasError = true;
+    }
+
     setStarOptions(newStarOptions);
 
     if (description.trim().length < 1) {
-      setError("Review description is required");
-      return;
+      setDescriptionError("Review description is required");
+      hasError = true;
+    } else if (validateBigText(description.trim()) !== true) {
+      setDescriptionError(validateBigText(description.trim()));
+      hasError = true;
     }
 
-    if (validateBigText(description.trim()) !== true) {
-      setError(validateBigText(description.trim()));
+    if (hasError) {
       return;
     }
 
@@ -107,6 +113,7 @@ const UserReviewForm = ({
                     handleChangeStars={handleChangeValue}
                     description={description}
                     handleDescriptionChange={handleDescriptionChange}
+                    descriptionError={descriptionError}
                   />
                 </div>
               </form>
@@ -131,17 +138,6 @@ const UserReviewForm = ({
                       ></textarea>
                     </div>
                   </div>
-
-                  {error && (
-                    <div className="w-full form-group mb-0">
-                      <div
-                        className="is-invalid"
-                        style={{ marginTop: "-25px" }}
-                      >
-                        <ErrorSpan error={error} />
-                      </div>
-                    </div>
-                  )}
 
                   <div
                     className="col-lg-12 col-md-12 d-flex"
