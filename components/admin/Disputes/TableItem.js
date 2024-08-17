@@ -65,12 +65,7 @@ const TableItem = ({
           <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <Link
-            href={`/listings/${listingId}/`}
-            className="flex items-center"
-            onClick={(e) => (isAdmin ? {} : e.preventDefault())}
-            style={isAdmin ? {} : { cursor: "auto" }}
-          >
+          <Link href={`/listings/${listingId}/`} className="flex items-center">
             <img
               className="w-8 h-8 rounded-full mr-1"
               src={fullListingPhotoPath}

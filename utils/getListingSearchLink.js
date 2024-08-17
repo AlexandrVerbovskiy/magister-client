@@ -15,6 +15,7 @@ export const getFullListingSearchLink = ({
     searchLink += `${hasPrev ? "&" : "?"}search-category=${encodeURIComponent(
       searchCategory
     )}`;
+    hasPrev = true;
   }
 
   if (searchListing) {
