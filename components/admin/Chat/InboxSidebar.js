@@ -145,26 +145,44 @@ const InboxSidebar = ({
             )}
 
             {!loading && filter.length < 1 && (
-              <ul className="mb-6">
-                {chats.map((chat) => (
-                  <ChatLi
-                    key={chat.id}
-                    selectedChat={selectedChat}
-                    chat={chat}
-                    handleSelectChat={handleSelectChat}
-                  />
-                ))}
-                <li className="-mx-2">
-                  {canShowMore && (
-                    <div
-                      className="transition text-indigo-400 hover:text-indigo-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
-                      onClick={handleShowMoreClick}
-                    >
-                      Show more
+              <>
+                {chats.length > 0 ? (
+                  <ul className="mb-6">
+                    {chats.map((chat) => (
+                      <ChatLi
+                        key={chat.id}
+                        selectedChat={selectedChat}
+                        chat={chat}
+                        handleSelectChat={handleSelectChat}
+                      />
+                    ))}
+                    <li className="-mx-2">
+                      {canShowMore && (
+                        <div
+                          className="transition text-indigo-400 hover:text-indigo-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
+                          onClick={handleShowMoreClick}
+                        >
+                          Show more
+                        </div>
+                      )}
+                    </li>
+                  </ul>
+                ) : (
+                  <div
+                    className="flex items-center justify-center w-full"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translate(0, -50%)",
+                      marginLeft:"-1.25rem"
+                    }}
+                  >
+                    <div className="text-center w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">
+                      No chat has been created yet
                     </div>
-                  )}
-                </li>
-              </ul>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -4385,7 +4385,7 @@
     padding-top: 178px;
   }
 
-  body:has(.sidemenu-body) .sidemenu-body {
+  body:has(.verification-alert) .sidemenu-body {
     padding-top: 0;
   }
 
