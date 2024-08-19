@@ -51,8 +51,8 @@ const useCreateDispute = ({ order = null }) => {
         id: order.listingId,
         listingImages: order.images ?? order.listingImages,
         name: order.listingName,
-        averageRating: order.listingAverageRating,
-        commentCount: order.listingCommentCount,
+        ownerAverageRating: order.ownerAverageRating,
+        ownerCommentCount: order.ownerCommentCount,
       });
     } else {
       setOpponentName("");

@@ -1,11 +1,6 @@
 import { initAxios } from "../utils";
 const { get, post } = initAxios("/comments");
 
-export const getListingCommentList = async (params, authToken = null) => {
-  const data = await post(`/listing-list`, params, authToken);
-  return data.body;
-};
-
 export const getOwnerCommentList = async (params, authToken = null) => {
   const data = await post(`/owner-list`, params, authToken);
   return data.body;
@@ -16,11 +11,6 @@ export const getTenantCommentList = async (params, authToken = null) => {
   return data.body;
 };
 
-export const listingCommentApprove = async ({ id }, authToken = null) => {
-  const data = await post(`/listing-approve`, { id }, authToken);
-  return data.body;
-};
-
 export const ownerCommentApprove = async ({ id }, authToken = null) => {
   const data = await post(`/owner-approve`, { id }, authToken);
   return data.body;
@@ -28,14 +18,6 @@ export const ownerCommentApprove = async ({ id }, authToken = null) => {
 
 export const tenantCommentApprove = async ({ id }, authToken = null) => {
   const data = await post(`/tenant-approve`, { id }, authToken);
-  return data.body;
-};
-
-export const listingCommentReject = async (
-  { id, description },
-  authToken = null
-) => {
-  const data = await post(`/listing-reject`, { id, description }, authToken);
   return data.body;
 };
 
@@ -68,12 +50,12 @@ export const createRenterReview = async (
 };
 
 export const createOwnerReview = async (
-  { ownerCommentInfo, listingCommentInfo, orderId },
+  { ownerCommentInfo, orderId },
   authToken
 ) => {
   const data = await post(
     `/create-owner-review`,
-    { userCommentInfo: ownerCommentInfo, listingCommentInfo, orderId },
+    { userCommentInfo: ownerCommentInfo, orderId },
     authToken
   );
   return data.body;

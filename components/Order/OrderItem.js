@@ -45,7 +45,11 @@ const OrderInfo = ({
     <>
       <div className="td details">
         <h4 className="order-item-title-row">
-          <div>{extension ? "Extension" : order.listingName}</div>
+          <div>
+            <Link href={"/listings/" + order.listingId}>
+              {extension ? "Extension" : order.listingName}
+            </Link>
+          </div>
           <StatusBlock
             status={order.status}
             disputeStatus={order.disputeStatus}

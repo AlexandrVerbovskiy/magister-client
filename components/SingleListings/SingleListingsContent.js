@@ -26,7 +26,6 @@ const SingleListingsContent = ({
   comments,
   listing: prevListing,
   tenantBaseCommissionPercent,
-  listingRatingInfo,
   ownerRatingInfo,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
@@ -37,6 +36,8 @@ const SingleListingsContent = ({
   const [currentApproveFromDate, setCurrentApproveFromDate] = useState(null);
   const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
   const [listing, setListing] = useState(prevListing);
+
+  console.log(ownerRatingInfo);
 
   const router = useRouter();
 
@@ -152,8 +153,8 @@ const SingleListingsContent = ({
                   </h3>
 
                   <StarRating
-                    averageRating={listingRatingInfo["averageRating"]}
-                    commentCount={listingRatingInfo["commentCount"]}
+                    averageRating={ownerRatingInfo["averageRating"]}
+                    commentCount={ownerRatingInfo["commentCount"]}
                     checked={true}
                     countClass="rating-count"
                     centerAlign={true}
@@ -310,8 +311,8 @@ const SingleListingsContent = ({
                       <h3>Review</h3>
                       <div className="listings-review">
                         <StarRating
-                          averageRating={listingRatingInfo["averageRating"]}
-                          commentCount={listingRatingInfo["commentCount"]}
+                          averageRating={ownerRatingInfo["averageRating"]}
+                          commentCount={ownerRatingInfo["commentCount"]}
                           checked={true}
                           countClass="rating-count"
                           pointsValue={true}
@@ -322,37 +323,15 @@ const SingleListingsContent = ({
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
-                                <div>Punctuality</div>
+                                <div>Item Description Accuracy</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        listingRatingInfo["averagePunctuality"]
-                                      ) || 1
-                                    }`}
-                                  ></div>
-                                </div>
-                              </div>
-                              <div className="side right">
-                                <div>
-                                  {listingRatingInfo[
-                                    "averagePunctuality"
-                                  ].toFixed(1)}
-                                </div>
-                              </div>
-
-                              <div className="side">
-                                <div>General Experience</div>
-                              </div>
-                              <div className="middle">
-                                <div className="bar-container">
-                                  <div
-                                    className={`bar-${
-                                      Math.round(
-                                        listingRatingInfo[
-                                          "averageGeneralExperience"
+                                        ownerRatingInfo[
+                                          "averageItemDescriptionAccuracy"
                                         ]
                                       ) || 1
                                     }`}
@@ -361,23 +340,21 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {listingRatingInfo[
-                                    "averageGeneralExperience"
+                                  {ownerRatingInfo[
+                                    "averageItemDescriptionAccuracy"
                                   ].toFixed(1)}
                                 </div>
                               </div>
 
                               <div className="side">
-                                <div>Communication</div>
+                                <div>Photo Accuracy</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        listingRatingInfo[
-                                          "averageCommunication"
-                                        ]
+                                        ownerRatingInfo["averagePhotoAccuracy"]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -385,9 +362,49 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {listingRatingInfo[
-                                    "averageCommunication"
-                                  ].toFixed(1)}
+                                  {ownerRatingInfo["averagePhotoAccuracy"].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Pickup Condition</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        ownerRatingInfo["averagePickupCondition"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {ownerRatingInfo["averagePickupCondition"].toFixed(
+                                    1
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Cleanliness</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        ownerRatingInfo["averageCleanliness"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {ownerRatingInfo["averageCleanliness"].toFixed(1)}
                                 </div>
                               </div>
                             </div>
@@ -396,14 +413,14 @@ const SingleListingsContent = ({
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
-                                <div>Reliability</div>
+                                <div>Responsiveness</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        listingRatingInfo["averageReliability"]
+                                        ownerRatingInfo["averageResponsiveness"]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -411,21 +428,60 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {listingRatingInfo[
-                                    "averageReliability"
+                                  {ownerRatingInfo["averageResponsiveness"].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Clarity</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(ownerRatingInfo["averageClarity"]) ||
+                                      1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {ownerRatingInfo["averageClarity"].toFixed(1)}
+                                </div>
+                              </div>
+
+                              <div className="side">
+                                <div>Scheduling Flexibility</div>
+                              </div>
+                              <div className="middle">
+                                <div className="bar-container">
+                                  <div
+                                    className={`bar-${
+                                      Math.round(
+                                        ownerRatingInfo["averageSchedulingFlexibility"]
+                                      ) || 1
+                                    }`}
+                                  ></div>
+                                </div>
+                              </div>
+                              <div className="side right">
+                                <div>
+                                  {ownerRatingInfo[
+                                    "averageSchedulingFlexibility"
                                   ].toFixed(1)}
                                 </div>
                               </div>
 
                               <div className="side">
-                                <div>Kindness</div>
+                                <div>Issue Resolution</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        listingRatingInfo["averageKindness"]
+                                        ownerRatingInfo["averageIssueResolution"]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -433,31 +489,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {listingRatingInfo["averageKindness"].toFixed(
+                                  {ownerRatingInfo["averageIssueResolution"].toFixed(
                                     1
                                   )}
-                                </div>
-                              </div>
-
-                              <div className="side">
-                                <div>Flexibility</div>
-                              </div>
-                              <div className="middle">
-                                <div className="bar-container">
-                                  <div
-                                    className={`bar-${
-                                      Math.round(
-                                        listingRatingInfo["averageFlexibility"]
-                                      ) || 1
-                                    }`}
-                                  ></div>
-                                </div>
-                              </div>
-                              <div className="side right">
-                                <div>
-                                  {listingRatingInfo[
-                                    "averageFlexibility"
-                                  ].toFixed(1)}
                                 </div>
                               </div>
                             </div>
@@ -469,13 +503,15 @@ const SingleListingsContent = ({
                         <div className="listings-review-comments">
                           {comments.map((comment) => {
                             const average = (
-                              (comment.flexibility +
-                                comment.generalExperience +
-                                comment.communication +
-                                comment.kindness +
-                                comment.punctuality +
-                                comment.reliability) /
-                              6
+                              (comment.itemDescriptionAccuracy +
+                                comment.photoAccuracy +
+                                comment.pickupCondition +
+                                comment.cleanliness +
+                                comment.responsiveness +
+                                comment.clarity +
+                                comment.schedulingFlexibility +
+                                comment.issueResolution) /
+                              8
                             ).toFixed(1);
 
                             return (
@@ -594,9 +630,11 @@ const SingleListingsContent = ({
                               <div className="base-full-rating-stars-info">
                                 <StarRating
                                   averageRating={
-                                    ownerRatingInfo["averageRating"]
+                                    ownerRatingInfo["ownerAverageRating"]
                                   }
-                                  commentCount={ownerRatingInfo["commentCount"]}
+                                  commentCount={
+                                    ownerRatingInfo["ownerCommentCount"]
+                                  }
                                   checked={true}
                                   countClass="rating-count"
                                   pointsValue={true}
@@ -621,8 +659,8 @@ const SingleListingsContent = ({
               setCurrentOpenImg={setCurrentOpenImg}
               listing={{
                 ...listing,
-                averageRating: listingRatingInfo["averageRating"],
-                commentCount: listingRatingInfo["commentCount"],
+                ownerAverageRating: ownerRatingInfo["averageRating"],
+                ownerCommentCount: ownerRatingInfo["commentCount"],
                 userAverageRating: ownerRatingInfo["averageRating"],
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}

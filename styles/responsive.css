@@ -4296,10 +4296,6 @@
 }
 
 @media only screen and (max-width: 991.9px) {
-  .verification-alert {
-    top: 68px;
-  }
-
   .bookings-listings-box:has(.orders-table) {
     padding-left: 0;
     padding-right: 0;
@@ -4377,20 +4373,5 @@
   .orders-table .tbody .tr.extension-tr .td.action,
   .orders-table .tbody .tr:has(+ .extension-tr) .td.action {
     border-bottom: 1px dashed #eeeeee;
-  }
-}
-
-@media only screen and (max-width: 1199.9px) {
-  body:has(.verification-alert) .main-content {
-    padding-top: 178px;
-  }
-
-  body:has(.verification-alert) .sidemenu-body {
-    padding-top: 0;
-  }
-
-  .verification-alert {
-    top: 65px;
-    z-index: 9998;
   }
 }

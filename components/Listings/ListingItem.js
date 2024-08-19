@@ -135,8 +135,8 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
       "
         >
           <StarRating
-            averageRating={listing["averageRating"] ?? 0}
-            commentCount={listing["commentCount"] ?? 0}
+            averageRating={listing["ownerAverageRating"] ?? 0}
+            commentCount={listing["ownerCommentCount"] ?? 0}
             emptyMaxWidth="120px"
           />
 

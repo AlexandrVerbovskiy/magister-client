@@ -21,7 +21,6 @@ const Listing = (baseProps) => {
         listing={props.listing}
         comments={props.comments}
         tenantBaseCommissionPercent={props.tenantBaseCommissionPercent}
-        listingRatingInfo={props.listingRatingInfo}
         ownerRatingInfo={props.ownerRatingInfo}
       />
 
