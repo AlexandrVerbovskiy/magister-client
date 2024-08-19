@@ -12,6 +12,7 @@ import {
   calculateFullTotalByDaysCount,
   downloadFileUrl,
   getFactOrderDays,
+  moneyFormat,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
@@ -236,7 +237,10 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                   }}
                 >
                   <b>Total Amount to Transfer: </b>
-                  <span className="pay-by-card-price">{STATIC.CURRENCY}{totalPrice}</span>
+                  <span className="pay-by-card-price">
+                    {STATIC.CURRENCY}
+                    {moneyFormat(totalPrice)}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -305,7 +309,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                                 />
                               </svg>
                               Upload your payment receipt here. Click to select
-                              or drag and drop your file.
+                              files
                             </div>
                           </div>
                         )}
