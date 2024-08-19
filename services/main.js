@@ -341,3 +341,8 @@ export const getCoordsAddress = async ({ lat, lng }, authToken) => {
   const data = await post(`/coords-to-address`, { lat, lng }, authToken);
   return data.body;
 };
+
+export const getOrderCheckoutInfo = async (id, authToken) => {
+  const data = await get(`/get-order-checkout-info/${id}`, authToken);
+  return data.body;
+};

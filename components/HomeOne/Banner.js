@@ -81,7 +81,9 @@ const Banner = () => {
             <SwiperSlide key={img}>
               <div
                 className="background-image"
-                style={{ backgroundImage: `url(${img})` }}
+                style={{
+                  backgroundImage: `url(${img})`,
+                }}
               ></div>
               <div className="background-image-black"></div>
             </SwiperSlide>

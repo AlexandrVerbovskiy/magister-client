@@ -1,7 +1,7 @@
 import { getListingImageByType } from "../../../utils";
 import StarRating from "../../StarRating";
 
-const ItemInfo = ({ setCurrentOpenImg, listing }) => {
+const ItemInfo = ({ setCurrentOpenImg, listing, wrapperClassName = "" }) => {
   const firstListingImagePhoto = listing?.listingImages
     ? listing.listingImages[0]
     : null;
@@ -20,7 +20,9 @@ const ItemInfo = ({ setCurrentOpenImg, listing }) => {
   }
 
   return (
-    <div className="listings-widget listings_author item_info">
+    <div
+      className={"listings-widget listings_author item_info " + wrapperClassName}
+    >
       <h3>Item</h3>
 
       <div
@@ -32,7 +34,10 @@ const ItemInfo = ({ setCurrentOpenImg, listing }) => {
         </div>
       </div>
 
-      <div className="title row-dots-end" style={{ fontSize: "20px", marginBottom: "15px" }}>
+      <div
+        className="title row-dots-end"
+        style={{ fontSize: "20px", marginBottom: "15px" }}
+      >
         <h4 className="row-dots-end">
           <a href={`/listings/${listing.id}`}>{listing.name}</a>
         </h4>
