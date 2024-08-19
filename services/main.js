@@ -297,15 +297,6 @@ export const getAdminOwnerCommentListOptions = async (params, authToken) => {
   return data.body;
 };
 
-export const getAdminListingCommentListOptions = async (params, authToken) => {
-  const data = await post(
-    `/admin-listing-comment-list-options`,
-    params,
-    authToken
-  );
-  return data.body;
-};
-
 export const getAdminDisputeListOptions = async (params, authToken) => {
   const data = await post(`/admin-dispute-list-options`, params, authToken);
   return data.body;

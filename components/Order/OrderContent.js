@@ -596,8 +596,6 @@ const OrderContent = ({
           userPhoto: order.ownerPhoto,
           listingImages: order.listingImages,
           userCountItems: order.listingCountStoredItems,
-          averageRating: order.listingAverageRating,
-          commentCount: order.listingCommentCount,
           ownerAverageRating: order.ownerAverageRating,
           ownerCommentCount: order.ownerCommentCount,
         }}

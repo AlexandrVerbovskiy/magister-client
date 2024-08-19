@@ -355,23 +355,6 @@ const orderMessageContent = ({
     );
   }
 
-  if (STATIC.MESSAGE_TYPES.LISTING_REVIEW == type) {
-    return (
-      <div className="d-flex flex-column align-items-center">
-        <div className="mb-2">
-          <b>Listing review</b>
-        </div>
-
-        <ListingCommentMessage content={content} />
-
-        <div className="my-1 text-start w-100">
-          <b>Description: </b>
-          {content.description}
-        </div>
-      </div>
-    );
-  }
-
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,

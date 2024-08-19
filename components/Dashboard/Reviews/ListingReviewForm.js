@@ -89,8 +89,8 @@ const ListingReviewForm = ({
               id: order.listingId,
               name: order.listingName,
               listingImages: order.listingImages,
-              averageRating: order.listingAverageRating,
-              commentCount: order.listingCommentCount,
+              averageRating: order.ownerAverageRating,
+              commentCount: order.ownerCommentCount,
             }}
           />
         </div>

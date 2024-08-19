@@ -39,14 +39,6 @@ const FullReview = (baseProps) => {
 
   const [disabled, setDisabled] = useState(false);
 
-  const statusBarOptions = [
-    {
-      title: "Review the renter",
-      finished: true,
-    },
-    { title: "Finish", finished: currentStep == "finished" },
-  ];
-
   const handleRenterReviewSubmit = () => {
     setActiveSaveModal(true);
   };
@@ -77,8 +69,6 @@ const FullReview = (baseProps) => {
         style={{ marginBottom: "50px" }}
       >
         <NavbarThree />
-
-        <StatusBar statuses={statusBarOptions} hasCancelStatus={false} />
 
         {currentStep == "renter" && (
           <UserReviewForm

@@ -83,7 +83,7 @@ const UserReviewForm = ({
   return (
     <div className="row">
       <div className="col-lg-4 col-md-12">
-        <div className="listings-sidebar">
+        <div className="listings-sidebar mt-0">
           <OwnerInfo
             data={{
               userName: data.userName,
@@ -97,7 +97,7 @@ const UserReviewForm = ({
         </div>
       </div>
       <div className="col-lg-8 col-md-12">
-        <div className="listings-details-desc">
+        <div className="listings-details-desc mt-0">
           <div id="add-review">
             <div className="review-form-wrapper">
               <h3>Add a Public Review</h3>

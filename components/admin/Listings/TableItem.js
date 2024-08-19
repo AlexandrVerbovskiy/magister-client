@@ -57,10 +57,8 @@ const TableItem = ({
   images,
   address,
   minRentalDays,
-  averageRating,
-  commentCount,
   ownerAverageRating,
-  ownerCommentsCount,
+  ownerCommentCount,
   openPopupImage,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
@@ -149,7 +147,10 @@ const TableItem = ({
               value={minRentalDays || "-"}
             />
             <SubInfoRowWithChild label="Rating">
-              <SingleRatingStar value={averageRating} count={commentCount} />
+              <SingleRatingStar
+                value={ownerAverageRating}
+                count={ownerCommentCount}
+              />
             </SubInfoRowWithChild>
           </div>
         </td>
@@ -196,7 +197,7 @@ const TableItem = ({
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
                 value={ownerAverageRating}
-                count={ownerCommentsCount}
+                count={ownerCommentCount}
                 commentName="owner"
               />
             </SubInfoRowWithChild>
