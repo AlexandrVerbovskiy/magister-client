@@ -18982,6 +18982,9 @@ span.flatpickr-weekday {
   padding: 7px;
   background-color: #ffffff;
   position: relative;
+}
+
+.listings_contact_details .date-info:not(.date-info-view){
   cursor: pointer;
 }
 

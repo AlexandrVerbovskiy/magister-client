@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
-  checkStringDateLowerOrEqualCurrentDate,
   dateConverter,
   generateProfileFilePath,
   getDisputeTitle,
   getFactOrderDays,
   getListingImageByType,
-  hasPayError,
   isOrderCanBeAccepted,
   moneyFormat,
   validateBigText,
@@ -54,9 +52,7 @@ const SubOrderItem = ({
   const tenantId = subOrder.tenantId;
 
   const startDate = subOrder.newStartDate ?? subOrder.offerStartDate;
-
   const endDate = subOrder.newEndDate ?? subOrder.offerEndDate;
-
   const pricePerDay = subOrder.newPricePerDay ?? subOrder.offerPricePerDay;
 
   const totalPrice = localCalculateCurrentTotalPrice({
@@ -571,17 +567,6 @@ const OrderContent = ({
   const handleDefectUpdate = (e) => {
     setDefectDescription(e.target.value);
     setDefectError(null);
-  };
-
-  const handlePayClick = (e) => {
-    e.stopPropagation();
-    const payError = hasPayError({ order, sessionUser });
-
-    if (payError) {
-      error.set(payError);
-    } else {
-      orderPopupsData.setPaypalModalActive(true);
-    }
   };
 
   if (orderPopupsData.extendApproveData) {
@@ -1453,13 +1438,12 @@ const OrderContent = ({
             {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
             ) && (
-              <button
+              <Link
                 className="default-btn"
-                type="button"
-                onClick={handlePayClick}
+                href={`/dashboard/orders/checkout/${order.id}`}
               >
                 Pay
-              </button>
+              </Link>
             )}
 
             {currentActionButtons.includes(
