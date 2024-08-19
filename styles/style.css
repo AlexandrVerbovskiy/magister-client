@@ -12332,14 +12332,6 @@ Dashboard CSS
   padding-top: 120px;
 }
 
-body:has(.verification-alert) .main-content{
-  padding-top: 188px;
-}
-
-body:has(.verification-alert) .sidemenu-body{
-  padding-top: 60px;
-}
-
 .main-content .navbar-area {
   position: fixed;
   background-color: var(--whiteColor);
@@ -19884,13 +19876,8 @@ video::-webkit-media-controls-panel {
 }
 
 .verification-alert{
-  position: absolute;
-  top: 85px;
-  left: 0;
-  right: 0;
   background: #F99132;
   color: white;
-  z-index: 9999;
 }
 
 .verification-alert a{

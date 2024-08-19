@@ -364,8 +364,8 @@ const ListingList = (pageProps) => {
                               </h3>
                               <div className="d-flex align-items-center justify-content-between">
                                 <StarRating
-                                  averageRating={listing.averageRating ?? 0}
-                                  commentCount={listing.commentCount ?? 0}
+                                  averageRating={listing.ownerAverageRating ?? 0}
+                                  commentCount={listing.ownerCommentCount ?? 0}
                                 />
                               </div>
                             </div>

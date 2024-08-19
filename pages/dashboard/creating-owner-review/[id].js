@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
-import StatusBar from "../../../components/StatusBar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import {
   createOwnerReview,
@@ -8,13 +7,12 @@ import {
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import ImagePopup from "../../../components/_App/ImagePopup";
-import ListingReviewForm from "../../../components/Dashboard/Reviews/ListingReviewForm";
 import UserReviewForm from "../../../components/Dashboard/Reviews/UserReviewForm";
 import FinishedPart from "../../../components/Dashboard/Reviews/FinishedPart";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../contexts";
 import YesNoModal from "../../../components/_App/YesNoModal";
-import { useListingReview, useOwnerReview } from "../../../hooks";
+import { useOwnerReview } from "../../../hooks";
 import { useIdPage } from "../../../hooks";
 
 const FullReview = (baseProps) => {
@@ -26,16 +24,8 @@ const FullReview = (baseProps) => {
 
   const router = useRouter();
   const { id } = router.query;
-  const [currentStep, setCurrentStep] = useState("item");
+  const [currentStep, setCurrentStep] = useState("owner");
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
-
-  const {
-    starOptions: listingStarOptions,
-    setStarOptions: setListingStarOptions,
-    description: listingDescription,
-    setDescription: setListingDescription,
-    dataToSubmit: listingDataToSubmit,
-  } = useListingReview();
 
   const {
     starOptions: ownerStarOptions,
@@ -52,23 +42,6 @@ const FullReview = (baseProps) => {
 
   const [disabled, setDisabled] = useState(false);
 
-  const statusBarOptions = [
-    { title: "Review the item", finished: true },
-    {
-      title: "Review the owner",
-      finished: ["owner", "finished"].includes(currentStep),
-    },
-    { title: "Finish", finished: currentStep == "finished" },
-  ];
-
-  const handleListingReviewSubmit = () => {
-    setCurrentStep("owner");
-  };
-
-  const handleBackToItemReview = () => {
-    setCurrentStep("item");
-  };
-
   const handleOwnerReviewSubmit = () => {
     setActiveSaveModal(true);
   };
@@ -80,7 +53,6 @@ const FullReview = (baseProps) => {
       await createOwnerReview(
         {
           ownerCommentInfo: ownerDataToSubmit(),
-          listingCommentInfo: listingDataToSubmit(),
           orderId: id,
         },
         authToken
@@ -104,22 +76,6 @@ const FullReview = (baseProps) => {
       >
         <NavbarThree />
 
-        <StatusBar statuses={statusBarOptions} hasCancelStatus={false} />
-
-        {currentStep == "item" && (
-          <ListingReviewForm
-            order={props.order}
-            onSubmit={handleListingReviewSubmit}
-            setCurrentOpenImg={setCurrentOpenImg}
-            submitButtonText="Continue"
-            disabled={disabled}
-            starOptions={listingStarOptions}
-            setStarOptions={setListingStarOptions}
-            description={listingDescription}
-            setDescription={setListingDescription}
-          />
-        )}
-
         {currentStep == "owner" && (
           <UserReviewForm
             data={{
@@ -130,7 +86,6 @@ const FullReview = (baseProps) => {
               userCommentCount: props.order.ownerCommentCount,
             }}
             onSubmit={handleOwnerReviewSubmit}
-            goBack={handleBackToItemReview}
             disabled={disabled}
             starOptions={ownerStarOptions}
             setStarOptions={setOwnerStarOptions}
