@@ -6,6 +6,7 @@ import { IndiceContext } from "../../contexts";
 import ListingLi from "./Navbar/ListingLi";
 import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
+import VerificateAlert from "../VerificateAlert";
 
 const NavbarThree = () => {
   const { isAuth, isSupport, toggleSideMenu } = useContext(IndiceContext);
@@ -110,6 +111,8 @@ const NavbarThree = () => {
           </nav>
         </div>
       </div>
+
+      <VerificateAlert />
 
       {categoriesLength > 0 && (
         <ListingPopup

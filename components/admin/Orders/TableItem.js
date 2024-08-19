@@ -38,10 +38,8 @@ const TableItem = (props) => {
     listingRentalCount,
     tenantAverageRating,
     ownerAverageRating,
-    listingAverageRating,
     tenantCommentCount,
     ownerCommentCount,
-    listingCommentCount,
     payedId,
   } = props;
   const { sessionUser, isAdmin } = useContext(IndiceContext);
@@ -117,8 +115,8 @@ const TableItem = (props) => {
             <SubInfoRow label="Times rented" value={listingRentalCount} />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
-                value={listingAverageRating}
-                count={listingCommentCount}
+                value={ownerAverageRating}
+                count={ownerCommentCount}
               />
             </SubInfoRowWithChild>
           </div>

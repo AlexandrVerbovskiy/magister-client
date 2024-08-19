@@ -40,8 +40,8 @@ const ItemInfo = ({ setCurrentOpenImg, listing }) => {
 
       <div className="rating-section">
         <StarRating
-          averageRating={listing["averageRating"] ?? 0}
-          commentCount={listing["commentCount"] ?? 0}
+          averageRating={listing["ownerAverageRating"] ?? 0}
+          commentCount={listing["ownerCommentCount"] ?? 0}
           centerAlign={true}
           countClass="rating-count"
         />
