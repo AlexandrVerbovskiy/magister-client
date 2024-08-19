@@ -10,7 +10,7 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { getDaysDifference, hasPayError } from "../utils";
+import { getDaysDifference } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({
@@ -419,18 +419,6 @@ const useOrderFastActions = ({
     setActivePay(false);
   };
 
-  const handleClickPay = (orderId) => {
-    const order = findCurrentOrderById(orderId);
-    const payError = hasPayError({ order, sessionUser });
-
-    if (payError) {
-      error.set(payError);
-    } else {
-      setActivePayOrder(order);
-      setActivePay(true);
-    }
-  };
-
   const onCreateUpdateRequest = ({
     orderId,
     price,
@@ -618,7 +606,6 @@ const useOrderFastActions = ({
     acceptOrderModalActive,
     closeAcceptOrderModal,
 
-    handleClickPay,
     activePay,
     closePay,
     onTenantPayed,

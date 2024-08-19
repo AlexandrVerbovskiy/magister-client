@@ -1,17 +1,14 @@
-import {
-  autoMultiEnding,
-  generateProfileFilePath,
-} from "../../../utils";
+import { autoMultiEnding, generateProfileFilePath } from "../../../utils";
 import StarRating from "../../StarRating";
 
 const OwnerInfo = ({
   data,
   countItemsType = "for rental",
   title = "Owner",
+  wrapperClassName = "",
 }) => {
-
   return (
-    <div className="listings-widget listings_author">
+    <div className={"listings-widget listings_author " + wrapperClassName}>
       <h3>{title}</h3>
 
       <div className="author">

@@ -37,8 +37,6 @@ const SingleListingsContent = ({
   const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
   const [listing, setListing] = useState(prevListing);
 
-  console.log(ownerRatingInfo);
-
   const router = useRouter();
 
   const handleShareClick = () => {
@@ -630,10 +628,10 @@ const SingleListingsContent = ({
                               <div className="base-full-rating-stars-info">
                                 <StarRating
                                   averageRating={
-                                    ownerRatingInfo["ownerAverageRating"]
+                                    ownerRatingInfo["averageRating"]
                                   }
                                   commentCount={
-                                    ownerRatingInfo["ownerCommentCount"]
+                                    ownerRatingInfo["commentCount"]
                                   }
                                   checked={true}
                                   countClass="rating-count"
