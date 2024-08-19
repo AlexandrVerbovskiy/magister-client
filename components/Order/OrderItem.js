@@ -8,7 +8,6 @@ import {
   getPaymentNameByType,
   isOrderCanBeAccepted,
   moneyFormat,
-  objDateSort,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
@@ -25,7 +24,6 @@ const OrderInfo = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickPay,
   handleClickExtend,
   extension = false,
 }) => {
@@ -201,16 +199,12 @@ const OrderInfo = ({
         {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
         ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickPay(order.id);
-            }}
+          <Link
+            href={`/dashboard/orders/checkout/${order.id}`}
             className="default-btn"
           >
             <i className="bx bx-wallet"></i> Pay
-          </button>
+          </Link>
         )}
 
         {currentActionButtons.includes(
@@ -360,7 +354,6 @@ const OrderItem = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickPay,
   handleClickExtend,
 }) => {
   const [showedAllExtends, setShowedAllExtends] = useState(false);
@@ -422,7 +415,6 @@ const OrderItem = ({
           handleClickUpdateRequest={handleClickUpdateRequest}
           handleClickReject={handleClickReject}
           handleClickAccept={handleClickAccept}
-          handleClickPay={handleClickPay}
           handleClickExtend={handleClickExtend}
           link={link}
         />
@@ -449,7 +441,6 @@ const OrderItem = ({
               handleClickUpdateRequest={handleClickUpdateRequest}
               handleClickReject={handleClickReject}
               handleClickAccept={handleClickAccept}
-              handleClickPay={handleClickPay}
               handleClickExtend={handleClickExtend}
               link={link}
               extension={true}

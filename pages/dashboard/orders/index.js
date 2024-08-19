@@ -147,7 +147,6 @@ const Orders = (pageProps) => {
     acceptOrderModalActive,
     closeAcceptOrderModal,
 
-    handleClickPay,
     activePay,
     closePay,
     onTenantPayed,
@@ -200,7 +199,6 @@ const Orders = (pageProps) => {
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
-                      handleClickPay={handleClickPay}
                       handleClickExtend={handleClickExtendOrder}
                     />
                   ))}
