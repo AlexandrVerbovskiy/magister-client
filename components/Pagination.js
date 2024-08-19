@@ -1,4 +1,4 @@
-import {useRef} from "react"
+import { useRef } from "react";
 import { generatePagination } from "../utils";
 
 const Pagination = ({
@@ -15,14 +15,14 @@ const Pagination = ({
 
   const handleMove = async (newPage) => {
     await move(newPage);
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const handleNextClick = (e) => {
     e.preventDefault();
 
     if (canNext) {
-      handleMove(page + 1);
+      handleMove(+page + 1);
     }
   };
 
@@ -30,14 +30,14 @@ const Pagination = ({
     e.preventDefault();
 
     if (canPrev) {
-      handleMove(page - 1);
+      handleMove(+page - 1);
     }
   };
 
   const handlePageClick = (e, pageNumber) => {
     e.preventDefault();
 
-    if (pageNumber != page) {
+    if (+pageNumber != +page) {
       handleMove(pageNumber);
     }
   };
@@ -51,7 +51,7 @@ const Pagination = ({
       <a
         href={
           canPrev
-            ? `/dashboard/listings?page=${page - 1}`
+            ? `/dashboard/listings?page=${+page - 1}`
             : "/dashboard/listings"
         }
         className={`prev page-numbers ${canPrev ? "" : "disabled"}`}
@@ -61,7 +61,7 @@ const Pagination = ({
       </a>
 
       {visiblePages.map((visiblePage, index) => {
-        if (visiblePage == page)
+        if (+visiblePage == +page)
           return (
             <a
               key={visiblePage}
@@ -100,7 +100,7 @@ const Pagination = ({
       <a
         href={
           canNext
-            ? `/dashboard/listings?page=${page + 1}`
+            ? `/dashboard/listings?page=${+page + 1}`
             : "/dashboard/listings"
         }
         className={`next page-numbers ${canNext ? "" : "disabled"}`}
