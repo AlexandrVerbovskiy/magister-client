@@ -33,7 +33,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
   const totalPrice = subtotalPrice + totalFee;
 
   const onTenantPayed = () => {
-    router.push("/dashboard/orders/" + order.id);
+    router.push(`/dashboard/orders/${order.id}?success=Payed successfully`);
   };
 
   return (
