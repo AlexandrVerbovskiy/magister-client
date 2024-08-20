@@ -9,8 +9,8 @@ import Category from "../components/HomeOne/Category";
 import DestinationsTwo from "../components/Common/DestinationsTwo";
 import Feedback from "../components/Common/Feedback";
 import SafeWithUs from "../components/Common/SafeWithUs";
-import BeforeTheRental from "../components/Common/BeforeTheRental";
-import DuringRental from "../components/Common/DuringRental";
+import UnlockAccess from "../components/Common/UnlockAccess";
+import StartEarning from "../components/Common/StartEarning";
 
 const Index = ({ categories }) => {
   const popularCategories = [];
@@ -38,21 +38,20 @@ const Index = ({ categories }) => {
 
       <YourBusiness />
 
-      <Category
-        topCategories={topCategories}
-        needShowMore={moreCategoriesThanView}
-        bgColor="bg-f9f9f9"
-      />
-
-      <Feedback />
-
-      <DestinationsTwo bgColor="bg-f9f9f9" />
+      <Feedback bgColor="bg-f9f9f9" />
 
       <SafeWithUs />
 
-      <BeforeTheRental />
+      <Category
+        topCategories={topCategories}
+        needShowMore={moreCategoriesThanView}
+      />
 
-      <DuringRental />
+      <UnlockAccess />
+
+      <StartEarning />
+
+      <DestinationsTwo bgColor="bg-f9f9f9" />
 
       {/*<ListingArea listings={topListings} />*/}
 

@@ -165,7 +165,7 @@ const EditForm = ({ listing, categories, save }) => {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(null);
 
-  const [category, setCategory] = useState(baseCategoryId);
+  const [category, setCategory] = useState(null);
   const [otherCategory, setOtherCategory] = useState("");
   const [otherCategoryParentId, setOtherCategoryParentId] = useState(null);
   const [isOtherCategory, setIsOtherCategory] = useState(false);

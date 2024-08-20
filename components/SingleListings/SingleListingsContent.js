@@ -565,7 +565,7 @@ const SingleListingsContent = ({
 
               {sessionUser?.id != listing.ownerId && (
                 <div className="col-lg-4 col-md-12">
-                  <div className="listings-sidebar">
+                  <div className="listings-sidebar d-flex flex-column">
                     {listing.approved && listing.userId != sessionUser?.id && (
                       <div className="listings-widget book_listings">
                         <h3>Booking Online</h3>

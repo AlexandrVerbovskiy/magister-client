@@ -7,7 +7,6 @@ const MainUserReviewPart = ({
   descriptionError,
   handleDescriptionChange,
 }) => {
-  console.log(descriptionError);
   return (
     <>
       <div className="col-lg-12 col-md-12">

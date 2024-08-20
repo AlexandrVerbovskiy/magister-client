@@ -1,6 +1,6 @@
 import { useListingListClick } from "../../hooks";
 
-const BeforeTheRental = () => {
+const UnlockAccess = () => {
   const { handleClick: handleStartEarningClick } = useListingListClick();
 
   return (
@@ -46,4 +46,4 @@ const BeforeTheRental = () => {
   );
 };
 
-export default BeforeTheRental;
+export default UnlockAccess;

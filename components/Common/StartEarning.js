@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const DuringRental = () => {
+const StartEarning = () => {
   return (
     <section className="category-area pt-100 pb-100">
       <div className="container">
@@ -41,4 +41,4 @@ const DuringRental = () => {
   );
 };
 
-export default DuringRental;
+export default StartEarning;

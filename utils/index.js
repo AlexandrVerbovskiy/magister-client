@@ -23,6 +23,7 @@ export { default as splitDataIntoChunks } from "./splitDataIntoChunks";
 export { default as splitBlob } from "./splitBlob";
 export { default as isOrderCanBeAccepted } from "./isOrderCanBeAccepted";
 export { default as getCityCoords } from "./getCityCoords";
+export { default as scrollToElementParent } from "./scrollToElementParent";
 export * from "./convertToBlob";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
