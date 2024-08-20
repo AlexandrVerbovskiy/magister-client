@@ -293,25 +293,23 @@ const EditPhotosSection = ({
               {...getRootPropsPopup()}
               style={{ marginBottom: "25px" }}
             >
+              <input name="modalImage" {...getInputPropsPopup()} />
+
               {!photoPopupPhoto && !photoPopupLink && (
                 <div className="gallery-flex form-group">
-                  <div className="add-more-image">
-                  Click to select files
-                  </div>
+                  <div className="add-more-image">Click to select files</div>
                 </div>
               )}
 
               {!photoPopupPhoto && photoPopupLink && (
                 <div className="invoice-btn-box gallery-flex form-group">
                   <img src={getListingImageByType(photoPopupLink, "storage")} />
-                  <input name="modalImage" {...getInputPropsPopup()} />
                 </div>
               )}
 
               {photoPopupPhoto && (
                 <div className="invoice-btn-box gallery-flex form-group">
                   <img src={photoPopupPhoto.preview} />
-                  <input name="modalImage" {...getInputPropsPopup()} />
                 </div>
               )}
 
