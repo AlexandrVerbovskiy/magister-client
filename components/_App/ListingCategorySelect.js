@@ -90,8 +90,6 @@ const ListingCategorySelect = ({
     parentPadding: 20,
   });
 
-  console.log(selectedCategoryId);
-
   return (
     <BaseModal
       className="category-select-modal"

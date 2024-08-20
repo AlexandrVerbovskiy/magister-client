@@ -328,10 +328,17 @@ const orderMessageContent = ({
   }
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
+    let senderName =
+      entity.ownerId == senderId ? entity.ownerName : entity.tenantName;
+
+    if (sessionUser.id == senderId) {
+      senderName = "You";
+    }
+
     return (
       <div className="d-flex flex-column">
         <div className="text-center mb-2">
-          <b>Started dispute</b>
+          <b>{senderName} started dispute</b>
         </div>
 
         <div className="my-1 text-start w-100">

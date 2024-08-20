@@ -1773,11 +1773,6 @@
     border-top: 1px solid #e0e0e0;
   }
 
-  .listings-details-image .container .container .no-comments-rating,
-  .listings-details-image .container .container .rating {
-    color: var(--mainColor);
-  }
-
   .listings-details-image .container-fluid {
     padding-left: 15px;
     padding-right: 15px;
@@ -2584,7 +2579,7 @@
   }
 
   .listings-details-image .swiper {
-    min-height: 300px;
+    min-height: 50px;
   }
 }
 /* Min width 576px to Max width 768px */
@@ -2637,7 +2632,7 @@
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991.9px) {
   .listings-details-image .swiper {
-    min-height: 400px;
+    min-height: 240px;
   }
 
   .listing-area {
@@ -4291,7 +4286,7 @@
   }
 
   .how-it-works-box-wrapper:not(:last-of-type) {
-    padding-left: 0;
+    padding-left: 10px;
   }
 
   .how-it-works-section .default-btn {
@@ -4397,5 +4392,50 @@
     min-width: 100%;
     border-right:0!important;
     border-left:0!important;
+  }
+
+  .how-it-works-section .security-box p,
+  .how-it-works-box p{
+    font-size: 14px!important;
+  }
+
+  .how-it-works-section .security-box h3,
+  .how-it-works-box h3{
+    font-size: 20px!important;
+    margin-bottom: 0;
+  }
+
+  .how-it-works-section .section-title h2{
+    font-size: 18px!important;
+  }
+
+  .how-it-works-box,
+  .how-it-works-box .icon{
+    margin-bottom: 0;
+  }
+
+  .security-box{
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  .how-it-works-main-section .earn-money-section{
+    font-size: 40px;
+    line-height: 60px;
+  }
+
+  .how-it-works-section{
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .how-it-works-box-wrapper{
+    justify-content: center;
+  }
+
+  .how-it-works-section .section-title h2,
+  .how-it-works-box-wrapper h3,
+  .how-it-works-box-wrapper p{
+    text-align: center!important;
   }
 }
