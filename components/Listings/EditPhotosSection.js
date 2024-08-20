@@ -103,6 +103,7 @@ const EditPhotosSection = ({
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: STATIC.LIMITS.FILE_SIZE,
+      multiple: false,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 

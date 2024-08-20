@@ -105,6 +105,7 @@ const EditPhotosSection = ({
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: STATIC.LIMITS.FILE_SIZE,
+      multiple: false,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
@@ -293,7 +294,7 @@ const EditPhotosSection = ({
                     {...getRootPropsPopup()}
                   >
                     <input name="modalPhotoInput" {...getInputPropsPopup()} />
-                    
+
                     {!photoPopupPhoto && !photoPopupLink && (
                       <div className="gallery-flex form-group">
                         <div className="add-more-image bg-gray-100 border rounded-lg shadow-md">
