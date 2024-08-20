@@ -58,6 +58,7 @@ const CategorySelect = ({
         selectedCategoryId={selectedCategoryId}
         otherCategoryParentId={otherCategoryParentId}
         setSelectedCategoryInfo={setSelectedCategoryInfo}
+        needBack={true}
       />
     </>
   );

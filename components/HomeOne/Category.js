@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { getFilePath } from "../../utils";
 
-const Category = ({ bgColor, topCategories, needShowMore }) => {
+const Category = ({ bgColor = "", topCategories, needShowMore }) => {
   return (
     <>
-      <section className={`category-area pt-100 pb-70 ${bgColor}`}>
+      <section className={`category-area pb-70 ${bgColor}`}>
         <div className="container">
           <div className="section-title">
             <h2>

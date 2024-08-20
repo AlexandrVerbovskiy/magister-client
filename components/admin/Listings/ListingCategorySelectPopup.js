@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
 import { getFilePath } from "../../../utils";
 import ModalBasic from "../ModalBasic";
+import useListingCategorySelect from "../../../hooks/useListingCategorySelect";
 
-const CategoryOption = ({ category, active = false, onClick }) => {
+const CategoryOption = ({
+  category,
+  active = false,
+  onClick,
+  className = "",
+  type = "normal",
+}) => {
   return (
     <div
-      className={`categories-select-option${active ? " active" : ""}`}
+      className={`categories-select-option${active ? " active" : ""}${
+        className ? ` ${className}` : ""
+      }`}
       onClick={onClick}
     >
       {category.image && (
@@ -16,11 +24,24 @@ const CategoryOption = ({ category, active = false, onClick }) => {
           src={getFilePath(category.image)}
         />
       )}
+      {type == "back" && (
+        <svg
+          className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+          viewBox="0 0 12 12"
+          style={{ transform: "rotate(90deg)" }}
+        >
+          <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
+        </svg>
+      )}
       <span className="category-option-name">{category.name}</span>
-      {category.countChildren ? (
-        <i className="bx bx-chevron-right category-option-show-children"></i>
-      ) : (
-        <></>
+      {category.countChildren > 0 && (
+        <svg
+          className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+          viewBox="0 0 12 12"
+          style={{ transform: "rotate(270deg)" }}
+        >
+          <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z"></path>
+        </svg>
       )}
     </div>
   );
@@ -35,87 +56,23 @@ const ListingCategorySelectPopup = ({
   setSelectedCategoryInfo = () => {},
   selectedCategoryId = null,
 }) => {
-  const [selectedByLevels, setSelectedByLevels] = useState({
-    firstLevel: null,
-    secondLevel: null,
-    thirdLevel: null,
+  const {
+    firstLevelRef,
+    secondLevelRef,
+    thirdLevelRef,
+    handleScrollToFirstElement,
+    handleScrollToSecondElement,
+    handleOptionClick,
+    selectedByLevels,
+  } = useListingCategorySelect({
+    active,
+    selectedCategoryId,
+    categories,
+    setSelectedCategoryInfo,
+    onChange,
+    setActive,
+    otherCategoryParentId,
   });
-
-  useEffect(() => {
-    let foundCategory = {};
-    let searchId = selectedCategoryId;
-
-    Object.keys(categories).forEach((level) => {
-      const resSearch =
-        categories[level].filter(
-          (category) => category.id == selectedCategoryId
-        )[0] ?? null;
-
-      if (resSearch) {
-        foundCategory = resSearch;
-      }
-    });
-
-    setSelectedCategoryInfo(foundCategory);
-
-    do {
-      Object.keys(categories).forEach((level) => {
-        const foundCategory = categories[level].filter((category) => {
-          if (searchId == "-") {
-            return (
-              category.parentId == otherCategoryParentId &&
-              category.id == searchId
-            );
-          } else {
-            return category.id == searchId;
-          }
-        })[0];
-
-        if (foundCategory) {
-          searchId = foundCategory.parentId;
-
-          setSelectedByLevels((prev) => {
-            const res = { ...prev };
-            res[level] = foundCategory.id;
-            return res;
-          });
-        }
-      });
-    } while (searchId);
-  }, [selectedCategoryId]);
-
-  const handleOptionClick = (
-    categoryId,
-    level,
-    hasChild = false,
-    parentId = null
-  ) => {
-    if (!hasChild) {
-      onChange(categoryId, parentId);
-      setActive(false);
-      setSelectedByLevels({
-        firstLevel: null,
-        secondLevel: null,
-        thirdLevel: null,
-      });
-      return;
-    }
-
-    setSelectedByLevels((prev) => {
-      let res = { ...prev };
-      res[level] = categoryId;
-
-      if (level == "firstLevel") {
-        res = { ...res, secondLevel: null, thirdLevel: null };
-      }
-
-      if (level == "secondLevel") {
-        res = { ...res, thirdLevel: null };
-      }
-
-      return res;
-    });
-  };
 
   return (
     <ModalBasic
@@ -124,8 +81,14 @@ const ListingCategorySelectPopup = ({
       setModalOpen={setActive}
     >
       <div className="category-select-modal">
-        <div className="flex w-100" style={{ height: "max-content" }}>
-          <div className="categories-select-level-column sidebar-left">
+        <div
+          className="flex w-full relative"
+          style={{ height: "max-content", overflowX: "hidden" }}
+        >
+          <div
+            className="categories-select-level-column sidebar-left"
+            ref={firstLevelRef}
+          >
             {categories["firstLevel"].map((category) => (
               <CategoryOption
                 key={category.id}
@@ -143,55 +106,85 @@ const ListingCategorySelectPopup = ({
             ))}
           </div>
 
-          {selectedByLevels["firstLevel"] && (
-            <div className="categories-select-level-column sidebar-left">
-              {categories["secondLevel"]
-                .filter(
-                  (category) =>
-                    category.parentId == selectedByLevels["firstLevel"]
-                )
-                .map((category) => (
-                  <CategoryOption
-                    key={category.id}
-                    category={category}
-                    onClick={() =>
-                      handleOptionClick(
-                        category.id,
-                        "secondLevel",
-                        !!category.countChildren,
-                        category.parentId
-                      )
-                    }
-                    active={category.id == selectedByLevels["secondLevel"]}
-                  />
-                ))}
-            </div>
-          )}
+          <div
+            className="categories-select-level-column sidebar-left"
+            ref={secondLevelRef}
+          >
+            {selectedByLevels["firstLevel"] && (
+              <>
+                {categories["secondLevel"]
+                  .filter(
+                    (category) =>
+                      category.parentId == selectedByLevels["firstLevel"]
+                  )
+                  .map((category) => (
+                    <CategoryOption
+                      key={category.id}
+                      category={category}
+                      onClick={() =>
+                        handleOptionClick(
+                          category.id,
+                          "secondLevel",
+                          !!category.countChildren,
+                          category.parentId
+                        )
+                      }
+                      active={category.id == selectedByLevels["secondLevel"]}
+                    />
+                  ))}
 
-          {selectedByLevels["secondLevel"] && (
-            <div className="categories-select-level-column sidebar-left">
-              {categories["thirdLevel"]
-                .filter(
-                  (category) =>
-                    category.parentId == selectedByLevels["secondLevel"]
-                )
-                .map((category) => (
+                {categories["secondLevel"]?.length > 0 && (
                   <CategoryOption
-                    key={category.id}
-                    onClick={() =>
-                      handleOptionClick(
-                        category.id,
-                        "thirdLevel",
-                        false,
-                        category.parentId
-                      )
-                    }
-                    active={category.id == selectedByLevels["thirdLevel"]}
-                    category={category}
+                    category={{ image: null, name: "Go Back" }}
+                    onClick={handleScrollToFirstElement}
+                    active={false}
+                    className="back-button"
+                    type="back"
                   />
-                ))}
-            </div>
-          )}
+                )}
+              </>
+            )}
+          </div>
+
+          <div
+            className="categories-select-level-column sidebar-left"
+            ref={thirdLevelRef}
+          >
+            {selectedByLevels["secondLevel"] && (
+              <>
+                {categories["thirdLevel"]
+                  .filter(
+                    (category) =>
+                      category.parentId == selectedByLevels["secondLevel"]
+                  )
+                  .map((category) => (
+                    <CategoryOption
+                      key={category.id}
+                      onClick={() =>
+                        handleOptionClick(
+                          category.id,
+                          "thirdLevel",
+                          false,
+                          category.parentId
+                        )
+                      }
+                      active={category.id == selectedByLevels["thirdLevel"]}
+                      category={category}
+                    />
+                  ))}
+
+                {categories["thirdLevel"]?.length > 0 && (
+                  <CategoryOption
+                    category={{ image: null, name: "Go Back" }}
+                    onClick={handleScrollToSecondElement}
+                    active={false}
+                    className="back-button"
+                    type="back"
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </ModalBasic>

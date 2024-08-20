@@ -46,8 +46,8 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
         imgSrc="/images/checkout.png"
         dopLinks={[
           { link: "/dashboard", title: "Dashboard" },
-          { link: "/orders", title: "Orders" },
-          { link: `/orders/${order.id}`, title: "Order #" + order.id },
+          { link: "/dashboard/orders", title: "Orders" },
+          { link: `/dashboard/orders/${order.id}`, title: "Order #" + order.id },
         ]}
       />
 
@@ -124,7 +124,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                     userCommentCount: order.ownerCommentCount,
                     userAverageRating: order.ownerAverageRating,
                   }}
-                  countItemsType={+order.ownerCountItems}
+                  countItemsType="for rental"
                   title="Owner"
                   wrapperClassName="h-100"
                 />

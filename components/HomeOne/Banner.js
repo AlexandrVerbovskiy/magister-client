@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import Link from "next/link";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../SearchTipsPopup";
@@ -100,10 +99,11 @@ const Banner = () => {
                 <Swiper
                   direction={"vertical"}
                   autoplay={{
-                    delay: 5000,
-                    pauseOnMouseEnter: true,
+                    delay: 8000,
                   }}
+                  loop={true}
                   modules={[Autoplay]}
+                  simulateTouch={false}
                 >
                   {categories.map((category) => (
                     <SwiperSlide key={category}>

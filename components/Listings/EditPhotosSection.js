@@ -217,7 +217,7 @@ const EditPhotosSection = ({
                     setPhotoPopupActive(true);
                   }}
                 >
-                  Drag 'n' drop some files here, or click to select files
+                  Click to select files
                 </div>
               </div>
             </div>
@@ -296,7 +296,7 @@ const EditPhotosSection = ({
               {!photoPopupPhoto && !photoPopupLink && (
                 <div className="gallery-flex form-group">
                   <div className="add-more-image">
-                    Drag 'n' drop some file here, or click to select file
+                  Click to select files
                   </div>
                 </div>
               )}
