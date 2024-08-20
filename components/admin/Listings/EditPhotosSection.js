@@ -292,10 +292,12 @@ const EditPhotosSection = ({
                     className="dropzone add-listings-box mb-4"
                     {...getRootPropsPopup()}
                   >
+                    <input name="modalPhotoInput" {...getInputPropsPopup()} />
+                    
                     {!photoPopupPhoto && !photoPopupLink && (
                       <div className="gallery-flex form-group">
                         <div className="add-more-image bg-gray-100 border rounded-lg shadow-md">
-                        Click to select files
+                          Click to select files
                         </div>
                       </div>
                     )}
@@ -305,20 +307,12 @@ const EditPhotosSection = ({
                         <img
                           src={getListingImageByType(photoPopupLink, "storage")}
                         />
-                        <input
-                          name="modalPhotoInput"
-                          {...getInputPropsPopup()}
-                        />
                       </div>
                     )}
 
                     {photoPopupPhoto && (
                       <div className="invoice-btn-box gallery-flex form-group bg-gray-100 border rounded-lg shadow-md cursor-pointer">
                         <img src={photoPopupPhoto.preview} />
-                        <input
-                          name="modalPhotoInput"
-                          {...getInputPropsPopup()}
-                        />
                       </div>
                     )}
 
