@@ -17,15 +17,15 @@ const useChatWindowsChanger = (chatId) => {
       steps *= -1;
     }
 
-    const smoothScroll = () => {
+    const smoothScroll = (chatRefCurrent) => {
       if (currentStep < steps) {
-        chatRef.current.scrollBy(scrollStep, 0);
+        chatRefCurrent.scrollBy(scrollStep, 0);
         currentStep++;
-        setTimeout(smoothScroll, interval);
+        setTimeout(() => smoothScroll(chatRefCurrent), interval);
       }
     };
 
-    smoothScroll();
+    smoothScroll(chatRef.current);
   };
 
   const scrollToChatList = () => {

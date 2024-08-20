@@ -33,6 +33,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: STATIC.LIMITS.FILE_SIZE,
+      multiple: false,
       onDrop: (acceptedFiles, fileRejections) => {
         const newFiles = acceptedFiles.slice(0, 1);
 
@@ -52,9 +53,6 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
         } else {
           setProofError(null);
         }
-      },
-      onClick: (e) => {
-        e.stopPropagation();
       },
     });
 
@@ -272,6 +270,8 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                         }}
                         {...getRootPropsPopup()}
                       >
+                        <input name="modalImage" {...getInputPropsPopup()} />
+                        
                         {proof ? (
                           <div
                             className="invoice-btn-box gallery-flex form-group"
@@ -280,10 +280,6 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                             <img
                               src={proof.preview}
                               style={{ maxHeight: "200px", marginBottom: "0" }}
-                            />
-                            <input
-                              name="modalImage"
-                              {...getInputPropsPopup()}
                             />
                           </div>
                         ) : (
