@@ -17647,7 +17647,7 @@ button.button-danger:hover {
 }
 
 .listings-details-image .swiper {
-  min-height: 500px;
+  min-height: 260px;
   /*background-color: #373737;*/
   background-color: #f5f5f5;
 }
@@ -19795,6 +19795,11 @@ span.flatpickr-weekday {
 .no-comments-rating {
   font-size: 12px;
 }
+
+.listings-details-image .container .container .no-comments-rating,
+  .listings-details-image .container .container .rating {
+    color: var(--blackColor);
+  }
 
 .small-text {
   font-size: 14px;

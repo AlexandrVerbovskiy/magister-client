@@ -359,7 +359,12 @@ const orderMessageContent = ({
     return (
       <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
-          <b>Started dispute</b>
+          <b>
+            {dispute.senderId == dispute.tenantId
+              ? dispute.tenantName
+              : dispute.ownerName}{" "}
+            started dispute
+          </b>
         </div>
 
         <div className="w-full">

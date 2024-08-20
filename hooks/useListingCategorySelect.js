@@ -8,7 +8,6 @@ const getCategoryById = (id, categories) => {
   Object.keys(categories).forEach((level) => {
     const resSearch =
       categories[level].filter((category) => category.id == id)[0] ?? null;
-    console.log(resSearch, id);
 
     if (resSearch) {
       result = resSearch;
@@ -42,7 +41,6 @@ const useListingCategorySelect = ({
   const initVisualCurrentCategoryList = (newCategoryId) => {
     const timerId = setTimeout(() => {
       let foundCategory = getCategoryById(newCategoryId, categories);
-      console.log(foundCategory);
 
       if (foundCategory) {
         if (foundCategory.id == "-") {
