@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { autoMultiEnding, generateProfileFilePath } from "../../../utils";
 import StarRating from "../../StarRating";
 
@@ -19,7 +20,9 @@ const OwnerInfo = ({
           />
           <div className="title row-dots-end">
             <h4 className="row-dots-end">
-              <a href="#">{data.userName}</a>
+              <Link href={"/owner-listings/" + data.userId}>
+                {data.userName}
+              </Link>
             </h4>
             <span style={{ color: "#666666" }}>
               {data.userCountItems}{" "}
