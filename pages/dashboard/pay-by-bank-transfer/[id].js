@@ -53,9 +53,6 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
           setProofError(null);
         }
       },
-      onClick: (e) => {
-        e.stopPropagation();
-      },
     });
 
   const totalPrice = calculateFullTotalByDaysCount(
