@@ -638,6 +638,24 @@ div.add-listings-box.dropzone > .gallery-flex {
   height: calc(100vh - 224px);
 }
 
+.categories-select-option.back-button{
+  color: #594fbf;
+  display: none;
+}
+
+.categories-select-option.back-button svg{
+  fill: #594fbf;
+  transition: 0.2s ease-in-out all;
+}
+
+.categories-select-option.back-button:hover{
+  color: var(--mainColor);
+}
+
+.categories-select-option.back-button:hover svg{
+  fill: var(--mainColor);
+}
+
 @media only screen and (max-width: 768px) {
   .error-content h3 {
     font-size: 20px;
@@ -667,5 +685,13 @@ div.add-listings-box.dropzone > .gallery-flex {
 @media only screen and (max-width: 991px) {
   .admin-table{
     width: 1000px;
+  }
+
+  .categories-select-level-column {
+    min-width: 100%;
+  }
+
+  .categories-select-option.back-button{
+    display: flex;
   }
 }

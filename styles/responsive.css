@@ -2583,7 +2583,7 @@
     height: 180px !important;
   }
 
-  .listings-details-image .swiper{
+  .listings-details-image .swiper {
     min-height: 300px;
   }
 }
@@ -2636,10 +2636,10 @@
 
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991.9px) {
-  .listings-details-image .swiper{
+  .listings-details-image .swiper {
     min-height: 400px;
   }
-  
+
   .listing-area {
     min-height: 53vh;
   }
@@ -4304,14 +4304,14 @@
 }
 
 @media only screen and (max-width: 991.9px) {
-  .listings-widget.book_listings{
+  .listings-widget.book_listings {
     order: 2;
     margin-bottom: 0;
   }
 
-  .listings-widget.listings_author{
+  .listings-widget.listings_author {
     order: 1;
-    margin-bottom: 30px!important;
+    margin-bottom: 30px !important;
   }
 
   .bookings-listings-box:has(.orders-table) {
@@ -4391,5 +4391,11 @@
   .orders-table .tbody .tr.extension-tr .td.action,
   .orders-table .tbody .tr:has(+ .extension-tr) .td.action {
     border-bottom: 1px dashed #eeeeee;
+  }
+
+  .categories-select-level-column {
+    min-width: 100%;
+    border-right:0!important;
+    border-left:0!important;
   }
 }
