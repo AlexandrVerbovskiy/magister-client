@@ -4445,6 +4445,7 @@ Listings Details Area CSS
   padding-bottom: 12px;
   font-size: 18px;
   font-weight: 700;
+  width: fit-content;
 }
 .listings-details-image .listings-details-content ul li.phone-number a i {
   position: absolute;
