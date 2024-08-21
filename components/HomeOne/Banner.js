@@ -75,6 +75,8 @@ const Banner = () => {
             delay: 8000,
           }}
           modules={[Autoplay]}
+          shortSwipes={false}
+          allowTouchMove={false}
         >
           {backgroundImages.map((img) => (
             <SwiperSlide key={img}>
@@ -103,7 +105,8 @@ const Banner = () => {
                   }}
                   loop={true}
                   modules={[Autoplay]}
-                  simulateTouch={false}
+                  shortSwipes={false}
+                  allowTouchMove={false}
                 >
                   {categories.map((category) => (
                     <SwiperSlide key={category}>
