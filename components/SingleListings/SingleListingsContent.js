@@ -145,7 +145,7 @@ const SingleListingsContent = ({
 
                   <h3
                     className="row-dots-end"
-                    style={{ color: "var(--mainColor)" }}
+                    style={{ color: "var(--mainColor)", textWrap: "nowrap" }}
                   >
                     {listing.name}
                   </h3>
