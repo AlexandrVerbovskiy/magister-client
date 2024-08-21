@@ -323,6 +323,8 @@
     border: 1px solid #eee;
     text-align: left;
   }
+
+  .base-main-button,
   .main-banner-content form .submit-btn button {
     margin-top: 5px;
   }
@@ -2588,6 +2590,7 @@
     height: 180px !important;
   }
 
+  .listings-details-image,
   .listings-details-image .swiper {
     min-height: 50px;
   }
@@ -2641,8 +2644,9 @@
 
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991.9px) {
+  .listings-details-image,
   .listings-details-image .swiper {
-    min-height: 240px;
+    min-height: 320px;
   }
 
   .listing-area {
@@ -2915,12 +2919,7 @@
     padding: 17px;
     margin-left: 15px;
   }
-  .main-banner-content form .submit-btn button {
-    display: inline-block;
-    width: auto;
-    padding: 11px 40px;
-    margin-top: 5px;
-  }
+
   .main-banner-content .popular-search-list {
     text-align: center;
     padding-left: 0;
@@ -4456,6 +4455,18 @@
 
   .listings-details-image .listings-details-content .meta{
     display: block;
+  }
+
+  .base-main-button,
+  .main-banner-content form .submit-btn button {
+    display: inline-block;
+    width: auto;
+    padding: 11px 20px;
+    margin-top: 5px;
+  }
+
+  .chat-content-area .content-right .chat-list-wrapper .chat-list .chat-list-footer form .send-btn{
+    padding: 1px 15px;
   }
 }
 

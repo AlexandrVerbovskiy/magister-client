@@ -2417,6 +2417,7 @@ Main Banner Area CSS
   padding: 12px 25px;
   border-radius: 30px;
   transition: var(--transition);
+  text-align: center;
 }
 
 .base-main-button {
@@ -17631,7 +17632,7 @@ button.button-danger:hover {
 
 .listings-details-image {
   max-height: 500px;
-  min-height: 500px;
+  min-height: 260px;
 }
 
 .listings-details-area .listings-details-image {
