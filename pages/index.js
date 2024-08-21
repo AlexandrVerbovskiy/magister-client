@@ -11,6 +11,7 @@ import Feedback from "../components/Common/Feedback";
 import SafeWithUs from "../components/Common/SafeWithUs";
 import UnlockAccess from "../components/Common/UnlockAccess";
 import StartEarning from "../components/Common/StartEarning";
+import { objStringSort, stringSort } from "../utils";
 
 const Index = ({ categories }) => {
   const popularCategories = [];
@@ -25,7 +26,7 @@ const Index = ({ categories }) => {
     topCategories.push(category);
   });
 
-  topCategories.sort((a, b) => a.countListings - b.countListings);
+  objStringSort(topCategories, "name");
   topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
 
   return (

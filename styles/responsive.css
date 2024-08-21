@@ -1807,7 +1807,7 @@
   .listings-details-image .listings-details-content ul li.phone-number a {
     font-size: 16px;
     padding-left: 50px;
-    padding-right: 15px;
+    padding-right: 20px;
     padding-top: 12px;
     padding-bottom: 11px;
   }
@@ -4447,6 +4447,15 @@
   .how-it-works-box-wrapper h3,
   .how-it-works-box-wrapper p {
     text-align: center !important;
+  }
+
+  .listings-details-image .listings-details-content .meta:not(:last-of-type){
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .listings-details-image .listings-details-content .meta{
+    display: block;
   }
 }
 
