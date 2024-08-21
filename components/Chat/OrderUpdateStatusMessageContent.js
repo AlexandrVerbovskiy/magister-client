@@ -9,6 +9,7 @@ const OrderUpdateStatusMessageContent = ({
   senderId,
   Icon = null,
   style = {},
+  isExtensionActions = false,
 }) => {
   return (
     <div className="d-flex flex-column align-items-center" style={style}>
@@ -29,6 +30,7 @@ const OrderUpdateStatusMessageContent = ({
         popupsData={popupsData}
         content={content}
         senderId={senderId}
+        isExtensionActions={isExtensionActions}
       />
     </div>
   );

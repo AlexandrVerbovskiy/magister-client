@@ -173,13 +173,18 @@ const OrderChatBody = ({
     });
   };
 
-  const onExtendOrder = ({ id, chatMessage, opponent }) => {
-    actions.appendChatToListByMessage(chatMessage, opponent);
-    handleSelectChat(chatMessage.chatId);
-
-    success.set(
-      "Order extended successfully. You can discuss the new terms in a new chat"
-    );
+  const onExtendOrder = (result) => {
+    const { id, chatMessage, opponent } = result;
+    if (chatMessage.chatId == selectedChat.id) {
+      updateOrder({ extendOrders: result.parentOrderExtendOrders });
+      actions.appendMessage(chatMessage);
+      windowProps.scrollBodyBottom();
+      success.set("Extension request created successfully");
+    } else {
+      actions.appendChatToListByMessage(chatMessage, opponent);
+      handleSelectChat(chatMessage.chatId);
+      success.set("New booking created successfully");
+    }
   };
 
   const popupsData = useSingleOrderActions({

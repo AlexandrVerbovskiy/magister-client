@@ -9,6 +9,11 @@ const useOrderActions = ({ order }) => {
   useEffect(() => {
     const newActionButtons = [];
 
+    if (!order) {
+      setCurrentActionButtons(newActionButtons);
+      return;
+    }
+
     if (order.chatId) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT);
     }

@@ -120,35 +120,6 @@ const TenantCommentMessage = ({ content }) => {
   );
 };
 
-const ListingCommentMessage = ({ content }) => {
-  const items = [
-    { label: "Punctuality", value: content.punctuality },
-    { label: "Experience", value: content.generalExperience },
-    { label: "Communication", value: content.communication },
-    { label: "Reliability", value: content.reliability },
-    { label: "Kindness", value: content.kindness },
-    { label: "Flexibility", value: content.flexibility },
-  ];
-
-  const chunkedItems = [];
-
-  for (let i = 0; i < items.length; i += 3) {
-    chunkedItems.push(items.slice(i, i + 3));
-  }
-
-  return (
-    <div className="mb-1">
-      {chunkedItems.map((chunk, index) => (
-        <div className="flex" key={index}>
-          {chunk.map((item, idx) => (
-            <PointStarInfo key={idx} label={item.label} value={item.value} />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   let src = "";
 

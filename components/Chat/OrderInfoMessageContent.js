@@ -20,6 +20,7 @@ const OrderInfoMessageContent = ({
   title,
   senderId,
   hasDescription = false,
+  isExtensionActions = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -76,6 +77,7 @@ const OrderInfoMessageContent = ({
         popupsData={popupsData}
         content={content}
         senderId={senderId}
+        isExtensionActions={isExtensionActions}
       />
     </div>
   );

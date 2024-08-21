@@ -110,35 +110,6 @@ const TenantCommentMessage = ({ content }) => {
   );
 };
 
-const ListingCommentMessage = ({ content }) => {
-  const items = [
-    { label: "Punctuality", value: content.punctuality },
-    { label: "General", value: content.generalExperience },
-    { label: "Communication", value: content.communication },
-    { label: "Reliability", value: content.reliability },
-    { label: "Kindness", value: content.kindness },
-    { label: "Flexibility", value: content.flexibility },
-  ];
-
-  const chunkedItems = [];
-
-  for (let i = 0; i < items.length; i += 3) {
-    chunkedItems.push(items.slice(i, i + 3));
-  }
-
-  return (
-    <div className="my-1">
-      {chunkedItems.map((chunk, index) => (
-        <div className="d-flex" key={index}>
-          {chunk.map((item, idx) => (
-            <PointStarInfo key={idx} label={item.label} value={item.value} />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const baseMessageContent = ({ isTemp, type, content }) => {
   let src = "";
 
@@ -209,11 +180,23 @@ const orderMessageContent = ({
   popupsData,
   senderId,
 }) => {
+  let isExtensionActions = [
+    STATIC.MESSAGE_TYPES.NEW_EXTENSION,
+    STATIC.MESSAGE_TYPES.UPDATE_EXTENSION,
+    STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION,
+    STATIC.MESSAGE_TYPES.CANCELED_EXTENSION,
+    STATIC.MESSAGE_TYPES.REJECTED_EXTENSION,
+    STATIC.MESSAGE_TYPES.NEW_ORDER_BY_EXTENSION,
+    STATIC.MESSAGE_TYPES.TENANT_PAYED_EXTENSION,
+    STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING_EXTENSION,
+  ].includes(type);
+
   const { sessionUser } = useContext(IndiceContext);
 
   if (
     type === STATIC.MESSAGE_TYPES.NEW_ORDER ||
-    type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
+    type === STATIC.MESSAGE_TYPES.UPDATE_ORDER ||
+    type === STATIC.MESSAGE_TYPES.NEW_EXTENSION
   ) {
     const totalPrice = calculateCurrentTotalPrice({
       startDate: content.offerDateStart,
@@ -230,6 +213,16 @@ const orderMessageContent = ({
       content.offerDateEnd
     );
 
+    let title = "Request";
+
+    if (type === STATIC.MESSAGE_TYPES.UPDATE_ORDER) {
+      title = "Updating Request";
+    }
+
+    if (type === STATIC.MESSAGE_TYPES.NEW_EXTENSION) {
+      title = "Extension Request";
+    }
+
     return (
       <OrderInfoMessageContent
         totalPrice={totalPrice}
@@ -238,13 +231,13 @@ const orderMessageContent = ({
         popupsData={popupsData}
         type={type}
         duration={duration}
-        title={
-          type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
-            ? "Updating Request"
-            : "Request"
+        title={title}
+        hasDescription={
+          type === STATIC.MESSAGE_TYPES.NEW_ORDER ||
+          type === STATIC.MESSAGE_TYPES.NEW_EXTENSION
         }
-        hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
         senderId={senderId}
+        isExtensionActions={isExtensionActions}
       />
     );
   }
@@ -293,6 +286,7 @@ const orderMessageContent = ({
         Icon={SuccessIcon}
         style={style}
         senderId={senderId}
+        isExtensionActions={isExtensionActions}
       />
     );
   }
@@ -357,6 +351,7 @@ const orderMessageContent = ({
           popupsData={popupsData}
           content={content}
           senderId={senderId}
+          isExtensionActions={isExtensionActions}
         />
       </div>
     );
