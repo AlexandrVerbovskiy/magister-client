@@ -759,7 +759,7 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label={`Rental price per day, ${STATIC.CURRENCY}:`}
+                label={`Rental price per day (${STATIC.CURRENCY}):`}
                 icon="bx bx-purchase-tag"
                 placeholder="12.00"
                 value={pricePerDay}
@@ -770,7 +770,7 @@ const EditForm = ({
             </div>
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label={`Item value, ${STATIC.CURRENCY}:`}
+                label={`Item value (${STATIC.CURRENCY}):`}
                 icon="bx bx-purchase-tag"
                 placeholder="532.00"
                 value={compensationCost}

@@ -37,7 +37,7 @@ export const generateMyEmailVerifyCode = async (email) => {
 
 export const register = async (userInfo) => {
   const data = await post("/register", userInfo);
-  return data.message;
+  return data.body;
 };
 
 export const getMyInfo = async (authToken) => {

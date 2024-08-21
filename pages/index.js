@@ -15,7 +15,7 @@ import StartEarning from "../components/Common/StartEarning";
 const Index = ({ categories }) => {
   const popularCategories = [];
   let topCategories = [];
-  const maxTopCategoriesSectionView = 8;
+  const maxTopCategoriesSectionView = 9;
 
   categories["firstLevel"].map((category) => {
     if (category.popular) {
@@ -26,8 +26,6 @@ const Index = ({ categories }) => {
   });
 
   topCategories.sort((a, b) => a.countListings - b.countListings);
-  const moreCategoriesThanView =
-    topCategories.length > maxTopCategoriesSectionView;
   topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
 
   return (
@@ -42,10 +40,7 @@ const Index = ({ categories }) => {
 
       <SafeWithUs />
 
-      <Category
-        topCategories={topCategories}
-        needShowMore={moreCategoriesThanView}
-      />
+      <Category topCategories={topCategories} />
 
       <UnlockAccess />
 

@@ -261,7 +261,7 @@ p:last-child {
 }
 .default-btn:hover {
   border-color: var(--mainColor);
-  background-color:var(--mainColor);
+  background-color: var(--mainColor);
   color: var(--whiteColor);
 }
 
@@ -3415,7 +3415,7 @@ Listings Area CSS
   bottom: 0;
 }
 
-.filter-bookmark-save{
+.filter-bookmark-save {
   border: 0;
   margin-left: 5px;
 }
@@ -3470,7 +3470,7 @@ Listings Area CSS
 }
 
 .single-listings-box .listings-image .swiper-button-next:hover:after,
-.single-listings-box .listings-image .swiper-button-prev:hover:after{
+.single-listings-box .listings-image .swiper-button-prev:hover:after {
   color: var(--mainColor);
   transition: var(--transition);
 }
@@ -4362,7 +4362,7 @@ Listings Details Area CSS
   font-size: 14px;
 }
 
-.listings-details-image .listings-details-content .meta:not(:last-of-type){
+.listings-details-image .listings-details-content .meta:not(:last-of-type) {
   margin-right: 10px;
 }
 
@@ -4841,7 +4841,7 @@ Listings Details Area CSS
 
 .default-btn.error-btn:hover {
   border-color: red;
-  background-color:red;
+  background-color: red;
   color: var(--whiteColor);
 }
 
@@ -4981,7 +4981,7 @@ Listings Details Area CSS
 .listings-details-desc .review-form-wrapper form .add-sub-rating p {
   line-height: 1.4;
 }
-.listings-details-desc .review-form-wrapper form .sub-ratings-border-bottom{
+.listings-details-desc .review-form-wrapper form .sub-ratings-border-bottom {
   border-bottom: 1px solid #e3e3e3;
 }
 .listings-details-desc .review-form-wrapper form .sub-ratings {
@@ -6706,7 +6706,6 @@ How It Works Area CSS
   height: 80px;
   line-height: 80px;
   background-color: var(--whiteColor);
-  border: 1px solid var(--mainColor);
   text-align: center;
   color: var(--mainColor);
   font-size: 40px;
@@ -11696,6 +11695,17 @@ All Modal CSS
   padding-right: 25px;
 }
 
+.provider-login-section .login-with-account ul li a svg,
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  .login-with-account
+  ul
+  li
+  a
+  svg,
 .provider-login-section .login-with-account ul li a i,
 .loginRegisterModal
   .modal-dialog
@@ -11712,6 +11722,20 @@ All Modal CSS
   position: relative;
   top: 4px;
   margin-right: 2px;
+}
+
+.provider-login-section .login-with-account ul li a svg,
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-login
+  .login-with-account
+  ul
+  li
+  a
+  svg {
+  top: 2px;
 }
 
 .provider-login-section .login-with-account ul li a.facebook,
@@ -11798,6 +11822,15 @@ All Modal CSS
   color: var(--whiteColor);
 }
 
+.loginRegisterModal
+  .modal-dialog
+  .modal-content
+  .tab-content
+  .miran-register
+  .register-with-account
+  ul
+  li
+  a.google,
 .provider-login-section .login-with-account ul li a.google,
 .loginRegisterModal
   .modal-dialog
@@ -11808,22 +11841,8 @@ All Modal CSS
   ul
   li
   a.google {
-  background-color: #d93025;
-  color: var(--whiteColor);
-}
-
-.provider-login-section .login-with-account ul li a.google:hover,
-.loginRegisterModal
-  .modal-dialog
-  .modal-content
-  .tab-content
-  .miran-login
-  .login-with-account
-  ul
-  li
-  a.google:hover {
-  background-color: #da584f;
-  color: var(--whiteColor);
+  background-color: white;
+  height: 100%;
 }
 
 .provider-login-section .sub-title,
@@ -12157,31 +12176,6 @@ All Modal CSS
   li
   a.linkedin:hover {
   background-color: rgb(110, 155, 182);
-  color: var(--whiteColor);
-}
-
-.loginRegisterModal
-  .modal-dialog
-  .modal-content
-  .tab-content
-  .miran-register
-  .register-with-account
-  ul
-  li
-  a.google {
-  background-color: #d93025;
-  color: var(--whiteColor);
-}
-.loginRegisterModal
-  .modal-dialog
-  .modal-content
-  .tab-content
-  .miran-register
-  .register-with-account
-  ul
-  li
-  a.google:hover {
-  background-color: #da584f;
   color: var(--whiteColor);
 }
 
@@ -13744,7 +13738,7 @@ Dashboard CSS
   margin-bottom: 0;
 }
 
-.bookings-listings-box .table .tr{
+.bookings-listings-box .table .tr {
   display: flex;
 }
 
@@ -13772,10 +13766,9 @@ Dashboard CSS
 .bookings-listings-box .table .tbody .td:not(:last-of-type),
 .bookings-listings-box table tbody td:not(:last-of-type),
 .bookings-listings-box .table .thead .th:not(:last-of-type),
-.bookings-listings-box table thead th:not(:last-of-type){
+.bookings-listings-box table thead th:not(:last-of-type) {
   border-right: 1px dashed #eeeeee;
 }
-
 
 .bookings-listings-box .table .tbody .td.name,
 .bookings-listings-box table tbody td.name {
@@ -13994,7 +13987,7 @@ Dashboard CSS
   color: var(--whiteColor);
 }
 
-.bookings-listings-box .table .tbody .td.action .default-btn i ,
+.bookings-listings-box .table .tbody .td.action .default-btn i,
 .bookings-listings-box table tbody td.action .default-btn i {
   position: absolute;
   left: 20px;
@@ -14589,9 +14582,9 @@ Dashboard CSS
   .chat-list
   .chat-list-header
   .header-left
-  h6{
-    max-width: calc(100% - 40px - 0.5rem)!important;
-  }
+  h6 {
+  max-width: calc(100% - 40px - 0.5rem) !important;
+}
 
 .chat-content-area
   .content-right
@@ -16769,9 +16762,9 @@ Dashboard CSS
   color: var(--blackColor) !important;
   font-weight: 400;
   font-size: var(--fontSize);
-  padding: 0 15px!important;
+  padding: 0 15px !important;
   box-shadow: none !important;
-  display: flex!important;
+  display: flex !important;
 }
 
 .custom-search-select.listing-sort-select > [class*="-control"] {
@@ -17122,7 +17115,6 @@ Preloader Area CSS
   bottom: 20px;
   right: 20px;
   z-index: 9999999999;
-  max-width: 40%;
 }
 
 .main-site-alert {
@@ -17138,7 +17130,6 @@ Preloader Area CSS
   bottom: 20px;
   left: 20px;
   z-index: 9999;
-  max-width: 40%;
 }
 
 .message-site-alert {
@@ -17477,7 +17468,7 @@ button.button-danger:hover {
 }
 
 .no-listing-img,
-.loading-pagination-img{
+.loading-pagination-img {
   width: calc(180px - 65px);
   height: calc(180px - 65px);
   background-position: center center;
@@ -18118,8 +18109,10 @@ input:-internal-autofill-selected {
   text-align: left !important;
 }
 
-.custom-search-select.listing-sort-select [class*="-control"] > div:nth-of-type(1) {
-  font-weight: 600!important;
+.custom-search-select.listing-sort-select
+  [class*="-control"]
+  > div:nth-of-type(1) {
+  font-weight: 600 !important;
 }
 
 .custom-search-select [class*="-control"] > div:nth-of-type(2) {
@@ -18361,7 +18354,7 @@ input[type="number"] {
   border: none;
   font-weight: 600;
   display: block;
-  padding: 12px 50px; 
+  padding: 12px 50px;
   transition: var(--transition);
   border-radius: 30px;
 }
@@ -18907,7 +18900,7 @@ span.flatpickr-weekday {
 .flatpickr-day.endRange,
 .flatpickr-day.startRange.endRange,
 .flatpickr-day.selected.endRange,
-.flatpickr-day.endRange{
+.flatpickr-day.endRange {
   border-radius: 0 !important;
   background-color: #594fbf !important;
   color: var(--whiteColor) !important;
@@ -18916,7 +18909,7 @@ span.flatpickr-weekday {
 }
 
 .flatpickr-day.startRange,
-.flatpickr-day.selected{
+.flatpickr-day.selected {
   border-radius: 0 !important;
   background-color: #ede7f6 !important;
   color: #212529 !important;
@@ -18984,7 +18977,7 @@ span.flatpickr-weekday {
   position: relative;
 }
 
-.listings_contact_details .date-info:not(.date-info-view){
+.listings_contact_details .date-info:not(.date-info-view) {
   cursor: pointer;
 }
 
@@ -19377,7 +19370,7 @@ span.flatpickr-weekday {
   justify-content: space-between !important;
 }
 
-*:has(>.chart-card){
+*:has(> .chart-card) {
   padding-bottom: 30px !important;
 }
 
@@ -19612,11 +19605,11 @@ span.flatpickr-weekday {
   margin-top: 20px;
 }
 
-.how-it-works-box-wrapper:not(:first-of-type){
+.how-it-works-box-wrapper:not(:first-of-type) {
   padding-right: 40px;
 }
 
-.how-it-works-box-wrapper:not(:last-of-type){
+.how-it-works-box-wrapper:not(:last-of-type) {
   padding-left: 40px;
 }
 
@@ -19797,9 +19790,9 @@ span.flatpickr-weekday {
 }
 
 .listings-details-image .container .container .no-comments-rating,
-  .listings-details-image .container .container .rating {
-    color: var(--blackColor);
-  }
+.listings-details-image .container .container .rating {
+  color: var(--blackColor);
+}
 
 .small-text {
   font-size: 14px;
@@ -19839,34 +19832,34 @@ video::-webkit-media-controls-panel {
   width: 100%;
 }
 
-.waller-box:not(:has(ul li)){
+.waller-box:not(:has(ul li)) {
   min-height: 400px;
 }
 
-.orders-table .tr>.th:nth-of-type(1),
-.orders-table .tr>.td:nth-of-type(1){
+.orders-table .tr > .th:nth-of-type(1),
+.orders-table .tr > .td:nth-of-type(1) {
   width: 40%;
 }
 
-.orders-table .tr>.th:nth-of-type(2),
-.orders-table .tr>.td:nth-of-type(2){
+.orders-table .tr > .th:nth-of-type(2),
+.orders-table .tr > .td:nth-of-type(2) {
   width: 40%;
 }
 
-.orders-table .tr>.th:nth-of-type(3),
-.orders-table .tr>.td:nth-of-type(3){
+.orders-table .tr > .th:nth-of-type(3),
+.orders-table .tr > .td:nth-of-type(3) {
   width: 20%;
 }
 
 .bookings-listings-box .td.show-more-table-rows,
-.bookings-listings-box td.show-more-table-rows{
-  width: 100%!important;
-  display: flex!important;
-  align-items: center!important;
-  justify-content: center!important;
+.bookings-listings-box td.show-more-table-rows {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.background-image-black{
+.background-image-black {
   background-color: rgba(0, 0, 0, 0.16);
   position: absolute;
   top: 0;
@@ -19875,31 +19868,132 @@ video::-webkit-media-controls-panel {
   right: 0;
 }
 
-.total-booking-price{
+.total-booking-price {
   font-size: 18px;
 }
 
-.total-booking-price span{
+.total-booking-price span {
   color: var(--mainColor);
-
 }
 
-.verification-alert{
-  background: #F99132;
+.verification-alert {
+  background: #f99132;
   color: white;
 }
 
-.verification-alert a{
+.verification-alert a {
   border-radius: 30px;
-    box-shadow: unset;
-    background-color: white;
-    color: var(--mainColor);
-    font-size: 13px;
-    border: none;
-    position: relative;
-    padding: 8px 20px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    transform: translate(-20px, -12px);
+  box-shadow: unset;
+  background-color: white;
+  color: var(--mainColor);
+  font-size: 13px;
+  border: none;
+  position: relative;
+  padding: 8px 20px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translate(-20px, -12px);
+}
+
+.gsi-material-button {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-appearance: none;
+  background-color: WHITE;
+  background-image: none;
+  border: 2px solid #747775;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #1f1f1f;
+  cursor: pointer;
+  font-size: 14px;
+  height: 40px;
+  letter-spacing: 0.25px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 12px;
+  position: relative;
+  text-align: center;
+  -webkit-transition: background-color .218s, border-color .218s, box-shadow .218s;
+  transition: background-color .218s, border-color .218s, box-shadow .218s;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: auto;
+  max-width: 400px;
+  min-width: min-content;
+}
+
+.gsi-material-button .gsi-material-button-icon {
+  height: 20px;
+  margin-right: 8px;
+  min-width: 20px;
+  width: 20px;
+}
+
+.gsi-material-button .gsi-material-button-content-wrapper {
+  -webkit-align-items: center;
+  align-items: center;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.gsi-material-button .gsi-material-button-contents {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  position: relative;
+  top: 3px;
+  font-weight: 600!important;
+}
+
+.gsi-material-button .gsi-material-button-state {
+  -webkit-transition: opacity .218s;
+  transition: opacity .218s;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.gsi-material-button:disabled {
+  cursor: default;
+  background-color: #ffffff61;
+  border-color: #1f1f1f1f;
+}
+
+.gsi-material-button:disabled .gsi-material-button-contents {
+  opacity: 38%;
+}
+
+.gsi-material-button:disabled .gsi-material-button-icon {
+  opacity: 38%;
+}
+
+.gsi-material-button:not(:disabled):active .gsi-material-button-state, 
+.gsi-material-button:not(:disabled):focus .gsi-material-button-state {
+  background-color: #303030;
+  opacity: 12%;
+}
+
+.gsi-material-button:not(:disabled):hover {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+}
+
+.gsi-material-button:not(:disabled):hover .gsi-material-button-state {
+  background-color: #303030;
+  opacity: 8%;
 }
