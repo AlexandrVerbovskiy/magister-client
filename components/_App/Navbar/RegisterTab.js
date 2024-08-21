@@ -7,6 +7,7 @@ import { IndiceContext } from "../../../contexts";
 import Link from "next/link";
 import ErrorSpan from "../../ErrorSpan";
 import PasswordInput from "../../FormComponents/PasswordInput";
+import { signIn } from "next-auth/react";
 
 const RegisterTab = ({ moveToLogin, activePopup }) => {
   const [formError, setFormError] = useState(null);
@@ -113,15 +114,22 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
     if (error) return;
 
     try {
-      const message = await register({
+      const res = await register({
         password,
         name,
         email,
         acceptedTermCondition,
       });
 
-      mainSuccess.set(message);
-      moveToLogin();
+      console.log(res)
+
+      await signIn("credentials", {
+        userId: res.userId,
+        authToken: res.authToken,
+        callbackUrl:
+          window.location.pathname + "?success=Successful registered",
+        needRegularViewInfoForm: res.needRegularViewInfoForm,
+      });
     } catch (e) {
       setFormError(e.message);
     } finally {

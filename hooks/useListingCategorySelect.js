@@ -140,10 +140,25 @@ const useListingCategorySelect = ({
     ) {
       onChange(categoryId, parentId);
       setActive(false);
-      setSelectedByLevels({
-        firstLevel: null,
-        secondLevel: null,
-        thirdLevel: null,
+      setSelectedByLevels((prev) => {
+        const result = { ...prev };
+
+        if (level == "firstLevel") {
+          result["firstLevel"] = categoryId;
+          result["secondLevel"] = null;
+          result["thirdLevel"] = null;
+        }
+
+        if (level == "secondLevel") {
+          result["secondLevel"] = categoryId;
+          result["thirdLevel"] = null;
+        }
+
+        if (level == "thirdLevel") {
+          result["thirdLevel"] = categoryId;
+        }
+
+        return result;
       });
       return;
     }

@@ -13,6 +13,8 @@ const TableItem = ({
   userName,
   userEmail,
   userPhone,
+  userEmailVerified,
+  userPhoneVerified,
   userPhoto,
   hasResponse,
   userId,
@@ -38,12 +40,7 @@ const TableItem = ({
       : "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
   }
 
-  const { sessionUser, isAdmin } = useContext(IndiceContext);
   const [descriptionOpen, setDescriptionOpen] = useState(false);
-
-  const fullPhotoPath = generateProfileFilePath(userPhoto);
-
-  const canMoveToUser = sessionUser?.id != userId;
 
   const userPhotoPath = generateProfileFilePath(documents.userPhoto);
   const frontDocumentPhotoPath = generateProfileFilePath(
@@ -58,11 +55,7 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink
-            id={userId}
-            name={userName}
-            photo={userPhoto}
-          />
+          <TableUserLink id={userId} name={userName} photo={userPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TableUserLink id={userId} name={userEmail} needPhoto={false} />
@@ -117,10 +110,25 @@ const TableItem = ({
                       Details
                     </div>
                     <SubInfoRow label="Name" value={userName} />
-                    <SubInfoRow label="Email" value={userEmail} />
+                    <SubInfoRow
+                      textClassName={
+                        userEmailVerified ? "text-gray-400" : "text-red-400"
+                      }
+                      label="Email"
+                      value={userEmail}
+                      tooltip={userEmailVerified ? null : "Unverified"}
+                    />
                     <SubInfoRow
                       label="Phone"
+                      textClassName={
+                        userPhoneVerified || !userPhone
+                          ? "text-gray-400"
+                          : "text-red-400"
+                      }
                       value={userPhone && userPhone.length ? userPhone : "-"}
+                      tooltip={
+                        userPhoneVerified || !userPhone ? null : "Unverified"
+                      }
                     />
                   </div>
                 </td>

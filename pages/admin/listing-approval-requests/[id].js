@@ -178,7 +178,7 @@ const ListingApprovalRequest = (baseProps) => {
                             <InputView
                               value={listing.pricePerDay}
                               name="pricePerDay"
-                              label={`Rental price per day, ${STATIC.CURRENCY}`}
+                              label={`Rental price per day (${STATIC.CURRENCY})`}
                               placeholder="12.00"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -187,7 +187,7 @@ const ListingApprovalRequest = (baseProps) => {
 
                           <div className="w-full sm:w-1/2">
                             <InputView
-                              label={`Item value, ${STATIC.CURRENCY}`}
+                              label={`Item value (${STATIC.CURRENCY})`}
                               name="compensationCost"
                               placeholder="532.00"
                               labelClassName="block text-sm font-medium mb-1"

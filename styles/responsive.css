@@ -5,7 +5,7 @@
   }
 
   .main-site-alert {
-    max-width: 80%;
+    max-width: 400px;
   }
 
   .loading-pagination,
@@ -2163,7 +2163,17 @@
     padding-left: 15px;
     padding-right: 15px;
   }
-
+  .provider-login-section .login-with-account ul li a svg,
+  .loginRegisterModal
+    .modal-dialog
+    .modal-content
+    .tab-content
+    .miran-login
+    .login-with-account
+    ul
+    li
+    a
+    svg,
   .provider-login-section .login-with-account ul li a i,
   .loginRegisterModal
     .modal-dialog
@@ -4390,52 +4400,58 @@
 
   .categories-select-level-column {
     min-width: 100%;
-    border-right:0!important;
-    border-left:0!important;
+    border-right: 0 !important;
+    border-left: 0 !important;
   }
 
   .how-it-works-section .security-box p,
-  .how-it-works-box p{
-    font-size: 14px!important;
+  .how-it-works-box p {
+    font-size: 14px !important;
   }
 
   .how-it-works-section .security-box h3,
-  .how-it-works-box h3{
-    font-size: 20px!important;
+  .how-it-works-box h3 {
+    font-size: 20px !important;
     margin-bottom: 0;
   }
 
-  .how-it-works-section .section-title h2{
-    font-size: 18px!important;
+  .how-it-works-section .section-title h2 {
+    font-size: 18px !important;
   }
 
   .how-it-works-box,
-  .how-it-works-box .icon{
+  .how-it-works-box .icon {
     margin-bottom: 0;
   }
 
-  .security-box{
+  .security-box {
     margin-bottom: 10px;
     margin-top: 20px;
   }
 
-  .how-it-works-main-section .earn-money-section{
+  .how-it-works-main-section .earn-money-section {
     font-size: 40px;
     line-height: 60px;
   }
 
-  .how-it-works-section{
+  .how-it-works-section {
     padding-top: 40px;
     padding-bottom: 40px;
   }
 
-  .how-it-works-box-wrapper{
+  .how-it-works-box-wrapper {
     justify-content: center;
   }
 
   .how-it-works-section .section-title h2,
   .how-it-works-box-wrapper h3,
-  .how-it-works-box-wrapper p{
-    text-align: center!important;
+  .how-it-works-box-wrapper p {
+    text-align: center !important;
+  }
+}
+
+@media only screen and (min-width: 767.9px) {
+  .message-site-success-alert-list {
+    max-width: 40%;
   }
 }

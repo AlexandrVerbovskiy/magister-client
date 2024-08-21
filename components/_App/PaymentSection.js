@@ -151,11 +151,13 @@ const PaymentSection = ({
           </div>
         </div>
 
-        <div style={{ color: "#666666" }}>
-          When making a bank transfer, you will be asked to provide the order
-          ID. Your order will not be accepted until the funds are visible in
-          your account
-        </div>
+        {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
+          <div style={{ color: "#666666" }}>
+            When making a bank transfer, you will be asked to provide the order
+            ID. Your order will not be accepted until the funds are visible in
+            your account
+          </div>
+        )}
 
         <div
           className="paypal-payment-form mt-2"
