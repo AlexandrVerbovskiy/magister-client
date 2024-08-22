@@ -183,6 +183,7 @@ const orderMessageContent = ({
   entity,
   popupsData,
   senderId,
+  extensionPopupsData = null,
 }) => {
   let isExtensionActions = [
     STATIC.MESSAGE_TYPES.NEW_EXTENSION,
@@ -204,8 +205,8 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_EXTENSION
   ) {
     const totalPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: sessionUser?.id == entity.ownerId,
@@ -214,8 +215,8 @@ const orderMessageContent = ({
     });
 
     const duration = getFactOrderDays(
-      content.offerDateStart,
-      content.offerDateEnd
+      content.offerStartDate,
+      content.offerEndDate
     );
 
     let title = "Request";
@@ -237,7 +238,6 @@ const orderMessageContent = ({
         totalPrice={totalPrice}
         content={content}
         entity={entity}
-        popupsData={popupsData}
         type={type}
         duration={duration}
         title={title}
@@ -246,6 +246,8 @@ const orderMessageContent = ({
           type === STATIC.MESSAGE_TYPES.NEW_EXTENSION
         }
         senderId={senderId}
+        popupsData={popupsData}
+        extensionPopupsData={extensionPopupsData}
         isExtensionActions={isExtensionActions}
       />
     );
@@ -266,9 +268,12 @@ const orderMessageContent = ({
   ) {
     let title = "Proposal accepted";
     let style = {};
+    let description = "";
 
     if (type == STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION) {
-      title = "Extension proposal accepted";
+      title = `Extension proposal accepted`;
+      description = `(From ${dateConverter(content.offerStartDate)} to
+      ${dateConverter(content.offerEndDate)})`;
     }
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED) {
@@ -282,12 +287,17 @@ const orderMessageContent = ({
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_EXTENSION) {
       title = "Paid for the extension";
+      description = `New end date for rental: ${dateConverter(
+        content.offerEndDate
+      )}`;
     }
 
     if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING_EXTENSION) {
       title =
         "Request for confirmation of extension payment was successfully sent";
       style = { maxWidth: "200px", textAlign: "center" };
+      description = `(From ${dateConverter(content.offerStartDate)} to
+      ${dateConverter(content.offerEndDate)})`;
     }
 
     if (type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT) {
@@ -306,13 +316,15 @@ const orderMessageContent = ({
       <OrderUpdateStatusMessageContent
         content={content}
         entity={entity}
-        popupsData={popupsData}
         type={type}
         title={title}
         Icon={SuccessIcon}
         style={style}
         senderId={senderId}
+        popupsData={popupsData}
+        extensionPopupsData={extensionPopupsData}
         isExtensionActions={isExtensionActions}
+        description={description}
       />
     );
   }
@@ -348,11 +360,12 @@ const orderMessageContent = ({
       <OrderUpdateStatusMessageContent
         content={content}
         entity={entity}
-        popupsData={popupsData}
         type={type}
         title={title}
         Icon={ErrorIcon}
         senderId={senderId}
+        popupsData={popupsData}
+        extensionPopupsData={extensionPopupsData}
       />
     );
   }
@@ -361,7 +374,7 @@ const orderMessageContent = ({
     let senderName =
       entity.ownerId == senderId ? entity.ownerName : entity.tenantName;
 
-    if (sessionUser.id == senderId) {
+    if (sessionUser?.id == senderId) {
       senderName = "You";
     }
 
@@ -384,9 +397,10 @@ const orderMessageContent = ({
         <OrderMessageActions
           type={type}
           order={entity}
-          popupsData={popupsData}
           content={content}
           senderId={senderId}
+          popupsData={popupsData}
+          extensionPopupsData={extensionPopupsData}
           isExtensionActions={isExtensionActions}
         />
       </div>
@@ -430,8 +444,8 @@ const orderMessageContent = ({
 
   if (type == STATIC.MESSAGE_TYPES.NEW_ORDER_BY_EXTENSION) {
     const totalPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: sessionUser?.id == entity.ownerId,
@@ -440,8 +454,8 @@ const orderMessageContent = ({
     });
 
     const duration = getFactOrderDays(
-      content.offerDateStart,
-      content.offerDateEnd
+      content.offerStartDate,
+      content.offerEndDate
     );
 
     return (
@@ -469,8 +483,8 @@ const orderMessageContent = ({
 
         <div className="mb-1">
           {duration} {autoMultiEnding(duration, "day")} (
-          {dateConverter(content.offerDateStart)} -{" "}
-          {dateConverter(content.offerDateEnd)})
+          {dateConverter(content.offerStartDate)} -{" "}
+          {dateConverter(content.offerEndDate)})
         </div>
         {hasDescription && (
           <div className="w-100 mb-1">
@@ -480,9 +494,10 @@ const orderMessageContent = ({
         <OrderMessageActions
           type={type}
           order={entity}
-          popupsData={popupsData}
           content={content}
           senderId={senderId}
+          popupsData={popupsData}
+          extensionPopupsData={extensionPopupsData}
           isExtensionActions={isExtensionActions}
         />
       </div>
@@ -499,6 +514,7 @@ const MessageContent = ({
   entity,
   popupsData,
   senderId,
+  extensionPopupsData = null,
 }) => {
   const isOrder = entity["type"] == STATIC.CHAT_TYPES.ORDER;
 
@@ -511,6 +527,7 @@ const MessageContent = ({
       entity,
       popupsData,
       senderId,
+      extensionPopupsData,
     });
   }
 

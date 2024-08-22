@@ -7,6 +7,7 @@ const OrderMessageActions = ({
   order,
   popupsData,
   type = null,
+  extensionPopupsData = null,
   isExtensionActions = false,
 }) => {
   let canActions = false;
@@ -17,6 +18,8 @@ const OrderMessageActions = ({
         (extension) => extension.id == content.extensionId
       )
     : null;
+
+  const extensionActionButtons = useOrderActions({ order: extension });
 
   if (isExtensionActions && !extension) {
     return;
@@ -55,6 +58,32 @@ const OrderMessageActions = ({
         !checkingOrder.actualUpdateRequest &&
         (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
           checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.NEW_EXTENSION &&
+        !checkingOrder.actualUpdateRequest &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.UPDATE_EXTENSION &&
+        checkingOrder.actualUpdateRequest &&
+        checkingOrder.actualUpdateRequest.id == content.requestId &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION &&
+        checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
       ) {
         canActions = true;
       }
@@ -110,8 +139,6 @@ const OrderMessageActions = ({
     }
   }
 
-  const extensionActionButtons = useOrderActions({ order: extension });
-
   let Actions = () => (
     <OrderActions
       currentActionButtons={currentActionButtons}
@@ -123,16 +150,18 @@ const OrderMessageActions = ({
     />
   );
 
-  Actions = () => (
-    <OrderActions
-      currentActionButtons={extensionActionButtons}
-      order={extension}
-      actionClass="message-content-action"
-      needIcon={false}
-      popupsData={popupsData}
-      canActions={canActions}
-    />
-  );
+  if (isExtensionActions) {
+    Actions = () => (
+      <OrderActions
+        currentActionButtons={extensionActionButtons}
+        order={extension}
+        actionClass="message-content-action"
+        needIcon={false}
+        popupsData={extensionPopupsData}
+        canActions={canActions}
+      />
+    );
+  }
 
   return (
     <div

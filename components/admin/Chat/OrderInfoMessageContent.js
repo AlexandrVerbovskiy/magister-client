@@ -45,8 +45,8 @@ const OrderInfoMessageContent = ({
       </div>
       <div className="mb-1">
         {duration} {autoMultiEnding(duration, "day")} (
-        {dateConverter(content.offerDateStart)} -{" "}
-        {dateConverter(content.offerDateEnd)})
+        {dateConverter(content.offerStartDate)} -{" "}
+        {dateConverter(content.offerEndDate)})
       </div>
       <div className="my-2">
         {order.cancelStatus ? (

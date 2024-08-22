@@ -164,15 +164,6 @@ const OrderChatBody = ({
     }, 100);
   };
 
-  const onMakeExtend = ({ price, fromDate, toDate }) => {
-    popupsData.setExtendPopupActive(false);
-    popupsData.setExtendApproveData({
-      price,
-      fromDate,
-      toDate,
-    });
-  };
-
   const onExtendOrder = (result) => {
     const { id, chatMessage, opponent } = result;
     if (chatMessage.chatId == selectedChat.id) {
@@ -187,6 +178,17 @@ const OrderChatBody = ({
     }
   };
 
+  const activeExtension = order.extendOrders.find(
+    (extension) =>
+      extension.status != STATIC.ORDER_STATUSES.FINISHED &&
+      !extension.disputeStatus &&
+      !extension.cancelStatus
+  );
+
+  if (activeExtension) {
+    activeExtension["conflictOrders"] = [...order["conflictOrders"], order];
+  }
+
   const popupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
@@ -199,6 +201,24 @@ const OrderChatBody = ({
     onRejectOrder,
     onPayedFastCancel,
     onDisputeOpened,
+  });
+
+  const onExtensionChanged = (res) => {
+    const { chatMessage, extendOrders } = res;
+    updateOrder({
+      extendOrders,
+    });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const extensionPopupsData = useSingleOrderActions({
+    order: activeExtension,
+    setError: error.set,
+    onCancel: onExtensionChanged,
+    onCreateUpdateRequest: onExtensionChanged,
+    onAcceptOrder: onExtensionChanged,
+    onRejectOrder: onExtensionChanged,
   });
 
   /*  activeDisputeWindow,
@@ -251,6 +271,7 @@ const OrderChatBody = ({
                   handleDeleteMessage={actions.deleteMessage}
                   entity={order}
                   popupsData={popupsData}
+                  extensionPopupsData={extensionPopupsData}
                 />
               );
             })}
@@ -276,7 +297,12 @@ const OrderChatBody = ({
         order={order}
         orderPopupsData={popupsData}
         onTenantPayed={onTenantPayed}
-        onMakeExtend={onMakeExtend}
+      />
+
+      <OrderModals
+        {...dopOrderInfo}
+        order={activeExtension}
+        orderPopupsData={extensionPopupsData}
       />
 
       {currentActionButtons.includes(

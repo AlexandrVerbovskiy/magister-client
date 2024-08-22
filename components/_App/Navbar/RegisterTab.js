@@ -121,8 +121,6 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
         acceptedTermCondition,
       });
 
-      console.log(res)
-
       await signIn("credentials", {
         userId: res.userId,
         authToken: res.authToken,

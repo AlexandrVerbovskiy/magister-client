@@ -18,6 +18,10 @@ const useOrderActions = ({ order }) => {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT);
     }
 
+    if (order.parentChatId) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT);
+    }
+
     if (order.disputeId != null) {
       if (order.disputeChatId) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT);
@@ -76,72 +80,77 @@ const useOrderActions = ({ order }) => {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
     }
 
-    if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
-      isOwner
-    ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE);
-    }
-
-    if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
-      isTenant
-    ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE);
-    }
-
-    if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
-      if (isTenant) {
-        if (order.canAcceptTenantListing) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-          );
-        }
-
-        if (order.canFastCancelPayed) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
-        } else {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
-        }
-      }
-    }
-
-    if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-      if (isOwner && /*order.canFinalization &&*/ order.canAcceptOwnerListing) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON);
-      }
-    }
-
-    if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
-      if (isOwner && !order.tenantCommentId) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW);
-      }
-
-      if (isTenant && !order.ownerCommentId) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
-      }
-    }
-
-    if (
-      [
-        STATIC.ORDER_STATUSES.FINISHED,
-        STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-      ].includes(order.status) ||
-      (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT && isOwner)
-    ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
-    }
-
     if (order.orderParentId) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
-    }
+    } else {
+      if (
+        order.extendOrders &&
+        order.extendOrders.length > 0 &&
+        order.extendOrders.length > 1
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
+      }
 
-    if (
-      order.extendOrders &&
-      order.extendOrders.length > 0 &&
-      (!order.orderParentId || order.extendOrders.length > 1)
-    ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
+      if (
+        [
+          STATIC.ORDER_STATUSES.FINISHED,
+          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+        ].includes(order.status) ||
+        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
+          isOwner)
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+      }
+
+      if (
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
+        isOwner
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE);
+      }
+
+      if (
+        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
+        isTenant
+      ) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE);
+      }
+
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
+        if (isTenant) {
+          if (order.canAcceptTenantListing) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
+            );
+          }
+
+          if (order.canFastCancelPayed) {
+            newActionButtons.push(
+              STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
+            );
+          } else {
+            newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+          }
+        }
+      }
+
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
+        if (isOwner && order.canAcceptOwnerListing) {
+          newActionButtons.push(
+            STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
+          );
+        }
+      }
+
+      if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
+        if (isOwner && !order.tenantCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW);
+        }
+
+        if (isTenant && !order.ownerCommentId) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+        }
+      }
     }
 
     const hasUnstartedExtends =

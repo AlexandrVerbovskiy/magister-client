@@ -24,9 +24,10 @@ const MessageLi = ({
   handleDeleteMessage,
   chatId,
   entity,
-  popupsData,
+  popupsData = null,
   adminSend,
   needUserPhoto,
+  extensionPopupsData = null,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
   const isAuthor = senderId == sessionUser?.id;
@@ -93,6 +94,7 @@ const MessageLi = ({
             content={content}
             popupsData={popupsData}
             senderId={senderId}
+            extensionPopupsData={extensionPopupsData}
           />
 
           {isTemp ? (

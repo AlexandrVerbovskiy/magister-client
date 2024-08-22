@@ -13,7 +13,7 @@ const useBookingAgreementPanel = ({
   setPrevUpdateRequest = null,
   onAcceptOrder = null,
   onRejectOrder = null,
-  onCreateUpdateRequest,
+  onCreateUpdateRequest = null,
 }) => {
   const [disabled, setDisabled] = useState(false);
   const [updateRequestModalActive, setUpdateRequestModalActive] =
@@ -36,7 +36,7 @@ const useBookingAgreementPanel = ({
       setDisabled(true);
       setUpdateRequestModalActive(false);
 
-      const { chatMessage, request } = await createOrderUpdateRequest(
+      const result = await createOrderUpdateRequest(
         {
           orderId: order.id,
           newStartDate: fromDate,
@@ -46,22 +46,22 @@ const useBookingAgreementPanel = ({
         authToken
       );
 
-      onCreateUpdateRequest({
-        orderId: order.id,
-        price,
-        fromDate,
-        toDate,
-        request,
-        chatMessage,
-      });
+      if (onCreateUpdateRequest) {
+        onCreateUpdateRequest({
+          orderId: order.id,
+          price,
+          fromDate,
+          toDate,
+          ...result,
+        });
+      }
 
       return {
         orderId: order.id,
         price,
         fromDate,
         toDate,
-        request,
-        chatMessage,
+        ...result,
       };
     } catch (e) {
       error.set(e.message);
@@ -128,7 +128,7 @@ const useBookingAgreementPanel = ({
 
       const updatedOrderInfo = { id: order.id };
 
-      if (sessionUser.id == order.ownerId) {
+      if (sessionUser?.id == order.ownerId) {
         updatedOrderInfo["status"] = STATIC.ORDER_STATUSES.REJECTED;
       } else {
         updatedOrderInfo["status"] = null;

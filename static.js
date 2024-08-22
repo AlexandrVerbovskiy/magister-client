@@ -40,6 +40,7 @@ export default {
     OWNER_REVIEW: "owner-review",
     OPEN_DISPUTE: "open-dispute",
     ORDER_CHAT: "order-chat",
+    EXTENSION_CHAT: "extension-chat",
     VIEW_DISPUTE_CHAT: "view-dispute-chat",
     PARENT_VIEW: "parent-view",
     EXTENSION_LIST: "extension-list",

@@ -216,8 +216,8 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const forOwnerPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: true,
@@ -226,8 +226,8 @@ const orderMessageContent = ({
     });
 
     const forTenantPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: false,
@@ -236,8 +236,8 @@ const orderMessageContent = ({
     });
 
     const duration = getFactOrderDays(
-      content.offerDateStart,
-      content.offerDateEnd
+      content.offerStartDate,
+      content.offerEndDate
     );
 
     return (
