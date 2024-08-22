@@ -14,12 +14,14 @@ const OrderInfoMessageContent = ({
   totalPrice,
   content,
   entity,
-  popupsData,
   type,
   duration,
   title,
   senderId,
+  popupsData,
+  extensionPopupsData = null,
   hasDescription = false,
+  isExtensionActions = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -47,8 +49,8 @@ const OrderInfoMessageContent = ({
 
       <div className="mb-1">
         {duration} {autoMultiEnding(duration, "day")} (
-        {dateConverter(content.offerDateStart)} -{" "}
-        {dateConverter(content.offerDateEnd)})
+        {dateConverter(content.offerStartDate)} -{" "}
+        {dateConverter(content.offerEndDate)})
       </div>
       <div className="mb-1">
         <StatusBlock
@@ -73,9 +75,11 @@ const OrderInfoMessageContent = ({
       <OrderMessageActions
         type={type}
         order={entity}
-        popupsData={popupsData}
         content={content}
         senderId={senderId}
+        popupsData={popupsData}
+        extensionPopupsData={extensionPopupsData}
+        isExtensionActions={isExtensionActions}
       />
     </div>
   );

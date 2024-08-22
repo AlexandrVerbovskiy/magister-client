@@ -14,6 +14,10 @@ const OrderActions = ({
 }) => {
   const router = useRouter();
 
+  if (!order) {
+    return;
+  }
+
   const handleDisputeChatClick = (e) => {
     e.preventDefault();
     router.push(`/dashboard/chats/${order.disputeChatId}/`);

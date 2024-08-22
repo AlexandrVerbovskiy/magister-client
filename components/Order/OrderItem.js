@@ -331,6 +331,17 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT
+        ) && (
+          <Link
+            className="default-btn"
+            href={`/dashboard/chats/${order.parentChatId}`}
+          >
+            <i className="bx bx-chat"></i> Parent Chat
+          </Link>
+        )}
+
+        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
         ) && (
           <Link

@@ -164,23 +164,30 @@ const OrderChatBody = ({
     }, 100);
   };
 
-  const onMakeExtend = ({ price, fromDate, toDate }) => {
-    popupsData.setExtendPopupActive(false);
-    popupsData.setExtendApproveData({
-      price,
-      fromDate,
-      toDate,
-    });
+  const onExtendOrder = (result) => {
+    const { id, chatMessage, opponent } = result;
+    if (chatMessage.chatId == selectedChat.id) {
+      updateOrder({ extendOrders: result.parentOrderExtendOrders });
+      actions.appendMessage(chatMessage);
+      windowProps.scrollBodyBottom();
+      success.set("Extension request created successfully");
+    } else {
+      actions.appendChatToListByMessage(chatMessage, opponent);
+      handleSelectChat(chatMessage.chatId);
+      success.set("New booking created successfully");
+    }
   };
 
-  const onExtendOrder = ({ id, chatMessage, opponent }) => {
-    actions.appendChatToListByMessage(chatMessage, opponent);
-    handleSelectChat(chatMessage.chatId);
+  const activeExtension = order.extendOrders.find(
+    (extension) =>
+      extension.status != STATIC.ORDER_STATUSES.FINISHED &&
+      !extension.disputeStatus &&
+      !extension.cancelStatus
+  );
 
-    success.set(
-      "Order extended successfully. You can discuss the new terms in a new chat"
-    );
-  };
+  if (activeExtension) {
+    activeExtension["conflictOrders"] = [...order["conflictOrders"], order];
+  }
 
   const popupsData = useSingleOrderActions({
     order,
@@ -194,6 +201,24 @@ const OrderChatBody = ({
     onRejectOrder,
     onPayedFastCancel,
     onDisputeOpened,
+  });
+
+  const onExtensionChanged = (res) => {
+    const { chatMessage, extendOrders } = res;
+    updateOrder({
+      extendOrders,
+    });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const extensionPopupsData = useSingleOrderActions({
+    order: activeExtension,
+    setError: error.set,
+    onCancel: onExtensionChanged,
+    onCreateUpdateRequest: onExtensionChanged,
+    onAcceptOrder: onExtensionChanged,
+    onRejectOrder: onExtensionChanged,
   });
 
   /*  activeDisputeWindow,
@@ -246,6 +271,7 @@ const OrderChatBody = ({
                   handleDeleteMessage={actions.deleteMessage}
                   entity={order}
                   popupsData={popupsData}
+                  extensionPopupsData={extensionPopupsData}
                 />
               );
             })}
@@ -271,7 +297,12 @@ const OrderChatBody = ({
         order={order}
         orderPopupsData={popupsData}
         onTenantPayed={onTenantPayed}
-        onMakeExtend={onMakeExtend}
+      />
+
+      <OrderModals
+        {...dopOrderInfo}
+        order={activeExtension}
+        orderPopupsData={extensionPopupsData}
       />
 
       {currentActionButtons.includes(

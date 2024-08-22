@@ -39,6 +39,17 @@ export const getOrderFullByIdOptions = async (id, authToken = null) => {
   return data.body;
 };
 
+export const getOrderFullByIdForDisputeOptions = async (
+  id,
+  authToken = null
+) => {
+  const data = await get(
+    `/order-full-by-id-for-dispute-options/${id}`,
+    authToken
+  );
+  return data.body;
+};
+
 export const getTenantListingScanRentalCode = async (token, authToken) => {
   const data = await get(
     `/tenant-scanning-listing-rental-code/${token}`,
