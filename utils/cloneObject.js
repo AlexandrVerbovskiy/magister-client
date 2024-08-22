@@ -1,5 +1,7 @@
+import _ from "lodash";
+
 const cloneObject = (elem) => {
-  return JSON.parse(JSON.stringify(elem));
+  return _.cloneDeep(elem);
 };
 
 export default cloneObject;

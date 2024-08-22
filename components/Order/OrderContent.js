@@ -150,10 +150,6 @@ const OrderContent = ({
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
-  const [hasDefect, setHasDefect] = useState(false);
-  const [defectError, setDefectError] = useState(null);
-  const [defectDescription, setDefectDescription] = useState("");
-
   const isBookingWithoutAgreement =
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
     order.status == STATIC.ORDER_STATUSES.PENDING_TENANT;
@@ -225,23 +221,6 @@ const OrderContent = ({
       onClose: handleClose,
       textWeight: textWeight ?? 600,
     });
-  };
-
-  const validateDefect = () => {
-    let hasError = false;
-
-    if (hasDefect) {
-      if (defectDescription.trim()) {
-        if (validateBigText(defectDescription) !== true) {
-          setDefectError(validateBigText(defectDescription));
-        }
-      } else {
-        setDefectError("Required field");
-        hasError = true;
-      }
-    }
-
-    return !hasError;
   };
 
   const localCalculateCurrentTotalPrice = ({
@@ -404,7 +383,6 @@ const OrderContent = ({
       const res = await approveClientGotListing(
         {
           token: order.acceptListingTenantToken,
-          defectDescription: defectDescription.trim(),
         },
         authToken
       );
@@ -412,13 +390,8 @@ const OrderContent = ({
       setOrder((prev) => ({
         ...prev,
         ownerAcceptListingQrcode: res.qrCode,
-        hasDefectByOwner: hasDefect,
-        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
       }));
-
-      setHasDefect(false);
-      setDefectDescription("");
 
       activateSuccessOrderPopup({
         text: "Approved successfully",
@@ -433,20 +406,14 @@ const OrderContent = ({
       await finishedByOwner(
         {
           token: order.acceptListingOwnerToken,
-          defectDescription: defectDescription.trim(),
         },
         authToken
       );
 
       setOrder((prev) => ({
         ...prev,
-        hasDefectByOwner: hasDefect,
-        defectDescriptionByOwner: defectDescription,
         status: STATIC.ORDER_STATUSES.FINISHED,
       }));
-
-      setHasDefect(false);
-      setDefectDescription("");
 
       activateSuccessOrderPopup({
         text: "Finished successfully",
@@ -536,28 +503,11 @@ const OrderContent = ({
   };
 
   const triggerFinishClick = () => {
-    if (!validateDefect()) {
-      return;
-    }
-
     setFinishOrderModalActive(true);
   };
 
   const triggerTenantQotListingClick = () => {
-    if (!validateDefect()) {
-      return;
-    }
-
     setTenantGotListingApproveModalActive(true);
-  };
-
-  const handleDefectInactive = () => setHasDefect(false);
-
-  const handleDefectActive = () => setHasDefect(true);
-
-  const handleDefectUpdate = (e) => {
-    setDefectDescription(e.target.value);
-    setDefectError(null);
   };
 
   if (orderPopupsData.extendApproveData) {
@@ -624,14 +574,29 @@ const OrderContent = ({
             />
           </div>
 
-          <div className="col">
-            <TextareaView
-              value={order.listingDescription}
-              icon="bx bx-text"
-              label="How Item Is Stored:"
-              placeholder="Details..."
-            />
+          <div className="row">
+            <div className="col">
+              <TextareaView
+                value={order.listingDescription}
+                icon="bx bx-text"
+                label="How Item Is Stored:"
+                placeholder="Details..."
+              />
+            </div>
           </div>
+
+          {order.listingDefects && (
+            <div className="row">
+              <div className="col">
+                <TextareaView
+                  value={order.listingDefects}
+                  icon="bx bx-text"
+                  label="Defects:"
+                  placeholder="Defects..."
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1249,54 +1214,7 @@ const OrderContent = ({
       {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
         order.canAcceptTenantListing) ||
         (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
-          order.canAcceptOwnerListing)) && (
-        <div className="order_widget add-listings-box">
-          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT && (
-            <h3>Any defects</h3>
-          )}
-          {order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER && (
-            <h3>New defects</h3>
-          )}
-
-          <div className="form-group">
-            <ul className="facilities-list">
-              <li>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    name="defect_yes"
-                    value="yes"
-                    checked={hasDefect}
-                    onChange={(e) => handleDefectActive(e)}
-                  />
-                  <span>Yes</span>
-                </label>
-              </li>
-              <li>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    name="defect_no"
-                    value="no"
-                    checked={!hasDefect}
-                    onChange={(e) => handleDefectInactive(e)}
-                  />
-                  <span>No</span>
-                </label>
-              </li>
-            </ul>
-          </div>
-
-          {hasDefect && (
-            <TextareaWithIcon
-              placeholder="Describe the defect"
-              value={defectDescription}
-              onChange={handleDefectUpdate}
-              error={defectError}
-            />
-          )}
-        </div>
-      )}
+          order.canAcceptOwnerListing)) && <>{/* CHECKLIST */}</>}
 
       {currentActionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE

@@ -220,13 +220,7 @@ const SingleListingsContent = ({
         <div className="container">
           {!currentApprove && (
             <div className="row">
-              <div
-                className={
-                  sessionUser?.id != listing.ownerId
-                    ? "col-lg-8 col-md-12"
-                    : "col-12"
-                }
-              >
+              <div className="col-lg-8 col-md-12">
                 <div className="listings-details-desc">
                   <h3>{listing.name}</h3>
                   <p>{listing.description}</p>
@@ -280,6 +274,17 @@ const SingleListingsContent = ({
                       </li>
                     </ul>
                   </div>
+
+                  {listing.defects && (
+                    <>
+                      <h3>Defects</h3>
+                      <div id="pricing">
+                        <ul className="pricing-list">
+                          <li className="row-dots-end">{listing.defects}</li>
+                        </ul>
+                      </div>
+                    </>
+                  )}
 
                   <h3>Collection Location</h3>
                   <div className="card-widget" style={{ height: "500px" }}>

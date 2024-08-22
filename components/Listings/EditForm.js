@@ -109,6 +109,10 @@ const EditForm = ({
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
+  const [hasDefects, setHasDefects] = useState(false);
+  const [defects, setDefects] = useState("");
+  const [defectsError, setDefectsError] = useState(null);
+
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
   const [postcode, setPostcode] = useState("");
@@ -257,6 +261,12 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const handleChangeDefects = (e) => {
+    setDefects(e.target.value);
+    setDefectsError(null);
+    setMainError(null);
+  };
+
   const handleChangeCity = (e) => {
     const city = e.value;
     const cityCords = getCityCoords(city);
@@ -332,6 +342,7 @@ const EditForm = ({
       address: listing.address ?? "",
       name: listing.name ?? "",
       description: listing.description ?? "",
+      defects: listing.defects ?? "",
       postcode: listing.postcode ?? "",
       city: city,
       compensationCost: listing.compensationCost ?? "",
@@ -365,6 +376,7 @@ const EditForm = ({
       address: address.trim(),
       name: name.trim(),
       description: description.trim(),
+      defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
       compensationCost,
@@ -402,6 +414,8 @@ const EditForm = ({
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
+    setDefects(data.defects);
+    setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
     setCompensationCost(data.compensationCost);
@@ -548,6 +562,18 @@ const EditForm = ({
       hasError = true;
     }
 
+    if (hasDefects) {
+      if (!defects) {
+        setDefectsError("Required field");
+        hasError = true;
+      }
+
+      if (defects && validateBigText(defects) !== true) {
+        setDefectsError(validateBigText(defects));
+        hasError = true;
+      }
+    }
+
     if (!pricePerDay) {
       setPricePerDayError("Required field");
       hasError = true;
@@ -652,23 +678,6 @@ const EditForm = ({
   const handleAcceptUpdate = async () => {
     await handleSubmit(true);
     setActiveUpdatePopup(false);
-  };
-
-  const handleBaseUpdateClick = async (e) => {
-    if (listing.id && listing.approved) {
-      if (disabled) return;
-      setMainError(null);
-
-      if (!validate()) return false;
-
-      if (hasChanges()) {
-        activateUpdatePopup(e);
-      } else {
-        success.set(messageOnSuccess);
-      }
-    } else {
-      handleSubmit(true);
-    }
   };
 
   return (
@@ -916,6 +925,42 @@ const EditForm = ({
           </div>
         </div>
 
+        <div className="add-listings-box">
+          <h3>Item Defects</h3>
+
+          <div className="form-group">
+            <div className="sidebar-widgets">
+              <div className="box">
+                <span className="title">Is your tool defective?</span>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={hasDefects}
+                    onChange={(e) => setHasDefects(e.target.checked)}
+                  />
+                  <span></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {hasDefects && (
+            <div className="row">
+              <div className="col-lg-12 col-md-12">
+                <TextareaWithIcon
+                  name="defects"
+                  value={defects}
+                  onChange={handleChangeDefects}
+                  icon="bx bx-text"
+                  label="Describe item defects:"
+                  error={defectsError}
+                  placeholder="DEFECTS"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
         {!canChange && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -969,16 +1014,6 @@ const EditForm = ({
                   {active ? "Delete" : "Restore"}
                 </button>
               )}
-
-              {/*listing.approved && listing.id && (
-              <button
-                type="button"
-                onClick={activateDeletePopup}
-                disabled={deleteDisabled}
-              >
-                Delete
-              </button>
-            )*/}
             </div>
           </div>
         ) : (

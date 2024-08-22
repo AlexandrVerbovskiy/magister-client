@@ -554,34 +554,6 @@ const Order = (baseProps) => {
                         </div>
                       </section>
 
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Defects By Tenant
-                        </h2>
-
-                        <div className="w-full">
-                          <TextareaView
-                            name="defect-by-tenant"
-                            value={order.defectDescriptionByTenant ?? "-"}
-                            row="7"
-                          />
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Defects By Owner
-                        </h2>
-
-                        <div className="w-full">
-                          <TextareaView
-                            name="defect-by-owner"
-                            value={order.defectDescriptionByOwner ?? "-"}
-                            row="7"
-                          />
-                        </div>
-                      </section>
-
                       {requestsToUpdate.length > 0 && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
