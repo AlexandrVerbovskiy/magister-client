@@ -212,10 +212,20 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
+  const onExtensionCancel = (res) => {
+    const { chatMessage, extendOrders, conflictOrders } = res;
+    updateOrder({
+      extendOrders,
+      conflictOrders
+    });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
   const extensionPopupsData = useSingleOrderActions({
     order: activeExtension,
     setError: error.set,
-    onCancel: onExtensionChanged,
+    onCancel: onExtensionCancel,
     onCreateUpdateRequest: onExtensionChanged,
     onAcceptOrder: onExtensionChanged,
     onRejectOrder: onExtensionChanged,
