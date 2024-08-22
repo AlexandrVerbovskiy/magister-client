@@ -30,9 +30,7 @@ const SignInForm = () => {
 
   const { success: mainSuccess } = useContext(IndiceContext);
 
-  const successReloadLink = () => {
-    return window.location.pathname + "?success=Successfully logged in";
-  };
+  const successReloadLink = window.location.pathname + "?success=Successfully logged in";
 
   const onLoginPartSuccess = async (res) => {
     if (res.needCode) {
@@ -50,7 +48,7 @@ const SignInForm = () => {
       await signIn("credentials", {
         userId: res.userId,
         authToken: res.authToken,
-        callbackUrl: successReloadLink(),
+        callbackUrl: successReloadLink,
         needRegularViewInfoForm: res.needRegularViewInfoForm,
       });
     }
@@ -117,7 +115,7 @@ const SignInForm = () => {
 
       await signIn("credentials", {
         authToken: res.authToken,
-        callbackUrl: successReloadLink(),
+        callbackUrl: successReloadLink,
       });
 
       setCode("");

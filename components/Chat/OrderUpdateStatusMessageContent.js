@@ -3,12 +3,15 @@ import OrderMessageActions from "./OrderMessageActions";
 const OrderUpdateStatusMessageContent = ({
   content,
   entity,
-  popupsData,
   type,
   title,
   senderId,
   Icon = null,
   style = {},
+  popupsData,
+  extensionPopupsData = null,
+  isExtensionActions = false,
+  description = null,
 }) => {
   return (
     <div className="d-flex flex-column align-items-center" style={style}>
@@ -21,6 +24,7 @@ const OrderUpdateStatusMessageContent = ({
             style={{ marginTop: "-4px", marginLeft: "5px" }}
           />
         )}
+        {description && <p>{description}</p>}
       </div>
 
       <OrderMessageActions
@@ -29,6 +33,8 @@ const OrderUpdateStatusMessageContent = ({
         popupsData={popupsData}
         content={content}
         senderId={senderId}
+        extensionPopupsData={extensionPopupsData}
+        isExtensionActions={isExtensionActions}
       />
     </div>
   );

@@ -120,35 +120,6 @@ const TenantCommentMessage = ({ content }) => {
   );
 };
 
-const ListingCommentMessage = ({ content }) => {
-  const items = [
-    { label: "Punctuality", value: content.punctuality },
-    { label: "Experience", value: content.generalExperience },
-    { label: "Communication", value: content.communication },
-    { label: "Reliability", value: content.reliability },
-    { label: "Kindness", value: content.kindness },
-    { label: "Flexibility", value: content.flexibility },
-  ];
-
-  const chunkedItems = [];
-
-  for (let i = 0; i < items.length; i += 3) {
-    chunkedItems.push(items.slice(i, i + 3));
-  }
-
-  return (
-    <div className="mb-1">
-      {chunkedItems.map((chunk, index) => (
-        <div className="flex" key={index}>
-          {chunk.map((item, idx) => (
-            <PointStarInfo key={idx} label={item.label} value={item.value} />
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   let src = "";
 
@@ -245,8 +216,8 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const forOwnerPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: true,
@@ -255,8 +226,8 @@ const orderMessageContent = ({
     });
 
     const forTenantPrice = calculateCurrentTotalPrice({
-      startDate: content.offerDateStart,
-      endDate: content.offerDateEnd,
+      startDate: content.offerStartDate,
+      endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
       type,
       isOwner: false,
@@ -265,8 +236,8 @@ const orderMessageContent = ({
     });
 
     const duration = getFactOrderDays(
-      content.offerDateStart,
-      content.offerDateEnd
+      content.offerStartDate,
+      content.offerEndDate
     );
 
     return (

@@ -14,6 +14,10 @@ const OrderActions = ({
 }) => {
   const router = useRouter();
 
+  if (!order) {
+    return;
+  }
+
   const handleDisputeChatClick = (e) => {
     e.preventDefault();
     router.push(`/dashboard/chats/${order.disputeChatId}/`);
@@ -90,7 +94,10 @@ const OrderActions = ({
           {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.PAY_BUTTON
           ) && (
-            <Link href={`/dashboard/orders/checkout/${order.id}`}>
+            <Link
+              className={actionClass}
+              href={`/dashboard/orders/checkout/${order.id}`}
+            >
               {needIcon && <i className="bx bx-wallet"></i>} Pay
             </Link>
           )}

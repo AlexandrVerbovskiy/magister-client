@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { getDaysDifference, getFactOrderDays, validateBigText } from "../../utils";
+import { getFactOrderDays, validateBigText } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -57,10 +57,10 @@ const OrderApprovementSection = ({
       setDateError('"From date" can\'t be larger than "To date"');
     }
 
-    if (minRentalDays && getDaysDifference(fromDate, toDate) < minRentalDays) {
+    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
       hasError = true;
       setDateError(
-        `Rental duration can't be lower than ${getDaysDifference(
+        `Rental duration can't be lower than ${getFactOrderDays(
           fromDate,
           toDate
         )} days`

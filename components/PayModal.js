@@ -13,7 +13,7 @@ const PayModal = ({
   amount,
   orderId,
   listingName,
-  onTenantPayed,
+  onTenantPayed = null,
   pricePerDay,
   offerStartDate,
   offerEndDate,
@@ -27,7 +27,10 @@ const PayModal = ({
 
   const handleTenantPayed = (result) => {
     setTimeout(() => {
-      onTenantPayed(result);
+      if(onTenantPayed){
+        onTenantPayed(result);
+      }
+      
       closeModal();
     }, 100);
   };

@@ -48,11 +48,13 @@ const OrderPopups = ({
   setPaypalModalActive,
   bankInfo,
 
-  onTenantPayed,
+  onTenantPayed = null,
 }) => {
-  const { authToken, sessionUser } = useContext(IndiceContext);
+  const { authToken } = useContext(IndiceContext);
 
-  const isOwner = sessionUser?.id == order.ownerId;
+  if (!order) {
+    return;
+  }
 
   const extendStartDate = getStartExtendOrderDate(
     order.offerEndDate,

@@ -136,7 +136,7 @@ const SingleListingsContent = ({
                         <i className="flaticon-furniture-and-household"></i>
                         {listing.otherCategory}
                       </span>
-                      <span className="meta" style={{ marginLeft: "10px" }}>
+                      <span className="meta">
                         <i className="flaticon-furniture-and-household"></i>
                         Others
                       </span>
@@ -145,7 +145,7 @@ const SingleListingsContent = ({
 
                   <h3
                     className="row-dots-end"
-                    style={{ color: "var(--mainColor)" }}
+                    style={{ color: "var(--mainColor)", textWrap: "nowrap" }}
                   >
                     {listing.name}
                   </h3>
@@ -360,7 +360,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {ownerRatingInfo["averagePhotoAccuracy"].toFixed(1)}
+                                  {ownerRatingInfo[
+                                    "averagePhotoAccuracy"
+                                  ].toFixed(1)}
                                 </div>
                               </div>
 
@@ -372,7 +374,9 @@ const SingleListingsContent = ({
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        ownerRatingInfo["averagePickupCondition"]
+                                        ownerRatingInfo[
+                                          "averagePickupCondition"
+                                        ]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -380,9 +384,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {ownerRatingInfo["averagePickupCondition"].toFixed(
-                                    1
-                                  )}
+                                  {ownerRatingInfo[
+                                    "averagePickupCondition"
+                                  ].toFixed(1)}
                                 </div>
                               </div>
 
@@ -402,7 +406,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {ownerRatingInfo["averageCleanliness"].toFixed(1)}
+                                  {ownerRatingInfo[
+                                    "averageCleanliness"
+                                  ].toFixed(1)}
                                 </div>
                               </div>
                             </div>
@@ -426,7 +432,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {ownerRatingInfo["averageResponsiveness"].toFixed(1)}
+                                  {ownerRatingInfo[
+                                    "averageResponsiveness"
+                                  ].toFixed(1)}
                                 </div>
                               </div>
 
@@ -437,8 +445,9 @@ const SingleListingsContent = ({
                                 <div className="bar-container">
                                   <div
                                     className={`bar-${
-                                      Math.round(ownerRatingInfo["averageClarity"]) ||
-                                      1
+                                      Math.round(
+                                        ownerRatingInfo["averageClarity"]
+                                      ) || 1
                                     }`}
                                   ></div>
                                 </div>
@@ -457,7 +466,9 @@ const SingleListingsContent = ({
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        ownerRatingInfo["averageSchedulingFlexibility"]
+                                        ownerRatingInfo[
+                                          "averageSchedulingFlexibility"
+                                        ]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -479,7 +490,9 @@ const SingleListingsContent = ({
                                   <div
                                     className={`bar-${
                                       Math.round(
-                                        ownerRatingInfo["averageIssueResolution"]
+                                        ownerRatingInfo[
+                                          "averageIssueResolution"
+                                        ]
                                       ) || 1
                                     }`}
                                   ></div>
@@ -487,9 +500,9 @@ const SingleListingsContent = ({
                               </div>
                               <div className="side right">
                                 <div>
-                                  {ownerRatingInfo["averageIssueResolution"].toFixed(
-                                    1
-                                  )}
+                                  {ownerRatingInfo[
+                                    "averageIssueResolution"
+                                  ].toFixed(1)}
                                 </div>
                               </div>
                             </div>
@@ -630,9 +643,7 @@ const SingleListingsContent = ({
                                   averageRating={
                                     ownerRatingInfo["averageRating"]
                                   }
-                                  commentCount={
-                                    ownerRatingInfo["commentCount"]
-                                  }
+                                  commentCount={ownerRatingInfo["commentCount"]}
                                   checked={true}
                                   countClass="rating-count"
                                   pointsValue={true}

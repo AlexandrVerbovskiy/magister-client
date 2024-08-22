@@ -11,11 +11,12 @@ import Feedback from "../components/Common/Feedback";
 import SafeWithUs from "../components/Common/SafeWithUs";
 import UnlockAccess from "../components/Common/UnlockAccess";
 import StartEarning from "../components/Common/StartEarning";
+import { objStringSort, stringSort } from "../utils";
 
 const Index = ({ categories }) => {
   const popularCategories = [];
   let topCategories = [];
-  const maxTopCategoriesSectionView = 8;
+  const maxTopCategoriesSectionView = 9;
 
   categories["firstLevel"].map((category) => {
     if (category.popular) {
@@ -25,9 +26,7 @@ const Index = ({ categories }) => {
     topCategories.push(category);
   });
 
-  topCategories.sort((a, b) => a.countListings - b.countListings);
-  const moreCategoriesThanView =
-    topCategories.length > maxTopCategoriesSectionView;
+  objStringSort(topCategories, "name");
   topCategories = topCategories.slice(0, maxTopCategoriesSectionView);
 
   return (
@@ -42,10 +41,7 @@ const Index = ({ categories }) => {
 
       <SafeWithUs />
 
-      <Category
-        topCategories={topCategories}
-        needShowMore={moreCategoriesThanView}
-      />
+      <Category topCategories={topCategories} />
 
       <UnlockAccess />
 

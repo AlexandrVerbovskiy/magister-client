@@ -521,15 +521,6 @@ const OrderContent = ({
     onExtendOrder,
   });
 
-  const onMakeExtend = ({ price, fromDate, toDate }) => {
-    orderPopupsData.setExtendPopupActive(false);
-    orderPopupsData.setExtendApproveData({
-      price,
-      fromDate,
-      toDate,
-    });
-  };
-
   const updateFromDate = (fromDate) => {
     orderPopupsData.setExtendApproveData({
       ...orderPopupsData.extendApproveData,
@@ -851,7 +842,10 @@ const OrderContent = ({
       )}
 
       {(order.cancelStatus != null || !actualUpdateRequest) && (
-        <div className="row listings-sidebar mt-0">
+        <div
+          className="row listings-sidebar mt-0"
+          style={{ marginBottom: "30px" }}
+        >
           <div className="col form-group mb-0">
             <div className="listings-widget order_widget order-proposal-info">
               <h3>Proposal Info</h3>
@@ -1025,7 +1019,10 @@ const OrderContent = ({
       )}
 
       {order.cancelStatus == null && actualUpdateRequest && (
-        <div className="row listings-sidebar mt-0">
+        <div
+          className="row listings-sidebar mt-0"
+          style={{ marginBottom: "30px" }}
+        >
           <div className="col col-12 col-md-6 form-group mb-0 h-100">
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
@@ -1337,10 +1334,7 @@ const OrderContent = ({
         order.conflictOrders &&
         order.status == STATIC.ORDER_STATUSES.PENDING_OWNER &&
         order.conflictOrders.length > 0 && (
-          <div
-            className="add-listings-box listings-sidebar listings-widget order_widget"
-            style={{ marginTop: 0 }}
-          >
+          <div className="add-listings-box listings-sidebar listings-widget order_widget mt-0">
             <h3>Conflict Bookings/Orders</h3>
 
             <ul
@@ -1363,10 +1357,7 @@ const OrderContent = ({
         )}
 
       {currentActionButtons.length > countDopAction && (
-        <div
-          className="order_widget add-listings-box"
-          style={{ marginTop: "30px" }}
-        >
+        <div className="order_widget add-listings-box">
           <h3>Operations</h3>
 
           {currentActionButtons.includes(
@@ -1563,6 +1554,17 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT
+            ) && (
+              <Link
+                className="default-btn"
+                href={`/dashboard/chats/${order.parentChatId}`}
+              >
+                Parent Chat
+              </Link>
+            )}
+
+            {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
             ) && (
               <Link
@@ -1582,7 +1584,6 @@ const OrderContent = ({
               currentFee={currentFee}
               actionButtons={currentActionButtons}
               onTenantPayed={onTenantPayed}
-              onMakeExtend={onMakeExtend}
               bankInfo={bankInfo}
             />
 
@@ -1613,7 +1614,7 @@ const OrderContent = ({
         STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST
       ) && (
         <div
-          className="add-listings-box listings-sidebar listings-widget order_widget"
+          className="add-listings-box listings-sidebar listings-widget order_widget mt-0"
           style={{ marginTop: 0 }}
         >
           <h3>Extensions</h3>

@@ -8,28 +8,30 @@ const OrderModals = ({
   order,
   orderPopupsData,
   bankInfo,
-  onTenantPayed,
-  onMakeExtend,
+  onTenantPayed = null,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
-
-  const currentFee =
-    sessionUser?.id == order.ownerId ? order.ownerFee : order.tenantFee;
 
   const currentActionButtons = useOrderActions({
     order,
   });
 
+  if (!order) {
+    return;
+  }
+
+  const currentFee =
+    sessionUser?.id == order.ownerId ? order.ownerFee : order.tenantFee;
+
   return (
     <OrderPopups
       {...orderPopupsData}
       order={order}
-      actualUpdateRequest={order.actualUpdateRequest}
+      actualUpdateRequest={order?.actualUpdateRequest}
       tenantBaseCommission={tenantBaseCommission}
       currentFee={currentFee}
       actionButtons={currentActionButtons}
       onTenantPayed={onTenantPayed}
-      onMakeExtend={onMakeExtend}
       bankInfo={bankInfo}
     />
   );

@@ -6,7 +6,7 @@ import { useCreateDispute, useIdPage } from "../../../../hooks";
 import { authSideProps } from "../../../../middlewares";
 import {
   createDispute as handleCreateDispute,
-  getOrderFullByIdOptions,
+  getOrderFullByIdForDisputeOptions,
 } from "../../../../services";
 import ImagePopup from "../../../../components/_App/ImagePopup";
 import { useRouter } from "next/router";
@@ -18,7 +18,7 @@ const CreateDispute = (baseProps) => {
   const { props, authToken } = useIdPage({
     baseProps,
     getPagePropsFunc: ({ field, authToken }) =>
-      getOrderFullByIdOptions(field, authToken),
+      getOrderFullByIdForDisputeOptions(field, authToken),
   });
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -109,7 +109,7 @@ const CreateDispute = (baseProps) => {
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const id = context.params.id;
-  const options = await getOrderFullByIdOptions(id, baseSideProps.authToken);
+  const options = await getOrderFullByIdForDisputeOptions(id, baseSideProps.authToken);
   return { ...options, id, pageTitle: `Dispute ${id}` };
 };
 

@@ -14,6 +14,7 @@ const RightSidebar = (props) => {
     handleSelectChat,
     canShowMore,
   } = props;
+  
   const [messagesToView, setMessagesToView] = useState([]);
   const [lastShowedMessageId, setLastShowedMessageId] = useState(null);
   const [updatingMessage, setUpdatingMessage] = useState(null);

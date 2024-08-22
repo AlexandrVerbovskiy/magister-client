@@ -1,12 +1,29 @@
-import { useContext } from "react";
 import { useOrderActions } from "../../hooks";
 import OrderActions from "../Order/OrderActions";
-import { IndiceContext } from "../../contexts";
 import STATIC from "../../static";
 
-const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
+const OrderMessageActions = ({
+  content,
+  order,
+  popupsData,
+  type = null,
+  extensionPopupsData = null,
+  isExtensionActions = false,
+}) => {
   let canActions = false;
   const currentActionButtons = useOrderActions({ order });
+
+  const extension = isExtensionActions
+    ? order.extendOrders.find(
+        (extension) => extension.id == content.extensionId
+      )
+    : null;
+
+  const extensionActionButtons = useOrderActions({ order: extension });
+
+  if (isExtensionActions && !extension) {
+    return;
+  }
 
   if (order.disputeStatus) {
     if (
@@ -34,51 +51,82 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         canActions = true;
       }
     } else {
+      const checkingOrder = isExtensionActions ? extension : order;
+
       if (
         type == STATIC.MESSAGE_TYPES.NEW_ORDER &&
-        !order.actualUpdateRequest &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+        !checkingOrder.actualUpdateRequest &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.NEW_EXTENSION &&
+        !checkingOrder.actualUpdateRequest &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.UPDATE_EXTENSION &&
+        checkingOrder.actualUpdateRequest &&
+        checkingOrder.actualUpdateRequest.id == content.requestId &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION &&
+        checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
       ) {
         canActions = true;
       }
 
       if (
         type == STATIC.MESSAGE_TYPES.UPDATE_ORDER &&
-        order.actualUpdateRequest &&
-        order.actualUpdateRequest.id == content.requestId &&
-        (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+        checkingOrder.actualUpdateRequest &&
+        checkingOrder.actualUpdateRequest.id == content.requestId &&
+        (checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
       ) {
         canActions = true;
       }
 
       if (
         (type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
-          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) ||
-        (order.orderParentId &&
+          checkingOrder.status ==
+            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) ||
+        (checkingOrder.orderParentId &&
           type == STATIC.MESSAGE_TYPES.TENANT_PAYED &&
-          order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER)
+          checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER)
       ) {
         canActions = true;
       }
 
       if (
         type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
+        checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
       ) {
         canActions = true;
       }
 
       if (
         type == STATIC.MESSAGE_TYPES.FINISHED &&
-        order.status == STATIC.ORDER_STATUSES.FINISHED
+        checkingOrder.status == STATIC.ORDER_STATUSES.FINISHED
       ) {
         canActions = true;
       }
 
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT) {
-        if (order?.paymentInfo?.id) {
+      if (
+        checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
+      ) {
+        if (checkingOrder?.paymentInfo?.id) {
           if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
             canActions = true;
           }
@@ -91,19 +139,36 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
     }
   }
 
+  let Actions = () => (
+    <OrderActions
+      currentActionButtons={currentActionButtons}
+      order={order}
+      actionClass="message-content-action"
+      needIcon={false}
+      popupsData={popupsData}
+      canActions={canActions}
+    />
+  );
+
+  if (isExtensionActions) {
+    Actions = () => (
+      <OrderActions
+        currentActionButtons={extensionActionButtons}
+        order={extension}
+        actionClass="message-content-action"
+        needIcon={false}
+        popupsData={extensionPopupsData}
+        canActions={canActions}
+      />
+    );
+  }
+
   return (
     <div
       className="d-flex flex-column"
       style={{ gap: "10px", marginTop: "10px" }}
     >
-      <OrderActions
-        currentActionButtons={currentActionButtons}
-        order={order}
-        actionClass="message-content-action"
-        needIcon={false}
-        popupsData={popupsData}
-        canActions={canActions}
-      />
+      <Actions />
     </div>
   );
 };

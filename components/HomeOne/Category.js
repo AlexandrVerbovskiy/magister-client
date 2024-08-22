@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getFilePath } from "../../utils";
 
-const Category = ({ bgColor = "", topCategories, needShowMore }) => {
+const Category = ({ bgColor = "", topCategories }) => {
   return (
     <>
       <section className={`category-area pb-70 ${bgColor}`}>
@@ -45,19 +45,6 @@ const Category = ({ bgColor = "", topCategories, needShowMore }) => {
                 </div>
               </div>
             ))}
-
-            {needShowMore && (
-              <div className="col-lg-4 col-sm-12 col-md-6">
-                <div className="single-category-box more-categories">
-                  <div className="icon overflow-hidden d-flex justify-content-center"></div>
-                  <div>
-                    <h3>More Categories</h3>
-                    <span>0 Listings</span>
-                  </div>
-                  <Link href="/listings/" className="link-btn"></Link>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>

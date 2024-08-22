@@ -10,7 +10,6 @@ import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn } from "next-auth/react";
 import useSearchCategory from "../../hooks/useSearchCategory";
-import SearchTipsPopup from "../SearchTipsPopup";
 import { getListingSearchLink } from "../../utils";
 import ListingLi from "./Navbar/ListingLi";
 import ListingPopup from "./Navbar/ListingPopup";

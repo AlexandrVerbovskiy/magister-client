@@ -10,12 +10,12 @@ import {
 
 const useSingleOrderActions = ({
   order,
-  setUpdatedOffer,
-  setActualUpdateRequest,
-  setPrevUpdateRequest,
-  onCreateUpdateRequest,
-  onCancel,
-  onExtendOrder,
+  setUpdatedOffer = null,
+  setActualUpdateRequest = null,
+  setPrevUpdateRequest = null,
+  onCreateUpdateRequest = null,
+  onCancel = null,
+  onExtendOrder = null,
   setError,
   onAcceptOrder = null,
   onRejectOrder = null,
@@ -31,7 +31,7 @@ const useSingleOrderActions = ({
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
 
-  const ownerId = order.ownerId;
+  const ownerId = order?.ownerId;
 
   const {
     disabled: bookingActionsDisabled,
@@ -60,12 +60,14 @@ const useSingleOrderActions = ({
     try {
       let result = null;
       if (isOwner) {
-        result = await rejectOrder(order.id, authToken);
+        result = await rejectOrder(order?.id, authToken);
       } else {
-        result = await orderFullCancel(order.id, authToken);
+        result = await orderFullCancel(order?.id, authToken);
       }
 
-      onCancel(result);
+      if (onCancel) {
+        onCancel(result);
+      }
     } catch (e) {
       setError(e.message);
     }
@@ -74,7 +76,7 @@ const useSingleOrderActions = ({
   const handlePayedFastCancel = async ({ type, paypalId, cardNumber }) => {
     try {
       const result = await orderFullCancelPayed(
-        { id: order.id, receiptType: type, paypalId, cardNumber },
+        { id: order?.id, receiptType: type, paypalId, cardNumber },
         authToken
       );
 
@@ -98,15 +100,17 @@ const useSingleOrderActions = ({
         {
           startDate: fromDate,
           endDate: toDate,
-          listingId: order.listingId,
+          listingId: order?.listingId,
           feeActive,
           message: sendingMessage,
-          parentOrderId: order.orderParentId ?? order.id,
+          parentOrderId: order?.orderParentId ?? order?.id,
         },
         authToken
       );
 
-      onExtendOrder(result);
+      if (onExtendOrder) {
+        onExtendOrder(result);
+      }
     } catch (e) {
       setError(e.message);
     }
