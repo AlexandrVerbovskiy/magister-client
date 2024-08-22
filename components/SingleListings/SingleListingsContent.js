@@ -575,13 +575,13 @@ const SingleListingsContent = ({
                   )}
                 </div>
               </div>
+              <div className="col-lg-4 col-md-12">
+                <div className="listings-sidebar d-flex flex-column">
+                  <div className="listings-widget book_listings">
+                    <h3>Booking Online</h3>
 
-              {sessionUser?.id != listing.ownerId && (
-                <div className="col-lg-4 col-md-12">
-                  <div className="listings-sidebar d-flex flex-column">
-                    {listing.approved && listing.userId != sessionUser?.id && (
-                      <div className="listings-widget book_listings">
-                        <h3>Booking Online</h3>
+                    {sessionUser?.id != listing.ownerId ? (
+                      <div>
                         {listing.minRentalDays > 0 && (
                           <ul style={{ listStyle: "none", padding: "0" }}>
                             <li className="d-flex">
@@ -608,49 +608,51 @@ const SingleListingsContent = ({
                           {moneyFormat(listing.pricePerDay)}/day
                         </button>
                       </div>
+                    ) : (
+                      <div className="status-background-orange">
+                        You can't book your own listing
+                      </div>
                     )}
+                  </div>
 
-                    <div className="listings-widget listings_author">
-                      <h3>Owner</h3>
-                      <div className="author">
-                        <div className="d-flex align-items-center">
-                          <img
-                            src={generateProfileFilePath(listing.userPhoto)}
-                            alt={listing.userName}
-                          />
-                          <div className="title row-dots-end">
-                            <h4 className="row-dots-end">
-                              <a href={"/owner-listings/" + listing.ownerId}>
-                                {listing.userName}
-                              </a>
-                            </h4>
-                            <span>
-                              {listing.userCountItems}{" "}
-                              {autoMultiEnding(listing.userCountItems, "Item")}{" "}
-                              for rental
-                            </span>
-                          </div>
+                  <div className="listings-widget listings_author">
+                    <h3>Owner</h3>
+                    <div className="author">
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={generateProfileFilePath(listing.userPhoto)}
+                          alt={listing.userName}
+                        />
+                        <div className="title row-dots-end">
+                          <h4 className="row-dots-end">
+                            <a href={"/owner-listings/" + listing.ownerId}>
+                              {listing.userName}
+                            </a>
+                          </h4>
+                          <span>
+                            {listing.userCountItems}{" "}
+                            {autoMultiEnding(listing.userCountItems, "Item")}{" "}
+                            for rental
+                          </span>
                         </div>
+                      </div>
 
-                        <div
-                          className="author-profile"
-                          style={{ borderTop: 0, margin: 0 }}
-                        >
-                          <div className="row align-items-center">
-                            <div className="col-12">
-                              <div className="base-full-rating-stars-info">
-                                <StarRating
-                                  averageRating={
-                                    ownerRatingInfo["averageRating"]
-                                  }
-                                  commentCount={ownerRatingInfo["commentCount"]}
-                                  checked={true}
-                                  countClass="rating-count"
-                                  pointsValue={true}
-                                  centerAlign={true}
-                                  commentName="owner"
-                                />
-                              </div>
+                      <div
+                        className="author-profile"
+                        style={{ borderTop: 0, margin: 0 }}
+                      >
+                        <div className="row align-items-center">
+                          <div className="col-12">
+                            <div className="base-full-rating-stars-info">
+                              <StarRating
+                                averageRating={ownerRatingInfo["averageRating"]}
+                                commentCount={ownerRatingInfo["commentCount"]}
+                                checked={true}
+                                countClass="rating-count"
+                                pointsValue={true}
+                                centerAlign={true}
+                                commentName="owner"
+                              />
                             </div>
                           </div>
                         </div>
@@ -658,7 +660,7 @@ const SingleListingsContent = ({
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           )}
 

@@ -91,6 +91,7 @@ const ChatMessage = ({
           type={type}
           content={content}
           messageClassName={messageClassName}
+          senderId={senderId}
         />
 
         {isTemp ? (

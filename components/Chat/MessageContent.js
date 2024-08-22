@@ -447,7 +447,7 @@ const orderMessageContent = ({
       startDate: content.offerStartDate,
       endDate: content.offerEndDate,
       pricePerDay: content.offerPrice,
-      type,
+      type: sessionUser?.id == entity.ownerId ? "owner" : "tenant",
       isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,
       tenantFee: entity.tenantFee,
@@ -486,11 +486,13 @@ const orderMessageContent = ({
           {dateConverter(content.offerStartDate)} -{" "}
           {dateConverter(content.offerEndDate)})
         </div>
+
         {hasDescription && (
           <div className="w-100 mb-1">
             <b>Description: </b> {content.description}
           </div>
         )}
+
         <OrderMessageActions
           type={type}
           order={entity}
