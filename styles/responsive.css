@@ -4448,14 +4448,14 @@
     text-align: center !important;
   }
 
-  .listings-details-image .listings-details-content .meta:not(:last-of-type){
+  /*.listings-details-image .listings-details-content .meta:not(:last-of-type){
     margin-right: 0;
     margin-bottom: 5px;
   }
 
   .listings-details-image .listings-details-content .meta{
     display: block;
-  }
+  }*/
 
   .base-main-button,
   .main-banner-content form .submit-btn button {
