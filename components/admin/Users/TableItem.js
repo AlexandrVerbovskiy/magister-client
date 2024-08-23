@@ -3,6 +3,7 @@ import { IndiceContext } from "../../../contexts";
 import Tooltip from "../../../components/admin/Tooltip";
 import Edit from "../FastActions/Edit";
 import Documents from "../FastActions/Documents";
+import Delete from "../FastActions/Delete";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../TableDateView";
 import { moneyFormat, dateConverter } from "../../../utils";
@@ -144,6 +145,7 @@ const TableItem = ({
   ownerDisputesCount,
   verifyRequestId,
   verifyRequestHasResponse,
+  onDeleteClick,
 }) => {
   const router = useRouter();
   const { sessionUser, isAdmin } = useContext(IndiceContext);
@@ -383,6 +385,9 @@ const TableItem = ({
             )}
             {!isCurrent && role !== "admin" && (
               <Documents href={`/admin/users/documents/${id}/`} />
+            )}
+            {!isCurrent && role !== "admin" && isAdmin && (
+              <Delete onDeleteClick={onDeleteClick} />
             )}
           </div>
         </td>
