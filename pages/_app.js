@@ -7,7 +7,6 @@ import Loader from "../components/Shared/Loader";
 import GlobalError from "../components/GlobalError/ErrorContent";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
-import UnverifiedAlert from "../components/_App/UnverifiedAlert";
 import "../styles/index.css";
 import {
   useIsomorphicLayoutEffect,
@@ -154,7 +153,6 @@ function MyApp({ Component, pageProps }) {
           <Loader loading={loading} />
 
           <div className="message-site-warning-alert-list">
-            <UnverifiedAlert {...pageProps} />
             {pageType != "admin" && <CookieBanner />}
           </div>
 

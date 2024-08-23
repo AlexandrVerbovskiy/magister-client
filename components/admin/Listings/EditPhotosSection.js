@@ -9,6 +9,7 @@ import DropdownClassic from "../DropdownClassic";
 import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../../static";
+import { useIsMobile } from "../../../hooks";
 
 const linkTypeOptions = [
   { value: "storage", title: "Storage" },
@@ -72,6 +73,8 @@ const EditPhotosSection = ({
   linkSuccessPhoto,
   successLoadLinkPhoto,
 }) => {
+  const isMobile = useIsMobile();
+
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       maxSize: STATIC.LIMITS.FILE_SIZE,
@@ -190,9 +193,23 @@ const EditPhotosSection = ({
         </div>
 
         <div
-          className="flex flex-wrap mt-5"
+          className="flex flex-wrap mt-5 bg-gray-100 border rounded-lg shadow-md"
           style={{ width: "100%", gridGap: "0.5rem" }}
         >
+          <div className="flex flex-col form-group">
+            <div
+              className="add-more-image p-4 cursor-pointer"
+              /*onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoPopupActive(true);
+                  }}*/
+            >
+              {isMobile
+                ? "Click to select files"
+                : "Click or drag and drop to select files"}
+            </div>
+          </div>
+
           {infosToView.map((file) => (
             <ImageView
               key={file.localId}
@@ -206,22 +223,6 @@ const EditPhotosSection = ({
               onImageClick={() => handleStartEditImage(file.localId, file.type)}
             />
           ))}
-
-          {files.length + linkFiles.length < 5 && (
-            <div className="bg-gray-100 border rounded-lg shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
-              <div className="flex flex-col form-group">
-                <div
-                  className="add-more-image p-4 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPhotoPopupActive(true);
-                  }}
-                >
-                  Click to select files
-                </div>
-              </div>
-            </div>
-          )}
 
           {fileError && (
             <div className="w-full form-group p-2">
@@ -250,12 +251,12 @@ const EditPhotosSection = ({
             </div>
             <div className="text-sm mb-4">
               <div className="space-y-2">
-                <DropdownClassic
+                {/*<DropdownClassic
                   options={linkTypeOptions}
                   selected={photoPopupType}
                   setSelected={handleChangePhotoPopupType}
                   needSearch={false}
-                />
+                />*/}
 
                 {photoPopupType !== "storage" && (
                   <div className="mb-4">
@@ -298,7 +299,10 @@ const EditPhotosSection = ({
                     {!photoPopupPhoto && !photoPopupLink && (
                       <div className="gallery-flex form-group">
                         <div className="add-more-image bg-gray-100 border rounded-lg shadow-md">
-                          Click to select files
+                          Click to select{" "}
+                          {isMobile
+                            ? "Click to select files"
+                            : "Click or drag and drop to select files"}
                         </div>
                       </div>
                     )}

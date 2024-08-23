@@ -5,6 +5,7 @@ import InputWithIcon from "../FormComponents/InputWithIcon";
 import { getListingImageByType, uniqueImageId } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../static";
+import { useIsMobile } from "../../hooks";
 
 const linkTypeOptions = [
   { value: "storage", label: "Storage" },
@@ -71,6 +72,8 @@ const EditPhotosSection = ({
   linkSuccessPhoto,
   successLoadLinkPhoto,
 }) => {
+  const isMobile = useIsMobile();
+
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
@@ -193,7 +196,21 @@ const EditPhotosSection = ({
           </div>
         </h3>
 
-        <div className="row" style={{ width: "100%" }}>
+        <div className="row m-0 gallery-flex" style={{ width: "100%" }}>
+          <div className="col col-12 form-group">
+            <div
+              className="add-more-image"
+              /*onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoPopupActive(true);
+                  }}*/
+            >
+              {isMobile
+                ? "Click to select files"
+                : "Click or drag and drop to select files"}
+            </div>
+          </div>
+
           {infosToView.map((file) => (
             <ImageView
               key={file.localId}
@@ -207,22 +224,6 @@ const EditPhotosSection = ({
               onImageClick={() => handleStartEditImage(file.localId, file.type)}
             />
           ))}
-
-          {files.length + linkFiles.length < 5 && (
-            <div className="col-xl-3 col-lg-4 col-md-6 gallery-flex-parent">
-              <div className="gallery-flex form-group">
-                <div
-                  className="add-more-image"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPhotoPopupActive(true);
-                  }}
-                >
-                  Click to select files
-                </div>
-              </div>
-            </div>
-          )}
 
           {fileError && (
             <div className="col-12 form-group">
@@ -243,13 +244,13 @@ const EditPhotosSection = ({
         </span>
 
         <form method="get" className="popup-get-image">
-          <SelectWithIcon
+          {/*<SelectWithIcon
             value={photoPopupType}
             onChange={handleChangePhotoPopupType}
             options={linkTypeOptions}
             isSearchable={false}
             name="photoPopupType"
-          />
+          />*/}
 
           {photoPopupType !== "storage" && (
             <div style={{ marginBottom: "15px" }}>
@@ -298,7 +299,11 @@ const EditPhotosSection = ({
 
               {!photoPopupPhoto && !photoPopupLink && (
                 <div className="gallery-flex form-group">
-                  <div className="add-more-image">Click to select files</div>
+                  <div className="add-more-image">
+                    {isMobile
+                      ? "Click to select files"
+                      : "Click or drag and drop to select files"}
+                  </div>
                 </div>
               )}
 

@@ -16,6 +16,7 @@ import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
+import VerificateAlert from "../VerificateAlert";
 
 const NavbarTwo = () => {
   const { isAuth, isSupport } = useContext(IndiceContext);
@@ -317,6 +318,8 @@ const NavbarTwo = () => {
             </nav>
           </div>
         </div>
+
+        <VerificateAlert className="verification-alert-listings" />
       </div>
 
       {!isAuth && canChangeType && (
