@@ -1192,6 +1192,7 @@ Navbar Area CSS
   right: 0;
   height: auto;
   z-index: 999;
+  border-radius: 0 0 5px 5px;
 }
 .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a {
   color: var(--whiteColor);
@@ -17498,10 +17499,7 @@ button.button-danger:hover {
 .dropzone.add-listings-box .gallery-flex {
   height: 100%;
   width: 100%;
-  display: flex;
   position: relative;
-  align-items: center;
-  justify-content: center;
   background-color: #f6f6f6;
   border: 1px solid #eee;
   cursor: pointer;
@@ -17521,6 +17519,11 @@ button.button-danger:hover {
   text-align: center;
   padding: 20px;
 }
+
+.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image{
+  height: 25px;
+}
+
 
 .gallery-flex-parent {
   display: flex;
@@ -19896,6 +19899,12 @@ video::-webkit-media-controls-panel {
   right: 0;
   bottom: 0;
   transform: translate(-20px, -12px);
+}
+
+.verification-alert-listings,
+.verification-alert-main{
+  margin-bottom: 0;
+  border-radius: 0 0 5px 5px;
 }
 
 .gsi-material-button {

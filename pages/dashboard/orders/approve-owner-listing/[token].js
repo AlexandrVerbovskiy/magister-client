@@ -57,7 +57,7 @@ const ApproveOwnerListing = (baseProps) => {
             />
           </>
         ) : (
-          <ApprovedSection />
+          <ApprovedSection type="finish" />
         )}
       </div>
     </>

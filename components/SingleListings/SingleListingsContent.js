@@ -159,14 +159,6 @@ const SingleListingsContent = ({
                   />
 
                   <ul className="d-flex align-items-center">
-                    {listing.userPhone && (
-                      <li className="phone-number">
-                        <a href={`tel:+${listing.userPhone}`}>
-                          <i className="bx bx-phone-call"></i>
-                          {listing.userPhone}
-                        </a>
-                      </li>
-                    )}
                     <li className="location">
                       <i className="bx bx-map"></i>
                       <span style={{ color: "var(--mainColor)" }}>City</span>
@@ -546,12 +538,6 @@ const SingleListingsContent = ({
                                           <h4 className="row-dots-end">
                                             {comment.reviewerName}
                                           </h4>
-                                          <span>
-                                            {comment.reviewerPhone &&
-                                            comment.reviewerPhone.length
-                                              ? comment.reviewerPhone
-                                              : "-"}
-                                          </span>
                                         </div>
                                       </div>
                                     </div>

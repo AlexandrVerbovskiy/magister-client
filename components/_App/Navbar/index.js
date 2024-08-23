@@ -16,11 +16,9 @@ import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
+import VerificateAlert from "../../VerificateAlert"
 
-const Navbar = ({
-  canShowSearch = true,
-  alwaysSticky = false,
-}) => {
+const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -325,7 +323,9 @@ const Navbar = ({
             </nav>
           </div>
         </div>
+        <VerificateAlert className="verification-alert-main" />
       </div>
+
       {/* ------------ Auth Modal ------- */}
 
       {!isAuth && canChangeType && (

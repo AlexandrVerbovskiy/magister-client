@@ -7,6 +7,7 @@ import TenantGotListingApproveModal from "../Order/TenantGotListingApproveModal"
 import FinishOrderModal from "../Order/FinishOrderModal";
 import { validateBigText } from "../../utils";
 import { approveClientGotListing, finishedByOwner } from "../../services";
+import { useIsMobile } from "../../hooks";
 
 const QuestionInput = ({
   name,
@@ -106,6 +107,8 @@ const ImageView = ({ removeFile, path }) => {
 const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
   const { error } = useContext(IndiceContext);
 
+  const isMobile = useIsMobile();
+
   const [itemMatchesDescription, setItemMatchesDescription] = useState("");
   const [itemMatchesDescriptionActive, setItemMatchesDescriptionActive] =
     useState(true);
@@ -141,7 +144,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     let hasError = false;
 
     if (itemMatchesDescriptionActive) {
-      if (!itemMatchesDescription) {
+      if (!itemMatchesDescription || !itemMatchesDescription.trim()) {
         setItemMatchesDescriptionError("Required field");
         hasError = true;
       }
@@ -153,7 +156,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     }
 
     if (itemMatchesPhotosActive) {
-      if (!itemMatchesPhotos) {
+      if (!itemMatchesPhotos || !itemMatchesPhotos.trim()) {
         setItemMatchesPhotosError("Required field");
         hasError = true;
       }
@@ -165,7 +168,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     }
 
     if (itemFullyFunctionalActive) {
-      if (!itemFullyFunctional) {
+      if (!itemFullyFunctional || !itemFullyFunctional.trim()) {
         setItemFullyFunctionalError("Required field");
         hasError = true;
       }
@@ -177,7 +180,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     }
 
     if (partsGoodConditionActive) {
-      if (!partsGoodCondition) {
+      if (!partsGoodCondition || !partsGoodCondition.trim()) {
         setPartsGoodConditionError("Required field");
         hasError = true;
       }
@@ -189,7 +192,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     }
 
     if (providedGuidelinesActive) {
-      if (!providedGuidelines) {
+      if (!providedGuidelines || !providedGuidelines.trim()) {
         setProvidedGuidelinesError("Required field");
         hasError = true;
       }
@@ -323,7 +326,9 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
               height: images.length > 0 ? "40px" : "inherit",
             }}
           >
-            Drag ‘n’ drop some files here, or click to select files
+            {isMobile
+              ? "Click to select files"
+              : "Click or drag and drop to select files"}
           </div>
 
           {images.map((image, index) => (
