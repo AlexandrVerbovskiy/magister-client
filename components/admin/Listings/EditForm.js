@@ -33,7 +33,6 @@ import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
 import ErrorSpan from "../ErrorSpan";
 import CategorySelect from "./CategorySelect";
-import { useDropzone } from "react-dropzone";
 
 const cityOptions = [
   { value: "Warrington", title: "Warrington" },

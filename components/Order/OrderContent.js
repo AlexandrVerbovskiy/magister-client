@@ -125,6 +125,7 @@ const OrderContent = ({
   ownerBaseCommission,
   tenantBaseCommission,
   bankInfo,
+  operationsDisabled = false,
 }) => {
   const { success, error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
@@ -1274,7 +1275,7 @@ const OrderContent = ({
           </div>
         )}
 
-      {currentActionButtons.length > countDopAction && (
+      {!operationsDisabled && currentActionButtons.length > countDopAction && (
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
 
