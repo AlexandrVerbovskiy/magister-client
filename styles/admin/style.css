@@ -235,6 +235,10 @@ div.add-listings-box.dropzone > .gallery-flex {
   padding: 20px;
 }
 
+.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image{
+  height: 25px;
+}
+
 .gallery-flex {
   display: flex;
   align-items: center;
@@ -317,7 +321,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   border-radius: 0 !important;
 }
 
-.admin-table{
+.admin-table {
   width: 100%;
 }
 
@@ -538,7 +542,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
 
   #messages-list,
-  #messages-sidebar{
+  #messages-sidebar {
     min-width: 100%;
   }
 }
@@ -630,29 +634,29 @@ div.add-listings-box.dropzone > .gallery-flex {
   min-height: 400px;
 }
 
-.messages-list-body{
+.messages-list-body {
   height: calc(100vh - 160px);
 }
 
-#messages-list:has(.message-footer) .messages-list-body{
+#messages-list:has(.message-footer) .messages-list-body {
   height: calc(100vh - 224px);
 }
 
-.categories-select-option.back-button{
+.categories-select-option.back-button {
   color: #594fbf;
   display: none;
 }
 
-.categories-select-option.back-button svg{
+.categories-select-option.back-button svg {
   fill: #594fbf;
   transition: 0.2s ease-in-out all;
 }
 
-.categories-select-option.back-button:hover{
+.categories-select-option.back-button:hover {
   color: var(--mainColor);
 }
 
-.categories-select-option.back-button:hover svg{
+.categories-select-option.back-button:hover svg {
   fill: var(--mainColor);
 }
 
@@ -666,11 +670,11 @@ div.add-listings-box.dropzone > .gallery-flex {
     margin-top: 20px;
   }
 
-  .messages-list-body{
+  .messages-list-body {
     height: calc(100vh - 112px);
   }
-  
-  #messages-list:has(.message-footer) .messages-list-body{
+
+  #messages-list:has(.message-footer) .messages-list-body {
     height: calc(100vh - 176px);
   }
 }
@@ -681,9 +685,8 @@ div.add-listings-box.dropzone > .gallery-flex {
   }
 }
 
-
 @media only screen and (max-width: 991px) {
-  .admin-table{
+  .admin-table {
     width: 1000px;
   }
 
@@ -691,7 +694,7 @@ div.add-listings-box.dropzone > .gallery-flex {
     min-width: 100%;
   }
 
-  .categories-select-option.back-button{
+  .categories-select-option.back-button {
     display: flex;
   }
 }

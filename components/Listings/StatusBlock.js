@@ -20,26 +20,16 @@ const StatusBlock = ({
   let text = "Waiting Approval";
   let color = "status-background-base";
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER) {
+  if (
+    [
+      STATIC.ORDER_STATUSES.PENDING_TENANT,
+      STATIC.ORDER_STATUSES.PENDING_OWNER,
+    ].includes(orderStatus)
+  ) {
     color = "status-background-base";
-
-    if (ownerId == userId) {
-      text = "Request Received";
-    } else {
-      text = "Waiting for Confirmation";
-    }
+    text = "Waiting for Confirmation";
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT) {
-    color = "status-background-base";
-
-    if (tenantId == userId) {
-      text = "Waiting for Confirmation";
-    } else {
-      text = "Request Received";
-    }
-  }
-  
   if (orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for Payment";
