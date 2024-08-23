@@ -69,15 +69,8 @@ export const paypalOrderPayed = async (orderId, authToken) => {
   return data.body;
 };
 
-export const approveClientGotListing = async (
-  { token, defectDescription },
-  authToken
-) => {
-  const data = await post(
-    `/approve-client-got-listing`,
-    { token, defectDescription },
-    authToken
-  );
+export const approveClientGotListing = async (formData, authToken) => {
+  const data = await post(`/approve-client-got-listing`, formData, authToken);
   return data.body;
 };
 
@@ -108,15 +101,8 @@ export const deleteOrder = async (id, authToken) => {
   return data.body;
 };
 
-export const finishedByOwner = async (
-  { token, defectDescription },
-  authToken
-) => {
-  const data = await post(
-    `/finished-by-owner`,
-    { token, defectDescription },
-    authToken
-  );
+export const finishedByOwner = async (formData, authToken) => {
+  const data = await post(`/finished-by-owner`, formData, authToken);
   return data.body;
 };
 

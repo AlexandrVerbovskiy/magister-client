@@ -8,6 +8,7 @@ import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView"
 import {
   calculateCurrentTotalPrice,
   getFactOrderDays,
+  getFilePath,
   getListingImageByType,
   moneyFormat,
   ownerGetsCalculate,
@@ -20,6 +21,24 @@ import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 import { useIdPage } from "../../../hooks";
+
+const ImageView = ({ path, onImageClick = () => {} }) => {
+  const handleImageClick = (e) => {
+    e.stopPropagation();
+    onImageClick();
+  };
+
+  return (
+    <div className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
+      <div
+        className="flex flex-col form-group cursor-zoom-in"
+        onClick={handleImageClick}
+      >
+        <img src={path} />
+      </div>
+    </div>
+  );
+};
 
 const PreviousProposalElem = ({
   index,
@@ -117,8 +136,7 @@ const Order = (baseProps) => {
     getPagePropsFunc: ({ field, authToken }) =>
       getAdminOrderInfo(field, authToken),
   });
-
-  const { requestsToUpdate, listingImages, categoryInfo } = order;
+  const { requestsToUpdate, listingImages } = order;
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [mapCenter, setMapCenter] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
@@ -622,6 +640,211 @@ const Order = (baseProps) => {
                   </div>
                 </div>
               </div>
+
+              {order.tenantChecklistId && (
+                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                  <div className="flex flex-col md:flex-row md:-mr-px">
+                    <div className="grow w-full">
+                      <div className="p-6 space-y-6">
+                        <section className="flex w-full">
+                          <div
+                            className={
+                              "w-full" + order.ownerChecklistId ? "mb-4" : ""
+                            }
+                          >
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Checklist by renter
+                            </h2>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm the that the item matches the description provided in the listing?"
+                                name="tenantChecklistItemMatchesDescription"
+                                value={
+                                  order.tenantChecklistItemMatchesDescription ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div
+                              className="flex flex-wrap mt-5"
+                              style={{ width: "100%", gridGap: "0.5rem" }}
+                            >
+                              <label className="block text-sm font-medium mb-1">
+                                Please upload clear, date stamped photos of the
+                                item within the last 24 hours, highlighting all
+                                sides and any existing damage or imperfections
+                                and also showing the serial number.
+                              </label>
+
+                              {order.ownerChecklistsImages.map(
+                                (image, index) => (
+                                  <ListingPhotoView
+                                    key={index}
+                                    src={getFilePath(image.link)}
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do the photos provided accurately represent the current state of the item?"
+                                name="tenantChecklistItemMatchesPhotos"
+                                value={
+                                  order.tenantChecklistItemMatchesPhotos || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm that the item is fully functional and meets the described specifications?"
+                                name="tenantChecklistItemFullyFunctional"
+                                value={
+                                  order.tenantChecklistItemFullyFunctional ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Are all the listed accessories and parts present and in good condition?"
+                                name="tenantChecklistPartsGoodCondition"
+                                value={
+                                  order.tenantChecklistPartsGoodCondition || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do you understand how to use the item properly and follow the provided guidelines?"
+                                name="tenantChecklistProvidedGuidelines"
+                                value={
+                                  order.tenantChecklistProvidedGuidelines || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {order.ownerChecklistId && (
+                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                  <div className="flex flex-col md:flex-row md:-mr-px">
+                    <div className="grow w-full">
+                      <div className="p-6 space-y-6">
+                        <section className="flex w-full">
+                          <div className="w-full">
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Checklist by owner
+                            </h2>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm the that the item matches the description provided in the listing?"
+                                name="ownerChecklistItemMatchesDescription"
+                                value={
+                                  order.ownerChecklistItemMatchesDescription ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div
+                              className="flex flex-wrap mt-5"
+                              style={{ width: "100%", gridGap: "0.5rem" }}
+                            >
+                              <label className="block text-sm font-medium mb-1">
+                                Please upload clear, date stamped photos of the
+                                item within the last 24 hours, highlighting all
+                                sides and any existing damage or imperfections
+                                and also showing the serial number.
+                              </label>
+
+                              {order.tenantChecklistsImages.map(
+                                (image, index) => (
+                                  <ListingPhotoView
+                                    key={index}
+                                    src={getFilePath(image.link)}
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do the photos provided accurately represent the current state of the item?"
+                                name="ownerChecklistItemMatchesPhotos"
+                                value={
+                                  order.ownerChecklistItemMatchesPhotos || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm that the item is fully functional and meets the described specifications?"
+                                name="ownerChecklistItemFullyFunctional"
+                                value={
+                                  order.ownerChecklistItemFullyFunctional || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Are all the listed accessories and parts present and in good condition?"
+                                name="ownerChecklistPartsGoodCondition"
+                                value={
+                                  order.ownerChecklistPartsGoodCondition || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do you understand how to use the item properly and follow the provided guidelines?"
+                                name="ownerChecklistProvidedGuidelines"
+                                value={
+                                  order.ownerChecklistProvidedGuidelines || "-"
+                                }
+                                labelClassName="block text-sm font-medium mb-1"
+                                row="4"
+                              />
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </main>
