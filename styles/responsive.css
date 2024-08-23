@@ -4305,6 +4305,12 @@
   .miran-grid-sorting {
     margin-bottom: 0;
   }
+
+  .verification-alert a {
+    position: relative;
+    transform: none;
+    margin-top: 5px;
+  }
 }
 
 @media only screen and (max-width: 991.9px) {
@@ -4448,14 +4454,14 @@
     text-align: center !important;
   }
 
-  .listings-details-image .listings-details-content .meta:not(:last-of-type){
+  /*.listings-details-image .listings-details-content .meta:not(:last-of-type){
     margin-right: 0;
     margin-bottom: 5px;
   }
 
   .listings-details-image .listings-details-content .meta{
     display: block;
-  }
+  }*/
 
   .base-main-button,
   .main-banner-content form .submit-btn button {
@@ -4465,7 +4471,13 @@
     margin-top: 5px;
   }
 
-  .chat-content-area .content-right .chat-list-wrapper .chat-list .chat-list-footer form .send-btn{
+  .chat-content-area
+    .content-right
+    .chat-list-wrapper
+    .chat-list
+    .chat-list-footer
+    form
+    .send-btn {
     padding: 1px 15px;
   }
 }
@@ -4473,5 +4485,20 @@
 @media only screen and (min-width: 767.9px) {
   .message-site-success-alert-list {
     max-width: 40%;
+  }
+}
+
+@media only screen and (max-width: 1199px) {
+  .navbar-area {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .navbar-area:has(.verification-alert) {
+    padding-bottom: 0;
+  }
+
+  .navbar-area:has(.verification-alert) .miran-responsive-nav {
+    margin-bottom: 15px;
   }
 }

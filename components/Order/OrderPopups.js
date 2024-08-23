@@ -61,6 +61,8 @@ const OrderPopups = ({
     order.extendOrders
   );
 
+  console.log(order.offerEndDate, order.extendOrders);
+
   return (
     <>
       {actionButtons.includes(

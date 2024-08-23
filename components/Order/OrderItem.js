@@ -373,8 +373,6 @@ const OrderItem = ({
     filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
   const userPhoto =
     filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-  const userPhone =
-    filterType == "tenant" ? order.ownerPhone : order.tenantPhone;
 
   let extendOrders = order.extendOrders.sort((a, b) => a.id - b.id);
 
@@ -395,13 +393,6 @@ const OrderItem = ({
           <div className="info">
             <span className="row-dots-end">{userName}</span>
             <ul>
-              {userPhone && (
-                <li>
-                  <Link className="row-dots-end" href={`tel:${userPhone}`}>
-                    {userPhone}
-                  </Link>
-                </li>
-              )}
               <li>
                 <Link className="row-dots-end" href={`mailto:${userEmail}`}>
                   {userEmail}

@@ -10,7 +10,7 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { getDaysDifference } from "../utils";
+import { cloneObject, getDaysDifference } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({
@@ -295,6 +295,35 @@ const useOrderFastActions = ({
       const foundOrder = findCurrentOrderById(activeCancelId);
       const newOrderData = {};
 
+      let ordersToUpdate = {};
+
+      orders.forEach((order) => {
+        const newOrder = cloneObject(order);
+
+        newOrder.conflictOrders = newOrder.conflictOrders.filter(
+          (conflictOrder) => {
+            conflictOrder.id != activeCancelId;
+          }
+        );
+
+        newOrder.extendOrders = order.extendOrders.map((extension) => {
+          extension.conflictOrders.filter((conflictOrder) => {
+            conflictOrder.id != activeCancelId;
+          });
+          return extension;
+        });
+
+        if (foundOrder.orderParentId) {
+          if (newOrder.id == foundOrder.orderParentId) {
+            newOrder.extendOrders = order.extendOrders.filter(
+              (extension) => extension.id != activeCancelId
+            );
+          }
+        }
+
+        ordersToUpdate[newOrder.id] = newOrder;
+      });
+
       if (foundOrder.ownerId === sessionUser?.id) {
         await rejectOrder(activeCancelId, authToken);
         newOrderData["status"] = STATIC.ORDER_STATUSES.REJECTED;
@@ -304,10 +333,6 @@ const useOrderFastActions = ({
           STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
       }
 
-      const ordersToUpdate = addConflictOrderInfoToList(
-        getRemovedConflictOrders(foundOrder),
-        { ...newOrderData, id: activeCancelId }
-      );
       updateItemsParticularly(ordersToUpdate);
 
       setActiveCancelId(null);
@@ -528,10 +553,13 @@ const useOrderFastActions = ({
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
     updatedInfo = { ...updatedInfo, ...updateOrderInfo };
 
-    const ordersToUpdate = addConflictOrderInfoToList(getRemovedConflictOrders(order), {
-      ...updatedInfo,
-      id: order.id,
-    });
+    const ordersToUpdate = addConflictOrderInfoToList(
+      getRemovedConflictOrders(order),
+      {
+        ...updatedInfo,
+        id: order.id,
+      }
+    );
 
     updateItemsParticularly(ordersToUpdate);
     setRejectOrderModalActiveId(null);
@@ -548,10 +576,13 @@ const useOrderFastActions = ({
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
     updatedInfo = { ...updatedInfo, ...updateOrderInfo };
 
-    const ordersToUpdate = addConflictOrderInfoToList(getAddConflictOrders(order), {
-      ...updatedInfo,
-      id: order.id,
-    });
+    const ordersToUpdate = addConflictOrderInfoToList(
+      getAddConflictOrders(order),
+      {
+        ...updatedInfo,
+        id: order.id,
+      }
+    );
 
     updateItemsParticularly(ordersToUpdate);
     setAcceptOrderModalActiveId(null);

@@ -162,4 +162,5 @@ export default {
   SUPPORT_EMAIL: "support@rentabout.com",
   CURRENCY: "£", //"$"
   CURRENCY_NAME: "GBP", //"USD"
+  MOBILE_SIZE: 768,
 };

@@ -33,7 +33,6 @@ import DropdownClassicAjax from "../DropdownClassicAjax";
 import STATIC from "../../../static";
 import ErrorSpan from "../ErrorSpan";
 import CategorySelect from "./CategorySelect";
-import { useDropzone } from "react-dropzone";
 
 const cityOptions = [
   { value: "Warrington", title: "Warrington" },
@@ -174,6 +173,10 @@ const EditForm = ({ listing, categories, save }) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
+  const [hasDefects, setHasDefects] = useState(false);
+  const [defects, setDefects] = useState("");
+  const [defectsError, setDefectsError] = useState(null);
+
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
 
@@ -290,6 +293,8 @@ const EditForm = ({ listing, categories, save }) => {
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
+    setDefects(data.defects);
+    setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
     setCompensationCost(data.compensationCost);
@@ -342,6 +347,7 @@ const EditForm = ({ listing, categories, save }) => {
     const data = {
       name: prevListing.name ?? "",
       description: prevListing.description ?? "",
+      defects: prevListing.defects ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
       compensationCost: prevListing.compensationCost ?? "",
@@ -379,6 +385,7 @@ const EditForm = ({ listing, categories, save }) => {
       name: name.trim(),
       address: address.trim(),
       description: description.trim(),
+      defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
       compensationCost,
@@ -419,7 +426,10 @@ const EditForm = ({ listing, categories, save }) => {
 
   const handleSubmit = async () => {
     try {
-      if (disabled) return;
+      if (disabled) {
+        return;
+      }
+
       error.set(null);
 
       let hasError = false;
@@ -495,6 +505,18 @@ const EditForm = ({ listing, categories, save }) => {
       if (description && validateBigText(description) !== true) {
         setDescriptionError(validateBigText(description));
         hasError = true;
+      }
+
+      if (hasDefects) {
+        if (!defects) {
+          setDefectsError("Required field");
+          hasError = true;
+        }
+
+        if (defects && validateBigText(defects) !== true) {
+          setDefectsError(validateBigText(defects));
+          hasError = true;
+        }
       }
 
       if (!pricePerDay) {
@@ -861,6 +883,44 @@ const EditForm = ({ listing, categories, save }) => {
                             placeholder="Details..."
                           />
                         </div>
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Item Defects
+                        </h2>
+
+                        <div className="flex flex-wrap mt-2">
+                          <div className="mr-2">
+                            <label
+                              className="block text-sm font-medium mb-1"
+                              htmlFor="approved"
+                            >
+                              Is your tool defective?
+                            </label>
+                          </div>
+                          <Switch
+                            id="hasDefects"
+                            checked={hasDefects}
+                            changeChecked={() => setHasDefects(!hasDefects)}
+                            onText="Yes"
+                            offText="No"
+                          />
+                        </div>
+
+                        {hasDefects && (
+                          <div className="w-full mt-2">
+                            <Textarea
+                              name="defects"
+                              value={defects}
+                              setValue={setDefects}
+                              row="7"
+                              error={defectsError}
+                              setError={setDefectsError}
+                              placeholder="Defects..."
+                            />
+                          </div>
+                        )}
                       </section>
 
                       <section>
