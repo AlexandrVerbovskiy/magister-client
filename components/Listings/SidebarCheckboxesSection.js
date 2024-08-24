@@ -15,21 +15,21 @@ const SidebarCheckboxesSection = ({
   const [showedMore, setShowedMore] = useState(false);
 
   useEffect(() => {
-    if (mainUlRef.current && dopUlRef.current) {
-      const childHeight =
-        mainUlRef.current.scrollHeight +
-        dopUlRef.current.scrollHeight +
-        (showMoreUlRef.current ? showMoreUlRef.current.scrollHeight : 0) +
-        1;
-      setMaxHeight(childHeight);
-    }
-  }, [mainUlRef.current, dopUlRef.current, showMoreUlRef.current]);
-
-  useEffect(() => {
-    if (dopUlRef.current) {
-      setDopMaxHeight(dopUlRef.current.scrollHeight + 1);
-    }
-  }, [dopUlRef.current]);
+    setInterval(() => {
+      if (mainUlRef.current && dopUlRef.current) {
+        const childHeight =
+          mainUlRef.current.scrollHeight +
+          dopUlRef.current.scrollHeight +
+          (showMoreUlRef.current ? showMoreUlRef.current.scrollHeight : 0) +
+          1;
+        setMaxHeight(childHeight);
+      }
+      
+      if (dopUlRef.current) {
+        setDopMaxHeight(dopUlRef.current.scrollHeight + 1);
+      }
+    }, 250);
+  }, []);
 
   return (
     <section className={`widget widget_distance ${open ? "" : "close"}`}>

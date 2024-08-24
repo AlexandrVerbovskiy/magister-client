@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import SignOutModal from "../_App/SignOutModal";
+import MobileNavbar from "../_App/MobileNavbar";
 
 const DashboardNavbar = () => {
   // Add active class
@@ -20,11 +21,11 @@ const DashboardNavbar = () => {
 
   return (
     <>
+      <MobileNavbar />
+
       <div
         className={
-          displaySideMenu
-            ? "sidemenu-area active-sidemenu-area"
-            : "sidemenu-area"
+          "sidemenu-area d-none d-xl-block" + (displaySideMenu ? "active-sidemenu-area" : "")
         }
       >
         <div className="sidemenu-header">

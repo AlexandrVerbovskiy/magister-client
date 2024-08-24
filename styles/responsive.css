@@ -55,7 +55,6 @@
   }
   .dashboard-hamburger {
     position: absolute;
-    top: -27px !important;
     color: #000 !important;
   }
   .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a {
@@ -70,7 +69,6 @@
   .navbar-area .navbar .navbar-nav {
     margin-left: 0px;
     max-height: 450px;
-    overflow-y: scroll;
     position: absolute;
     background: #fff;
     width: 100%;
@@ -2717,7 +2715,6 @@
   }
   .dashboard-hamburger {
     position: absolute;
-    top: -27px !important;
     color: #000 !important;
   }
   .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a {
@@ -3593,7 +3590,6 @@
   }
   .dashboard-hamburger {
     position: absolute;
-    top: -27px !important;
     color: #000 !important;
   }
   .navbar-style-two .miran-nav .navbar .navbar-nav .nav-item a {
@@ -4311,9 +4307,29 @@
     transform: none;
     margin-top: 5px;
   }
+
+  .no-listing-found .image-parent, .send-create-listing-category-notification .image-parent{
+    width: 100%;
+  }
 }
 
 @media only screen and (max-width: 991.9px) {
+  .pagination-area{
+    margin-bottom: 80px;
+  }
+
+  /*.widget-visible{
+    bottom: 70px!important;
+  }
+
+  .widget-visible iframe:first-of-type{
+    bottom: 70px!important;
+  }
+
+  .widget-visible iframe:last-of-type{
+    bottom: 80px!important;
+  }*/
+
   .listings-widget.book_listings {
     order: 2;
     margin-bottom: 0;
@@ -4325,11 +4341,11 @@
   }
 
   .bookings-listings-box:has(.orders-table) {
-    padding-left: 0;
-    padding-right: 0;
     background: transparent;
     border: 0;
     box-shadow: none;
+    padding: 25px 0 0 0;
+    margin-bottom: 0;
   }
 
   .bookings-listings-box:has(.orders-table) .nav.nav-tabs {
@@ -4339,7 +4355,7 @@
   }
 
   .orders-table .tr:not(:has(+ .tr.extension-tr)) {
-    margin-bottom: 40px;
+    margin-bottom: 0;
   }
 
   .orders-table .thead {
@@ -4501,4 +4517,17 @@
   .navbar-area:has(.verification-alert) .miran-responsive-nav {
     margin-bottom: 15px;
   }
+
+  .chat-content-area .sidebar-left .sidebar .sidebar-content {
+    height: calc(100vh - 405px);
+  }
+
+  .main-content {
+    padding-bottom: 50px;
+  }
+
+  .sidemenu-area .sidemenu-body .sidemenu-nav {
+    overflow-y: hidden;
+  }
+  
 }

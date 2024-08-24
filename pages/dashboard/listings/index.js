@@ -11,7 +11,7 @@ import {
   getUserListingList,
   getUserListingListOptions,
 } from "../../../services";
-import { usePagination } from "../../../hooks";
+import { useIsMobile, usePagination } from "../../../hooks";
 import { IndiceContext } from "../../../contexts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { baseListPageParams, getListingImageByType } from "../../../utils";
@@ -38,6 +38,46 @@ const Tooltip = ({ text, children }) => {
   );
 };
 
+const Filter = ({ filter, changeFilter }) => (
+  <input
+    value={filter}
+    onChange={(e) => changeFilter(e.target.value)}
+    type="text"
+    name="search"
+    className="search-field"
+    placeholder="Search..."
+    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+  />
+);
+
+const StatusFilter = ({ handleChangeStatusFilter, statusFilter }) => (
+  <ul className="list-group list-group-flush">
+    {[
+      { value: "approved", label: "Approved" },
+      { value: "unapproved", label: "Unapproved" },
+      { value: "not-processed", label: "Not Processed" },
+      { value: "all", label: "All" },
+    ].map((option) => (
+      <div className="py-1" key={option.value}>
+        <div className="form-check">
+          <input
+            type="radio"
+            name={option.value}
+            className="form-check-input cursor-pointer"
+            value={option.value}
+            checked={statusFilter === option.value}
+            onChange={() => handleChangeStatusFilter(option.value)}
+            id={option.value}
+          />
+          <label htmlFor={option.value} className="form-check-label">
+            {option.label}
+          </label>
+        </div>
+      </div>
+    ))}
+  </ul>
+);
+
 const TabHeaderSection = ({
   filter,
   changeFilter,
@@ -45,64 +85,42 @@ const TabHeaderSection = ({
   handleChangeStatusFilter,
   countItems,
   style = {},
-}) => (
-  <ul
-    className="nav nav-tabs d-flex align-items-end justify-content-between"
-    id="myTab"
-    style={style}
-  >
-    <li className="nav-item">
-      <a className="nav-link active" id="all-listing-tab">
-        <span className="menu-title">All Listings ({countItems})</span>
-      </a>
-    </li>
+}) => {
+  const isMobile = useIsMobile();
 
-    <li className="nav-item dropdown d-flex">
-      <label className="search-header-section me-3">
-        <input
-          value={filter}
-          onChange={(e) => changeFilter(e.target.value)}
-          type="text"
-          name="search"
-          className="search-field"
-          placeholder="Search..."
-          maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-        />
-      </label>
+  return (
+    <ul
+      className="nav nav-tabs d-flex align-items-end justify-content-between"
+      id="myTab"
+      style={style}
+    >
+      <li className="nav-item">
+        <a className="nav-link active" id="all-listing-tab">
+          <span className="menu-title">All Listings ({countItems})</span>
+        </a>
+      </li>
 
-      <DropdownFilter align="right">
-        <div className="pt-1.5 px-3">
-          <div className="text-uppercase label-section">Status</div>
-          <ul className="list-group list-group-flush">
-            {[
-              { value: "approved", label: "Approved" },
-              { value: "unapproved", label: "Unapproved" },
-              { value: "not-processed", label: "Not Processed" },
-              { value: "all", label: "All" },
-            ].map((option) => (
-              <div className="py-1" key={option.value}>
-                <div className="form-check">
-                  <input
-                    type="radio"
-                    name={option.value}
-                    className="form-check-input cursor-pointer"
-                    value={option.value}
-                    checked={statusFilter === option.value}
-                    onChange={() => handleChangeStatusFilter(option.value)}
-                    id={option.value}
-                  />
-                  <label htmlFor={option.value} className="form-check-label">
-                    {option.label}
-                  </label>
-                </div>
-              </div>
-            ))}
-          </ul>
-        </div>
-      </DropdownFilter>
-    </li>
-  </ul>
-);
+      {!isMobile && (
+        <li className="nav-item dropdown d-none d-xl-flex">
+          <label className="search-header-section me-3">
+            <Filter filter={filter} changeFilter={changeFilter} />
+          </label>
+
+          <DropdownFilter align="right">
+            <div className="pt-1.5 px-3">
+              <div className="text-uppercase label-section">Status</div>
+
+              <StatusFilter
+                statusFilter={statusFilter}
+                handleChangeStatusFilter={handleChangeStatusFilter}
+              />
+            </div>
+          </DropdownFilter>
+        </li>
+      )}
+    </ul>
+  );
+};
 
 const StatusBlock = ({ requestId, requestApproved, active = false }) => {
   const { sessionUser } = useContext(IndiceContext);
@@ -126,10 +144,11 @@ const StatusBlock = ({ requestId, requestApproved, active = false }) => {
       : "Account still unverified and item cannot be rented";
   }
 
-  if(!active){
+  if (!active) {
     listingStatus = "deleted";
     icon = "bx bx-x-circle";
-    tooltip = "The item has been deleted. Users can't now view and submit rental requests for your item";
+    tooltip =
+      "The item has been deleted. Users can't now view and submit rental requests for your item";
   }
 
   return (
@@ -147,6 +166,8 @@ const ListingList = (pageProps) => {
   const baseStatusFilter = pageProps.options.status ?? "all";
   const [statusFilter, setStatusFilter] = useState(baseStatusFilter);
   const [changeActiveData, setChangeActiveData] = useState(null);
+
+  const isMobile = useIsMobile();
 
   const {
     page,
@@ -201,9 +222,37 @@ const ListingList = (pageProps) => {
       <DashboardNavbar />
 
       <div className="main-content d-flex flex-column">
-        <NavbarThree />
+        <NavbarThree>
+          {isMobile && (
+            <div
+              className="pt-1 mt-2"
+              style={{ borderTop: "1px solid #ede7f6" }}
+            >
+              <label className="search-header-section w-full d-block mt-2 mb-2">
+                <Filter filter={filter} changeFilter={changeFilter} />
+              </label>
 
-        <div className="miran-grid-sorting row align-items-center">
+              <div className="pt-1.5">
+                <StatusFilter
+                  statusFilter={statusFilter}
+                  handleChangeStatusFilter={handleChangeStatusFilter}
+                />
+              </div>
+
+              <Link
+                href="/dashboard/listings/add/"
+                className="default-btn add-listing-link-btn"
+              >
+                <span className="icon">
+                  <i className="flaticon-more"></i>
+                </span>
+                <span className="menu-title">Add Listings</span>
+              </Link>
+            </div>
+          )}
+        </NavbarThree>
+
+        <div className="miran-grid-sorting row align-items-center d-none d-xl-flex">
           <div className="col-lg-6 col-md-6 result-count">
             <div className="breadcrumb-area">
               <h1>My Items</h1>
@@ -364,7 +413,9 @@ const ListingList = (pageProps) => {
                               </h3>
                               <div className="d-flex align-items-center justify-content-between">
                                 <StarRating
-                                  averageRating={listing.ownerAverageRating ?? 0}
+                                  averageRating={
+                                    listing.ownerAverageRating ?? 0
+                                  }
                                   commentCount={listing.ownerCommentCount ?? 0}
                                 />
                               </div>

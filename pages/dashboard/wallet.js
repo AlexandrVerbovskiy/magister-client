@@ -66,7 +66,7 @@ const Wallet = ({
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="miran-grid-sorting row align-items-center">
+        <div className="miran-grid-sorting row align-items-center d-none d-xl-block">
           <div className="col-12 result-count">
             <div className="breadcrumb-area">
               <h1>My Expenses</h1>
@@ -99,7 +99,10 @@ const Wallet = ({
                 <i className="bx bx-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Earnings <strong className="wallet-currency">{STATIC.CURRENCY_NAME}</strong>
+                Total Earnings{" "}
+                <strong className="wallet-currency">
+                  {STATIC.CURRENCY_NAME}
+                </strong>
               </span>
               <h3>{moneyFormat(totalGet)}</h3>
             </div>
@@ -110,7 +113,10 @@ const Wallet = ({
                 <i className="bx bxs-badge-dollar"></i>
               </div>
               <span className="sub-title">
-                Total Paid <strong className="wallet-currency">{STATIC.CURRENCY_NAME}</strong>
+                Total Paid{" "}
+                <strong className="wallet-currency">
+                  {STATIC.CURRENCY_NAME}
+                </strong>
               </span>
               <h3>{moneyFormat(totalPayed)}</h3>
             </div>

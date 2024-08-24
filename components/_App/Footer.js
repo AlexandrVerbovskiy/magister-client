@@ -3,11 +3,9 @@ import LangDropdown from "./LangDropdown";
 import { activateAuthPopup } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import { useListingListClick } from "../../hooks";
 
 const Footer = ({ bgColor }) => {
   const { sessionUser } = useContext(IndiceContext);
-  const { handleClick: handleListingListClick } = useListingListClick();
 
   const handleSignInClick = (e) => {
     e.preventDefault();

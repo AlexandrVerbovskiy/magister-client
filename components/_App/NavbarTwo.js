@@ -17,8 +17,10 @@ import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
 import VerificateAlert from "../VerificateAlert";
+import MobileNavbar from "./MobileNavbar";
+import { useIsMobile } from "../../hooks";
 
-const NavbarTwo = () => {
+const NavbarTwo = ({ children = null, needMobileSticky = true }) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
 
   const {
@@ -189,23 +191,38 @@ const NavbarTwo = () => {
     document.querySelector(".navbar-search-box input").blur();
   };
 
+  const isMobile = useIsMobile();
+
   return (
     <>
+      <MobileNavbar />
+
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
-      <div className={sticky ? "is-sticky navbar-area" : "navbar-area"}>
+      <div
+        className={
+          (needMobileSticky || !isMobile) && sticky
+            ? "is-sticky navbar-area"
+            : "navbar-area"
+        }
+        style={
+          !needMobileSticky ? { overflowY: "auto", maxHeight: "100vh" } : {}
+        }
+      >
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">
-              <div
-                onClick={() => toggleMenu()}
-                className="hamburger-menu hamburger-two"
-              >
-                {showMenu ? (
-                  <i className="bx bx-x"></i>
-                ) : (
-                  <i className="bx bx-menu"></i>
-                )}
-              </div>
+              {children && (
+                <div
+                  onClick={() => toggleMenu()}
+                  className="hamburger-menu hamburger-two"
+                >
+                  {showMenu ? (
+                    <i className="bx bx-x"></i>
+                  ) : (
+                    <i className="bx bx-menu"></i>
+                  )}
+                </div>
+              )}
               <div className="logo">
                 <Link href="/">
                   <img
@@ -219,7 +236,7 @@ const NavbarTwo = () => {
           </div>
         </div>
 
-        <div className={showMenu ? "miran-nav show" : "miran-nav"}>
+        <div className={"miran-nav d-none d-xl-block"}>
           <div className="container-fluid">
             <nav className="navbar navbar-expand-md navbar-light">
               <Link href="/" className="navbar-brand">
@@ -318,6 +335,28 @@ const NavbarTwo = () => {
             </nav>
           </div>
         </div>
+
+        {isMobile && children && (
+          <div className={"miran-nav " + (showMenu ? "show" : "")}>
+            <div className="container-fluid">
+              <nav className="navbar navbar-expand-md navbar-light">
+                <Link href="/" className="navbar-brand">
+                  <img
+                    src="/images/rent-about-logo-black.png"
+                    className="logo-image"
+                    alt="logo"
+                  />{" "}
+                </Link>
+                <div
+                  className="collapse navbar-collapse mean-menu"
+                  style={{ width: "100%" }}
+                >
+                  {children}
+                </div>
+              </nav>
+            </div>
+          </div>
+        )}
 
         <VerificateAlert className="verification-alert-listings" />
       </div>
