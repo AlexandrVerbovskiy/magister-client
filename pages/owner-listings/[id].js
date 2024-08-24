@@ -22,8 +22,6 @@ const GridListingsFullMap = (baseProps) => {
 
   return (
     <>
-      <NavbarTwo />
-
       <ListingsWithMap
         authToken={authToken}
         categories={props.categories}

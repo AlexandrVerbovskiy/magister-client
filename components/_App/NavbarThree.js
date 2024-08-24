@@ -1,76 +1,60 @@
 // import { useState, useContext } from "react";
 import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import ListingLi from "./Navbar/ListingLi";
 import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 import VerificateAlert from "../VerificateAlert";
+import { useIsMobile } from "../../hooks";
 
-const NavbarThree = () => {
-  const { isAuth, isSupport, toggleSideMenu } = useContext(IndiceContext);
+const NavbarThree = ({ children = null }) => {
+  const { isAuth, isSupport } = useContext(IndiceContext);
 
   const {
     navbarCategories,
-    handleChangeCategory: handleChangePopupCategory,
     handleListingClick,
     categoriesLength,
     activePopup,
     setActivePopup,
   } = useNavListingCategories();
 
-  // Add active class
-  const [currentPath, setCurrentPath] = useState("");
-  const router = useRouter();
-
-  useEffect(() => {
-    setCurrentPath(router.asPath);
-  }, [router]);
-
   const [showMenu, setshowMenu] = useState(false);
-  const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
-  const [displayDropdownProfile, setDisplayDropdownProfile] = useState(false);
-
-  const toggleMiniAuth = () => {
-    setDisplayMiniAuth(!displayMiniAuth);
-  };
 
   const toggleMenu = () => {
     setshowMenu(!showMenu);
   };
 
-  const toggleDropdownProfile = () => {
-    setDisplayDropdownProfile(!displayDropdownProfile);
-  };
+  const isMobile = useIsMobile();
 
   return (
     <>
       <div className="navbar-area">
         <div className="miran-responsive-nav">
-          <div className="miran-responsive-menu">
-            <div
-              onClick={() => toggleMenu()}
-              className="hamburger-menu hamburger-two dashboard-hamburger"
-            >
-              {showMenu ? (
-                <i className="bx bx-x"></i>
-              ) : (
-                <i className="bx bx-menu"></i>
-              )}
-            </div>
-            <div
-              className="responsive-burger-menu d-lg-none d-block"
-              onClick={toggleSideMenu}
-            >
-              <span className="top-bar"></span>
-              <span className="middle-bar"></span>
-              <span className="bottom-bar"></span>
+          <div className="miran-responsive-menu d-flex align-items-center">
+            {children && (
+              <div
+                onClick={() => toggleMenu()}
+                className="hamburger-menu hamburger-two dashboard-hamburger"
+              >
+                {showMenu ? (
+                  <i className="bx bx-x"></i>
+                ) : (
+                  <i className="bx bx-menu"></i>
+                )}
+              </div>
+            )}
+            <div className="responsive-burger-menu d-lg-none d-block">
+              <img
+                src="/images/rent-about-logo-black.png"
+                className="logo-image"
+                alt="logo"
+              />
             </div>
           </div>
         </div>
 
-        <div className={showMenu ? "miran-nav show" : "miran-nav"}>
+        <div className={"miran-nav d-none d-xl-block"}>
           <nav className="navbar navbar-expand-md navbar-light">
             <div className="collapse navbar-collapse mean-menu">
               <ul className="navbar-nav">
@@ -110,6 +94,16 @@ const NavbarThree = () => {
             </div>
           </nav>
         </div>
+
+        {children && isMobile && (
+          <div className={"miran-nav" + (showMenu ? "show" : "")}>
+            <nav className="navbar navbar-expand-md navbar-light pb-0">
+              <div className="collapse navbar-collapse mean-menu">
+                {children}
+              </div>
+            </nav>
+          </div>
+        )}
       </div>
 
       <VerificateAlert />

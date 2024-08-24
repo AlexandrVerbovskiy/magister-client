@@ -328,7 +328,7 @@ Navbar Area CSS
 }
 .miran-nav .navbar {
   position: inherit;
-  padding: 0;
+  /*padding: 0;*/
 }
 .miran-nav .navbar .navbar-brand {
   font-size: inherit;
@@ -20007,4 +20007,50 @@ video::-webkit-media-controls-panel {
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
   background-color: #303030;
   opacity: 8%;
+}
+
+.mobile-footer{
+  bottom: 0!important;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: #FFFFFF;
+  box-shadow: 0px -4px 25px 3px rgba(0, 0, 0, 0.1)!important;
+  padding: 10px 0;
+}
+
+.mobile-footer .container{
+  display: flex;
+  justify-content: space-between!important;
+}
+
+.mobile-footer button{
+  background-color: inherit;
+  border: 0;
+  cursor: pointer;
+}
+
+.mobile-footer button:not(:nth-of-type(3)) svg{
+  fill: #BCBCBC;
+  transition: var(--transition);
+}
+
+.mobile-footer button:nth-of-type(3) svg{
+  stroke: #BCBCBC;
+  transition: var(--transition);
+}
+
+.mobile-footer button:not(:nth-of-type(3)).active svg,
+.mobile-footer button:not(:nth-of-type(3)):hover svg{
+  fill: #594FBF;
+}
+
+.mobile-footer button:nth-of-type(3).active svg,
+.mobile-footer button:nth-of-type(3):hover svg{
+  stroke: #594FBF;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd!important;
+  border-color: #0d6efd!important;
 }

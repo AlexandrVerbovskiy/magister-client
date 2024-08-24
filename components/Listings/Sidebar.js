@@ -84,10 +84,11 @@ const Sidebar = ({
     }
   };
 
-  useEffect(() => updatePriceFilterHeight(), [priceFilterFullUlRef.current]);
-
   useEffect(() => {
-    setInterval(updateTimeFilterHeight, 250);
+    setInterval(() => {
+      updateTimeFilterHeight();
+      updatePriceFilterHeight();
+    }, 250);
   }, []);
 
   const handleChangeCheckedCategory = (value, id, parentId = null) => {
