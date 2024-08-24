@@ -11,6 +11,33 @@ import { useRouter } from "next/router";
 import TransactionAnalyticsTable from "../../components/Charts/TransactionAnalyticsTable";
 import DashboardDoughnutChart from "../../components/Charts/DashboardDoughnutChart";
 import STATIC from "../../static";
+import { useIsMobile } from "../../hooks";
+
+const Sort = ({ handleChangeFilterDuration, durationFilter }) => {
+  return (
+    <select
+      id="duration-filter"
+      className="shop-select cursor-pointer"
+      value={durationFilter}
+      onChange={(e) => handleChangeFilterDuration(e.target.value)}
+    >
+      {[
+        { value: "last-year", title: "Last Year" },
+        { value: "last-month", title: "Last Month" },
+        { value: "last-week", title: "Last Week" },
+        { value: "last-day", title: "Last Day" },
+      ].map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
+          className="cursor-pointer"
+        >
+          {option.title}
+        </option>
+      ))}
+    </select>
+  );
+};
 
 const Dashboard = (props) => {
   const router = useRouter();
@@ -79,52 +106,54 @@ const Dashboard = (props) => {
     timeType = "months";
   }
 
+  const isMobile = useIsMobile();
+
   return (
     <>
       <DashboardNavbar />
 
       <div className="main-content d-flex flex-column">
-        <NavbarThree />
+        <NavbarThree>
+          {isMobile && (
+            <div
+              className="pt-1 mt-2"
+              style={{ borderTop: "1px solid #ede7f6" }}
+            >
+              <label className="search-header-section w-full d-block mt-2 mb-2">
+                Sort By:{" "}
+                <Sort
+                  handleChangeFilterDuration={handleChangeFilterDuration}
+                  durationFilter={durationFilter}
+                />
+              </label>
+            </div>
+          )}
+        </NavbarThree>
 
-        <div className="miran-grid-sorting row align-items-center">
-          <div className="col-lg-6 col-md-6 result-count">
-            <div className="breadcrumb-area">
-              <h1>Dashboard</h1>
-              <ol className="breadcrumb">
-                <li className="item">
-                  <Link href="/">Home</Link>
-                </li>
-              </ol>
+        {!isMobile && (
+          <div className="miran-grid-sorting row align-items-center">
+            <div className="col-lg-6 col-md-6 result-count">
+              <div className="breadcrumb-area">
+                <h1>Dashboard</h1>
+                <ol className="breadcrumb">
+                  <li className="item">
+                    <Link href="/">Home</Link>
+                  </li>
+                </ol>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 ordering">
+              <div className="select-box">
+                <label htmlFor="duration-filter">Sort By:</label>
+                <Sort
+                  handleChangeFilterDuration={handleChangeFilterDuration}
+                  durationFilter={durationFilter}
+                />
+              </div>
             </div>
           </div>
-
-          <div className="col-lg-6 col-md-6 ordering">
-            <div className="select-box">
-              <label htmlFor="duration-filter">Sort By:</label>
-              <select
-                id="duration-filter"
-                className="shop-select cursor-pointer"
-                value={durationFilter}
-                onChange={(e) => handleChangeFilterDuration(e.target.value)}
-              >
-                {[
-                  { value: "last-year", title: "Last Year" },
-                  { value: "last-month", title: "Last Month" },
-                  { value: "last-week", title: "Last Week" },
-                  { value: "last-day", title: "Last Day" },
-                ].map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    className="cursor-pointer"
-                  >
-                    {option.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        )}
 
         <div
           className="notification-alert alert alert-info alert-dismissible fade show"

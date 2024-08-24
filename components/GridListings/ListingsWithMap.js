@@ -4,6 +4,7 @@ import {
   usePagination,
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
+  useIsMobile,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import Pagination from "../Pagination";
@@ -21,6 +22,7 @@ import {
 import STATIC from "../../static";
 import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 import Loading from "../../components/GridListings/Loading";
+import NavbarTwo from "../_App/NavbarTwo";
 
 const defaultCenter = STATIC.DEFAULTS.CITY_COORDS;
 const baseItemsPerPage = 6;
@@ -506,57 +508,122 @@ const ListingsWithMap = ({
     dopListingCards.push(1);
   }
 
+  const isMobile = useIsMobile();
+
   return (
     <>
-      <PopularPlacesFilter
-        selectedCategories={selectedCategories}
-        selectedCities={selectedCities}
-        categories={categoriesNames}
-        cities={cityNames}
-        searchCity={searchCity}
-        searchCategory={searchCategory}
-        searchListing={searchListing}
-      />
+      <NavbarTwo needMobileSticky={false}>
+        <div
+          className="container mb-4 pt-1 mt-2"
+          style={{ borderTop: "1px solid #ede7f6" }}
+        >
+          <div
+            className="page-title-bg p-0 mb-4"
+            style={{ borderBottom: "1px solid #ede7f6" }}
+          >
+            <PopularPlacesFilter
+              selectedCategories={selectedCategories}
+              selectedCities={selectedCities}
+              categories={categoriesNames}
+              cities={cityNames}
+              searchCity={searchCity}
+              searchCategory={searchCategory}
+              searchListing={searchListing}
+            />
+          </div>
+          <Sidebar
+            fromDateFilter={fromTime}
+            setFromDateFilter={handleChangeFromDate}
+            toDateFilter={toTime}
+            setToDateFilter={handleChangeToDate}
+            selectedCities={selectedCities}
+            selectedDistance={selectedDistance}
+            setSelectedCities={handleSelectedCities}
+            setSelectedDistance={handleSelectedDistance}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={handleSelectedCategories}
+            selectedOthersCategories={selectedOthersCategories}
+            setSelectedOthersCategories={handleSelectedOthersCategories}
+            categories={categories}
+            cities={cities}
+            distances={distances}
+            searchCity={searchCity}
+            searchCategory={searchCategory}
+            minPrice={minPrice}
+            setMinPrice={handleChangeMinPrice}
+            maxPrice={maxPrice}
+            setMaxPrice={handleChangeMaxPrice}
+            handleChangePrices={handleChangePrices}
+            minLimitPrice={minLimitPrice}
+            maxLimitPrice={maxLimitPrice}
+            totalOthersCategories={totalOthersCategories}
+            setTotalOthersCategories={handleChangeTotalOthersCategories}
+            favorites={favorites}
+            changeFavorites={handleChangeFavorite}
+          />
+        </div>
+      </NavbarTwo>
+
+      <div className="page-title-bg  d-none d-xl-flex">
+        <div className="container">
+          <h2>What would you like to rent?</h2>
+          <PopularPlacesFilter
+            selectedCategories={selectedCategories}
+            selectedCities={selectedCities}
+            categories={categoriesNames}
+            cities={cityNames}
+            searchCity={searchCity}
+            searchCategory={searchCategory}
+            searchListing={searchListing}
+          />
+        </div>
+      </div>
 
       <div className="listings-area ptb-100">
         <div className="container-fluid">
           <div className="row m-0">
             <div className="col-xl-8 col-lg-12 col-md-12 p-0">
               <div className="row">
-                <div className="col-lg-4 col-md-12">
-                  <Sidebar
-                    fromDateFilter={fromTime}
-                    setFromDateFilter={handleChangeFromDate}
-                    toDateFilter={toTime}
-                    setToDateFilter={handleChangeToDate}
-                    selectedCities={selectedCities}
-                    selectedDistance={selectedDistance}
-                    setSelectedCities={handleSelectedCities}
-                    setSelectedDistance={handleSelectedDistance}
-                    selectedCategories={selectedCategories}
-                    setSelectedCategories={handleSelectedCategories}
-                    selectedOthersCategories={selectedOthersCategories}
-                    setSelectedOthersCategories={handleSelectedOthersCategories}
-                    categories={categories}
-                    cities={cities}
-                    distances={distances}
-                    searchCity={searchCity}
-                    searchCategory={searchCategory}
-                    minPrice={minPrice}
-                    setMinPrice={handleChangeMinPrice}
-                    maxPrice={maxPrice}
-                    setMaxPrice={handleChangeMaxPrice}
-                    handleChangePrices={handleChangePrices}
-                    minLimitPrice={minLimitPrice}
-                    maxLimitPrice={maxLimitPrice}
-                    totalOthersCategories={totalOthersCategories}
-                    setTotalOthersCategories={handleChangeTotalOthersCategories}
-                    favorites={favorites}
-                    changeFavorites={handleChangeFavorite}
-                  />
-                </div>
+                {!isMobile && (
+                  <div className="col-xl-4 col-md-12">
+                    <Sidebar
+                      fromDateFilter={fromTime}
+                      setFromDateFilter={handleChangeFromDate}
+                      toDateFilter={toTime}
+                      setToDateFilter={handleChangeToDate}
+                      selectedCities={selectedCities}
+                      selectedDistance={selectedDistance}
+                      setSelectedCities={handleSelectedCities}
+                      setSelectedDistance={handleSelectedDistance}
+                      selectedCategories={selectedCategories}
+                      setSelectedCategories={handleSelectedCategories}
+                      selectedOthersCategories={selectedOthersCategories}
+                      setSelectedOthersCategories={
+                        handleSelectedOthersCategories
+                      }
+                      categories={categories}
+                      cities={cities}
+                      distances={distances}
+                      searchCity={searchCity}
+                      searchCategory={searchCategory}
+                      minPrice={minPrice}
+                      setMinPrice={handleChangeMinPrice}
+                      maxPrice={maxPrice}
+                      setMaxPrice={handleChangeMaxPrice}
+                      handleChangePrices={handleChangePrices}
+                      minLimitPrice={minLimitPrice}
+                      maxLimitPrice={maxLimitPrice}
+                      totalOthersCategories={totalOthersCategories}
+                      setTotalOthersCategories={
+                        handleChangeTotalOthersCategories
+                      }
+                      favorites={favorites}
+                      changeFavorites={handleChangeFavorite}
+                    />
+                  </div>
+                )}
 
-                <div className="col-lg-8 col-md-12">
+                <div className="col-xl-8 col-md-12">
                   <div className={`all-listings-list`}>
                     <div
                       className="listings-grid-sorting row align-items-center"

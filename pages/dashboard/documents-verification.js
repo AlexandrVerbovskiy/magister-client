@@ -142,7 +142,7 @@ const DocumentsVerification = () => {
       <div className="main-content d-flex flex-column">
         <NavbarThree />
 
-        <div className="miran-grid-sorting row align-items-center">
+        <div className="miran-grid-sorting row align-items-center d-none d-xl-block">
           <div className="col-12 result-count">
             <div className="breadcrumb-area">
               <h1>Documents Verification</h1>
