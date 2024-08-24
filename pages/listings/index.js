@@ -26,8 +26,6 @@ const GridListingsFullMap = ({
 
   return (
     <>
-      <NavbarTwo />
-
       <ListingsWithMap
         authToken={authToken}
         categories={categories}

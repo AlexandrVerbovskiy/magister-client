@@ -16,7 +16,8 @@ import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
-import VerificateAlert from "../../VerificateAlert"
+import VerificateAlert from "../../VerificateAlert";
+import MobileNavbar from "../MobileNavbar"
 
 const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
@@ -192,6 +193,8 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
   return (
     <>
+      <MobileNavbar />
+
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
       <div
         className={
@@ -203,13 +206,6 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">
-              <div onClick={() => toggleMenu()} className="hamburger-menu">
-                {showMenu ? (
-                  <i className="bx bx-x"></i>
-                ) : (
-                  <i className="bx bx-menu"></i>
-                )}
-              </div>
               <div className="logo">
                 <Link href="/">
                   <img
