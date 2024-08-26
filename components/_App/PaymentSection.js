@@ -5,7 +5,7 @@ import { IndiceContext } from "../../contexts";
 import { paypalCreateOrder, paypalOrderPayed } from "../../services";
 import PaypalButton from "../PaypalButton";
 import PaypalForm from "../PaypalForm";
-import { moneyFormat } from "../../utils";
+import { moneyFormatVisual } from "../../utils";
 
 const getPaymentFormStyles = (type) => {
   switch (type) {
@@ -278,8 +278,7 @@ const PaymentSection = ({
                   >
                     <b>Total Amount to Transfer: </b>
                     <span className="pay-by-card-price">
-                      {STATIC.CURRENCY}
-                      {moneyFormat(amount)}
+                      {moneyFormatVisual(amount)}
                     </span>
                   </li>
                 </ul>

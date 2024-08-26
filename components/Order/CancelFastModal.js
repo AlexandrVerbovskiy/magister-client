@@ -4,9 +4,8 @@ import { IndiceContext } from "../../contexts";
 import {
   calculateFullTotalByDaysCount,
   getFactOrderDays,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../utils";
-import STATIC from "../../static";
 
 const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
   const { error } = useContext(IndiceContext);
@@ -42,9 +41,9 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
     message =
       `The cancellation fee is ${
         order.tenantCancelFee
-      }% of the full payment. \nYou paid ${STATIC.CURRENCY}${moneyFormat(
+      }% of the full payment. \nYou paid ${moneyFormatVisual(
         totalPayed
-      )}\n. The size of the return cats will be ${STATIC.CURRENCY}${moneyFormat(
+      )}\n. The size of the return cats will be ${moneyFormatVisual(
         totalBack
       )}. ` + message;
   }

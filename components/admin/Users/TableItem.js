@@ -6,7 +6,7 @@ import Documents from "../FastActions/Documents";
 import Delete from "../FastActions/Delete";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../TableDateView";
-import { moneyFormat, dateConverter } from "../../../utils";
+import { moneyFormat, dateConverter, moneyFormatVisual } from "../../../utils";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import SingleRatingStar from "../SingleRatingStar";
@@ -207,8 +207,7 @@ const TableItem = ({
 
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <div className="font-medium text-green-600">
-            {STATIC.CURRENCY}
-            {moneyFormat(totalSpent ?? 0)}
+            {moneyFormatVisual(totalSpent ?? 0)}
           </div>
         </td>
 

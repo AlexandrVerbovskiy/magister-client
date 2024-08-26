@@ -14382,6 +14382,11 @@ Dashboard CSS
 .chat-content-area .sidebar-left .sidebar .sidebar-content {
   height: calc(100vh - 325px);
 }
+
+body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sidebar-content{
+  height: calc(100vh - 360px);
+}
+
 .chat-content-area
   .sidebar-left
   .sidebar

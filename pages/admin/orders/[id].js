@@ -21,6 +21,7 @@ import TextareaView from "../../../components/admin/Form/TextareaView";
 import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 import { useIdPage } from "../../../hooks";
+import STATIC from "../../../static";
 
 const ImageView = ({ path, onImageClick = () => {} }) => {
   const handleImageClick = (e) => {
@@ -287,7 +288,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="price_per_day"
-                                label="Price Per Day, $"
+                                label={`Price Per Day (${STATIC.CURRENCY})`}
                                 placeholder="Price Per Day"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -302,7 +303,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="total_price"
-                                label="Total Price, $"
+                                label={`Total Price (${STATIC.CURRENCY})`}
                                 placeholder="Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -330,7 +331,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="owner_fee"
-                                label="Owner Fee, %"
+                                label="Owner Fee (%)"
                                 placeholder="Owner Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={order.ownerFee}
@@ -341,7 +342,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_fee"
-                                label="Renter Fee, %"
+                                label="Renter Fee (%)"
                                 placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={order.tenantFee}
@@ -354,7 +355,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="owner_total_fee"
-                                label="Owner Total Fee, $"
+                                label={`Owner Total Fee (${STATIC.CURRENCY})`}
                                 placeholder="Owner Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -381,7 +382,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_total_fee"
-                                label="Renter Total Fee, $"
+                                label={`Renter Total Fee (${STATIC.CURRENCY})`}
                                 placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -410,7 +411,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="owner_price"
-                                label="Owner Get Total Price, $"
+                                label={`Owner Get Total Price (${STATIC.CURRENCY})`}
                                 placeholder="Owner Get Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
@@ -439,7 +440,7 @@ const Order = (baseProps) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="tenant_price"
-                                label="Renter Send Total Price, $"
+                                label={`Renter Send Total Price (${STATIC.CURRENCY})`}
                                 placeholder="Renter Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={

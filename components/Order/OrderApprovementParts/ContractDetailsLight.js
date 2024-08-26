@@ -1,5 +1,8 @@
-import { autoMultiEnding, getFactOrderDays, moneyFormat } from "../../../utils";
-import STATIC from "../../../static";
+import {
+  autoMultiEnding,
+  getFactOrderDays,
+  moneyFormatVisual,
+} from "../../../utils";
 
 const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
   const duration = getFactOrderDays(fromDate, toDate);
@@ -28,13 +31,10 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>
-            {STATIC.CURRENCY}
-            {price} x {duration} {autoMultiEnding(duration, "day")}
+            {moneyFormatVisual(price)} x {duration}{" "}
+            {autoMultiEnding(duration, "day")}
           </div>
-          <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(subtotalPrice)}
-          </div>
+          <div>{moneyFormatVisual(subtotalPrice)}</div>
         </div>
 
         <div
@@ -42,20 +42,13 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>Service Fee</div>
-          <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(totalFee)}
-          </div>
+          <div>{moneyFormatVisual(totalFee)}</div>
         </div>
       </div>
 
       <ul>
         <li className="d-flex justify-content-between px-0">
-          <div>Total:</div>{" "}
-          <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(totalPrice)}
-          </div>
+          <div>Total:</div> <div>{moneyFormatVisual(totalPrice)}</div>
         </li>
       </ul>
     </div>

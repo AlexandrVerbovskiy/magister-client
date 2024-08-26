@@ -235,7 +235,7 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
     setImagesError(null);
   };
 
-  const { getRootProps } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     accept: STATIC.ACCEPT_IMAGE_FORMAT,
     maxSize: STATIC.LIMITS.FILE_SIZE,
     onDrop,
@@ -295,6 +295,8 @@ const ChecklistForm = ({ type, order, authToken, onSubmit }) => {
         className="dropzone add-listings-box p-0"
         style={{ boxShadow: "none" }}
       >
+        <input name="modalImage" {...getInputProps()} />
+
         <p>
           Please upload clear, date stamped photos of the item within the last
           24 hours, highlighting all sides and any existing damage or

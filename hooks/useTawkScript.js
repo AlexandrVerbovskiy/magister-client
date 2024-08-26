@@ -6,6 +6,7 @@ const tawkScriptId = "tawk-script";
 const useTawkScript = (type) => {
   const firstActionRef = useRef(true);
   const router = useRouter();
+  const interval = useRef(null);
 
   useEffect(() => {
     const widgetVisible = document.querySelector(".widget-visible");
@@ -37,6 +38,24 @@ const useTawkScript = (type) => {
         }
       }
     }
+
+    if (interval.current) {
+      clearInterval(interval.current);
+    }
+
+    interval.interval = setInterval(() => {
+      const frames = document.querySelectorAll(".widget-visible iframe");
+
+      if (frames.length >= 3) {
+        frames[0].style.bottom = "70px";
+        frames[1].style.bottom = "140px";
+        frames[2].style.bottom = "140px";
+      }
+
+      if(frames.length == 4){
+        frames[3].style.bottom = "100px";
+      }
+    }, 100);
   }, [router.asPath, type]);
 
   return null;

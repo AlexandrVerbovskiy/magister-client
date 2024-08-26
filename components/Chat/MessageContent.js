@@ -9,6 +9,7 @@ import {
   autoMultiEnding,
   moneyFormat,
   getListingImageByType,
+  moneyFormatVisual,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
@@ -475,10 +476,7 @@ const orderMessageContent = ({
         />
 
         <div className="my-1">
-          <b>
-            Total price: {STATIC.CURRENCY}
-            {moneyFormat(totalPrice)}
-          </b>
+          <b>Total price: {moneyFormatVisual(totalPrice)}</b>
         </div>
 
         <div className="mb-1">
