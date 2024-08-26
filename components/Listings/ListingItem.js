@@ -3,7 +3,7 @@ import {
   activateAuthPopup,
   generateProfileFilePath,
   getListingImageByType,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -11,7 +11,6 @@ import StarRating from "../StarRating";
 import { changeListingFavorite } from "../../services";
 import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
-import STATIC from "../../static";
 
 const ListingItem = ({ listing: prevListing, hovered = false }) => {
   const [listing, setListing] = useState({ ...prevListing });
@@ -141,11 +140,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           />
 
           <div className="price">
-            Per Day{" "}
-            <span>
-              {STATIC.CURRENCY}
-              {moneyFormat(listing.pricePerDay)}
-            </span>
+            Per Day <span>{moneyFormatVisual(listing.pricePerDay)}</span>
           </div>
         </div>
       </div>

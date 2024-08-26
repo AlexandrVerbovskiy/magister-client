@@ -5,7 +5,7 @@ import { IndiceContext } from "../contexts";
 const VerificateAlert = ({ className = "verification-alert-dashboard" }) => {
   const { sessionUser } = useContext(IndiceContext);
 
-  if (sessionUser?.verified) {
+  if (!sessionUser || sessionUser?.verified) {
     return <></>;
   }
 

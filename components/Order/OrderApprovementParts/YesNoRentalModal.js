@@ -1,6 +1,5 @@
-import { dateConverter, moneyFormat } from "../../../utils";
+import { dateConverter, moneyFormatVisual } from "../../../utils";
 import YesNoModal from "../../_App/YesNoModal";
-import STATIC from "../../../static";
 
 const YesNoRentalModal = ({
   fromDate,
@@ -20,9 +19,9 @@ const YesNoRentalModal = ({
     message += ` from ${dateConverter(fromDate)} to ${dateConverter(toDate)} `;
   }
 
-  message += `for ${STATIC.CURRENCY}${moneyFormat(
+  message += `for${moneyFormatVisual(
     price
-  )} per day, total amount of ${STATIC.CURRENCY}${moneyFormat(
+  )} per day, total amount of ${moneyFormatVisual(
     totalPrice
   )} (including fees).`;
 

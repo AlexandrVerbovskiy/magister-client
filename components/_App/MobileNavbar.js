@@ -5,7 +5,7 @@ import { IndiceContext } from "../../contexts";
 import Link from "next/link";
 import SignOutModal from "./SignOutModal";
 
-const MobileNavbar = () => {
+const MobileNavbar = ({ onLoginClick = null }) => {
   const router = useRouter();
 
   const { handleClick: handleListingListClick } = useListingListClick();
@@ -32,6 +32,10 @@ const MobileNavbar = () => {
     setCurrentPath(router.asPath);
   }, [router]);
 
+  if (!onLoginClick) {
+    onLoginClick = () => router.push("/sign-in");
+  }
+
   const { isAuth, isSupport, toggleSideMenu, displaySideMenu } =
     useContext(IndiceContext);
 
@@ -39,10 +43,14 @@ const MobileNavbar = () => {
     <>
       <div className="mobile-footer position-fixed d-xl-none">
         <div className="container">
-          <button type="button" className={isHomePage ? "active" : ""}>
+          <button
+            type="button"
+            onClick={() => router.push("/")}
+            className={isHomePage ? "active" : ""}
+          >
             <svg
-              width="36"
-              height="30"
+              width="20"
+              height="20"
               viewBox="0 0 36 30"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -56,8 +64,8 @@ const MobileNavbar = () => {
             className={isListings || isOwnerListings ? "active" : ""}
           >
             <svg
-              width="30"
-              height="30"
+              width="18"
+              height="20"
               viewBox="0 0 30 30"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -71,8 +79,8 @@ const MobileNavbar = () => {
             className={isDashboardOrders ? "active" : ""}
           >
             <svg
-              width="29"
-              height="24"
+              width="18"
+              height="20"
               viewBox="0 0 29 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +99,8 @@ const MobileNavbar = () => {
             className={isDashboardChats ? "active" : ""}
           >
             <svg
-              width="30"
-              height="30"
+              width="18"
+              height="20"
               viewBox="0 0 30 30"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -106,8 +114,8 @@ const MobileNavbar = () => {
             onClick={toggleSideMenu}
           >
             <svg
-              width="34"
-              height="36"
+              width="21"
+              height="20"
               viewBox="0 0 34 36"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +159,7 @@ const MobileNavbar = () => {
             <li className="nav-item-title">Main</li>
 
             <li className="nav-item">
-              <Link href="/" className="nav-link">
+              <Link onClick={toggleSideMenu} href="/" className="nav-link">
                 <span className="icon">
                   <i className="bx bx-home"></i>
                 </span>
@@ -161,7 +169,10 @@ const MobileNavbar = () => {
 
             <li className="nav-item">
               <a
-                onClick={handleListingListClick}
+                onClick={()=>{
+                  handleListingListClick();
+                  toggleSideMenu();
+                }}
                 href="#"
                 className={`nav-link d-block d-xl-none`}
               >
@@ -172,24 +183,29 @@ const MobileNavbar = () => {
               </a>
             </li>
 
-            {!isAuth && (
-              <li className="nav-item">
-                <a
-                  onClick={handleListingCreateClick}
-                  href="#"
-                  className={`nav-link d-block d-xl-none`}
-                >
-                  <span className="icon">
-                    <i className="bx bx-wrench"></i>
-                  </span>
-                  <span className="menu-title">List An Item</span>
-                </a>
-              </li>
-            )}
+            <li className="nav-item">
+              <a
+                onClick={()=>{
+                  handleListingCreateClick();
+                  toggleSideMenu();
+                }}
+                href="#"
+                className={`nav-link d-block d-xl-none`}
+              >
+                <span className="icon">
+                  <i className="bx bx-wrench"></i>
+                </span>
+                <span className="menu-title">List An Item</span>
+              </a>
+            </li>
 
             {isSupport ? (
               <li className="nav-item">
-                <Link href="/admin/" className="nav-link">
+                <Link
+                  onClick={toggleSideMenu}
+                  href="/admin/"
+                  className="nav-link"
+                >
                   <span className="icon">
                     <i className="bx bx-cog"></i>{" "}
                   </span>
@@ -198,7 +214,11 @@ const MobileNavbar = () => {
               </li>
             ) : (
               <li className="nav-item">
-                <Link href="/how-it-works/" className="nav-link">
+                <Link
+                  onClick={toggleSideMenu}
+                  href="/how-it-works/"
+                  className="nav-link"
+                >
                   <span className="icon">
                     <i className="bx bx-info-circle"></i>{" "}
                   </span>
@@ -213,6 +233,7 @@ const MobileNavbar = () => {
 
                 <li className="nav-item">
                   <Link
+                    onClick={toggleSideMenu}
                     href="/dashboard/"
                     className={`nav-link ${
                       currentPath == "/dashboard/" && "active"
@@ -227,6 +248,7 @@ const MobileNavbar = () => {
 
                 <li className="nav-item">
                   <Link
+                    onClick={toggleSideMenu}
                     href="/dashboard/listings/"
                     className={`nav-link ${
                       currentPath.includes("/dashboard/listings/") && "active"
@@ -241,6 +263,7 @@ const MobileNavbar = () => {
 
                 <li className="nav-item">
                   <Link
+                    onClick={toggleSideMenu}
                     href="/dashboard/orders/"
                     className={`nav-link ${
                       currentPath.includes("/dashboard/orders/") && "active"
@@ -255,6 +278,7 @@ const MobileNavbar = () => {
 
                 <li className="nav-item">
                   <Link
+                    onClick={toggleSideMenu}
                     href="/dashboard/chats/"
                     className={`nav-link ${
                       currentPath.includes("/dashboard/chats/") && "active"
@@ -269,6 +293,7 @@ const MobileNavbar = () => {
 
                 <li className="nav-item">
                   <Link
+                    onClick={toggleSideMenu}
                     href="/dashboard/wallet/"
                     className={`nav-link ${
                       currentPath.includes("/dashboard/wallet/") && "active"
@@ -290,6 +315,7 @@ const MobileNavbar = () => {
                         "/dashboard/documents-verification/",
                       ].includes(currentPath) && "active"
                     }`}
+                    onClick={toggleSideMenu}
                   >
                     <span className="icon">
                       <i className="bx bx-user-circle"></i>
@@ -300,21 +326,41 @@ const MobileNavbar = () => {
               </>
             )}
 
-            <li className="nav-item">
-              <Link
-                href="#"
-                className={`nav-link`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setSignOutModalActive(true);
-                }}
-              >
-                <span className="icon">
-                  <i className="bx bx-log-out"></i>{" "}
-                </span>
-                <span className="menu-title">Sign Out</span>
-              </Link>
-            </li>
+            {isAuth ? (
+              <li className="nav-item">
+                <Link
+                  href="#"
+                  className={`nav-link`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleSideMenu();
+                    setSignOutModalActive(true);
+                  }}
+                >
+                  <span className="icon">
+                    <i className="bx bx-log-out"></i>{" "}
+                  </span>
+                  <span className="menu-title">Sign Out</span>
+                </Link>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <button
+                  type="button"
+                  className={`nav-link`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleSideMenu();
+                    onLoginClick();
+                  }}
+                >
+                  <span className="icon">
+                    <i className="bx bx-log-in"></i>{" "}
+                  </span>
+                  <span className="menu-title">Sign In</span>
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

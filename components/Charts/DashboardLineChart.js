@@ -1,6 +1,6 @@
 import React from "react";
 import LineChart from "../../charts/LineChart01";
-import { lineChartOptions } from "../../utils";
+import { lineChartOptions, moneyFormatVisual } from "../../utils";
 import STATIC from "../../static";
 
 function DashboardLineChart({
@@ -24,8 +24,8 @@ function DashboardLineChart({
         <div>{title}</div>
         <div style={{ fontSize: "1.375rem" }}>
           <span className={`fw-bold mx-2`}>
-            {valueType === "money" && STATIC.CURRENCY}
-            {sum}
+            {valueType === "money"}
+            {moneyFormatVisual(sum)}
           </span>
           {needCompare && (
             <span

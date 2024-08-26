@@ -17,7 +17,7 @@ import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
 import VerificateAlert from "../../VerificateAlert";
-import MobileNavbar from "../MobileNavbar"
+import MobileNavbar from "../MobileNavbar";
 
 const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
@@ -98,7 +98,10 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
   const loginTabBtnTrigger = useRef(null);
   const registerTabBtnTrigger = useRef(null);
 
-  const handleLoginTabActive = () => loginTabBtnTrigger.current.click();
+  const handleLoginTabActive = () => {
+    loginTabBtnTrigger.current.click();
+    console.log(loginTabBtnTrigger);
+  };
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
   const [userToAuth, setUserToAuth] = useState(null);
@@ -193,7 +196,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
   return (
     <>
-      <MobileNavbar />
+      <MobileNavbar onLoginClick={toggleAuth} />
 
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
       <div

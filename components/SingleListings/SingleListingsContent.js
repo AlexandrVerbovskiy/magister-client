@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import ClipboardJS from "clipboard";
+import React, { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   activateAuthPopup,
   autoMultiEnding,
   generateProfileFilePath,
-  getFilePath,
   getListingImageByType,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
@@ -15,12 +13,11 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 import BookingModal from "./BookingModal";
 import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 import StarRating from "../StarRating";
-import STATIC from "../../static";
 
 const SingleListingsContent = ({
   comments,
@@ -259,10 +256,7 @@ const SingleListingsContent = ({
                     <ul className="pricing-list">
                       <li>
                         Rental price per day{" "}
-                        <span>
-                          {STATIC.CURRENCY}
-                          {moneyFormat(listing.pricePerDay)}
-                        </span>
+                        <span>{moneyFormatVisual(listing.pricePerDay)}</span>
                       </li>
                     </ul>
                   </div>
@@ -595,8 +589,7 @@ const SingleListingsContent = ({
                           className="default-btn w-100"
                           onClick={handleMakeBookingTriggerClick}
                         >
-                          Book Now {STATIC.CURRENCY}
-                          {moneyFormat(listing.pricePerDay)}/day
+                          Book Now {moneyFormatVisual(listing.pricePerDay)}/day
                         </button>
                       </div>
                     ) : (

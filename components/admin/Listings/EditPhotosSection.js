@@ -10,6 +10,8 @@ import Input from "../../../components/admin/Form/Input";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../../static";
 import { useIsMobile } from "../../../hooks";
+import { useContext } from "react";
+import { IndiceContext } from "../../../contexts";
 
 const linkTypeOptions = [
   { value: "storage", title: "Storage" },
@@ -74,12 +76,18 @@ const EditPhotosSection = ({
   successLoadLinkPhoto,
 }) => {
   const isMobile = useIsMobile();
+  const { error: mainError } = useContext(IndiceContext);
 
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       maxSize: STATIC.LIMITS.FILE_SIZE,
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       onDrop: (acceptedFiles, fileRejections) => {
+        if (acceptedFiles.length + files.length + linkFiles.length > 5) {
+          mainError.set("You can't set more than 5 files");
+          return;
+        }
+
         const newFiles = acceptedFiles.slice(
           0,
           5 - files.length - linkFiles.length
@@ -184,6 +192,8 @@ const EditPhotosSection = ({
   return (
     <>
       <section {...getRootPropsBase()} className="dropzone add-listings-box">
+        <input name="modalImage" {...getInputPropsBase()} />
+
         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
           Photos
         </h2>

@@ -4,8 +4,8 @@ import {
   fullDateConverter,
   getFilePath,
   getPaymentNameByType,
-  moneyFormat,
   isPayedUsedPaypal,
+  moneyFormatVisual,
 } from "../../../utils";
 import View from "../FastActions/View";
 import Status from "./Status";
@@ -69,8 +69,7 @@ const TableItem = (props) => {
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            {STATIC.CURRENCY}
-            {moneyFormat(money)}
+            {moneyFormatVisual(money)}
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

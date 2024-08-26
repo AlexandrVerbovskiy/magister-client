@@ -137,7 +137,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(recipient.offerPricePerDay)}
-                                label="Offer Price Per Day, $"
+                                label={`Offer Price Per Day (${STATIC.CURRENCY})`}
                                 name="offer-price-per-day"
                                 placeholder="Offer Price Per Date"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -148,7 +148,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(totalPayed)}
-                                label="Renter paid, $"
+                                label={`Renter paid (${STATIC.CURRENCY})`}
                                 name="renter-payed-money"
                                 placeholder="Renter Paid"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -193,7 +193,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               <div className="w-full sm:w-1/2">
                                 <InputView
                                   value={refundCommission}
-                                  label="Refund Commission, %"
+                                  label="Refund Commission (%)"
                                   name="refund-commission"
                                   placeholder="Refund Commission"
                                   labelClassName="block text-sm font-medium mb-1"
@@ -207,7 +207,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                                     (totalPayed * (100 - refundCommission)) /
                                       100
                                   )}
-                                  label="Refund Without Commission, $"
+                                  label={`Refund Without Commission (${STATIC.CURRENCY})`}
                                   name="refund-without-commission"
                                   placeholder="Refund Without Commission"
                                   labelClassName="block text-sm font-medium mb-1"
@@ -298,7 +298,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               <div className="w-full sm:w-1/2">
                                 <InputView
                                   value={recipient.ownerFee}
-                                  label="Recipient Fee, %"
+                                  label="Recipient Fee (%)"
                                   name="recipient-fee"
                                   placeholder="Recipient Fee"
                                   labelClassName="block text-sm font-medium mb-1"

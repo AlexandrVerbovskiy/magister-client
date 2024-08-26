@@ -13,6 +13,7 @@ import {
   getFactOrderDays,
   moneyFormat,
   dateConverter,
+  moneyFormatVisual,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -165,18 +166,16 @@ const Wallet = ({
                               </li>
                               <li>Order: #{earning.orderId}</li>
                               <li className="price">
-                                {STATIC.CURRENCY}
-                                {moneyFormat(pricePerDuration)}
+                                {moneyFormatVisual(pricePerDuration)}
                               </li>
                               <li className="fee-price">
-                                Fee: {STATIC.CURRENCY}
-                                {moneyFormat(feePerDuration)}
+                                Fee:
+                                {moneyFormatVisual(feePerDuration)}
                               </li>
                               <li className="price">
                                 Net Earning:{" "}
                                 <strong>
-                                  {STATIC.CURRENCY}
-                                  {moneyFormat(earning.money)}
+                                  {moneyFormatVisual(earning.money)}
                                 </strong>
                               </li>
                               {earning.receivedType == "refund" &&
@@ -265,18 +264,15 @@ const Wallet = ({
                               <li>Date: {dateConverter(sending.createdAt)}</li>
                               <li>Order: #{sending.orderId}</li>
                               <li className="price">
-                                {STATIC.CURRENCY}
-                                {moneyFormat(pricePerDuration)}
+                                {moneyFormatVisual(pricePerDuration)}
                               </li>
                               <li className="fee-price">
-                                Fee: {STATIC.CURRENCY}
-                                {moneyFormat(feePerDuration)}
+                                Fee: {moneyFormatVisual(feePerDuration)}
                               </li>
                               <li className="price">
                                 Net Paid:{" "}
                                 <strong>
-                                  {STATIC.CURRENCY}
-                                  {moneyFormat(sending.money)}
+                                  {moneyFormatVisual(sending.money)}
                                 </strong>
                               </li>
                               {!sending.adminApproved &&

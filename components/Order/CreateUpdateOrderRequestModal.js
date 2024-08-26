@@ -11,14 +11,13 @@ import {
   getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
-  moneyFormat,
+  moneyFormatVisual,
   separateDate,
 } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
-import STATIC from "../../static";
 
 const CreateUpdateOrderRequestModal = ({
   handleCreateUpdateRequest,
@@ -282,12 +281,12 @@ const CreateUpdateOrderRequestModal = ({
               acceptText="Confirm"
               body={
                 fromDate.toDateString() == toDate.toDateString()
-                  ? `'${listingName}' rental during ${fromDate.toDateString()} for ${
-                      STATIC.CURRENCY
-                    }${moneyFormat(price)} per day`
-                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for ${
-                      STATIC.CURRENCY
-                    }${moneyFormat(price)} per day`
+                  ? `'${listingName}' rental during ${fromDate.toDateString()} for ${moneyFormatVisual(
+                      price
+                    )} per day`
+                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for ${moneyFormatVisual(
+                      price
+                    )} per day`
               }
             />
           </div>
@@ -305,11 +304,7 @@ const CreateUpdateOrderRequestModal = ({
             </div>
             <div className="total-booking-price">
               <b>
-                Total:{" "}
-                <span>
-                  {STATIC.CURRENCY}
-                  {fullTotal}
-                </span>
+                Total: <span>{moneyFormatVisual(fullTotal)}</span>
               </b>
             </div>
           </div>

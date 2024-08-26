@@ -30,7 +30,8 @@ const SignInForm = () => {
 
   const { success: mainSuccess } = useContext(IndiceContext);
 
-  const successReloadLink = window.location.pathname + "?success=Successfully logged in";
+  const successReloadLink =
+    window.location.pathname + "?success=Successfully logged in";
 
   const onLoginPartSuccess = async (res) => {
     if (res.needCode) {
@@ -232,6 +233,10 @@ const SignInForm = () => {
                 <p className="words-wrap">
                   Forgot or lost your password?{" "}
                   <Link href="/password-reset-send/">Reset It Now</Link>
+                </p>
+                <p className="words-wrap">
+                  Don't have an account?{" "}
+                  <Link href="/sign-up/">Register Now</Link>
                 </p>
               </form>
 
