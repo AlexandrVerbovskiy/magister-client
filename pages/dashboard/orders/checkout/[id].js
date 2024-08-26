@@ -178,7 +178,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                       </div>
                       <Link
                         className="default-btn mt-3"
-                        href={"/dashboard/chats/" + chatId}
+                        href={"/dashboard/chats/" + order.chatId}
                       >
                         Notify owner
                       </Link>

@@ -16026,7 +16026,7 @@ body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sideba
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 85px;
+  height: 100px;
   width: 100%;
   transition: var(--transition);
 }
