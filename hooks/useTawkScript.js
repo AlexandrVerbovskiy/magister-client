@@ -47,13 +47,13 @@ const useTawkScript = (type) => {
       const frames = document.querySelectorAll(".widget-visible iframe");
 
       if (frames.length >= 3) {
-        frames[0].style.bottom = "70px";
-        frames[1].style.bottom = "140px";
-        frames[2].style.bottom = "140px";
+        frames[0].style.bottom = "60px";
+        frames[1].style.bottom = "130px";
+        frames[2].style.bottom = "130px";
       }
 
       if(frames.length == 4){
-        frames[3].style.bottom = "100px";
+        frames[3].style.bottom = "70px";
       }
     }, 100);
   }, [router.asPath, type]);
