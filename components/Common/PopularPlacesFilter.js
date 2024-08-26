@@ -13,6 +13,7 @@ const PopularPlacesFilter = ({
   searchCity: baseSearchCity = null,
   searchCategory: baseSearchCategory = null,
   searchListing: baseListing = null,
+  onSubmit = null,
 }) => {
   const router = useRouter();
 
@@ -88,6 +89,10 @@ const PopularPlacesFilter = ({
     });
 
     router.push(link);
+
+    if (onSubmit) {
+      onSubmit();
+    }
   };
 
   return (

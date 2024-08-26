@@ -549,6 +549,15 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
+      if (
+        prevListing.ownerId &&
+        prevListing.ownerId == ownerId &&
+        !prevListing.userVerified &&
+        active
+      ) {
+        hasError = true;
+      }
+
       if (hasError) return;
 
       setDisabled(true);
@@ -965,9 +974,11 @@ const EditForm = ({ listing, categories, save }) => {
                             checked={approved}
                             changeChecked={() => {
                               if (
-                                prevListing.ownerId ||
-                                prevListing.ownerId !== ownerId ||
-                                prevListing.userVerified
+                                !(
+                                  prevListing.ownerId &&
+                                  prevListing.ownerId == ownerId &&
+                                  !prevListing.userVerified
+                                )
                               ) {
                                 setApproved(!approved);
                               }

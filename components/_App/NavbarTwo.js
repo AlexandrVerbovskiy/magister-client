@@ -195,7 +195,7 @@ const NavbarTwo = ({ children = null, needMobileSticky = true }) => {
 
   return (
     <>
-      <MobileNavbar />
+      <MobileNavbar onLoginClick={toggleAuth} />
 
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
       <div

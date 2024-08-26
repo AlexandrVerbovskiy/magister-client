@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import STATIC from "../../static";
+import React, { useRef } from "react";
+import { moneyFormatVisual } from "../../utils";
 
 const PriceRangeSlider = ({
   minPrice,
@@ -8,7 +8,7 @@ const PriceRangeSlider = ({
   setMaxPrice,
   handleChangePrices,
   minLimit,
-  maxLimit
+  maxLimit,
 }) => {
   const rangeSlideRef = useRef();
 
@@ -94,7 +94,7 @@ const PriceRangeSlider = ({
         </div>
 
         <div className="price-input-container mt-4">
-          From {STATIC.CURRENCY}{minPrice} to {STATIC.CURRENCY}{maxPrice}
+          From {moneyFormatVisual(minPrice)} to {moneyFormatVisual(maxPrice)}
         </div>
       </div>
     </div>

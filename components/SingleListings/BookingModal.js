@@ -12,7 +12,7 @@ import {
   getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
-  moneyFormat,
+  moneyFormatVisual,
   separateDate,
 } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
@@ -303,11 +303,7 @@ const BookingModal = ({
               </div>
               <div className="total-booking-price">
                 <b>
-                  Total:{" "}
-                  <span>
-                    {STATIC.CURRENCY}
-                    {fullTotal}
-                  </span>
+                  Total: <span>{moneyFormatVisual(fullTotal)}</span>
                 </b>
               </div>
             </div>

@@ -5,7 +5,8 @@
   }
 
   .main-site-alert {
-    max-width: 400px;
+    max-width: calc(100% - 40px);
+    bottom: 60px;
   }
 
   .loading-pagination,
@@ -2352,7 +2353,7 @@
   }
   .chat-content-area .sidebar-left {
     float: unset;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .chat-content-area .sidebar-left .sidebar {
     width: 100%;
@@ -3531,7 +3532,7 @@
   }
   .chat-content-area .sidebar-left {
     float: unset;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .chat-content-area .sidebar-left .sidebar {
     width: 100%;
@@ -4311,6 +4312,10 @@
   .no-listing-found .image-parent, .send-create-listing-category-notification .image-parent{
     width: 100%;
   }
+
+  body:has(.verification-alert) .chat-content-area .sidebar-left .sidebar .sidebar-content {
+    height: calc(100vh - 420px)!important;
+  }
 }
 
 @media only screen and (max-width: 991.9px) {
@@ -4496,6 +4501,14 @@
     .send-btn {
     padding: 1px 15px;
   }
+
+  body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sidebar-content{
+    height: calc(100vh - 390px);
+  }
+
+  .chat-content-area .sidebar-left .sidebar .sidebar-content {
+    height: calc(100vh - 300px);
+  }
 }
 
 @media only screen and (min-width: 767.9px) {
@@ -4518,8 +4531,12 @@
     margin-bottom: 15px;
   }
 
+  body:has(.verification-alert) .chat-content-area .sidebar-left .sidebar .sidebar-content{
+    height: calc(100vh - 380px);
+  }
+
   .chat-content-area .sidebar-left .sidebar .sidebar-content {
-    height: calc(100vh - 405px);
+    height: calc(100vh - 290px);
   }
 
   .main-content {

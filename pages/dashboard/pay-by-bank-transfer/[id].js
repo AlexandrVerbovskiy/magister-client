@@ -12,7 +12,7 @@ import {
   calculateFullTotalByDaysCount,
   downloadFileUrl,
   getFactOrderDays,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
 import STATIC from "../../../static";
@@ -239,8 +239,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                 >
                   <b>Total Amount to Transfer: </b>
                   <span className="pay-by-card-price">
-                    {STATIC.CURRENCY}
-                    {moneyFormat(totalPrice)}
+                    {moneyFormatVisual(totalPrice)}
                   </span>
                 </li>
               </ul>
@@ -271,7 +270,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
                         {...getRootPropsPopup()}
                       >
                         <input name="modalImage" {...getInputPropsPopup()} />
-                        
+
                         {proof ? (
                           <div
                             className="invoice-btn-box gallery-flex form-group"

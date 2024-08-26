@@ -4,6 +4,7 @@ import {
   moneyFormat,
   autoMultiEnding,
   dateConverter,
+  moneyFormatVisual,
 } from "../../utils";
 import StatusBlock from "../Listings/StatusBlock";
 import { IndiceContext } from "../../contexts";
@@ -41,10 +42,7 @@ const OrderInfoMessageContent = ({
       />
 
       <div className="my-1">
-        <b>
-          Total price: {STATIC.CURRENCY}
-          {moneyFormat(totalPrice)}
-        </b>
+        <b>Total price: {moneyFormatVisual(totalPrice)}</b>
       </div>
 
       <div className="mb-1">

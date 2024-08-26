@@ -1,6 +1,5 @@
-import Link from "next/link";
 import View from "../FastActions/View";
-import { moneyFormat } from "../../../utils";
+import {moneyFormatVisual } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
@@ -113,8 +112,7 @@ const TableItem = ({
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            {STATIC.CURRENCY}
-            {moneyFormat(money)}
+            {moneyFormatVisual(money)}
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">

@@ -192,7 +192,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(payment.offerPricePerDay)}
-                                label="Offer Price Per Day, $"
+                                label={`Offer Price Per Day (${STATIC.CURRENCY})`}
                                 name="price-per-day"
                                 placeholder="Offer Price Per Day"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -203,7 +203,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <div className="w-1/2">
                               <InputView
                                 value={subtotalPrice}
-                                label="Offer Subtotal Price, $"
+                                label={`Offer Subtotal Price (${STATIC.CURRENCY})`}
                                 placeholder="Offer Subtotal Price"
                                 name="order-subtotal"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -216,7 +216,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={payment.tenantFee}
-                                label="Renter Fee, %"
+                                label="Renter Fee (%)"
                                 name="renter-fee"
                                 placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -227,7 +227,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <div className="w-1/2">
                               <InputView
                                 value={moneyFormat(subtotalPrice + totalFee)}
-                                label="Total To Pay, $"
+                                label={`Total To Pay (${STATIC.CURRENCY})`}
                                 placeholder="Total To Pay"
                                 name="total-to-pay"
                                 labelClassName="block text-sm font-medium mb-1"

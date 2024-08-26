@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from "../../utils";
+import { capitalizeFirstLetter, moneyFormatVisual } from "../../utils";
 import STATIC from "../../static";
 
 const PaypalCheck = ({
@@ -71,8 +71,7 @@ const PaypalCheck = ({
             <h1>
               You paid{" "}
               <span className="amount">
-                {STATIC.CURRENCY}
-                {rentalPrice} {STATIC.CURRENCY_NAME}
+                {moneyFormatVisual(rentalPrice, true)}
               </span>
             </h1>
             <p>to RentAbout</p>
@@ -92,8 +91,7 @@ const PaypalCheck = ({
                     </td>
                     <td className="price max-w-full overflow-separate">
                       <span className="amount">
-                        {STATIC.CURRENCY}
-                        {rentalPrice}
+                        {moneyFormatVisual(rentalPrice, true)}
                       </span>
                       <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
@@ -133,8 +131,7 @@ const PaypalCheck = ({
                     </td>
                     <td className="price max-w-full overflow-separate">
                       <span className="amount">
-                        {STATIC.CURRENCY}
-                        {rentalPrice}
+                        {moneyFormatVisual(rentalPrice)}
                       </span>
                       <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
@@ -156,8 +153,7 @@ const PaypalCheck = ({
                     </td>
                     <td className="price max-w-full overflow-separate">
                       <span className="amount">
-                        {STATIC.CURRENCY}
-                        {rentalPrice}
+                        {moneyFormatVisual(rentalPrice)}
                       </span>
                       <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>
@@ -187,8 +183,7 @@ const PaypalCheck = ({
                     </td>
                     <td className="price max-w-full overflow-separate">
                       <span className="amount">
-                        {STATIC.CURRENCY}
-                        {rentalPrice}
+                        {moneyFormatVisual(rentalPrice)}
                       </span>
                       <span className="currency">{STATIC.CURRENCY_NAME}</span>
                     </td>

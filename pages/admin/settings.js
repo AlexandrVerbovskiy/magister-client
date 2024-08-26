@@ -373,7 +373,7 @@ const Settings = ({
                               setValue={setOwnerBaseCommissionPercent}
                               error={ownerBaseCommissionPercentError}
                               setError={setOwnerBaseCommissionPercentError}
-                              label="Listing Owner Commission, %"
+                              label="Listing Owner Commission (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -388,7 +388,7 @@ const Settings = ({
                               setValue={setOwnerBoostCommissionPercent}
                               error={ownerBoostCommissionPercentError}
                               setError={setOwnerBoostCommissionPercentError}
-                              label="Listing Owner Commission For Boost Position, %"
+                              label="Listing Owner Commission For Boost Position (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -403,7 +403,7 @@ const Settings = ({
                               setValue={setTenantBaseCommissionPercent}
                               error={tenantBaseCommissionPercentError}
                               setError={setTenantBaseCommissionPercentError}
-                              label="Rental Rent Commission, %"
+                              label="Rental Rent Commission (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -418,7 +418,7 @@ const Settings = ({
                               setValue={setTenantCancelFeePercent}
                               error={tenantCancelFeePercentError}
                               setError={setTenantCancelFeePercentError}
-                              label="Renter Cancel Commission, %"
+                              label="Renter Cancel Commission (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />

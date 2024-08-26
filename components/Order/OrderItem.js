@@ -7,7 +7,7 @@ import {
   getFactOrderDays,
   getPaymentNameByType,
   isOrderCanBeAccepted,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
@@ -83,14 +83,13 @@ const OrderInfo = ({
           <li className="row-dots-end" style={{ color: "black" }}>
             <i className="bx bx-purchase-tag"></i>
             <span>Price: </span>
-            {STATIC.CURRENCY}
             <span>
               {order.requestId
-                ? moneyFormat(
+                ? moneyFormatVisual(
                     order.newPricePerDay *
                       getFactOrderDays(order.newStartDate, order.newEndDate)
                   )
-                : moneyFormat(
+                : moneyFormatVisual(
                     order.offerPricePerDay *
                       getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}

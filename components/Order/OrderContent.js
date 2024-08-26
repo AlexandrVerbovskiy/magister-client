@@ -8,8 +8,7 @@ import {
   getFactOrderDays,
   getListingImageByType,
   isOrderCanBeAccepted,
-  moneyFormat,
-  validateBigText,
+  moneyFormatVisual,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -24,7 +23,6 @@ import {
   useOrderDateError,
   useSingleOrderActions,
 } from "../../hooks";
-import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
@@ -104,15 +102,12 @@ const SubOrderItem = ({
         <BaseDateSpan startDate={startDate} endDate={endDate} />
       </div>
 
-      <div>
-        Price per day: {STATIC.CURRENCY}
-        {moneyFormat(pricePerDay)}
-      </div>
+      <div>Price per day: {moneyFormatVisual(pricePerDay)}</div>
 
       <div>
         <b>
-          Total price {isOwner ? "to get" : "to pay"}: {STATIC.CURRENCY}
-          {moneyFormat(totalPrice)}
+          Total price {isOwner ? "to get" : "to pay"}:{" "}
+          {moneyFormatVisual(totalPrice)}
         </b>
       </div>
     </li>
@@ -808,13 +803,13 @@ const OrderContent = ({
                           : {}
                       }
                     >
-                      Listing price per day: {STATIC.CURRENCY}
-                      {moneyFormat(order.listingPricePerDay)}
+                      Listing price per day:{" "}
+                      {moneyFormatVisual(order.listingPricePerDay)}
                     </li>
                   )}
                 <li>
-                  Offer price per day: {STATIC.CURRENCY}
-                  {moneyFormat(order.offerPricePerDay)}
+                  Offer price per day:{" "}
+                  {moneyFormatVisual(order.offerPricePerDay)}
                 </li>
                 <li>
                   <CanBeErrorBaseDateSpan
@@ -851,8 +846,7 @@ const OrderContent = ({
                       }}
                     >
                       Subtotal price with listing price per day{" "}
-                      {STATIC.CURRENCY}
-                      {moneyFormat(
+                      {moneyFormatVisual(
                         order.listingPricePerDay *
                           getFactOrderDays(
                             order.offerStartDate,
@@ -863,16 +857,16 @@ const OrderContent = ({
                   )}
 
                 <li>
-                  Fact offer subtotal price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Fact offer subtotal price:{" "}
+                  {moneyFormatVisual(
                     order.offerPricePerDay *
                       getFactOrderDays(order.offerStartDate, order.offerEndDate)
                   )}
                 </li>
 
                 <li>
-                  Total fee price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Total fee price:{" "}
+                  {moneyFormatVisual(
                     (order.offerPricePerDay *
                       getFactOrderDays(
                         order.offerStartDate,
@@ -894,8 +888,7 @@ const OrderContent = ({
                           }}
                         >
                           Price with listing price per day to get{" "}
-                          {STATIC.CURRENCY}
-                          {moneyFormat(
+                          {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               startDate: order.offerStartDate,
                               endDate: order.offerEndDate,
@@ -914,8 +907,7 @@ const OrderContent = ({
                           }}
                         >
                           Price with listing price per day to pay{" "}
-                          {STATIC.CURRENCY}
-                          {moneyFormat(
+                          {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               startDate: order.offerStartDate,
                               endDate: order.offerEndDate,
@@ -930,8 +922,8 @@ const OrderContent = ({
 
                 {isOwner && (
                   <li style={{ fontWeight: 700 }}>
-                    Fact offer price to get: {STATIC.CURRENCY}
-                    {moneyFormat(
+                    Fact offer price to get:{" "}
+                    {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         startDate: order.offerStartDate,
                         endDate: order.offerEndDate,
@@ -944,8 +936,8 @@ const OrderContent = ({
 
                 {isTenant && (
                   <li style={{ fontWeight: 700 }}>
-                    Fact offer price to pay: {STATIC.CURRENCY}
-                    {moneyFormat(
+                    Fact offer price to pay:{" "}
+                    {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         startDate: order.offerStartDate,
                         endDate: order.offerEndDate,
@@ -984,8 +976,8 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day: {STATIC.CURRENCY}
-                  {moneyFormat(prevUpdateRequest.pricePerDay)}
+                  Offer price per day:{" "}
+                  {moneyFormatVisual(prevUpdateRequest.pricePerDay)}
                 </li>
 
                 <li>
@@ -1005,8 +997,7 @@ const OrderContent = ({
                       }}
                     >
                       Subtotal price with listing price per day{" "}
-                      {STATIC.CURRENCY}
-                      {moneyFormat(
+                      {moneyFormatVisual(
                         prevUpdateRequest.pricePerDay *
                           getFactOrderDays(
                             prevUpdateRequest.startDate,
@@ -1017,8 +1008,8 @@ const OrderContent = ({
                   )}
 
                 <li>
-                  Fact offer subtotal price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Fact offer subtotal price:{" "}
+                  {moneyFormatVisual(
                     prevUpdateRequest.pricePerDay *
                       getFactOrderDays(
                         prevUpdateRequest.startDate,
@@ -1028,8 +1019,8 @@ const OrderContent = ({
                 </li>
 
                 <li>
-                  Total fee price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Total fee price:{" "}
+                  {moneyFormatVisual(
                     (prevUpdateRequest.pricePerDay *
                       getFactOrderDays(
                         prevUpdateRequest.startDate,
@@ -1047,8 +1038,8 @@ const OrderContent = ({
                         textDecoration: "line-through",
                       }}
                     >
-                      Price with listing price per day: {STATIC.CURRENCY}
-                      {moneyFormat(
+                      Price with listing price per day:
+                      {moneyFormatVisual(
                         localCalculateCurrentTotalPrice({
                           startDate: prevUpdateRequest.startDate,
                           endDate: prevUpdateRequest.endDate,
@@ -1060,8 +1051,7 @@ const OrderContent = ({
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
-                  {STATIC.CURRENCY}
-                  {moneyFormat(
+                  {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       startDate: prevUpdateRequest.startDate,
                       endDate: prevUpdateRequest.endDate,
@@ -1086,8 +1076,8 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day: {STATIC.CURRENCY}
-                  {moneyFormat(actualUpdateRequest.newPricePerDay)}
+                  Offer price per day:
+                  {moneyFormatVisual(actualUpdateRequest.newPricePerDay)}
                 </li>
 
                 <li>
@@ -1106,8 +1096,8 @@ const OrderContent = ({
                       textDecoration: "line-through",
                     }}
                   >
-                    Subtotal price with listing price per day {STATIC.CURRENCY}
-                    {moneyFormat(
+                    Subtotal price with listing price per day
+                    {moneyFormatVisual(
                       actualUpdateRequest.newPricePerDay *
                         getFactOrderDays(
                           actualUpdateRequest.newStartDate,
@@ -1118,8 +1108,8 @@ const OrderContent = ({
                 )}
 
                 <li>
-                  Fact offer subtotal price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Fact offer subtotal price:{" "}
+                  {moneyFormatVisual(
                     actualUpdateRequest.newPricePerDay *
                       getFactOrderDays(
                         actualUpdateRequest.newStartDate,
@@ -1129,8 +1119,8 @@ const OrderContent = ({
                 </li>
 
                 <li>
-                  Total fee price: {STATIC.CURRENCY}
-                  {moneyFormat(
+                  Total fee price:{" "}
+                  {moneyFormatVisual(
                     (actualUpdateRequest.newPricePerDay *
                       getFactOrderDays(
                         actualUpdateRequest.newStartDate,
@@ -1149,8 +1139,8 @@ const OrderContent = ({
                     }}
                   >
                     Price {isOwner ? "to get" : "to pay"} with listing price per
-                    day: {STATIC.CURRENCY}
-                    {moneyFormat(
+                    day:
+                    {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         startDate: actualUpdateRequest.newStartDate,
                         endDate: actualUpdateRequest.newEndDate,
@@ -1162,8 +1152,7 @@ const OrderContent = ({
 
                 <li style={{ fontWeight: 700 }}>
                   Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
-                  {STATIC.CURRENCY}
-                  {moneyFormat(
+                  {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       startDate: actualUpdateRequest.newStartDate,
                       endDate: actualUpdateRequest.newEndDate,

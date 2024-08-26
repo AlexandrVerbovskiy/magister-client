@@ -1,8 +1,9 @@
-import resolveConfig from 'tailwindcss/resolveConfig';
+import resolveConfig from "tailwindcss/resolveConfig";
+import STATIC from "../../static";
 
 export const tailwindConfig = () => {
-  return resolveConfig('../../styles/admin/tailwind.config.js')
-}
+  return resolveConfig("../../styles/admin/tailwind.config.js");
+};
 
 export const hexToRGB = (h) => {
   let r = 0;
@@ -20,17 +21,19 @@ export const hexToRGB = (h) => {
   return `${+r},${+g},${+b}`;
 };
 
-export const formatValue = (value) => Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumSignificantDigits: 3,
-  notation: 'compact',
-}).format(value);
+export const formatValue = (value) =>
+  Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: STATIC.CURRENCY_NAME,
+    maximumSignificantDigits: 3,
+    notation: "compact",
+  }).format(value);
 
-export const formatThousands = (value) => Intl.NumberFormat('en-US', {
-  maximumSignificantDigits: 3,
-  notation: 'compact',
-}).format(value);
+export const formatThousands = (value) =>
+  Intl.NumberFormat("en-US", {
+    maximumSignificantDigits: 3,
+    notation: "compact",
+  }).format(value);
 
 export const fixedColors = [
   "indigo",
