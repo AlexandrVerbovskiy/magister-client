@@ -1,12 +1,10 @@
-import { IndiceContext } from "../contexts";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { getFactOrderDays, moneyFormat, dateConverter } from "../utils";
-import PaypalButton from "./PaypalButton";
-import PaypalForm from "./PaypalForm";
-import { paypalCreateOrder, paypalOrderPayed } from "../services";
-import Link from "next/link";
-import STATIC from "../static";
+import {
+  getFactOrderDays,
+  dateConverter,
+  moneyFormatVisual,
+} from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
 const PayModal = ({
@@ -27,10 +25,10 @@ const PayModal = ({
 
   const handleTenantPayed = (result) => {
     setTimeout(() => {
-      if(onTenantPayed){
+      if (onTenantPayed) {
         onTenantPayed(result);
       }
-      
+
       closeModal();
     }, 100);
   };
@@ -67,20 +65,15 @@ const PayModal = ({
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">
-              Price per day: {STATIC.CURRENCY}
-              {moneyFormat(pricePerDay)}
+              Price per day: {moneyFormatVisual(pricePerDay)}
             </div>
             <div className="form-group">Duration: {durationInfo}</div>
             <div className="form-group">
-              Subtotal: {STATIC.CURRENCY}
-              {moneyFormat(subtotal)}
+              Subtotal: {moneyFormatVisual(subtotal)}
             </div>
             <div className="form-group">Fee: {offerFee}% </div>
             <div className="form-group">
-              <b>
-                Total to pay: {STATIC.CURRENCY}
-                {moneyFormat(total)}
-              </b>
+              <b>Total to pay: {moneyFormatVisual(total)}</b>
             </div>
           </div>
         </div>

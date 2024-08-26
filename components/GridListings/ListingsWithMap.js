@@ -510,6 +510,14 @@ const ListingsWithMap = ({
 
   const isMobile = useIsMobile();
 
+  const handleSearchFormSubmit = () => {
+    const menuBtn = document.querySelector(".hamburger-menu.hamburger-two");
+
+    if (menuBtn) {
+      menuBtn.click();
+    }
+  };
+
   return (
     <>
       <NavbarTwo needMobileSticky={false}>
@@ -529,6 +537,7 @@ const ListingsWithMap = ({
               searchCity={searchCity}
               searchCategory={searchCategory}
               searchListing={searchListing}
+              onSubmit={handleSearchFormSubmit}
             />
           </div>
           <Sidebar

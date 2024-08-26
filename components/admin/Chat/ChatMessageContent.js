@@ -12,7 +12,7 @@ import {
   getFactOrderDays,
   getFilePath,
   getListingImageByType,
-  moneyFormat,
+  moneyFormatVisual,
 } from "../../../utils";
 import CancelStatus from "../Orders/CancelStatus";
 import StatusBlock from "../../Listings/StatusBlock";
@@ -487,15 +487,9 @@ const orderMessageContent = ({
           style={{ width: "200px", height: "200px" }}
         />
         <div className="my-1">
-          <b>
-            Owner get: {STATIC.CURRENCY}
-            {moneyFormat(forOwnerPrice)}
-          </b>
+          <b>Owner get: {moneyFormatVisual(forOwnerPrice)}</b>
           <br />
-          <b>
-            Renter payed: {STATIC.CURRENCY}
-            {moneyFormat(forTenantPrice)}
-          </b>
+          <b>Renter payed: {moneyFormatVisual(forTenantPrice)}</b>
         </div>
         <div className="mb-1">
           {duration} {autoMultiEnding(duration, "day")} (

@@ -1,14 +1,10 @@
 import flatpickr from "flatpickr";
 import {
   autoMultiEnding,
-  getFactOrderDays,
-  moneyFormat,
-  dateConverter,
   separateDate,
-  groupDates,
   getMaxFlatpickrDate,
+  moneyFormatVisual,
 } from "../../../utils";
-import STATIC from "../../../static";
 import { useEffect, useRef } from "react";
 import ErrorSpan from "../../ErrorSpan";
 
@@ -107,12 +103,10 @@ const ContractDetails = ({
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>
-            {STATIC.CURRENCY}
-            {price} x {duration} {autoMultiEnding(duration, "day")}
+            {moneyFormatVisual(price)} x {duration} {autoMultiEnding(duration, "day")}
           </div>
           <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(subtotalPrice)}
+            {moneyFormatVisual(subtotalPrice)}
           </div>
         </div>
 
@@ -122,8 +116,7 @@ const ContractDetails = ({
         >
           <div>Service Fee</div>
           <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(totalFee)}
+            {moneyFormatVisual(totalFee)}
           </div>
         </div>
       </div>
@@ -132,8 +125,7 @@ const ContractDetails = ({
         <li className="d-flex justify-content-between px-0">
           <div>Total:</div>{" "}
           <div>
-            {STATIC.CURRENCY}
-            {moneyFormat(totalPrice)}
+            {moneyFormatVisual(totalPrice)}
           </div>
         </li>
       </ul>

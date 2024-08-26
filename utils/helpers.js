@@ -4,6 +4,7 @@ import {
   getOrderBlockedDatesToUpdate,
 } from "./dateHelpers";
 import {
+  moneyFormat,
   ownerGetsCalculate,
   tenantPaymentCalculate,
 } from "./priceCalculations";
@@ -190,3 +191,13 @@ export const initOthersCategory = ({ level = 1, parentId = null } = {}) => ({
   popular: false,
   isOther: true,
 });
+
+export const moneyFormatVisual = (value, needCurrencyName = false) => {
+  let result = `${STATIC.CURRENCY} ${moneyFormat(value)}`;
+
+  if (needCurrencyName) {
+    result += ` ${STATIC.CURRENCY_NAME}`;
+  }
+
+  return result;
+};

@@ -6,6 +6,8 @@ import { getListingImageByType, uniqueImageId } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import STATIC from "../../static";
 import { useIsMobile } from "../../hooks";
+import { useContext } from "react";
+import { IndiceContext } from "../../contexts";
 
 const linkTypeOptions = [
   { value: "storage", label: "Storage" },
@@ -74,11 +76,18 @@ const EditPhotosSection = ({
 }) => {
   const isMobile = useIsMobile();
 
+  const { error: mainError } = useContext(IndiceContext);
+
   const { getRootProps: getRootPropsBase, getInputProps: getInputPropsBase } =
     useDropzone({
       accept: STATIC.ACCEPT_IMAGE_FORMAT,
       maxSize: STATIC.LIMITS.FILE_SIZE,
       onDrop: (acceptedFiles, fileRejections) => {
+        if (acceptedFiles.length + files.length + linkFiles.length > 5) {
+          mainError.set("You can't set more than 5 files");
+          return;
+        }
+
         const newFiles = acceptedFiles.slice(
           0,
           5 - files.length - linkFiles.length
@@ -189,6 +198,8 @@ const EditPhotosSection = ({
   return (
     <>
       <div {...getRootPropsBase()} className="dropzone add-listings-box">
+        <input name="modalImage" {...getInputPropsPopup()} />
+
         <h3>
           Photos
           <div className="form-hint">
@@ -196,7 +207,10 @@ const EditPhotosSection = ({
           </div>
         </h3>
 
-        <div className="row m-0 gallery-flex" style={{ width: "100%" }}>
+        <div
+          className="row mx-0 gallery-flex"
+          style={{ width: "100%", marginBottom: "25px" }}
+        >
           <div className="col col-12 form-group">
             <div
               className="add-more-image"
