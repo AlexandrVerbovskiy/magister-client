@@ -48,8 +48,6 @@ const ApproveOwnerListing = (baseProps) => {
               </div>
             </div>
 
-            <OrderContent {...props} operationsDisabled={true} />
-
             <ChecklistForm
               {...props}
               type="finish"

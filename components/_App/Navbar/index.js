@@ -100,7 +100,6 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
   const handleLoginTabActive = () => {
     loginTabBtnTrigger.current.click();
-    console.log(loginTabBtnTrigger);
   };
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
@@ -196,7 +195,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
   return (
     <>
-      <MobileNavbar onLoginClick={toggleAuth} />
+      {isAuth && <MobileNavbar onLoginClick={toggleAuth} />}
 
       <div className={displayAuth ? "body_overlay open" : "body_overlay"}></div>
       <div
@@ -209,6 +208,14 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">
+              <div onClick={toggleMenu} className="hamburger-menu">
+                {showMenu ? (
+                  <i className="bx bx-x"></i>
+                ) : (
+                  <i className="bx bx-menu"></i>
+                )}
+              </div>
+
               <div className="logo">
                 <Link href="/">
                   <img

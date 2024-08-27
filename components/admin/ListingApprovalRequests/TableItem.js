@@ -67,6 +67,7 @@ const TableItem = ({
   handleRejectClick,
   ownerAverageRating,
   ownerCommentCount,
+  userVerified,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 

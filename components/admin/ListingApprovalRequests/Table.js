@@ -24,7 +24,7 @@ const RequestsTable = ({
   const [popupImage, setPopupImage] = useState(null);
   const [popupApproveId, setPopupApproveId] = useState(null);
   const [popupRejectId, setPopupRejectId] = useState(null);
-  const { authToken } = useContext(IndiceContext);
+  const { authToken, error: mainError } = useContext(IndiceContext);
 
   const ths = [
     { title: "Id", value: "listing_approval_requests.id", width: "10%" },
@@ -59,16 +59,31 @@ const RequestsTable = ({
   };
 
   const handleApproveAcceptClick = async () => {
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == popupApproveId
+    );
+
     await approveListingApprovalRequest(
       { listingId: popupApproveId },
       authToken
     );
 
+    setItemFields({ approved: true }, request.id);
+  };
+
+  const handleTriggerApproveClick = (listingId) => {
     const request = listingApprovalRequests.find(
-      (request) => request.listingId == popupApproveId
+      (request) => request.listingId == listingId
     );
 
-    setItemFields({ approved: true }, request.id);
+    if (!request.userVerified) {
+      mainError.set(
+        "You can't approve this listing because owner wasn't approved"
+      );
+      return;
+    }
+
+    setPopupApproveId(listingId);
   };
 
   return (
@@ -106,9 +121,7 @@ const RequestsTable = ({
                     key={request.id}
                     {...request}
                     openPopupImage={(image) => setPopupImage(image)}
-                    handleApproveClick={(listingId) =>
-                      setPopupApproveId(listingId)
-                    }
+                    handleApproveClick={handleTriggerApproveClick}
                     handleRejectClick={(listingId) =>
                       setPopupRejectId(listingId)
                     }
@@ -119,7 +132,9 @@ const RequestsTable = ({
 
           {loading && <PaginationLoading />}
 
-          {!loading && listingApprovalRequests.length < 1 && <EmptyTable name="requests"/>}
+          {!loading && listingApprovalRequests.length < 1 && (
+            <EmptyTable name="requests" />
+          )}
         </div>
       </div>
 

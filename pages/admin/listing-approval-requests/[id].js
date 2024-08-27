@@ -36,7 +36,7 @@ const ListingApprovalRequest = (baseProps) => {
   const [mapCenter, setMapCenter] = useState(null);
 
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  const { authToken } = useContext(IndiceContext);
+  const { authToken, error: mainError } = useContext(IndiceContext);
 
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [approveModalOpen, setApproveModalOpen] = useState(false);
@@ -59,6 +59,14 @@ const ListingApprovalRequest = (baseProps) => {
 
   const handleApproveClick = (e) => {
     e.stopPropagation();
+
+    if (!request.userVerified) {
+      mainError.set(
+        "You can't approve this listing because owner wasn't approved"
+      );
+      return;
+    }
+
     setApproveModalOpen(true);
   };
 
@@ -321,6 +329,21 @@ const ListingApprovalRequest = (baseProps) => {
                           value={listing.description}
                           row="7"
                           placeholder="Details..."
+                        />
+                      </div>
+                    </section>
+
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Item Defects
+                      </h2>
+
+                      <div className="w-full">
+                        <TextareaView
+                          name="defects"
+                          value={listing.defects ?? "-"}
+                          row="7"
+                          placeholder="Defects..."
                         />
                       </div>
                     </section>

@@ -18,6 +18,7 @@ import { Autoplay } from "swiper/modules";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
 import StarRating from "../StarRating";
+import { useIsMobile } from "../../hooks";
 
 const SingleListingsContent = ({
   comments,
@@ -33,6 +34,7 @@ const SingleListingsContent = ({
   const [currentApproveFromDate, setCurrentApproveFromDate] = useState(null);
   const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
   const [listing, setListing] = useState(prevListing);
+  const isMobile = useIsMobile();
 
   const router = useRouter();
 
@@ -562,42 +564,45 @@ const SingleListingsContent = ({
               </div>
               <div className="col-lg-4 col-md-12">
                 <div className="listings-sidebar d-flex flex-column">
-                  <div className="listings-widget book_listings">
-                    <h3>Booking Online</h3>
+                  {!isMobile && (
+                    <div className="listings-widget book_listings">
+                      <h3>Booking Online</h3>
 
-                    {sessionUser?.id != listing.ownerId ? (
-                      <div>
-                        {listing.minRentalDays > 0 && (
-                          <ul style={{ listStyle: "none", padding: "0" }}>
-                            <li className="d-flex">
-                              <i
-                                style={{
-                                  fontSize: "20px",
-                                  transform: "translateY(3px)",
-                                  marginRight: "4px",
-                                }}
-                                className="bx bx-envelope"
-                              ></i>
-                              <span className="row-dots-end mt-0">
-                                Min rental:{listing.minRentalDays} days
-                              </span>
-                            </li>
-                          </ul>
-                        )}
-                        <button
-                          type="button"
-                          className="default-btn w-100"
-                          onClick={handleMakeBookingTriggerClick}
-                        >
-                          Book Now {moneyFormatVisual(listing.pricePerDay)}/day
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="status-background-orange">
-                        You can't book your own listing
-                      </div>
-                    )}
-                  </div>
+                      {sessionUser?.id != listing.ownerId ? (
+                        <div>
+                          {listing.minRentalDays > 0 && (
+                            <ul style={{ listStyle: "none", padding: "0" }}>
+                              <li className="d-flex">
+                                <i
+                                  style={{
+                                    fontSize: "20px",
+                                    transform: "translateY(3px)",
+                                    marginRight: "4px",
+                                  }}
+                                  className="bx bx-envelope"
+                                ></i>
+                                <div className="row-dots-end mt-0">
+                                  Min rental: {listing.minRentalDays} days
+                                </div>
+                              </li>
+                            </ul>
+                          )}
+                          <button
+                            type="button"
+                            className="default-btn w-100"
+                            onClick={handleMakeBookingTriggerClick}
+                          >
+                            Send rental request{" "}
+                            {moneyFormatVisual(listing.pricePerDay)}/day
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="status-background-orange">
+                          You can't book your own listing
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div className="listings-widget listings_author">
                     <h3>Owner</h3>
@@ -686,6 +691,53 @@ const SingleListingsContent = ({
           title="Book Now"
           isExtend={false}
         />
+      )}
+
+      {isMobile && (
+        <div
+          className="mobile-booking-section"
+        >
+          <div className="listings-sidebar d-flex flex-column">
+            <div className="listings-widget book_listings">
+              {sessionUser?.id != listing.ownerId ? (
+                <div>
+                  {listing.minRentalDays > 0 && (
+                    <ul style={{ listStyle: "none", padding: "0" }}>
+                      <li className="d-flex">
+                        <div className="row-dots-end mt-0">
+                          <span style={{ color: "var(--mainColor)" }}>
+                            {moneyFormatVisual(listing.pricePerDay)}
+                          </span>{" "}
+                          daily rent
+                        </div>
+                      </li>
+                      <li className="d-flex">
+                        <div className="row-dots-end mt-0">
+                          <span style={{ textDecoration: "underline" }}>
+                            {listing.minRentalDays} days
+                          </span>{" "}
+                          is min rental duration
+                        </div>
+                      </li>
+                    </ul>
+                  )}
+                  <button
+                    type="button"
+                    className="default-btn w-100"
+                    onClick={handleMakeBookingTriggerClick}
+                  >
+                    Send rental request {moneyFormatVisual(listing.pricePerDay)}
+                    /day
+                  </button>
+                </div>
+              ) : (
+                <div className="status-background-orange">
+                  You can't book your own listing
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
