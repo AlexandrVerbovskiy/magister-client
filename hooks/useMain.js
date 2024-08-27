@@ -32,7 +32,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
   const handleSetSuccess = (message) => {
     setError(null);
     clearMainTimeouts();
-    successClearTimeout.current = setTimeout(() => setSuccess(null), 5000);
+    //successClearTimeout.current = setTimeout(() => setSuccess(null), 5000);
     setSuccess(message);
   };
 

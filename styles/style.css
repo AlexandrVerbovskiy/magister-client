@@ -18781,7 +18781,7 @@ input[type="number"] {
   align-items: flex-start;
 }
 
-[id*="zoid-paypal-card-number-field-uid"] {
+/*[id*="zoid-paypal-card-number-field-uid"] {
   margin: -0.375rem;
   width: calc(100% + 0.75rem - 0.125rem) !important;
 }
@@ -18794,7 +18794,7 @@ input[type="number"] {
 [id*="zoid-paypal-card-expiry-field"] {
   margin: -0.375rem 0 -0.375rem -0.375rem;
   width: calc(100% + 0.375rem - 0.125rem) !important;
-}
+}*/
 
 .flatpickr-date-filter > .flatpickr-wrapper input {
   padding: 0 2.25rem 0 1rem;
