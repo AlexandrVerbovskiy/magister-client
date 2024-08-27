@@ -21,11 +21,12 @@ const DashboardNavbar = () => {
 
   return (
     <>
-      <MobileNavbar />
+      {isAuth && <MobileNavbar />}
 
       <div
         className={
-          "sidemenu-area d-none d-xl-block" + (displaySideMenu ? "active-sidemenu-area" : "")
+          "sidemenu-area d-none d-xl-block" +
+          (displaySideMenu ? "active-sidemenu-area" : "")
         }
       >
         <div className="sidemenu-header">

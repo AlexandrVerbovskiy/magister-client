@@ -1,5 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import useIsMobile from "./useIsMobile";
+import { IndiceContext } from "../contexts";
 
 const tawkScriptId = "tawk-script";
 
@@ -7,6 +9,7 @@ const useTawkScript = (type) => {
   const firstActionRef = useRef(true);
   const router = useRouter();
   const interval = useRef(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const widgetVisible = document.querySelector(".widget-visible");
@@ -43,17 +46,20 @@ const useTawkScript = (type) => {
       clearInterval(interval.current);
     }
 
-    interval.interval = setInterval(() => {
+    interval.current = setInterval(() => {
       const frames = document.querySelectorAll(".widget-visible iframe");
+      const hasFooter = !!document.querySelector(".mobile-footer");
 
-      if (frames.length >= 3) {
-        frames[0].style.bottom = "60px";
-        frames[1].style.bottom = "130px";
-        frames[2].style.bottom = "130px";
-      }
+      if (isMobile && hasFooter) {
+        if (frames.length >= 3) {
+          frames[0].style.bottom = "50px";
+          frames[1].style.bottom = "120px";
+          frames[2].style.bottom = "120px";
+        }
 
-      if(frames.length == 4){
-        frames[3].style.bottom = "70px";
+        if (frames.length == 4) {
+          frames[3].style.bottom = "60px";
+        }
       }
     }, 100);
   }, [router.asPath, type]);
