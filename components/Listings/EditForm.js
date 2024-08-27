@@ -17,12 +17,12 @@ import {
   validatePrice,
   validateSmallText,
 } from "../../utils";
-import EditMap from "../Listings/EditMap";
+import EditMap from "./EditMap";
 import SelectWithIcon from "../FormComponents/SelectWithIcon";
 import InputWithIcon from "../FormComponents/InputWithIcon";
 import ErrorIconWrapper from "../FormComponents/ErrorIconWrapper";
 import TextareaWithIcon from "../FormComponents/TextareaWithIcon";
-import EditPhotosSection from "../Listings/EditPhotosSection";
+import EditPhotosSection from "./EditPhotosSection";
 import { IndiceContext } from "../../contexts";
 import { useCoordsAddress, useListingPhotosEdit } from "../../hooks";
 import CategorySelect from "./CategorySelect";

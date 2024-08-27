@@ -26,8 +26,7 @@ function DashboardLineChart({
         </header>
         <div className="flex items-start">
           <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">
-            {valueType == "money"}
-            {moneyFormatVisual(sum)}
+            {valueType == "money" ? moneyFormatVisual(sum) : sum}
           </div>
           {needCompare && (
             <div

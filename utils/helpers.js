@@ -193,7 +193,7 @@ export const initOthersCategory = ({ level = 1, parentId = null } = {}) => ({
 });
 
 export const moneyFormatVisual = (value, needCurrencyName = false) => {
-  let result = `${STATIC.CURRENCY} ${moneyFormat(value)}`;
+  let result = `${STATIC.CURRENCY}${moneyFormat(value)}`;
 
   if (needCurrencyName) {
     result += ` ${STATIC.CURRENCY_NAME}`;
