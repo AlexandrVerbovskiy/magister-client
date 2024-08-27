@@ -35,7 +35,7 @@ const NavbarThree = ({ children = null }) => {
             {children && (
               <div
                 onClick={() => toggleMenu()}
-                className="hamburger-menu hamburger-two dashboard-hamburger"
+                className="hamburger-menu dashboard-hamburger"
               >
                 {showMenu ? (
                   <i className="bx bx-x"></i>
