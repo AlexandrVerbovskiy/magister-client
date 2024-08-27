@@ -4,9 +4,9 @@
     min-height: 400px;
   }
 
+  .message-site-warning-alert-list,
   .main-site-alert {
     max-width: calc(100% - 40px);
-    bottom: 60px;
   }
 
   .loading-pagination,
@@ -720,7 +720,7 @@
     font-size: 18px;
   }
   .listings-widget-area {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
   }
   .listings-widget-area .widget {
     margin-bottom: 25px;
@@ -2187,8 +2187,22 @@
     a
     i {
     font-size: 20px;
+  }
+
+  .provider-login-section .login-with-account ul li a i,
+  .loginRegisterModal
+    .modal-dialog
+    .modal-content
+    .tab-content
+    .miran-login
+    .login-with-account
+    ul
+    li
+    a
+    i {
     top: 3px;
   }
+
   .main-content {
     padding-top: 110px;
     padding-right: 15px;
@@ -3605,7 +3619,7 @@
   .navbar-area .navbar .navbar-nav {
     margin-left: 0px;
     max-height: 450px;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: absolute;
     background: #fff;
     width: 100%;
@@ -4309,17 +4323,22 @@
     margin-top: 5px;
   }
 
-  .no-listing-found .image-parent, .send-create-listing-category-notification .image-parent{
+  .no-listing-found .image-parent,
+  .send-create-listing-category-notification .image-parent {
     width: 100%;
   }
 
-  body:has(.verification-alert) .chat-content-area .sidebar-left .sidebar .sidebar-content {
-    height: calc(100vh - 420px)!important;
+  body:has(.verification-alert)
+    .chat-content-area
+    .sidebar-left
+    .sidebar
+    .sidebar-content {
+    height: calc(100vh - 420px) !important;
   }
 }
 
 @media only screen and (max-width: 991.9px) {
-  .pagination-area{
+  .pagination-area {
     margin-bottom: 80px;
   }
 
@@ -4502,7 +4521,11 @@
     padding: 1px 15px;
   }
 
-  body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sidebar-content{
+  body:has(.verification-alert)
+    .chat-content-area
+    .sidebar-left
+    .sidebar
+    .sidebar-content {
     height: calc(100vh - 390px);
   }
 
@@ -4531,7 +4554,11 @@
     margin-bottom: 15px;
   }
 
-  body:has(.verification-alert) .chat-content-area .sidebar-left .sidebar .sidebar-content{
+  body:has(.verification-alert)
+    .chat-content-area
+    .sidebar-left
+    .sidebar
+    .sidebar-content {
     height: calc(100vh - 380px);
   }
 
@@ -4546,5 +4573,30 @@
   .sidemenu-area .sidemenu-body .sidemenu-nav {
     overflow-y: hidden;
   }
-  
+
+  body:has(.mobile-footer) .message-site-warning-alert-list,
+  body:has(.mobile-footer) .main-site-alert {
+    bottom: 60px;
+  }
+
+  .navbar-area-two:has(.miran-nav.show) {
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    overflow-y: auto;
+    max-height: 100vh;
+    background-color: white;
+  }
+
+  .hamburger-two {
+    margin-top: 5px;
+  }
+
+  .miran-responsive-menu:has(.logo) .hamburger-two {
+    margin-top: -12px;
+  }
+
+  .hamburger-two i {
+    margin-top: 20px;
+  }
 }

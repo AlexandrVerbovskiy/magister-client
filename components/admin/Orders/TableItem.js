@@ -4,7 +4,7 @@ import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
-import { getFactOrderDays, getPaymentNameByType } from "../../../utils";
+import { getFactOrderDays, getPaymentNameByType, moneyFormatVisual } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
@@ -63,7 +63,7 @@ const TableItem = (props) => {
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            ${getFactOrderDays(offerStartDate, offerEndDate) * offerPricePerDay}
+            {moneyFormatVisual(getFactOrderDays(offerStartDate, offerEndDate) * offerPricePerDay)}
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

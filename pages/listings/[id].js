@@ -15,7 +15,7 @@ const Listing = (baseProps) => {
 
   return (
     <>
-      <NavbarTwo />
+      <NavbarTwo needMobile={false} />
 
       <SingleListingsContent
         listing={props.listing}

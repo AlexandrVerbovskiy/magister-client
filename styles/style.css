@@ -4730,7 +4730,6 @@ Listings Details Area CSS
 }
 .listings-details-desc .listings-review {
   background-color: #f5f5f5;
-  box-shadow: 5px 5px #dedede;
   padding: 30px;
 }
 .listings-details-desc .listings-review .rating {
@@ -4813,7 +4812,6 @@ Listings Details Area CSS
 }
 .listings-details-desc .write-a-review {
   background-color: #f5f5f5;
-  box-shadow: 5px 5px #dedede;
   padding: 30px 230px 30px 30px;
   position: relative;
   margin-top: 30px;
@@ -5492,7 +5490,6 @@ Listings Details Area CSS
 }
 
 .listings-sidebar .book_listings span {
-  display: block;
   color: var(--optionalColor);
   margin-top: 15px;
 }
@@ -11738,7 +11735,7 @@ All Modal CSS
   li
   a
   svg {
-  top: 2px;
+  top: 0px;
 }
 
 .provider-login-section .login-with-account ul li a.facebook,
@@ -14383,7 +14380,11 @@ Dashboard CSS
   height: calc(100vh - 325px);
 }
 
-body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sidebar-content{
+body:has(.verification-alert)
+  .chat-content-area
+  .sidebar-left
+  .sidebar
+  .sidebar-content {
   height: calc(100vh - 360px);
 }
 
@@ -14878,6 +14879,23 @@ body:has(.verification-alert)  .chat-content-area .sidebar-left .sidebar .sideba
   .chat-container {
   height: calc(100vh - 375.5px);
 }
+
+body:has(.verification-alert) .chat-content-area
+.content-right
+.chat-list-wrapper
+.chat-list
+.chat-container {
+height: calc(100vh - 440px);
+}
+
+body:has(.verification-alert) .chat-content-area
+.content-right
+.chat-list-wrapper
+.chat-list:has(.editable-message-panel)
+.chat-container {
+height: calc(100vh - 475.5px);
+}
+
 .chat-content-area
   .content-right
   .chat-list-wrapper
@@ -17142,7 +17160,7 @@ Preloader Area CSS
 
 .message-site-alert {
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   border-radius: 0.375rem;
   max-width: 500px;
   text-align: justify !important;
@@ -17525,10 +17543,9 @@ button.button-danger:hover {
   padding: 20px;
 }
 
-.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image{
+.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image {
   height: 25px;
 }
-
 
 .gallery-flex-parent {
   display: flex;
@@ -19907,7 +19924,7 @@ video::-webkit-media-controls-panel {
 }
 
 .verification-alert-listings,
-.verification-alert-main{
+.verification-alert-main {
   margin-bottom: 0;
   border-radius: 0 0 5px 5px;
 }
@@ -19934,8 +19951,9 @@ video::-webkit-media-controls-panel {
   padding: 0 12px;
   position: relative;
   text-align: center;
-  -webkit-transition: background-color .218s, border-color .218s, box-shadow .218s;
-  transition: background-color .218s, border-color .218s, box-shadow .218s;
+  -webkit-transition: background-color 0.218s, border-color 0.218s,
+    box-shadow 0.218s;
+  transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
   vertical-align: middle;
   white-space: nowrap;
   width: auto;
@@ -19970,12 +19988,12 @@ video::-webkit-media-controls-panel {
   vertical-align: top;
   position: relative;
   top: 3px;
-  font-weight: 600!important;
+  font-weight: 600 !important;
 }
 
 .gsi-material-button .gsi-material-button-state {
-  -webkit-transition: opacity .218s;
-  transition: opacity .218s;
+  -webkit-transition: opacity 0.218s;
+  transition: opacity 0.218s;
   bottom: 0;
   left: 0;
   opacity: 0;
@@ -19998,15 +20016,17 @@ video::-webkit-media-controls-panel {
   opacity: 38%;
 }
 
-.gsi-material-button:not(:disabled):active .gsi-material-button-state, 
+.gsi-material-button:not(:disabled):active .gsi-material-button-state,
 .gsi-material-button:not(:disabled):focus .gsi-material-button-state {
   background-color: #303030;
   opacity: 12%;
 }
 
 .gsi-material-button:not(:disabled):hover {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 .gsi-material-button:not(:disabled):hover .gsi-material-button-state {
@@ -20014,48 +20034,76 @@ video::-webkit-media-controls-panel {
   opacity: 8%;
 }
 
-.mobile-footer{
-  bottom: 0!important;
+.mobile-footer {
+  bottom: 0 !important;
   left: 0;
   right: 0;
   z-index: 999;
-  background-color: #FFFFFF;
-  box-shadow: 0px -4px 25px 3px rgba(0, 0, 0, 0.1)!important;
+  background-color: #ffffff;
+  box-shadow: 0px -4px 25px 3px rgba(0, 0, 0, 0.1) !important;
   padding: 10px 0;
 }
 
-.mobile-footer .container{
+.mobile-footer .container {
   display: flex;
-  justify-content: space-between!important;
+  justify-content: space-between !important;
 }
 
-.mobile-footer button{
+.mobile-footer button {
   background-color: inherit;
   border: 0;
   cursor: pointer;
 }
 
-.mobile-footer button:not(:nth-of-type(3)) svg{
-  fill: #BCBCBC;
+.mobile-footer button:not(:nth-of-type(3)) svg {
+  fill: #bcbcbc;
   transition: var(--transition);
 }
 
-.mobile-footer button:nth-of-type(3) svg{
-  stroke: #BCBCBC;
+.mobile-footer button:nth-of-type(3) svg {
+  stroke: #bcbcbc;
   transition: var(--transition);
 }
 
 .mobile-footer button:not(:nth-of-type(3)).active svg,
-.mobile-footer button:not(:nth-of-type(3)):hover svg{
-  fill: #594FBF;
+.mobile-footer button:not(:nth-of-type(3)):hover svg {
+  fill: #594fbf;
 }
 
 .mobile-footer button:nth-of-type(3).active svg,
-.mobile-footer button:nth-of-type(3):hover svg{
-  stroke: #594FBF;
+.mobile-footer button:nth-of-type(3):hover svg {
+  stroke: #594fbf;
 }
 
 .form-check-input:checked {
-  background-color: #0d6efd!important;
-  border-color: #0d6efd!important;
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.page-title-bg form .form-group i {
+  color: var(--mainColor);
+}
+
+.view-listings-filter{
+  border: 1px solid #dedede;
+  border-radius: 5px;
+  width: calc(100% - 50px);
+  padding: 10px;
+}
+
+.view-listings-categories-filter{
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.mobile-booking-section{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 9;
+  box-shadow: 0px 0px 20px 3px #e3e3e3;
+}
+
+.mobile-booking-section .listings-sidebar{
+margin-top: 0;
 }

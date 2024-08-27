@@ -518,28 +518,58 @@ const ListingsWithMap = ({
     }
   };
 
+  const MobileViewFilterComponent = () => {
+    return (
+      <div className="d-flex view-listings-filter">
+        <div className="d-flex align-items-center me-2">
+          <svg
+            width="34"
+            height="34"
+            viewBox="0 0 34 34"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M14.6818 4.25C12.6186 4.25 10.6017 4.86181 8.88619 6.00807C7.1707 7.15432 5.83363 8.78354 5.04408 10.6897C4.25452 12.5959 4.04794 14.6933 4.45045 16.7169C4.85296 18.7405 5.84649 20.5992 7.3054 22.0581C8.7643 23.517 10.6231 24.5106 12.6466 24.9131C14.6702 25.3156 16.7677 25.109 18.6738 24.3194C20.58 23.5299 22.2092 22.1928 23.3555 20.4773C24.5017 18.7618 25.1135 16.745 25.1135 14.6818C25.1133 11.9151 24.0142 9.26188 22.0579 7.30559C20.1016 5.34929 17.4484 4.25018 14.6818 4.25Z"
+              stroke="#221638"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+            />
+            <path
+              d="M22.4648 22.4648L29.7503 29.7503"
+              stroke="#221638"
+              strokeWidth="2"
+              strokeMiterlimit="10"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
+        <div className="row-dots-end">
+          <div className="view-listings-categories-filter row-dots-end text-nowrap">
+            {selectedCategories.length > 0
+              ? `“${selectedCategories.join(", ")}”`
+              : "No categories"}
+          </div>
+          <div className="view-listings-cities-filter row-dots-end text-nowrap">
+            {selectedCities.length > 0
+              ? selectedCities.join(", ")
+              : "No cities"}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      <NavbarTwo needMobileSticky={false}>
+      <NavbarTwo
+        MobileLogoComponent={MobileViewFilterComponent}
+        needMobileSticky={false}
+      >
         <div
-          className="container mb-4 pt-1 mt-2"
+          className="container pt-1 mt-4"
           style={{ borderTop: "1px solid #ede7f6" }}
         >
-          <div
-            className="page-title-bg p-0 mb-4"
-            style={{ borderBottom: "1px solid #ede7f6" }}
-          >
-            <PopularPlacesFilter
-              selectedCategories={selectedCategories}
-              selectedCities={selectedCities}
-              categories={categoriesNames}
-              cities={cityNames}
-              searchCity={searchCity}
-              searchCategory={searchCategory}
-              searchListing={searchListing}
-              onSubmit={handleSearchFormSubmit}
-            />
-          </div>
           <Sidebar
             fromDateFilter={fromTime}
             setFromDateFilter={handleChangeFromDate}
@@ -570,6 +600,25 @@ const ListingsWithMap = ({
             favorites={favorites}
             changeFavorites={handleChangeFavorite}
           />
+
+          <div
+            className="page-title-bg p-0 mt-4"
+            style={{
+              borderTop: "1px solid #ede7f6",
+              backgroundColor: "inherit",
+            }}
+          >
+            <PopularPlacesFilter
+              selectedCategories={selectedCategories}
+              selectedCities={selectedCities}
+              categories={categoriesNames}
+              cities={cityNames}
+              searchCity={searchCity}
+              searchCategory={searchCategory}
+              searchListing={searchListing}
+              onSubmit={handleSearchFormSubmit}
+            />
+          </div>
         </div>
       </NavbarTwo>
 
