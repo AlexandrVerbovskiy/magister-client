@@ -11735,7 +11735,7 @@ All Modal CSS
   li
   a
   svg {
-  top: 2px;
+  top: 0px;
 }
 
 .provider-login-section .login-with-account ul li a.facebook,
@@ -14879,6 +14879,23 @@ body:has(.verification-alert)
   .chat-container {
   height: calc(100vh - 375.5px);
 }
+
+body:has(.verification-alert) .chat-content-area
+.content-right
+.chat-list-wrapper
+.chat-list
+.chat-container {
+height: calc(100vh - 440px);
+}
+
+body:has(.verification-alert) .chat-content-area
+.content-right
+.chat-list-wrapper
+.chat-list:has(.editable-message-panel)
+.chat-container {
+height: calc(100vh - 475.5px);
+}
+
 .chat-content-area
   .content-right
   .chat-list-wrapper

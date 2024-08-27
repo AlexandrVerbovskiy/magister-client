@@ -24,8 +24,7 @@ function DashboardLineChart({
         <div>{title}</div>
         <div style={{ fontSize: "1.375rem" }}>
           <span className={`fw-bold mx-2`}>
-            {valueType === "money"}
-            {moneyFormatVisual(sum)}
+            {valueType === "money" ? moneyFormatVisual(sum) : sum}
           </span>
           {needCompare && (
             <span

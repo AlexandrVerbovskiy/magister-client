@@ -198,7 +198,7 @@ const EditPhotosSection = ({
   return (
     <>
       <div {...getRootPropsBase()} className="dropzone add-listings-box">
-        <input name="modalImage" {...getInputPropsPopup()} />
+        <input name="modalImage" {...getInputPropsBase()} />
 
         <h3>
           Photos

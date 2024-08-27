@@ -7,6 +7,9 @@ import { useListingListClick } from "../../hooks";
 const Footer = ({ bgColor }) => {
   const { sessionUser } = useContext(IndiceContext);
   const { handleClick: handleListingListClick } = useListingListClick();
+  const { handleClick: handleListingCreateClick } = useListingListClick({
+    link: "/dashboard/listings/add",
+  });
 
   const handleSignInClick = (e) => {
     e.preventDefault();
@@ -46,10 +49,10 @@ const Footer = ({ bgColor }) => {
                       href="/"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleListingListClick();
+                        handleListingCreateClick();
                       }}
                     >
-                      <i className="flaticon-left-chevron"></i> List item
+                      <i className="flaticon-left-chevron"></i> List an item
                     </Link>
                   </li>
                 </ul>
@@ -63,7 +66,7 @@ const Footer = ({ bgColor }) => {
                 <ul className="link-list">
                   <li>
                     <Link href="/our-mission/">
-                      <i className="flaticon-left-chevron"></i>Our Mission
+                      <i className="flaticon-left-chevron"></i>Our mission
                     </Link>
                   </li>
                   <li>

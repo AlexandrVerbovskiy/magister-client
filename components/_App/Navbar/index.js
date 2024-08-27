@@ -100,7 +100,6 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
 
   const handleLoginTabActive = () => {
     loginTabBtnTrigger.current.click();
-    console.log(loginTabBtnTrigger);
   };
   const handleRegisterTabActive = () => registerTabBtnTrigger.current.click();
 
