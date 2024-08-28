@@ -3,10 +3,51 @@ import useSearchCategory from "./useSearchCategory";
 import useSearchCity from "./useSearchCity";
 
 const useCategoryCity = ({
-  baseCity = "",
-  baseCategory = "",
+  selectedCategories = [],
+  selectedCities = [],
+  categories = {},
+  cities = [],
+  baseSearchCity = "",
+  baseSearchCategory = "",
   baseListing = "",
 } = {}) => {
+  let notFoundCategory = "";
+  let notFoundCity = "";
+
+  selectedCategories.forEach((selectedCategory) => {
+    let countFound = 0;
+
+    Object.keys(categories).forEach((categoryLevel) => {
+      categories[categoryLevel].forEach((category) => {
+        if (category.name.toLowerCase() === selectedCategory.toLowerCase()) {
+          countFound++;
+        }
+      });
+    });
+
+    if (!countFound) {
+      notFoundCategory = selectedCategory;
+    }
+  });
+
+  selectedCities.forEach((selectedCity) => {
+    let countFound = 0;
+
+    cities.forEach((city) => {
+      if (city.name.toLowerCase() === selectedCity.toLowerCase()) {
+        countFound++;
+      }
+    });
+
+    if (!countFound) {
+      notFoundCity = selectedCity;
+    }
+  });
+
+  const baseCity = baseSearchCity ?? notFoundCity;
+  const baseCategory = baseSearchCategory ?? notFoundCategory;
+  baseListing = baseListing ?? "";
+
   const categoryFilterRef = useRef(null);
   const cityFilterRef = useRef(null);
   const [searchListingName, setSearchListingName] = useState(baseListing);

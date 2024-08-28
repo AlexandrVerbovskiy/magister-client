@@ -5,6 +5,7 @@ import {
   useInitPaginationTimeFilter,
   useChangeTimeFilter,
   useIsMobile,
+  useCategoryCity,
 } from "../../hooks";
 import { IndiceContext } from "../../contexts";
 import Pagination from "../Pagination";
@@ -17,6 +18,7 @@ import {
   cloneObject,
   getCityCoords,
   getDateByCurrentAdd,
+  getFullListingSearchLink,
   validatePrice,
 } from "../../utils";
 import STATIC from "../../static";
@@ -335,6 +337,16 @@ const ListingsWithMap = ({
     ...defaultTimeFilterValues,
   });
 
+  const categoryCityOptions = useCategoryCity({
+    selectedCategories,
+    selectedCities,
+    categories,
+    cities,
+    baseSearchCity: searchCity,
+    baseSearchCategory: searchCategory,
+    baseListing: searchListing,
+  });
+
   const handleSelectedCategories = (categories, needRemoveSearch = false) => {
     const rebuildProps = { categories };
     setSelectedCategories(cloneObject(categories));
@@ -510,15 +522,18 @@ const ListingsWithMap = ({
 
   const isMobile = useIsMobile();
 
-  const handleSearchFormSubmit = () => {
-    const menuBtn = document.querySelector(".hamburger-menu.hamburger-two");
-
-    if (menuBtn) {
-      menuBtn.click();
-    }
-  };
-
   const MobileViewFilterComponent = () => {
+    const localSelectedCities = selectedCities;
+    const localSelectedCategories = selectedCategories;
+
+    if (searchCity && !localSelectedCities.includes(searchCity)) {
+      localSelectedCities.push(searchCity);
+    }
+
+    if (searchCategory && !localSelectedCategories.includes(searchCategory)) {
+      localSelectedCategories.push(searchCategory);
+    }
+
     return (
       <div className="d-flex view-listings-filter">
         <div className="d-flex align-items-center me-2">
@@ -546,18 +561,34 @@ const ListingsWithMap = ({
         </div>
         <div className="row-dots-end">
           <div className="view-listings-categories-filter row-dots-end text-nowrap">
-            {selectedCategories.length > 0
-              ? `“${selectedCategories.join(", ")}”`
+            {localSelectedCities.length > 0
+              ? `“${localSelectedCities.join(", ")}”`
               : "No categories"}
           </div>
           <div className="view-listings-cities-filter row-dots-end text-nowrap">
-            {selectedCities.length > 0
-              ? selectedCities.join(", ")
+            {localSelectedCategories.length > 0
+              ? localSelectedCategories.join(", ")
               : "No cities"}
           </div>
         </div>
       </div>
     );
+  };
+
+  const mainFilterSubmit = () => {
+    const link = getFullListingSearchLink({
+      searchCity: categoryCityOptions.searchCity,
+      searchCategory: categoryCityOptions.searchCategory,
+      searchListing: categoryCityOptions.searchListingName,
+    });
+
+    router.push(link);
+
+    const menuBtn = document.querySelector(".hamburger-menu.hamburger-two");
+
+    if (menuBtn) {
+      menuBtn.click();
+    }
   };
 
   return (
@@ -567,9 +598,23 @@ const ListingsWithMap = ({
         needMobileSticky={false}
       >
         <div
-          className="container pt-1 mt-4"
+          className="container mt-4"
           style={{ borderTop: "1px solid #ede7f6" }}
         >
+          <div
+            className="page-title-bg p-0 mb-4"
+            style={{
+              borderBottom: "1px solid #ede7f6",
+              backgroundColor: "inherit",
+            }}
+          >
+            <PopularPlacesFilter
+              {...categoryCityOptions}
+              onSubmit={mainFilterSubmit}
+              needSubmitButton={false}
+            />
+          </div>
+
           <Sidebar
             fromDateFilter={fromTime}
             setFromDateFilter={handleChangeFromDate}
@@ -601,23 +646,10 @@ const ListingsWithMap = ({
             changeFavorites={handleChangeFavorite}
           />
 
-          <div
-            className="page-title-bg p-0 mt-4"
-            style={{
-              borderTop: "1px solid #ede7f6",
-              backgroundColor: "inherit",
-            }}
-          >
-            <PopularPlacesFilter
-              selectedCategories={selectedCategories}
-              selectedCities={selectedCities}
-              categories={categoriesNames}
-              cities={cityNames}
-              searchCity={searchCity}
-              searchCategory={searchCategory}
-              searchListing={searchListing}
-              onSubmit={handleSearchFormSubmit}
-            />
+          <div className="col-lg-2 col-md-12 p-0 popup-places-filter">
+            <button type="button" className="base-main-button w-100" onClick={mainFilterSubmit}>
+              Search Now
+            </button>
           </div>
         </div>
       </NavbarTwo>
@@ -626,13 +658,8 @@ const ListingsWithMap = ({
         <div className="container">
           <h2>What would you like to rent?</h2>
           <PopularPlacesFilter
-            selectedCategories={selectedCategories}
-            selectedCities={selectedCities}
-            categories={categoriesNames}
-            cities={cityNames}
-            searchCity={searchCity}
-            searchCategory={searchCategory}
-            searchListing={searchListing}
+            {...categoryCityOptions}
+            onSubmit={mainFilterSubmit}
           />
         </div>
       </div>
