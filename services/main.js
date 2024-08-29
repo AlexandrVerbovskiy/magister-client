@@ -357,3 +357,8 @@ export const getOrderCheckoutInfo = async (id, authToken) => {
   const data = await get(`/get-order-checkout-info/${id}`, authToken);
   return data.body;
 };
+
+export const getEmailVerificationInfo = async (token, authToken) => {
+  const data = await post(`/email-verification-info`, {token}, authToken);
+  return data.body;
+};
