@@ -10,10 +10,14 @@ const middlewareCallbackWrapper = async ({
     try {
       const callbackRes = await callback({ baseSideProps: res, context });
 
-      if (callback.notFound) {
+      if (callbackRes.notFound) {
         return {
           notFound: true,
         };
+      }
+
+      if (callbackRes.redirect) {
+        return callbackRes;
       }
 
       res = { ...res, ...callbackRes, ...baseProps };

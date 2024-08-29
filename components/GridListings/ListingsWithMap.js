@@ -563,12 +563,12 @@ const ListingsWithMap = ({
           <div className="view-listings-categories-filter row-dots-end text-nowrap">
             {localSelectedCities.length > 0
               ? `“${localSelectedCities.join(", ")}”`
-              : "No categories"}
+              : "No cities"}
           </div>
           <div className="view-listings-cities-filter row-dots-end text-nowrap">
             {localSelectedCategories.length > 0
               ? localSelectedCategories.join(", ")
-              : "No cities"}
+              : "No categories"}
           </div>
         </div>
       </div>
