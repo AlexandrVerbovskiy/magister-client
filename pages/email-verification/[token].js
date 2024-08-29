@@ -3,8 +3,8 @@ import Link from "next/link";
 import { validateEmail } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useRouter } from "next/router";
-import { verifyEmail } from "../../services";
-import { notAuthSideProps } from "../../middlewares";
+import { getEmailVerificationInfo, verifyEmail } from "../../services";
+import { userSideProps } from "../../middlewares";
 import ErrorSpan from "../../components/ErrorSpan";
 
 const PasswordResetSend = () => {
@@ -95,7 +95,31 @@ const PasswordResetSend = () => {
   );
 };
 
+const boostServerSideProps = async ({ baseSideProps, context }) => {
+  const token = context.params.token;
+  const options = await getEmailVerificationInfo(
+    token,
+    baseSideProps.authToken
+  );
+
+  if (options.authorized) {
+    return {
+      props: { ...options, token },
+      redirect: {
+        destination: "/?success=Mail verified successfully",
+        permanent: false,
+      },
+    };
+  }
+
+  return { ...options, token };
+};
+
 export const getServerSideProps = (context) =>
-  notAuthSideProps({ context, baseProps: { pageTitle: "Email verification" } });
+  userSideProps({
+    context,
+    callback: boostServerSideProps,
+    baseProps: { pageTitle: "Email verification" },
+  });
 
 export default PasswordResetSend;
