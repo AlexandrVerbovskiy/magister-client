@@ -355,8 +355,8 @@ Navbar Area CSS
   font-weight: 500;
   padding-left: 0;
   padding-right: 0;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 .miran-nav .navbar .navbar-nav .nav-item a:hover,
 .miran-nav .navbar .navbar-nav .nav-item a:focus,
@@ -373,7 +373,7 @@ Navbar Area CSS
   content: "\f106";
   position: absolute;
   right: 0;
-  top: 32px;
+  top: 22px;
   font-size: 16px;
   font-family: Flaticon;
 }
@@ -16044,7 +16044,7 @@ height: calc(100vh - 475.5px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
+  height: 80px;
   width: 100%;
   transition: var(--transition);
 }
@@ -19908,11 +19908,18 @@ video::-webkit-media-controls-panel {
   color: white;
 }
 
+.beta-auth-alert{
+  background-color: #3638BC;
+  color: white;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+.beta-auth-alert a,
 .verification-alert a {
   border-radius: 30px;
   box-shadow: unset;
   background-color: white;
-  color: var(--mainColor);
   font-size: 13px;
   border: none;
   position: relative;
@@ -19921,6 +19928,20 @@ video::-webkit-media-controls-panel {
   right: 0;
   bottom: 0;
   transform: translate(-20px, -12px);
+}
+
+.beta-auth-alert a{
+  color: #2D2CB0;
+}
+
+.beta-auth-alert a:hover{
+  background-color: #2D2CB0;
+  color: white;
+}
+
+
+.verification-alert a {
+  color: var(--mainColor);
 }
 
 .verification-alert-listings,

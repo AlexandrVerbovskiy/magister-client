@@ -16,7 +16,8 @@ import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
-import VerificateAlert from "../../VerificateAlert";
+import VerificationAlert from "../../VerificationAlert";
+import BetaAuthAlert from "../../BetaAuthAlert";
 import MobileNavbar from "../MobileNavbar";
 
 const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
@@ -205,6 +206,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
             : "navbar-area navbar-style-two"
         }
       >
+        <BetaAuthAlert />
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">
@@ -329,7 +331,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
             </nav>
           </div>
         </div>
-        <VerificateAlert className="verification-alert-main" />
+        <VerificationAlert className="verification-alert-main" />
       </div>
 
       {/* ------------ Auth Modal ------- */}

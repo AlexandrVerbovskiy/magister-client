@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import { IndiceContext } from "../contexts";
 
-const VerificateAlert = ({ className = "verification-alert-dashboard" }) => {
+const VerificationAlert = ({ className = "verification-alert-dashboard" }) => {
   const { sessionUser } = useContext(IndiceContext);
 
   if (!sessionUser || sessionUser?.verified) {
@@ -32,4 +32,4 @@ const VerificateAlert = ({ className = "verification-alert-dashboard" }) => {
   );
 };
 
-export default VerificateAlert;
+export default VerificationAlert;
