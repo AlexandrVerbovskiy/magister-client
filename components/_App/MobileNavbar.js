@@ -169,7 +169,8 @@ const MobileNavbar = ({ onLoginClick = null }) => {
 
             <li className="nav-item">
               <a
-                onClick={()=>{
+                onClick={(e) => {
+                  e.preventDefault();
                   handleListingListClick();
                   toggleSideMenu();
                 }}
@@ -185,7 +186,8 @@ const MobileNavbar = ({ onLoginClick = null }) => {
 
             <li className="nav-item">
               <a
-                onClick={()=>{
+                onClick={(e) => {
+                  e.preventDefault();
                   handleListingCreateClick();
                   toggleSideMenu();
                 }}

@@ -236,7 +236,13 @@ const RegisterTab = ({ moveToLogin, activePopup }) => {
 
         <span className="already-account">
           Already have an account?{" "}
-          <a href="#" onClick={moveToLogin}>
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              moveToLogin();
+            }}
+          >
             Login Now
           </a>
         </span>

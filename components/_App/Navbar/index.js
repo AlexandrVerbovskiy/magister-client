@@ -10,7 +10,6 @@ import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 import { signIn } from "next-auth/react";
 import useSearchCategory from "../../../hooks/useSearchCategory";
-import SearchTipsPopup from "../../SearchTipsPopup";
 import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
@@ -283,7 +282,7 @@ const Navbar = ({
 
                   {isAuth ? (
                     <li className="nav-item d-block d-xl-none">
-                      <Link
+                      <a
                         href="#"
                         className="nav-link"
                         onClick={(e) => {
@@ -292,13 +291,20 @@ const Navbar = ({
                         }}
                       >
                         Sign out
-                      </Link>
+                      </a>
                     </li>
                   ) : (
                     <li className="nav-item d-block d-xl-none">
-                      <Link href="#" className="nav-link" onClick={toggleAuth}>
+                      <a
+                        href="#"
+                        className="nav-link"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleAuth();
+                        }}
+                      >
                         Login / Register
-                      </Link>
+                      </a>
                     </li>
                   )}
                 </ul>
