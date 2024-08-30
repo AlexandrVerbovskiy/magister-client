@@ -20,7 +20,11 @@ import VerificationAlert from "../../VerificationAlert";
 import BetaAuthAlert from "../../BetaAuthAlert";
 import MobileNavbar from "../MobileNavbar";
 
-const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
+const Navbar = ({
+  canShowSearch = true,
+  alwaysSticky = false,
+  needBetaAlert = true,
+}) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
@@ -206,7 +210,7 @@ const Navbar = ({ canShowSearch = true, alwaysSticky = false }) => {
             : "navbar-area navbar-style-two"
         }
       >
-        <BetaAuthAlert />
+        {needBetaAlert && <BetaAuthAlert />}
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">
