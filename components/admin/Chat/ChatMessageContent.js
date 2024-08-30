@@ -72,9 +72,9 @@ const OwnerCommentMessage = ({ content }) => {
   }
 
   return (
-    <div className="mb-1">
+    <div className="mb-1 w-full">
       {chunkedItems.map((chunk, index) => (
-        <div className="flex" key={index}>
+        <div className="flex w-full flex-wrap" key={index}>
           {chunk.map((item, idx) => (
             <PointStarInfo
               key={idx}
@@ -109,9 +109,9 @@ const TenantCommentMessage = ({ content }) => {
   }
 
   return (
-    <div className="mb-1">
+    <div className="mb-1 w-full">
       {chunkedItems.map((chunk, index) => (
-        <div className="flex" key={index}>
+        <div className="flex w-full flex-wrap" key={index}>
           {chunk.map((item, idx) => (
             <PointStarInfo
               key={idx}
