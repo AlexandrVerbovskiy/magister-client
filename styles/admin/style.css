@@ -698,3 +698,12 @@ div.add-listings-box.dropzone > .gallery-flex {
     display: flex;
   }
 }
+
+.message-body{
+  max-width: calc(100% - 40px - 1rem);
+}
+
+.message-text-body{
+  word-break: break-all;
+  max-width: 100%;
+}
