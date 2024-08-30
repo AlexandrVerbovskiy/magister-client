@@ -235,7 +235,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   padding: 20px;
 }
 
-.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image{
+.dropzone.add-listings-box:has(.gallery-flex-parent) .add-more-image {
   height: 25px;
 }
 
@@ -697,4 +697,13 @@ div.add-listings-box.dropzone > .gallery-flex {
   .categories-select-option.back-button {
     display: flex;
   }
+}
+
+.message-body {
+  max-width: calc(100% - 40px - 1rem);
+}
+
+.message-body > div {
+  word-break: break-all;
+  max-width: 100%;
 }

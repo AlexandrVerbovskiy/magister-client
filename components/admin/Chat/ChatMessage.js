@@ -82,7 +82,7 @@ const ChatMessage = ({
       <div
         ref={messageRef}
         onContextMenu={handleActivateEditPopup}
-        className="relative"
+        className="relative message-body"
       >
         <ChatMessageContent
           order={order}
