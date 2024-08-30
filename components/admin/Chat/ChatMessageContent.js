@@ -132,7 +132,7 @@ const baseMessageContent = ({ isTemp, type, content, messageClassName }) => {
   if (type == STATIC.MESSAGE_TYPES.TEXT) {
     return (
       <div
-        className={`${messageClassName} w-max`}
+        className={`${messageClassName} w-max message-text-body`}
         dangerouslySetInnerHTML={{ __html: content.text }}
       ></div>
     );
