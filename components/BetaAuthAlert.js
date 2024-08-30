@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useContext } from "react";
 import { IndiceContext } from "../contexts";
-import { activateAuthPopup } from "../utils";
+import { activateRegisterPopup } from "../utils";
 
 const BetaAuthAlert = () => {
   const { sessionUser } = useContext(IndiceContext);
@@ -18,7 +18,7 @@ const BetaAuthAlert = () => {
       <strong>We are currently in beta testing. </strong>To join the waiting
       list for our test, please register on our platform.
       <div>
-        <Link href="#" className="default-btn" onClick={activateAuthPopup}>
+        <Link href="#" className="default-btn" onClick={activateRegisterPopup}>
           Join Waiting List
         </Link>
       </div>
