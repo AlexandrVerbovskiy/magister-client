@@ -271,6 +271,11 @@
     padding-top: 130px;
     padding-bottom: 100px;
   }
+
+  body:has(.beta-auth-alert) .main-banner-area {
+    padding-top: 250px;
+  }
+
   .banner-form-select {
     width: 100%;
   }
@@ -2868,6 +2873,11 @@
     padding-top: 160px;
     padding-bottom: 130px;
   }
+
+  body:has(.beta-auth-alert) .main-banner-area {
+    padding-top: 200px;
+  }
+
   .banner-content form .form-group.category-select {
     padding-right: 0;
     margin-left: 15px;
