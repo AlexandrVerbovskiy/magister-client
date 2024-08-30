@@ -15,7 +15,7 @@ const AuthCodeModal = ({
         <span>Enter Verified Code</span>
       </span>
 
-      <form className="mt-0" method="get" onSubmit={(e) => e.preventDefault}>
+      <form className="mt-0" method="get" onSubmit={(e) => e.preventDefault()}>
         <span className="small-text">
           You received a verification code on your{" "}
           {type == "email" ? "email" : "mobile phone"}. Copy and paste it in the
