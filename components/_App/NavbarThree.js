@@ -5,7 +5,7 @@ import { IndiceContext } from "../../contexts";
 import ListingLi from "./Navbar/ListingLi";
 import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
-import VerificateAlert from "../VerificateAlert";
+import VerificationAlert from "../VerificationAlert";
 import { useIsMobile } from "../../hooks";
 
 const NavbarThree = ({ children = null }) => {
@@ -106,7 +106,7 @@ const NavbarThree = ({ children = null }) => {
         )}
       </div>
 
-      <VerificateAlert />
+      <VerificationAlert />
 
       {categoriesLength > 0 && (
         <ListingPopup
