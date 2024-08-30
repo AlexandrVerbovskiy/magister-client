@@ -18,3 +18,17 @@ export const activateAuthPopup = () => {
     triggerBtn.click();
   }
 };
+
+export const activateRegisterPopup = () => {
+  const triggerBtn = document.querySelector(".sign-form-trigger");
+
+  if (triggerBtn) {
+    triggerBtn.click();
+
+    const registerBtn = document.querySelector("#register-tab");
+
+    if (registerBtn) {
+      registerBtn.click();
+    }
+  }
+};

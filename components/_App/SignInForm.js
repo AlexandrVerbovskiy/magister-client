@@ -216,7 +216,13 @@ const SignInForm = () => {
                     {resendEmailView && !wasResendEmailView && (
                       <>
                         {". "}
-                        <a href="#" onClick={handleResendEmailVerify}>
+                        <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleResendEmailVerify();
+                          }}
+                        >
                           Resend Letter
                         </a>
                       </>
