@@ -135,7 +135,13 @@ const LoginTab = ({
                 {resendEmailView && !wasResendEmailView && (
                   <>
                     {". "}
-                    <a href="#" onClick={handleResendEmailVerify}>
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleResendEmailVerify();
+                      }}
+                    >
                       Resend Letter
                     </a>
                   </>
@@ -153,7 +159,13 @@ const LoginTab = ({
 
           <span className="dont-account">
             Don&apos;t have an account?{" "}
-            <a href="#" onClick={moveToRegister}>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                moveToRegister();
+              }}
+            >
               Register Now
             </a>
           </span>

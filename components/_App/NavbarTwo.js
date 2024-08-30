@@ -323,7 +323,7 @@ const NavbarTwo = ({
 
                   {isAuth ? (
                     <li className="nav-item d-block d-xl-none">
-                      <Link
+                      <a
                         href="#"
                         className="nav-link"
                         onClick={(e) => {
@@ -332,13 +332,20 @@ const NavbarTwo = ({
                         }}
                       >
                         Sign out
-                      </Link>
+                      </a>
                     </li>
                   ) : (
                     <li className="nav-item d-block d-xl-none">
-                      <Link href="#" className="nav-link" onClick={toggleAuth}>
+                      <a
+                        href="#"
+                        className="nav-link"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleAuth();
+                        }}
+                      >
                         Login / Register
-                      </Link>
+                      </a>
                     </li>
                   )}
                 </ul>
