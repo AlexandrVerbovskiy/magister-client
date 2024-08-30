@@ -80,6 +80,11 @@
     margin: 0 auto;
     z-index: 999;
   }
+
+  .navbar-area:has(.beta-auth-alert) .navbar .navbar-nav {
+    top: 130px;
+  }
+
   .navbar-area .navbar .navbar-nav .nav-item {
     margin-left: 15px !important;
     margin-right: 15px !important;
@@ -2755,6 +2760,11 @@
     margin: 0 auto;
     z-index: 999;
   }
+
+  .navbar-area:has(.beta-auth-alert) .navbar .navbar-nav {
+    top: 130px;
+  }
+
   .hamburger-menu {
     position: absolute;
     right: 0;
@@ -3630,6 +3640,11 @@
     margin: 0 auto;
     z-index: 999;
   }
+
+  .navbar-area:has(.beta-auth-alert) .navbar .navbar-nav {
+    top: 130px;
+  }
+
   .hamburger-menu {
     position: absolute;
     right: 0;
