@@ -76,10 +76,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
         <a
           href="#"
           className={`bookmark-save ${listing.favorite ? "checked" : ""}`}
-          onClick={() => {
-            e.preventDefault();
-            handleChangeFavorite();
-          }}
+          onClick={handleChangeFavorite}
         >
           <i className="flaticon-heart"></i>
         </a>

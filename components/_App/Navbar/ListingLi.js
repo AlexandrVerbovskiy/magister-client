@@ -4,7 +4,7 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
       <a
         onClick={(e) => {
           e.preventDefault();
-          handleListingClick();
+          handleListingClick(e);
         }}
         href="#"
         className={`${
@@ -17,7 +17,7 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
       <a
         onClick={(e) => {
           e.preventDefault();
-          handleListingClick();
+          handleListingClick(e);
         }}
         href="#"
         className={`nav-link d-block d-xl-none`}
