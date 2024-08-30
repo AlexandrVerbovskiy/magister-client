@@ -16,11 +16,7 @@ const VerificationAlert = ({ className = "verification-alert-dashboard" }) => {
     >
       <strong>Pending: </strong>You need to confirm your identity.
       <div>
-        <Link
-          href="/dashboard/documents-verification"
-          type="button"
-          className="default-btn"
-        >
+        <Link href="/dashboard/documents-verification" className="default-btn">
           Confirm identity{" "}
           <i
             className="bx bx-arrow-back"
