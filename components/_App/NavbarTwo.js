@@ -16,7 +16,7 @@ import ListingPopup from "./Navbar/ListingPopup";
 import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
-import VerificateAlert from "../VerificateAlert";
+import VerificationAlert from "../VerificationAlert";
 import MobileNavbar from "./MobileNavbar";
 import { useIsMobile } from "../../hooks";
 
@@ -399,7 +399,7 @@ const NavbarTwo = ({
         )}
 
         {!showMenu && (
-          <VerificateAlert className="verification-alert-listings" />
+          <VerificationAlert className="verification-alert-listings" />
         )}
       </div>
 
