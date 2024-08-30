@@ -19001,6 +19001,11 @@ span.flatpickr-weekday {
   width: 100%;
 }
 
+.pay-by-bank-transfer-paypal-form{
+  margin: 0.375rem 0.375rem 0;
+  width: calc(100% - 0.75rem);
+}
+
 .pay-by-card-btn {
   margin-top: 22px;
 }

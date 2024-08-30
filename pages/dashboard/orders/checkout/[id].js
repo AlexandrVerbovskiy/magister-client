@@ -37,7 +37,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
 
   return (
     <>
-      <Navbar canShowSearch={false} />
+      <Navbar canShowSearch={false} needBetaAlert={false}/>
 
       <PageBanner
         pageTitle="Checkout"
