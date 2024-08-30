@@ -112,7 +112,7 @@ const PayedCancelModal = ({
         <span>Where do you want a refund?</span>
       </span>
 
-      <form method="get" onSubmit={(e) => e.preventDefault}>
+      <form method="get" onSubmit={(e) => e.preventDefault()}>
         <div
           className="payment-box"
           style={{
