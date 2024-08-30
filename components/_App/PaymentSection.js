@@ -10,7 +10,7 @@ import { moneyFormatVisual } from "../../utils";
 const getPaymentFormStyles = (type) => {
   switch (type) {
     case STATIC.PAYMENT_TYPES.CREDIT_CARD:
-      return { height: "140px", overflow: "hidden" };
+      return { height: "calc(130px + 1.875rem)", overflow: "hidden" };
     case STATIC.PAYMENT_TYPES.PAYPAL:
       return { height: "50px" };
     default: {
