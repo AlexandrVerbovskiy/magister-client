@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { useContext } from "react";
 import { IndiceContext } from "../contexts";
-import { activateAuthPopup } from "../utils";
+import { activateRegisterPopup } from "../utils";
 
 const BetaAuthAlert = () => {
   const { sessionUser } = useContext(IndiceContext);
@@ -9,6 +8,11 @@ const BetaAuthAlert = () => {
   if (sessionUser) {
     return <></>;
   }
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    activateRegisterPopup();
+  };
 
   return (
     <div
@@ -18,9 +22,9 @@ const BetaAuthAlert = () => {
       <strong>We are currently in beta testing. </strong>To join the waiting
       list for our test, please register on our platform.
       <div>
-        <Link href="#" className="default-btn" onClick={activateAuthPopup}>
+        <a href="#" className="default-btn" onClick={handleClick}>
           Join Waiting List
-        </Link>
+        </a>
       </div>
     </div>
   );

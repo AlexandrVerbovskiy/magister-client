@@ -2,7 +2,10 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
   return (
     <li className="nav-item">
       <a
-        onClick={handleListingClick}
+        onClick={(e) => {
+          e.preventDefault();
+          handleListingClick();
+        }}
         href="#"
         className={`${
           categoriesLength > 0 ? "dropdown-toggle " : ""
@@ -12,7 +15,10 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
       </a>
 
       <a
-        onClick={handleListingClick}
+        onClick={(e) => {
+          e.preventDefault();
+          handleListingClick();
+        }}
         href="#"
         className={`nav-link d-block d-xl-none`}
       >
