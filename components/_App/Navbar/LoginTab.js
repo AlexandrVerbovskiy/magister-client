@@ -139,7 +139,7 @@ const LoginTab = ({
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleResendEmailVerify();
+                        handleResendEmailVerify(e);
                       }}
                     >
                       Resend Letter
