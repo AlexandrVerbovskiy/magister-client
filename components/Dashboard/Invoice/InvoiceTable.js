@@ -73,6 +73,13 @@ const InvoiceTable = ({
     </a>
   );
 
+  const totalPayed = tenantPaymentCalculate(
+    offer.startDate,
+    offer.endDate,
+    offer.fee,
+    offer.pricePerDay
+  );
+
   return (
     <>
       <div className="invoice-area">
@@ -187,14 +194,7 @@ const InvoiceTable = ({
                   <strong>Total</strong>
                 </td>
                 <td className="text-right total-price">
-                  <strong>
-                    {tenantPaymentCalculate(
-                      offer.startDate,
-                      offer.endDate,
-                      offer.fee,
-                      offer.pricePerDay
-                    )}
-                  </strong>
+                  <strong>{moneyFormatVisual(totalPayed)}</strong>
                 </td>
               </tr>
               <tr>
@@ -204,12 +204,7 @@ const InvoiceTable = ({
                 <td className="text-right total-price">
                   <strong>
                     {adminApproved
-                      ? moneyFormatVisual(
-                          offer.startDate,
-                          offer.endDate,
-                          offer.fee,
-                          offer.pricePerDay
-                        )
+                      ? moneyFormatVisual(totalPayed)
                       : moneyFormatVisual(0)}
                   </strong>
                 </td>
