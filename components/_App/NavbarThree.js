@@ -45,11 +45,13 @@ const NavbarThree = ({ children = null }) => {
               </div>
             )}
             <div className="responsive-burger-menu d-lg-none d-block">
-              <img
-                src="/images/rent-about-logo-black.png"
-                className="logo-image"
-                alt="logo"
-              />
+              <Link href="/">
+                <img
+                  src="/images/rent-about-logo-black.png"
+                  className="logo-image"
+                  alt="logo"
+                />
+              </Link>
             </div>
           </div>
         </div>
