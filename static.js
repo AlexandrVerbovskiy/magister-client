@@ -160,6 +160,7 @@ export default {
   SERVER_API: "/api",
   SERVER_STORAGE: "/public",
   SUPPORT_EMAIL: "support@rentabout.com",
+  HELLO_EMAIL: "hello@rentabout.com",
   CURRENCY: "£", //"$"
   CURRENCY_NAME: "GBP", //"USD"
   MOBILE_SIZE: 1199,
