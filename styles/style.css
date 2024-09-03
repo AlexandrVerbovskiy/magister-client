@@ -19953,3 +19953,13 @@ video::-webkit-media-controls-panel {
 .mobile-booking-section .listings-sidebar{
 margin-top: 0;
 }
+
+.inform-page ul,
+.inform-page li{
+  color: var(--optionalColor);
+  line-height: 1.8;
+}
+
+.inform-page a{
+  color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+}
