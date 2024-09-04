@@ -17,7 +17,7 @@ const TermsOfService = () => {
           <div className="row m-0">
             <h3>Terms of Service</h3>
             <p>
-              <strong>Effective Date: 23.08.2024</strong>
+              <strong>LAST UPDATED: 23.08.2024</strong>
             </p>
             <p className="mb-1">
               Welcome to RentAbout, a platform that enables:
