@@ -189,33 +189,31 @@ const InsuranceGuarantee = () => {
                       Photos or videos of the item before and after the rental
                       to prove the condition.
                     </li>
-                    <li>
-                      Refrain from posting information about your claim on
-                      social media or online before the claim process is
-                      completed.
-                    </li>
-                    <li>
-                      If your items are business-owned, you must first try to
-                      claim on your existing insurance before claiming under
-                      this protection plan. Provide written evidence if the
-                      claim is denied.
-                    </li>
-                    <li>
-                      If the item is under warranty, attempt to use it to cover
-                      repairs or replacements before making a claim under this
-                      plan. Provide written evidence if the warranty claim is
-                      denied.
-                    </li>
-                    <li>
-                      Report any incident that may lead to a claim within 24
-                      hours of the rental end date.
-                    </li>
-                    <li>
-                      Provide all required information for the claim within 3
-                      months of initiating the process. Failure to do so will
-                      result in the claim being closed.
-                    </li>
                   </ul>
+                </li>
+                <li>
+                  Refrain from posting information about your claim on social
+                  media or online before the claim process is completed.
+                </li>
+                <li>
+                  If your items are business-owned, you must first try to claim
+                  on your existing insurance before claiming under this
+                  protection plan. Provide written evidence if the claim is
+                  denied.
+                </li>
+                <li>
+                  If the item is under warranty, attempt to use it to cover
+                  repairs or replacements before making a claim under this plan.
+                  Provide written evidence if the warranty claim is denied.
+                </li>
+                <li>
+                  Report any incident that may lead to a claim within 24 hours
+                  of the rental end date.
+                </li>
+                <li>
+                  Provide all required information for the claim within 3 months
+                  of initiating the process. Failure to do so will result in the
+                  claim being closed.
                 </li>
               </ul>
             </div>
