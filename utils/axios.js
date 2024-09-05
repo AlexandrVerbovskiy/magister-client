@@ -9,7 +9,9 @@ const serviceWrapper = async (promise) => {
       throw res.error;
     }
 
-    if (res.data.isError) throw new Error(res.data);
+    if (res.data.isError) {
+      throw new Error(res.data);
+    }
 
     return res.data;
   } catch (e) {
@@ -46,7 +48,11 @@ export const initAxios = (path = null) => {
 
   const post = async (url, body = null, authToken = null) => {
     const options = { headers: {} };
-    if (authToken) options["headers"]["Authorization"] = `Bearer ${authToken}`;
+
+    if (authToken) {
+      options["headers"]["Authorization"] = `Bearer ${authToken}`;
+    }
+
     return await serviceWrapper(axiosInstance.post(url, body, options));
   };
 

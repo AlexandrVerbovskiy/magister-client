@@ -154,7 +154,7 @@ const BookingModal = ({
 
     if (!isExtend || dateConverter(startDate) != dateConverter(fromDate)) {
       if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-        let message = `You can rent ads only for a period of more than ${minRentalDays} days`;
+        let message = `You can rent a listing only for a period of more than ${minRentalDays} days`;
 
         if (isExtend) {
           message += `, or extend renting from ${dateConverter(startDate)}`;
@@ -165,9 +165,16 @@ const BookingModal = ({
       }
     }
 
-    if (getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.RENTAL_DURATION) {
+    if (getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION) {
       setCalendarError(
-        `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
+        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
+      );
+      hasError = true;
+    }
+
+    if (totalPrice < STATIC.LIMITS.MIN_RENTAL_PRICE) {
+      setCalendarError(
+        `Total rental price can't be lower than ${STATIC.CURRENCY}${STATIC.LIMITS.MIN_RENTAL_PRICE}`
       );
       hasError = true;
     }

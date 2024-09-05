@@ -20,7 +20,7 @@ export const calculateFullTotalByDaysCount = (
 
   if (type == "sum") {
     total =
-      +calculateTotalPriceByDaysCount(count, price, fee) +
+      +calculateTotalPriceByDaysCount(count, price) +
       +calculateFeeByDaysCount(count, price, fee);
   }
 

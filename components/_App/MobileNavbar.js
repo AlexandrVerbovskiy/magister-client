@@ -45,7 +45,10 @@ const MobileNavbar = ({ onLoginClick = null }) => {
         <div className="container">
           <button
             type="button"
-            onClick={() => router.push("/")}
+            onClick={() => {
+              router.push("/");
+              toggleSideMenu();
+            }}
             className={isHomePage ? "active" : ""}
           >
             <svg
@@ -134,7 +137,11 @@ const MobileNavbar = ({ onLoginClick = null }) => {
         }
       >
         <div className="sidemenu-header">
-          <Link href="/" className="navbar-brand d-flex align-items-center">
+          <Link
+            href="/"
+            className="navbar-brand d-flex align-items-center"
+            onClick={toggleSideMenu}
+          >
             <img
               src="/images/rent-about-logo-black.png"
               className="logo-image"
