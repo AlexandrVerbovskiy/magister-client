@@ -4,6 +4,7 @@ import {
   getFactOrderDays,
   dateConverter,
   moneyFormatVisual,
+  tenantPaymentCalculate,
 } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
@@ -40,7 +41,12 @@ const PayModal = ({
 
   const subtotal = pricePerDay * getFactOrderDays(offerStartDate, offerEndDate);
 
-  const total = (subtotal * (100 + offerFee)) / 100;
+  const total = tenantPaymentCalculate(
+    offerStartDate,
+    offerEndDate,
+    offerFee,
+    pricePerDay
+  );
 
   const handleClose = () => {
     if (disabled) {

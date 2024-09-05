@@ -2,7 +2,12 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 import ModalBlank from "../ModalBlank";
 
-const ApproveModal = ({ active, close, onAcceptClick }) => {
+const ApproveModal = ({
+  active,
+  close,
+  onAcceptClick,
+  userVerified = true,
+}) => {
   const { error, success } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
@@ -10,7 +15,7 @@ const ApproveModal = ({ active, close, onAcceptClick }) => {
     if (disabled) {
       return;
     }
-    
+
     try {
       await onAcceptClick();
       success.set("Approved successfully");
@@ -39,6 +44,12 @@ const ApproveModal = ({ active, close, onAcceptClick }) => {
                 Once you approve this product, other users will be able to rent
                 it
               </p>
+              {!userVerified && (
+                <p>
+                  <b>Warning: </b> You shouldn't make the listing active
+                  because the owner of the listing is unverified
+                </p>
+              )}
             </div>
           </div>
 
