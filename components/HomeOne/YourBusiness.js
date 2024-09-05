@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import { useListingListClick } from "../../hooks";
 
 const YourBusiness = () => {
   /*const items = [
@@ -19,6 +20,7 @@ const YourBusiness = () => {
       image: "/images/home/icons-how_it_works-2_contact.png",
     },
   ];*/
+  const { handleClick: handleStartEarningClick } = useListingListClick();
 
   const items = [
     {
@@ -56,9 +58,13 @@ const YourBusiness = () => {
           </div>
 
           <div className="row justify-content-center">
-            <Link className="base-main-button" href="/how-it-works/">
+            <button
+              type="button"
+              className="base-main-button"
+              onClick={handleStartEarningClick}
+            >
               Start earning
-            </Link>
+            </button>
           </div>
         </div>
 

@@ -133,10 +133,6 @@ export function validatePrice(priceString) {
   const resSmallTextValidation = validateSmallText(`${priceString}`);
   if (resSmallTextValidation !== true) return resSmallTextValidation;
 
-  if (Number(priceString) < 5) {
-    return "Price can't be lower than $5";
-  }
-
   if (Number(priceString) > 1000000) {
     return "Price can't be higher than $1.000.000";
   }

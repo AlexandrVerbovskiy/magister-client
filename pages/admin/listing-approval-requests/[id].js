@@ -59,14 +59,6 @@ const ListingApprovalRequest = (baseProps) => {
 
   const handleApproveClick = (e) => {
     e.stopPropagation();
-
-    if (!request.userVerified) {
-      mainError.set(
-        "You can't approve this listing because owner wasn't approved"
-      );
-      return;
-    }
-
     setApproveModalOpen(true);
   };
 
