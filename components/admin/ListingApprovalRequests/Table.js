@@ -22,8 +22,8 @@ const RequestsTable = ({
   loading,
 }) => {
   const [popupImage, setPopupImage] = useState(null);
-  const [popupApproveId, setPopupApproveId] = useState(null);
-  const [popupRejectId, setPopupRejectId] = useState(null);
+  const [popupApprovePayment, setPopupApprovePayment] = useState(null);
+  const [popupRejectPayment, setPopupRejectPayment] = useState(null);
   const { authToken, error: mainError } = useContext(IndiceContext);
 
   const ths = [
@@ -47,32 +47,33 @@ const RequestsTable = ({
 
   const handleRejectAcceptClick = async (description) => {
     await rejectListingApproveRequest(
-      { listingId: popupRejectId, description },
+      { listingId: popupRejectPayment.listingId, description },
       authToken
     );
-
-    const request = listingApprovalRequests.find(
-      (request) => request.listingId == popupRejectId
-    );
-
-    setItemFields({ approved: false }, request.id);
+    setItemFields({ approved: false }, popupRejectPayment.id);
   };
 
   const handleApproveAcceptClick = async () => {
-    const request = listingApprovalRequests.find(
-      (request) => request.listingId == popupApproveId
-    );
-
     await approveListingApprovalRequest(
-      { listingId: popupApproveId },
+      { listingId: popupApprovePayment.listingId },
       authToken
     );
 
-    setItemFields({ approved: true }, request.id);
+    setItemFields({ approved: true }, popupApprovePayment.id);
   };
 
   const handleTriggerApproveClick = (listingId) => {
-    setPopupApproveId(listingId);
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == listingId
+    );
+    setPopupApprovePayment(request);
+  };
+
+  const handleTriggerRejectClick = (listingId) => {
+    const request = listingApprovalRequests.find(
+      (request) => request.listingId == listingId
+    );
+    setPopupRejectPayment(request);
   };
 
   return (
@@ -111,9 +112,7 @@ const RequestsTable = ({
                     {...request}
                     openPopupImage={(image) => setPopupImage(image)}
                     handleApproveClick={handleTriggerApproveClick}
-                    handleRejectClick={(listingId) =>
-                      setPopupRejectId(listingId)
-                    }
+                    handleRejectClick={handleTriggerRejectClick}
                   />
                 ))}
             </tbody>
@@ -134,15 +133,16 @@ const RequestsTable = ({
       />
 
       <RejectModal
-        active={!!popupRejectId}
-        close={() => setPopupRejectId(null)}
+        active={!!popupRejectPayment?.id}
+        close={() => setPopupRejectPayment(null)}
         onAcceptClick={handleRejectAcceptClick}
       />
 
       <ApproveModal
-        active={!!popupApproveId}
-        close={() => setPopupApproveId(null)}
+        active={!!popupApprovePayment?.id}
+        close={() => setPopupApprovePayment(null)}
         onAcceptClick={handleApproveAcceptClick}
+        userVerified={popupApprovePayment?.userVerified}
       />
     </div>
   );

@@ -61,7 +61,7 @@ const BookingModal = ({
     const countDays = getFactOrderDays(fromDate, toDate);
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
-    setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
+    setTotalFee(calculateFeeByDaysCount(countDays, price, fee, true));
     setFullTotal(calculateFullTotalByDaysCount(countDays, price, fee));
   };
 
@@ -165,16 +165,11 @@ const BookingModal = ({
       }
     }
 
-    if (getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION) {
+    if (
+      getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION
+    ) {
       setCalendarError(
         `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
-    if (totalPrice < STATIC.LIMITS.MIN_RENTAL_PRICE) {
-      setCalendarError(
-        `Total rental price can't be lower than ${STATIC.CURRENCY}${STATIC.LIMITS.MIN_RENTAL_PRICE}`
       );
       hasError = true;
     }

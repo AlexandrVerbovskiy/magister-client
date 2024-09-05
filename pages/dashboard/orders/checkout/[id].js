@@ -9,6 +9,7 @@ import { getOrderCheckoutInfo } from "../../../../services";
 import {
   autoMultiEnding,
   calculateCurrentTotalPrice,
+  calculateFeeByDaysCount,
   getFactOrderDays,
   moneyFormatVisual,
 } from "../../../../utils";
@@ -28,7 +29,12 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
   const price = order.offerPricePerDay;
   const duration = getFactOrderDays(order.offerStartDate, order.offerEndDate);
   const subtotalPrice = price * duration;
-  const totalFee = (subtotalPrice * tenantBaseCommission) / 100;
+  const totalFee = calculateFeeByDaysCount(
+    duration,
+    price,
+    tenantBaseCommission,
+    true
+  );
   const totalPrice = subtotalPrice + totalFee;
 
   const onTenantPayed = () => {
@@ -37,7 +43,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
 
   return (
     <>
-      <Navbar canShowSearch={false} needBetaAlert={false}/>
+      <Navbar canShowSearch={false} needBetaAlert={false} />
 
       <PageBanner
         pageTitle="Checkout"

@@ -251,7 +251,8 @@ const Wallet = ({
                           sending.offerEndDate
                         ),
                         sending.offerPricePerDay,
-                        sending.tenantFee
+                        sending.tenantFee,
+                        true
                       );
 
                       return (
