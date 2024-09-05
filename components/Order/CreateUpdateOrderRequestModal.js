@@ -33,7 +33,6 @@ const CreateUpdateOrderRequestModal = ({
   listingName,
   blockedDates,
   commissionType,
-  tenantFee,
 }) => {
   const proposalCountDays = getFactOrderDays(
     proposalStartDate,
@@ -69,7 +68,9 @@ const CreateUpdateOrderRequestModal = ({
     const countDays = getFactOrderDays(fromDate, toDate);
 
     setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
-    setTotalFee(calculateFeeByDaysCount(countDays, price, fee));
+    setTotalFee(
+      calculateFeeByDaysCount(countDays, price, fee, commissionType == "sum")
+    );
     setFullTotal(
       calculateFullTotalByDaysCount(countDays, price, fee, commissionType)
     );
@@ -187,19 +188,6 @@ const CreateUpdateOrderRequestModal = ({
     ) {
       setCalendarError(
         `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
-    const totalToPay = calculateTotalPriceByDaysCount(
-      getFactOrderDays(fromDate, toDate),
-      price,
-      tenantFee
-    );
-
-    if (totalToPay < STATIC.LIMITS.MIN_RENTAL_PRICE) {
-      error.set(
-        `Renter must pay ${STATIC.CURRENCY}${totalToPay} for the rental. Payment price can't be lower than ${STATIC.CURRENCY}${STATIC.LIMITS.MIN_RENTAL_PRICE}`
       );
       hasError = true;
     }
