@@ -51,22 +51,15 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [phoneError, setPhoneError] = useState(null);
   const [phoneVerified, setPhoneVerified] = useState(false);
 
-  const [contactDetails, setContactDetails] = useState("");
   const [briefBio, setBriefBio] = useState("");
-  const [placeWork, setPlaceWork] = useState("");
 
-  const [contactDetailsError, setContactDetailsError] = useState(null);
   const [briefBioError, setBriefBioError] = useState(null);
-  const [placeWorkError, setPlaceWorkError] = useState(null);
 
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [linkedinUrlError, setLinkedinUrlError] = useState(null);
 
   const [facebookUrl, setFacebookUrl] = useState("");
   const [facebookUrlError, setFacebookUrlError] = useState(null);
-
-  const [twitterUrl, setTwitterUrl] = useState("");
-  const [twitterUrlError, setTwitterUrlError] = useState(null);
 
   const [paypalId, setPaypalId] = useState("");
   const [paypalIdError, setPaypalIdError] = useState(null);
@@ -106,14 +99,11 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setFacebookUrl(resUserToState.facebookUrl);
     setLinkedinUrl(resUserToState.linkedinUrl);
     setInstagramUrl(resUserToState.instagramUrl);
-    setTwitterUrl(resUserToState.twitterUrl);
     setBriefBio(resUserToState.briefBio);
-    setContactDetails(resUserToState.contactDetails);
     setTwoFactorAuthentication(resUserToState.twoFactorAuthentication);
     setActive(resUserToState.active);
     setSuspicious(resUserToState.suspicious);
     setVerified(resUserToState.verified);
-    setPlaceWork(resUserToState.placeWork);
     setPaypalId(resUserToState.paypalId);
   }, [user.id]);
 
@@ -146,20 +136,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       obj["instagramUrl"] = instagramUrl.trim();
     }
 
-    if (twitterUrl.trim()) {
-      obj["twitterUrl"] = twitterUrl.trim();
-    }
-
     if (briefBio.trim()) {
       obj["briefBio"] = briefBio.trim();
-    }
-
-    if (contactDetails.trim()) {
-      obj["contactDetails"] = contactDetails.trim();
-    }
-
-    if (placeWork.trim()) {
-      obj["placeWork"] = placeWork.trim();
     }
 
     if (paypalId.trim()) {
@@ -176,17 +154,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     email: user.email ?? "",
     linkedinUrl: user.linkedinUrl ?? "",
     facebookUrl: user.facebookUrl ?? "",
-    twitterUrl: user.twitterUrl ?? "",
     instagramUrl: user.instagramUrl ?? "",
     emailVerified: user.emailVerified ?? false,
     phoneVerified: user.phoneVerified ?? false,
     twoFactorAuthentication: user.twoFactorAuthentication ?? true,
-    contactDetails: user.contactDetails ?? "",
     briefBio: user.briefBio ?? "",
     active: user.active ?? false,
     suspicious: user.suspicious ?? false,
     verified: user.verified ?? false,
-    placeWork: user.placeWork ?? "",
     paypalId: user.paypalId ?? "",
   });
 
@@ -267,31 +242,10 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       hasError = true;
     }
 
-    const resValidateTwitterLink = validateUrl(twitterUrl);
-
-    if (twitterUrl && resValidateTwitterLink !== true) {
-      setTwitterUrlError(resValidateTwitterLink);
-      hasError = true;
-    }
-
     const resBriefBioValidation = validateBigText(briefBio);
 
     if (resBriefBioValidation !== true) {
       setBriefBioError(resBriefBioValidation);
-      hasError = true;
-    }
-
-    const resContactDetailsValidation = validateBigText(contactDetails);
-
-    if (resContactDetailsValidation !== true) {
-      setContactDetailsError(resContactDetailsValidation);
-      hasError = true;
-    }
-
-    const resPlaceWorkValidation = validateBigText(placeWork);
-
-    if (resPlaceWorkValidation !== true) {
-      setPlaceWorkError(resPlaceWorkValidation);
       hasError = true;
     }
 
@@ -489,11 +443,11 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         Social networks
                       </h2>
                       <div className="text-sm">
-                        Share your story: LinkedIn, Facebook, Instagram, Twitter
+                        Share your story: LinkedIn, Facebook, Instagram
                         links welcome
                       </div>
 
-                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
+                      <div className="space-y-2 mt-5">
                         <div className="sm:w-1/4">
                           <Input
                             name="facebookUrl"
@@ -516,9 +470,6 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
-                      </div>
-
-                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                         <div className="sm:w-1/4">
                           <Input
                             name="instagramUrl"
@@ -527,17 +478,6 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                             error={instagramUrlError}
                             setError={setInstagramUrlError}
                             label="Instagram URL"
-                            labelClassName="block text-sm font-medium mb-1"
-                          />
-                        </div>
-                        <div className="sm:w-1/4">
-                          <Input
-                            name="twitterUrl"
-                            value={twitterUrl}
-                            setValue={setTwitterUrl}
-                            error={twitterUrlError}
-                            setError={setTwitterUrlError}
-                            label="Twitter URL"
                             labelClassName="block text-sm font-medium mb-1"
                           />
                         </div>
@@ -681,48 +621,6 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                           setValue={setBriefBio}
                           error={briefBioError}
                           setError={setBriefBioError}
-                        />
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Contact Details
-                      </h2>
-
-                      <div className="text-sm">
-                        Enter your information below
-                      </div>
-
-                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <Textarea
-                          name="contactDetails"
-                          row="3"
-                          value={contactDetails}
-                          setValue={setContactDetails}
-                          error={contactDetailsError}
-                          setError={setContactDetailsError}
-                        />
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Place Work
-                      </h2>
-
-                      <div className="text-sm">
-                        Determine workplace location.
-                      </div>
-
-                      <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
-                        <Textarea
-                          name="placeWork"
-                          value={placeWork}
-                          setValue={setPlaceWork}
-                          row="3"
-                          error={placeWorkError}
-                          setError={setPlaceWorkError}
                         />
                       </div>
                     </section>

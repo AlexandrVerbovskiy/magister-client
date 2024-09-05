@@ -112,18 +112,6 @@ const ProfileDetailsForm = () => {
 
             <div className="col-xl-6 col-lg-12 col-md-12">
               <div className="form-group">
-                <label>Twitter URL</label>
-                <input
-                  type="text"
-                  name="twitterUrl"
-                  className="form-control"
-                  placeholder="https://twitter.com/"
-                />
-              </div>
-            </div>
-
-            <div className="col-xl-6 col-lg-12 col-md-12">
-              <div className="form-group">
                 <label>Linkedin URL</label>
                 <input
                   type="text"

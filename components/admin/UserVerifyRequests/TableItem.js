@@ -20,8 +20,6 @@ const TableItem = ({
   userId,
   createdAt,
   failedDescription,
-  userContactDetails,
-  userTwitterUrl,
   userFacebookUrl,
   userLinkedinUrl,
   userInstagramUrl,
@@ -138,14 +136,6 @@ const TableItem = ({
                       Contact
                     </div>
                     <SubInfoRow
-                      label="Details"
-                      value={
-                        userContactDetails && userContactDetails.length
-                          ? userContactDetails
-                          : "-"
-                      }
-                    />
-                    <SubInfoRow
                       label="Facebook"
                       value={
                         userFacebookUrl && userFacebookUrl.length
@@ -166,14 +156,6 @@ const TableItem = ({
                       value={
                         userLinkedinUrl && userLinkedinUrl.length
                           ? userLinkedinUrl
-                          : "-"
-                      }
-                    />
-                    <SubInfoRow
-                      label="Twitter"
-                      value={
-                        userTwitterUrl && userTwitterUrl.length
-                          ? userTwitterUrl
                           : "-"
                       }
                     />

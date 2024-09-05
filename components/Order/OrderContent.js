@@ -727,15 +727,6 @@ const OrderContent = ({
                 value={order.ownerEmail}
               />
             </div>
-
-            <div className="col-12">
-              <InputView
-                label="Owner Place Work:"
-                icon="bx bx-building"
-                placeholder="Owner Place Work"
-                value={order.ownerPlaceWork ? order.ownerPlaceWork : "-"}
-              />
-            </div>
           </div>
         </div>
       )}
@@ -769,15 +760,6 @@ const OrderContent = ({
                 icon="bx bx-envelope"
                 placeholder="Renter Email"
                 value={order.tenantEmail}
-              />
-            </div>
-
-            <div className="col">
-              <InputView
-                label="Renter Place Work:"
-                icon="bx bx-building"
-                placeholder="Renter Place Work"
-                value={order.tenantPlaceWork ? order.tenantPlaceWork : "-"}
               />
             </div>
           </div>
