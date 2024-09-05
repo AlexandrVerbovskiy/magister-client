@@ -72,17 +72,6 @@ const RequestsTable = ({
   };
 
   const handleTriggerApproveClick = (listingId) => {
-    const request = listingApprovalRequests.find(
-      (request) => request.listingId == listingId
-    );
-
-    if (!request.userVerified) {
-      mainError.set(
-        "You can't approve this listing because owner wasn't approved"
-      );
-      return;
-    }
-
     setPopupApproveId(listingId);
   };
 

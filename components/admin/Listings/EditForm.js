@@ -476,9 +476,9 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (minRentalDays > STATIC.LIMITS.RENTAL_DURATION) {
+      if (minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
         setMinRentalDaysError(
-          `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
+          `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
         );
         hasError = true;
       }
@@ -549,16 +549,9 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (
-        prevListing.ownerId &&
-        prevListing.ownerId == ownerId &&
-        !prevListing.userVerified &&
-        active
-      ) {
-        hasError = true;
+      if (hasError) {
+        return;
       }
-
-      if (hasError) return;
 
       setDisabled(true);
 
@@ -896,7 +889,7 @@ const EditForm = ({ listing, categories, save }) => {
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Item Defects
+                          Confirm the tools condition
                         </h2>
 
                         <div className="flex flex-wrap mt-2">
@@ -973,15 +966,7 @@ const EditForm = ({ listing, categories, save }) => {
                             id="approved"
                             checked={approved}
                             changeChecked={() => {
-                              if (
-                                !(
-                                  prevListing.ownerId &&
-                                  prevListing.ownerId == ownerId &&
-                                  !prevListing.userVerified
-                                )
-                              ) {
-                                setApproved(!approved);
-                              }
+                              setApproved(!approved);
                             }}
                             onText="Yes"
                             offText="No"
@@ -992,7 +977,7 @@ const EditForm = ({ listing, categories, save }) => {
                             prevListing.ownerId &&
                             prevListing.ownerId == ownerId &&
                             !prevListing.userVerified
-                              ? "You cannot change verify the listing because the owner of the listing is unverified"
+                              ? "You shouldn't make the listing active because the owner of the listing is unverified"
                               : ""
                           }
                         />

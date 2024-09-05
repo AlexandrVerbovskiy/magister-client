@@ -81,22 +81,15 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
   const [nameError, setNameError] = useState(null);
   const [phoneError, setPhoneError] = useState(null);
 
-  const [contactDetails, setContactDetails] = useState("");
   const [briefBio, setBriefBio] = useState("");
-  const [placeWork, setPlaceWork] = useState("");
-
-  const [contactDetailsError, setContactDetailsError] = useState(null);
   const [briefBioError, setBriefBioError] = useState(null);
-  const [placeWorkError, setPlaceWorkError] = useState(null);
 
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [facebookUrl, setFacebookUrl] = useState("");
-  const [twitterUrl, setTwitterUrl] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
 
   const [linkedinUrlError, setLinkedinUrlError] = useState(null);
   const [facebookUrlError, setFacebookUrlError] = useState(null);
-  const [twitterUrlError, setTwitterUrlError] = useState(null);
   const [instagramUrlError, setInstagramUrlError] = useState(null);
 
   const [password, setPassword] = useState("");
@@ -128,20 +121,8 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
       obj["instagramUrl"] = instagramUrl.trim();
     }
 
-    if (twitterUrl.trim()) {
-      obj["twitterUrl"] = twitterUrl.trim();
-    }
-
     if (briefBio.trim()) {
       obj["briefBio"] = briefBio.trim();
-    }
-
-    if (contactDetails.trim()) {
-      obj["contactDetails"] = contactDetails.trim();
-    }
-
-    if (placeWork.trim()) {
-      obj["placeWork"] = placeWork.trim();
     }
 
     return obj;
@@ -153,10 +134,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
     facebookUrl: sessionUser?.facebookUrl ?? "",
     linkedinUrl: sessionUser?.linkedinUrl ?? "",
     instagramUrl: sessionUser?.instagramUrl ?? "",
-    twitterUrl: sessionUser?.twitterUrl ?? "",
     briefBio: sessionUser?.briefBio ?? "",
-    contactDetails: sessionUser?.contactDetails ?? "",
-    placeWork: sessionUser?.placeWork ?? "",
   });
 
   const hasChanges = () => {
@@ -182,10 +160,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
     setFacebookUrl(userInfo.facebookUrl);
     setLinkedinUrl(userInfo.linkedinUrl);
     setInstagramUrl(userInfo.instagramUrl);
-    setTwitterUrl(userInfo.twitterUrl);
     setBriefBio(userInfo.briefBio);
-    setContactDetails(userInfo.contactDetails);
-    setPlaceWork(userInfo.placeWork);
   };
 
   const handlePhotoChange = (e) => {
@@ -240,31 +215,10 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
       hasError = true;
     }
 
-    const resValidateTwitterLink = validateUrl(twitterUrl);
-
-    if (twitterUrl && resValidateTwitterLink !== true) {
-      setTwitterUrlError(resValidateTwitterLink);
-      hasError = true;
-    }
-
     const resBriefBioValidation = validateBigText(briefBio);
 
     if (resBriefBioValidation !== true) {
       setBriefBioError(resBriefBioValidation);
-      hasError = true;
-    }
-
-    const resContactDetailsValidation = validateBigText(contactDetails);
-
-    if (resContactDetailsValidation !== true) {
-      setContactDetailsError(resContactDetailsValidation);
-      hasError = true;
-    }
-
-    const resPlaceWorkValidation = validateBigText(placeWork);
-
-    if (resPlaceWorkValidation !== true) {
-      setPlaceWorkError(resPlaceWorkValidation);
       hasError = true;
     }
 
@@ -394,7 +348,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         await generateMyPhoneVerifyCode(authToken);
         toggleCodePhoneModal();
       } catch (e) {
-        setProfileFormError(e.message);
+        setPhoneError(e.message);
       }
     }
   };
@@ -453,18 +407,10 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         phoneError,
         briefBio,
         setBriefBio,
-        contactDetails,
-        setContactDetails,
-        placeWork,
-        setPlaceWork,
         facebookUrl,
         setFacebookUrl,
         facebookUrlError,
         setFacebookUrlError,
-        twitterUrl,
-        setTwitterUrl,
-        twitterUrlError,
-        setTwitterUrlError,
         linkedinUrl,
         setLinkedinUrl,
         linkedinUrlError,
@@ -475,12 +421,8 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         setInstagramUrlError,
         profileFormError,
         handleProfileSaveClick,
-        contactDetailsError,
-        setContactDetailsError,
         briefBioError,
         setBriefBioError,
-        placeWorkError,
-        setPlaceWorkError,
       }}
     />
   );
@@ -514,7 +456,9 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
     />
   );
 
-  const verifyDocumentsSection = <DocumentVerificationSection verifiedInfo={verifiedInfo}/>;
+  const verifyDocumentsSection = (
+    <DocumentVerificationSection verifiedInfo={verifiedInfo} />
+  );
 
   return (
     <>

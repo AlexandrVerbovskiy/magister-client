@@ -19,18 +19,10 @@ const ProfileSection = ({ formInfo }) => {
     phoneError,
     briefBio,
     setBriefBio,
-    contactDetails,
-    setContactDetails,
-    placeWork,
-    setPlaceWork,
     facebookUrl,
     setFacebookUrl,
     facebookUrlError,
     setFacebookUrlError,
-    twitterUrl,
-    setTwitterUrl,
-    twitterUrlError,
-    setTwitterUrlError,
     linkedinUrl,
     setLinkedinUrl,
     linkedinUrlError,
@@ -41,12 +33,8 @@ const ProfileSection = ({ formInfo }) => {
     setInstagramUrlError,
     profileFormError,
     handleProfileSaveClick,
-    contactDetailsError,
-    setContactDetailsError,
     briefBioError,
     setBriefBioError,
-    placeWorkError,
-    setPlaceWorkError,
   } = formInfo;
 
   return (
@@ -132,33 +120,7 @@ const ProfileSection = ({ formInfo }) => {
             />
           </div>
 
-          <div className="col-lg-12 col-md-12">
-            <Textarea
-              label="Contact Details"
-              rows="3"
-              placeholder="Short contact info about you..."
-              value={contactDetails}
-              setValue={setContactDetails}
-              error={contactDetailsError}
-              setError={setContactDetailsError}
-              name="contactDetails"
-            />
-          </div>
-
-          <div className="col-lg-12 col-md-12">
-            <Textarea
-              label="Place Work"
-              rows="3"
-              placeholder="Short info about you work..."
-              value={placeWork}
-              setValue={setPlaceWork}
-              error={placeWorkError}
-              setError={setPlaceWorkError}
-              name="placeWork"
-            />
-          </div>
-
-          <div className="col-xl-6 col-lg-12 col-md-12">
+          <div className="col-12">
             <Input
               label="Facebook URL"
               value={facebookUrl}
@@ -171,20 +133,7 @@ const ProfileSection = ({ formInfo }) => {
             />
           </div>
 
-          <div className="col-xl-6 col-lg-12 col-md-12">
-            <Input
-              label="Twitter URL"
-              value={twitterUrl}
-              type="text"
-              setValue={setTwitterUrl}
-              placeholder="https://twitter.com/"
-              error={twitterUrlError}
-              setError={setTwitterUrlError}
-              name="twitterUrl"
-            />
-          </div>
-
-          <div className="col-xl-6 col-lg-12 col-md-12">
+          <div className="col-12">
             <Input
               label="Linkedin URL"
               value={linkedinUrl}
@@ -197,7 +146,7 @@ const ProfileSection = ({ formInfo }) => {
             />
           </div>
 
-          <div className="col-xl-6 col-lg-12 col-md-12">
+          <div className="col-12">
             <Input
               label="Instagram URL"
               value={instagramUrl}

@@ -531,9 +531,9 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (minRentalDays && minRentalDays > STATIC.LIMITS.RENTAL_DURATION) {
+    if (minRentalDays && minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
       setMinRentalDaysError(
-        `You can't rent a listing more than ${STATIC.LIMITS.RENTAL_DURATION} days`
+        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
       );
       hasError = true;
     }
@@ -926,7 +926,7 @@ const EditForm = ({
         </div>
 
         <div className="add-listings-box">
-          <h3>Item Defects</h3>
+          <h3>Confirm the tools condition</h3>
 
           <div className="form-group">
             <div className="sidebar-widgets">

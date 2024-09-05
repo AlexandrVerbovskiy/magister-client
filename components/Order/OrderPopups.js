@@ -86,6 +86,7 @@ const OrderPopups = ({
           }
           listingMinRentalDays={order.listingMinRentalDays}
           fee={currentFee}
+          tenantFee={order.tenantFee}
           commissionType={
             order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
               ? "reject"

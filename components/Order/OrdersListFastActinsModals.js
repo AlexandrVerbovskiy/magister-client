@@ -188,6 +188,7 @@ const OrdersListFastActinsModals = ({
         closeActiveUpdateRequest={closeActiveUpdateRequest}
         listingName={updateRequestListingName}
         blockedDates={updateRequestBlockedDates}
+        tenantFee={updateRequestModalActiveOrder?.tenantFee ?? 0}
       />
 
       <PayModal

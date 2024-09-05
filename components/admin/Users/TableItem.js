@@ -132,11 +132,9 @@ const TableItem = ({
   totalSpent,
   briefBio,
   lastRenterDate,
-  contactDetails,
   facebookUrl,
   instagramUrl,
   linkedinUrl,
-  twitterUrl,
   ownerAverageRating,
   tenantAverageRating,
   ownerCommentCount,
@@ -290,12 +288,6 @@ const TableItem = ({
           <div>
             <div className="font-semibold flex items-center">Contact</div>
             <SubInfoRow
-              label="Details"
-              value={
-                contactDetails && contactDetails.length ? contactDetails : "-"
-              }
-            />
-            <SubInfoRow
               label="Facebook"
               value={facebookUrl && facebookUrl.length ? facebookUrl : "-"}
             />
@@ -306,10 +298,6 @@ const TableItem = ({
             <SubInfoRow
               label="Linkedin"
               value={linkedinUrl && linkedinUrl.length ? linkedinUrl : "-"}
-            />
-            <SubInfoRow
-              label="Twitter"
-              value={twitterUrl && twitterUrl.length ? twitterUrl : "-"}
             />
           </div>
         </td>

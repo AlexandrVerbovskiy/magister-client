@@ -25,7 +25,7 @@ const DashboardNavbar = () => {
 
       <div
         className={
-          "sidemenu-area d-none d-xl-block" +
+          "sidemenu-area d-xl-block" +
           (displaySideMenu ? "active-sidemenu-area" : "")
         }
       >
