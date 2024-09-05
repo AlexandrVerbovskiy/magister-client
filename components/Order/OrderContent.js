@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   calculateCurrentTotalPrice,
+  calculateFeeByDaysCount,
   dateConverter,
   generateProfileFilePath,
   getDisputeTitle,
@@ -420,6 +421,8 @@ const OrderContent = ({
   };
 
   const currentFee = isOwner ? order.ownerFee : order.tenantFee;
+  const currentFeeCalculate = (count, price, fee) =>
+    calculateFeeByDaysCount(count, price, fee, !isOwner);
 
   const currentActionButtons = useOrderActions({
     order,
@@ -849,13 +852,14 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    (order.offerPricePerDay *
+                    currentFeeCalculate(
                       getFactOrderDays(
                         order.offerStartDate,
                         order.offerEndDate
-                      ) *
-                      currentFee) /
-                      100
+                      ),
+                      order.offerPricePerDay,
+                      currentFee
+                    )
                   )}
                 </li>
 
@@ -1003,13 +1007,14 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    (prevUpdateRequest.pricePerDay *
+                    currentFeeCalculate(
                       getFactOrderDays(
                         prevUpdateRequest.startDate,
                         prevUpdateRequest.endDate
-                      ) *
-                      currentFee) /
-                      100
+                      ),
+                      prevUpdateRequest.pricePerDay,
+                      currentFee
+                    )
                   )}
                 </li>
 
@@ -1103,13 +1108,14 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    (actualUpdateRequest.newPricePerDay *
+                    currentFeeCalculate(
                       getFactOrderDays(
                         actualUpdateRequest.newStartDate,
                         actualUpdateRequest.newEndDate
-                      ) *
-                      currentFee) /
-                      100
+                      ),
+                      actualUpdateRequest.newPricePerDay,
+                      currentFee
+                    )
                   )}
                 </li>
 

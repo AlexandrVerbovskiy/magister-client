@@ -7,6 +7,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
   calculateCurrentTotalPrice,
+  calculateFeeByDaysCount,
   getFactOrderDays,
   getFilePath,
   getListingImageByType,
@@ -360,20 +361,18 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? (order.ownerFee *
-                                        getFactOrderDays(
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newEndDate
-                                        ) *
-                                        activeRequestsToUpdate.newPricePerDay) /
-                                      100
-                                    : (order.ownerFee *
-                                        getFactOrderDays(
-                                          order.offerStartDate,
-                                          order.offerEndDate
-                                        ) *
-                                        order.offerPricePerDay) /
-                                      100
+                                    ? ownerGetsCalculate(
+                                        activeRequestsToUpdate.newStartDate,
+                                        activeRequestsToUpdate.newEndDate,
+                                        order.ownerFee,
+                                        activeRequestsToUpdate.newPricePerDay
+                                      )
+                                    : ownerGetsCalculate(
+                                        order.offerStartDate,
+                                        order.offerEndDate,
+                                        order.ownerFee,
+                                        order.offerPricePerDay
+                                      )
                                 }
                                 inputClassName="form-input w-full"
                               />
@@ -387,20 +386,24 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? (order.tenantFee *
+                                    ? calculateFeeByDaysCount(
                                         getFactOrderDays(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate
-                                        ) *
-                                        activeRequestsToUpdate.newPricePerDay) /
-                                      100
-                                    : (order.tenantFee *
+                                        ),
+                                        activeRequestsToUpdate.newPricePerDay,
+                                        order.tenantFee,
+                                        true
+                                      )
+                                    : calculateFeeByDaysCount(
                                         getFactOrderDays(
                                           order.offerStartDate,
                                           order.offerEndDate
-                                        ) *
-                                        order.offerPricePerDay) /
-                                      100
+                                        ),
+                                        order.offerPricePerDay,
+                                        order.tenantFee,
+                                        true
+                                      )
                                 }
                                 inputClassName="form-input w-full"
                               />

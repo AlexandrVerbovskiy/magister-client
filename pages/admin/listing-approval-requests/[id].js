@@ -430,6 +430,7 @@ const ListingApprovalRequest = (baseProps) => {
           active={approveModalOpen}
           close={() => setApproveModalOpen(false)}
           onAcceptClick={handleApproveAcceptClick}
+          userVerified={request.userVerified}
         />
       </div>
     </div>

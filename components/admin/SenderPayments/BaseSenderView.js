@@ -14,6 +14,7 @@ import {
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
+  calculateFeeByDaysCount,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -44,7 +45,12 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
     payment.offerPricePerDay
   );
 
-  const totalFee = (subtotalPrice * payment.tenantFee) / 100;
+  const totalFee = calculateFeeByDaysCount(
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
+    payment.offerPricePerDay,
+    payment.tenantFee,
+    true
+  );
 
   const handleAccept = async () => {
     await approveSenderPaymentTransaction(
