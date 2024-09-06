@@ -40,6 +40,7 @@ const TableItem = (props) => {
     handleRejectClick,
     data,
   } = props;
+  console.log(props)
 
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
