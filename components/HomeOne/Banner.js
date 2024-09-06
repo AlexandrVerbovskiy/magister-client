@@ -6,7 +6,6 @@ import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import mainBannerBg1 from "../../public/images/main-banner-bg1.jpg";
 import mainBannerBg3 from "../../public/images/main-banner-bg3.jpg";
 import mainBannerBg4 from "../../public/images/main-banner-bg4.jpg";
@@ -44,11 +43,11 @@ const Banner = () => {
   };
 
   const backgroundImages = [
-    { src: mainBannerBg1, alt: "Banner 1", key: 1 },
-    { src: mainBannerBg3, alt: "Banner 2", key: 2 },
-    { src: mainBannerBg4, alt: "Banner 3", key: 3 },
-    { src: mainBannerBg5, alt: "Banner 4", key: 4 },
-    { src: mainBannerBg6, alt: "Banner 5", key: 5 },
+    { src: mainBannerBg1.src, alt: "Banner 1", key: 1 },
+    { src: mainBannerBg3.src, alt: "Banner 2", key: 2 },
+    { src: mainBannerBg4.src, alt: "Banner 3", key: 3 },
+    { src: mainBannerBg5.src, alt: "Banner 4", key: 4 },
+    { src: mainBannerBg6.src, alt: "Banner 5", key: 5 },
   ];
 
   const categories = [
@@ -87,10 +86,11 @@ const Banner = () => {
           >
             {backgroundImages.map((img) => (
               <SwiperSlide key={img.key}>
-                <Image
+                <div
                   className="background-image"
-                  src={img.src}
-                  alt={img.alt}
+                  style={{
+                    backgroundImage: `url(${img.src})`,
+                  }}
                 />
                 <div className="background-image-black"></div>
               </SwiperSlide>
