@@ -1,4 +1,4 @@
-const ListingLi = ({ categoriesLength, handleListingClick }) => {
+const ListingLi = ({ categoriesLength, handleListingClick }) => {  
   return (
     <li className="nav-item">
       <a
