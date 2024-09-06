@@ -110,13 +110,11 @@ const NavbarThree = ({ children = null }) => {
 
       <VerificationAlert />
 
-      {categoriesLength > 0 && (
-        <ListingPopup
-          active={activePopup}
-          setActive={setActivePopup}
-          categories={navbarCategories}
-        />
-      )}
+      <ListingPopup
+        active={activePopup}
+        setActive={setActivePopup}
+        categories={navbarCategories}
+      />
     </>
   );
 };

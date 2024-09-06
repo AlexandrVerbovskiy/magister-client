@@ -60,9 +60,19 @@ const useTawkScript = (type) => {
         if (frames.length == 4) {
           frames[3].style.bottom = "60px";
         }
+      } else {
+        if (frames.length >= 3) {
+          frames[0].style.bottom = "20px";
+          frames[1].style.bottom = "90px";
+          frames[2].style.bottom = "100px";
+        }
+
+        if (frames.length == 4) {
+          frames[3].style.bottom = "30px";
+        }
       }
     }, 100);
-  }, [router.asPath, type]);
+  }, [router.asPath, type, isMobile]);
 
   return null;
 };
