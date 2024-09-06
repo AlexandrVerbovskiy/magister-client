@@ -39,7 +39,6 @@ const Banner = () => {
   };
 
   const backgroundImages = [
-    { src: "/images/main-banner-bg3.jpg", alt: "Banner 1", key: 1 },
     { src: "/images/main-banner-bg1.jpg", alt: "Banner 1", key: 1 },
     { src: "/images/main-banner-bg3.jpg", alt: "Banner 2", key: 2 },
     { src: "/images/main-banner-bg4.jpg", alt: "Banner 3", key: 3 },
