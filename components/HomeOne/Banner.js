@@ -6,7 +6,12 @@ import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
 import { useRouter } from "next/router";
-import Head from "next/head";
+import Image from "next/image";
+import mainBannerBg1 from "../../public/images/main-banner-bg1.jpg";
+import mainBannerBg3 from "../../public/images/main-banner-bg3.jpg";
+import mainBannerBg4 from "../../public/images/main-banner-bg4.jpg";
+import mainBannerBg5 from "../../public/images/main-banner-bg5.jpg";
+import mainBannerBg6 from "../../public/images/main-banner-bg6.jpg";
 
 const Banner = () => {
   const router = useRouter();
@@ -39,11 +44,11 @@ const Banner = () => {
   };
 
   const backgroundImages = [
-    "/images/main-banner-bg1.jpg",
-    "/images/main-banner-bg3.jpg",
-    "/images/main-banner-bg4.jpg",
-    "/images/main-banner-bg5.jpg",
-    "/images/main-banner-bg6.jpg",
+    { src: mainBannerBg1, alt: "Banner 1", key: 1 },
+    { src: mainBannerBg3, alt: "Banner 2", key: 2 },
+    { src: mainBannerBg4, alt: "Banner 3", key: 3 },
+    { src: mainBannerBg5, alt: "Banner 4", key: 4 },
+    { src: mainBannerBg6, alt: "Banner 5", key: 5 },
   ];
 
   const categories = [
@@ -69,12 +74,6 @@ const Banner = () => {
 
   return (
     <>
-      <Head>
-        {backgroundImages.map((imgSrc) => (
-          <link rel="preload" as="image" href={imgSrc} />
-        ))}
-      </Head>
-
       <div className="main-banner-area">
         <div className="background-image-list">
           <Swiper
@@ -87,13 +86,12 @@ const Banner = () => {
             allowTouchMove={false}
           >
             {backgroundImages.map((img) => (
-              <SwiperSlide key={img}>
-                <div
+              <SwiperSlide key={img.key}>
+                <Image
                   className="background-image"
-                  style={{
-                    backgroundImage: `url(${img})`,
-                  }}
-                ></div>
+                  src={img.src}
+                  alt={img.alt}
+                />
                 <div className="background-image-black"></div>
               </SwiperSlide>
             ))}
