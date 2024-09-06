@@ -6,6 +6,7 @@ import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const Banner = () => {
   const router = useRouter();
@@ -67,140 +68,148 @@ const Banner = () => {
   };
 
   return (
-    <div className="main-banner-area">
-      <div className="background-image-list">
-        <Swiper
-          loop={true}
-          autoplay={{
-            delay: 8000,
-          }}
-          modules={[Autoplay]}
-          shortSwipes={false}
-          allowTouchMove={false}
-        >
-          {backgroundImages.map((img) => (
-            <SwiperSlide key={img}>
-              <div
-                className="background-image"
-                style={{
-                  backgroundImage: `url(${img})`,
-                }}
-              ></div>
-              <div className="background-image-black"></div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+    <>
+      <Head>
+        {backgroundImages.map((imgSrc) => (
+          <link rel="preload" as="image" href={imgSrc} />
+        ))}
+      </Head>
 
-      <div className="container">
-        <div className="main-banner-content">
-          <div className="banner-flexi">
-            <h1 className="banner-one-heading">
-              <div className="banner-one-heading-scrollable">
-                What would you like to rent?
-                <Swiper
-                  direction={"vertical"}
-                  autoplay={{
-                    delay: 8000,
+      <div className="main-banner-area">
+        <div className="background-image-list">
+          <Swiper
+            loop={true}
+            autoplay={{
+              delay: 8000,
+            }}
+            modules={[Autoplay]}
+            shortSwipes={false}
+            allowTouchMove={false}
+          >
+            {backgroundImages.map((img) => (
+              <SwiperSlide key={img}>
+                <div
+                  className="background-image"
+                  style={{
+                    backgroundImage: `url(${img})`,
                   }}
-                  loop={true}
-                  modules={[Autoplay]}
-                  shortSwipes={false}
-                  allowTouchMove={false}
-                >
-                  {categories.map((category) => (
-                    <SwiperSlide key={category}>
-                      <span className="color-main">{category}</span>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-            </h1>
-          </div>
+                ></div>
+                <div className="background-image-black"></div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="row m-0 align-items-center">
-              <div className="col-lg-4 col-md-12 p-0">
-                <div className="form-group">
-                  <label>
-                    <i className="flaticon-search"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="What are you looking for?"
-                    name="listing"
-                    value={searchListingName}
-                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-                    onInput={handleChangeSearchListingName}
-                  />
+        <div className="container">
+          <div className="main-banner-content">
+            <div className="banner-flexi">
+              <h1 className="banner-one-heading">
+                <div className="banner-one-heading-scrollable">
+                  What would you like to rent?
+                  <Swiper
+                    direction={"vertical"}
+                    autoplay={{
+                      delay: 8000,
+                    }}
+                    loop={true}
+                    modules={[Autoplay]}
+                    shortSwipes={false}
+                    allowTouchMove={false}
+                  >
+                    {categories.map((category) => (
+                      <SwiperSlide key={category}>
+                        <span className="color-main">{category}</span>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
-              </div>
-
-              <div className="col-lg-3 col-md-6 p-0">
-                <div className="form-group">
-                  <label>
-                    <i className="flaticon-pin"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Location"
-                    name="city"
-                    ref={cityFilterRef}
-                    onFocus={() => openCityTipsPopup(searchCity)}
-                    onBlur={closeCityTipsPopup}
-                    value={searchCity}
-                    onInput={handleChangeCity}
-                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-                    onKeyPress={handleKeyPress}
-                  />
-
-                  <SearchTipsPopup
-                    active={cityTipsPopupActive}
-                    tips={cityTips}
-                    handleTipClick={handleCityTipClick}
-                  />
-                </div>
-              </div>
-
-              <div className="col-lg-3 col-md-6 p-0">
-                <div className="form-group">
-                  <label>
-                    <i className="flaticon-category"></i>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search by category"
-                    name="category"
-                    ref={categoryFilterRef}
-                    onFocus={() => openCategoryTipsPopup(searchCategory)}
-                    onBlur={closeCategoryTipsPopup}
-                    value={searchCategory}
-                    onInput={handleChangeCategory}
-                    maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
-                    onKeyPress={handleKeyPress}
-                  />
-
-                  <SearchTipsPopup
-                    active={categoryTipsPopupActive}
-                    tips={categoryTips}
-                    handleTipClick={handleCategoryTipClick}
-                  />
-                </div>
-              </div>
-
-              <div className="col-lg-2 col-md-12 p-0">
-                <div id="filter-search-btn" className="submit-btn">
-                  <button type="submit">Search Now</button>
-                </div>
-              </div>
+              </h1>
             </div>
-          </form>
+
+            <form onSubmit={handleSubmit}>
+              <div className="row m-0 align-items-center">
+                <div className="col-lg-4 col-md-12 p-0">
+                  <div className="form-group">
+                    <label>
+                      <i className="flaticon-search"></i>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="What are you looking for?"
+                      name="listing"
+                      value={searchListingName}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+                      onInput={handleChangeSearchListingName}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-md-6 p-0">
+                  <div className="form-group">
+                    <label>
+                      <i className="flaticon-pin"></i>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Location"
+                      name="city"
+                      ref={cityFilterRef}
+                      onFocus={() => openCityTipsPopup(searchCity)}
+                      onBlur={closeCityTipsPopup}
+                      value={searchCity}
+                      onInput={handleChangeCity}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+                      onKeyPress={handleKeyPress}
+                    />
+
+                    <SearchTipsPopup
+                      active={cityTipsPopupActive}
+                      tips={cityTips}
+                      handleTipClick={handleCityTipClick}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-md-6 p-0">
+                  <div className="form-group">
+                    <label>
+                      <i className="flaticon-category"></i>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search by category"
+                      name="category"
+                      ref={categoryFilterRef}
+                      onFocus={() => openCategoryTipsPopup(searchCategory)}
+                      onBlur={closeCategoryTipsPopup}
+                      value={searchCategory}
+                      onInput={handleChangeCategory}
+                      maxLength={STATIC.LIMITS.SEARCH_INPUT_LENGTH}
+                      onKeyPress={handleKeyPress}
+                    />
+
+                    <SearchTipsPopup
+                      active={categoryTipsPopupActive}
+                      tips={categoryTips}
+                      handleTipClick={handleCategoryTipClick}
+                    />
+                  </div>
+                </div>
+
+                <div className="col-lg-2 col-md-12 p-0">
+                  <div id="filter-search-btn" className="submit-btn">
+                    <button type="submit">Search Now</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
