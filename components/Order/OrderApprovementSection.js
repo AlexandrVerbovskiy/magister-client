@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { getFactOrderDays, validateBigText } from "../../utils";
+import { calculateFeeByDaysCount, getFactOrderDays, validateBigText } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -34,7 +34,7 @@ const OrderApprovementSection = ({
 
   const duration = getFactOrderDays(fromDate, toDate);
   const subtotalPrice = price * duration;
-  const totalFee = (subtotalPrice * fee) / 100;
+  const totalFee = calculateFeeByDaysCount(duration, price, fee, true);
   const totalPrice = subtotalPrice + totalFee;
 
   const onSendClick = (e) => {

@@ -5,6 +5,7 @@ import {
   tenantPaymentCalculate,
   dateConverter,
   moneyFormatVisual,
+  calculateFeeByDaysCount,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -48,8 +49,16 @@ const InvoiceTable = ({
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
-  const subTotalPrice =
-    offer.pricePerDay * getFactOrderDays(offer.startDate, offer.endDate);
+  const offerDuration = getFactOrderDays(offer.startDate, offer.endDate);
+
+  const subTotalPrice = offer.pricePerDay * offerDuration;
+
+  const totalFee = calculateFeeByDaysCount(
+    offerDuration,
+    offer.pricePerDay,
+    offer.fee,
+    true
+  );
 
   const handlePdfDownload = async () => {
     try {
@@ -185,9 +194,7 @@ const InvoiceTable = ({
                 <td className="text-right" colSpan="4">
                   <strong>Sales Tax {offer.fee}%</strong>
                 </td>
-                <td className="text-right">
-                  {moneyFormatVisual((subTotalPrice * offer.fee) / 100)}
-                </td>
+                <td className="text-right">{moneyFormatVisual(totalFee)}</td>
               </tr>
               <tr>
                 <td className="text-right total" colSpan="4">
