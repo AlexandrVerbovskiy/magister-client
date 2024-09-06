@@ -56,38 +56,33 @@ const Banner = () => {
   ];
 
   const { setLoading } = useContext(IndiceContext);
-  /*const loadedImagesRef = useRef({});
+  const loadedImagesRef = useRef({});
 
-  useEffect(() => {
-    setLoading(true);
-
-    backgroundImages.forEach((image) => {
-      loadedImagesRef.current[image.key] = false;
-
+  const loadImage = (src, key) => {
+    return new Promise((resolve) => {
       const img = new Image();
-      img.src = image.src;
-
+      img.src = src;
       img.onload = () => {
-        loadedImagesRef.current[image.key] = true;
-
-        const loadedImagesStatuses = Object.values(loadedImagesRef.current);
-        const countLoadedImages = loadedImagesStatuses.filter(
-          (status) => status
-        ).length;
-
-        if (countLoadedImages == backgroundImages.length) {
-          setLoading(false);
-        }
+        loadedImagesRef.current[key] = true;
+        resolve();
       };
     });
-  }, []);*/
+  };
 
   useEffect(() => {
-    setLoading(true);
+    const loadImagesAsync = async () => {
+      setLoading(true);
 
-    const img = new Image();
-    img.src = backgroundImages[0].src;
-    img.onload = () => setLoading(false);
+      const promises = backgroundImages.map((image) => {
+        loadedImagesRef.current[image.key] = false;
+        return loadImage(image.src, image.key);
+      });
+
+      await Promise.all(promises);
+      setLoading(false);
+    };
+
+    loadImagesAsync();
   }, []);
 
   const handleSubmit = (e) => {
