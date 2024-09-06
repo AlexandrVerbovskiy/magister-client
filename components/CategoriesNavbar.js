@@ -13,7 +13,11 @@ const NavbarLi = ({ category }) => {
       >
         {category.image && (
           <div className="category-navbar-img">
-            <img src={getFilePath(category.image)} height="20px" width="20px" />
+            <img
+              src={getFilePath(category.image)}
+              height="20px"
+              width="20px"
+            />
           </div>
         )}
         <span>{category.name}</span>
