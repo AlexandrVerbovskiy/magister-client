@@ -38,11 +38,11 @@ const Banner = () => {
   };
 
   const backgroundImages = [
-    "/images/main-banner-bg1.jpg",
-    "/images/main-banner-bg3.jpg",
-    "/images/main-banner-bg4.jpg",
-    "/images/main-banner-bg5.jpg",
-    "/images/main-banner-bg6.jpg",
+    "/images/main-banner-bg1.webp",
+    "/images/main-banner-bg3.webp",
+    "/images/main-banner-bg4.webp",
+    "/images/main-banner-bg5.webp",
+    "/images/main-banner-bg6.webp",
   ];
 
   const categories = [
