@@ -39,6 +39,7 @@ const Banner = () => {
   };
 
   const backgroundImages = [
+    { src: "/images/main-banner-bg3.jpg", alt: "Banner 1", key: 1 },
     { src: "/images/main-banner-bg1.jpg", alt: "Banner 1", key: 1 },
     { src: "/images/main-banner-bg3.jpg", alt: "Banner 2", key: 2 },
     { src: "/images/main-banner-bg4.jpg", alt: "Banner 3", key: 3 },
@@ -56,34 +57,42 @@ const Banner = () => {
   ];
 
   const { setLoading } = useContext(IndiceContext);
-  const loadedImagesRef = useRef({});
-
-  const loadImage = (src, key) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loadedImagesRef.current[key] = true;
-        resolve();
-      };
-    });
-  };
+  /*const loadedImagesRef = useRef({});
 
   useEffect(() => {
-    const loadImagesAsync = async () => {
-      setLoading(true);
+    setLoading(true);
 
-      const promises = backgroundImages.map((image) => {
-        loadedImagesRef.current[image.key] = false;
-        return loadImage(image.src, image.key);
-      });
+    backgroundImages.forEach((image) => {
+      loadedImagesRef.current[image.key] = false;
 
-      await Promise.all(promises);
-      setLoading(false);
-    };
+      const img = new Image();
+      img.src = image.src;
 
-    loadImagesAsync();
-  }, []);
+      img.onload = () => {
+        loadedImagesRef.current[image.key] = true;
+
+        const loadedImagesStatuses = Object.values(loadedImagesRef.current);
+        const countLoadedImages = loadedImagesStatuses.filter(
+          (status) => status
+        ).length;
+
+        if (countLoadedImages == backgroundImages.length) {
+          setLoading(false);
+        }
+      };
+    });
+  }, []);*/
+
+  useEffect(() => {
+    setLoading(true);
+
+    const img = new Image();
+      img.src = backgroundImages[0].src;
+
+      img.onload = () => {
+        setLoading(false);
+      }
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
