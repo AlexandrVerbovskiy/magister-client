@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import SearchTipsPopup from "../SearchTipsPopup";
@@ -6,14 +6,12 @@ import { useCategoryCity } from "../../hooks";
 import { getFullListingSearchLink } from "../../utils";
 import STATIC from "../../static";
 import { useRouter } from "next/router";
-import mainBannerBg1 from "../../public/images/main-banner-bg1.jpg";
-import mainBannerBg3 from "../../public/images/main-banner-bg3.jpg";
-import mainBannerBg4 from "../../public/images/main-banner-bg4.jpg";
-import mainBannerBg5 from "../../public/images/main-banner-bg5.jpg";
-import mainBannerBg6 from "../../public/images/main-banner-bg6.jpg";
+import { IndiceContext } from "../../contexts";
 
 const Banner = () => {
   const router = useRouter();
+  const { setLoading } = useContext(IndiceContext);
+  const loadedImagesRef = useRef({});
 
   const {
     handleChangeCity,
@@ -43,11 +41,11 @@ const Banner = () => {
   };
 
   const backgroundImages = [
-    { src: mainBannerBg1.src, alt: "Banner 1", key: 1 },
-    { src: mainBannerBg3.src, alt: "Banner 2", key: 2 },
-    { src: mainBannerBg4.src, alt: "Banner 3", key: 3 },
-    { src: mainBannerBg5.src, alt: "Banner 4", key: 4 },
-    { src: mainBannerBg6.src, alt: "Banner 5", key: 5 },
+    { src: "/images/main-banner-bg1.jpg", alt: "Banner 1", key: 1 },
+    { src: "/images/main-banner-bg3.jpg", alt: "Banner 2", key: 2 },
+    { src: "/images/main-banner-bg4.jpg", alt: "Banner 3", key: 3 },
+    { src: "/images/main-banner-bg5.jpg", alt: "Banner 4", key: 4 },
+    { src: "/images/main-banner-bg6.jpg", alt: "Banner 5", key: 5 },
   ];
 
   const categories = [
@@ -58,6 +56,30 @@ const Banner = () => {
     "Cameras",
     "Bikes",
   ];
+
+  useEffect(() => {
+    setLoading(true);
+
+    backgroundImages.forEach((image) => {
+      loadedImagesRef.current[image.key] = false;
+
+      const img = new Image();
+      img.src = image.src;
+
+      img.onload = () => {
+        loadedImagesRef.current[image.key] = true;
+
+        const loadedImagesStatuses = Object.values(loadedImagesRef.current);
+        const countLoadedImages = loadedImagesStatuses.filter(
+          (status) => status
+        ).length;
+
+        if (countLoadedImages == backgroundImages.length) {
+          setLoading(false);
+        }
+      };
+    });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
