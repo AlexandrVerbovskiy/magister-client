@@ -37,8 +37,6 @@ const Index = ({ categories }) => {
 
       <YourBusiness />
 
-      <Feedback bgColor="bg-f9f9f9" />
-
       <SafeWithUs />
 
       <Category topCategories={topCategories} />
