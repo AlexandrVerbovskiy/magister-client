@@ -10,8 +10,6 @@ import { IndiceContext } from "../../contexts";
 
 const Banner = () => {
   const router = useRouter();
-  const { setLoading } = useContext(IndiceContext);
-  const loadedImagesRef = useRef({});
 
   const {
     handleChangeCity,
@@ -56,6 +54,9 @@ const Banner = () => {
     "Cameras",
     "Bikes",
   ];
+
+  const { setLoading } = useContext(IndiceContext);
+  const loadedImagesRef = useRef({});
 
   useEffect(() => {
     setLoading(true);
