@@ -14197,7 +14197,7 @@ Dashboard CSS
   transition: var(--transition);
 }
 .chat-content-area .sidebar-left .sidebar .sidebar-content {
-  height: calc(100vh - 325px);
+  height: calc(100vh - 285px);
 }
 
 body:has(.verification-alert)

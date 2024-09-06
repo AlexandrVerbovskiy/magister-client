@@ -19,7 +19,7 @@ const YesNoRentalModal = ({
     message += ` from ${dateConverter(fromDate)} to ${dateConverter(toDate)} `;
   }
 
-  message += `for${moneyFormatVisual(
+  message += `for ${moneyFormatVisual(
     price
   )} per day, total amount of ${moneyFormatVisual(
     totalPrice

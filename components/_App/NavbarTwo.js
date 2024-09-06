@@ -506,13 +506,11 @@ const NavbarTwo = ({
         </>
       )}
 
-      {categoriesLength > 0 && (
-        <ListingPopup
-          active={activePopup}
-          setActive={setActivePopup}
-          categories={navbarCategories}
-        />
-      )}
+      <ListingPopup
+        active={activePopup}
+        setActive={setActivePopup}
+        categories={navbarCategories}
+      />
 
       {isAuth && (
         <SignOutModal
