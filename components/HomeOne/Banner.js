@@ -56,9 +56,9 @@ const Banner = () => {
   ];
 
   const { setLoading } = useContext(IndiceContext);
-  const loadedImagesRef = useRef({});
+  /*const loadedImagesRef = useRef({});
 
-  /*useEffect(() => {
+  useEffect(() => {
     setLoading(true);
 
     backgroundImages.forEach((image) => {
@@ -81,6 +81,14 @@ const Banner = () => {
       };
     });
   }, []);*/
+
+  useEffect(() => {
+    setLoading(true);
+
+    const img = new Image();
+    img.src = backgroundImages[0].src;
+    img.onload = () => setLoading(false);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
