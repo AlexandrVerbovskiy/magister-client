@@ -14,6 +14,7 @@ import { IndiceContext } from "../../contexts";
 //test4
 //test5
 //test6
+//test7
 
 const Banner = () => {
   const router = useRouter();
