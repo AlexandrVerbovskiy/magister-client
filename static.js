@@ -165,4 +165,5 @@ export default {
   CURRENCY: "£", //"$"
   CURRENCY_NAME: "GBP", //"USD"
   MOBILE_SIZE: 1199,
+  PHONE_COUNTRIES_CODES: ["gb", "ua"],
 };
