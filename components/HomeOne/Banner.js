@@ -8,6 +8,8 @@ import STATIC from "../../static";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 
+//test
+
 const Banner = () => {
   const router = useRouter();
 
