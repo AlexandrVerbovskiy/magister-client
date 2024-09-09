@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
 
 //test
+//test2
 
 const Banner = () => {
   const router = useRouter();
