@@ -26,7 +26,7 @@ import ErrorSpan from "./ErrorSpan";
 import LeaveBtn from "./LeaveBtn";
 import STATIC from "../../static";
 import PhoneInput from "react-phone-input-2";
-import parsePhoneNumberFromString from "libphonenumber-js";
+import {parsePhoneNumberFromString} from "libphonenumber-js";
 
 const roleOptions = [
   { value: "user", title: "User", default: true },

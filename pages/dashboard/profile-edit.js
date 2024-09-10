@@ -260,7 +260,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         const newData = { ...info };
 
         if (info.phone != (sessionUser?.phone ?? "")) {
-          newData["photoVerified"] = false;
+          newData["phoneVerified"] = false;
         }
 
         if (res.photo) {
