@@ -70,3 +70,5 @@ override.tf.json
 terraform.rc
 
 robots.txt
+.vscode
+.idea

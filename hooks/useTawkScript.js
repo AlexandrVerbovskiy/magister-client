@@ -52,13 +52,13 @@ const useTawkScript = (type) => {
 
       if (isMobile && hasFooter) {
         if (frames.length >= 3) {
-          frames[0].style.bottom = "50px";
-          frames[1].style.bottom = "120px";
-          frames[2].style.bottom = "120px";
+          frames[0].style.bottom = "60px";
+          frames[1].style.bottom = "130px";
+          frames[2].style.bottom = "130px";
         }
 
         if (frames.length == 4) {
-          frames[3].style.bottom = "60px";
+          frames[3].style.bottom = "70px";
         }
       } else {
         if (frames.length >= 3) {

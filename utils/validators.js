@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from "libphonenumber-js";
+
 export function validateBigText(text) {
   if (text && text.length > 2000) {
     return "The string size exceeds 2000 characters";
@@ -102,19 +104,16 @@ export function validateDate(date) {
   return true;
 }
 
-export function validatePhoneNumber(phoneNumber) {
-  if (/[^0-9]/.test(phoneNumber)) {
-    return "Phone number should contain only digits";
+export function validatePhoneNumber(phoneNumber, countryCode) {
+  console.log(phoneNumber, countryCode, isValidPhoneNumber(phoneNumber, countryCode.toLocaleUpperCase()))
+  if (
+    phoneNumber &&
+    isValidPhoneNumber("+" + phoneNumber, countryCode.toLocaleUpperCase())
+  ) {
+    return true;
   }
 
-  if (phoneNumber.length < 10) {
-    return "Phone number should have a minimum of 10 digits";
-  }
-
-  const resSmallTextValidation = validateSmallText(phoneNumber);
-  if (resSmallTextValidation !== true) return resSmallTextValidation;
-
-  return true;
+  return "Invalid phone number";
 }
 
 export function validatePrice(priceString) {

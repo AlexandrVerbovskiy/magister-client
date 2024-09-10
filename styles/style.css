@@ -153,6 +153,7 @@ p:last-child {
   padding-bottom: 70px;
 }
 
+.pt-lg-70,
 .pt-70 {
   padding-top: 70px;
 }
@@ -3245,7 +3246,9 @@ Listings Area CSS
 .filter-bookmark-save,
 .single-listings-box .listings-image .bookmark-save {
   z-index: 3;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--whiteColor);
   text-align: center;
   background-color: rgba(0, 0, 0, 0.55);
@@ -3254,6 +3257,11 @@ Listings Area CSS
   border-radius: 50%;
   line-height: 38px;
   font-size: 16px;
+}
+
+.filter-bookmark-save i,
+.single-listings-box .listings-image .bookmark-save i {
+  height: 35px;
 }
 
 .single-listings-box .listings-image .bookmark-save {
@@ -14700,20 +14708,22 @@ body:has(.verification-alert)
   height: calc(100vh - 375.5px);
 }
 
-body:has(.verification-alert) .chat-content-area
-.content-right
-.chat-list-wrapper
-.chat-list
-.chat-container {
-height: calc(100vh - 440px);
+body:has(.verification-alert)
+  .chat-content-area
+  .content-right
+  .chat-list-wrapper
+  .chat-list
+  .chat-container {
+  height: calc(100vh - 440px);
 }
 
-body:has(.verification-alert) .chat-content-area
-.content-right
-.chat-list-wrapper
-.chat-list:has(.editable-message-panel)
-.chat-container {
-height: calc(100vh - 475.5px);
+body:has(.verification-alert)
+  .chat-content-area
+  .content-right
+  .chat-list-wrapper
+  .chat-list:has(.editable-message-panel)
+  .chat-container {
+  height: calc(100vh - 475.5px);
 }
 
 .chat-content-area
@@ -18201,9 +18211,10 @@ input[type="number"] {
   border: none;
   font-weight: 600;
   display: block;
-  padding: 12px 50px;
   transition: var(--transition);
   border-radius: 30px;
+  width: 150px;
+  height: 43.5px;
 }
 
 .listings-details-desc .review-form-wrapper form button[type="submit"]:hover,
@@ -19001,7 +19012,7 @@ span.flatpickr-weekday {
   width: 100%;
 }
 
-.pay-by-bank-transfer-paypal-form{
+.pay-by-bank-transfer-paypal-form {
   margin: 0.375rem 0.375rem 0;
   width: calc(100% - 0.75rem);
 }
@@ -19733,8 +19744,8 @@ video::-webkit-media-controls-panel {
   color: white;
 }
 
-.beta-auth-alert{
-  background-color: #3638BC;
+.beta-auth-alert {
+  background-color: #3638bc;
   color: white;
   margin-bottom: 0;
   border-radius: 0;
@@ -19755,15 +19766,14 @@ video::-webkit-media-controls-panel {
   transform: translate(-20px, -12px);
 }
 
-.beta-auth-alert a{
-  color: #2D2CB0;
+.beta-auth-alert a {
+  color: #2d2cb0;
 }
 
-.beta-auth-alert a:hover{
-  background-color: #2D2CB0;
+.beta-auth-alert a:hover {
+  background-color: #2d2cb0;
   color: white;
 }
-
 
 .verification-alert a {
   color: var(--mainColor);
@@ -19930,19 +19940,19 @@ video::-webkit-media-controls-panel {
   color: var(--mainColor);
 }
 
-.view-listings-filter{
+.view-listings-filter {
   border: 1px solid #dedede;
   border-radius: 5px;
   width: calc(100% - 50px);
   padding: 10px;
 }
 
-.view-listings-categories-filter{
+.view-listings-categories-filter {
   font-weight: 600;
   font-size: 18px;
 }
 
-.mobile-booking-section{
+.mobile-booking-section {
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -19950,16 +19960,26 @@ video::-webkit-media-controls-panel {
   box-shadow: 0px 0px 20px 3px #e3e3e3;
 }
 
-.mobile-booking-section .listings-sidebar{
-margin-top: 0;
+.mobile-booking-section .listings-sidebar {
+  margin-top: 0;
 }
 
 .inform-page ul,
-.inform-page li{
+.inform-page li {
   color: var(--optionalColor);
   line-height: 1.8;
 }
 
-.inform-page a{
+.inform-page a {
   color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
+}
+
+.message-site-warning-alert-list,
+.message-site-success-alert-list,
+.message-site-error-alert-list {
+  max-width: calc(100% - 40px);
+}
+
+body:has(.widget-visible) .message-site-warning-alert-list {
+  max-width: calc(100% - 124px);
 }

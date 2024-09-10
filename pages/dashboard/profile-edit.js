@@ -31,6 +31,8 @@ import {
   PaypalSection,
 } from "../../components/ProfileEdit";
 import { useRouter } from "next/router";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import STATIC from "../../static";
 
 const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
   const router = useRouter();
@@ -77,6 +79,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneCountryCode, setPhoneCountryCode] = useState("");
 
   const [nameError, setNameError] = useState(null);
   const [phoneError, setPhoneError] = useState(null);
@@ -156,11 +159,26 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
     const userInfo = userToState();
 
     setName(userInfo.name);
-    setPhone(userInfo.phone);
     setFacebookUrl(userInfo.facebookUrl);
     setLinkedinUrl(userInfo.linkedinUrl);
     setInstagramUrl(userInfo.instagramUrl);
     setBriefBio(userInfo.briefBio);
+
+    if (userInfo.phone) {
+      const phoneNumber = parsePhoneNumberFromString("+" + userInfo.phone);
+      const phoneCountry = phoneNumber?.country;
+
+      if (phoneNumber && phoneCountry) {
+        setPhoneCountryCode(phoneCountry.toLocaleLowerCase());
+        setPhone(userInfo.phone);
+      } else {
+        setPhoneCountryCode(STATIC.DEFAULT_PHONE_INFO.code);
+        setPhone(STATIC.DEFAULT_PHONE_INFO.phone);
+      }
+    } else {
+      setPhoneCountryCode(STATIC.DEFAULT_PHONE_INFO.code);
+      setPhone(STATIC.DEFAULT_PHONE_INFO.phone);
+    }
   };
 
   const handlePhotoChange = (e) => {
@@ -187,7 +205,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
       hasError = true;
     }
 
-    const resValidatePhone = validatePhoneNumber(phone);
+    const resValidatePhone = validatePhoneNumber(phone, phoneCountryCode);
 
     if (phone && resValidatePhone !== true) {
       setPhoneError(resValidatePhone);
@@ -334,7 +352,7 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
 
     if (userInfo.phone == phone && sessionUser?.phoneVerified) return;
 
-    const resPhoneValidate = validatePhoneNumber(phone);
+    const resPhoneValidate = validatePhoneNumber(phone, phoneCountryCode);
 
     if (resPhoneValidate !== true) {
       setPhoneError(resPhoneValidate);
@@ -423,6 +441,8 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         handleProfileSaveClick,
         briefBioError,
         setBriefBioError,
+        phoneCountryCode,
+        setPhoneCountryCode,
       }}
     />
   );

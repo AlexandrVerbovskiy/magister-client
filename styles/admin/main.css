@@ -3,3 +3,4 @@
 
 @import "tailwindcss/base.css";
 @import "tailwindcss/components.css";
+@import "./phone-input.css";

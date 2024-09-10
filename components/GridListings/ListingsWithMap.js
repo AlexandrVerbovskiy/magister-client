@@ -664,7 +664,7 @@ const ListingsWithMap = ({
         </div>
       </div>
 
-      <div className="listings-area ptb-70">
+      <div className="listings-area pt-lg-70 pb-70">
         <div className="container-fluid">
           <div className="row m-0">
             <div className="col-xl-8 col-lg-12 col-md-12 p-0">
