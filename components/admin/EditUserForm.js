@@ -24,6 +24,9 @@ import {
 } from "../../utils";
 import ErrorSpan from "./ErrorSpan";
 import LeaveBtn from "./LeaveBtn";
+import STATIC from "../../static";
+import PhoneInput from "react-phone-input-2";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 const roleOptions = [
   { value: "user", title: "User", default: true },
@@ -50,6 +53,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState(null);
   const [phoneVerified, setPhoneVerified] = useState(false);
+  const [phoneCountryCode, setPhoneCountryCode] = useState("");
 
   const [briefBio, setBriefBio] = useState("");
 
@@ -86,7 +90,6 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setName(resUserToState.name);
     setEmail(resUserToState.email);
     setEmailVerified(resUserToState.emailVerified);
-    setPhone(resUserToState.phone);
     setPhoneVerified(resUserToState.phoneVerified);
 
     if (resUserToState.role) {
@@ -105,6 +108,25 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setSuspicious(resUserToState.suspicious);
     setVerified(resUserToState.verified);
     setPaypalId(resUserToState.paypalId);
+
+    if (resUserToState.phone) {
+      const phoneNumber = parsePhoneNumberFromString(
+        "+" + resUserToState.phone
+      );
+
+      const phoneCountry = phoneNumber?.country;
+
+      if (phoneNumber && phoneCountry) {
+        setPhoneCountryCode(phoneCountry.toLocaleLowerCase());
+        setPhone(resUserToState.phone);
+      } else {
+        setPhoneCountryCode(STATIC.DEFAULT_PHONE_INFO.code);
+        setPhone(STATIC.DEFAULT_PHONE_INFO.phone);
+      }
+    } else {
+      setPhoneCountryCode(STATIC.DEFAULT_PHONE_INFO.code);
+      setPhone(STATIC.DEFAULT_PHONE_INFO.phone);
+    }
   }, [user.id]);
 
   const getObjectToSave = () => {
@@ -214,7 +236,7 @@ const EditUserForm = ({ user, save, currentTitle }) => {
       hasError = true;
     }
 
-    const resValidatePhone = validatePhoneNumber(phone);
+    const resValidatePhone = validatePhoneNumber(phone, phoneCountryCode);
 
     if (phone && resValidatePhone !== true) {
       setPhoneError(resValidatePhone);
@@ -294,9 +316,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
     setEmail(value);
   };
 
-  const handleChangePhone = (value) => {
-    if (value.length < 1) setPhoneVerified(false);
-    setPhone(value);
+  const handleChangePhone = (newPhone, countryData) => {
+    if (newPhone.length < 1) {
+      setPhoneVerified(false);
+    }
+
+    setPhone(newPhone);
+    setPhoneCountryCode(countryData.countryCode);
+    setPhoneError(null);
   };
 
   const handleChangePhoneVerified = (value) => {
@@ -415,13 +442,14 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                       </h2>
                       <div className="flex flex-wrap mt-2">
                         <div className="mr-2">
-                          <Input
-                            name="phone"
+                          <PhoneInput
                             value={phone}
-                            setValue={handleChangePhone}
-                            setError={setPhoneError}
-                            label="Business Phone"
-                            labelClassName="sr-only"
+                            onChange={handleChangePhone}
+                            onlyCountries={STATIC.PHONE_COUNTRIES_CODES}
+                            inputProps={{ name: "phone" }}
+                            placeholder="Phone Number"
+                            specialLabel={null}
+                            inputClass="form-input w-full"
                           />
                         </div>
 
@@ -443,8 +471,8 @@ const EditUserForm = ({ user, save, currentTitle }) => {
                         Social networks
                       </h2>
                       <div className="text-sm">
-                        Share your story: LinkedIn, Facebook, Instagram
-                        links welcome
+                        Share your story: LinkedIn, Facebook, Instagram links
+                        welcome
                       </div>
 
                       <div className="space-y-2 mt-5">

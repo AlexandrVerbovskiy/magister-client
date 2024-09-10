@@ -1,4 +1,4 @@
-export default {
+const config = {
   CITY_COORDS: {
     Warrington: { lat: 53.390044, lng: -2.59695 },
     Manchester: { lat: 53.48095, lng: -2.23743 },
@@ -165,4 +165,12 @@ export default {
   CURRENCY: "£", //"$"
   CURRENCY_NAME: "GBP", //"USD"
   MOBILE_SIZE: 1199,
+  PHONE_COUNTRIES_CODES: ["gb", "ua"],
 };
+
+config["DEFAULT_PHONE_INFO"] = {
+  code: config.PHONE_COUNTRIES_CODES[0],
+  phone: "44",
+};
+
+export default config;

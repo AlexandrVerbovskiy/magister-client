@@ -2,6 +2,8 @@ import ImageInput from "../DashboardComponents/ImageInput";
 import Input from "../DashboardComponents/Input";
 import Textarea from "../DashboardComponents/Textarea";
 import ErrorSpan from "../../components/ErrorSpan";
+import PhoneInput from "react-phone-input-2";
+import STATIC from "../../static";
 
 const ProfileSection = ({ formInfo }) => {
   const {
@@ -17,6 +19,8 @@ const ProfileSection = ({ formInfo }) => {
     setPhoneError,
     handleVerifyPhoneClick,
     phoneError,
+    phoneCountryCode,
+    setPhoneCountryCode,
     briefBio,
     setBriefBio,
     facebookUrl,
@@ -36,6 +40,12 @@ const ProfileSection = ({ formInfo }) => {
     briefBioError,
     setBriefBioError,
   } = formInfo;
+
+  const handleChangePhone = (newPhone, countryData) => {
+    setPhone(newPhone);
+    setPhoneCountryCode(countryData.countryCode);
+    setPhoneError(null);
+  };
 
   return (
     <div className="my-profile-box">
@@ -74,15 +84,17 @@ const ProfileSection = ({ formInfo }) => {
 
           <div className="row pe-0 edit-profile-phone-row">
             <div className="order-1 order-xl-1 col-xl-6 col-lg-12 col-md-12 p-0 phone-input">
-              <Input
-                label="Phone"
-                placeholder="Phone Number"
-                value={phone}
-                type="text"
-                setValue={setPhone}
-                setError={setPhoneError}
-                name="phone"
-              />
+              <div className="form-group">
+                <label>Phone</label>
+
+                <PhoneInput
+                  value={phone}
+                  onChange={handleChangePhone}
+                  onlyCountries={STATIC.PHONE_COUNTRIES_CODES}
+                  inputProps={{ name: "phone" }}
+                  placeholder="Phone Number"
+                />
+              </div>
             </div>
 
             {(phone != user.phone || !user.phoneVerified) && (
