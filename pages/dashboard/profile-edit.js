@@ -33,6 +33,7 @@ import {
 import { useRouter } from "next/router";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import STATIC from "../../static";
+import PhoneVerifiedCodeModal from "../../components/_App/Navbar/PhoneVerifiedCodeModal";
 
 const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
   const router = useRouter();
@@ -492,44 +493,14 @@ const ProfileEdit = ({ newPaypalId, verifiedInfo }) => {
         onAccept={handleVerifyPhoneModalClick}
       />
 
-      <BaseModal
-        active={activeCodePhoneModal}
-        closeModal={toggleCodePhoneModal}
-      >
-        <span className="sub-title mb-0">
-          <span>Enter Verified Code</span>
-        </span>
-
-        <form className="mt-0" method="get">
-          <span className="small-text">
-            You received a verification code on your mobile phone. Copy and
-            paste it in the field below
-          </span>
-          <div className="form-group mt-2">
-            <input
-              value={phoneCode}
-              onInput={handleInputPhoneCode}
-              type="text"
-              placeholder="Code"
-              name="phoneCode"
-              className="form-control"
-            />
-          </div>
-          {verifyFormError && (
-            <div className="col-12">
-              <div
-                className="alert-dismissible fade show alert alert-danger"
-                role="alert"
-              >
-                {verifyFormError}
-              </div>
-            </div>
-          )}
-          <button type="button" onClick={handleVerifyCode}>
-            Verify
-          </button>
-        </form>
-      </BaseModal>
+      <PhoneVerifiedCodeModal
+        activeModal={activeCodePhoneModal}
+        closeModal={() => setActiveCodePhoneModal(false)}
+        code={phoneCode}
+        handleInputCode={handleInputPhoneCode}
+        verifyFormError={verifyFormError}
+        handleVerifyCode={handleVerifyCode}
+      />
 
       <DashboardNavbar />
       <div className="main-content d-flex flex-column">
