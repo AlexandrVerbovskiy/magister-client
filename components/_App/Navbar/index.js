@@ -3,7 +3,11 @@ import Link from "next/link";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import RegisterTab from "./RegisterTab";
 import LoginTab from "./LoginTab";
-import { generateTwoFactorCode, checkTwoFactorCode } from "../../../services";
+import {
+  generateTwoFactorCode,
+  checkTwoFactorCode,
+  verifyEmail,
+} from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
@@ -18,13 +22,15 @@ import { useListingListClick } from "../../../hooks";
 import VerificationAlert from "../../VerificationAlert";
 import BetaAuthAlert from "../../BetaAuthAlert";
 import MobileNavbar from "../MobileNavbar";
+import EmailVerifiedCodeModal from "./EmailVerifiedCodeModal";
+import { useEffect } from "react";
 
 const Navbar = ({
   canShowSearch = true,
   alwaysSticky = false,
   needBetaAlert = true,
 }) => {
-  const { isAuth, isSupport } = useContext(IndiceContext);
+  const { isAuth, isSupport, success } = useContext(IndiceContext);
 
   const categoryFilterRef = useRef(null);
   const smallCategoryFilterRef = useRef(null);
@@ -74,7 +80,6 @@ const Navbar = ({
   };
 
   if (typeof window !== "undefined") {
-    // browser code
     window.addEventListener("scroll", showStickyMenu);
   }
 
@@ -126,6 +131,33 @@ const Navbar = ({
   const handleChangeCode = (e) => {
     setCode(e.target.value);
     setCodeModalError(null);
+  };
+
+  const [emailVerifiedTab, setEmailVerifiedTab] = useState("login");
+  const [emailVerifiedEmail, setEmailVerifiedEmail] = useState("");
+  const [emailVerifiedCode, setEmailVerifiedCode] = useState("");
+  const [emailVerifiedCodeModalActive, setEmailVerifiedCodeModalActive] =
+    useState(false);
+  const [emailVerifiedCodeModalError, setEmailVerifiedCodeModalError] =
+    useState(null);
+
+  const handleChangeEmailVerifiedCode = (e) => {
+    setEmailVerifiedCode(e.target.value);
+    setEmailVerifiedCodeModalError(null);
+  };
+
+  const handleEmailVerifyCode = async () => {
+    try {
+      const rememberMe = emailVerifiedTab === "login" ? loginRememberMe : false;
+      const res = await verifyEmail(
+        emailVerifiedEmail,
+        emailVerifiedCode,
+        rememberMe
+      );
+      await onLoginPartSuccess(res, "Email verified successfully");
+    } catch (e) {
+      setEmailVerifiedCodeModalError(e.message);
+    }
   };
 
   const handleSelectTypeClick = async (type) => {
@@ -186,6 +218,44 @@ const Navbar = ({
     }
 
     handleSearchClick();
+  };
+
+  const onLoginPartSuccess = async (
+    res,
+    successMessage = "Successfully logged in",
+    tab = "login"
+  ) => {
+    closeModals();
+    console.log(res);
+
+    if (res.emailVerifiedCodeSent) {
+      setEmailVerifiedCodeModalActive(true);
+      setEmailVerifiedEmail(res.email);
+      setEmailVerifiedTab(tab);
+      success.set(successMessage);
+      return;
+    }
+
+    if (res.needCode) {
+      if (res.codeSent) {
+        setCanChangeType(false);
+        setType("email");
+        setCodeModalActive(true);
+      } else {
+        setCanChangeType(true);
+        setTypeModalActive(true);
+      }
+
+      return;
+    }
+
+    await signIn("credentials", {
+      userId: res.userId,
+      authToken: res.authToken,
+      callbackUrl:
+        STATIC.REDIRECTS.EDIT_PROFILE_LINK + "?success=" + successMessage,
+      needRegularViewInfoForm: res.needRegularViewInfoForm,
+    });
   };
 
   const handleSearchClick = () => {
@@ -368,6 +438,17 @@ const Navbar = ({
       )}
 
       {!isAuth && (
+        <EmailVerifiedCodeModal
+          code={emailVerifiedCode}
+          activeModal={emailVerifiedCodeModalActive}
+          closeModal={() => setEmailVerifiedCodeModalActive(false)}
+          handleInputCode={handleChangeEmailVerifiedCode}
+          verifyFormError={emailVerifiedCodeModalError}
+          handleVerifyCode={handleEmailVerifyCode}
+        />
+      )}
+
+      {!isAuth && (
         <>
           <div
             className={
@@ -417,13 +498,9 @@ const Navbar = ({
                         password={loginPassword}
                         setPassword={setLoginPassword}
                         moveToRegister={handleRegisterTabActive}
-                        closeModal={closeModals}
-                        setCanChangeType={setCanChangeType}
-                        setType={setType}
-                        setCodeModalActive={setCodeModalActive}
-                        setTypeModalActive={setTypeModalActive}
                         rememberMe={loginRememberMe}
                         setRememberMe={setLoginRememberMe}
+                        onLoginPartSuccess={onLoginPartSuccess}
                       />
                     </TabPanel>
 
@@ -431,7 +508,13 @@ const Navbar = ({
                       <RegisterTab
                         activePopup={displayAuth}
                         moveToLogin={handleLoginTabActive}
-                        closeModal={closeModals}
+                        onRegisterPartSuccess={(res) =>
+                          onLoginPartSuccess(
+                            res,
+                            "Successfully registration",
+                            "register"
+                          )
+                        }
                       />
                     </TabPanel>
                   </div>

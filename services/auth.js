@@ -69,9 +69,9 @@ export const updateMyPassword = async (
   return data.body.user;
 };
 
-export const verifyEmail = async (email, token) => {
-  const data = await post("/verify-email", { email, token });
-  return data.message;
+export const verifyEmail = async (email, code, rememberMe = false) => {
+  const data = await post("/verify-email", { email, code, rememberMe });
+  return data.body;
 };
 
 export const resetPasswordSend = async (email) => {

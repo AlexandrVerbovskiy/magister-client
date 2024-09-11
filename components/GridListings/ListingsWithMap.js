@@ -647,7 +647,11 @@ const ListingsWithMap = ({
           />
 
           <div className="col-lg-2 col-md-12 p-0 popup-places-filter">
-            <button type="button" className="base-main-button w-100" onClick={mainFilterSubmit}>
+            <button
+              type="button"
+              className="base-main-button w-100"
+              onClick={mainFilterSubmit}
+            >
               Search Now
             </button>
           </div>
@@ -834,7 +838,11 @@ const ListingsWithMap = ({
                         {!hasListings && !canSendCreateNotifyRequest && (
                           <div className="no-listing-found">
                             <div className="image-parent">
-                              <img src="/images/banner-img1.png" alt="image" />
+                              <img
+                                src="/images/no-listings.svg"
+                                style={{ transform: "scale(1.5)" }}
+                                alt="image"
+                              />
                             </div>
 
                             <div className="description">

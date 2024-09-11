@@ -4,10 +4,12 @@ import { signIn } from "next-auth/react";
 import Input from "../components/FormComponents/Input";
 import PasswordInput from "../components/FormComponents/PasswordInput";
 import { IndiceContext } from "../contexts";
-import { register } from "../services";
+import { register, verifyEmail } from "../services";
 import SocialAuth from "../components/_App/Navbar/SocialAuth";
 import { validateEmail, validatePassword } from "../utils";
 import ErrorSpan from "../components/ErrorSpan";
+import EmailVerifiedCodeModal from "../components/_App/Navbar/EmailVerifiedCodeModal";
+import STATIC from "../static";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -26,7 +28,36 @@ const SignUp = () => {
   const [acceptedTermConditionError, setAcceptedTermConditionError] =
     useState(null);
 
-  const { error: mainError } = useContext(IndiceContext);
+  const { error: mainError, success: mainSuccess } = useContext(IndiceContext);
+
+  const [emailVerifiedCode, setEmailVerifiedCode] = useState("");
+  const [emailVerifiedCodeModalActive, setEmailVerifiedCodeModalActive] =
+    useState(false);
+  const [emailVerifiedCodeModalError, setEmailVerifiedCodeModalError] =
+    useState(null);
+
+  const handleChangeEmailVerifiedCode = (e) => {
+    setEmailVerifiedCode(e.target.value);
+    setEmailVerifiedCodeModalError(null);
+  };
+
+  const handleEmailVerifyCode = async () => {
+    try {
+      const res = await verifyEmail(email, emailVerifiedCode);
+      console.log(res);
+
+      await signIn("credentials", {
+        userId: res.userId,
+        authToken: res.authToken,
+        callbackUrl:
+          STATIC.REDIRECTS.EDIT_PROFILE_LINK +
+          "?success=Email verified successfully",
+        needRegularViewInfoForm: res.needRegularViewInfoForm,
+      });
+    } catch (e) {
+      mainError.set(e.message);
+    }
+  };
 
   const handleInputName = (e) => {
     setName(e.target.value);
@@ -55,7 +86,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormError(null);
 
     let error = false;
 
@@ -97,22 +127,17 @@ const SignUp = () => {
     if (error) return;
 
     try {
-      const res = await register({
+      await register({
         password,
         name,
         email,
         acceptedTermCondition,
       });
 
-      await signIn("credentials", {
-        userId: res.userId,
-        authToken: res.authToken,
-        callbackUrl:
-          window.location.pathname + "?success=Successful registered",
-        needRegularViewInfoForm: res.needRegularViewInfoForm,
-      });
+      setEmailVerifiedCodeModalActive(true);
+      mainSuccess.set("Successful registered");
     } catch (e) {
-      mainError.setError(e.message);
+      mainError.set(e.message);
     } finally {
       setPassword("");
       setConfirmPassword("");
@@ -238,6 +263,15 @@ const SignUp = () => {
           </div>
         </div>
       </div>
+
+      <EmailVerifiedCodeModal
+        code={emailVerifiedCode}
+        activeModal={emailVerifiedCodeModalActive}
+        closeModal={() => setEmailVerifiedCodeModalActive(false)}
+        handleInputCode={handleChangeEmailVerifiedCode}
+        verifyFormError={emailVerifiedCodeModalError}
+        handleVerifyCode={handleEmailVerifyCode}
+      />
     </>
   );
 };
