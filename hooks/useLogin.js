@@ -71,8 +71,6 @@ const useLogin = ({
         rememberMe,
       });
 
-      setUser(res.user);
-
       onLoginPartSuccess(res);
     } catch (e) {
       setFormError(e.message);

@@ -45,21 +45,21 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
 
   const router = useRouter();
 
-  const analizeQueryInfo = (param, onChange=null) => {
+  const analizeQueryInfo = (param, onChange = null) => {
     const currentParam = router.query[param];
 
     if (!currentParam) {
       return;
     }
 
-    if(onChange) {
+    if (onChange) {
       onChange(currentParam);
     }
 
     const { query, ...rest } = router.query;
     delete rest[param];
-    
-    if(router.query["callbackUrl"]){
+
+    if (router.query["callbackUrl"]) {
       delete rest["callbackUrl"];
     }
 
@@ -75,7 +75,7 @@ const useMain = ({ userInfo, authToken: baseAuthToken = null }) => {
 
   useEffect(() => {
     analizeQueryInfo("error", (currentParam) => {
-      if(currentParam.toLowerCase()!="callback"){
+      if (currentParam.toLowerCase() != "callback") {
         handleSetError(currentParam);
       }
     });

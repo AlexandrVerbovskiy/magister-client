@@ -17325,8 +17325,6 @@ button.button-danger:hover {
 
 .no-listing-img,
 .loading-pagination-img {
-  width: calc(180px - 65px);
-  height: calc(180px - 65px);
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -17334,7 +17332,18 @@ button.button-danger:hover {
 }
 
 .no-listing-img {
-  background-image: url("/images/banner-img1.png");
+  width: 180px;
+  height: 180px;
+  transform: scale(2);
+}
+
+.loading-pagination-img {
+  width: calc(180px - 65px);
+  height: calc(180px - 65px);
+}
+
+.no-listing-img {
+  background-image: url("/images/no-listings.svg");
 }
 
 .loading-pagination-img {
