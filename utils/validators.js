@@ -105,7 +105,6 @@ export function validateDate(date) {
 }
 
 export function validatePhoneNumber(phoneNumber, countryCode) {
-  console.log(phoneNumber, countryCode, isValidPhoneNumber(phoneNumber, countryCode.toLocaleUpperCase()))
   if (
     phoneNumber &&
     isValidPhoneNumber("+" + phoneNumber, countryCode.toLocaleUpperCase())
