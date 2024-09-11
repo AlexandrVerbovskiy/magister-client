@@ -89,12 +89,12 @@ const Banner = () => {
     setLoading(true);
 
     const img = new Image();
-      img.src = backgroundImages[0].src;
+    img.src = backgroundImages[0].src;
 
-      img.onload = () => {
-        setLoading(false);
-      }
-  });
+    img.onload = () => {
+      setLoading(false);
+    };
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

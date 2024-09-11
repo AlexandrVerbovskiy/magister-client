@@ -4,8 +4,6 @@ import SocialAuth from "./SocialAuth";
 import Link from "next/link";
 import PasswordInput from "../../FormComponents/PasswordInput";
 import { useLogin } from "../../../hooks";
-import { signIn } from "next-auth/react";
-import STATIC from "../../../static";
 
 const LoginTab = ({
   email,
@@ -13,38 +11,12 @@ const LoginTab = ({
   password,
   setPassword,
   moveToRegister,
-  closeModal,
-  setCanChangeType,
-  setType,
-  setCodeModalActive,
-  setTypeModalActive,
   setUser,
   rememberMe,
   setRememberMe,
   activePopup,
+  onLoginPartSuccess,
 }) => {
-  const onLoginPartSuccess = async (res) => {
-    closeModal();
-
-    if (res.needCode) {
-      if (res.codeSent) {
-        setCanChangeType(false);
-        setType("email");
-        setCodeModalActive(true);
-      } else {
-        setCanChangeType(true);
-        setTypeModalActive(true);
-      }
-    } else {
-      await signIn("credentials", {
-        userId: res.userId,
-        authToken: res.authToken,
-        callbackUrl: STATIC.REDIRECTS.SUCCESS_LOGIN,
-        needRegularViewInfoForm: res.needRegularViewInfoForm,
-      });
-    }
-  };
-
   const {
     formError,
     emailError,
