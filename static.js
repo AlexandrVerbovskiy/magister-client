@@ -131,6 +131,7 @@ const config = {
     BANK_TRANSFER: "bank-transfer",
   },
   REDIRECTS: {
+    EDIT_PROFILE_LINK: "/dashboard/profile-edit/",
     SUCCESS_LOGIN: "/dashboard/profile-edit?success=Successfully logged in",
     SUCCESS_LOGOUT: "/?success=Successfully logged out",
   },

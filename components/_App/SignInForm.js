@@ -5,11 +5,17 @@ import Input from "../FormComponents/Input";
 import PasswordInput from "../FormComponents/PasswordInput";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../contexts";
-import { checkTwoFactorCode, generateTwoFactorCode } from "../../services";
+import {
+  checkTwoFactorCode,
+  generateTwoFactorCode,
+  verifyEmail,
+} from "../../services";
 import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn } from "next-auth/react";
 import SocialAuth from "./Navbar/SocialAuth";
+import EmailVerifiedCodeModal from "./Navbar/EmailVerifiedCodeModal";
+import STATIC from "../../static";
 
 const SignInForm = () => {
   const router = useRouter();
@@ -28,12 +34,33 @@ const SignInForm = () => {
 
   const [rememberMe, setRememberMe] = useState(false);
 
+  const [emailVerifiedCode, setEmailVerifiedCode] = useState("");
+  const [emailVerifiedCodeModalActive, setEmailVerifiedCodeModalActive] =
+    useState(false);
+  const [emailVerifiedCodeModalError, setEmailVerifiedCodeModalError] =
+    useState(null);
+
+  const handleChangeEmailVerifiedCode = (e) => {
+    setEmailVerifiedCode(e.target.value);
+    setEmailVerifiedCodeModalError(null);
+  };
+
+  const handleEmailVerifyCode = async () => {
+    try {
+      const res = await verifyEmail(email, emailVerifiedCode, rememberMe);
+      mainSuccess.set("Email verified successfully");
+      await baseOnLogin(res);
+    } catch (e) {
+      setFormError(e.message);
+    }
+  };
+
   const { success: mainSuccess } = useContext(IndiceContext);
 
   const successReloadLink =
-    window.location.pathname + "?success=Successfully logged in";
+    STATIC.REDIRECTS.EDIT_PROFILE_LINK + "?success=Successfully logged in";
 
-  const onLoginPartSuccess = async (res) => {
+  const baseOnLogin = async (res) => {
     if (res.needCode) {
       if (res.codeSent) {
         setCanChangeType(false);
@@ -43,16 +70,28 @@ const SignInForm = () => {
         setCanChangeType(true);
         setTypeModalActive(true);
       }
-    } else {
-      mainSuccess.set("Successfully logged in");
 
-      await signIn("credentials", {
-        userId: res.userId,
-        authToken: res.authToken,
-        callbackUrl: successReloadLink,
-        needRegularViewInfoForm: res.needRegularViewInfoForm,
-      });
+      return;
     }
+
+    mainSuccess.set("Successfully logged in");
+
+    await signIn("credentials", {
+      userId: res.userId,
+      authToken: res.authToken,
+      callbackUrl: successReloadLink,
+      needRegularViewInfoForm: res.needRegularViewInfoForm,
+    });
+  };
+
+  const onLoginPartSuccess = async (res) => {
+    if (res.emailVerifiedCodeSent) {
+      setCanChangeType(false);
+      setEmailVerifiedCodeModalActive(true);
+      return;
+    }
+
+    await baseOnLogin(res);
   };
 
   const {
@@ -263,6 +302,15 @@ const SignInForm = () => {
                 codeModalError={codeModalError}
                 handleCheckCode={handleCheckCode}
                 handleClose={handleCloseCodeModal}
+              />
+
+              <EmailVerifiedCodeModal
+                code={emailVerifiedCode}
+                activeModal={emailVerifiedCodeModalActive}
+                closeModal={() => setEmailVerifiedCodeModalActive(false)}
+                handleInputCode={handleChangeEmailVerifiedCode}
+                verifyFormError={emailVerifiedCodeModalError}
+                handleVerifyCode={handleEmailVerifyCode}
               />
             </div>
           </div>

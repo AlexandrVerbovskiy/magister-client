@@ -180,10 +180,14 @@ export const generateProfileFilePath = (path) => {
   return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
 };
 
-export const initOthersCategory = ({ level = 1, parentId = null } = {}) => ({
+export const initOthersCategory = ({
+  level = 1,
+  parentId = null,
+  image = null,
+} = {}) => ({
   countChildren: 0,
   id: "-",
-  image: null,
+  image: image,
   level: level,
   name: "Others",
   orderIndex: null,

@@ -11,3 +11,7 @@ export const objStringSort = (array, key) =>
 
 export const objDateSort = (array, key, dopKey = null) =>
   array.sort((a, b) => dateCompare(a[key] ?? a[dopKey], b[key] ?? b[dopKey]));
+
+export const sortCategoriesByName = (categories) => {
+  return categories.sort((a, b)=>stringCompare(a.name, b.name));
+};
