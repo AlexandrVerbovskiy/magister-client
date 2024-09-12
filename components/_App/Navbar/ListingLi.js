@@ -1,4 +1,4 @@
-const ListingLi = ({ categoriesLength, handleListingClick }) => {  
+const ListingLi = ({ handleListingClick }) => {
   return (
     <li className="nav-item">
       <a
@@ -7,9 +7,7 @@ const ListingLi = ({ categoriesLength, handleListingClick }) => {
           handleListingClick(e);
         }}
         href="#"
-        className={`${
-          categoriesLength > 0 ? "dropdown-toggle " : ""
-        }nav-link d-none d-xl-block`}
+        className={`nav-link d-none d-xl-block`}
       >
         List An Item
       </a>

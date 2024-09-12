@@ -1,24 +1,13 @@
 // import { useState, useContext } from "react";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import { IndiceContext } from "../../contexts";
 import ListingLi from "./Navbar/ListingLi";
-import ListingPopup from "./Navbar/ListingPopup";
-import useNavListingCategories from "../../hooks/useNavListingCategories";
 import VerificationAlert from "../VerificationAlert";
-import { useIsMobile } from "../../hooks";
+import { useIsMobile, useListingListClick } from "../../hooks";
 
 const NavbarThree = ({ children = null }) => {
   const { isAuth, isSupport } = useContext(IndiceContext);
-
-  const {
-    navbarCategories,
-    handleListingClick,
-    categoriesLength,
-    activePopup,
-    setActivePopup,
-  } = useNavListingCategories();
-
   const [showMenu, setshowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -27,6 +16,9 @@ const NavbarThree = ({ children = null }) => {
 
   const isMobile = useIsMobile();
 
+  const { handleClick: handleListingClick } = useListingListClick({
+    link: "/dashboard/listings/add/",
+  });
   return (
     <>
       <div className="navbar-area">
@@ -67,7 +59,6 @@ const NavbarThree = ({ children = null }) => {
                 </li>
 
                 <ListingLi
-                  categoriesLength={categoriesLength}
                   handleListingClick={handleListingClick}
                 />
 
@@ -109,12 +100,6 @@ const NavbarThree = ({ children = null }) => {
       </div>
 
       <VerificationAlert />
-
-      <ListingPopup
-        active={activePopup}
-        setActive={setActivePopup}
-        categories={navbarCategories}
-      />
     </>
   );
 };
