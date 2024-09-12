@@ -13,8 +13,6 @@ import { useRouter } from "next/router";
 import AuthCodeModal from "./AuthCodeModal";
 import AuthTypeModal from "./AuthTypeModal";
 import { signIn } from "next-auth/react";
-import useSearchCategory from "../../../hooks/useSearchCategory";
-import { getListingSearchLink } from "../../../utils";
 import ListingLi from "./ListingLi";
 import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
@@ -23,49 +21,21 @@ import VerificationAlert from "../../VerificationAlert";
 import BetaAuthAlert from "../../BetaAuthAlert";
 import MobileNavbar from "../MobileNavbar";
 import EmailVerifiedCodeModal from "./EmailVerifiedCodeModal";
-import { useEffect } from "react";
 
 const Navbar = ({
   canShowSearch = true,
   alwaysSticky = false,
   needBetaAlert = true,
 }) => {
-  const { isAuth, isSupport, success } = useContext(IndiceContext);
-
-  const categoryFilterRef = useRef(null);
-  const smallCategoryFilterRef = useRef(null);
-  const [signOutModalActive, setSignOutModalActive] = useState(false);
-
-  const {
-    categoryTipsPopupActive,
-    categoryTips,
-    openCategoryTipsPopup,
-    closeCategoryTipsPopup,
-    updateCategoryTips,
-  } = useSearchCategory();
-
-  const [searchCategory, setSearchCategory] = useState("");
-
   const router = useRouter();
+
+  const { isAuth, isSupport, success } = useContext(IndiceContext);
+  const [signOutModalActive, setSignOutModalActive] = useState(false);
+  const [searchCategory, setSearchCategory] = useState("");
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [sticky, setSticky] = useState(alwaysSticky);
-
-  const handleChangeCategory = (e) => {
-    const newValue = e.target.value;
-    updateCategoryTips(newValue);
-    setSearchCategory(newValue);
-  };
-
-  const handleCategoryTipClick = (value) => {
-    categoryFilterRef.current.blur();
-    smallCategoryFilterRef.current.blur();
-    setSearchCategory(value);
-    updateCategoryTips(value);
-    const link = getListingSearchLink(value);
-    router.push(link);
-  };
 
   const showStickyMenu = () => {
     if (!alwaysSticky) {
@@ -210,16 +180,6 @@ const Navbar = ({
     setTypeModalError(null);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-
-    if (!searchCategory) {
-      return;
-    }
-
-    handleSearchClick();
-  };
-
   const onLoginPartSuccess = async (
     res,
     successMessage = "Successfully logged in",
@@ -256,11 +216,6 @@ const Navbar = ({
         STATIC.REDIRECTS.EDIT_PROFILE_LINK + "?success=" + successMessage,
       needRegularViewInfoForm: res.needRegularViewInfoForm,
     });
-  };
-
-  const handleSearchClick = () => {
-    const link = getListingSearchLink(searchCategory);
-    router.push(link);
   };
 
   const { handleClick: handleListingClick } = useListingListClick({
@@ -323,10 +278,7 @@ const Navbar = ({
                     </Link>
                   </li>
 
-                  <ListingLi
-                    categoriesLength={0}
-                    handleListingClick={handleListingClick}
-                  />
+                  <ListingLi handleListingClick={handleListingClick} />
 
                   {isAuth && (
                     <li className="nav-item">
