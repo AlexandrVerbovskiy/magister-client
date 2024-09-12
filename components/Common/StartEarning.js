@@ -2,8 +2,10 @@ import Link from "next/link";
 import { useListingListClick } from "../../hooks";
 
 const StartEarning = () => {
-  const { handleClick: handleStartEarningClick } = useListingListClick();
-  
+  const { handleClick: handleStartEarningClick } = useListingListClick({
+    link: "/dashboard/listings/add",
+  });
+
   return (
     <section className="category-area pt-100 pb-100">
       <div className="container">

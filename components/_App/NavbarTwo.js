@@ -13,16 +13,12 @@ import { IndiceContext } from "../../contexts";
 import AuthCodeModal from "./Navbar/AuthCodeModal";
 import AuthTypeModal from "./Navbar/AuthTypeModal";
 import { signIn } from "next-auth/react";
-import useSearchCategory from "../../hooks/useSearchCategory";
-import { getListingSearchLink } from "../../utils";
 import ListingLi from "./Navbar/ListingLi";
-import ListingPopup from "./Navbar/ListingPopup";
-import useNavListingCategories from "../../hooks/useNavListingCategories";
 import STATIC from "../../static";
 import SignOutModal from "./SignOutModal";
 import VerificationAlert from "../VerificationAlert";
 import MobileNavbar from "./MobileNavbar";
-import { useIsMobile } from "../../hooks";
+import { useIsMobile, useListingListClick } from "../../hooks";
 import EmailVerifiedCodeModal from "./Navbar/EmailVerifiedCodeModal";
 
 const NavbarTwo = ({
@@ -33,42 +29,11 @@ const NavbarTwo = ({
 }) => {
   const { isAuth, isSupport, success } = useContext(IndiceContext);
 
-  const {
-    navbarCategories,
-    handleListingClick,
-    categoriesLength,
-    activePopup,
-    setActivePopup,
-  } = useNavListingCategories();
-
-  const categoryFilterRef = useRef(null);
-  const smallCategoryFilterRef = useRef(null);
   const [signOutModalActive, setSignOutModalActive] = useState(false);
-
-  const { updateCategoryTips } = useSearchCategory();
-
-  const [searchCategory, setSearchCategory] = useState("");
-
-  const router = useRouter();
 
   const [displayAuth, setDisplayAuth] = useState(false);
   const [displayMiniAuth, setDisplayMiniAuth] = useState(false);
   const [sticky, setSticky] = useState(true);
-
-  const handleChangeCategory = (e) => {
-    const newValue = e.target.value;
-    updateCategoryTips(newValue);
-    setSearchCategory(newValue);
-  };
-
-  const handleCategoryTipClick = (value) => {
-    categoryFilterRef.current.blur();
-    smallCategoryFilterRef.current.blur();
-    setSearchCategory(value);
-    updateCategoryTips(value);
-    const link = getListingSearchLink(value);
-    router.push(link, undefined, { unstable_skipClientCache: true });
-  };
 
   //sticky menu
 
@@ -94,9 +59,6 @@ const NavbarTwo = ({
     setLoginEmail("");
     setLoginPassword("");
     setLoginRememberMe(false);
-  };
-  const toggleMiniAuth = () => {
-    setDisplayMiniAuth(!displayMiniAuth);
   };
 
   const closeModals = () => {
@@ -213,13 +175,6 @@ const NavbarTwo = ({
     setTypeModalError(null);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (!searchCategory) return;
-
-    handleSearchClick();
-  };
-
   const onLoginPartSuccess = async (
     res,
     successMessage = "Successfully logged in",
@@ -258,12 +213,9 @@ const NavbarTwo = ({
     });
   };
 
-  const handleSearchClick = () => {
-    const link = getListingSearchLink(searchCategory);
-    router.push(link);
-    setSearchCategory("");
-    document.querySelector(".navbar-search-box input").blur();
-  };
+  const { handleClick: handleListingClick } = useListingListClick({
+    link: "/dashboard/listings/add/",
+  });
 
   const isMobile = useIsMobile();
 
@@ -363,10 +315,7 @@ const NavbarTwo = ({
                     </Link>
                   </li>
 
-                  <ListingLi
-                    categoriesLength={categoriesLength}
-                    handleListingClick={handleListingClick}
-                  />
+                  <ListingLi handleListingClick={handleListingClick} />
 
                   {isAuth && (
                     <li className="nav-item">
@@ -561,7 +510,11 @@ const NavbarTwo = ({
                         activePopup={displayAuth}
                         moveToLogin={handleLoginTabActive}
                         onRegisterPartSuccess={(res) =>
-                          onLoginPartSuccess(res, "Successfully registration", "register")
+                          onLoginPartSuccess(
+                            res,
+                            "Successfully registration",
+                            "register"
+                          )
                         }
                       />
                     </TabPanel>
@@ -583,12 +536,6 @@ const NavbarTwo = ({
           handleVerifyCode={handleEmailVerifyCode}
         />
       )}
-
-      <ListingPopup
-        active={activePopup}
-        setActive={setActivePopup}
-        categories={navbarCategories}
-      />
 
       {isAuth && (
         <SignOutModal
