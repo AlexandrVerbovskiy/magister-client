@@ -45,7 +45,9 @@ const rentingSafelyAndSecurityOptions = [
 ];
 
 const HowItWorks = () => {
-  const { handleClick: handleStartEarningClick } = useListingListClick();
+  const { handleClick: handleStartEarningClick } = useListingListClick({
+    link: "/dashboard/listings/add",
+  });
 
   return (
     <>

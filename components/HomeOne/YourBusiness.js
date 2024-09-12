@@ -20,7 +20,9 @@ const YourBusiness = () => {
       image: "/images/home/icons-how_it_works-2_contact.png",
     },
   ];*/
-  const { handleClick: handleStartEarningClick } = useListingListClick();
+  const { handleClick: handleStartEarningClick } = useListingListClick({
+    link: "/dashboard/listings/add",
+  });
 
   const items = [
     {
