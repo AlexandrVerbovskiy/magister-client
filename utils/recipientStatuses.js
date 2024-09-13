@@ -1,8 +1,10 @@
-import { dateConverter, getDaysDifference, separateDate } from "./dateHelpers";
+import { dateConverter, separateDate } from "./dateHelpers";
+import STATIC from "../static";
 
 export default ({
   status,
   plannedTime,
+  orderStatus,
   admin = false,
   failedDescription = null,
 }) => {
@@ -16,9 +18,17 @@ export default ({
   } else if (status == "cancelled") {
     return "The operation was canceled by the customer before it started";
   } else {
-    return plannedTime != separateDate(new Date())
-      ? "The operation will be executed on the scheduled day: " +
-          dateConverter(plannedTime)
-      : "The operation will be performed during the day";
+    if (new Date(plannedTime) > new Date(separateDate(new Date()))) {
+      return (
+        "The operation will be executed on the scheduled day: " +
+        dateConverter(plannedTime)
+      );
+    }
+
+    if (orderStatus != STATIC.ORDER_STATUSES.FINISHED) {
+      return "The operation will be carried out once the order is completed.";
+    }
+
+    return "The operation will be performed during the day";
   }
 };
