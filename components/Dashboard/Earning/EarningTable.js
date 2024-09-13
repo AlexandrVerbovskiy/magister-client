@@ -61,6 +61,7 @@ const EarningTable = ({
   orderId,
   id,
   plannedTime,
+  orderStatus,
 }) => {
   let typeText = "Unknown";
   let recipientNumber = "-";
@@ -99,6 +100,7 @@ const EarningTable = ({
       plannedTime: plannedTime,
       admin: true,
       failedDescription: failedDescription,
+      orderStatus: orderStatus,
     });
   }
 

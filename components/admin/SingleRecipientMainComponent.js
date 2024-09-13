@@ -88,6 +88,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
       plannedTime: recipient.plannedTime,
       admin: true,
       failedDescription: recipient.failedDescription,
+      orderStatus: recipient.orderStatus,
     });
   }
 
