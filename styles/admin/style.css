@@ -707,3 +707,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   word-break: break-all;
   max-width: 100%;
 }
+
+.mt-0-important {
+  margin-top: 0 !important;
+}

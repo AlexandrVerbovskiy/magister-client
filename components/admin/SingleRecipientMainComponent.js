@@ -9,6 +9,7 @@ import {
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
+  recipientStatuses,
 } from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
@@ -16,6 +17,7 @@ import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
 import AcceptModal from "./RecipientPayments/AcceptModal";
 import STATIC from "../../static";
+import StatusSpan from "./RecipientPayments/StatusSpan";
 
 const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const { authToken } = useContext(IndiceContext);
@@ -24,8 +26,11 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const router = useRouter();
   const [doneAcceptModalOpen, setDoneAcceptModalOpen] = useState(false);
 
-  const handleDoneAcceptClick = async () => {
-    await waitingRefundMarkAsDone({ id: recipient.id }, authToken);
+  const handleDoneAcceptClick = async ({ type, paypalId, cardNumber }) => {
+    await waitingRefundMarkAsDone(
+      { id: recipient.id, type, paypalId, cardNumber },
+      authToken
+    );
     router.push("/admin/payments/recipients/");
   };
 
@@ -37,17 +42,53 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   );
 
   let paymentNumber = "-";
+  let paymentNumberLabel = "Payment Number";
 
-  if(isPayedUsedPaypal(recipient.type)){
-    if(recipient.data?.paypalId && recipient.data?.paypalId!="-"){
-      paymentNumber = recipient.data?.paypalId;
-    }else{
+  if (isPayedUsedPaypal(recipient.type)) {
+    if (recipient.data?.paypalId && recipient.data?.paypalId != "-") {
+      paymentNumber = recipient.data.paypalId;
+      paymentNumberLabel = "Payment Paypal Id";
+    } else {
       paymentNumber = recipient.recipientPaypalId;
+      paymentNumberLabel = "Recipient Paypal Id";
     }
-  }else{
-    if(recipient.data?.cardNumber){
+  } else {
+    if (recipient.data?.cardNumber) {
       paymentNumber = recipient.data?.cardNumber;
     }
+
+    paymentNumberLabel = "Payment Number";
+  }
+
+  let operationMessageClasses =
+    "bg-amber-100 dark:bg-amber-400/30 text-amber-600 dark:text-amber-400";
+  let operationMessage = "Operation waiting admin approve";
+
+  if (recipient.status == "failed") {
+    operationMessageClasses =
+      "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
+    operationMessage = "Operation mark as failed";
+  }
+
+  if (recipient.status == "completed") {
+    operationMessageClasses =
+      "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
+    operationMessage = "Operation mark as finished";
+  }
+
+  if (recipient.status == "cancelled") {
+    operationMessageClasses =
+      "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400";
+    operationMessage = "Operation mark as cancelled";
+  }
+
+  if (recipient.receivedType === "rental") {
+    operationMessage = recipientStatuses({
+      status: recipient.status,
+      plannedTime: recipient.plannedTime,
+      admin: true,
+      failedDescription: recipient.failedDescription,
+    });
   }
 
   return (
@@ -76,9 +117,17 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
-                      <h2 className="max-w-full overflow-separate text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5">
-                        Payment Details
+                      <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
+                        <div className="order-form-title max-w-full overflow-separate">
+                          Payment Details
+                        </div>
                       </h2>
+
+                      <div
+                        className={`min-w-fit form-input w-full mt-2 mb-1 font-semibold ${operationMessageClasses}`}
+                      >
+                        {operationMessage}
+                      </div>
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
@@ -274,19 +323,6 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               </div>
                             </div>
                           </div>
-
-                          {recipient.failedDescription && (
-                            <div className="flex flex-col gap-2">
-                              <div className="flex w-full gap-2">
-                                <div className="w-full">
-                                  <div className="text-wrap inline-flex font-medium rounded p-2.5 bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400 w-full mt-4">
-                                    Rejected description:{" "}
-                                    {recipient.failedDescription}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
                         </section>
                       )}
 
@@ -336,9 +372,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                               <div className="w-full sm:w-1/2">
                                 <InputView
                                   value={paymentNumber}
-                                  label="Payment Number"
+                                  label={paymentNumberLabel}
                                   name="payment-money"
-                                  placeholder="Payment Number"
+                                  placeholder={paymentNumberLabel}
                                   labelClassName="block text-sm font-medium mb-1"
                                   inputClassName="form-input w-full"
                                 />
@@ -398,9 +434,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
           </div>
 
           <AcceptModal
-            active={doneAcceptModalOpen}
+            active={!!doneAcceptModalOpen}
             close={() => setDoneAcceptModalOpen(false)}
             onAcceptClick={handleDoneAcceptClick}
+            defaultPaypalId={recipient.recipientPaypalId}
           />
         </main>
       </div>

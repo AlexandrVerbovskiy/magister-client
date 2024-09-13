@@ -24,6 +24,7 @@ export { default as splitBlob } from "./splitBlob";
 export { default as isOrderCanBeAccepted } from "./isOrderCanBeAccepted";
 export { default as getCityCoords } from "./getCityCoords";
 export { default as scrollToElementParent } from "./scrollToElementParent";
+export { default as recipientStatuses } from "./recipientStatuses";
 export * from "./convertToBlob";
 export * from "./listPageParams";
 export * from "./getListingSearchLink";
