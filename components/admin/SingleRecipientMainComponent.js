@@ -323,7 +323,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                                 <InputView
                                   value={
                                     isPayedUsedPaypal(recipient.type)
-                                      ? recipient.data?.paypalId ?? "-"
+                                      ? recipient.data?.paypalId ?? recipient.recipientPaypalId ?? "-"
                                       : recipient.data?.cardNumber ?? "-"
                                   }
                                   label="Payment Number"
