@@ -9,6 +9,7 @@ import {
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
+  recipientStatuses,
 } from "../../../utils";
 
 const Status = ({ status, receivedType }) => {
@@ -59,6 +60,7 @@ const EarningTable = ({
   ownerFee,
   orderId,
   id,
+  plannedTime,
 }) => {
   let typeText = "Unknown";
   let recipientNumber = "-";
@@ -71,6 +73,33 @@ const EarningTable = ({
     } else {
       recipientNumber = data.cardNumber;
     }
+  }
+
+  let operationMessageClasses = "status-background-orange";
+  let operationMessage = "Operation waiting admin approve";
+
+  if (status == "failed") {
+    operationMessageClasses = "status-background-red";
+    operationMessage = "Operation mark as failed";
+  }
+
+  if (status == "completed") {
+    operationMessageClasses = "status-background-green";
+    operationMessage = "Operation mark as finished";
+  }
+
+  if (status == "cancelled") {
+    operationMessageClasses = "status-background-gray";
+    operationMessage = "Operation mark as cancelled";
+  }
+
+  if (receivedType === "rental") {
+    operationMessage = recipientStatuses({
+      status: status,
+      plannedTime: plannedTime,
+      admin: true,
+      failedDescription: failedDescription,
+    });
   }
 
   return (
@@ -243,6 +272,17 @@ const EarningTable = ({
             </div>
           </>
         )}
+
+        <div className="row">
+          <div className="col-12">
+            <div
+              style={{ paddingRight: "15px", paddingLeft: "15px" }}
+              className={`d-flex align-items-center form-control bookings-status order-item-status mb-4 ${operationMessageClasses}`}
+            >
+              {operationMessage}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
