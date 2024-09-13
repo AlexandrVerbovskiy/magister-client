@@ -1,5 +1,5 @@
 import View from "../FastActions/View";
-import {moneyFormatVisual } from "../../../utils";
+import { moneyFormatVisual } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import { useContext, useState } from "react";
 import ShowMore from "../FastActions/ShowMore";
@@ -77,6 +77,7 @@ const TableItem = ({
   recipientEmail,
   recipientPhone,
   recipientPhoto,
+  recipientPaypalId,
   viewPath,
   listingId,
   listingName,
@@ -190,6 +191,16 @@ const TableItem = ({
                         : "-"
                     }
                   />
+                  {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.RENTAL && (
+                    <>
+                      <SubInfoRow label="Recipient Type" value="Paypal" />
+                      <SubInfoRow
+                        label="Paypal Id"
+                        value={recipientPaypalId ?? "-"}
+                      />
+                    </>
+                  )}
+
                   {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND && (
                     <>
                       {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
