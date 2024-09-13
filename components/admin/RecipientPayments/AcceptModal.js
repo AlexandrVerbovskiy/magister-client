@@ -195,6 +195,11 @@ const AcceptModal = ({
             )}
           </div>
 
+          <div style={{ marginLeft: "calc(-40px - 1rem)" }}>
+            <b>WARNING!</b> This operation does not transfer funds. You are only
+            confirming that the money has been transferred to the user!
+          </div>
+
           <div className="flex flex-wrap justify-end space-x-2">
             <button
               disabled={disabled}
