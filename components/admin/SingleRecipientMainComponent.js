@@ -36,6 +36,20 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     recipient.offerPricePerDay
   );
 
+  let paymentNumber = "-";
+
+  if(isPayedUsedPaypal(recipient.type)){
+    if(recipient.data?.paypalId && recipient.data?.paypalId!="-"){
+      paymentNumber = recipient.data?.paypalId;
+    }else{
+      paymentNumber = recipient.recipientPaypalId;
+    }
+  }else{
+    if(recipient.data?.cardNumber){
+      paymentNumber = recipient.data?.cardNumber;
+    }
+  }
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -321,11 +335,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                               <div className="w-full sm:w-1/2">
                                 <InputView
-                                  value={
-                                    isPayedUsedPaypal(recipient.type)
-                                      ? recipient.data?.paypalId ?? recipient.recipientPaypalId ?? "-"
-                                      : recipient.data?.cardNumber ?? "-"
-                                  }
+                                  value={paymentNumber}
                                   label="Payment Number"
                                   name="payment-money"
                                   placeholder="Payment Number"
