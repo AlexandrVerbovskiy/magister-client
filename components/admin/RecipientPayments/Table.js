@@ -2,10 +2,11 @@ import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import TableItem from "./TableItem";
 import { waitingRefundMarkAsDone } from "../../../services";
-import AcceptModal from "../SenderPayments/AcceptModal";
+import AcceptModal from "./AcceptModal";
 import { IndiceContext } from "../../../contexts";
 import PaginationLoading from "../PaginationLoading";
 import EmptyTable from "../EmptyTable";
+import STATIC from "../../../static";
 
 const RecipientPaymentsTable = ({
   payments,
@@ -37,15 +38,29 @@ const RecipientPaymentsTable = ({
   ];
 
   const [popupApproveId, setPopupApproveId] = useState(null);
+  const [popupApprovePaypalId, setPopupApprovePaypalId] = useState("");
+
   const { authToken } = useContext(IndiceContext);
 
-  const handleAccept = async () => {
+  const handleAccept = async ({ type, paypalId, cardNumber }) => {
     const payment = payments.find((payment) => payment.id === popupApproveId);
 
-    await waitingRefundMarkAsDone({ id: payment.id }, authToken);
+    await waitingRefundMarkAsDone(
+      { id: payment.id, type, paypalId, cardNumber },
+      authToken
+    );
+
+    const newData =
+      type == STATIC.PAYMENT_TYPES.CREDIT_CARD ? { cardNumber } : { paypalId };
 
     setItemFields(
-      { adminApproved: true, waitingApproved: false, status: "completed" },
+      {
+        adminApproved: true,
+        waitingApproved: false,
+        status: "completed",
+        type,
+        data: newData,
+      },
       payment.id
     );
   };
@@ -85,7 +100,10 @@ const RecipientPaymentsTable = ({
                     key={payment.id}
                     {...payment}
                     viewPath={viewPath}
-                    handleApproveClick={(id) => setPopupApproveId(id)}
+                    handleApproveClick={() => {
+                      setPopupApproveId(payment.id);
+                      setPopupApprovePaypalId(payment.recipientPaypalId);
+                    }}
                   />
                 ))}
             </tbody>
@@ -98,9 +116,13 @@ const RecipientPaymentsTable = ({
       </div>
 
       <AcceptModal
-        active={popupApproveId}
-        close={() => setPopupApproveId(null)}
+        active={!!popupApproveId}
+        close={() => {
+          setPopupApproveId(null);
+          setPopupApprovePaypalId("");
+        }}
         onAcceptClick={handleAccept}
+        defaultPaypalId={popupApprovePaypalId}
       />
     </div>
   );

@@ -8,6 +8,7 @@ import SubInfoTitle from "../SubInfoTitle";
 import TableDateView from "../TableDateView";
 import STATIC from "../../../static";
 import TableUserLink from "../TableUserLink";
+import StatusSpan from "./StatusSpan";
 
 const TypeSpan = ({ type }) => {
   let dopClass =
@@ -18,38 +19,6 @@ const TypeSpan = ({ type }) => {
     dopClass =
       "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400";
     text = "Refund";
-  }
-
-  return (
-    <div
-      className={`text-xs inline-flex font-medium ${dopClass} rounded-full text-center px-2.5 py-1 overflow-separate`}
-    >
-      {text}
-    </div>
-  );
-};
-
-const StatusSpan = ({ status }) => {
-  let dopClass =
-    "bg-amber-100 dark:bg-amber-400/30 text-amber-600 dark:text-amber-400";
-  let text = "Waiting";
-
-  if (status == "failed") {
-    dopClass =
-      "bg-rose-100 dark:bg-rose-500/30 text-rose-500 dark:text-rose-400";
-    text = "Failed";
-  }
-
-  if (status == "completed") {
-    dopClass =
-      "bg-emerald-100 dark:bg-emerald-400/30 text-emerald-600 dark:text-emerald-400";
-    text = "Completed";
-  }
-
-  if (status == "cancelled") {
-    dopClass =
-      "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400";
-    text = "Cancelled";
   }
 
   return (
@@ -191,35 +160,25 @@ const TableItem = ({
                         : "-"
                     }
                   />
-                  {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.RENTAL && (
+                  {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
                     <>
-                      <SubInfoRow label="Recipient Type" value="Paypal" />
-                      <SubInfoRow
-                        label="Paypal Id"
-                        value={recipientPaypalId ?? "-"}
-                      />
+                      <SubInfoRow label="Recipient Type" value="Credit Card" />
+                      <SubInfoRow label="Card Number" value={data.cardNumber} />
                     </>
                   )}
-
-                  {receivedType == STATIC.RECIPIENT_PAYMENT_TYPES.REFUND && (
+                  {type == STATIC.PAYMENT_TYPES.PAYPAL && (
                     <>
-                      {type == STATIC.PAYMENT_TYPES.BANK_TRANSFER && (
-                        <>
-                          <SubInfoRow
-                            label="Recipient Type"
-                            value="Credit Card"
-                          />
-                          <SubInfoRow
-                            label="Card Number"
-                            value={data.cardNumber}
-                          />
-                        </>
-                      )}
-                      {type == STATIC.PAYMENT_TYPES.PAYPAL && (
-                        <>
-                          <SubInfoRow label="Recipient Type" value="Paypal" />
-                          <SubInfoRow label="Paypal Id" value={data.paypalId} />
-                        </>
+                      <SubInfoRow label="Recipient Type" value="Paypal" />
+                      {data?.paypalId ? (
+                        <SubInfoRow
+                          label="Payment Paypal Id"
+                          value={data.paypalId}
+                        />
+                      ) : (
+                        <SubInfoRow
+                          label="Recipient Paypal Id"
+                          value={recipientPaypalId}
+                        />
                       )}
                     </>
                   )}

@@ -11,7 +11,14 @@ export const getAdminRecipientPaymentList = async (body, authToken) => {
   return data.body;
 };
 
-export const waitingRefundMarkAsDone = async ({ id }, authToken) => {
-  const data = await post("/completed", { id }, authToken);
+export const waitingRefundMarkAsDone = async (
+  { id, type, paypalId, cardNumber },
+  authToken
+) => {
+  const data = await post(
+    "/completed",
+    { id, type, paypalId, cardNumber },
+    authToken
+  );
   return data.body;
 };
