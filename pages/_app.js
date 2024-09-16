@@ -112,7 +112,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 
 function MyApp({ Component, pageProps }) {
   const [scriptLoading, setScriptLoading] = useState(true);
-  const [pageLoading, setPageLoading] = useState(false);
 
   const pageType = pageProps.pageType;
   const pageTitle = pageProps.pageTitle ?? "RentAbout";
@@ -120,6 +119,9 @@ function MyApp({ Component, pageProps }) {
   const authToken = pageProps.authToken;
   const categories = pageProps.categories ?? {};
   const globalError = pageProps.globalError ?? null;
+  const basePageLoading = pageProps.pageLoading ?? false;
+
+  const [pageLoading, setPageLoading] = useState(basePageLoading);
 
   const io = useSocketInit({ authToken });
 

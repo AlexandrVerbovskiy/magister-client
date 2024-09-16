@@ -33,30 +33,30 @@ const Index = ({ categories }) => {
     <>
       <Navbar canShowSearch={false} />
 
-        <Banner popularCategories={popularCategories} />
+      <Banner popularCategories={popularCategories} />
 
-        <YourBusiness />
+      <YourBusiness />
 
-        <SafeWithUs />
+      <SafeWithUs />
 
-        <Category topCategories={topCategories} />
+      <Category topCategories={topCategories} />
 
-        <UnlockAccess />
+      <UnlockAccess />
 
-        <StartEarning />
+      <StartEarning />
 
-        <DestinationsTwo bgColor="bg-f9f9f9" />
+      <DestinationsTwo bgColor="bg-f9f9f9" />
 
-        {/*<ListingArea listings={topListings} />*/}
+      {/*<ListingArea listings={topListings} />*/}
 
-        <Footer />
+      <Footer />
     </>
   );
 };
 
 const boostServerSideProps = async ({ baseSideProps }) => {
   const options = await getIndexOptions(baseSideProps.authToken);
-  return { ...options };
+  return { ...options, pageLoading: true };
 };
 
 export const getServerSideProps = (context) =>
