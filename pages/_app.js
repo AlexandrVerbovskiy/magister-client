@@ -112,7 +112,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 
 function MyApp({ Component, pageProps }) {
   const [scriptLoading, setScriptLoading] = useState(true);
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
 
   const pageType = pageProps.pageType;
   const pageTitle = pageProps.pageTitle ?? "RentAbout";
