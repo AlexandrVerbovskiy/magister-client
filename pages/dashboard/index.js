@@ -41,8 +41,7 @@ const Sort = ({ handleChangeFilterDuration, durationFilter }) => {
 
 const Dashboard = (props) => {
   const router = useRouter();
-  const { setLoading, sessionUser, authToken, error } =
-    useContext(IndiceContext);
+  const { sessionUser, authToken, error } = useContext(IndiceContext);
   const [durationFilter, setDurationFilter] = useState("last-month");
   const [disabled, setDisabled] = useState(false);
 
@@ -55,10 +54,6 @@ const Dashboard = (props) => {
     disputeTotalDatesCount: props.disputeTotalDatesCount,
     disputeStatisticInfo: props.disputeStatisticInfo,
   });
-
-  useEffect(() => {
-    setLoading(false);
-  }, []);
 
   const handleChangeFilterDuration = async (duration) => {
     if (disabled) {
