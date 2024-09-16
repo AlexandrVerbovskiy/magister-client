@@ -56,7 +56,7 @@ const Index = ({ categories }) => {
 
 const boostServerSideProps = async ({ baseSideProps }) => {
   const options = await getIndexOptions(baseSideProps.authToken);
-  return { ...options };
+  return { ...options, pageLoading: true };
 };
 
 export const getServerSideProps = (context) =>

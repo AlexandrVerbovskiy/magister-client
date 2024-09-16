@@ -550,7 +550,7 @@ const boostServerSideProps = async ({ baseSideProps, context }) => {
     baseSideProps.authToken
   );
 
-  return { ...options };
+  return { ...options, pageLoading: true };
 };
 
 export const getServerSideProps = (context) =>
