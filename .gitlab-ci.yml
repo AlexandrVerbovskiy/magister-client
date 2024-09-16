@@ -1,0 +1,23 @@
+stages:
+  - deploy
+
+
+image: ubuntu
+
+before_script:
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 775 ~/.ssh
+  - ssh-keyscan $DEV_HOST >> ~/.ssh/known_hosts
+  - chmod 775 ~/.ssh/known_hosts
+  - echo $GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY
+
+deploy to master:
+  stage: deploy
+  script:
+    - ssh $REMOTE_USER@$DEV_HOST -p $HOST_PORT "cd $STAGING_DIR && git remote set-url origin $GIT_PROTOCOL$GIT_LOGIN":"$GIT_PASS"@"$GIT_REPOSITORY && git pull origin master  && npm install && npm run build && pm2 update"
+  only:
+    - master
+

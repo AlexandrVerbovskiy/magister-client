@@ -1,0 +1,23 @@
+version: 0.2
+
+env:
+  variables:
+    REPO_NAME: "client"
+
+phases:
+  build:
+    commands:
+      # Conditionally set the tag based on the environment
+      - if [ "$ENVIRONMENT" == "dev" ]; then
+          TAG="dev-latest";
+        else
+          TAG="latest";
+        fi
+      ## Deploy
+      - cd terraform/app/$ENVIRONMENT/
+      - terraform init
+      - terraform plan -var image=211125642419.dkr.ecr.eu-west-2.amazonaws.com/$REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION -out plan.terraform
+
+artifacts:
+  files:
+    - '**/*'

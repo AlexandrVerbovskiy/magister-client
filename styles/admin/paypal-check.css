@@ -1,0 +1,160 @@
+.paypal-check-wrapper {
+  --size-coef: 1;
+}
+
+.paypal-check-wrapper {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  font-size: calc(12px / var(--size-coef));
+  overflow-y: auto;
+}
+
+.paypal-check-wrapper table {
+  table-layout: fixed;
+}
+
+.paypal-check-wrapper .receipt-container {
+  background-color: #fff;
+  width: 350px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+.paypal-check-wrapper .paypal-logo {
+  width: calc(100px / var(--size-coef));
+}
+.paypal-check-wrapper .receipt-body h1 {
+  font-size: calc(18px / var(--size-coef));
+  color: #333;
+  margin: 0;
+}
+.paypal-check-wrapper .amount {
+  font-weight: bold;
+}
+.paypal-check-wrapper .details-link {
+  color: #0070ba;
+  cursor: pointer;
+}
+.paypal-check-wrapper .confirmation {
+  margin-bottom: calc(20px / var(--size-coef));
+  display: flex;
+  justify-content: center;
+}
+
+.paypal-check-wrapper .confirmation svg {
+  height: calc(80px / var(--size-coef));
+  width: calc(80px / var(--size-coef));
+}
+
+.paypal-check-wrapper .checkmark {
+  width: calc(50px / var(--size-coef));
+}
+.paypal-check-wrapper .payment-info,
+.paypal-check-wrapper .purchase-details,
+.paypal-check-wrapper .merchant-details {
+  text-align: left;
+  margin-bottom: calc(20px / var(--size-coef));
+}
+.paypal-check-wrapper .item-details,
+.paypal-check-wrapper .summary {
+  text-align: left;
+}
+.paypal-check-wrapper .item-details table:not(:first-child),
+.paypal-check-wrapper .summary table:first-child {
+  text-align: left;
+  border-bottom: 1px solid #e1e4e4;
+  padding: calc(10px / var(--size-coef)) 0;
+  margin: 0;
+}
+.paypal-check-wrapper .item-details .row:first-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.paypal-check-wrapper .item-details table:last-child {
+  padding-top: 0 !important;
+}
+.paypal-check-wrapper .row.item-id {
+  font-size: calc(10px / var(--size-coef));
+  font-weight: 600;
+}
+.paypal-check-wrapper .summary table:last-child {
+  margin-bottom: 0;
+  padding-top: calc(10px / var(--size-coef));
+}
+.paypal-check-wrapper .payment-info .row,
+.paypal-check-wrapper .purchase-details .row,
+.paypal-check-wrapper .merchant-details .row {
+  margin: calc(5px / var(--size-coef)) 0;
+}
+.paypal-check-wrapper .return-btn {
+  width: 100%;
+  padding: calc(10px / var(--size-coef));
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  margin-top: calc(20px / var(--size-coef));
+}
+.paypal-check-wrapper .return-btn:hover {
+  background-color: #e0e0e0;
+}
+.paypal-check-wrapper .top-section {
+  background-color: #f6f8f9;
+  padding: calc(40px / var(--size-coef)) calc(20px / var(--size-coef)) calc(20px / var(--size-coef));
+  border-bottom: 1px solid #f1f1f1;
+}
+.paypal-check-wrapper .header {
+  padding: calc(20px / var(--size-coef));
+  border-bottom: 1px solid #f1f1f1;
+  text-align: left;
+}
+.paypal-check-wrapper .bottom-section {
+  padding: calc(20px / var(--size-coef)) calc(40px / var(--size-coef));
+}
+.paypal-check-wrapper .top-section h1 {
+  font-weight: 400;
+  margin-bottom: calc(12px / var(--size-coef));
+}
+.paypal-check-wrapper .top-section > p {
+  margin: 0;
+}
+.paypal-check-wrapper .details-link {
+  margin-bottom: calc(42px / var(--size-coef)) !important;
+}
+.paypal-check-wrapper .item-id .amount {
+  font-weight: 400;
+}
+.paypal-check-wrapper .summary .total {
+  font-weight: 600;
+}
+.paypal-check-wrapper .currency {
+  font-weight: 400;
+  font-size: calc(8px / var(--size-coef));
+}
+.paypal-check-wrapper .row {
+  font-size: calc(12px / var(--size-coef));
+}
+.paypal-check-wrapper table {
+  width: 100%;
+}
+.paypal-check-wrapper td:last-child:not(:first-child) {
+  text-align: right;
+}
+
+.paypal-check-wrapper table .title {
+  text-wrap: wrap;
+}
+
+/*small-size*/
+
+.paypal-check-wrapper.small-size {
+  --size-coef: 3;
+}
+
+.paypal-check-wrapper.small-size {
+  width: 100%;
+}
+
+.paypal-check-wrapper.small-size .receipt-container {
+  width: 100%;
+}

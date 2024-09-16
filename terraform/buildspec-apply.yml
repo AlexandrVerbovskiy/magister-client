@@ -1,0 +1,17 @@
+version: 0.2
+env:
+  variables:
+    REPO_NAME: "client"
+
+phases:
+  build:
+    commands:
+      # Conditionally set the tag based on the environment
+      - if [ "$ENVIRONMENT" == "dev" ]; then
+          TAG="dev-latest";
+        else
+          TAG="latest";
+        fi
+      ## Deploy
+      - cd terraform/app/$ENVIRONMENT/
+      - terraform apply plan.terraform
