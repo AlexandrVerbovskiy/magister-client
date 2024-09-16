@@ -59,7 +59,6 @@ const Banner = () => {
   
   useEffect(() => {
     setLoading(true);
-    console.log("refresh")
 
     const img = new Image();
     img.src = backgroundImages[0].src;
