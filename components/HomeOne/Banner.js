@@ -56,37 +56,10 @@ const Banner = () => {
   ];
 
   const { setLoading } = useContext(IndiceContext);
-  const loadedImagesRef = useRef({});
-
-  /*const loadImage = (src, key) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = () => {
-        loadedImagesRef.current[key] = true;
-        resolve();
-      };
-    });
-  };
-
-  useEffect(() => {
-    const loadImagesAsync = async () => {
-      setLoading(true);
-
-      const promises = backgroundImages.map((image) => {
-        loadedImagesRef.current[image.key] = false;
-        return loadImage(image.src, image.key);
-      });
-
-      await Promise.all(promises);
-      setLoading(false);
-    };
-
-    loadImagesAsync();
-  }, []);*/
-
+  
   useEffect(() => {
     setLoading(true);
+    console.log("refresh")
 
     const img = new Image();
     img.src = backgroundImages[0].src;

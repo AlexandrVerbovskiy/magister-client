@@ -111,10 +111,11 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
 };
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(true);
+  const [scriptLoading, setScriptLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const pageType = pageProps.pageType;
-  const pageTitle = pageProps.pageTitle??"RentAbout";
+  const pageTitle = pageProps.pageTitle ?? "RentAbout";
   const sessionUser = pageProps.sessionUser;
   const authToken = pageProps.authToken;
   const categories = pageProps.categories ?? {};
@@ -124,9 +125,9 @@ function MyApp({ Component, pageProps }) {
 
   useImportGlobalStyle({
     type: pageType,
-    onStart: () => setLoading(true),
+    onStart: () => setScriptLoading(true),
     onEnd: () => {
-      setLoading(false);
+      setScriptLoading(false);
     },
   });
 
@@ -143,14 +144,14 @@ function MyApp({ Component, pageProps }) {
       <IndiceProvider
         authToken={authToken}
         userInfo={sessionUser}
-        dopProps={{ setLoading }}
+        dopProps={{ setLoading: setPageLoading }}
         categories={categories}
         io={io}
       >
         <Layout title={pageTitle}>
-          {!loading && <Component {...pageProps} />}
+          {!scriptLoading && <Component {...pageProps} />}
 
-          <Loader loading={loading} />
+          <Loader loading={scriptLoading || pageLoading} />
 
           <div className="message-site-warning-alert-list">
             {pageType != "admin" && <CookieBanner />}
