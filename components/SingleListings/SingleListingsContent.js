@@ -23,7 +23,7 @@ import { useIsMobile } from "../../hooks";
 const SingleListingsContent = ({
   comments,
   listing: prevListing,
-  tenantBaseCommissionPercent,
+  workerBaseCommissionPercent,
   ownerRatingInfo,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
@@ -668,7 +668,7 @@ const SingleListingsContent = ({
               fromDate={currentApproveFromDate}
               toDate={currentApproveToDate}
               price={currentApprovePrice}
-              fee={tenantBaseCommissionPercent}
+              fee={workerBaseCommissionPercent}
               setToDate={setCurrentApproveToDate}
               setFromDate={setCurrentApproveFromDate}
               blockedDates={listing.blockedDates}
@@ -683,13 +683,12 @@ const SingleListingsContent = ({
           handleMakeBooking={handleBeforeMakeBooking}
           price={listing.pricePerDay}
           minRentalDays={listing.minRentalDays}
-          fee={tenantBaseCommissionPercent}
+          fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
           blockedDates={listing.blockedDates}
           title="Book Now"
-          isExtend={false}
         />
       )}
 

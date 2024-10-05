@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import { IndiceContext } from "../contexts";
 import {
-  extendOrder,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
@@ -15,7 +14,6 @@ const useSingleOrderActions = ({
   setPrevUpdateRequest = null,
   onCreateUpdateRequest = null,
   onCancel = null,
-  onExtendOrder = null,
   setError,
   onAcceptOrder = null,
   onRejectOrder = null,
@@ -23,10 +21,7 @@ const useSingleOrderActions = ({
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
-  const [extendPopupActive, setExtendPopupActive] = useState(false);
-  const [extendApproveData, setExtendApproveData] = useState(null);
   const [paypalModalActive, setPaypalModalActive] = useState(false);
-
   const [cancelModalActive, setCancelModalActive] = useState(false);
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
@@ -88,34 +83,6 @@ const useSingleOrderActions = ({
     }
   };
 
-  const handleMakeBooking = async ({
-    feeActive,
-    sendingMessage,
-    price,
-    fromDate,
-    toDate,
-  }) => {
-    try {
-      const result = await extendOrder(
-        {
-          startDate: fromDate,
-          endDate: toDate,
-          listingId: order?.listingId,
-          feeActive,
-          message: sendingMessage,
-          parentOrderId: order?.orderParentId ?? order?.id,
-        },
-        authToken
-      );
-
-      if (onExtendOrder) {
-        onExtendOrder(result);
-      }
-    } catch (e) {
-      setError(e.message);
-    }
-  };
-
   return {
     bookingActionsDisabled,
     updateRequestModalActive,
@@ -127,11 +94,6 @@ const useSingleOrderActions = ({
     rejectOrderModalActive,
     setRejectOrderModalActive,
     handleAcceptAcceptOrder,
-
-    extendPopupActive,
-    setExtendPopupActive,
-    extendApproveData,
-    setExtendApproveData,
     paypalModalActive,
     setPaypalModalActive,
     cancelModalActive,
@@ -140,10 +102,8 @@ const useSingleOrderActions = ({
     setPayedCancelModalActive,
     payedCancelDisabled,
     setPayedCancelDisabled,
-
     handleCancelApprove,
     handlePayedFastCancel,
-    handleMakeBooking,
   };
 };
 

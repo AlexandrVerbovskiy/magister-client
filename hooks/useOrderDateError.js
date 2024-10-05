@@ -3,7 +3,6 @@ import { IndiceContext } from "../contexts";
 import {
   checkStringDateLowerOrEqualCurrentDate,
   dateConverter,
-  isOrderCanBeAccepted,
 } from "../utils";
 import STATIC from "../static";
 
@@ -52,7 +51,7 @@ const useOrderDateError = ({ order }) => {
 
     if (
       (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) &&
       order.cancelStatus == null
     ) {
       if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
@@ -60,7 +59,7 @@ const useOrderDateError = ({ order }) => {
         blocked = true;
       }
 
-      if (!isOrderCanBeAccepted(order) && order.ownerId == sessionUser?.id) {
+      if (order.ownerId == sessionUser?.id) {
         tooltipErrorMessage =
           "There are more priority bookings or orders for these dates";
         blocked = true;

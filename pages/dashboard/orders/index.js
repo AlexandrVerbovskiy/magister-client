@@ -19,7 +19,7 @@ import PaginationLoadingWrapper from "../../../components/_App/PaginationLoading
 
 const Wrapper = ({
   children,
-  countForTenant,
+  countForWorker,
   countForOwner,
   type,
   changeType,
@@ -37,13 +37,13 @@ const Wrapper = ({
               className="list-group list-group-flush pt-1 mt-2"
               style={{ borderTop: "1px solid #ede7f6" }}
             >
-              <div className="py-1" onClick={() => changeType("tenant")}>
+              <div className="py-1" onClick={() => changeType("worker")}>
                 <div
                   className="form-check px-0"
-                  style={type == "tenant" ? { color: "var(--mainColor)" } : {}}
+                  style={type == "worker" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    My rental requests ({countForTenant})
+                    My rental requests ({countForWorker})
                   </label>
                 </div>
               </div>
@@ -54,7 +54,7 @@ const Wrapper = ({
                   style={type == "owner" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Requests for my items ({countForOwner})
+                    Requests for my listings ({countForOwner})
                   </label>
                 </div>
               </div>
@@ -88,7 +88,7 @@ const Wrapper = ({
 };
 
 const TabHeaderSection = ({
-  countForTenant,
+  countForWorker,
   countForOwner,
   type,
   changeType,
@@ -101,12 +101,12 @@ const TabHeaderSection = ({
       style={{ marginBottom: "21px" }}
       onClick={(e) => {
         e.preventDefault();
-        changeType("tenant");
+        changeType("worker");
       }}
     >
-      <a className={`nav-link ${type == "tenant" ? "active" : ""}`}>
+      <a className={`nav-link ${type == "worker" ? "active" : ""}`}>
         <span className="menu-title">
-          My rental requests ({countForTenant})
+          My rental requests ({countForWorker})
         </span>
       </a>
     </li>
@@ -121,7 +121,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
         <span className="menu-title">
-          Requests for my items ({countForOwner})
+          Requests for my listings ({countForOwner})
         </span>
       </a>
     </li>
@@ -131,7 +131,7 @@ const TabHeaderSection = ({
 const Orders = (pageProps) => {
   const router = useRouter();
   const { error, authToken } = useContext(IndiceContext);
-  const [type, setType] = useState(router.query.type ?? "tenant");
+  const [type, setType] = useState(router.query.type ?? "worker");
 
   const {
     page,
@@ -151,7 +151,7 @@ const Orders = (pageProps) => {
     getDopProps: () => ({
       type: {
         value: type,
-        hidden: (value) => value == "tenant",
+        hidden: (value) => value == "worker",
       },
     }),
   });
@@ -189,14 +189,8 @@ const Orders = (pageProps) => {
 
     activePay,
     closePay,
-    onTenantPayed,
+    onWorkerPayed,
     activePayOrder,
-
-    handleClickExtendOrder,
-    handleClickApproveExtendOrder,
-    extendModalActive,
-    extendModalActiveOrder,
-    closeExtendOrder,
     successIconPopupState,
   } = useOrderFastActions({
     orders: orders,
@@ -210,7 +204,7 @@ const Orders = (pageProps) => {
     <Wrapper
       type={type}
       changeType={changeType}
-      countForTenant={pageProps.countForTenant}
+      countForWorker={pageProps.countForWorker}
       countForOwner={pageProps.countForOwner}
     >
       <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
@@ -219,7 +213,7 @@ const Orders = (pageProps) => {
             style={{ marginBottom: "0" }}
             type={type}
             changeType={changeType}
-            countForTenant={pageProps.countForTenant}
+            countForWorker={pageProps.countForWorker}
             countForOwner={pageProps.countForOwner}
           />
         )}
@@ -248,7 +242,6 @@ const Orders = (pageProps) => {
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
-                      handleClickExtend={handleClickExtendOrder}
                     />
                   ))}
                 </div>
@@ -266,7 +259,7 @@ const Orders = (pageProps) => {
       </section>
 
       <OrdersListFastActinsModals
-        tenantBaseCommission={pageProps.tenantBaseFee}
+        workerBaseCommission={pageProps.workerBaseFee}
         activeCancel={activeCancel}
         closeActiveCancel={closeActiveCancel}
         handleAcceptCancel={handleAcceptCancel}
@@ -285,13 +278,8 @@ const Orders = (pageProps) => {
         updateRequestModalActiveOrder={updateRequestModalActiveOrder}
         activePay={activePay}
         closePay={closePay}
-        onTenantPayed={onTenantPayed}
+        onWorkerPayed={onWorkerPayed}
         activePayOrder={activePayOrder}
-        handleClickExtendOrder={handleClickExtendOrder}
-        handleClickApproveExtendOrder={handleClickApproveExtendOrder}
-        extendModalActive={extendModalActive}
-        extendModalActiveOrder={extendModalActiveOrder}
-        closeExtendOrder={closeExtendOrder}
         successIconPopupState={successIconPopupState}
         bankInfo={pageProps.bankInfo}
       />
@@ -309,7 +297,7 @@ const Orders = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const type = context.query.type === "owner" ? "owner" : "tenant";
+  const type = context.query.type === "owner" ? "owner" : "worker";
   const params = { ...baseListPageParams(context.query), type };
   const options = await getOrderListOptions(params, baseSideProps.authToken);
   return { ...options };

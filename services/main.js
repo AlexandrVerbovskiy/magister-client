@@ -50,22 +50,6 @@ export const getOrderFullByIdForDisputeOptions = async (
   return data.body;
 };
 
-export const getTenantListingScanRentalCode = async (token, authToken) => {
-  const data = await get(
-    `/tenant-scanning-listing-rental-code/${token}`,
-    authToken
-  );
-  return data.body;
-};
-
-export const getOwnerListingScanRentalCode = async (token, authToken) => {
-  const data = await get(
-    `/owner-scanning-listing-rental-code/${token}`,
-    authToken
-  );
-  return data.body;
-};
-
 export const getCreateListingOptions = async (authToken) => {
   const data = await get(`/create-listing-options`, authToken);
   return data.body;
@@ -280,8 +264,8 @@ export const getAdminDashboardOptions = async (body, authToken) => {
   return data.body;
 };
 
-export const getOrderReviewByTenantOptions = async (id, authToken) => {
-  const data = await get(`/get-order-review-by-tenant/${id}`, authToken);
+export const getOrderReviewByWorkerOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-worker/${id}`, authToken);
   return data.body;
 };
 
@@ -290,9 +274,9 @@ export const getOrderReviewByOwnerOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminTenantCommentListOptions = async (params, authToken) => {
+export const getAdminWorkerCommentListOptions = async (params, authToken) => {
   const data = await post(
-    `/admin-tenant-comment-list-options`,
+    `/admin-worker-comment-list-options`,
     params,
     authToken
   );

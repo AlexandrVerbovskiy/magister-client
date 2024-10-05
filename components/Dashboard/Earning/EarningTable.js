@@ -5,12 +5,13 @@ import {
   getFactOrderDays,
   moneyFormat,
   ownerGetsCalculate,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
 } from "../../../utils";
+import STATIC from "../../../static";
 
 const Status = ({ status, receivedType }) => {
   let statusName = "Unknown";
@@ -56,7 +57,7 @@ const EarningTable = ({
   offerStartDate,
   offerEndDate,
   offerPricePerDay,
-  tenantFee,
+  workerFee,
   ownerFee,
   orderId,
   id,
@@ -94,7 +95,7 @@ const EarningTable = ({
     operationMessage = "Operation mark as cancelled";
   }
 
-  if (receivedType === "rental") {
+  if (receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT) {
     operationMessage = recipientStatuses({
       status: status,
       plannedTime: plannedTime,
@@ -165,10 +166,10 @@ const EarningTable = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Renter Fee"
-                placeholder="Renter Fee"
+                label="Worker Fee"
+                placeholder="Worker Fee"
                 icon="bx bx-tag"
-                value={`${tenantFee}`}
+                value={`${workerFee}`}
               />
             </div>
 
@@ -177,10 +178,10 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${tenantPaymentCalculate(
+                value={`${workerPaymentCalculate(
                   offerStartDate,
                   offerEndDate,
-                  tenantFee,
+                  workerFee,
                   offerPricePerDay
                 )}`}
               />
@@ -250,10 +251,10 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (tenantPaymentCalculate(
+                  (workerPaymentCalculate(
                     offerStartDate,
                     offerEndDate,
-                    tenantFee,
+                    workerFee,
                     offerPricePerDay
                   ) *
                     (100 - refundCommission)) /

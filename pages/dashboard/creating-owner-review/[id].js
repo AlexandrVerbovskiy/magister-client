@@ -3,7 +3,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import {
   createOwnerReview,
-  getOrderReviewByTenantOptions,
+  getOrderReviewByWorkerOptions,
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import ImagePopup from "../../../components/_App/ImagePopup";
@@ -19,7 +19,7 @@ const FullReview = (baseProps) => {
   const { props } = useIdPage({
     baseProps,
     getPagePropsFunc: ({ field, authToken }) =>
-      getOrderReviewByTenantOptions(field, authToken),
+      getOrderReviewByWorkerOptions(field, authToken),
   });
 
   const router = useRouter();
@@ -120,7 +120,7 @@ const FullReview = (baseProps) => {
 
 const boostServerSideProps = async ({ context, baseSideProps }) => {
   const id = context.params.id;
-  const options = await getOrderReviewByTenantOptions(
+  const options = await getOrderReviewByWorkerOptions(
     id,
     baseSideProps.authToken
   );

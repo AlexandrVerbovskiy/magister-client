@@ -51,7 +51,7 @@ const Invoice = (baseProps) => {
           dueDate={payment.createdAt}
           indiceAdmin="RentAbout"
           offer={{
-            fee: payment.tenantFee,
+            fee: payment.workerFee,
             listingName: payment.listingName,
             pricePerDay: payment.orderOfferPricePerDay,
             startDate: payment.orderOfferStartDate,
@@ -63,7 +63,7 @@ const Invoice = (baseProps) => {
           canUpdate={
             !payment.disputeStatus &&
             !payment.orderCancelStatus &&
-            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
+            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT
           }
         />
       </div>

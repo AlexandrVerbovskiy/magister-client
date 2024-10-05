@@ -6,9 +6,7 @@ import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
 import {
   calculateCurrentTotalPrice,
-  getOrderBlockedDatesToExtend,
   getOrderBlockedDatesToUpdate,
-  getStartExtendOrderDate,
 } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
@@ -16,13 +14,8 @@ import { IndiceContext } from "../../contexts";
 const OrderPopups = ({
   order,
   actualUpdateRequest = null,
-  tenantBaseCommission,
   currentFee,
   actionButtons,
-
-  extendPopupActive,
-  setExtendPopupActive,
-  handleMakeBooking,
 
   handleCancelApprove,
   cancelModalActive,
@@ -48,18 +41,13 @@ const OrderPopups = ({
   setPaypalModalActive,
   bankInfo,
 
-  onTenantPayed = null,
+  onWorkerPayed = null,
 }) => {
   const { authToken } = useContext(IndiceContext);
 
   if (!order) {
     return;
   }
-
-  const extendStartDate = getStartExtendOrderDate(
-    order.offerEndDate,
-    order.extendOrders
-  );
 
   return (
     <>
@@ -86,7 +74,7 @@ const OrderPopups = ({
           }
           listingMinRentalDays={order.listingMinRentalDays}
           fee={currentFee}
-          tenantFee={order.tenantFee}
+          workerFee={order.workerFee}
           commissionType={
             order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
               ? "reject"
@@ -103,23 +91,6 @@ const OrderPopups = ({
           rejectOrderModalActive={rejectOrderModalActive}
           setRejectOrderModalActive={setRejectOrderModalActive}
           handleAcceptRejectOrder={handleAcceptRejectOrder}
-        />
-      )}
-
-      {actionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON) && (
-        <BookingModal
-          createOrderModalActive={extendPopupActive}
-          closeModal={() => setExtendPopupActive(false)}
-          handleMakeBooking={handleMakeBooking}
-          fee={tenantBaseCommission}
-          price={order.offerPricePerDay}
-          minRentalDays={order.listingMinRentalDays}
-          listingName={order.listingName}
-          blockedDates={getOrderBlockedDatesToExtend(order)}
-          title="Extend Now"
-          startDate={extendStartDate}
-          fullVersion={true}
-          isExtend={true}
         />
       )}
 
@@ -152,16 +123,16 @@ const OrderPopups = ({
           endDate: order.offerEndDate,
           pricePerDay: order.offerPricePerDay,
           ownerFee: order.ownerFee,
-          tenantFee: order.tenantFee,
-          type: "tenant",
+          workerFee: order.workerFee,
+          type: "worker",
         })}
         orderId={order.id}
         listingName={order.listingName}
-        onTenantPayed={onTenantPayed}
+        onWorkerPayed={onWorkerPayed}
         pricePerDay={order.offerPricePerDay}
         offerStartDate={order.offerStartDate}
         offerEndDate={order.offerEndDate}
-        offerFee={order.tenantFee}
+        offerFee={order.workerFee}
         authToken={authToken}
         bankInfo={bankInfo}
       />

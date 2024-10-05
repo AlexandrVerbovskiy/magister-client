@@ -229,7 +229,7 @@ const Wallet = ({
               <h3>
                 Payout History{" "}
                 <span className="comission-taken">
-                  Fee: {feeInfo.tenantBaseCommissionPercent}%
+                  Fee: {feeInfo.workerBaseCommissionPercent}%
                 </span>
               </h3>
 
@@ -251,7 +251,7 @@ const Wallet = ({
                           sending.offerEndDate
                         ),
                         sending.offerPricePerDay,
-                        sending.tenantFee,
+                        sending.workerFee,
                         true
                       );
 

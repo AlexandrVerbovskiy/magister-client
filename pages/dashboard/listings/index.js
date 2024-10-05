@@ -255,7 +255,7 @@ const ListingList = (pageProps) => {
         <div className="miran-grid-sorting row align-items-center d-none d-xl-flex">
           <div className="col-lg-6 col-md-6 result-count">
             <div className="breadcrumb-area">
-              <h1>My Items</h1>
+              <h1>My Listings</h1>
               <ol className="breadcrumb">
                 <li className="item">
                   <Link href="/">Home</Link>

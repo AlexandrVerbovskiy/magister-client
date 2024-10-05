@@ -65,7 +65,7 @@ const CreateDisputeSection = (data) => {
               userAverageRating: opponentAverageRating,
             }}
             countItemsType={opponentItemsType}
-            title={isOwnerCreateDispute ? "Renter" : "Owner"}
+            title={isOwnerCreateDispute ? "Worker" : "Owner"}
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />

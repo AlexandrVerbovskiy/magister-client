@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
   getFactOrderDays,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
   dateConverter,
   moneyFormatVisual,
   calculateFeeByDaysCount,
@@ -82,7 +82,7 @@ const InvoiceTable = ({
     </a>
   );
 
-  const totalPayed = tenantPaymentCalculate(
+  const totalPayed = workerPaymentCalculate(
     offer.startDate,
     offer.endDate,
     offer.fee,

@@ -9,7 +9,7 @@ import CancelStatus from "../Orders/CancelStatus";
 
 const OrderInfoMessageContent = ({
   forOwnerPrice,
-  forTenantPrice,
+  forWorkerPrice,
   content,
   duration,
   title,
@@ -35,7 +35,7 @@ const OrderInfoMessageContent = ({
       <div className="my-1">
         <b>Owner get: {moneyFormatVisual(forOwnerPrice)}</b>
         <br />
-        <b>Renter payed: {moneyFormatVisual(forTenantPrice)}</b>
+        <b>Worker payed: {moneyFormatVisual(forWorkerPrice)}</b>
       </div>
       <div className="mb-1">
         {duration} {autoMultiEnding(duration, "day")} (

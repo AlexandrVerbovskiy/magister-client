@@ -530,14 +530,6 @@ const EditForm = ({
       setMinRentalDaysError(validateInteger(minRentalDays));
       hasError = true;
     }
-
-    if (minRentalDays && minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
-      setMinRentalDaysError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
     if (!countStoredItems) {
       setCountStoredItemsError("Required field");
       hasError = true;
@@ -819,10 +811,10 @@ const EditForm = ({
             Collection Location{" "}
             <div className="form-hint">
               The location is where you plan to hand over the item to the
-              renter. It could be your home, workplace, or any other convenient
+              worker. It could be your home, workplace, or any other convenient
               place. <br />
               <b>Note:</b> Your safety is our priority. The exact location will
-              only be shared with the renter once you approve the rental.
+              only be shared with the worker once you approve the rental.
             </div>
           </h3>
           <div className="row">

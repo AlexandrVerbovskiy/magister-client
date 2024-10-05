@@ -48,7 +48,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   const totalFee = calculateFeeByDaysCount(
     getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
     payment.offerPricePerDay,
-    payment.tenantFee,
+    payment.workerFee,
     true
   );
 
@@ -221,10 +221,10 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={payment.tenantFee}
-                                label="Renter Fee (%)"
-                                name="renter-fee"
-                                placeholder="Renter Fee"
+                                value={payment.workerFee}
+                                label="Worker Fee (%)"
+                                name="worker-fee"
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

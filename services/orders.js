@@ -19,31 +19,6 @@ export const createOrder = async (
   return data.body.id;
 };
 
-export const extendOrder = async (
-  { startDate, endDate, listingId, feeActive, message, parentOrderId },
-  authToken
-) => {
-  if (startDate > endDate) {
-    let temp = startDate;
-    startDate = endDate;
-    endDate = temp;
-  }
-
-  const data = await post(
-    `/extend`,
-    {
-      startDate,
-      endDate,
-      listingId,
-      feeActive,
-      message,
-      parentOrderId,
-    },
-    authToken
-  );
-  return data.body;
-};
-
 export const getOrderFullInfo = async (id, authToken) => {
   const data = await get(`/get-full-by-id/${id}`, authToken);
   return data.body;
@@ -66,11 +41,6 @@ export const acceptOrder = async (id, authToken) => {
 
 export const paypalOrderPayed = async (orderId, authToken) => {
   const data = await post(`/paypal-order-payed`, { orderId }, authToken);
-  return data.body;
-};
-
-export const approveClientGotListing = async (formData, authToken) => {
-  const data = await post(`/approve-client-got-listing`, formData, authToken);
   return data.body;
 };
 
@@ -98,11 +68,6 @@ export const rejectOrder = async (id, authToken) => {
 
 export const deleteOrder = async (id, authToken) => {
   const data = await post(`/delete`, { id }, authToken);
-  return data.body;
-};
-
-export const finishedByOwner = async (formData, authToken) => {
-  const data = await post(`/finished-by-owner`, formData, authToken);
   return data.body;
 };
 

@@ -198,7 +198,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 title="Reviews"
                 sublinks={[
                   { href: "owner-reviews", title: "Owner Reviews" },
-                  { href: "renter-reviews", title: "Renter Reviews" },
+                  { href: "worker-reviews", title: "Worker Reviews" },
                 ]}
                 SVG={({ current }) => (
                   <svg

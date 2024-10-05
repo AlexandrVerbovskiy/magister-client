@@ -20,9 +20,7 @@ const OrderInfoMessageContent = ({
   title,
   senderId,
   popupsData,
-  extensionPopupsData = null,
   hasDescription = false,
-  isExtensionActions = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -56,7 +54,7 @@ const OrderInfoMessageContent = ({
           statusCancelled={entity.cancelStatus}
           disputeStatus={entity.disputeStatus}
           ownerId={entity.ownerId}
-          tenantId={entity.tenantId}
+          workerId={entity.workerId}
           userId={sessionUser?.id}
           endDate={entity.offerEndDate}
           payedId={entity.paymentInfo?.id}
@@ -76,8 +74,6 @@ const OrderInfoMessageContent = ({
         content={content}
         senderId={senderId}
         popupsData={popupsData}
-        extensionPopupsData={extensionPopupsData}
-        isExtensionActions={isExtensionActions}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import DashboardNavbar from "../../../components/Dashboard/DashboardNavbar";
 import StatusBar from "../../../components/StatusBar";
 import NavbarThree from "../../../components/_App/NavbarThree";
 import {
-  createRenterReview,
+  createWorkerReview,
   getOrderReviewByOwnerOptions,
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
@@ -12,7 +12,7 @@ import UserReviewForm from "../../../components/Dashboard/Reviews/UserReviewForm
 import { useRouter } from "next/router";
 import YesNoModal from "../../../components/_App/YesNoModal";
 import { IndiceContext } from "../../../contexts";
-import { useRenterReview } from "../../../hooks";
+import { useWorkerReview } from "../../../hooks";
 import { useIdPage } from "../../../hooks";
 
 const FullReview = (baseProps) => {
@@ -24,31 +24,31 @@ const FullReview = (baseProps) => {
 
   const router = useRouter();
   const { id } = router.query;
-  const [currentStep, setCurrentStep] = useState("renter");
+  const [currentStep, setCurrentStep] = useState("worker");
   const { authToken, error } = useContext(IndiceContext);
   const [activeSaveModal, setActiveSaveModal] = useState(false);
   const {
-    starOptions: tenantStarOptions,
-    setStarOptions: setTenantStarOptions,
-    description: tenantDescription,
-    setDescription: setTenantDescription,
-    leaveFeedback: leaveTenantDescription,
-    setLeaveFeedback: setLeaveTenantDescription,
-    dataToSubmit: tenantDataToSubmit,
-  } = useRenterReview();
+    starOptions: workerStarOptions,
+    setStarOptions: setWorkerStarOptions,
+    description: workerDescription,
+    setDescription: setWorkerDescription,
+    leaveFeedback: leaveWorkerDescription,
+    setLeaveFeedback: setLeaveWorkerDescription,
+    dataToSubmit: workerDataToSubmit,
+  } = useWorkerReview();
 
   const [disabled, setDisabled] = useState(false);
 
-  const handleRenterReviewSubmit = () => {
+  const handleWorkerReviewSubmit = () => {
     setActiveSaveModal(true);
   };
 
-  const handleRenterReviewSubmitConfirm = async () => {
+  const handleWorkerReviewSubmitConfirm = async () => {
     try {
       setDisabled(true);
 
-      await createRenterReview(
-        { tenantCommentInfo: tenantDataToSubmit(), orderId: id },
+      await createWorkerReview(
+        { workerCommentInfo: workerDataToSubmit(), orderId: id },
         authToken
       );
 
@@ -70,24 +70,24 @@ const FullReview = (baseProps) => {
       >
         <NavbarThree />
 
-        {currentStep == "renter" && (
+        {currentStep == "worker" && (
           <UserReviewForm
             data={{
-              userName: props.order.tenantName,
-              userPhoto: props.order.tenantPhoto,
-              userCountItems: props.order.tenantCountItems,
-              userAverageRating: props.order.tenantAverageRating,
-              userCommentCount: props.order.tenantCommentCount,
+              userName: props.order.workerName,
+              userPhoto: props.order.workerPhoto,
+              userCountItems: props.order.workerCountItems,
+              userAverageRating: props.order.workerAverageRating,
+              userCommentCount: props.order.workerCommentCount,
             }}
-            onSubmit={handleRenterReviewSubmit}
+            onSubmit={handleWorkerReviewSubmit}
             disabled={disabled}
-            starOptions={tenantStarOptions}
-            setStarOptions={setTenantStarOptions}
-            description={tenantDescription}
-            setDescription={setTenantDescription}
-            leaveFeedback={leaveTenantDescription}
-            setLeaveFeedback={setLeaveTenantDescription}
-            type="renter"
+            starOptions={workerStarOptions}
+            setStarOptions={setWorkerStarOptions}
+            description={workerDescription}
+            setDescription={setWorkerDescription}
+            leaveFeedback={leaveWorkerDescription}
+            setLeaveFeedback={setLeaveWorkerDescription}
+            type="worker"
           />
         )}
 
@@ -99,7 +99,7 @@ const FullReview = (baseProps) => {
         closeModal={() => setActiveSaveModal(false)}
         title="Confirmation is required to perform the operation"
         body='Please click "Confirm" to complete the review'
-        onAccept={handleRenterReviewSubmitConfirm}
+        onAccept={handleWorkerReviewSubmitConfirm}
         acceptText="Confirm"
       />
     </>

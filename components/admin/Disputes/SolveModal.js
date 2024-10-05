@@ -16,7 +16,6 @@ const SolveModal = ({ active, close, onAcceptClick }) => {
     { title: "Full Refund", value: "full-refund" },
     { title: "Replacement Item", value: "replacement-item" },
     { title: "Repair Costs", value: "repair-costs" },
-    { title: "Extended Rental Period", value: "extended-rental-period" },
   ];
 
   const rightReasons = [

@@ -19,8 +19,8 @@ export const setSystemCommissionOptions = async (
   {
     ownerBaseCommissionPercent,
     ownerBoostCommissionPercent,
-    tenantBaseCommissionPercent,
-    tenantCancelFeePercent,
+    workerBaseCommissionPercent,
+    workerCancelFeePercent,
   },
   authToken
 ) => {
@@ -29,8 +29,8 @@ export const setSystemCommissionOptions = async (
     {
       ownerBaseCommissionPercent,
       ownerBoostCommissionPercent,
-      tenantBaseCommissionPercent,
-      tenantCancelFeePercent,
+      workerBaseCommissionPercent,
+      workerCancelFeePercent,
     },
     authToken
   );

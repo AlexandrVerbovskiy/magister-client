@@ -9,8 +9,6 @@ const OrderUpdateStatusMessageContent = ({
   Icon = null,
   style = {},
   popupsData,
-  extensionPopupsData = null,
-  isExtensionActions = false,
   description = null,
 }) => {
   return (
@@ -33,8 +31,6 @@ const OrderUpdateStatusMessageContent = ({
         popupsData={popupsData}
         content={content}
         senderId={senderId}
-        extensionPopupsData={extensionPopupsData}
-        isExtensionActions={isExtensionActions}
       />
     </div>
   );

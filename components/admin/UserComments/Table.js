@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Th from "../../../partials/admin/base/Th";
 import OwnerTableItem from "./OwnerTableItem";
-import RenterTableItem from "./RenterTableItem";
+import WorkerTableItem from "./WorkerTableItem";
 import ImageView from "../Form/ImageView";
 import { IndiceContext } from "../../../contexts";
 import RejectModal from "../Comments/RejectModal";
@@ -50,10 +50,10 @@ const UserCommentsTable = ({
   rejectReview,
   approveReview,
   loading,
-  type = "renter",
+  type = "worker",
 }) => {
-  let userColumnTitle = "Renter";
-  let TableItem = RenterTableItem;
+  let userColumnTitle = "Worker";
+  let TableItem = WorkerTableItem;
 
   if (type == "owner") {
     userColumnTitle = "Owner";

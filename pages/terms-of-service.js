@@ -29,9 +29,9 @@ const TermsOfService = () => {
                 </li>
                 <li>
                   Owners to communicate with and enter into agreements with
-                  other users to rent (such users being "Renters")
+                  other users to rent (such users being "Workers")
                 </li>
-                <li>Renters to pay Owners for renting the relevant items</li>
+                <li>Workers to pay Owners for renting the relevant items</li>
                 <li>Users to resolve disputes concerning the rented items</li>
               </ul>
             </div>
@@ -57,7 +57,7 @@ const TermsOfService = () => {
               BY THESE TERMS AND TO THE COLLECTION AND USE OF YOUR INFORMATION
               AS SET FORTH IN OUR PRIVACY POLICY WHICH IS HEREBY INCORPORATED
               INTO THESE TERMS BY REFERENCE. THESE TERMS APPLY TO ALL OWNERS,
-              RENTERS, AND OTHERS WHO REGISTER FOR OR OTHERWISE ACCESS THE RENT
+              WORKERS, AND OTHERS WHO REGISTER FOR OR OTHERWISE ACCESS THE RENT
               ABOUT SERVICE (COLLECTIVELY "USERS").
             </p>
 
@@ -74,7 +74,7 @@ const TermsOfService = () => {
               periodically to stay informed about any changes. Your continued
               use of RentAbout after any modifications to the Terms will
               constitute your acceptance of those changes. Additional terms may
-              apply to you depending on whether you are a renter, owner, buyer
+              apply to you depending on whether you are a worker, owner, buyer
               or seller.
             </p>
 
@@ -86,7 +86,7 @@ const TermsOfService = () => {
               hire by Owners on the RentAbout Service. Consequently, it is the
               Owner's responsibility (and not ours) to ensure that the items
               conform to any provided descriptions, are fit for their intended
-              purpose, and are safe to use. If you are a Renter, we are not
+              purpose, and are safe to use. If you are a Worker, we are not
               responsible for the quality, safety, or legality of any items you
               hire through the RentAbout Service.
             </p>
@@ -96,12 +96,12 @@ const TermsOfService = () => {
                   <b>Owner Responsibilities:</b> If you are an Owner, you are
                   solely responsible for ensuring compliance with any legal
                   obligations related to the items you provide for hire. This
-                  includes respecting Renters' rights under applicable consumer
+                  includes respecting Workers' rights under applicable consumer
                   protection laws and compensating for any damages or injuries
                   caused by your items.
                 </li>
                 <li>
-                  <b>Renter Responsibilities:</b> If you are a Renter, you are
+                  <b>Worker Responsibilities:</b> If you are a Worker, you are
                   responsible for the proper care and timely return of any items
                   you hire through the RentAbout Service. Generally, you will
                   not be held liable for compensating the Owner for accidental
@@ -120,7 +120,7 @@ const TermsOfService = () => {
             <p className="mb-0">
               The RentAbout Service provides a platform that enables Owners and
               Sellers to advertise items for hire and sale, and to communicate
-              and enter into agreements with Renters and Buyers for the hire or
+              and enter into agreements with Workers and Buyers for the hire or
               sale of those items. Our services include:
             </p>
             <div className="p-0">
@@ -128,20 +128,20 @@ const TermsOfService = () => {
                 <li>
                   <b>Advertising:</b> Owners and Sellers can list their items on
                   the RentAbout platform, providing detailed descriptions,
-                  pricing, and availability. This allows Renters and Buyers to
+                  pricing, and availability. This allows Workers and Buyers to
                   browse, compare, and choose items for hire or purchase.
                 </li>
 
                 <li>
                   <b>Communication and Agreement Facilitation:</b> The RentAbout
                   Service facilitates direct communication between Owners,
-                  Sellers, Renters, and Buyers. Users can negotiate terms, ask
+                  Sellers, Workers, and Buyers. Users can negotiate terms, ask
                   questions, and finalize agreements through our messaging
                   system.
                 </li>
                 <li>
                   <b>Transaction Management:</b> The platform supports secure
-                  transactions, allowing Renters to pay Owners for the hire of
+                  transactions, allowing Workers to pay Owners for the hire of
                   items, and Buyers to pay Sellers for the purchase of items or
                   services. Our system ensures that payments are processed
                   efficiently and securely.
@@ -152,7 +152,7 @@ const TermsOfService = () => {
                   of the RentAbout Service with other users. These features are
                   designed to enhance your experience by enabling you to connect
                   with other users, share your feedback, and create a community
-                  of trusted renters and sellers.
+                  of trusted workers and sellers.
                 </li>
                 <li>
                   <b>Rules of Acceptable Use:</b> Any use of the social features
@@ -348,7 +348,7 @@ const TermsOfService = () => {
               Service. You must not offer to lend through the RentAbout Service
               any firearms, weapons, pornography, mature content, animals, or
               any items that it would be illegal to offer for hire in your or
-              the renter's country of residence. We reserve the right to remove
+              the worker's country of residence. We reserve the right to remove
               any items offered for hire from the RentAbout Service if we
               believe such items are illegal, immoral, or damaging to our
               reputation.
@@ -361,7 +361,7 @@ const TermsOfService = () => {
                   <ul>
                     <li>
                       You have all necessary rights to hire out any items you
-                      advertise on the RentAbout Service, and the renter's use
+                      advertise on the RentAbout Service, and the worker's use
                       of those items will not infringe any other party's rights;
                     </li>
                     <li>
@@ -373,8 +373,8 @@ const TermsOfService = () => {
                   Delivery and Description:
                   <ul>
                     <li>
-                      You deliver any hired items to the renter in accordance
-                      with the agreement you reach with the renter;
+                      You deliver any hired items to the worker in accordance
+                      with the agreement you reach with the worker;
                     </li>
                     <li>
                       Any descriptions of the items you advertise for hire
@@ -400,12 +400,12 @@ const TermsOfService = () => {
                         </li>
                         <li>
                           Are safe to use in accordance with any reasonable
-                          instructions you provide to the renter;
+                          instructions you provide to the worker;
                         </li>
                         <li>
                           Are fit for any purpose for which such items would
                           normally be used, or any purpose communicated to you
-                          by the renter.
+                          by the worker.
                         </li>
                       </ul>
                     </li>
@@ -415,7 +415,7 @@ const TermsOfService = () => {
                   Handover:
                   <ul>
                     <li>
-                      Any rental item is only handed over to the renter after
+                      Any rental item is only handed over to the worker after
                       the transaction(s) are approved by the RentAbout
                       Verification process. You must only hand over the item to
                       the person verified by RentAbout, not third parties. To be
@@ -440,7 +440,7 @@ const TermsOfService = () => {
                         </li>
                         <li>
                           You will be responsible for any damage to any of the
-                          renter's items that are left in your storage area.
+                          worker's items that are left in your storage area.
                         </li>
                       </ul>
                     </li>
@@ -453,7 +453,7 @@ const TermsOfService = () => {
             <div className="p-0">
               <ul>
                 <li>
-                  Any damage the Renter or any other person may suffer as a
+                  Any damage the Worker or any other person may suffer as a
                   result of any defect in the item they have rented from you;
                 </li>
                 <li>
@@ -464,21 +464,21 @@ const TermsOfService = () => {
             </div>
 
             <p>
-              You are free to agree on any other terms with the Renter,
+              You are free to agree on any other terms with the Worker,
               including the price (the "Hire Fee"). When posting items for hire,
               ensure that the Hire Fee is the total price payable, including any
               applicable taxes or costs of delivery. Once terms are agreed upon,
               you must not amend them (including the price) unless you have a
-              valid, justifiable reason and the Renter agrees to the amended
+              valid, justifiable reason and the Worker agrees to the amended
               terms. You can remove a listing or cancel your agreement to lend
-              an item to a Renter at any time up to 48 hours before the start of
+              an item to a Worker at any time up to 48 hours before the start of
               the relevant hire period. If you cancel less than 48 hours before
               the start of the hire period, we may charge you the full Hire Fee.
             </p>
 
-            <h4>RENTER SPECIFIC TERMS</h4>
+            <h4>WORKER SPECIFIC TERMS</h4>
             <p>
-              This section applies to you if you are a Renter on the RentAbout
+              This section applies to you if you are a Worker on the RentAbout
               Service. When you agree to hire an item with an Owner, the Owner
               grants you a limited right to use that item for the relevant hire
               period. This right is personal to you, and you are not allowed to
@@ -566,9 +566,9 @@ const TermsOfService = () => {
 
             <h4>FEES AND PAYMENT</h4>
             <p>
-              If you are an Owner, we will collect the Hire Fee from the Renter
+              If you are an Owner, we will collect the Hire Fee from the Worker
               on your behalf. Unless we are unable to obtain payment from the
-              Renter, such as where a Buyer's payment method is refused or our
+              Worker, such as where a Buyer's payment method is refused or our
               payment services provider determines that there is a risk of
               fraud, we will transfer you the Hire Fee after 24 hours of the end
               date of the rental. We will also charge you a fee of 15% of the
@@ -577,15 +577,15 @@ const TermsOfService = () => {
             </p>
 
             <p>
-              If you are a Renter, once you have agreed to hire an item from the
+              If you are a Worker, once you have agreed to hire an item from the
               Owner, we will charge you the full Hire Fee on the Owner's behalf.
               In addition to the Hire Fee, we will also charge you an additional
               fee for your use of the RentAbout Service equal to 15% of the
-              price you pay to the owner to hire an item ("Renter Fee").
+              price you pay to the owner to hire an item ("Worker Fee").
             </p>
 
             <p>
-              If we are unsuccessful in charging the Hire Fee, Renter Fee, Late
+              If we are unsuccessful in charging the Hire Fee, Worker Fee, Late
               Fee, Settlement Fee or any other amount to your credit or debit
               card, and have still not received payment within seven (7) days
               after informing you, we may suspend or temporarily disable all or
@@ -872,12 +872,12 @@ const TermsOfService = () => {
               attorney.
             </p>
 
-            <h4>RESOLVING DISPUTES BETWEEN RENTERS AND OWNERS</h4>
+            <h4>RESOLVING DISPUTES BETWEEN WORKERS AND OWNERS</h4>
 
             <p>
               We strongly advocate for direct resolution of any disputes between
-              renters and owners. If an item is lost or damaged by a renter, the
-              renter must promptly reimburse the owner for the full repair or
+              workers and owners. If an item is lost or damaged by a worker, the
+              worker must promptly reimburse the owner for the full repair or
               replacement cost. Owners may be required to provide evidence as
               outlined in our protection policy which can be found on our
               website. By exchanging you agree that you have read the Owner
@@ -894,9 +894,9 @@ const TermsOfService = () => {
                   <b>Mediation by RentAbout:</b> Either party can request
                   RentAbout to mediate the dispute. Upon mediation, RentAbout
                   may charge a mediation fee of up to 30% of the compensation
-                  determined to be payable by the renter to the owner for any
+                  determined to be payable by the worker to the owner for any
                   damages. This fee, termed as the “Settlement Fee,” will be in
-                  addition to any amounts owed by the renter to the owner.
+                  addition to any amounts owed by the worker to the owner.
                 </li>
                 <li>
                   <b>Acceptance of RentAbout's Decision:</b> Parties agree to
@@ -923,9 +923,9 @@ const TermsOfService = () => {
               criteria outlined in the full Owner Protection Guarantee document
               which can be accessed on the RentAbout website. Upon RentAbout's
               agreement to reimburse you under the Owner Guarantee, it is your
-              responsibility to inform the Renter that any outstanding amounts
+              responsibility to inform the Worker that any outstanding amounts
               are now payable to RentAbout. If RentAbout reimburses the owner
-              under the Owner Guarantee, the Renter's obligation to compensate
+              under the Owner Guarantee, the Worker's obligation to compensate
               for lost, stolen, or damaged items will remain unchanged. However,
               this obligation will be redirected to RentAbout rather than the
               owner.
@@ -1245,7 +1245,7 @@ const TermsOfService = () => {
               us, governing your use of the RentAbout Service. Your use of the
               Service is subject to compliance with these Terms, as well as our
               Privacy Policy and any other guidelines or policies referenced
-              herein. These Terms are applicable to all Owners, Renters,
+              herein. These Terms are applicable to all Owners, Workers,
               visitors, and others who access or use our Services. Please review
               these Terms carefully to ensure your understanding of your
               obligations, rights, and responsibilities when using the Services.

@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -34,10 +34,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = tenantPaymentCalculate(
+  const totalPayed = workerPaymentCalculate(
     recipient.offerStartDate,
     recipient.offerEndDate,
-    recipient.tenantFee,
+    recipient.workerFee,
     recipient.offerPricePerDay
   );
 
@@ -82,7 +82,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     operationMessage = "Operation mark as cancelled";
   }
 
-  if (recipient.receivedType === "rental") {
+  if (recipient.receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT) {
     operationMessage = recipientStatuses({
       status: recipient.status,
       plannedTime: recipient.plannedTime,
@@ -163,10 +163,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={recipient.tenantName}
-                                label="Renter Name"
-                                name="renter-name"
-                                placeholder="Renter Name"
+                                value={recipient.workerName}
+                                label="Worker Name"
+                                name="worker-name"
+                                placeholder="Worker Name"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -212,9 +212,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(totalPayed)}
-                                label={`Renter paid (${STATIC.CURRENCY})`}
-                                name="renter-payed-money"
-                                placeholder="Renter Paid"
+                                label={`Worker paid (${STATIC.CURRENCY})`}
+                                name="worker-payed-money"
+                                placeholder="Worker Paid"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -327,7 +327,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                         </section>
                       )}
 
-                      {recipient.receivedType === "rental" && (
+                      {recipient.receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Payment Information

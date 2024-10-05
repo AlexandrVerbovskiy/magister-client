@@ -59,7 +59,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
   const totalPrice = calculateFullTotalByDaysCount(
     getFactOrderDays(order.offerStartDate, order.offerEndDate),
     order.offerPricePerDay,
-    order.tenantFee,
+    order.workerFee,
     "sum"
   );
 

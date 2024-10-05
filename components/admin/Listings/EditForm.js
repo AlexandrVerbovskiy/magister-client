@@ -476,13 +476,6 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
-        setMinRentalDaysError(
-          `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-        );
-        hasError = true;
-      }
-
       if (!countStoredItems) {
         setCountStoredItemsError("Required field");
         hasError = true;

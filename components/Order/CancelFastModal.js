@@ -32,15 +32,15 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
     const totalPayed = calculateFullTotalByDaysCount(
       getFactOrderDays(order.offerStartDate, order.offerEndDate),
       order.offerPricePerDay,
-      order.tenantFee,
+      order.workerFee,
       "sum"
     );
 
-    const totalBack = (totalPayed * (100 - order.tenantCancelFee)) / 100;
+    const totalBack = (totalPayed * (100 - order.workerCancelFee)) / 100;
 
     message =
       `The cancellation fee is ${
-        order.tenantCancelFee
+        order.workerCancelFee
       }% of the full payment. \nYou paid ${moneyFormatVisual(
         totalPayed
       )}\n. The size of the return cats will be ${moneyFormatVisual(

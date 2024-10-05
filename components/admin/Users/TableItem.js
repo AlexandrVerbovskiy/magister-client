@@ -131,15 +131,15 @@ const TableItem = ({
   totalRents,
   totalSpent,
   briefBio,
-  lastRenterDate,
+  lastWorkerDate,
   facebookUrl,
   instagramUrl,
   linkedinUrl,
   ownerAverageRating,
-  tenantAverageRating,
+  workerAverageRating,
   ownerCommentCount,
-  tenantCommentCount,
-  tenantDisputesCount,
+  workerCommentCount,
+  workerDisputesCount,
   ownerDisputesCount,
   verifyRequestId,
   verifyRequestHasResponse,
@@ -319,13 +319,13 @@ const TableItem = ({
                     <SubInfoRow
                       label="Last rental"
                       value={
-                        lastRenterDate ? dateConverter(lastRenterDate) : "-"
+                        lastWorkerDate ? dateConverter(lastWorkerDate) : "-"
                       }
                       newRow={true}
                     />
                     <SubInfoRow
-                      label="Renter Disputes"
-                      value={tenantDisputesCount}
+                      label="Worker Disputes"
+                      value={workerDisputesCount}
                       newRow={true}
                     />
                     <SubInfoRow
@@ -334,11 +334,11 @@ const TableItem = ({
                       newRow={true}
                     />
 
-                    <SubInfoRowWithChild label="Renter">
+                    <SubInfoRowWithChild label="Worker">
                       <SingleRatingStar
-                        value={tenantAverageRating}
-                        count={tenantCommentCount}
-                        commentName="renter"
+                        value={workerAverageRating}
+                        count={workerCommentCount}
+                        commentName="worker"
                       />
                     </SubInfoRowWithChild>
                     <SubInfoRowWithChild label="Owner">

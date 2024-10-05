@@ -4,7 +4,7 @@ import {
   getFactOrderDays,
   dateConverter,
   moneyFormatVisual,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
 } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
@@ -12,7 +12,7 @@ const PayModal = ({
   amount,
   orderId,
   listingName,
-  onTenantPayed = null,
+  onWorkerPayed = null,
   pricePerDay,
   offerStartDate,
   offerEndDate,
@@ -24,10 +24,10 @@ const PayModal = ({
 }) => {
   const [disabled, setDisabled] = useState(false);
 
-  const handleTenantPayed = (result) => {
+  const handleWorkerPayed = (result) => {
     setTimeout(() => {
-      if (onTenantPayed) {
-        onTenantPayed(result);
+      if (onWorkerPayed) {
+        onWorkerPayed(result);
       }
 
       closeModal();
@@ -41,7 +41,7 @@ const PayModal = ({
 
   const subtotal = pricePerDay * getFactOrderDays(offerStartDate, offerEndDate);
 
-  const total = tenantPaymentCalculate(
+  const total = workerPaymentCalculate(
     offerStartDate,
     offerEndDate,
     offerFee,
@@ -86,7 +86,7 @@ const PayModal = ({
 
         <PaymentSection
           cardClassName="mt-4 card-shadow"
-          onTenantPayed={handleTenantPayed}
+          onWorkerPayed={handleWorkerPayed}
           orderId={orderId}
           disabled={disabled}
           setDisabled={setDisabled}

@@ -10,7 +10,6 @@ import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import "../styles/index.css";
 import {
   useIsomorphicLayoutEffect,
-  useTawkScript,
   useSocketInit,
 } from "../hooks";
 import CookieBanner from "../components/_App/CookieAlert";
@@ -132,8 +131,6 @@ function MyApp({ Component, pageProps }) {
       setScriptLoading(false);
     },
   });
-
-  useTawkScript(pageType);
 
   if (globalError) {
     return (

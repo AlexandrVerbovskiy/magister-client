@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
@@ -6,15 +6,12 @@ import {
   getDisputeTitle,
   getFactOrderDays,
   getPaymentNameByType,
-  isOrderCanBeAccepted,
   moneyFormatVisual,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import Link from "next/link";
-
-const baseShowedExtendsCount = 5;
 
 const OrderInfo = ({
   order,
@@ -24,8 +21,6 @@ const OrderInfo = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickExtend,
-  extension = false,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -45,14 +40,14 @@ const OrderInfo = ({
         <h4 className="order-item-title-row">
           <div>
             <Link href={"/listings/" + order.listingId}>
-              {extension ? "Extension" : order.listingName}
+              {order.listingName}
             </Link>
           </div>
           <StatusBlock
             status={order.status}
             disputeStatus={order.disputeStatus}
             ownerId={order.ownerId}
-            tenantId={order.tenantId}
+            workerId={order.workerId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
@@ -64,13 +59,11 @@ const OrderInfo = ({
         </h4>
 
         <ul>
-          {!extension && (
-            <li className="row-dots-end">
-              <i className="bx bx-map"></i>
-              <span>Address: </span>
-              <span>{order.listingCity}</span>
-            </li>
-          )}
+          <li className="row-dots-end">
+            <i className="bx bx-map"></i>
+            <span>Address: </span>
+            <span>{order.listingCity}</span>
+          </li>
           <li className="order-list-item-date">
             <i className="bx bx-calendar"></i>
             <CanBeErrorBaseDateSpan
@@ -100,9 +93,9 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+                STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
+                STATIC.ORDER_STATUSES.IN_PROCESS,
+                STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
                 STATIC.ORDER_STATUSES.FINISHED,
               ].includes(order.status) && paymentType ? (
                 <>
@@ -160,18 +153,17 @@ const OrderInfo = ({
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
         ) && (
           <>
-            {isOrderCanBeAccepted(order) && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleClickAccept(order.id);
-                }}
-                className="default-btn"
-              >
-                <i className="bx bx-check-circle"></i> Accept
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickAccept(order.id);
+              }}
+              className="default-btn"
+            >
+              <i className="bx bx-check-circle"></i> Accept
+            </button>
+
             <button
               type="button"
               onClick={(e) => {
@@ -218,33 +210,11 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
+          STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
         ) && (
           <Link
             className="default-btn"
-            href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
-          >
-            <i className="bx bx-comment-detail"></i> Start the rental
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
-        ) && (
-          <Link
-            className="default-btn"
-            href={`${link}/${order.id}/?scroll-to=owner-qr-code`}
-          >
-            <i className="bx bx-comment-detail"></i> Finish the rental
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
-        ) && (
-          <Link
-            className="default-btn"
-            href={`/dashboard/creating-renter-review/${order.id}/`}
+            href={`/dashboard/creating-worker-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -271,21 +241,6 @@ const OrderInfo = ({
             <i className="bx bx-transfer-alt"></i>
             Open dispute
           </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickExtend(order.id);
-            }}
-            className="default-btn"
-          >
-            <i className="bx bx-calendar"></i> Extend Offer
-          </button>
         )}
 
         {currentActionButtons.includes(
@@ -330,17 +285,6 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT
-        ) && (
-          <Link
-            className="default-btn"
-            href={`/dashboard/chats/${order.parentChatId}`}
-          >
-            <i className="bx bx-chat"></i> Parent Chat
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
         ) && (
           <Link
@@ -364,106 +308,47 @@ const OrderItem = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickExtend,
 }) => {
-  const [showedAllExtends, setShowedAllExtends] = useState(false);
-  const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
+  const userName = filterType == "worker" ? order.ownerName : order.workerName;
   const userEmail =
-    filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
+    filterType == "worker" ? order.ownerEmail : order.workerEmail;
   const userPhoto =
-    filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-
-  let extendOrders = order.extendOrders.sort((a, b) => a.id - b.id);
-
-  extendOrders = extendOrders.reverse();
-
-  if (!showedAllExtends) {
-    extendOrders = extendOrders.slice(0, baseShowedExtendsCount);
-  }
+    filterType == "worker" ? order.ownerPhoto : order.workerPhoto;
 
   return (
-    <>
-      <div className="tr">
-        <div
-          className="td name"
-          style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
-        >
-          <img src={generateProfileFilePath(userPhoto)} alt="image" />
-          <div className="info">
-            <span className="row-dots-end">{userName}</span>
-            <ul>
-              <li>
-                <Link className="row-dots-end" href={`mailto:${userEmail}`}>
-                  {userEmail}
-                </Link>
-              </li>
-            </ul>
-            {order.chatId && (
-              <Link
-                href={`/dashboard/chats/${order.chatId}/`}
-                className="default-btn"
-              >
-                <i className="bx bx-envelope"></i> Send Message
+    <div className="tr">
+      <div className="td name">
+        <img src={generateProfileFilePath(userPhoto)} alt="image" />
+        <div className="info">
+          <span className="row-dots-end">{userName}</span>
+          <ul>
+            <li>
+              <Link className="row-dots-end" href={`mailto:${userEmail}`}>
+                {userEmail}
               </Link>
-            )}
-          </div>
-        </div>
-
-        <OrderInfo
-          order={order}
-          handleClickCancel={handleClickCancel}
-          handleClickPayedFastCancel={handleClickPayedFastCancel}
-          handleClickUpdateRequest={handleClickUpdateRequest}
-          handleClickReject={handleClickReject}
-          handleClickAccept={handleClickAccept}
-          handleClickExtend={handleClickExtend}
-          link={link}
-        />
-      </div>
-
-      {extendOrders.map((extendOrder, index) => {
-        extendOrder["extendOrders"] = order.extendOrders;
-
-        return (
-          <div className="tr extension-tr" key={extendOrder.id}>
-            <div
-              className="td name"
-              style={
-                order.extendOrders.length != index + 1
-                  ? { borderBottom: 0, borderTop: 0 }
-                  : { borderTop: 0 }
-              }
-            ></div>
-
-            <OrderInfo
-              order={extendOrder}
-              handleClickCancel={handleClickCancel}
-              handleClickPayedFastCancel={handleClickPayedFastCancel}
-              handleClickUpdateRequest={handleClickUpdateRequest}
-              handleClickReject={handleClickReject}
-              handleClickAccept={handleClickAccept}
-              handleClickExtend={handleClickExtend}
-              link={link}
-              extension={true}
-            />
-          </div>
-        );
-      })}
-
-      {order.extendOrders.length > baseShowedExtendsCount && (
-        <div className="tr extension-tr">
-          <div colSpan={3} className="td show-more-table-rows">
-            <button
-              onClick={() => setShowedAllExtends(!showedAllExtends)}
-              type="button"
+            </li>
+          </ul>
+          {order.chatId && (
+            <Link
+              href={`/dashboard/chats/${order.chatId}/`}
               className="default-btn"
             >
-              {showedAllExtends ? "Show Less" : "Show More"}
-            </button>
-          </div>
+              <i className="bx bx-envelope"></i> Send Message
+            </Link>
+          )}
         </div>
-      )}
-    </>
+      </div>
+
+      <OrderInfo
+        order={order}
+        handleClickCancel={handleClickCancel}
+        handleClickPayedFastCancel={handleClickPayedFastCancel}
+        handleClickUpdateRequest={handleClickUpdateRequest}
+        handleClickReject={handleClickReject}
+        handleClickAccept={handleClickAccept}
+        link={link}
+      />
+    </div>
   );
 };
 

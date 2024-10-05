@@ -18,7 +18,7 @@ import { useRouter } from "next/router";
 import { IndiceContext } from "../../../../contexts";
 import Link from "next/link";
 
-const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
+const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
   const { sessionUser } = useContext(IndiceContext);
   const router = useRouter();
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -32,12 +32,12 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
   const totalFee = calculateFeeByDaysCount(
     duration,
     price,
-    tenantBaseCommission,
+    workerBaseCommission,
     true
   );
   const totalPrice = subtotalPrice + totalFee;
 
-  const onTenantPayed = () => {
+  const onWorkerPayed = () => {
     router.push(`/dashboard/orders/${order.id}?success=Payed successfully`);
   };
 
@@ -200,7 +200,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                       setDisabled={setDisabled}
                       bankInfo={bankInfo}
                       authToken={authToken}
-                      onTenantPayed={onTenantPayed}
+                      onWorkerPayed={onWorkerPayed}
                       orderId={order.id}
                       amount={calculateCurrentTotalPrice({
                         isOwner: false,
@@ -208,8 +208,8 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                         endDate: order.offerEndDate,
                         pricePerDay: order.offerPricePerDay,
                         ownerFee: order.ownerFee,
-                        tenantFee: order.tenantFee,
-                        type: "tenant",
+                        workerFee: order.workerFee,
+                        type: "worker",
                       })}
                     />
                   )}

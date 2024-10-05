@@ -4,11 +4,11 @@ import { useOrderActions } from "../../hooks";
 import OrderPopups from "../Order/OrderPopups";
 
 const OrderModals = ({
-  tenantBaseCommission,
+  workerBaseCommission,
   order,
   orderPopupsData,
   bankInfo,
-  onTenantPayed = null,
+  onWorkerPayed = null,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -21,17 +21,17 @@ const OrderModals = ({
   }
 
   const currentFee =
-    sessionUser?.id == order.ownerId ? order.ownerFee : order.tenantFee;
+    sessionUser?.id == order.ownerId ? order.ownerFee : order.workerFee;
 
   return (
     <OrderPopups
       {...orderPopupsData}
       order={order}
       actualUpdateRequest={order?.actualUpdateRequest}
-      tenantBaseCommission={tenantBaseCommission}
+      workerBaseCommission={workerBaseCommission}
       currentFee={currentFee}
       actionButtons={currentActionButtons}
-      onTenantPayed={onTenantPayed}
+      onWorkerPayed={onWorkerPayed}
       bankInfo={bankInfo}
     />
   );

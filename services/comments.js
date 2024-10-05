@@ -6,8 +6,8 @@ export const getOwnerCommentList = async (params, authToken = null) => {
   return data.body;
 };
 
-export const getTenantCommentList = async (params, authToken = null) => {
-  const data = await post(`/tenant-list`, params, authToken);
+export const getWorkerCommentList = async (params, authToken = null) => {
+  const data = await post(`/worker-list`, params, authToken);
   return data.body;
 };
 
@@ -16,8 +16,8 @@ export const ownerCommentApprove = async ({ id }, authToken = null) => {
   return data.body;
 };
 
-export const tenantCommentApprove = async ({ id }, authToken = null) => {
-  const data = await post(`/tenant-approve`, { id }, authToken);
+export const workerCommentApprove = async ({ id }, authToken = null) => {
+  const data = await post(`/worker-approve`, { id }, authToken);
   return data.body;
 };
 
@@ -29,21 +29,21 @@ export const ownerCommentReject = async (
   return data.body;
 };
 
-export const tenantCommentReject = async (
+export const workerCommentReject = async (
   { id, description },
   authToken = null
 ) => {
-  const data = await post(`/tenant-reject`, { id, description }, authToken);
+  const data = await post(`/worker-reject`, { id, description }, authToken);
   return data.body;
 };
 
-export const createRenterReview = async (
-  { tenantCommentInfo, orderId },
+export const createWorkerReview = async (
+  { workerCommentInfo, orderId },
   authToken
 ) => {
   const data = await post(
-    `/create-tenant-review`,
-    { userCommentInfo: tenantCommentInfo, orderId },
+    `/create-worker-review`,
+    { userCommentInfo: workerCommentInfo, orderId },
     authToken
   );
   return data.body;

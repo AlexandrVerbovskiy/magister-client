@@ -15,14 +15,14 @@ const TableItem = (props) => {
   const {
     id,
     listingName,
-    tenantName,
-    tenantEmail,
-    tenantPhone,
+    workerName,
+    workerEmail,
+    workerPhone,
     ownerName,
     ownerEmail,
     ownerPhone,
     listingId,
-    tenantId,
+    workerId,
     ownerId,
     status,
     cancelStatus,
@@ -36,9 +36,9 @@ const TableItem = (props) => {
     payedAdminApproved,
     payedWaitingApproved,
     listingRentalCount,
-    tenantAverageRating,
+    workerAverageRating,
     ownerAverageRating,
-    tenantCommentCount,
+    workerCommentCount,
     ownerCommentCount,
     payedId,
   } = props;
@@ -148,21 +148,21 @@ const TableItem = (props) => {
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
             <SubInfoTitle
-              title="Renter"
-              href={`/admin/users/edit/${tenantId}`}
-              canMove={isAdmin && sessionUser?.id != tenantId}
+              title="Worker"
+              href={`/admin/users/edit/${workerId}`}
+              canMove={isAdmin && sessionUser?.id != workerId}
             />
-            <SubInfoRow label="Name" value={tenantName} />
-            <SubInfoRow label="Email" value={tenantEmail} />
+            <SubInfoRow label="Name" value={workerName} />
+            <SubInfoRow label="Email" value={workerEmail} />
             <SubInfoRow
               label="Phone"
-              value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
+              value={workerPhone && workerPhone.length ? workerPhone : "-"}
             />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
-                value={tenantAverageRating}
-                count={tenantCommentCount}
-                commentName="renter"
+                value={workerAverageRating}
+                count={workerCommentCount}
+                commentName="worker"
               />
             </SubInfoRowWithChild>
           </div>

@@ -92,11 +92,11 @@ const InsuranceGuarantee = () => {
               weapon.
             </p>
             <p>Items that are still under a claim process.</p>
-            <p>Items handed over to anyone other than the verified Renter.</p>
+            <p>Items handed over to anyone other than the verified Worker.</p>
             <p>
               Items handed over during the exchange process that do not follow
               the barcode and verification of condition process from both the
-              Owner and the Renter. RentAbout cannot guarantee where no damage
+              Owner and the Worker. RentAbout cannot guarantee where no damage
               or other issues were reported as part of that process at the time
               of the exchange.
             </p>
@@ -136,7 +136,7 @@ const InsuranceGuarantee = () => {
                   Ensure the transaction was approved by RentAbout's
                   verification process before handing over the item.
                 </li>
-                <li>Only hand over the item to the verified Renter.</li>
+                <li>Only hand over the item to the verified Worker.</li>
               </ul>
             </div>
 
@@ -155,7 +155,7 @@ const InsuranceGuarantee = () => {
             <p>
               The Customer Service Team will determine when to initiate the
               claims process, after compensation has been sought from the
-              Renter.
+              Worker.
             </p>
 
             <h4>Owner Responsibilities</h4>
@@ -165,7 +165,7 @@ const InsuranceGuarantee = () => {
             <div className="p-0">
               <ul>
                 <li>
-                  Seek compensation from the Renter for any damage, loss, or
+                  Seek compensation from the Worker for any damage, loss, or
                   theft during the rental period.
                 </li>
                 <li>
@@ -173,7 +173,7 @@ const InsuranceGuarantee = () => {
                   and obtain a crime reference number.
                 </li>
                 <li>
-                  Include all items in your original listing used by the Renter
+                  Include all items in your original listing used by the Worker
                   to rent the items.
                 </li>
                 <li>

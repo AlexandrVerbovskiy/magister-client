@@ -32,7 +32,6 @@ const BookingModal = ({
   title = "Book Now",
   startDate = null,
   fullVersion = false,
-  isExtend = false,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
@@ -126,7 +125,7 @@ const BookingModal = ({
   }, [defaultPrice]);
 
   useEffect(() => {
-    const defaultCountDays = minRentalDays && !isExtend ? minRentalDays : 1;
+    const defaultCountDays = minRentalDays && minRentalDays;
     const firstAvailableDate = findFirstAvailableDate(
       blockedDates,
       defaultCountDays,
@@ -152,26 +151,12 @@ const BookingModal = ({
   const handleSubmit = () => {
     let hasError = false;
 
-    if (!isExtend || dateConverter(startDate) != dateConverter(fromDate)) {
+    if (dateConverter(startDate) != dateConverter(fromDate)) {
       if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-        let message = `You can rent a listing only for a period of more than ${minRentalDays} days`;
-
-        if (isExtend) {
-          message += `, or extend renting from ${dateConverter(startDate)}`;
-        }
-
+        const message = `You can rent a listing only for a period of more than ${minRentalDays} days`;
         setCalendarError(message);
         hasError = true;
       }
-    }
-
-    if (
-      getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION
-    ) {
-      setCalendarError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
     }
 
     if (fullVersion) {
@@ -203,9 +188,7 @@ const BookingModal = ({
     setOfferPriceActive(true);
   };
 
-  const yesNoTitle = isExtend
-    ? "Confirm that you want to make an extension"
-    : "Confirm that you want to make a booking";
+  const yesNoTitle = "Confirm that you want to make a booking";
 
   const onYesNoAccept = () => {
     setYesNoActive(false);
@@ -237,12 +220,6 @@ const BookingModal = ({
         <span className="sub-title mb-2">
           <span>{title}</span>
           <br />
-          {isExtend && (
-            <span className="sub-text">
-              You can extend the order from {dateConverter(startDate)}, or start
-              a new order if the start date is different
-            </span>
-          )}
         </span>
 
         <div className="mt-3 booking-form left-scrollable">

@@ -6,8 +6,8 @@ export const moneyFormat = (money) => +money.toFixed(2);
 export const calculateFeeByDaysCount = (count, price, fee, needMin = false) => {
   const totalFee = (fee * price * count) / 100;
 
-  if (needMin && totalFee < STATIC.LIMITS.MIN_TENANT_COMMISSION) {
-    return STATIC.LIMITS.MIN_TENANT_COMMISSION;
+  if (needMin && totalFee < STATIC.LIMITS.MIN_WORKER_COMMISSION) {
+    return STATIC.LIMITS.MIN_WORKER_COMMISSION;
   }
 
   return moneyFormat(totalFee);
@@ -39,7 +39,7 @@ export const calculateFullTotalByDaysCount = (
   return moneyFormat(total);
 };
 
-export const tenantPaymentCalculate = (startDay, endDay, fee, pricePerDay) => {
+export const workerPaymentCalculate = (startDay, endDay, fee, pricePerDay) => {
   const duration = getFactOrderDays(startDay, endDay);
   const resPayment =
     duration * pricePerDay +

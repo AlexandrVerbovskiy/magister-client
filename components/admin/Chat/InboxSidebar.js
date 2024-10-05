@@ -18,10 +18,10 @@ const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
             <a className="block" href="#0">
               <img
                 className="rounded-full border-2 border-white dark:border-slate-800 box-content"
-                src={generateProfileFilePath(chat.tenantPhoto)}
+                src={generateProfileFilePath(chat.workerPhoto)}
                 width="32"
                 height="32"
-                alt={chat.tenantName}
+                alt={chat.workerName}
                 style={{ width: "32px", height: "32px" }}
               />
             </a>

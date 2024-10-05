@@ -10,7 +10,7 @@ import SubInfoRowWithChild from "../SubInfoRowWithChild";
 import RatingInfoRow from "../RatingInfoRow";
 import TableUserLink from "../TableUserLink";
 
-const RenterTableItem = ({
+const WorkerTableItem = ({
   id,
   description,
 
@@ -137,7 +137,7 @@ const RenterTableItem = ({
                       <SingleRatingStar
                         value={reviewerAverageRating}
                         count={reviewerCommentCount}
-                        commentName="renter"
+                        commentName="worker"
                       />
                     </SubInfoRowWithChild>
                   </div>
@@ -259,4 +259,4 @@ const RenterTableItem = ({
   );
 };
 
-export default RenterTableItem;
+export default WorkerTableItem;

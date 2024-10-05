@@ -18,10 +18,6 @@ const useOrderActions = ({ order }) => {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ORDER_CHAT);
     }
 
-    if (order.parentChatId) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT);
-    }
-
     if (order.disputeId != null) {
       if (order.disputeChatId) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT);
@@ -37,11 +33,11 @@ const useOrderActions = ({ order }) => {
     }
 
     const isOwner = order.ownerId == sessionUser?.id;
-    const isTenant = order.tenantId == sessionUser?.id;
+    const isWorker = order.workerId == sessionUser?.id;
 
     if (
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-      (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
+      (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
     ) {
       newActionButtons.push(
         STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
@@ -49,8 +45,8 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT &&
-      isTenant
+      order.status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT &&
+      isWorker
     ) {
       if (order.paymentInfo) {
         if (
@@ -68,110 +64,46 @@ const useOrderActions = ({ order }) => {
       !(order.paymentInfo && order.paymentInfo.waitingApproved) &&
       ((isOwner &&
         [
-          STATIC.ORDER_STATUSES.PENDING_TENANT,
-          STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+          STATIC.ORDER_STATUSES.PENDING_WORKER,
+          STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
         ].includes(order.status)) ||
-        (isTenant &&
+        (isWorker &&
           [
             STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+            STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
           ].includes(order.status)))
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
     }
 
-    if (order.orderParentId) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
-    } else {
-      if (
-        order.extendOrders &&
-        order.extendOrders.length > 0 &&
-        order.extendOrders.length > 1
-      ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
-      }
+    if (
+      [
+        STATIC.ORDER_STATUSES.IN_PROCESS,
+        STATIC.ORDER_STATUSES.FINISHED,
+        STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
+      ].includes(order.status)
+    ) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+    }
 
-      if (
-        [
-          STATIC.ORDER_STATUSES.FINISHED,
-          STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-        ].includes(order.status) ||
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
-          isOwner)
-      ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
-      }
-
-      if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
-        isOwner
-      ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE);
-      }
-
-      if (
-        order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
-        isTenant
-      ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE);
-      }
-
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
-        if (isTenant) {
-          if (order.canAcceptTenantListing) {
-            newActionButtons.push(
-              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-            );
-          }
-
-          if (order.canFastCancelPayed) {
-            newActionButtons.push(
-              STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
-            );
-          } else {
-            newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
-          }
-        }
-      }
-
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-        if (isOwner && order.canAcceptOwnerListing) {
-          newActionButtons.push(
-            STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
-          );
-        }
-      }
-
-      if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
-        if (isOwner && !order.tenantCommentId) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW);
-        }
-
-        if (isTenant && !order.ownerCommentId) {
-          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+    if (order.status == STATIC.ORDER_STATUSES.IN_PROCESS) {
+      if (isWorker) {
+        if (order.canFastCancelPayed) {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
+        } else {
+          newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
         }
       }
     }
 
-    const hasUnstartedExtends =
-      order.extendOrders &&
-      order.extendOrders.length > 0 &&
-      order.extendOrders.find(
-        (extendOrder) =>
-          [
-            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-            STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_TENANT,
-            STATIC.ORDER_STATUSES.REJECTED,
-          ].includes(extendOrder.status) && !extendOrder.cancelStatus
-      );
+    if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
+      if (isOwner && !order.workerCommentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW);
+      }
 
-    if (
-      isTenant &&
-      !hasUnstartedExtends &&
-      order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER
-    ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON);
+      if (isWorker && !order.ownerCommentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
+      }
     }
 
     setCurrentActionButtons(newActionButtons);

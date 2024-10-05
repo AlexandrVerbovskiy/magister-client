@@ -184,15 +184,6 @@ const CreateUpdateOrderRequestModal = ({
     }
 
     if (
-      getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION
-    ) {
-      setCalendarError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
-    if (
       proposalPrice == price &&
       proposalStartDate == separateDate(fromDate) &&
       proposalEndDate == separateDate(toDate)

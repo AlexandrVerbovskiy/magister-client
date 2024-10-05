@@ -6,14 +6,11 @@ import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
 import {
-  getOrderBlockedDatesToExtend,
   getOrderBlockedDatesToUpdate,
-  getStartExtendOrderDate,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
 } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
-import BookingModal from "../SingleListings/BookingModal";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -40,16 +37,11 @@ const OrdersListFastActinsModals = ({
 
   activePay,
   closePay,
-  onTenantPayed,
+  onWorkerPayed,
   activePayOrder,
-  tenantCancelFee,
+  workerCancelFee,
 
-  handleClickApproveExtendOrder,
-  extendModalActive,
-  extendModalActiveOrder,
-  closeExtendOrder,
-
-  tenantBaseCommission,
+  workerBaseCommission,
   successIconPopupState,
 
   bankInfo,
@@ -107,7 +99,7 @@ const OrdersListFastActinsModals = ({
       setUpdateRequestFee(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
           ? updateRequestModalActiveOrder.ownerFee
-          : updateRequestModalActiveOrder.tenantFee
+          : updateRequestModalActiveOrder.workerFee
       );
       setUpdateRequestCommissionType(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
@@ -123,30 +115,21 @@ const OrdersListFastActinsModals = ({
 
   useEffect(() => {
     const newAmount = activePayOrder
-      ? tenantPaymentCalculate(
+      ? workerPaymentCalculate(
           activePayOrder.offerStartDate,
           activePayOrder.offerEndDate,
-          activePayOrder.tenantFee,
+          activePayOrder.workerFee,
           activePayOrder.offerPricePerDay
         )
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
     setPayListingName(activePayOrder?.listingName ?? "");
-    setPayOfferFee(activePayOrder?.tenantFee ?? 0);
+    setPayOfferFee(activePayOrder?.workerFee ?? 0);
     setPayPricePerDay(activePayOrder?.offerPricePerDay ?? 0);
     setPayOfferStartDate(activePayOrder?.offerStartDate ?? Date.now());
     setPayOfferEndDate(activePayOrder?.offerEndDate ?? Date.now());
   }, [activePayOrder, sessionUser]);
-
-  let extendStartDate = null;
-
-  if (extendModalActiveOrder) {
-    extendStartDate = getStartExtendOrderDate(
-      extendModalActiveOrder.offerEndDate,
-      extendModalActiveOrder.extendOrders
-    );
-  }
 
   return (
     <>
@@ -188,14 +171,14 @@ const OrdersListFastActinsModals = ({
         closeActiveUpdateRequest={closeActiveUpdateRequest}
         listingName={updateRequestListingName}
         blockedDates={updateRequestBlockedDates}
-        tenantFee={updateRequestModalActiveOrder?.tenantFee ?? 0}
+        workerFee={updateRequestModalActiveOrder?.workerFee ?? 0}
       />
 
       <PayModal
         amount={payAmount}
         orderId={payOrderId}
         listingName={payListingName}
-        onTenantPayed={onTenantPayed}
+        onWorkerPayed={onWorkerPayed}
         pricePerDay={payPricePerDay}
         offerStartDate={payOfferStartDate}
         offerEndDate={payOfferEndDate}
@@ -212,21 +195,6 @@ const OrdersListFastActinsModals = ({
         textWeight={successIconPopupState.textWeight}
         text={successIconPopupState.text}
         mainCloseButtonText={successIconPopupState.closeButtonText}
-      />
-
-      <BookingModal
-        handleMakeBooking={handleClickApproveExtendOrder}
-        price={extendModalActiveOrder?.offerPricePerDay ?? 0}
-        minRentalDays={extendModalActiveOrder?.listingMinRentalDays ?? 0}
-        fee={tenantBaseCommission}
-        createOrderModalActive={extendModalActive}
-        closeModal={closeExtendOrder}
-        listingName={extendModalActiveOrder?.listingName ?? ""}
-        blockedDates={getOrderBlockedDatesToExtend(extendModalActiveOrder)}
-        title="Extend Now"
-        startDate={extendStartDate}
-        isExtend={true}
-        fullVersion={true}
       />
     </>
   );

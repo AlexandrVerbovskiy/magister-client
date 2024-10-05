@@ -32,11 +32,11 @@ const TypeSpan = ({ type }) => {
 
 const TableItem = ({
   id,
-  tenantId,
-  tenantName,
-  tenantEmail,
-  tenantPhone,
-  tenantPhoto,
+  workerId,
+  workerName,
+  workerEmail,
+  workerPhone,
+  workerPhoto,
   money,
   status,
   receivedType,
@@ -71,7 +71,7 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
+          <TableUserLink id={workerId} name={workerName} photo={workerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TableUserLink
@@ -128,16 +128,16 @@ const TableItem = ({
                   className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
                 >
                   <SubInfoTitle
-                    title="Renter"
-                    href={`/admin/users/edit/${tenantId}`}
+                    title="Worker"
+                    href={`/admin/users/edit/${workerId}`}
                     canMove={canMoveToRecipient}
                   />
-                  <SubInfoRow label="Name" value={tenantName} />
-                  <SubInfoRow label="Email" value={tenantEmail} />
+                  <SubInfoRow label="Name" value={workerName} />
+                  <SubInfoRow label="Email" value={workerEmail} />
                   <SubInfoRow
                     label="Phone"
                     value={
-                      tenantPhone && tenantPhone.length ? tenantPhone : "-"
+                      workerPhone && workerPhone.length ? workerPhone : "-"
                     }
                   />
                 </td>

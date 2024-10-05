@@ -6,7 +6,7 @@ import {
 import {
   moneyFormat,
   ownerGetsCalculate,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
 } from "./priceCalculations";
 
 export const capitalizeFirstLetter = (str) => {
@@ -73,17 +73,17 @@ export const calculateCurrentTotalPrice = ({
   endDate,
   pricePerDay,
   ownerFee,
-  tenantFee,
+  workerFee,
   type = null,
   isOwner = null,
 }) => {
   if (!type) {
-    type = isOwner ? "owner" : "tenant";
+    type = isOwner ? "owner" : "worker";
   }
 
-  const fee = type == "owner" ? ownerFee : tenantFee;
+  const fee = type == "owner" ? ownerFee : workerFee;
   const calculationFunc =
-    type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
+    type == "owner" ? ownerGetsCalculate : workerPaymentCalculate;
 
   return calculationFunc(startDate, endDate, fee, pricePerDay);
 };
@@ -174,7 +174,7 @@ export const getDisputeTitle = (name) => {
 };
 
 export const getFilePath = (part) =>
-  process.env.NEXT_PUBLIC_BUCKET_URL + "/public/" + part;
+  process.env.NEXT_PUBLIC_SERVER_URL + "/public/" + part;
 
 export const generateProfileFilePath = (path) => {
   return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;

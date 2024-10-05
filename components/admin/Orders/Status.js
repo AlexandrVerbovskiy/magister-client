@@ -10,12 +10,12 @@ const Status = ({
   let text = "Unknown Status";
   let dopClassName = "bg-slate-100 text-slate-500";
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
-    text = "Approved";
+  if (status == STATIC.ORDER_STATUSES.IN_PROCESS) {
+    text = "In process";
     dopClassName = "bg-indigo-100 text-indigo-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
+  if (status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED) {
     text = "Rental in Progress";
     dopClassName = "bg-orange-100 text-orange-500";
   }
@@ -30,7 +30,7 @@ const Status = ({
     dopClassName = "bg-purple-100 text-purple-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_TENANT) {
+  if (status == STATIC.ORDER_STATUSES.PENDING_WORKER) {
     text = "Waiting for Confirmation";
     dopClassName = "bg-purple-100 text-purple-500";
   }
@@ -40,7 +40,7 @@ const Status = ({
     dopClassName = "bg-rose-100 text-rose-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT) {
+  if (status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT) {
     text = "Waiting for Payment";
     dopClassName = "bg-sky-100 text-sky-500";
 

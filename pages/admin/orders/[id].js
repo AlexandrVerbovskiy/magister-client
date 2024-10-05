@@ -13,7 +13,7 @@ import {
   getListingImageByType,
   moneyFormat,
   ownerGetsCalculate,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -171,7 +171,7 @@ const Order = (baseProps) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.workerName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}
@@ -235,7 +235,7 @@ const Order = (baseProps) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={order.tenantName}
+                                value={order.workerName}
                                 label="Rental"
                                 placeholder="Rental Name"
                                 name="rental"
@@ -342,11 +342,11 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_fee"
-                                label="Renter Fee (%)"
-                                placeholder="Renter Fee"
+                                name="worker_fee"
+                                label="Worker Fee (%)"
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.tenantFee}
+                                value={order.workerFee}
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -380,9 +380,9 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_total_fee"
-                                label={`Renter Total Fee (${STATIC.CURRENCY})`}
-                                placeholder="Renter Fee"
+                                name="worker_total_fee"
+                                label={`Worker Total Fee (${STATIC.CURRENCY})`}
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
@@ -392,7 +392,7 @@ const Order = (baseProps) => {
                                           activeRequestsToUpdate.newEndDate
                                         ),
                                         activeRequestsToUpdate.newPricePerDay,
-                                        order.tenantFee,
+                                        order.workerFee,
                                         true
                                       )
                                     : calculateFeeByDaysCount(
@@ -401,7 +401,7 @@ const Order = (baseProps) => {
                                           order.offerEndDate
                                         ),
                                         order.offerPricePerDay,
-                                        order.tenantFee,
+                                        order.workerFee,
                                         true
                                       )
                                 }
@@ -442,25 +442,25 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_price"
-                                label={`Renter Send Total Price (${STATIC.CURRENCY})`}
-                                placeholder="Renter Send Total Price"
+                                name="worker_price"
+                                label={`Worker Send Total Price (${STATIC.CURRENCY})`}
+                                placeholder="Worker Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        tenantPaymentCalculate(
+                                        workerPaymentCalculate(
                                           activeRequestsToUpdate.newStartDate,
                                           activeRequestsToUpdate.newEndDate,
-                                          order.tenantFee,
+                                          order.workerFee,
                                           activeRequestsToUpdate.newPricePerDay
                                         )
                                       )
                                     : moneyFormat(
-                                        tenantPaymentCalculate(
+                                        workerPaymentCalculate(
                                           order.offerStartDate,
                                           order.offerEndDate,
-                                          order.tenantFee,
+                                          order.workerFee,
                                           order.offerPricePerDay
                                         )
                                       )
@@ -601,9 +601,9 @@ const Order = (baseProps) => {
                               pricePerDay:
                                 order.prevPricePerDay ?? order.offerPricePerDay,
                               ownerFee: order.ownerFee,
-                              tenantFee: order.tenantFee,
+                              workerFee: order.workerFee,
                             })}
-                            prevSenderName={order.tenantName}
+                            prevSenderName={order.workerName}
                             prevGetterName={order.ownerName}
                             needBottomMargin={true}
                           />
@@ -621,17 +621,17 @@ const Order = (baseProps) => {
                                 endDate: request.newEndDate,
                                 pricePerDay: request.newPricePerDay,
                                 ownerFee: order.ownerFee,
-                                tenantFee: request.newFee,
+                                workerFee: request.newFee,
                               })}
                               prevSenderName={
-                                request.senderId == order.tenantId
-                                  ? order.tenantName
+                                request.senderId == order.workerId
+                                  ? order.workerName
                                   : order.ownerName
                               }
                               prevGetterName={
-                                request.senderId == order.tenantId
+                                request.senderId == order.workerId
                                   ? order.ownerName
-                                  : order.tenantName
+                                  : order.workerName
                               }
                               needBottomMargin={
                                 index != requestsToUpdate.length - 1
@@ -645,7 +645,7 @@ const Order = (baseProps) => {
                 </div>
               </div>
 
-              {order.tenantChecklistId && (
+              {order.workerChecklistId && (
                 <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
                   <div className="flex flex-col md:flex-row md:-mr-px">
                     <div className="grow w-full">
@@ -657,15 +657,15 @@ const Order = (baseProps) => {
                             }
                           >
                             <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                              Checklist by renter
+                              Checklist by worker
                             </h2>
 
                             <div className="w-full mb-2">
                               <TextareaView
                                 label="Can you confirm the that the item matches the description provided in the listing?"
-                                name="tenantChecklistItemMatchesDescription"
+                                name="workerChecklistItemMatchesDescription"
                                 value={
-                                  order.tenantChecklistItemMatchesDescription ||
+                                  order.workerChecklistItemMatchesDescription ||
                                   "-"
                                 }
                                 row="4"
@@ -697,9 +697,9 @@ const Order = (baseProps) => {
                             <div className="w-full mb-2">
                               <TextareaView
                                 label="Do the photos provided accurately represent the current state of the item?"
-                                name="tenantChecklistItemMatchesPhotos"
+                                name="workerChecklistItemMatchesPhotos"
                                 value={
-                                  order.tenantChecklistItemMatchesPhotos || "-"
+                                  order.workerChecklistItemMatchesPhotos || "-"
                                 }
                                 row="4"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -709,9 +709,9 @@ const Order = (baseProps) => {
                             <div className="w-full mb-2">
                               <TextareaView
                                 label="Can you confirm that the item is fully functional and meets the described specifications?"
-                                name="tenantChecklistItemFullyFunctional"
+                                name="workerChecklistItemFullyFunctional"
                                 value={
-                                  order.tenantChecklistItemFullyFunctional ||
+                                  order.workerChecklistItemFullyFunctional ||
                                   "-"
                                 }
                                 row="4"
@@ -722,9 +722,9 @@ const Order = (baseProps) => {
                             <div className="w-full mb-2">
                               <TextareaView
                                 label="Are all the listed accessories and parts present and in good condition?"
-                                name="tenantChecklistPartsGoodCondition"
+                                name="workerChecklistPartsGoodCondition"
                                 value={
-                                  order.tenantChecklistPartsGoodCondition || "-"
+                                  order.workerChecklistPartsGoodCondition || "-"
                                 }
                                 row="4"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -734,9 +734,9 @@ const Order = (baseProps) => {
                             <div className="w-full mb-2">
                               <TextareaView
                                 label="Do you understand how to use the item properly and follow the provided guidelines?"
-                                name="tenantChecklistProvidedGuidelines"
+                                name="workerChecklistProvidedGuidelines"
                                 value={
-                                  order.tenantChecklistProvidedGuidelines || "-"
+                                  order.workerChecklistProvidedGuidelines || "-"
                                 }
                                 row="4"
                                 labelClassName="block text-sm font-medium mb-1"
@@ -785,7 +785,7 @@ const Order = (baseProps) => {
                                 and also showing the serial number.
                               </label>
 
-                              {order.tenantChecklistsImages.map(
+                              {order.workerChecklistsImages.map(
                                 (image, index) => (
                                   <ListingPhotoView
                                     key={index}

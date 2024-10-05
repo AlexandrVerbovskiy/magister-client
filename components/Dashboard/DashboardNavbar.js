@@ -78,7 +78,7 @@ const DashboardNavbar = () => {
                 <span className="icon">
                   <i className="bx bx-layer"></i>
                 </span>
-                <span className="menu-title">My Items</span>
+                <span className="menu-title">My Listings</span>
               </Link>
             </li>
 
