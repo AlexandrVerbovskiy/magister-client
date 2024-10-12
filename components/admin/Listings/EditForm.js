@@ -182,20 +182,7 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [postcode, setPostcode] = useState("");
   const [postcodeError, setPostcodeError] = useState(null);
-
   const [city, setCity] = useState(baseCity);
-
-  const [compensationCost, setCompensationCost] = useState("");
-  const [compensationCostError, setCompensationCostError] = useState(null);
-
-  const [countStoredItems, setCountStoredItems] = useState("");
-  const [countStoredItemsError, setCountStoredItemsError] = useState(null);
-
-  const [pricePerDay, setPricePerDay] = useState("");
-  const [pricePerDayError, setPricePerDayError] = useState(null);
-
-  const [minRentalDays, setMinRentalDays] = useState("");
-  const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const baseCoords = getCityCoords(baseCity);
 
@@ -297,10 +284,6 @@ const EditForm = ({ listing, categories, save }) => {
     setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
-    setCompensationCost(data.compensationCost);
-    setCountStoredItems(data.countStoredItems);
-    setPricePerDay(data.pricePerDay);
-    setMinRentalDays(data.minRentalDays);
     setLat(data.rentalLat);
     setLng(data.rentalLng);
     setCenter({ lat: data.rentalLat, lng: data.rentalLng });
@@ -350,10 +333,6 @@ const EditForm = ({ listing, categories, save }) => {
       defects: prevListing.defects ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
-      compensationCost: prevListing.compensationCost ?? "",
-      countStoredItems: prevListing.countStoredItems ?? "",
-      pricePerDay: prevListing.pricePerDay ?? "",
-      minRentalDays: prevListing.minRentalDays ?? "",
       rentalLat: lat,
       rentalLng: lng,
       rentalRadius:
@@ -388,9 +367,6 @@ const EditForm = ({ listing, categories, save }) => {
       defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
-      compensationCost,
-      countStoredItems,
-      pricePerDay,
       rentalLat: lat,
       rentalLng: lng,
       rentalRadius: radius,
@@ -399,10 +375,6 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId,
       active,
     };
-
-    if (`${minRentalDays}`.trim()) {
-      dataToSave["minRentalDays"] = minRentalDays;
-    }
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
@@ -471,30 +443,6 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (minRentalDays && validateInteger(minRentalDays) !== true) {
-        setMinRentalDaysError(validateInteger(minRentalDays));
-        hasError = true;
-      }
-
-      if (!countStoredItems) {
-        setCountStoredItemsError("Required field");
-        hasError = true;
-      }
-
-      if (countStoredItems && validateInteger(countStoredItems) !== true) {
-        setCountStoredItemsError(validateInteger(countStoredItems));
-        hasError = true;
-      }
-
-      if (
-        countStoredItems &&
-        validateInteger(countStoredItems) === true &&
-        Number(countStoredItems) == 0
-      ) {
-        setCountStoredItemsError("Field must be higher than zero");
-        hasError = true;
-      }
-
       if (description && validateBigText(description) !== true) {
         setDescriptionError(validateBigText(description));
         hasError = true;
@@ -512,28 +460,8 @@ const EditForm = ({ listing, categories, save }) => {
         }
       }
 
-      if (!pricePerDay) {
-        setPricePerDayError("Required field");
-        hasError = true;
-      }
-
       if (!ownerId) {
         setOwnerIdError("Required field");
-        hasError = true;
-      }
-
-      if (pricePerDay && validatePrice(pricePerDay) !== true) {
-        setPricePerDayError(validatePrice(pricePerDay));
-        hasError = true;
-      }
-
-      if (!compensationCost) {
-        setCompensationCostError("Required field");
-        hasError = true;
-      }
-
-      if (compensationCost && validatePrice(compensationCost) !== true) {
-        setCompensationCostError(validatePrice(compensationCost));
         hasError = true;
       }
 
@@ -696,74 +624,6 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                             </div>
                           )}
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Pricing
-                        </h2>
-
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="pricePerPay"
-                                value={pricePerDay}
-                                setValue={setPricePerDay}
-                                error={pricePerDayError}
-                                setError={setPricePerDayError}
-                                label={`Rental price per day (${STATIC.CURRENCY})`}
-                                placeholder="12.00"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="compensationCost"
-                                label={`Item value (${STATIC.CURRENCY})`}
-                                placeholder="532.00"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={compensationCost}
-                                setValue={setCompensationCost}
-                                error={compensationCostError}
-                                setError={setCompensationCostError}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="minRentalDays"
-                                value={minRentalDays}
-                                setValue={setMinRentalDays}
-                                error={minRentalDaysError}
-                                setError={setMinRentalDaysError}
-                                label="Minimum rental days"
-                                placeholder="0"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="countStoredItems"
-                                label="Quantity"
-                                placeholder="1"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={countStoredItems}
-                                setValue={setCountStoredItems}
-                                error={countStoredItemsError}
-                                setError={setCountStoredItemsError}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
                         </div>
                       </section>
 

@@ -1,39 +1,41 @@
-import React, { useRef, useState } from "react";
+import Flatpickr from "react-flatpickr";
+import React, { useEffect, useState } from "react";
+import { getMaxFlatpickrDate } from "../../utils";
 
-const DateInput = ({ value, name, onInput, min = null }) => {
-  const inputRef = useRef(null);
-  const [showedPicker, setShowedPicker] = useState(false);
+const DateInput = ({ value, name, placeholder, onInput }) => {
+  const [pickerValue, setPickerValue] = useState(value ? [value] : []);
 
-  const showPicker = () => {
-    if (!showedPicker) {
-      inputRef.current.showPicker();
-    }
+  useEffect(() => {
+    setPickerValue(value ? [value] : []);
+  }, [value]);
 
-    setShowedPicker(!showedPicker);
-  };
-
-  const handleInput = (e) => {
-    onInput(e.target.value);
-    setShowedPicker(false);
-  };
-
-  const handleBlur = () => {
-    setShowedPicker(false);
+  const options = {
+    mode: "single",
+    static: true,
+    monthSelectorType: "static",
+    dateFormat: "M j, Y",
+    prevArrow:
+      '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+    nextArrow:
+      '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+    maxDate: getMaxFlatpickrDate(),
+    onChange: (selectedDates) => {
+      const date = selectedDates[0];
+      setPickerValue(date ? [date] : []);
+      onInput(date);
+    },
   };
 
   return (
-    <input
-      ref={inputRef}
-      className="date-input"
-      type="date"
-      value={value}
-      onChange={handleInput}
-      name={name}
-      id={name}
-      onClick={showPicker}
-      min={min}
-      onBlur={handleBlur}
-    />
+    <div className="w-100">
+      <Flatpickr
+        value={pickerValue}
+        options={options}
+        placeholder={placeholder}
+        name={name}
+        className="form-control d-flex align-items-center cursor-pointer w-100"
+      />
+    </div>
   );
 };
 

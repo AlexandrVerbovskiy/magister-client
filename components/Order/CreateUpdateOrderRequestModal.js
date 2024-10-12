@@ -6,11 +6,8 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
-  dateToSeconds,
-  findFirstAvailableDate,
   getFactOrderDays,
   getMaxFlatpickrDate,
-  groupDates,
   moneyFormatVisual,
   separateDate,
 } from "../../utils";
@@ -29,9 +26,7 @@ const CreateUpdateOrderRequestModal = ({
   proposalEndDate,
   updateRequestModalActive,
   closeActiveUpdateRequest,
-  minRentalDays,
   listingName,
-  blockedDates,
   commissionType,
 }) => {
   const proposalCountDays = getFactOrderDays(
@@ -94,30 +89,6 @@ const CreateUpdateOrderRequestModal = ({
   };
 
   useEffect(() => {
-    const defaultCountDays = minRentalDays ? minRentalDays : 1;
-    const baseFromDate = findFirstAvailableDate(blockedDates, defaultCountDays);
-
-    const baseToDate = new Date(
-      baseFromDate.getTime() + dateToSeconds(defaultCountDays - 1)
-    );
-
-    setToDate(baseToDate);
-    setFromDate(baseFromDate);
-
-    setPrice(defaultPrice);
-  }, [
-    defaultPrice,
-    fee,
-    proposalPrice,
-    proposalStartDate,
-    proposalEndDate,
-    minRentalDays,
-    listingName,
-    blockedDates,
-    commissionType,
-  ]);
-
-  useEffect(() => {
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
@@ -127,7 +98,6 @@ const CreateUpdateOrderRequestModal = ({
       static: true,
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
-      disable: groupDates(blockedDates),
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
       },
@@ -175,13 +145,6 @@ const CreateUpdateOrderRequestModal = ({
 
   const handleSubmit = () => {
     let hasError = false;
-
-    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-      setCalendarError(
-        `You can rent a listing only for a period of more than ${minRentalDays} days`
-      );
-      hasError = true;
-    }
 
     if (
       proposalPrice == price &&

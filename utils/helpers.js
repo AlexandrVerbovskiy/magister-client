@@ -1,7 +1,6 @@
 import STATIC from "../static";
 import {
   generateDatesBetween,
-  getOrderBlockedDatesToUpdate,
 } from "./dateHelpers";
 import {
   moneyFormat,
@@ -120,17 +119,6 @@ export const hasPayError = ({ sessionUser, order }) => {
   }
 
   return null;
-};
-
-export const getOrderBlockedDatesToExtend = (order) => {
-  if (!order) {
-    return [];
-  }
-
-  return removeDuplicates([
-    ...getOrderBlockedDatesToUpdate(order),
-    ...generateDatesBetween(order.offerStartDate, order.offerEndDate),
-  ]);
 };
 
 export const removeDuplicates = (arr) => [...new Set(arr)];

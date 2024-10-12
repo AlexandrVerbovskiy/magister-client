@@ -159,48 +159,6 @@ export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   return date < currentDate;
 };
 
-const isDateBlocked = (startDate, blockedDates, numOfDays) => {
-  for (let i = 0; i < numOfDays; i++) {
-    let tempDate = new Date(startDate);
-    tempDate.setDate(startDate.getDate() + i);
-
-    if (blockedDates.includes(separateDate(tempDate))) {
-      return true;
-    }
-  }
-  return false;
-};
-
-export const findFirstAvailableDate = (
-  blockedDates,
-  numOfDays,
-  startDate = null
-) => {
-  if (!startDate || startDate < new Date()) {
-    startDate = new Date();
-  }
-
-  let firstAvailableDate = null;
-  let daysToCheck = 0;
-
-  while (!firstAvailableDate) {
-    let currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + daysToCheck);
-
-    if (!numOfDays) {
-      numOfDays = 1;
-    }
-
-    if (!isDateBlocked(currentDate, blockedDates, numOfDays)) {
-      firstAvailableDate = currentDate;
-    } else {
-      daysToCheck++;
-    }
-  }
-
-  return firstAvailableDate;
-};
-
 export const increaseDateByOneDay = (dateString) => {
   const date = new Date(dateString);
   const newDate = new Date(date);

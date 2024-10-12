@@ -17,8 +17,6 @@ const OrderApprovementSection = ({
   fee,
   setToDate,
   setFromDate,
-  blockedDates,
-  minRentalDays,
 }) => {
   const [feeActive, setFeeActive] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
@@ -57,16 +55,6 @@ const OrderApprovementSection = ({
       setDateError('"From date" can\'t be larger than "To date"');
     }
 
-    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-      hasError = true;
-      setDateError(
-        `Rental duration can't be lower than ${getFactOrderDays(
-          fromDate,
-          toDate
-        )} days`
-      );
-    }
-
     if (hasError) {
       return;
     }
@@ -87,7 +75,6 @@ const OrderApprovementSection = ({
             toDate={toDate}
             price={price}
             listing={listing}
-            minRentalDays={minRentalDays}
             totalPrice={totalPrice}
             sendingMessageError={sendingMessageError}
             setSendingMessageError={setSendingMessageError}
@@ -106,7 +93,6 @@ const OrderApprovementSection = ({
             price={price}
             setToDate={setToDate}
             setFromDate={setFromDate}
-            blockedDates={blockedDates}
             totalPrice={totalPrice}
             subtotalPrice={subtotalPrice}
             dateError={dateError}

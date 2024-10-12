@@ -18314,6 +18314,10 @@ input[type="number"] {
   z-index: 9;
 }
 
+.flatpickr-wrapper{
+  width: 100%;
+}
+
 .flatpickr-date-filter > .flatpickr-wrapper > input {
   height: 40px !important;
   color: var(--blackColor);

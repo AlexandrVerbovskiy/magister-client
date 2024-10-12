@@ -8,34 +8,13 @@ import {
 import { useEffect, useRef } from "react";
 import ErrorSpan from "../../ErrorSpan";
 
-const DateInput = ({ value, setValue, label, blockedDates, setDateError }) => {
+const DateInput = ({ value, setValue, label, setDateError }) => {
   const flatpickrRef = useRef(null);
   const flatpickrContainerRef = useRef(null);
 
   const openDatePicker = () => {
     flatpickrRef.current.open();
   };
-
-  const handleInputDate = (dates) => {
-    const newLocalValue = dates[0];
-    setValue(separateDate(newLocalValue));
-    setDateError(null);
-  };
-
-  useEffect(() => {
-    flatpickrRef.current = flatpickr(flatpickrContainerRef.current, {
-      dateFormat: "Y-m-d",
-      disable: blockedDates,
-      minDate: "today",
-      defaultDate: [value],
-      static: true,
-      maxDate: getMaxFlatpickrDate(),
-      onChange: (selectedDates, dateStr, instance) => {
-        instance.element.value = dateStr;
-        handleInputDate(selectedDates);
-      },
-    });
-  }, [JSON.stringify(blockedDates)]);
 
   return (
     <div className="date-info" onClick={openDatePicker}>
@@ -53,10 +32,6 @@ const ContractDetails = ({
   price,
   setToDate,
   setFromDate,
-  needFeeSwitch = false,
-  feeActive = null,
-  setFeeActive = null,
-  blockedDates = [],
   totalPrice,
   subtotalPrice,
   dateError,
@@ -79,23 +54,6 @@ const ContractDetails = ({
           </div>
         )*/}
         <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-          <div className="d-flex">
-            <DateInput
-              label="Withdrawal"
-              value={fromDate}
-              setValue={setFromDate}
-              blockedDates={blockedDates}
-              setDateError={setDateError}
-            />
-
-            <DateInput
-              label="Devolution"
-              value={toDate}
-              setValue={setToDate}
-              blockedDates={blockedDates}
-              setDateError={setDateError}
-            />
-          </div>
           <ErrorSpan className="d-block" error={dateError} />
         </div>
         <div

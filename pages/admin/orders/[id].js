@@ -104,17 +104,6 @@ const PreviousProposalElem = ({
         </div>
 
         <div className="flex w-full gap-2">
-          <div className="w-full sm:w-1/2">
-            <InputView
-              value={prevPricePerDay}
-              label="Previous Price Per Day"
-              name={`prev_price_per_day_${index}`}
-              placeholder="Prev Price Per Day"
-              labelClassName="block text-sm font-medium mb-1"
-              inputClassName="form-input w-full"
-            />
-          </div>
-
           <div className="w-1/2">
             <InputView
               value={prevTotalPrice}
@@ -286,21 +275,6 @@ const Order = (baseProps) => {
                           </div>
 
                           <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <InputView
-                                name="price_per_day"
-                                label={`Price Per Day (${STATIC.CURRENCY})`}
-                                placeholder="Price Per Day"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={
-                                  activeRequestsToUpdate
-                                    ? activeRequestsToUpdate.newPricePerDay
-                                    : order.offerPricePerDay
-                                }
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 name="total_price"

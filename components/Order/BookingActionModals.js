@@ -8,11 +8,9 @@ const BookingActionModals = ({
   proposalPrice,
   proposalStartDate,
   proposalEndDate,
-  listingMinRentalDays,
   fee,
   commissionType,
   listingName,
-  blockedDates,
 
   updateRequestModalActive,
   setUpdateRequestModalActive,
@@ -36,13 +34,11 @@ const BookingActionModals = ({
         proposalPrice={proposalPrice}
         proposalStartDate={proposalStartDate}
         proposalEndDate={proposalEndDate}
-        minRentalDays={listingMinRentalDays}
         fee={fee}
         commissionType={commissionType}
         updateRequestModalActive={updateRequestModalActive}
         closeActiveUpdateRequest={() => setUpdateRequestModalActive(false)}
         listingName={listingName}
-        blockedDates={blockedDates}
       />
 
       <AcceptAcceptOrderModal

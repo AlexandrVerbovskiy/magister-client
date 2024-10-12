@@ -6,9 +6,6 @@ import {
   calculateFeeByDaysCount,
   calculateFullTotalByDaysCount,
   calculateTotalPriceByDaysCount,
-  dateConverter,
-  dateToSeconds,
-  findFirstAvailableDate,
   getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
@@ -27,10 +24,7 @@ const BookingModal = ({
   fee,
   createOrderModalActive,
   closeModal,
-  minRentalDays,
-  blockedDates,
   title = "Book Now",
-  startDate = null,
   fullVersion = false,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
@@ -81,8 +75,6 @@ const BookingModal = ({
   };
 
   useEffect(() => {
-    const datesToDisable = groupDates(blockedDates);
-
     calendarRef.current = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
@@ -92,7 +84,6 @@ const BookingModal = ({
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
       yearSelectorType: "static",
-      disable: datesToDisable,
       maxDate: getMaxFlatpickrDate(),
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
@@ -124,40 +115,8 @@ const BookingModal = ({
     setPrice(defaultPrice);
   }, [defaultPrice]);
 
-  useEffect(() => {
-    const defaultCountDays = minRentalDays && minRentalDays;
-    const firstAvailableDate = findFirstAvailableDate(
-      blockedDates,
-      defaultCountDays,
-      startDate
-    );
-
-    const lastAvailableDate = new Date(
-      firstAvailableDate.getTime() + dateToSeconds(defaultCountDays - 1)
-    );
-
-    const datesToDisable = groupDates(blockedDates);
-
-    if (calendarRef.current) {
-      calendarRef.current.set("disable", datesToDisable);
-      calendarRef.current.setDate([firstAvailableDate, lastAvailableDate]);
-      calendarRef.current.jumpToDate(firstAvailableDate);
-    }
-
-    setFromDate(firstAvailableDate);
-    setToDate(lastAvailableDate);
-  }, [blockedDates, minRentalDays, startDate]);
-
   const handleSubmit = () => {
     let hasError = false;
-
-    if (dateConverter(startDate) != dateConverter(fromDate)) {
-      if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-        const message = `You can rent a listing only for a period of more than ${minRentalDays} days`;
-        setCalendarError(message);
-        hasError = true;
-      }
-    }
 
     if (fullVersion) {
       if (!sendingMessage.trim()) {

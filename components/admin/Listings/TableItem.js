@@ -48,15 +48,12 @@ const TableItem = ({
   ownerPhone,
   categoryName,
   otherCategory,
-  countStoredItems,
-  pricePerDay,
   approved,
   active,
   onClickDelete,
   onChangeActive,
   images,
   address,
-  minRentalDays,
   ownerAverageRating,
   ownerCommentCount,
   openPopupImage,
@@ -140,12 +137,6 @@ const TableItem = ({
               value={categoryName ?? otherCategory}
             />
             <SubInfoRow label="Location" value={address} />
-            <SubInfoRow label="Price Per Day" value={pricePerDay} />
-            <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow
-              label="Minimum Rental Days"
-              value={minRentalDays || "-"}
-            />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
                 value={ownerAverageRating}

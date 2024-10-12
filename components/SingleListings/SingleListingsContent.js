@@ -253,16 +253,6 @@ const SingleListingsContent = ({
                     </div>
                   </div>
 
-                  <h3>Pricing</h3>
-                  <div id="pricing">
-                    <ul className="pricing-list">
-                      <li>
-                        Rental price per day{" "}
-                        <span>{moneyFormatVisual(listing.pricePerDay)}</span>
-                      </li>
-                    </ul>
-                  </div>
-
                   {listing.defects && (
                     <>
                       <h3>Defects</h3>
@@ -570,30 +560,12 @@ const SingleListingsContent = ({
 
                       {sessionUser?.id != listing.ownerId ? (
                         <div>
-                          {listing.minRentalDays > 0 && (
-                            <ul style={{ listStyle: "none", padding: "0" }}>
-                              <li className="d-flex">
-                                <i
-                                  style={{
-                                    fontSize: "20px",
-                                    transform: "translateY(3px)",
-                                    marginRight: "4px",
-                                  }}
-                                  className="bx bx-envelope"
-                                ></i>
-                                <div className="row-dots-end mt-0">
-                                  Min rental: {listing.minRentalDays} days
-                                </div>
-                              </li>
-                            </ul>
-                          )}
                           <button
                             type="button"
                             className="default-btn w-100"
                             onClick={handleMakeBookingTriggerClick}
                           >
-                            Send rental request{" "}
-                            {moneyFormatVisual(listing.pricePerDay)}/day
+                            Send request {moneyFormatVisual(listing.totalPrice)}
                           </button>
                         </div>
                       ) : (
@@ -671,8 +643,6 @@ const SingleListingsContent = ({
               fee={workerBaseCommissionPercent}
               setToDate={setCurrentApproveToDate}
               setFromDate={setCurrentApproveFromDate}
-              blockedDates={listing.blockedDates}
-              minRentalDays={listing.minRentalDays}
             />
           )}
         </div>
@@ -681,52 +651,36 @@ const SingleListingsContent = ({
       {sessionUser && (
         <BookingModal
           handleMakeBooking={handleBeforeMakeBooking}
-          price={listing.pricePerDay}
-          minRentalDays={listing.minRentalDays}
+          price={listing.totalPrice}
           fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
-          blockedDates={listing.blockedDates}
           title="Book Now"
         />
       )}
 
       {isMobile && (
-        <div
-          className="mobile-booking-section"
-        >
+        <div className="mobile-booking-section">
           <div className="listings-sidebar d-flex flex-column">
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
-                  {listing.minRentalDays > 0 && (
-                    <ul style={{ listStyle: "none", padding: "0" }}>
-                      <li className="d-flex">
-                        <div className="row-dots-end mt-0">
-                          <span style={{ color: "var(--mainColor)" }}>
-                            {moneyFormatVisual(listing.pricePerDay)}
-                          </span>{" "}
-                          daily rent
-                        </div>
-                      </li>
-                      <li className="d-flex">
-                        <div className="row-dots-end mt-0">
-                          <span style={{ textDecoration: "underline" }}>
-                            {listing.minRentalDays} days
-                          </span>{" "}
-                          is min rental duration
-                        </div>
-                      </li>
-                    </ul>
-                  )}
+                  <ul style={{ listStyle: "none", padding: "0" }}>
+                    <li className="d-flex">
+                      <div className="row-dots-end mt-0">
+                        <span style={{ color: "var(--mainColor)" }}>
+                          {moneyFormatVisual(listing.totalPrice)}
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
                   <button
                     type="button"
                     className="default-btn w-100"
                     onClick={handleMakeBookingTriggerClick}
                   >
-                    Send rental request {moneyFormatVisual(listing.pricePerDay)}
-                    /day
+                    Send rental request {moneyFormatVisual(listing.totalPrice)}
                   </button>
                 </div>
               ) : (

@@ -8,12 +8,10 @@ import {
   byteConverter,
   convertToSelectPopupCategories,
   getCityCoords,
-  getFilePath,
   onCurrentUserLocation,
   sortListingImages,
   uniqueImageId,
   validateBigText,
-  validateInteger,
   validatePrice,
   validateSmallText,
 } from "../../utils";
@@ -32,6 +30,7 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
+import DateInput from "../FormComponents/DateInput";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -120,17 +119,11 @@ const EditForm = ({
 
   const [city, setCity] = useState(baseCity);
 
-  const [compensationCost, setCompensationCost] = useState("");
-  const [compensationCostError, setCompensationCostError] = useState(null);
+  const [totalPrice, setTotalPrice] = useState("");
+  const [totalPriceError, setTotalPriceError] = useState(null);
 
-  const [countStoredItems, setCountStoredItems] = useState("");
-  const [countStoredItemsError, setCountStoredItemsError] = useState(null);
-
-  const [pricePerDay, setPricePerDay] = useState("");
-  const [pricePerDayError, setPricePerDayError] = useState(null);
-
-  const [minRentalDays, setMinRentalDays] = useState("");
-  const [minRentalDaysError, setMinRentalDaysError] = useState(null);
+  const [finishTime, setFinishTime] = useState("");
+  const [finishTimeError, setFinishTimeError] = useState(null);
 
   const [changePopupActive, setChangePopupActive] = useState(null);
 
@@ -285,27 +278,15 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeCompensationCost = (e) => {
-    setCompensationCost(e.target.value);
-    setCompensationCostError(null);
+  const handleChangeTotalPrice = (e) => {
+    setTotalPrice(e.target.value);
+    setTotalPriceError(null);
     setMainError(null);
   };
 
-  const handleChangeCountStoredItems = (e) => {
-    setCountStoredItems(e.target.value);
-    setCountStoredItemsError(null);
-    setMainError(null);
-  };
-
-  const handleChangePricePerDay = (e) => {
-    setPricePerDay(e.target.value);
-    setPricePerDayError(null);
-    setMainError(null);
-  };
-
-  const handleChangeMinRentalDays = (e) => {
-    setMinRentalDays(e.target.value);
-    setMinRentalDaysError(null);
+  const handleChangeFinishTine = (value) => {
+    setFinishTime(value);
+    setFinishTimeError(null);
     setMainError(null);
   };
 
@@ -345,10 +326,7 @@ const EditForm = ({
       defects: listing.defects ?? "",
       postcode: listing.postcode ?? "",
       city: city,
-      compensationCost: listing.compensationCost ?? "",
-      countStoredItems: listing.countStoredItems ?? "",
-      pricePerDay: listing.pricePerDay ?? "",
-      minRentalDays: listing.minRentalDays ?? "",
+      totalPrice: listing.totalPrice ?? "",
       rentalLat: lat,
       rentalLng: lng,
       rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
@@ -379,19 +357,13 @@ const EditForm = ({
       defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
-      compensationCost,
-      countStoredItems,
-      pricePerDay,
+      totalPrice,
       rentalLat: lat,
       rentalLng: lng,
       rentalRadius: radius,
       listingImages,
       active,
     };
-
-    if (`${minRentalDays}`.trim()) {
-      dataToSave["minRentalDays"] = minRentalDays;
-    }
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
@@ -418,10 +390,7 @@ const EditForm = ({
     setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
-    setCompensationCost(data.compensationCost);
-    setCountStoredItems(data.countStoredItems);
-    setPricePerDay(data.pricePerDay);
-    setMinRentalDays(data.minRentalDays);
+    setTotalPrice(data.totalPrice);
     setLat(data.rentalLat);
     setLng(data.rentalLng);
     setRadius(data.rentalRadius);
@@ -526,29 +495,6 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (minRentalDays && validateInteger(minRentalDays) !== true) {
-      setMinRentalDaysError(validateInteger(minRentalDays));
-      hasError = true;
-    }
-    if (!countStoredItems) {
-      setCountStoredItemsError("Required field");
-      hasError = true;
-    }
-
-    if (countStoredItems && validateInteger(countStoredItems) !== true) {
-      setCountStoredItemsError(validateInteger(countStoredItems));
-      hasError = true;
-    }
-
-    if (
-      countStoredItems &&
-      validateInteger(countStoredItems) === true &&
-      Number(countStoredItems) == 0
-    ) {
-      setCountStoredItemsError("Field must be higher than zero");
-      hasError = true;
-    }
-
     if (description && validateBigText(description) !== true) {
       setDescriptionError(validateBigText(description));
       hasError = true;
@@ -566,28 +512,18 @@ const EditForm = ({
       }
     }
 
-    if (!pricePerDay) {
-      setPricePerDayError("Required field");
+    if (!totalPrice) {
+      setTotalPrice("Required field");
       hasError = true;
     }
 
-    if (pricePerDay && validatePrice(pricePerDay) !== true) {
-      setPricePerDayError(validatePrice(pricePerDay));
-      hasError = true;
-    }
-
-    if (!compensationCost) {
-      setCompensationCostError("Required field");
+    if (totalPrice && validatePrice(totalPrice) !== true) {
+      setTotalPriceError(validatePrice(totalPrice));
       hasError = true;
     }
 
     if (files.length + linkFiles.length < 1) {
       setFileError("At least one photo is required");
-      hasError = true;
-    }
-
-    if (compensationCost && validatePrice(compensationCost) !== true) {
-      setCompensationCostError(validatePrice(compensationCost));
       hasError = true;
     }
 
@@ -753,59 +689,36 @@ const EditForm = ({
               </div>
             )}
           </div>
-        </div>
-        <div className="add-listings-box">
-          <h3>Pricing</h3>
 
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label={`Rental price per day (${STATIC.CURRENCY}):`}
-                icon="bx bx-purchase-tag"
-                placeholder="12.00"
-                value={pricePerDay}
-                onInput={handleChangePricePerDay}
-                error={pricePerDayError}
-                name="pricePerDay"
-              />
-            </div>
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label={`Item value (${STATIC.CURRENCY}):`}
+                label={`Total price (${STATIC.CURRENCY}):`}
                 icon="bx bx-purchase-tag"
                 placeholder="532.00"
-                value={compensationCost}
-                onInput={handleChangeCompensationCost}
-                error={compensationCostError}
-                name="compensationCostError"
+                value={totalPrice}
+                onInput={handleChangeTotalPrice}
+                error={totalPriceError}
+                name="totalPriceError"
               />
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Minimum rental days:"
-                icon="bx bx-menu-alt-left"
-                placeholder="0"
-                value={minRentalDays}
-                onInput={handleChangeMinRentalDays}
-                error={minRentalDaysError}
-                name="minRentalDays"
-              />
-            </div>
-
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Quantity:"
-                icon="bx bx-menu-alt-left"
-                placeholder="1"
-                value={countStoredItems}
-                onInput={handleChangeCountStoredItems}
-                error={countStoredItemsError}
-                name="countStoredItems"
-              />
+              <div class="form-group ">
+                <label>
+                  <i class="bx bx-timer"></i> Finish Time:
+                </label>
+                <DateInput
+                  name="finishTime"
+                  value={finishTime}
+                  onInput={handleChangeFinishTine}
+                  placeholder="Finish Time"
+                />
+              </div>
             </div>
           </div>
         </div>
+
         <div className="add-listings-box">
           <h3>
             Collection Location{" "}

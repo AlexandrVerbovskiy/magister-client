@@ -166,63 +166,7 @@ const ListingApprovalRequest = (baseProps) => {
                         </div>
                       </div>
                     </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Pricing
-                      </h2>
-
-                      <div className="flex flex-col gap-2">
-                        <div className="flex w-full gap-2">
-                          <div className="w-full sm:w-1/2">
-                            <InputView
-                              value={listing.pricePerDay}
-                              name="pricePerDay"
-                              label={`Rental price per day (${STATIC.CURRENCY})`}
-                              placeholder="12.00"
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div className="w-full sm:w-1/2">
-                            <InputView
-                              label={`Item value (${STATIC.CURRENCY})`}
-                              name="compensationCost"
-                              placeholder="532.00"
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={listing.compensationCost}
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex w-full gap-2">
-                          <div className="w-full sm:w-1/2">
-                            <InputView
-                              value={listing.minRentalDays}
-                              name="minRentalDays"
-                              label="Minimum rental days"
-                              placeholder="0"
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div className="w-full sm:w-1/2">
-                            <InputView
-                              label="Quantity"
-                              name="countStoredItems"
-                              placeholder="1"
-                              labelClassName="block text-sm font-medium mb-1"
-                              value={listing.countStoredItems}
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
+                    
                     <section>
                       <div className="flex w-full gap-2">
                         <div className="w-full sm:w-1/2">

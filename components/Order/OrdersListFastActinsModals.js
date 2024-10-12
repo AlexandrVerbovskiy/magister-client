@@ -6,7 +6,6 @@ import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
 import {
-  getOrderBlockedDatesToUpdate,
   workerPaymentCalculate,
 } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
@@ -54,15 +53,10 @@ const OrdersListFastActinsModals = ({
     useState(Date.now());
   const [updateRequestProposalEndDate, setUpdateRequestProposalEndDate] =
     useState(Date.now());
-  const [updateRequestMinRentalDays, setUpdateRequestMinRentalDays] =
-    useState(0);
   const [updateRequestFee, setUpdateRequestFee] = useState(0);
   const [updateRequestCommissionType, setUpdateRequestCommissionType] =
     useState("sum");
   const [updateRequestListingName, setUpdateRequestListingName] = useState("");
-  const [updateRequestBlockedDates, setUpdateRequestBlockedDates] = useState(
-    []
-  );
 
   const [payAmount, setPayAmount] = useState(0);
   const [payOrderId, setPayOrderId] = useState(null);
@@ -93,9 +87,6 @@ const OrdersListFastActinsModals = ({
           updateRequestModalActiveOrder.offerEndDate ??
           Date.now()
       );
-      setUpdateRequestMinRentalDays(
-        updateRequestModalActiveOrder.listingMinRentalDays ?? 0
-      );
       setUpdateRequestFee(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
           ? updateRequestModalActiveOrder.ownerFee
@@ -107,9 +98,6 @@ const OrdersListFastActinsModals = ({
           : "sum"
       );
       setUpdateRequestListingName(updateRequestModalActiveOrder.listingName);
-      setUpdateRequestBlockedDates(
-        getOrderBlockedDatesToUpdate(updateRequestModalActiveOrder)
-      );
     }
   }, [updateRequestModalActiveOrder, sessionUser]);
 
@@ -164,13 +152,11 @@ const OrdersListFastActinsModals = ({
         proposalPrice={updateRequestProposalPrice}
         proposalStartDate={updateRequestProposalStartDate}
         proposalEndDate={updateRequestProposalEndDate}
-        minRentalDays={updateRequestMinRentalDays}
         fee={updateRequestFee}
         commissionType={updateRequestCommissionType}
         updateRequestModalActive={activeUpdateRequest}
         closeActiveUpdateRequest={closeActiveUpdateRequest}
         listingName={updateRequestListingName}
-        blockedDates={updateRequestBlockedDates}
         workerFee={updateRequestModalActiveOrder?.workerFee ?? 0}
       />
 

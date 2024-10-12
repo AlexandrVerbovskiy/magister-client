@@ -6,7 +6,6 @@ import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
 import {
   calculateCurrentTotalPrice,
-  getOrderBlockedDatesToUpdate,
 } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
@@ -72,7 +71,6 @@ const OrderPopups = ({
               ? actualUpdateRequest.newEndDate
               : order.offerEndDate
           }
-          listingMinRentalDays={order.listingMinRentalDays}
           fee={currentFee}
           workerFee={order.workerFee}
           commissionType={
@@ -81,7 +79,6 @@ const OrderPopups = ({
               : "sum"
           }
           listingName={order.listingName}
-          blockedDates={getOrderBlockedDatesToUpdate(order)}
           updateRequestModalActive={updateRequestModalActive}
           setUpdateRequestModalActive={setUpdateRequestModalActive}
           handleCreateUpdateRequest={handleCreateUpdateRequest}

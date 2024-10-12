@@ -59,15 +59,11 @@ const TableItem = ({
   userPhone,
   images,
   listingId,
-  pricePerDay,
-  countStoredItems,
-  minRentalDays,
   openPopupImage,
   handleApproveClick,
   handleRejectClick,
   ownerAverageRating,
   ownerCommentCount,
-  userVerified,
 }) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -134,9 +130,6 @@ const TableItem = ({
               value={categoryName ?? otherCategory}
             />
             <SubInfoRow label="Collection Location" value={address} />
-            <SubInfoRow label="Price Per Day" value={pricePerDay} />
-            <SubInfoRow label="Count Stored" value={countStoredItems} />
-            <SubInfoRow label="Minimum Rental Days" value={minRentalDays} />
           </div>
         </td>
 
