@@ -181,7 +181,11 @@ const SingleListingsContent = ({
                     checked={true}
                     countClass="rating-count"
                     centerAlign={true}
+<<<<<<< HEAD
                     commentName="order"
+=======
+                    commentName="task"
+>>>>>>> ebc90ab (listing updated)
                   />
 
                   <ul className="d-flex align-items-center">
@@ -321,7 +325,11 @@ const SingleListingsContent = ({
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
+<<<<<<< HEAD
                                 <div>Rental Description</div>
+=======
+                                <div>Task Description</div>
+>>>>>>> ebc90ab (listing updated)
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
@@ -573,7 +581,11 @@ const SingleListingsContent = ({
                 <div className="listings-sidebar d-flex flex-column">
                   {!isMobile && (
                     <div className="listings-widget book_listings">
+<<<<<<< HEAD
                       <h3>Start Rental</h3>
+=======
+                      <h3>Complete Task</h3>
+>>>>>>> ebc90ab (listing updated)
 
                       {sessionUser?.id != listing.ownerId ? (
                         <div>
@@ -587,7 +599,11 @@ const SingleListingsContent = ({
                         </div>
                       ) : (
                         <div className="status-background-orange">
+<<<<<<< HEAD
                           You can't complete your own item
+=======
+                          You can't complete your own listing
+>>>>>>> ebc90ab (listing updated)
                         </div>
                       )}
                     </div>
@@ -609,8 +625,13 @@ const SingleListingsContent = ({
                           </h4>
                           <span>
                             {listing.userCountItems}{" "}
+<<<<<<< HEAD
                             {autoMultiEnding(listing.userCountItems, "Order")}{" "}
                             for rent
+=======
+                            {autoMultiEnding(listing.userCountItems, "Task")}{" "}
+                            for complete
+>>>>>>> ebc90ab (listing updated)
                           </span>
                         </div>
                       </div>
@@ -687,6 +708,18 @@ const SingleListingsContent = ({
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
+<<<<<<< HEAD
+=======
+                  <ul style={{ listStyle: "none", padding: "0" }}>
+                    <li className="d-flex">
+                      <div className="row-dots-end mt-0">
+                        <span>
+                          {moneyFormatVisual(listing.totalPrice)}
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
+>>>>>>> ebc90ab (listing updated)
                   <button
                     type="button"
                     className="default-btn w-100"
@@ -697,7 +730,11 @@ const SingleListingsContent = ({
                 </div>
               ) : (
                 <div className="status-background-orange">
+<<<<<<< HEAD
                   You can't rent your own dress
+=======
+                  You can't complete your own listing
+>>>>>>> ebc90ab (listing updated)
                 </div>
               )}
             </div>

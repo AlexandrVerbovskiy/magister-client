@@ -301,10 +301,18 @@ const EditForm = ({
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
+<<<<<<< HEAD
       price: listing.price ?? "",
       lat: lat,
       lng: lng,
       radius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+=======
+      totalPrice: listing.totalPrice ?? "",
+      finishTime: listing.finishTime ?? "",
+      lat: lat,
+      lng: lng,
+      rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+>>>>>>> ebc90ab (listing updated)
       listingImages,
       active: listing.active ?? true,
       otherCategory: listing.otherCategory ?? "",
@@ -331,10 +339,18 @@ const EditForm = ({
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
+<<<<<<< HEAD
       price,
       lat,
       lng,
       radius,
+=======
+      totalPrice,
+      finishTime,
+      lat: lat,
+      lng: lng,
+      rentalRadius: radius,
+>>>>>>> ebc90ab (listing updated)
       listingImages,
       active,
     };
@@ -362,10 +378,18 @@ const EditForm = ({
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
+<<<<<<< HEAD
     setPrice(data.price);
     setLat(data.lat);
     setLng(data.lng);
     setRadius(data.radius);
+=======
+    setTotalPrice(data.totalPrice);
+    setFinishTime(data.finishTime);
+    setLat(data.lat);
+    setLng(data.lng);
+    setRadius(data.rentalRadius);
+>>>>>>> ebc90ab (listing updated)
     setAddress(data.address);
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);
@@ -472,6 +496,7 @@ const EditForm = ({
       hasError = true;
     }
 
+<<<<<<< HEAD
     if (!price) {
       setPrice("Required field");
       hasError = true;
@@ -479,6 +504,20 @@ const EditForm = ({
 
     if (price && validatePrice(price) !== true) {
       setPriceError(validatePrice(price));
+=======
+    if (!totalPrice) {
+      setTotalPrice("Required field");
+      hasError = true;
+    }
+
+    if(!finishTimeError){
+      setFinishTimeError("Required field");
+      hasError = true;
+    }
+
+    if (totalPrice && validatePrice(totalPrice) !== true) {
+      setTotalPriceError(validatePrice(totalPrice));
+>>>>>>> ebc90ab (listing updated)
       hasError = true;
     }
 
@@ -611,7 +650,11 @@ const EditForm = ({
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
+<<<<<<< HEAD
                 placeholder="Name of your order"
+=======
+                placeholder="Name of your task"
+>>>>>>> ebc90ab (listing updated)
                 value={name}
                 onInput={handleChangeName}
                 error={nameError}
@@ -662,6 +705,22 @@ const EditForm = ({
                 name="priceError"
               />
             </div>
+<<<<<<< HEAD
+=======
+
+            <div className="col-lg-6 col-md-6">
+              <div className="form-group ">
+                <ErrorIconWrapper label="Finish Time:" icon="bx bx-timer" error={finishTimeError}>
+                  <DateInput
+                    name="finishTime"
+                    value={finishTime}
+                    onInput={handleChangeFinishTine}
+                    placeholder="Finish Time"
+                  />
+                </ErrorIconWrapper>
+              </div>
+            </div>
+>>>>>>> ebc90ab (listing updated)
           </div>
         </div>
 
@@ -847,7 +906,11 @@ const EditForm = ({
           body={
             listing.id
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
+<<<<<<< HEAD
               : "When you create a listing, you should send request to verify it. Users will not be able to complete the order until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
+=======
+              : "When you create a listing, you should send request to verify it. Users will not be able to complete the task until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
+>>>>>>> ebc90ab (listing updated)
           }
           acceptText="Confirm"
           actionsParentClass="mt-4"

@@ -1,6 +1,15 @@
 import STATIC from "../static";
+<<<<<<< HEAD
 import { isDateBlocked } from "./dateHelpers";
 import { moneyFormat } from "./priceCalculations";
+=======
+import { generateDatesBetween } from "./dateHelpers";
+import {
+  moneyFormat,
+  ownerGetsCalculate,
+  workerPaymentCalculate,
+} from "./priceCalculations";
+>>>>>>> ebc90ab (listing updated)
 
 export const capitalizeFirstLetter = (str) => {
   if (!str) {
@@ -214,6 +223,7 @@ export const moneyFormatVisual = (value, needCurrencyName = false) => {
 
   return result;
 };
+<<<<<<< HEAD
 
 export const findFirstAvailableDate = (blockedDates, startDate = null) => {
   if (!startDate || startDate < new Date()) {
@@ -246,3 +256,5 @@ export const isKeyOperation = (key) =>
   Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
     .map((op) => op.key)
     .includes(key);
+=======
+>>>>>>> ebc90ab (listing updated)

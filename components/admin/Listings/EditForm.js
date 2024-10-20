@@ -5,7 +5,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Switch from "../../../partials/admin/base/Switch";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../Form/Input";
-import Textarea from "../Form/Textarea";
+import DateInput from "../Form/DateInput";
 import { getUserNameIdList } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
@@ -190,8 +190,16 @@ const EditForm = ({ listing, categories, save }) => {
   const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
+<<<<<<< HEAD
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
+=======
+  const [totalPrice, setTotalPrice] = useState("");
+  const [totalPriceError, setTotalPriceError] = useState(null);
+
+  const [finishTime, setFinishTime] = useState("");
+  const [finishTimeError, setFinishTimeError] = useState(null);
+>>>>>>> ebc90ab (listing updated)
 
   const [lat, setLat] = useState(baseCoords.lat);
   const [lng, setLng] = useState(baseCoords.lng);
@@ -281,7 +289,12 @@ const EditForm = ({ listing, categories, save }) => {
       categoryInfo = "-";
     }
 
+<<<<<<< HEAD
     setPrice(data.price);
+=======
+    setTotalPrice(data.totalPrice);
+    setFinishTime(data.finishTime);
+>>>>>>> ebc90ab (listing updated)
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
@@ -289,7 +302,11 @@ const EditForm = ({ listing, categories, save }) => {
     setCity(data.city);
     setLat(data.lat);
     setLng(data.lng);
+<<<<<<< HEAD
     setCenter({ lat: data.lat, lng: data.lng });
+=======
+    setCenter({ lat: data.lat, lng: data.lLng });
+>>>>>>> ebc90ab (listing updated)
     setRadius(data.radius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
@@ -333,7 +350,12 @@ const EditForm = ({ listing, categories, save }) => {
       city: city,
       lat,
       lng,
+<<<<<<< HEAD
       radius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+=======
+      radius:
+        prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+>>>>>>> ebc90ab (listing updated)
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -341,7 +363,12 @@ const EditForm = ({ listing, categories, save }) => {
       active: prevListing.active ?? true,
       otherCategory: prevListing.otherCategory ?? "",
       otherCategoryParentId: listing.otherCategoryParentId ?? null,
+<<<<<<< HEAD
       price: prevListing.price ?? "",
+=======
+      totalPrice: prevListing.totalPrice ?? "",
+      finishTime: prevListing.finishTime ?? "",
+>>>>>>> ebc90ab (listing updated)
     };
 
     if (categoryId) {
@@ -371,7 +398,12 @@ const EditForm = ({ listing, categories, save }) => {
       approved,
       ownerId,
       active,
+<<<<<<< HEAD
       price,
+=======
+      totalPrice,
+      finishTime,
+>>>>>>> ebc90ab (listing updated)
     };
 
     if (`${minRentalDays}`.trim()) {
@@ -418,6 +450,7 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
+<<<<<<< HEAD
       if (!price) {
         setPrice("Required field");
         hasError = true;
@@ -425,6 +458,20 @@ const EditForm = ({ listing, categories, save }) => {
 
       if (price && validatePrice(price) !== true) {
         setPriceError(validatePrice(price));
+=======
+      if (!totalPrice) {
+        setTotalPrice("Required field");
+        hasError = true;
+      }
+
+      if (!finishTime) {
+        setFinishTimeError("Required field");
+        hasError = true;
+      }
+
+      if (totalPrice && validatePrice(totalPrice) !== true) {
+        setTotalPriceError(validatePrice(totalPrice));
+>>>>>>> ebc90ab (listing updated)
         hasError = true;
       }
 
@@ -671,6 +718,7 @@ const EditForm = ({ listing, categories, save }) => {
                             </div>
                           )}
 
+<<<<<<< HEAD
                           <div>
                             <Textarea
                               name="description"
@@ -695,11 +743,38 @@ const EditForm = ({ listing, categories, save }) => {
                                 setError={setPriceError}
                                 label="Price per day"
                                 placeholder="Price per day"
+=======
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <Input
+                                name="total-price"
+                                value={totalPrice}
+                                setValue={setTotalPrice}
+                                error={totalPriceError}
+                                setError={setTotalPriceError}
+                                label="Total Price"
+                                placeholder="Total Price"
+                                labelClassName="block text-sm font-medium mb-1"
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <DateInput
+                                label="Finish Time"
+                                name="finishTime"
+                                value={finishTime}
+                                setValue={setFinishTime}
+                                error={finishTimeError}
+                                setError={setFinishTimeError}
+                                placeholder="Finish Time"
+>>>>>>> ebc90ab (listing updated)
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
                             </div>
                           </div>
+<<<<<<< HEAD
                         </div>
                       </section>
 
@@ -768,6 +843,8 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                             </div>
                           </div>
+=======
+>>>>>>> ebc90ab (listing updated)
                         </div>
                       </section>
 

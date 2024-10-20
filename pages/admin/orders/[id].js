@@ -423,14 +423,19 @@ const Order = (baseProps) => {
                                 markers={[
                                   {
                                     id: 1,
+<<<<<<< HEAD
                                     lat: order.listingRentalLat,
                                     lng: order.listingRentalLng,
+=======
+                                    lat: order.listingLat,
+                                    lng: order.listingLng,
+>>>>>>> ebc90ab (listing updated)
                                     radius: order.radius,
                                   },
                                 ]}
                                 baseCenter={{
-                                  lat: order.listingRentalLat,
-                                  lng: order.listingRentalLng,
+                                  lat: order.listingLat,
+                                  lng: order.listingLng,
                                 }}
                                 center={mapCenter}
                                 setCenter={setMapCenter}
