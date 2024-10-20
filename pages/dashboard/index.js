@@ -49,8 +49,6 @@ const Dashboard = (props) => {
     transactionsDetailInfo: props.transactionsDetailInfo,
     transactionDatesCount: props.transactionDatesCount,
     transactionDatesSum: props.transactionDatesSum,
-    rentListingCounts: props.rentListingCounts,
-    rentListingTotalCounts: props.rentListingTotalCounts,
     disputeTotalDatesCount: props.disputeTotalDatesCount,
     disputeStatisticInfo: props.disputeStatisticInfo,
   });
@@ -168,25 +166,16 @@ const Dashboard = (props) => {
 
           <div className="col-12 col-sm-6">
             <DashboardLineChart
-              title="Total items listed"
-              data={[statistic.rentListingCounts]}
-              timeType={timeType}
-              totalCount={statistic.rentListingTotalCounts}
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-12 col-sm-6">
-            <DashboardLineChart
               title="Amount of total transactions"
               data={[statistic.transactionDatesSum]}
               timeType={timeType}
               valueType="money"
             />
           </div>
+        </div>
 
-          <div className="col-12 col-sm-6">
+        <div className="row">
+          <div className="col-12">
             <TransactionAnalyticsTable
               title={`Total amount (${STATIC.CURRENCY}) by type of payment`}
               data={statistic.transactionsDetailInfo}

@@ -109,10 +109,6 @@ const EditForm = ({
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
-  const [hasDefects, setHasDefects] = useState(false);
-  const [defects, setDefects] = useState("");
-  const [defectsError, setDefectsError] = useState(null);
-
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
   const [postcode, setPostcode] = useState("");
@@ -261,12 +257,6 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeDefects = (e) => {
-    setDefects(e.target.value);
-    setDefectsError(null);
-    setMainError(null);
-  };
-
   const handleChangeCity = (e) => {
     const city = e.value;
     const cityCords = getCityCoords(city);
@@ -325,8 +315,8 @@ const EditForm = ({
     const city = listing.city ?? baseCity;
     const cityCords = getCityCoords(city);
 
-    const lat = listing.rentalLat ? Number(listing.rentalLat) : cityCords.lat;
-    const lng = listing.rentalLng ? Number(listing.rentalLng) : cityCords.lng;
+    const lat = listing.lat ? Number(listing.lat) : cityCords.lat;
+    const lng = listing.lng ? Number(listing.lng) : cityCords.lng;
 
     const listingImages = (listing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -342,15 +332,12 @@ const EditForm = ({
       address: listing.address ?? "",
       name: listing.name ?? "",
       description: listing.description ?? "",
-      defects: listing.defects ?? "",
       postcode: listing.postcode ?? "",
       city: city,
-      compensationCost: listing.compensationCost ?? "",
-      countStoredItems: listing.countStoredItems ?? "",
-      pricePerDay: listing.pricePerDay ?? "",
-      minRentalDays: listing.minRentalDays ?? "",
-      rentalLat: lat,
-      rentalLng: lng,
+      totalPrice: listing.totalPrice ?? "",
+      finishTime: listing.finishTime ?? "",
+      lat: lat,
+      lng: lng,
       rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
@@ -376,14 +363,12 @@ const EditForm = ({
       address: address.trim(),
       name: name.trim(),
       description: description.trim(),
-      defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
-      compensationCost,
-      countStoredItems,
-      pricePerDay,
-      rentalLat: lat,
-      rentalLng: lng,
+      totalPrice,
+      finishTime,
+      lat: lat,
+      lng: lng,
       rentalRadius: radius,
       listingImages,
       active,
@@ -414,16 +399,12 @@ const EditForm = ({
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
-    setDefects(data.defects);
-    setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
-    setCompensationCost(data.compensationCost);
-    setCountStoredItems(data.countStoredItems);
-    setPricePerDay(data.pricePerDay);
-    setMinRentalDays(data.minRentalDays);
-    setLat(data.rentalLat);
-    setLng(data.rentalLng);
+    setTotalPrice(data.totalPrice);
+    setFinishTime(data.finishTime);
+    setLat(data.lat);
+    setLng(data.lng);
     setRadius(data.rentalRadius);
     setAddress(data.address);
     setActive(data.active);
@@ -501,7 +482,7 @@ const EditForm = ({
 
     if (isOtherCategory) {
       if (!otherCategory.trim()) {
-        setCategoryError("required field");
+        setCategoryError("Required field");
         hasError = true;
       }
 
@@ -562,30 +543,18 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (hasDefects) {
-      if (!defects) {
-        setDefectsError("Required field");
-        hasError = true;
-      }
-
-      if (defects && validateBigText(defects) !== true) {
-        setDefectsError(validateBigText(defects));
-        hasError = true;
-      }
-    }
-
-    if (!pricePerDay) {
-      setPricePerDayError("Required field");
+    if (!totalPrice) {
+      setTotalPrice("Required field");
       hasError = true;
     }
 
-    if (pricePerDay && validatePrice(pricePerDay) !== true) {
-      setPricePerDayError(validatePrice(pricePerDay));
+    if(!finishTimeError){
+      setFinishTimeError("Required field");
       hasError = true;
     }
 
-    if (!compensationCost) {
-      setCompensationCostError("Required field");
+    if (totalPrice && validatePrice(totalPrice) !== true) {
+      setTotalPriceError(validatePrice(totalPrice));
       hasError = true;
     }
 
@@ -723,7 +692,7 @@ const EditForm = ({
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
-                placeholder="Name of your tool"
+                placeholder="Name of your task"
                 value={name}
                 onInput={handleChangeName}
                 error={nameError}
@@ -790,27 +759,16 @@ const EditForm = ({
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Minimum rental days:"
-                icon="bx bx-menu-alt-left"
-                placeholder="0"
-                value={minRentalDays}
-                onInput={handleChangeMinRentalDays}
-                error={minRentalDaysError}
-                name="minRentalDays"
-              />
-            </div>
-
-            <div className="col-lg-6 col-md-6">
-              <InputWithIcon
-                label="Quantity:"
-                icon="bx bx-menu-alt-left"
-                placeholder="1"
-                value={countStoredItems}
-                onInput={handleChangeCountStoredItems}
-                error={countStoredItemsError}
-                name="countStoredItems"
-              />
+              <div className="form-group ">
+                <ErrorIconWrapper label="Finish Time:" icon="bx bx-timer" error={finishTimeError}>
+                  <DateInput
+                    name="finishTime"
+                    value={finishTime}
+                    onInput={handleChangeFinishTine}
+                    placeholder="Finish Time"
+                  />
+                </ErrorIconWrapper>
+              </div>
             </div>
           </div>
         </div>
@@ -925,42 +883,6 @@ const EditForm = ({
           </div>
         </div>
 
-        <div className="add-listings-box">
-          <h3>Confirm the tools condition</h3>
-
-          <div className="form-group">
-            <div className="sidebar-widgets">
-              <div className="box">
-                <span className="title">Is your tool defective?</span>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={hasDefects}
-                    onChange={(e) => setHasDefects(e.target.checked)}
-                  />
-                  <span></span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          {hasDefects && (
-            <div className="row">
-              <div className="col-lg-12 col-md-12">
-                <TextareaWithIcon
-                  name="defects"
-                  value={defects}
-                  onChange={handleChangeDefects}
-                  icon="bx bx-text"
-                  label="Describe item defects:"
-                  error={defectsError}
-                  placeholder="DEFECTS"
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
         {!canChange && (
           <div
             className="alert-dismissible fade show alert alert-danger"
@@ -1032,7 +954,7 @@ const EditForm = ({
           body={
             listing.id
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
-              : "When you create a listing, you should send request to verify it. Users will not be able to rent the tool until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
+              : "When you create a listing, you should send request to verify it. Users will not be able to complete the task until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
           }
           acceptText="Confirm"
           actionsParentClass="mt-4"

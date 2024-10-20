@@ -122,7 +122,7 @@ const ListingApprovalRequest = (baseProps) => {
                               value={listing.name}
                               label="User Name"
                               name="name"
-                              placeholder="Name of tool"
+                              placeholder="Name"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />
@@ -275,14 +275,14 @@ const ListingApprovalRequest = (baseProps) => {
                               markers={[
                                 {
                                   id: 1,
-                                  lat: listing.rentalLat,
-                                  lng: listing.rentalLng,
-                                  radius: listing.rentalRadius,
+                                  lat: listing.lat,
+                                  lng: listing.lng,
+                                  radius: listing.radius,
                                 },
                               ]}
                               baseCenter={{
-                                lat: listing.rentalLat,
-                                lng: listing.rentalLng,
+                                lat: listing.lat,
+                                lng: listing.lng,
                               }}
                               center={mapCenter}
                               setCenter={setMapCenter}
@@ -312,7 +312,7 @@ const ListingApprovalRequest = (baseProps) => {
 
                     <section>
                       <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Item Description
+                        Description
                       </h2>
 
                       <div className="w-full">
@@ -321,21 +321,6 @@ const ListingApprovalRequest = (baseProps) => {
                           value={listing.description}
                           row="7"
                           placeholder="Details..."
-                        />
-                      </div>
-                    </section>
-
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Item Defects
-                      </h2>
-
-                      <div className="w-full">
-                        <TextareaView
-                          name="defects"
-                          value={listing.defects ?? "-"}
-                          row="7"
-                          placeholder="Defects..."
                         />
                       </div>
                     </section>

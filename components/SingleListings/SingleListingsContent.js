@@ -13,7 +13,7 @@ import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 import BookingModal from "./BookingModal";
 import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
-import { Swiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
 import OrderApprovementSection from "../Order/OrderApprovementSection";
@@ -115,7 +115,11 @@ const SingleListingsContent = ({
                 delay: 8000,
               }}
               modules={[Autoplay]}
-            ></Swiper>
+            >
+              <SwiperSlide>
+                <img src="/images/listings-details.jpg" alt="image" />
+              </SwiperSlide>
+            </Swiper>
 
             <div className="container">
               <div className="container">
@@ -142,10 +146,7 @@ const SingleListingsContent = ({
                     </>
                   )}
 
-                  <h3
-                    className="row-dots-end"
-                    style={{ color: "var(--mainColor)", textWrap: "nowrap" }}
-                  >
+                  <h3 className="row-dots-end" style={{ textWrap: "nowrap" }}>
                     {listing.name}
                   </h3>
 
@@ -155,12 +156,13 @@ const SingleListingsContent = ({
                     checked={true}
                     countClass="rating-count"
                     centerAlign={true}
+                    commentName="task"
                   />
 
                   <ul className="d-flex align-items-center">
                     <li className="location">
                       <i className="bx bx-map"></i>
-                      <span style={{ color: "var(--mainColor)" }}>City</span>
+                      <span>City</span>
                       {listing.city}
                     </li>
                   </ul>
@@ -253,42 +255,21 @@ const SingleListingsContent = ({
                     </div>
                   </div>
 
-                  <h3>Pricing</h3>
-                  <div id="pricing">
-                    <ul className="pricing-list">
-                      <li>
-                        Rental price per day{" "}
-                        <span>{moneyFormatVisual(listing.pricePerDay)}</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {listing.defects && (
-                    <>
-                      <h3>Defects</h3>
-                      <div id="pricing">
-                        <ul className="pricing-list">
-                          <li className="row-dots-end">{listing.defects}</li>
-                        </ul>
-                      </div>
-                    </>
-                  )}
-
                   <h3>Collection Location</h3>
                   <div className="card-widget" style={{ height: "500px" }}>
                     <MultyMarkersMap
                       markers={[
                         {
                           id: 1,
-                          lat: listing.rentalLat,
-                          lng: listing.rentalLng,
-                          radius: listing.rentalRadius,
+                          lat: listing.lat,
+                          lng: listing.lng,
+                          radius: listing.radius,
                           active: true,
                         },
                       ]}
                       baseCenter={{
-                        lat: listing.rentalLat,
-                        lng: listing.rentalLng,
+                        lat: listing.lat,
+                        lng: listing.lng,
                       }}
                       userLocation={userLocation}
                       setUserLocation={setUserLocation}
@@ -308,13 +289,14 @@ const SingleListingsContent = ({
                           countClass="rating-count"
                           pointsValue={true}
                           centerAlign={true}
+                          commentName="owner"
                         />
 
                         <div className="row">
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
-                                <div>Item Description Accuracy</div>
+                                <div>Task Description</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
@@ -566,7 +548,7 @@ const SingleListingsContent = ({
                 <div className="listings-sidebar d-flex flex-column">
                   {!isMobile && (
                     <div className="listings-widget book_listings">
-                      <h3>Booking Online</h3>
+                      <h3>Complete Task</h3>
 
                       {sessionUser?.id != listing.ownerId ? (
                         <div>
@@ -598,7 +580,7 @@ const SingleListingsContent = ({
                         </div>
                       ) : (
                         <div className="status-background-orange">
-                          You can't book your own listing
+                          You can't complete your own listing
                         </div>
                       )}
                     </div>
@@ -620,8 +602,8 @@ const SingleListingsContent = ({
                           </h4>
                           <span>
                             {listing.userCountItems}{" "}
-                            {autoMultiEnding(listing.userCountItems, "Item")}{" "}
-                            for rental
+                            {autoMultiEnding(listing.userCountItems, "Task")}{" "}
+                            for complete
                           </span>
                         </div>
                       </div>
@@ -701,26 +683,15 @@ const SingleListingsContent = ({
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
-                  {listing.minRentalDays > 0 && (
-                    <ul style={{ listStyle: "none", padding: "0" }}>
-                      <li className="d-flex">
-                        <div className="row-dots-end mt-0">
-                          <span style={{ color: "var(--mainColor)" }}>
-                            {moneyFormatVisual(listing.pricePerDay)}
-                          </span>{" "}
-                          daily rent
-                        </div>
-                      </li>
-                      <li className="d-flex">
-                        <div className="row-dots-end mt-0">
-                          <span style={{ textDecoration: "underline" }}>
-                            {listing.minRentalDays} days
-                          </span>{" "}
-                          is min rental duration
-                        </div>
-                      </li>
-                    </ul>
-                  )}
+                  <ul style={{ listStyle: "none", padding: "0" }}>
+                    <li className="d-flex">
+                      <div className="row-dots-end mt-0">
+                        <span>
+                          {moneyFormatVisual(listing.totalPrice)}
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
                   <button
                     type="button"
                     className="default-btn w-100"
@@ -732,7 +703,7 @@ const SingleListingsContent = ({
                 </div>
               ) : (
                 <div className="status-background-orange">
-                  You can't book your own listing
+                  You can't complete your own listing
                 </div>
               )}
             </div>

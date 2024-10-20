@@ -1,9 +1,17 @@
 import React from "react";
 import STATIC from "../../../static";
 
-function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
+function SearchForm({
+  placeholder = "Search…",
+  value,
+  onInput,
+  onSearch = () => {},
+}) {
   return (
-    <form className="relative w-full md:w-auto" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className="relative w-full md:w-auto"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <label htmlFor="action-search" className="sr-only">
         Search
       </label>
@@ -35,9 +43,5 @@ function SearchForm({ placeholder, value, onInput, onSearch = () => {} }) {
     </form>
   );
 }
-
-SearchForm.defaultProps = {
-  placeholder: "Search…",
-};
 
 export default SearchForm;

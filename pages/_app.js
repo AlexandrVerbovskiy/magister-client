@@ -8,18 +8,14 @@ import GlobalError from "../components/GlobalError/ErrorContent";
 import MainErrorAlert from "../components/_App/MainErrorAlert";
 import MainSuccessAlert from "../components/_App/MainSuccessAlert";
 import "../styles/index.css";
-import {
-  useIsomorphicLayoutEffect,
-  useTawkScript,
-  useSocketInit,
-} from "../hooks";
+import { useIsomorphicLayoutEffect, useSocketInit } from "../hooks";
 import CookieBanner from "../components/_App/CookieAlert";
 
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
-  const stylesRef = useRef({ base: [], admin: [] });
-  const loadedRef = useRef({ base: false, admin: false });
+  const stylesRef = useRef({ base: [], admin: [], "base admin": [] });
+  const loadedRef = useRef({ base: false, admin: false, "base admin": false });
   const isFirstCall = useRef(true);
 
   const importStyle = async (importFuncs, key) => {
@@ -35,7 +31,7 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
       }
 
       document.querySelectorAll(styleSelector).forEach((elem) => {
-        elem.classList.add(key);
+        key.split(" ").forEach((subKey) => elem.classList.add(subKey));
         const clonedElement = elem.cloneNode(true);
         stylesRef.current[key].push(clonedElement);
       });
@@ -89,7 +85,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
         [
           () => import(`../styles/admin/main.css`),
           () => import(`../styles/admin/utility-patterns.css`),
-          () => import(`../styles/admin/flatpickr.css`),
           () => import(`../styles/admin/dop.css`),
         ],
         "admin"
@@ -97,6 +92,14 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     } else {
       await importStyle([() => import(`../styles/index.css`)], "base");
     }
+
+    await importStyle(
+      [
+        () => import(`../styles/flaticon.css`),
+        () => import(`../styles/flatpickr.css`),
+      ],
+      "base admin"
+    );
 
     if (!isFirst) {
       setTimeout(onEnd, 500);

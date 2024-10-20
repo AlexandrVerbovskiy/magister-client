@@ -200,7 +200,7 @@ const Order = (baseProps) => {
                                 value={order.listingName}
                                 label="User Name"
                                 name="name"
-                                placeholder="Name of tool"
+                                placeholder="Name"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -524,14 +524,14 @@ const Order = (baseProps) => {
                                 markers={[
                                   {
                                     id: 1,
-                                    lat: order.listingRentalLat,
-                                    lng: order.listingRentalLng,
-                                    radius: order.rentalRadius,
+                                    lat: order.listingLat,
+                                    lng: order.listingLng,
+                                    radius: order.radius,
                                   },
                                 ]}
                                 baseCenter={{
-                                  lat: order.listingRentalLat,
-                                  lng: order.listingRentalLng,
+                                  lat: order.listingLat,
+                                  lng: order.listingLng,
                                 }}
                                 center={mapCenter}
                                 setCenter={setMapCenter}

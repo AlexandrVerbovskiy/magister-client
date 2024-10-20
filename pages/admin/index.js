@@ -32,8 +32,6 @@ const AdminIndex = (props) => {
     transactionDatesCount: props.transactionDatesCount,
     transactionDatesSum: props.transactionDatesSum,
     userTotalDatesCount: props.userTotalDatesCount,
-    rentListingCounts: props.rentListingCounts,
-    rentListingTotalCounts: props.rentListingTotalCounts,
     totalNewInactiveUsers: 0,
     totalNewUsers: 0,
     disputeTotalDatesCount: props.disputeTotalDatesCount,
@@ -144,7 +142,7 @@ const AdminIndex = (props) => {
             </div>
 
             <div className="grid grid-cols-12 gap-6">
-              <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardLineChart
                   title="Total transactions"
                   data={[statistic.transactionDatesCount]}
@@ -152,20 +150,21 @@ const AdminIndex = (props) => {
                 />
               </div>
 
-              <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart
-                  title="Total items listed"
-                  data={[statistic.rentListingCounts]}
-                  timeType={timeType}
-                  totalCount={statistic.rentListingTotalCounts}
-                />
-              </div>
               <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <DashboardLineChart
                   title="Total number of users"
                   data={[statistic.userTotalDatesCount]}
                   timeType={timeType}
                   getTotalType="last"
+                />
+              </div>
+
+              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+                <DashboardLineChart
+                  title="Amount of total transactions"
+                  data={[statistic.transactionDatesSum]}
+                  timeType={timeType}
+                  valueType="money"
                 />
               </div>
             </div>
@@ -176,16 +175,8 @@ const AdminIndex = (props) => {
               </h2>
             </div>
 
-            <div className="grid grid-cols-12 gap-6">
-              <div className="flex flex-col col-span-full xl:col-span-4 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
-                <DashboardLineChart
-                  title="Amount of total transactions"
-                  data={[statistic.transactionDatesSum]}
-                  timeType={timeType}
-                  valueType="money"
-                />
-              </div>
-              <div className="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
+            <div className="grid grid-cols-12 gap-6"> 
+              <div className="col-span-full xl:col-span-12 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
                 <TransactionAnalyticsTable
                   title={`Total amount (${STATIC.CURRENCY}) by type of payment`}
                   data={statistic.transactionsDetailInfo}

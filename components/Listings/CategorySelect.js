@@ -31,7 +31,11 @@ const CategorySelect = ({
                 height="25px"
                 className="category-option-image"
                 style={{ marginRight: "5px" }}
-                src={getFilePath(selectedCategoryInfo.image)}
+                src={
+                  selectedCategoryInfo.customImage
+                    ? selectedCategoryInfo.image
+                    : getFilePath(selectedCategoryInfo.image)
+                }
               />
             )}
             <span className="overflow-separate">

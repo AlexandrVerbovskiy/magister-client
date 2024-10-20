@@ -44,7 +44,9 @@ const CategoryOption = ({
           width="25px"
           height="25px"
           className="category-option-image"
-          src={getFilePath(category.image)}
+          src={category.customImage
+            ? category.image
+            : getFilePath(category.image)}
         />
       )}
 
@@ -71,6 +73,7 @@ const ListingCategorySelect = ({
   needAll = false,
   needBack = false,
 }) => {
+
   const {
     firstLevelRef,
     secondLevelRef,
