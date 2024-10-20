@@ -1,7 +1,5 @@
 import STATIC from "../static";
-import {
-  generateDatesBetween,
-} from "./dateHelpers";
+import { generateDatesBetween } from "./dateHelpers";
 import {
   moneyFormat,
   ownerGetsCalculate,
@@ -172,6 +170,7 @@ export const initOthersCategory = ({
   level = 1,
   parentId = null,
   image = null,
+  customImage = false,
 } = {}) => ({
   countChildren: 0,
   id: "-",
@@ -182,6 +181,7 @@ export const initOthersCategory = ({
   parentId: parentId,
   popular: false,
   isOther: true,
+  customImage,
 });
 
 export const moneyFormatVisual = (value, needCurrencyName = false) => {

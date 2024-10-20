@@ -28,7 +28,11 @@ const CategorySelect = ({
             height="20px"
             className="category-option-image"
             style={{ marginRight: "5px" }}
-            src={getFilePath(selectedCategoryInfo.image)}
+            src={
+              selectedCategoryInfo.customImage
+                ? selectedCategoryInfo.image
+                : getFilePath(selectedCategoryInfo.image)
+            }
           />
         )}
         {selectedCategoryInfo.name ? (

@@ -449,19 +449,6 @@ const OrderContent = ({
               />
             </div>
           </div>
-
-          {order.listingDefects && (
-            <div className="row">
-              <div className="col">
-                <TextareaView
-                  value={order.listingDefects}
-                  icon="bx bx-text"
-                  label="Defects:"
-                  placeholder="Defects..."
-                />
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -544,14 +531,14 @@ const OrderContent = ({
                     markers={[
                       {
                         id: 1,
-                        lat: order.listingRentalLat,
-                        lng: order.listingRentalLng,
-                        radius: order.listingRentalRadius,
+                        lat: order.listingLat,
+                        lng: order.listingLng,
+                        radius: order.listingRadius,
                       },
                     ]}
                     baseCenter={{
-                      lat: order.listingRentalLat,
-                      lng: order.listingRentalLng,
+                      lat: order.listingLat,
+                      lng: order.listingLng,
                     }}
                     userLocation={userLocation}
                     setUserLocation={setUserLocation}

@@ -1,8 +1,19 @@
 import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
-import { getMaxFlatpickrDate } from "../../utils";
+import { getMaxFlatpickrDate } from "../../../utils";
+import ErrorSpan from "../ErrorSpan";
 
-const DateInput = ({ value, name, placeholder, onInput }) => {
+const DateInput = ({
+  label = null,
+  value,
+  name,
+  placeholder,
+  setValue,
+  error,
+  setError,
+  labelClassName = "sr-only",
+  inputClassName = "form-input w-full",
+}) => {
   const [pickerValue, setPickerValue] = useState(value ? [value] : []);
 
   useEffect(() => {
@@ -27,20 +38,27 @@ const DateInput = ({ value, name, placeholder, onInput }) => {
       const formattedDate = date ? date.toISOString() : null;
 
       setPickerValue(date ? [date] : []);
-      onInput(formattedDate);
+      setValue(formattedDate);
+      setError(null);
     },
   };
 
   return (
-    <div className="w-100">
-      <Flatpickr
-        value={pickerValue}
-        options={options}
-        placeholder={placeholder}
-        name={name}
-        className="form-control d-flex align-items-center cursor-pointer w-100"
-      />
-    </div>
+    <>
+      {label && <label className={labelClassName}>{label}</label>}
+
+      <div className="w-full relative">
+        <Flatpickr
+          value={pickerValue}
+          options={options}
+          placeholder={placeholder}
+          name={name}
+          className={inputClassName}
+        />
+      </div>
+
+      <ErrorSpan error={error} />
+    </>
   );
 };
 

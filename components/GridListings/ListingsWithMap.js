@@ -424,9 +424,9 @@ const ListingsWithMap = ({
 
   useEffect(() => {
     const newMarkers = listings.map((listing) => ({
-      lat: listing.rentalLat,
-      lng: listing.rentalLng,
-      radius: listing.rentalRadius,
+      lat: listing.lat,
+      lng: listing.lng,
+      radius: listing.radius,
       id: listing.id,
       active: false,
     }));

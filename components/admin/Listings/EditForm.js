@@ -5,7 +5,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Switch from "../../../partials/admin/base/Switch";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../Form/Input";
-import Textarea from "../Form/Textarea";
+import DateInput from "../Form/DateInput";
 import { getUserNameIdList } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
@@ -173,10 +173,6 @@ const EditForm = ({ listing, categories, save }) => {
   const [description, setDescription] = useState("");
   const [descriptionError, setDescriptionError] = useState(null);
 
-  const [hasDefects, setHasDefects] = useState(false);
-  const [defects, setDefects] = useState("");
-  const [defectsError, setDefectsError] = useState(null);
-
   const [address, setAddress] = useState("");
   const [addressError, setAddressError] = useState(null);
 
@@ -188,6 +184,12 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
+
+  const [totalPrice, setTotalPrice] = useState("");
+  const [totalPriceError, setTotalPriceError] = useState(null);
+
+  const [finishTime, setFinishTime] = useState("");
+  const [finishTimeError, setFinishTimeError] = useState(null);
 
   const [lat, setLat] = useState(baseCoords.lat);
   const [lng, setLng] = useState(baseCoords.lng);
@@ -277,17 +279,17 @@ const EditForm = ({ listing, categories, save }) => {
       categoryInfo = "-";
     }
 
+    setTotalPrice(data.totalPrice);
+    setFinishTime(data.finishTime);
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
-    setDefects(data.defects);
-    setHasDefects(data.defects && data.defects.length > 0);
     setPostcode(data.postcode);
     setCity(data.city);
-    setLat(data.rentalLat);
-    setLng(data.rentalLng);
-    setCenter({ lat: data.rentalLat, lng: data.rentalLng });
-    setRadius(data.rentalRadius);
+    setLat(data.lat);
+    setLng(data.lng);
+    setCenter({ lat: data.lat, lng: data.lLng });
+    setRadius(data.radius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
@@ -310,12 +312,8 @@ const EditForm = ({ listing, categories, save }) => {
     const city = prevListing.city ?? baseCity;
     const cityCoords = getCityCoords(city);
 
-    const lat = prevListing.rentalLat
-      ? Number(prevListing.rentalLat)
-      : cityCoords.lat;
-    const lng = prevListing.rentalLng
-      ? Number(prevListing.rentalLng)
-      : cityCoords.lng;
+    const lat = prevListing.lat ? Number(prevListing.lat) : cityCoords.lat;
+    const lng = prevListing.lng ? Number(prevListing.lng) : cityCoords.lng;
 
     const listingImages = (prevListing.listingImages ?? []).map((elem) => ({
       link: elem.link,
@@ -330,12 +328,11 @@ const EditForm = ({ listing, categories, save }) => {
     const data = {
       name: prevListing.name ?? "",
       description: prevListing.description ?? "",
-      defects: prevListing.defects ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
-      rentalLat: lat,
-      rentalLng: lng,
-      rentalRadius:
+      lat,
+      lng,
+      radius:
         prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
@@ -344,6 +341,8 @@ const EditForm = ({ listing, categories, save }) => {
       active: prevListing.active ?? true,
       otherCategory: prevListing.otherCategory ?? "",
       otherCategoryParentId: listing.otherCategoryParentId ?? null,
+      totalPrice: prevListing.totalPrice ?? "",
+      finishTime: prevListing.finishTime ?? "",
     };
 
     if (categoryId) {
@@ -364,16 +363,17 @@ const EditForm = ({ listing, categories, save }) => {
       name: name.trim(),
       address: address.trim(),
       description: description.trim(),
-      defects: hasDefects ? defects.trim() : "",
       postcode: postcode.trim(),
       city: city.trim(),
-      rentalLat: lat,
-      rentalLng: lng,
-      rentalRadius: radius,
+      lat,
+      lng,
+      radius,
       listingImages,
       approved,
       ownerId,
       active,
+      totalPrice,
+      finishTime,
     };
 
     if (isOtherCategory) {
@@ -416,6 +416,21 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
+      if (!totalPrice) {
+        setTotalPrice("Required field");
+        hasError = true;
+      }
+
+      if (!finishTime) {
+        setFinishTimeError("Required field");
+        hasError = true;
+      }
+
+      if (totalPrice && validatePrice(totalPrice) !== true) {
+        setTotalPriceError(validatePrice(totalPrice));
+        hasError = true;
+      }
+
       if (isOtherCategory) {
         if (!otherCategory.trim()) {
           setCategoryError("required field");
@@ -446,18 +461,6 @@ const EditForm = ({ listing, categories, save }) => {
       if (description && validateBigText(description) !== true) {
         setDescriptionError(validateBigText(description));
         hasError = true;
-      }
-
-      if (hasDefects) {
-        if (!defects) {
-          setDefectsError("Required field");
-          hasError = true;
-        }
-
-        if (defects && validateBigText(defects) !== true) {
-          setDefectsError(validateBigText(defects));
-          hasError = true;
-        }
       }
 
       if (!ownerId) {
@@ -624,6 +627,36 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                             </div>
                           )}
+
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <Input
+                                name="total-price"
+                                value={totalPrice}
+                                setValue={setTotalPrice}
+                                error={totalPriceError}
+                                setError={setTotalPriceError}
+                                label="Total Price"
+                                placeholder="Total Price"
+                                labelClassName="block text-sm font-medium mb-1"
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <DateInput
+                                label="Finish Time"
+                                name="finishTime"
+                                value={finishTime}
+                                setValue={setFinishTime}
+                                error={finishTimeError}
+                                setError={setFinishTimeError}
+                                placeholder="Finish Time"
+                                labelClassName="block text-sm font-medium mb-1"
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          </div>
                         </div>
                       </section>
 
@@ -721,62 +754,6 @@ const EditForm = ({ listing, categories, save }) => {
                         linkSuccessPhoto={linkSuccessPhoto}
                         successLoadLinkPhoto={successLoadLinkPhoto}
                       />
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Item Description
-                        </h2>
-
-                        <div className="w-full">
-                          <Textarea
-                            name="description"
-                            value={description}
-                            setValue={setDescription}
-                            row="7"
-                            error={descriptionError}
-                            setError={setDescriptionError}
-                            placeholder="Details..."
-                          />
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Confirm the tools condition
-                        </h2>
-
-                        <div className="flex flex-wrap mt-2">
-                          <div className="mr-2">
-                            <label
-                              className="block text-sm font-medium mb-1"
-                              htmlFor="approved"
-                            >
-                              Is your tool defective?
-                            </label>
-                          </div>
-                          <Switch
-                            id="hasDefects"
-                            checked={hasDefects}
-                            changeChecked={() => setHasDefects(!hasDefects)}
-                            onText="Yes"
-                            offText="No"
-                          />
-                        </div>
-
-                        {hasDefects && (
-                          <div className="w-full mt-2">
-                            <Textarea
-                              name="defects"
-                              value={defects}
-                              setValue={setDefects}
-                              row="7"
-                              error={defectsError}
-                              setError={setDefectsError}
-                              placeholder="Defects..."
-                            />
-                          </div>
-                        )}
-                      </section>
 
                       <section>
                         <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">

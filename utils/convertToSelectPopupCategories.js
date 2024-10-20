@@ -37,6 +37,15 @@ const convertToSelectPopupCategories = (categories, needOthers = false) => {
   );
 
   if (needOthers) {
+    newCategories["firstLevel"].push(
+      initOthersCategory({
+        level: 1,
+        parentId: null,
+        image: "/images/three-dots.svg",
+        customImage: true
+      })
+    );
+
     newCategories["firstLevel"].forEach((firstLevelCategory) => {
       if (!firstLevelCategory.isOther && firstLevelCategory.countChildren) {
         newCategories["secondLevel"].push(
