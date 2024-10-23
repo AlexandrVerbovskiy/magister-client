@@ -52,7 +52,7 @@ const Footer = ({ bgColor }) => {
                         handleListingCreateClick();
                       }}
                     >
-                      <i className="flaticon-left-chevron"></i> List an item
+                      <i className="flaticon-left-chevron"></i> Listings
                     </Link>
                   </li>
                 </ul>

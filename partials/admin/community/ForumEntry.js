@@ -16,7 +16,7 @@ function ForumEntry() {
         <ul className="inline-flex flex-wrap text-sm font-medium">
           <li className="flex items-center">
             <Link
-              className="text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-500"
+              className="text-slate-500 dark:text-slate-400 hover:text-teal-500 dark:hover:text-teal-500"
               href="/community/forum"
             >
               Home
@@ -30,7 +30,7 @@ function ForumEntry() {
           </li>
           <li className="flex items-center">
             <a
-              className="text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-500"
+              className="text-slate-500 dark:text-slate-400 hover:text-teal-500 dark:hover:text-teal-500"
               href="#0"
             >
               Discussion
@@ -64,7 +64,7 @@ function ForumEntry() {
         <div className="flex flex-wrap text-sm">
           <div className="flex items-center after:block after:content-['·'] last:after:content-[''] after:text-sm after:text-slate-400 dark:after:text-slate-600 after:px-2">
             <a
-              className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+              className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
               href="#0"
             >
               katemerlu
@@ -112,7 +112,7 @@ function ForumEntry() {
         <div className="text-right">
           <button
             type="submit"
-            className="btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap"
+            className="btn bg-teal-500 hover:bg-teal-600 text-white whitespace-nowrap"
           >
             Reply -&gt;
           </button>
@@ -130,7 +130,7 @@ function ForumEntry() {
             <div className="flex items-start">
               {/* Comment upvote */}
               <div className="absolute top-0 left-0">
-                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                   <svg
                     className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                     width="12"
@@ -171,7 +171,7 @@ function ForumEntry() {
                       />
                     </a>
                     <a
-                      className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                      className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                       href="#0"
                     >
                       ekuplu89
@@ -204,7 +204,7 @@ function ForumEntry() {
                 <div className="flex items-start">
                   {/* Comment upvote */}
                   <div className="absolute top-0 left-0">
-                    <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                    <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                       <svg
                         className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                         width="12"
@@ -223,7 +223,7 @@ function ForumEntry() {
                       <p>
                         That's great advice,{" "}
                         <a
-                          className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                          className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                           href="#0"
                         >
                           @ekuplu89
@@ -244,7 +244,7 @@ function ForumEntry() {
                           />
                         </a>
                         <a
-                          className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                          className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                           href="#0"
                         >
                           ellielong
@@ -280,7 +280,7 @@ function ForumEntry() {
               <div className="absolute top-0 left-0">
                 <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300">
                   <svg
-                    className="inline-flex fill-indigo-500 mt-1.5 mb-1.5"
+                    className="inline-flex fill-teal-500 mt-1.5 mb-1.5"
                     width="12"
                     height="6"
                     xmlns="http://www.w3.org/2000/svg"
@@ -314,7 +314,7 @@ function ForumEntry() {
                       />
                     </a>
                     <a
-                      className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                      className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                       href="#0"
                     >
                       markcuttik
@@ -346,7 +346,7 @@ function ForumEntry() {
             <div className="flex items-start">
               {/* Comment upvote */}
               <div className="absolute top-0 left-0">
-                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                   <svg
                     className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                     width="12"
@@ -382,7 +382,7 @@ function ForumEntry() {
                       />
                     </a>
                     <a
-                      className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                      className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                       href="#0"
                     >
                       davidp1
@@ -415,7 +415,7 @@ function ForumEntry() {
                 <div className="flex items-start">
                   {/* Comment upvote */}
                   <div className="absolute top-0 left-0">
-                    <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                    <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                       <svg
                         className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                         width="12"
@@ -449,7 +449,7 @@ function ForumEntry() {
                           />
                         </a>
                         <a
-                          className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                          className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                           href="#0"
                         >
                           ellielong
@@ -482,7 +482,7 @@ function ForumEntry() {
                     <div className="flex items-start">
                       {/* Comment upvote */}
                       <div className="absolute top-0 left-0">
-                        <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                        <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                           <svg
                             className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                             width="12"
@@ -513,7 +513,7 @@ function ForumEntry() {
                               />
                             </a>
                             <a
-                              className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                              className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                               href="#0"
                             >
                               davidp1
@@ -549,7 +549,7 @@ function ForumEntry() {
             <div className="flex items-start">
               {/* Comment upvote */}
               <div className="absolute top-0 left-0">
-                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-indigo-500 dark:hover:text-indigo-500">
+                <button className="text-xs font-semibold text-left w-6 rounded-sm flex flex-col justify-center items-center text-slate-600 dark:text-slate-300 hover:text-teal-500 dark:hover:text-teal-500">
                   <svg
                     className="inline-flex fill-slate-400 dark:fill-slate-500 mt-1.5 mb-1.5"
                     width="12"
@@ -583,7 +583,7 @@ function ForumEntry() {
                       />
                     </a>
                     <a
-                      className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+                      className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
                       href="#0"
                     >
                       patrick2
@@ -612,7 +612,7 @@ function ForumEntry() {
         </ul>
         {/* View more link */}
         <div className="text-center mt-5">
-          <button className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400">
+          <button className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400">
             View More Comments
           </button>
         </div>

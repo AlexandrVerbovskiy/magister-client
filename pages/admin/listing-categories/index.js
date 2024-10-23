@@ -649,7 +649,7 @@ const ListingCategories = ({ categories: baseCategories }) => {
                 <button
                   onClick={handleSaveClick}
                   disabled={submitting}
-                  className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
+                  className="btn bg-teal-500 hover:bg-teal-600 text-white disabled:bg-teal-400"
                 >
                   <span className="hidden xs:block">Save Categories</span>
                 </button>

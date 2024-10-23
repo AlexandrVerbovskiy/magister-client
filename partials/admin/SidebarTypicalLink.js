@@ -9,13 +9,13 @@ const SidebarTypicalLink = ({ SVG, link = "", title }) => {
   return (
     <li
       className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${
-        isCurrent && "bg-slate-900"
+        isCurrent && "bg-teal-900"
       }`}
     >
       <Link
         href={`/admin/${link ? link + "/" : ""}`}
-        className={`block text-slate-200 truncate transition duration-150 ${
-          isCurrent ? "hover:text-slate-200" : "hover:text-white"
+        className={`block text-slate-100 truncate transition duration-150 ${
+          isCurrent ? "hover:text-slate-200" : "hover:text-teal-600"
         }`}
       >
         <div className="flex items-center justify-between">

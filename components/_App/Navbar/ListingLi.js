@@ -9,7 +9,7 @@ const ListingLi = ({ handleListingClick }) => {
         href="#"
         className={`nav-link d-none d-xl-block`}
       >
-        List An Item
+        Listings
       </a>
 
       <a
@@ -20,7 +20,7 @@ const ListingLi = ({ handleListingClick }) => {
         href="#"
         className={`nav-link d-block d-xl-none`}
       >
-        List An Item
+        Listings
       </a>
     </li>
   );

@@ -8,7 +8,7 @@ function WelcomeBanner() {
   const dayPart = timeName();
 
   return (
-    <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
+    <div className="relative bg-teal-200 dark:bg-teal-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
       <div
         className="absolute right-0 top-0 -mt-4 mr-16 pointer-events-none hidden xl:block"
@@ -77,7 +77,7 @@ function WelcomeBanner() {
         <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">
           Good {dayPart}, {name} 👋
         </h1>
-        <p className="dark:text-indigo-200">
+        <p className="dark:text-teal-200">
           Here is what’s happening with your projects today:
         </p>
       </div>

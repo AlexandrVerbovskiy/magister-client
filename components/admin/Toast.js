@@ -46,7 +46,7 @@ function Toast({
       case 'success':
         return 'bg-emerald-500';
       default:
-        return 'bg-indigo-500';
+        return 'bg-teal-500';
     }
   };
 

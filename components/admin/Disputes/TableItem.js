@@ -203,7 +203,7 @@ const TableItem = ({
 
             <Link
               href={`/admin/chats/${chatId}/`}
-              className="bg-indigo-100 hover:bg-indigo-200  flex items-center text-indigo-500 hover:text-indigo-600 rounded-full py-2 px-4"
+              className="bg-teal-100 hover:bg-teal-200  flex items-center text-teal-500 hover:text-teal-600 rounded-full py-2 px-4"
             >
               Chat
             </Link>

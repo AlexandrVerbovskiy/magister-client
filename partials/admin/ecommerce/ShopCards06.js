@@ -17,7 +17,7 @@ function ShopCards06() {
         {/* Content */}
         <div className="relative h-full p-5 flex flex-col justify-end">
           <h3 className="text-lg text-white font-semibold mt-16 mb-0.5">Merchandise</h3>
-          <a className="text-sm font-medium text-indigo-400 hover:text-indigo-300" href="#0">Explore -&gt;</a>
+          <a className="text-sm font-medium text-teal-400 hover:text-teal-300" href="#0">Explore -&gt;</a>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ function ShopCards06() {
         {/* Content */}
         <div className="relative h-full p-5 flex flex-col justify-end">
           <h3 className="text-lg text-white font-semibold mt-16 mb-0.5">Audiobooks</h3>
-          <a className="text-sm font-medium text-indigo-400 hover:text-indigo-300" href="#0">Explore -&gt;</a>
+          <a className="text-sm font-medium text-teal-400 hover:text-teal-300" href="#0">Explore -&gt;</a>
         </div>
       </div>
 
@@ -43,7 +43,7 @@ function ShopCards06() {
         {/* Content */}
         <div className="relative h-full p-5 flex flex-col justify-end">
           <h3 className="text-lg text-white font-semibold mt-16 mb-0.5">Design & Tech</h3>
-          <a className="text-sm font-medium text-indigo-400 hover:text-indigo-300" href="#0">Explore -&gt;</a>
+          <a className="text-sm font-medium text-teal-400 hover:text-teal-300" href="#0">Explore -&gt;</a>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ function ShopCards06() {
         {/* Content */}
         <div className="relative h-full p-5 flex flex-col justify-end">
           <h3 className="text-lg text-white font-semibold mt-16 mb-0.5">Apps & Software</h3>
-          <a className="text-sm font-medium text-indigo-400 hover:text-indigo-300" href="#0">Explore -&gt;</a>
+          <a className="text-sm font-medium text-teal-400 hover:text-teal-300" href="#0">Explore -&gt;</a>
         </div>
       </div>
     </React.Fragment>

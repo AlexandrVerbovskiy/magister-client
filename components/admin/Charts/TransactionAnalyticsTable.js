@@ -71,7 +71,7 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                   </div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-indigo-500">
+                  <div className="text-center text-teal-500">
                     {paypalInfo["total"]}%
                   </div>
                 </td>
@@ -107,7 +107,7 @@ const TransactionAnalyticsTable = ({ title, data }) => {
                   </div>
                 </td>
                 <td className="px-2 py-4">
-                  <div className="text-center text-indigo-500">
+                  <div className="text-center text-teal-500">
                     {bankTransferInfo["total"]}%
                   </div>
                 </td>

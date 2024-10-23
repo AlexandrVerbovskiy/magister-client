@@ -14,7 +14,7 @@ function AppsPanel() {
           <div className="mb-4 border-b border-slate-200 dark:border-slate-700">
             <ul className="text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar">
               <li className="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
-                <a className="text-indigo-500 whitespace-nowrap" href="#0">View All</a>
+                <a className="text-teal-500 whitespace-nowrap" href="#0">View All</a>
               </li>
               <li className="pb-3 mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                 <a className="text-slate-500 dark:text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 whitespace-nowrap" href="#0">Utility</a>
@@ -38,7 +38,7 @@ function AppsPanel() {
               <div className="flex flex-col h-full p-5">
                 <div className="grow">
                   <header className="flex items-center mb-4">
-                    <div className="w-10 h-10 rounded-full shrink-0 bg-gradient-to-tr from-indigo-500 to-indigo-300 mr-3">
+                    <div className="w-10 h-10 rounded-full shrink-0 bg-gradient-to-tr from-teal-500 to-teal-300 mr-3">
                       <svg className="w-10 h-10 fill-current text-white" viewBox="0 0 40 40">
                         <path d="M26.946 18.005a.583.583 0 00-.53-.34h-6.252l.985-3.942a.583.583 0 00-1.008-.52l-7 8.167a.583.583 0 00.442.962h6.252l-.984 3.943a.583.583 0 001.008.52l7-8.167a.583.583 0 00.087-.623z" />
                       </svg>
@@ -318,7 +318,7 @@ function AppsPanel() {
                     {/* Left side */}
                     <div className="text-sm text-slate-500 dark:text-slate-400 italic">400+ Apps</div>
                     {/* Right side */}
-                    <a className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Explore -&gt;</a>
+                    <a className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Explore -&gt;</a>
                   </div>
                 </footer>
               </div>
@@ -338,7 +338,7 @@ function AppsPanel() {
                     {/* Left side */}
                     <div className="text-sm text-slate-500 dark:text-slate-400 italic">320+ Apps</div>
                     {/* Right side */}
-                    <a className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Explore -&gt;</a>
+                    <a className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Explore -&gt;</a>
                   </div>
                 </footer>
               </div>
@@ -358,7 +358,7 @@ function AppsPanel() {
                     {/* Left side */}
                     <div className="text-sm text-slate-500 dark:text-slate-400 italic">270+ Apps</div>
                     {/* Right side */}
-                    <a className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Explore -&gt;</a>
+                    <a className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Explore -&gt;</a>
                   </div>
                 </footer>
               </div>

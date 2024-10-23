@@ -198,9 +198,9 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(payment.offerPricePerDay)}
-                                label={`Offer Price Per Day (${STATIC.CURRENCY})`}
-                                name="price-per-day"
-                                placeholder="Offer Price Per Day"
+                                label={`Offer Price (${STATIC.CURRENCY})`}
+                                name="price"
+                                placeholder="Offer Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -343,7 +343,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                             <button
                               type="button"
                               onClick={handleAcceptActivate}
-                              className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                              className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
                             >
                               Approve
                             </button>

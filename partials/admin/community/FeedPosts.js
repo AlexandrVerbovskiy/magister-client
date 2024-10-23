@@ -62,21 +62,21 @@ function FeedPosts() {
         {/* Footer */}
         <footer className="flex items-center space-x-4">
           {/* Like button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M14.682 2.318A4.485 4.485 0 0011.5 1 4.377 4.377 0 008 2.707 4.383 4.383 0 004.5 1a4.5 4.5 0 00-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 000-6.364zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 014.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 011.785 4.251h-.003z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">4</div>
           </button>
           {/* Share button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M13 7h2v6a1 1 0 0 1-1 1H4v2l-4-3 4-3v2h9V7ZM3 9H1V3a1 1 0 0 1 1-1h10V0l4 3-4 3V4H3v5Z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">44</div>
           </button>
           {/* Replies button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
             </svg>
@@ -133,7 +133,7 @@ function FeedPosts() {
             <div className="absolute left-0 right-0 bottom-0 p-4 bg-black bg-opacity-25 backdrop-blur-md">
               <div className="flex items-center justify-between">
                 <div className="text-xs font-medium text-slate-300">togethernature.com</div>
-                <a className="text-xs font-medium text-indigo-400 hover:text-indigo-300" href="#0">
+                <a className="text-xs font-medium text-teal-400 hover:text-teal-300" href="#0">
                   Learn More -&gt;
                 </a>
               </div>
@@ -143,21 +143,21 @@ function FeedPosts() {
         {/* Footer */}
         <footer className="flex items-center space-x-4">
           {/* Like button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M14.682 2.318A4.485 4.485 0 0011.5 1 4.377 4.377 0 008 2.707 4.383 4.383 0 004.5 1a4.5 4.5 0 00-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 000-6.364zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 014.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 011.785 4.251h-.003z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">4</div>
           </button>
           {/* Share button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M13 7h2v6a1 1 0 0 1-1 1H4v2l-4-3 4-3v2h9V7ZM3 9H1V3a1 1 0 0 1 1-1h10V0l4 3-4 3V4H3v5Z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">44</div>
           </button>
           {/* Replies button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
             </svg>
@@ -208,21 +208,21 @@ function FeedPosts() {
         {/* Footer */}
         <footer className="flex items-center space-x-4">
           {/* Like button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M14.682 2.318A4.485 4.485 0 0011.5 1 4.377 4.377 0 008 2.707 4.383 4.383 0 004.5 1a4.5 4.5 0 00-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 000-6.364zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 014.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 011.785 4.251h-.003z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">122</div>
           </button>
           {/* Share button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M13 7h2v6a1 1 0 0 1-1 1H4v2l-4-3 4-3v2h9V7ZM3 9H1V3a1 1 0 0 1 1-1h10V0l4 3-4 3V4H3v5Z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">7</div>
           </button>
           {/* Replies button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
             </svg>
@@ -244,7 +244,7 @@ function FeedPosts() {
                     · 44min
                   </div>
                   <div className="text-sm">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       @EricaSpriggs
                     </a>{' '}
                     Reading through and really enjoying "Zero to Sold" by Arvid.
@@ -275,7 +275,7 @@ function FeedPosts() {
             <div className="text-sm text-slate-500 dark:text-slate-400">
               <span className="font-medium text-slate-600 dark:text-slate-300">2</span> of <span className="font-medium text-slate-600 dark:text-slate-300">67</span> comments
             </div>
-            <button className="text-sm  font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400">View More Comments</button>
+            <button className="text-sm  font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400">View More Comments</button>
           </div>
           {/* Comment form */}
           <div className="flex items-center space-x-3 mt-3">
@@ -339,7 +339,7 @@ function FeedPosts() {
               <svg className="w-16 h-16" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
                 <circle className="fill-white opacity-80 group-hover:opacity-100 transition" cx="32" cy="32" r="32" />
                 <path
-                  className="fill-indigo-500"
+                  className="fill-teal-500"
                   d="M40 33a.999.999 0 0 0-.427-.82l-10-7A1 1 0 0 0 28 26v14.002a.999.999 0 0 0 1.573.819l10-7A.995.995 0 0 0 40 33V33c0 .002 0 .002 0 0Z"
                 />
               </svg>
@@ -355,21 +355,21 @@ function FeedPosts() {
         {/* Footer */}
         <footer className="flex items-center space-x-4">
           {/* Like button */}
-          <button className="flex items-center text-indigo-400 dark:text-indigo-500">
+          <button className="flex items-center text-teal-400 dark:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M14.682 2.318A4.485 4.485 0 0011.5 1 4.377 4.377 0 008 2.707 4.383 4.383 0 004.5 1a4.5 4.5 0 00-3.182 7.682L8 15l6.682-6.318a4.5 4.5 0 000-6.364zm-1.4 4.933L8 12.247l-5.285-5A2.5 2.5 0 014.5 3c1.437 0 2.312.681 3.5 2.625C9.187 3.681 10.062 3 11.5 3a2.5 2.5 0 011.785 4.251h-.003z" />
             </svg>
-            <div className="text-sm text-indigo-500">2.2K</div>
+            <div className="text-sm text-teal-500">2.2K</div>
           </button>
           {/* Share button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M13 7h2v6a1 1 0 0 1-1 1H4v2l-4-3 4-3v2h9V7ZM3 9H1V3a1 1 0 0 1 1-1h10V0l4 3-4 3V4H3v5Z" />
             </svg>
             <div className="text-sm text-slate-500 dark:text-slate-400">4.3K</div>
           </button>
           {/* Replies button */}
-          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-500">
+          <button className="flex items-center text-slate-400 dark:text-slate-500 hover:text-teal-500 dark:hover:text-teal-500">
             <svg className="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
               <path d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8z" />
             </svg>

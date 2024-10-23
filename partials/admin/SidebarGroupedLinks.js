@@ -41,8 +41,8 @@ const SidebarGroupedLinks = ({
           <React.Fragment>
             <a
               href="#0"
-              className={`sidebar-group-header block text-slate-200 truncate transition duration-150 ${
-                isCurrent ? "hover:text-slate-200" : "hover:text-white"
+              className={`sidebar-group-header block text-slate-100 truncate transition duration-150 ${
+                isCurrent ? "hover:text-slate-200" : "hover:text-teal-600"
               }`}
               onClick={(e) => {
                 e.preventDefault();
@@ -83,8 +83,8 @@ const SidebarGroupedLinks = ({
                       className={
                         "block transition duration-150 truncate " +
                         (isCurrentAdminPath(router.asPath, sublink.href)
-                          ? "text-indigo-500"
-                          : "text-slate-400 hover:text-slate-200")
+                          ? "text-teal-500"
+                          : "text-slate-100 hover:text-teal-600")
                       }
                     >
                       <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">

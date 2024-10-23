@@ -14,7 +14,7 @@ function ForumRightContent() {
         <div className="md:py-8">
           {/* Button */}
           <div className="mb-6">
-            <button className="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white">Create Post</button>
+            <button className="btn w-full bg-teal-500 hover:bg-teal-600 text-white">Create Post</button>
           </div>
 
           {/* Blocks */}
@@ -27,7 +27,7 @@ function ForumRightContent() {
                 {/* Event 1 */}
                 <li className="relative pb-4 last-of-type:pb-0">
                   <div className="pl-6">
-                    <div className="text-xs font-medium uppercase text-indigo-600 mb-0.5">Mon 27 Dec</div>
+                    <div className="text-xs font-medium uppercase text-teal-600 mb-0.5">Mon 27 Dec</div>
                     <div className="text-sm mb-2">
                       <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
                         Silicon Valley Bootstrapper Breakfast Online for 2021
@@ -70,7 +70,7 @@ function ForumRightContent() {
                 {/* Event 2 */}
                 <li className="relative pb-4 last-of-type:pb-0">
                   <div className="pl-6">
-                    <div className="text-xs font-medium uppercase text-indigo-600 mb-0.5">Mon 27 Dec</div>
+                    <div className="text-xs font-medium uppercase text-teal-600 mb-0.5">Mon 27 Dec</div>
                     <div className="text-sm mb-2">
                       <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
                         New York &amp; New Jersey Virtual Retreat
@@ -113,7 +113,7 @@ function ForumRightContent() {
                 {/* Event 3 */}
                 <li className="relative pb-4 last-of-type:pb-0">
                   <div className="pl-6">
-                    <div className="text-xs font-medium uppercase text-indigo-600 mb-0.5">Mon 29 Dec</div>
+                    <div className="text-xs font-medium uppercase text-teal-600 mb-0.5">Mon 29 Dec</div>
                     <div className="text-sm mb-2">
                       <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
                         The World of AI and Machine Learning - Open Chat
@@ -156,7 +156,7 @@ function ForumRightContent() {
                 {/* Event 4 */}
                 <li className="relative pb-4 last-of-type:pb-0">
                   <div className="pl-6">
-                    <div className="text-xs font-medium uppercase text-indigo-600 mb-0.5">Mon 29 Dec</div>
+                    <div className="text-xs font-medium uppercase text-teal-600 mb-0.5">Mon 29 Dec</div>
                     <div className="text-sm mb-2">
                       <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
                         NYC Code &amp; Coffee 2.0 @ Freehold Brooklyn
@@ -198,7 +198,7 @@ function ForumRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-teal-500 shadow-none">View All</button>
               </div>
             </div>
             
@@ -213,7 +213,7 @@ function ForumRightContent() {
                     </a>
                   </div>
                   <div className="text-xs text-slate-500">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       markusj
                     </a>{' '}
                     · 2d · 312 comments
@@ -226,7 +226,7 @@ function ForumRightContent() {
                     </a>
                   </div>
                   <div className="text-xs text-slate-500">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       katemerlu
                     </a>{' '}
                     · 2h · 7 comments
@@ -239,7 +239,7 @@ function ForumRightContent() {
                     </a>
                   </div>
                   <div className="text-xs text-slate-500">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       sophiestar
                     </a>{' '}
                     · 3d · 66 comments
@@ -252,7 +252,7 @@ function ForumRightContent() {
                     </a>
                   </div>
                   <div className="text-xs text-slate-500">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       ekuplu89
                     </a>{' '}
                     · 4h · 14 comments
@@ -265,7 +265,7 @@ function ForumRightContent() {
                     </a>
                   </div>
                   <div className="text-xs text-slate-500">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">
                       molliehacks
                     </a>{' '}
                     · 3d · 32 comments
@@ -273,7 +273,7 @@ function ForumRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-teal-500 shadow-none">View All</button>
               </div>
             </div>
           </div>

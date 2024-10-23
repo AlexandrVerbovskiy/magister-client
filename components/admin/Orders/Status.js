@@ -12,7 +12,7 @@ const Status = ({
 
   if (status == STATIC.ORDER_STATUSES.IN_PROCESS) {
     text = "In process";
-    dopClassName = "bg-indigo-100 text-indigo-500";
+    dopClassName = "bg-teal-100 text-teal-500";
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED) {

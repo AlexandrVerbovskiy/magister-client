@@ -36,7 +36,7 @@ export const formatThousands = (value) =>
   }).format(value);
 
 export const fixedColors = [
-  "indigo",
+  "teal",
   "pink",
   "blue",
   "gray",
@@ -44,10 +44,10 @@ export const fixedColors = [
   "orange",
   "violet",
   "rose",
-  "emerald",
+  "indigo",
   "amber",
   "purple",
-  "teal",
+  "emerald",
   "red",
   "green",
   "cyan",

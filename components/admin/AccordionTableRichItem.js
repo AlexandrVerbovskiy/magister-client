@@ -55,7 +55,7 @@ function AccordionTableRichItem(props) {
               <div className="font-medium text-slate-800 dark:text-slate-100 mb-1">{props.descriptionTitle}</div>
               <div>{props.descriptionBody}</div>
             </div>
-            <button className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white">Approve</button>
+            <button className="btn-xs bg-teal-500 hover:bg-teal-600 text-white">Approve</button>
           </div>
         </td>
       </tr>

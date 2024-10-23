@@ -44,7 +44,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Mon 27 Dec, 2021</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Mon 27 Dec, 2021</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Silicon Valley Bootstrapper Breakfast Online for 2021</h3>
             </Link>
@@ -116,7 +116,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Mon 27 Dec, 2021</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Mon 27 Dec, 2021</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">New York &amp; New Jersey Virtual Retreat 2021</h3>
             </Link>
@@ -188,7 +188,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Wed 29 Dec, 2021</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Wed 29 Dec, 2021</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">The World of AI and Machine Learning — Open Chat</h3>
             </Link>
@@ -260,7 +260,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Wed 29 Dec, 2021</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Wed 29 Dec, 2021</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">NYC Code &amp; Coffee 2.0 @ Freehold Brooklyn</h3>
             </Link>
@@ -325,7 +325,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Mon 3 Jan, 2022</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Mon 3 Jan, 2022</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Acme Inc. London Meetup: Women in Tech Night</h3>
             </Link>
@@ -390,7 +390,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Thu 6 Jan, 2022</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Thu 6 Jan, 2022</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Founder Worldwide - First Meetup of 2022!</h3>
             </Link>
@@ -462,7 +462,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Thu 6 Jan, 2022</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Thu 6 Jan, 2022</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">NYC Blockchain Network - Monthly 3rd Thursday Meetup</h3>
             </Link>
@@ -527,7 +527,7 @@ function MeetupsPosts() {
         {/* Content */}
         <div className="grow p-5 flex flex-col">
           <div className="grow">
-            <div className="text-sm font-semibold text-indigo-500 uppercase mb-2">Fri 7 Jan, 2022</div>
+            <div className="text-sm font-semibold text-teal-500 uppercase mb-2">Fri 7 Jan, 2022</div>
             <Link className="inline-flex mb-2" href="/community/meetups-post">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Build a Personal Brand and Boost Your Career in AI!</h3>
             </Link>

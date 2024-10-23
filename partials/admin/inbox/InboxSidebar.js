@@ -55,7 +55,7 @@ function InboxSidebar() {
               <div className="absolute bottom-0 w-full h-px bg-slate-200 dark:bg-slate-700" aria-hidden="true"></div>
               <ul className="relative text-sm font-medium flex flex-nowrap -mx-4 sm:-mx-6 lg:-mx-8 overflow-x-scroll no-scrollbar">
                 <li className="mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
-                  <a className="block pb-3 text-indigo-500 whitespace-nowrap border-b-2 border-indigo-500" href="#0">
+                  <a className="block pb-3 text-teal-500 whitespace-nowrap border-b-2 border-teal-500" href="#0">
                     Primary
                   </a>
                 </li>
@@ -76,7 +76,7 @@ function InboxSidebar() {
               <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-3">Inbox (44)</div>
               <ul className="mb-6">
                 <li className="-mx-2">
-                  <button className="flex w-full p-2 rounded bg-indigo-100 dark:bg-indigo-500/30 text-left">
+                  <button className="flex w-full p-2 rounded bg-teal-100 dark:bg-teal-500/30 text-left">
                     <img className="w-8 h-8 rounded-full mr-2" src={UserImage01} width="32" height="32" alt="User 01" />
                     <div className="grow truncate">
                       <div className="flex items-center justify-between mb-1.5">

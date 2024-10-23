@@ -108,7 +108,7 @@ const UserVerifyRequest = (baseProps) => {
                           <button
                             type="button"
                             onClick={handleAcceptClick}
-                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-2"
+                            className="btn bg-teal-500 hover:bg-teal-600 text-white ml-2"
                           >
                             Accept
                           </button>

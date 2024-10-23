@@ -21,7 +21,7 @@ function BillingPanel() {
               {/* Right */}
               <div className="text-sm text-slate-600 dark:text-slate-400 ml-4">
                 <span className="mr-3">Mastercard ending 9282</span>
-                <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Edit</a>
+                <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Edit</a>
               </div>
             </li>
             <li className="md:flex md:justify-between md:items-center py-3 border-b border-slate-200 dark:border-slate-700">
@@ -30,7 +30,7 @@ function BillingPanel() {
               {/* Right */}
               <div className="text-sm text-slate-600 dark:text-slate-400 ml-4">
                 <span className="mr-3">Annually</span>
-                <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Edit</a>
+                <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Edit</a>
               </div>
             </li>
             <li className="md:flex md:justify-between md:items-center py-3 border-b border-slate-200 dark:border-slate-700">
@@ -39,7 +39,7 @@ function BillingPanel() {
               {/* Right */}
               <div className="text-sm text-slate-600 dark:text-slate-400 ml-4">
                 <span className="mr-3">UK849700927</span>
-                <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Edit</a>
+                <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Edit</a>
               </div>
             </li>
             <li className="md:flex md:justify-between md:items-center py-3 border-b border-slate-200 dark:border-slate-700">
@@ -48,7 +48,7 @@ function BillingPanel() {
               {/* Right */}
               <div className="text-sm text-slate-600 dark:text-slate-400 ml-4">
                 <span className="mr-3">34 Savoy Street, London, UK, 24E8X</span>
-                <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Edit</a>
+                <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Edit</a>
               </div>
             </li>
             <li className="md:flex md:justify-between md:items-center py-3 border-b border-slate-200 dark:border-slate-700">
@@ -57,7 +57,7 @@ function BillingPanel() {
               {/* Right */}
               <div className="text-sm text-slate-600 dark:text-slate-400 ml-4">
                 <span className="mr-3">hello@cruip.com</span>
-                <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Edit</a>
+                <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Edit</a>
               </div>
             </li>
           </ul>
@@ -100,9 +100,9 @@ function BillingPanel() {
                 </td>
                 <td className="w-full block md:w-auto md:table-cell py-0.5 md:py-2">
                   <div className="text-right flex items-center md:justify-end">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">HTML</a>
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">HTML</a>
                     <span className="block w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2" aria-hidden="true"></span>
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">PDF</a>
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">PDF</a>
                   </div>
                 </td>
               </tr>
@@ -119,9 +119,9 @@ function BillingPanel() {
                 </td>
                 <td className="w-full block md:w-auto md:table-cell py-0.5 md:py-2">
                   <div className="text-right flex items-center md:justify-end">
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">HTML</a>
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">HTML</a>
                     <span className="block w-px h-4 bg-slate-200 dark:bg-slate-700 mx-2" aria-hidden="true"></span>
-                    <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">PDF</a>
+                    <a className="font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">PDF</a>
                   </div>
                 </td>
               </tr>
@@ -135,7 +135,7 @@ function BillingPanel() {
         <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
           <div className="flex self-end">
             <button className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300">Cancel</button>
-            <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">Save Changes</button>
+            <button className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3">Save Changes</button>
           </div>
         </div>
       </footer>

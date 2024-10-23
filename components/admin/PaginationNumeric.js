@@ -23,7 +23,7 @@ function PaginationNumeric({
   };
 
   const activeClass =
-    "inline-flex items-center justify-center rounded leading-5 px-2.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white shadow-sm";
+    "inline-flex items-center justify-center rounded leading-5 px-2.5 py-2 bg-white dark:bg-slate-800 hover:bg-teal-500 dark:hover:bg-teal-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white shadow-sm";
   const inactiveClass =
     "inline-flex items-center justify-center rounded leading-5 px-2.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600";
 
@@ -52,7 +52,7 @@ function PaginationNumeric({
             if (visiblePage == page)
               return (
                 <li key={index}>
-                  <span className="inline-flex items-center justify-center rounded-l leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-500">
+                  <span className="inline-flex items-center justify-center rounded-l leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-teal-500">
                     {visiblePage}
                   </span>
                 </li>
@@ -71,7 +71,7 @@ function PaginationNumeric({
               <li key={index}>
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-500 dark:hover:bg-indigo-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
+                  className="inline-flex items-center justify-center leading-5 px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-teal-500 dark:hover:bg-teal-500 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-white"
                   onClick={() => move(visiblePage)}
                 >
                   {visiblePage}

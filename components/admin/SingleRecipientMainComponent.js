@@ -201,9 +201,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(recipient.offerPricePerDay)}
-                                label={`Offer Price Per Day (${STATIC.CURRENCY})`}
-                                name="offer-price-per-day"
-                                placeholder="Offer Price Per Date"
+                                label={`Offer Price (${STATIC.CURRENCY})`}
+                                name="offer-price"
+                                placeholder="Offer Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -420,7 +420,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                                 e.stopPropagation();
                                 setDoneAcceptModalOpen(true);
                               }}
-                              className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                              className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
                             >
                               Mark as Done
                             </button>

@@ -41,7 +41,7 @@ function DropdownSort({
         aria-expanded={dropdownOpen}
       >
         <div className="flex items-center truncate">
-          <span className="truncate font-medium text-indigo-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">Newest</span>
+          <span className="truncate font-medium text-teal-500 group-hover:text-teal-600 dark:group-hover:text-teal-400">Newest</span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>

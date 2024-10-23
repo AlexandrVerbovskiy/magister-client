@@ -172,7 +172,7 @@ function DropdownClassicAjax({
           <input
             name="selectFilter"
             type="text"
-            className="form-input w-full border-0 border-b border-slate-200 dark:border-slate-700 rounded-sm px-3 py-1 focus:border-indigo-500 focus:ring-indigo-500"
+            className="form-input w-full border-0 border-b border-slate-200 dark:border-slate-700 rounded-sm px-3 py-1 focus:border-teal-500 focus:ring-teal-500"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => handleChangeSearchTerm(e.target.value)}
@@ -193,7 +193,7 @@ function DropdownClassicAjax({
                     tabIndex="0"
                     className={`select-option flex items-center w-full hover:bg-slate-50 hover:dark:bg-slate-700/20 py-1 px-3 ${
                       disabled ? "cursor-auto " : "cursor-pointer "
-                    }${option.value === selected && "text-indigo-500"}`}
+                    }${option.value === selected && "text-teal-500"}`}
                     onClick={(e) => {
                       if (disabled) return;
                       onChange(option.value, option.title);
@@ -201,7 +201,7 @@ function DropdownClassicAjax({
                     }}
                   >
                     <svg
-                      className={`shrink-0 mr-2 fill-current text-indigo-500 ${
+                      className={`shrink-0 mr-2 fill-current text-teal-500 ${
                         option.value !== selected && "invisible"
                       }`}
                       width="12"

@@ -8,7 +8,7 @@ const ChatLi = ({ selectedChat, chat, handleSelectChat }) => {
       <button
         className={`flex items-center justify-between w-full p-2 rounded ${
           selectedChat?.id == chat.id
-            ? "bg-indigo-500/30"
+            ? "bg-teal-500/30"
             : "border-b border-slate-300"
         }`}
         onClick={() => handleSelectChat(chat.id)}
@@ -159,7 +159,7 @@ const InboxSidebar = ({
                     <li className="-mx-2">
                       {canShowMore && (
                         <div
-                          className="transition text-indigo-400 hover:text-indigo-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
+                          className="transition text-teal-400 hover:text-teal-600 flex items-center justify-center cursor-pointer py-2 chat-list-show-more text-sm"
                           onClick={handleShowMoreClick}
                         >
                           Show more
@@ -177,7 +177,7 @@ const InboxSidebar = ({
                       marginLeft:"-1.25rem"
                     }}
                   >
-                    <div className="text-center w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">
+                    <div className="text-center w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-teal-500 text-white duration-150 ease-in-out">
                       No chat has been created yet
                     </div>
                   </div>

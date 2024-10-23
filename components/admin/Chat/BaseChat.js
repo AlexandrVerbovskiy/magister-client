@@ -283,7 +283,7 @@ const BaseChat = ({
               ) : (
                 <>
                   <div className="w-full h-full flex items-center justify-center">
-                    <div className="w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">
+                    <div className="w-fit inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-sm bg-teal-500 text-white duration-150 ease-in-out">
                       Select a chat to start messaging
                     </div>
                   </div>

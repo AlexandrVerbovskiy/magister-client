@@ -52,7 +52,7 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">Introductions</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Join
                     </button>
                   </div>
@@ -67,7 +67,7 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">HackerNews</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Join
                     </button>
                   </div>
@@ -99,14 +99,14 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">JustChatting</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Join
                     </button>
                   </div>
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-teal-500 shadow-none">View All</button>
               </div>
             </div>
             
@@ -124,7 +124,7 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">Elly Boutin</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Follow
                     </button>
                   </div>
@@ -139,7 +139,7 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">Rich Harris</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Follow
                     </button>
                   </div>
@@ -154,7 +154,7 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">Mary Porzio</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Follow
                     </button>
                   </div>
@@ -169,14 +169,14 @@ function FeedRightContent() {
                         <span className="text-sm font-medium text-slate-800 dark:text-slate-100">Brian Lovin</span>
                       </div>
                     </div>
-                    <button className="text-xs inline-flex font-medium bg-indigo-100 dark:bg-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full text-center px-2.5 py-1">
+                    <button className="text-xs inline-flex font-medium bg-teal-100 dark:bg-teal-500/30 text-teal-600 dark:text-teal-400 rounded-full text-center px-2.5 py-1">
                       Follow
                     </button>
                   </div>
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-teal-500 shadow-none">View All</button>
               </div>
             </div>
             
@@ -226,7 +226,7 @@ function FeedRightContent() {
                 </li>
               </ul>
               <div className="mt-4">
-                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-indigo-500 shadow-none">View All</button>
+                <button className="btn w-full bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-teal-500 shadow-none">View All</button>
               </div>
             </div>
 
