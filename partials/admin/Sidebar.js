@@ -29,11 +29,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   useEffect(() => {
     if (sidebarOpen) {
       const clickHandler = ({ target }) => {
-        if (
-          !sidebar.current ||
-          !sidebarOpen ||
-          sidebar.current.contains(target)
-        ) {
+        if (!sidebar.current || !sidebarOpen || sidebar.current.contains(target)) {
           return;
         }
 
@@ -78,7 +74,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-full overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-teal-800 p-4 transition-all duration-200 ease-in-out ${
+        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-teal-800 p-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
         }`}
       >
@@ -93,7 +89,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             aria-expanded={sidebarOpen}
           >
             <span className="sr-only">Close sidebar</span>
-            <img src="/images/logo.svg" className="logo-image" alt="logo" />
+            <img
+              src="/images/rent-about-logo.png"
+              className="logo-image"
+              alt="logo"
+            />
           </Link>
           {/* Logo */}
           <Link href="/" className="hidden lg:block w-full">
@@ -198,7 +198,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                 title="Reviews"
                 sublinks={[
                   { href: "owner-reviews", title: "Owner Reviews" },
-                  { href: "renter-reviews", title: "Renter Reviews" },
+                  { href: "worker-reviews", title: "Worker Reviews" },
                 ]}
                 SVG={({ current }) => (
                   <svg
@@ -509,32 +509,6 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           }`}
                         ></path>
                       </g>
-                    </svg>
-                  )}
-                />
-              )}
-
-              {isAdmin && (
-                <SidebarTypicalLink
-                  title="Dispute Predictions"
-                  link="dispute-predictions"
-                  SVG={({ current }) => (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      height="24"
-                      width="24"
-                      viewBox="0 0 24 24"
-                      className={`stroke-current ${
-                        current ? "text-teal-500" : "text-slate-50"
-                      }`}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 12h6m2 0a2 2 0 100-4 2 2 0 000 4zm-10 0a2 2 0 100-4 2 2 0 000 4zm4-10v2m0 12v2m10-10h-2m-12 0H2"
-                      />
                     </svg>
                   )}
                 />

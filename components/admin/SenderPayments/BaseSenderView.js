@@ -8,12 +8,13 @@ import {
   rejectSenderPaymentTransaction,
 } from "../../../services";
 import {
+  calculateTotalPriceByDaysCount,
+  getFactOrderDays,
   getFilePath,
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
-  renterPaysFeeCalculate,
-  getPriceByDays,
+  calculateFeeByDaysCount,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -39,15 +40,16 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
     parentLink = "/admin/payments/failed-senders-paypal/";
   }
 
-  const subtotalPrice = payment.offerPrice;
+  const subtotalPrice = calculateTotalPriceByDaysCount(
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
+    payment.offerPricePerDay
+  );
 
-  const totalFee = renterPaysFeeCalculate(
-    getPriceByDays(
-      payment.offerPrice,
-      payment.offerStartDate,
-      payment.offerFinishDate
-    ),
-    payment.renterFee
+  const totalFee = calculateFeeByDaysCount(
+    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
+    payment.offerPricePerDay,
+    payment.workerFee,
+    true
   );
 
   const handleAccept = async () => {
@@ -182,7 +184,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={dateConverter(payment.offerFinishDate)}
+                                value={dateConverter(payment.offerEndDate)}
                                 label="Offer End Name"
                                 placeholder="Offer End Name"
                                 name="offer-end-date"
@@ -195,7 +197,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={moneyFormat(payment.offerPrice)}
+                                value={moneyFormat(payment.offerPricePerDay)}
                                 label={`Offer Price (${STATIC.CURRENCY})`}
                                 name="price"
                                 placeholder="Offer Price"
@@ -219,10 +221,10 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={payment.renterFee}
-                                label="Renter Fee (%)"
-                                name="renter-fee"
-                                placeholder="Renter Fee"
+                                value={payment.workerFee}
+                                label="Worker Fee (%)"
+                                name="worker-fee"
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

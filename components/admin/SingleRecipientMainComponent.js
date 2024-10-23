@@ -5,12 +5,11 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
-  renterPaysCalculate,
+  workerPaymentCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
-  getPriceByDays,
 } from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
@@ -18,6 +17,7 @@ import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
 import AcceptModal from "./RecipientPayments/AcceptModal";
 import STATIC from "../../static";
+import StatusSpan from "./RecipientPayments/StatusSpan";
 
 const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const { authToken } = useContext(IndiceContext);
@@ -34,9 +34,11 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = renterPaysCalculate(
-    getPriceByDays(recipient.offerPrice, recipient.offerStartDate, recipient.offerFinishDate),
-    recipient.renterFee,
+  const totalPayed = workerPaymentCalculate(
+    recipient.offerStartDate,
+    recipient.offerEndDate,
+    recipient.workerFee,
+    recipient.offerPricePerDay
   );
 
   let paymentNumber = "-";
@@ -161,10 +163,10 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={recipient.renterName}
-                                label="Renter Name"
-                                name="renter-name"
-                                placeholder="Renter Name"
+                                value={recipient.workerName}
+                                label="Worker Name"
+                                name="worker-name"
+                                placeholder="Worker Name"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -185,7 +187,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={recipient.offerFinishDate}
+                                value={recipient.offerEndDate}
                                 label="Offer End Date"
                                 name="offer-end-date"
                                 placeholder="Offer End Date"
@@ -198,7 +200,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={moneyFormat(recipient.offerPrice)}
+                                value={moneyFormat(recipient.offerPricePerDay)}
                                 label={`Offer Price (${STATIC.CURRENCY})`}
                                 name="offer-price"
                                 placeholder="Offer Price"
@@ -210,9 +212,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                             <div className="w-full sm:w-1/2">
                               <InputView
                                 value={moneyFormat(totalPayed)}
-                                label={`Renter paid (${STATIC.CURRENCY})`}
-                                name="renter-payed-money"
-                                placeholder="Renter Paid"
+                                label={`Worker paid (${STATIC.CURRENCY})`}
+                                name="worker-payed-money"
+                                placeholder="Worker Paid"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

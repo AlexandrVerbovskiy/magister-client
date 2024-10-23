@@ -14,8 +14,8 @@ import CookieBanner from "../components/_App/CookieAlert";
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
-  const stylesRef = useRef({ base: [], admin: [], "base admin": [] });
-  const loadedRef = useRef({ base: false, admin: false, "base admin": false });
+  const stylesRef = useRef({ base: [], admin: [] });
+  const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
   const importStyle = async (importFuncs, key) => {
@@ -103,14 +103,6 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
         "base"
       );
     }
-
-    await importStyle(
-      [
-        () => import(`../styles/flaticon.css`),
-        () => import(`../styles/flatpickr.css`),
-      ],
-      "base admin"
-    );
 
     if (!isFirst) {
       setTimeout(onEnd, 500);

@@ -2,9 +2,9 @@ import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
 import {
   getFactOrderDays,
-  getPriceByDays,
+  dateConverter,
   moneyFormatVisual,
-  renterPaysCalculate,
+  workerPaymentCalculate,
 } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
@@ -12,10 +12,10 @@ const PayModal = ({
   amount,
   orderId,
   listingName,
-  onRenterPayed = null,
-  price,
-  startDate,
-  finishDate,
+  onWorkerPayed = null,
+  pricePerDay,
+  offerStartDate,
+  offerEndDate,
   offerFee,
   modalActive,
   closeModal,
@@ -24,19 +24,28 @@ const PayModal = ({
 }) => {
   const [disabled, setDisabled] = useState(false);
 
-  const handleRenterPayed = (result) => {
+  const handleWorkerPayed = (result) => {
     setTimeout(() => {
-      if (onRenterPayed) {
-        onRenterPayed(result);
+      if (onWorkerPayed) {
+        onWorkerPayed(result);
       }
 
       closeModal();
     }, 100);
   };
 
-  const total = renterPaysCalculate(
-    getPriceByDays(price, startDate, finishDate),
-    offerFee
+  const durationInfo =
+    dateConverter(offerStartDate) === dateConverter(offerEndDate)
+      ? dateConverter(offerStartDate)
+      : `${dateConverter(offerStartDate)} - ${dateConverter(offerEndDate)}`;
+
+  const subtotal = pricePerDay * getFactOrderDays(offerStartDate, offerEndDate);
+
+  const total = workerPaymentCalculate(
+    offerStartDate,
+    offerEndDate,
+    offerFee,
+    pricePerDay
   );
 
   const handleClose = () => {
@@ -58,12 +67,15 @@ const PayModal = ({
         <div className="card card-shadow">
           <div className="card-body">
             <span className="sub-title mb-2" style={{ fontSize: "18px" }}>
-              <span>Renter payment</span>
+              <span>Rental payment</span>
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">
-              Price: {getFactOrderDays(startDate, finishDate)} x{" "}
-              {moneyFormatVisual(price)}
+              Price: {moneyFormatVisual(pricePerDay)}
+            </div>
+            <div className="form-group">Duration: {durationInfo}</div>
+            <div className="form-group">
+              Subtotal: {moneyFormatVisual(subtotal)}
             </div>
             <div className="form-group">Fee: {offerFee}% </div>
             <div className="form-group">
@@ -74,7 +86,7 @@ const PayModal = ({
 
         <PaymentSection
           cardClassName="mt-4 card-shadow"
-          onRenterPayed={handleRenterPayed}
+          onWorkerPayed={handleWorkerPayed}
           orderId={orderId}
           disabled={disabled}
           setDisabled={setDisabled}

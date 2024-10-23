@@ -32,11 +32,11 @@ const TypeSpan = ({ type }) => {
 
 const TableItem = ({
   id,
-  renterId,
-  renterName,
-  renterEmail,
-  renterPhone,
-  renterPhoto,
+  workerId,
+  workerName,
+  workerEmail,
+  workerPhone,
+  workerPhoto,
   money,
   status,
   receivedType,
@@ -52,7 +52,7 @@ const TableItem = ({
   listingName,
   listingAddress,
   listingCity,
-  listingPrice,
+  listingPricePerDay,
   handleApproveClick,
   createdAt,
   type,
@@ -69,7 +69,7 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink id={renterId} name={renterName} photo={renterPhoto} />
+          <TableUserLink id={workerId} name={workerName} photo={workerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TableUserLink
@@ -126,16 +126,16 @@ const TableItem = ({
                   className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top"
                 >
                   <SubInfoTitle
-                    title="Renter"
-                    href={`/admin/users/edit/${renterId}`}
+                    title="Worker"
+                    href={`/admin/users/edit/${workerId}`}
                     canMove={canMoveToRecipient}
                   />
-                  <SubInfoRow label="Name" value={renterName} />
-                  <SubInfoRow label="Email" value={renterEmail} />
+                  <SubInfoRow label="Name" value={workerName} />
+                  <SubInfoRow label="Email" value={workerEmail} />
                   <SubInfoRow
                     label="Phone"
                     value={
-                      renterPhone && renterPhone.length ? renterPhone : "-"
+                      workerPhone && workerPhone.length ? workerPhone : "-"
                     }
                   />
                 </td>
@@ -194,7 +194,7 @@ const TableItem = ({
                   <SubInfoRow label="City" value={listingCity} />
                   <SubInfoRow
                     label="Price"
-                    value={listingPrice}
+                    value={listingPricePerDay}
                   />
                 </td>
               </tr>
