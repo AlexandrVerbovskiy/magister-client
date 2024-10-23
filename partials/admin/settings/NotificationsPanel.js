@@ -207,7 +207,7 @@ function NotificationsPanel() {
             <button className="btn dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300">
               Cancel
             </button>
-            <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">
+            <button className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3">
               Save Changes
             </button>
           </div>

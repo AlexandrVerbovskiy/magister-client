@@ -31,7 +31,7 @@ const rentingSafelyAndSecurityOptions = [
     image: "/images/how-it-works/sign-up.png",
   },
   {
-    title: "2. List an Item",
+    title: "2. Listings",
     description:
       "Easy and fast. Add photos, basic information and you're done!",
     image: "/images/how-it-works/item-list.png",

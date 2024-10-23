@@ -8,7 +8,7 @@ function JobSidebar() {
   return (
     <div className="space-y-8">
       {/* Alert */}
-      <div className="relative bg-indigo-200 dark:bg-indigo-500 rounded-sm p-5 min-w-60">
+      <div className="relative bg-teal-200 dark:bg-teal-500 rounded-sm p-5 min-w-60">
         <div className="absolute bottom-0 -mb-3">
           <svg width="44" height="42" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <defs>
@@ -32,9 +32,9 @@ function JobSidebar() {
           </svg>
         </div>
         <div className="relative">
-          <div className="text-sm font-medium text-slate-800 dark:text-indigo-200 mb-2">Remember to keep track of your job research.</div>
+          <div className="text-sm font-medium text-slate-800 dark:text-teal-200 mb-2">Remember to keep track of your job research.</div>
           <div className="text-right">
-            <a className="text-sm font-medium text-indigo-500 dark:text-indigo-50 hover:text-indigo-600 dark:hover:text-white" href="#0">
+            <a className="text-sm font-medium text-teal-500 dark:text-teal-50 hover:text-teal-600 dark:hover:text-white" href="#0">
               Create Alert -&gt;
             </a>
           </div>

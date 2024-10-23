@@ -12,7 +12,7 @@ const BreadCrumbs = ({ links }) => {
             >
               {link.href && (
                 <a
-                  className="text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
+                  className="text-slate-800 dark:text-slate-100 font-bold hover:text-teal-500 dark:hover:text-teal-500"
                   href={link.href}
                 >
                   {link.title}
@@ -22,7 +22,7 @@ const BreadCrumbs = ({ links }) => {
               {!link.href && (
                 <div
                   style={{ transition: "0.5s" }}
-                  className="max-w-full overflow-separate cursor-pointer text-slate-800 dark:text-slate-100 font-bold hover:text-indigo-500 dark:hover:text-indigo-500"
+                  className="max-w-full overflow-separate cursor-pointer text-slate-800 dark:text-slate-100 font-bold hover:text-teal-500 dark:hover:text-teal-500"
                 >
                   {link.title}
                 </div>

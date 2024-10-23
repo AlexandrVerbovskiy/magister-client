@@ -204,7 +204,7 @@ const MobileNavbar = ({ onLoginClick = null }) => {
                 <span className="icon">
                   <i className="bx bx-wrench"></i>
                 </span>
-                <span className="menu-title">List An Item</span>
+                <span className="menu-title">Listings</span>
               </a>
             </li>
 

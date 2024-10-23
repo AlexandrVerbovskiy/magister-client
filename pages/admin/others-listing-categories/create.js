@@ -262,7 +262,7 @@ const CreateCategory = (baseProps) => {
                           e.stopPropagation();
                           setConfirmModalActive(true);
                         }}
-                        className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                        className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
                       >
                         Create
                       </button>

@@ -141,8 +141,8 @@ const EarningTable = ({
         <div className="row">
           <div className="col-lg-6 col-md-6">
             <InputView
-              label="Offer Price Per Day"
-              placeholder="Offer Price Per Day"
+              label="Offer Price"
+              placeholder="Offer Price"
               icon="bx bx-dollar-circle"
               value={`${moneyFormat(offerPricePerDay)}`}
             />

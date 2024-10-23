@@ -12,7 +12,7 @@ function FintechCard02() {
         {/* CC container */}
         <div className="relative w-full max-w-sm mx-auto bg-slate-800 dark:bg-slate-900 p-3 rounded-2xl">
           {/* Credit Card */}
-          <div className="relative aspect-[7/4] bg-gradient-to-tr from-indigo-500 to-indigo-400 p-5 rounded-xl overflow-hidden">
+          <div className="relative aspect-[7/4] bg-gradient-to-tr from-teal-500 to-teal-400 p-5 rounded-xl overflow-hidden">
             {/* Gradients */}
             <div className="absolute left-0 -bottom-1/3 w-[398px] aspect-square" aria-hidden="true">
               <svg className="w-full h-full" width="398" height="392" viewBox="0 0 398 392" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@ function FintechCard02() {
                     <feGaussianBlur stdDeviation="50" in="SourceGraphic" />
                   </filter>
                 </defs>
-                <circle className="fill-indigo-100 opacity-60" filter="url(#glow-a)" cx="85" cy="85" r="85" transform="translate(0 216)" />
+                <circle className="fill-teal-100 opacity-60" filter="url(#glow-a)" cx="85" cy="85" r="85" transform="translate(0 216)" />
               </svg>
             </div>
             <div className="absolute right-0 -top-1/3 w-[398px] aspect-square" aria-hidden="true">

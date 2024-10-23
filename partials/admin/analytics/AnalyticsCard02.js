@@ -167,7 +167,7 @@ function AnalyticsCard02() {
         {/* Card footer */}
         <div className="text-right px-5 pb-4">
           <Link
-            className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400"
+            className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400"
             href="#0"
           >
             Real-Time Report -&gt;

@@ -55,12 +55,12 @@ function FeedLeftContent() {
                     href="#0"
                   >
                     <svg
-                      className="w-4 h-4 shrink-0 fill-current text-indigo-500 mr-2"
+                      className="w-4 h-4 shrink-0 fill-current text-teal-500 mr-2"
                       viewBox="0 0 16 16"
                     >
                       <path d="M10 16h4c.6 0 1-.4 1-.998V6.016c0-.3-.1-.6-.4-.8L8.6.226c-.4-.3-.9-.3-1.3 0l-6 4.992c-.2.2-.3.5-.3.799v8.986C1 15.6 1.4 16 2 16h4c.6 0 1-.4 1-.998v-2.996h2v2.996c0 .599.4.998 1 .998Zm-4-5.99c-.6 0-1 .399-1 .998v2.995H3V6.515L8 2.32l5 4.194v7.488h-2v-2.995c0-.6-.4-.999-1-.999H6Z" />
                     </svg>
-                    <span className="text-sm font-medium text-indigo-500">
+                    <span className="text-sm font-medium text-teal-500">
                       Home
                     </span>
                   </a>

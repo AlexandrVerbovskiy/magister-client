@@ -140,7 +140,7 @@ const ListingItem = ({ listing: prevListing, hovered = false }) => {
           />
 
           <div className="price">
-            Per Day <span>{moneyFormatVisual(listing.pricePerDay)}</span>
+            Price <span>{moneyFormatVisual(listing.totalPrice)}</span>
           </div>
         </div>
       </div>

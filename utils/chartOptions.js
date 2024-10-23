@@ -16,11 +16,11 @@ export const doughnutChartOptions = ({ title, data, labelPrefix = "" }) => {
 
   labels.forEach((label, index) => {
     backgroundColors.push(
-      tailwindConfig().theme.colors[fixedColors[index]][500]
+      tailwindConfig().theme.colors[fixedColors[index]][100]
     );
 
     hoverBackgroundColors.push(
-      tailwindConfig().theme.colors[fixedColors[index]][700]
+      tailwindConfig().theme.colors[fixedColors[index]][300]
     );
 
     const currentValue = data[label];
@@ -63,16 +63,16 @@ export const lineChartOptions = ({
     data: labels.map((label) => rowInfo[label]),
     fill: true,
     backgroundColor: `rgba(${hexToRGB(
-      tailwindConfig().theme.colors[fixedColors[i]][500]
+      tailwindConfig().theme.colors[fixedColors[i]][100]
     )}, 0.08)`,
-    borderColor: tailwindConfig().theme.colors[fixedColors[i]][700],
+    borderColor: tailwindConfig().theme.colors[fixedColors[i]][300],
     borderWidth: 2,
     tension: 0,
     pointRadius: 0,
     pointHoverRadius: 3,
-    pointBackgroundColor: tailwindConfig().theme.colors[fixedColors[i]][700],
+    pointBackgroundColor: tailwindConfig().theme.colors[fixedColors[i]][300],
     pointHoverBackgroundColor:
-      tailwindConfig().theme.colors[fixedColors[i]][700],
+      tailwindConfig().theme.colors[fixedColors[i]][300],
     pointBorderWidth: 0,
     pointHoverBorderWidth: 0,
     clip: 20,

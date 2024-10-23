@@ -84,7 +84,7 @@ const CategoryList = ({
 
   const createButton = (
     <button
-      className="btn bg-indigo-500 hover:bg-indigo-600 text-white disabled:bg-indigo-400"
+      className="btn bg-teal-500 hover:bg-teal-600 text-white disabled:bg-teal-400"
       onClick={handleCreate}
       disabled={!canCreate}
     >

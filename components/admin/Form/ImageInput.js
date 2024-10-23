@@ -59,7 +59,7 @@ const ImageInput = ({
 
         <button
           onClick={handleInputClick}
-          className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+          className="btn bg-teal-500 hover:bg-teal-600 text-white"
         >
           {btnText}
         </button>

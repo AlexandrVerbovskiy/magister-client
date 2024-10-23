@@ -71,7 +71,7 @@ const PayModal = ({
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">
-              Price per day: {moneyFormatVisual(pricePerDay)}
+              Price: {moneyFormatVisual(pricePerDay)}
             </div>
             <div className="form-group">Duration: {durationInfo}</div>
             <div className="form-group">

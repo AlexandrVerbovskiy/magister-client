@@ -952,7 +952,7 @@ const EditForm = ({ listing, categories, save }) => {
                             disabled={disabled}
                             type="button"
                             onClick={handleSubmit}
-                            className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3"
+                            className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
                           >
                             Save Changes
                           </button>

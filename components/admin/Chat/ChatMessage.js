@@ -30,7 +30,7 @@ const ChatMessage = ({
   const { sessionUser } = useContext(IndiceContext);
   const isAuthor = senderId == sessionUser?.id || adminSend;
   const messageClassName = isAuthor
-    ? "text-sm bg-indigo-500 text-white p-3 rounded-lg rounded-tl-none border border-transparent shadow-md mb-1"
+    ? "text-sm bg-teal-500 text-white p-3 rounded-lg rounded-tl-none border border-transparent shadow-md mb-1"
     : "text-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 p-3 rounded-lg rounded-tl-none border border-slate-200 dark:border-slate-700 shadow-md mb-1";
 
   const messageRef = useRef(null);
@@ -153,7 +153,7 @@ const ChatMessage = ({
           >
             {isText && (
               <button
-                className="w-full hover:bg-indigo-500/30 transition duration-150 p-3 pb-2 flex"
+                className="w-full hover:bg-teal-500/30 transition duration-150 p-3 pb-2 flex"
                 type="button"
                 onClick={handleEditClick}
               >
@@ -179,7 +179,7 @@ const ChatMessage = ({
               </button>
             )}
             <button
-              className="w-full hover:bg-indigo-500/30 transition duration-150 p-3 pt-2 flex"
+              className="w-full hover:bg-teal-500/30 transition duration-150 p-3 pt-2 flex"
               type="button"
               onClick={handleDeleteClick}
             >

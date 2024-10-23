@@ -101,7 +101,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
               <ul className="text-sm">
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -116,7 +116,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -131,7 +131,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -146,7 +146,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -161,7 +161,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -176,7 +176,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -199,7 +199,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
               <ul className="text-sm">
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >
@@ -219,7 +219,7 @@ function ModalSearch({ id, searchId, modalOpen, setModalOpen }) {
                 </li>
                 <li>
                   <Link
-                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                    className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-teal-500 rounded group"
                     href="#0"
                     onClick={() => setModalOpen(!modalOpen)}
                   >

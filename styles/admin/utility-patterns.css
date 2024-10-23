@@ -92,7 +92,7 @@ input[type="search"]::-webkit-search-results-decoration {
 
 .form-checkbox,
 .form-radio {
-    @apply text-indigo-500 checked:bg-indigo-500 dark:checked:border-transparent border border-slate-300 focus:border-indigo-300 dark:border-slate-700 dark:focus:border-indigo-500/50;
+    @apply text-teal-500 checked:bg-teal-500 dark:checked:border-transparent border border-slate-300 focus:border-teal-300 dark:border-slate-700 dark:focus:border-teal-500/50;
 }
 
 /* Switch element */
@@ -116,7 +116,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 
 .form-switch input[type="checkbox"]:checked + label {
-    @apply bg-indigo-500;
+    @apply bg-teal-500;
 }
 
 .form-switch input[type="checkbox"]:checked + label > span:first-child {

@@ -14,8 +14,8 @@ import CookieBanner from "../components/_App/CookieAlert";
 const styleSelector = "head style, head link:not([rel='shortcut icon']";
 
 const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
-  const stylesRef = useRef({ base: [], admin: [], "base admin": [] });
-  const loadedRef = useRef({ base: false, admin: false, "base admin": false });
+  const stylesRef = useRef({ base: [], admin: [] });
+  const loadedRef = useRef({ base: false, admin: false });
   const isFirstCall = useRef(true);
 
   const importStyle = async (importFuncs, key) => {
@@ -83,23 +83,26 @@ const useImportGlobalStyle = ({ type, onStart, onEnd }) => {
     if (type == "admin") {
       await importStyle(
         [
+          () => import(`flatpickr/dist/flatpickr.min.css?type=admin`),
           () => import(`../styles/admin/main.css`),
           () => import(`../styles/admin/utility-patterns.css`),
           () => import(`../styles/admin/dop.css`),
+          () => import(`../styles/admin/flatpickr.css`),
+          () => import(`../styles/admin/flaticon.css`),
         ],
         "admin"
       );
     } else {
-      await importStyle([() => import(`../styles/index.css`)], "base");
+      await importStyle(
+        [
+          () => import(`flatpickr/dist/flatpickr.min.css?type=base`),
+          () => import(`../styles/index.css`),
+          () => import(`../styles/flatpickr.css`),
+          () => import(`../styles/flaticon.css`),
+        ],
+        "base"
+      );
     }
-
-    await importStyle(
-      [
-        () => import(`../styles/flaticon.css`),
-        () => import(`../styles/flatpickr.css`),
-      ],
-      "base admin"
-    );
 
     if (!isFirst) {
       setTimeout(onEnd, 500);

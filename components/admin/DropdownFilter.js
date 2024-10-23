@@ -75,7 +75,7 @@ function DropdownFilter({ align, children }) {
               </li>
               <li>
                 <button
-                  className="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white"
+                  className="btn-xs bg-teal-500 hover:bg-teal-600 text-white"
                   onClick={() => setDropdownOpen(false)}
                   onBlur={() => setDropdownOpen(false)}
                 >

@@ -669,9 +669,7 @@ const SingleListingsContent = ({
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
-          blockedDates={listing.blockedDates}
-          title="Book Now"
-          isExtend={false}
+          title="Send request"
         />
       )}
 

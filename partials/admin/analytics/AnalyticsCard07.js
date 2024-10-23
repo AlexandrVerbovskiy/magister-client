@@ -85,7 +85,7 @@ function AnalyticsCard07() {
           </div>
           {/* Card footer */}
           <div className="text-center pt-4 pb-1 border-t border-slate-100 dark:border-slate-700">
-            <Link className="text-sm font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">Countries Report -&gt;</Link>
+            <Link className="text-sm font-medium text-teal-500 hover:text-teal-600 dark:hover:text-teal-400" href="#0">Countries Report -&gt;</Link>
           </div>
         </div>
       </div>

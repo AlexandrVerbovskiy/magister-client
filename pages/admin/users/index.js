@@ -235,7 +235,7 @@ const Users = (pageProps) => {
                 {isAdmin && (
                   <Link
                     href="/admin/users/create/"
-                    className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+                    className="btn bg-teal-500 hover:bg-teal-600 text-white"
                   >
                     <svg
                       className="w-4 h-4 fill-current opacity-50 shrink-0"

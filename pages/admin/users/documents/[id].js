@@ -76,7 +76,7 @@ const UserDocuments = (baseProps) => {
                         <button
                           type="button"
                           onClick={handleVerifyClick}
-                          className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+                          className="btn bg-teal-500 hover:bg-teal-600 text-white"
                         >
                           {user.verified ? "Unverify" : "Verify"}
                         </button>

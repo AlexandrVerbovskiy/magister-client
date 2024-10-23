@@ -195,7 +195,7 @@ const TableItem = ({
                   <SubInfoRow label="Address" value={listingAddress} />
                   <SubInfoRow label="City" value={listingCity} />
                   <SubInfoRow
-                    label="Price Per Day"
+                    label="Price"
                     value={listingPricePerDay}
                   />
                   <SubInfoRow
