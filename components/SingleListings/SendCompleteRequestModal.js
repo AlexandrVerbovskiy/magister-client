@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import BaseModal from "../_App/BaseModal";
-import { moneyFormat, moneyFormatVisual } from "../../utils";
+import { dateConverter, fullDateConverter, moneyFormat, moneyFormatVisual } from "../../utils";
 import OfferOwnPrice from "./OfferOwnPrice";
 import ErrorSpan from "../ErrorSpan";
 import YesNoModal from "../_App/YesNoModal";
-//import "flatpickr/dist/flatpickr.min.css";
+import DateInput from "../FormComponents/DateInput";
 
-const BookingModal = ({
-  handleMakeBooking,
+const SendCompleteRequestModal = ({
+  handleSendRequest,
   price: defaultPrice,
+  finishTime: defaultFinishTime,
   createOrderModalActive,
   closeModal,
   title = "Send request",
   fullVersion = false,
 }) => {
   const [price, setPrice] = useState(defaultPrice);
+  const [finishTime, setFinishTime] = useState(defaultFinishTime);
   const [offerPriceActive, setOfferPriceActive] = useState(false);
   const [yesNoActive, setYesNoActive] = useState(false);
 
@@ -42,8 +44,9 @@ const BookingModal = ({
     if (fullVersion) {
       setYesNoActive(true);
     } else {
-      handleMakeBooking({
+      handleSendRequest({
         price,
+        finishTime,
         sendingMessage: sendingMessage.trim(),
       });
     }
@@ -54,13 +57,12 @@ const BookingModal = ({
     setOfferPriceActive(true);
   };
 
-
   const yesNoTitle = "Confirm that you want to send request";
 
   const onYesNoAccept = () => {
     setYesNoActive(false);
 
-    handleMakeBooking({
+    handleSendRequest({
       price,
       sendingMessage: sendingMessage.trim(),
     });
@@ -86,7 +88,17 @@ const BookingModal = ({
           <br />
         </span>
 
-        <div className="mt-3 booking-form left-scrollable">
+        <div className="mt-3 sending-request-form left-scrollable">
+          <div className="flatpickr-parent-wrapper popup-widget">
+            <DateInput
+              value={finishTime}
+              name="new-finish-time"
+              placeholder="Finish Time"
+              onInput={setFinishTime}
+              inline={true}
+            />
+          </div>
+
           <div className="popup-widget order-info-widget">
             <div className="d-flex align-items-center">
               Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
@@ -98,7 +110,7 @@ const BookingModal = ({
                 ></i>
               )}
             </div>
-            
+
             {price != defaultPrice && (
               <div className="d-flex align-items-center">
                 Offered price: ${moneyFormat(price)}{" "}
@@ -148,6 +160,11 @@ const BookingModal = ({
           )}
           <div className="border-top d-flex justify-content-between">
             <div className="d-flex flex-column mt-4 ">
+              <div>
+                <b>Finish time: </b>
+                {fullDateConverter(finishTime)}
+              </div>
+
               <div className="total-booking-price">
                 <b>
                   Total: <span>{moneyFormatVisual(price)}</span>
@@ -195,4 +212,4 @@ const BookingModal = ({
   );
 };
 
-export default BookingModal;
+export default SendCompleteRequestModal;

@@ -2,7 +2,7 @@ import Flatpickr from "react-flatpickr";
 import React, { useEffect, useState } from "react";
 import { getMaxFlatpickrDate } from "../../utils";
 
-const DateInput = ({ value, name, placeholder, onInput }) => {
+const DateInput = ({ value, name, placeholder, onInput, inline = true }) => {
   const [pickerValue, setPickerValue] = useState(value ? [value] : []);
 
   useEffect(() => {
@@ -11,6 +11,7 @@ const DateInput = ({ value, name, placeholder, onInput }) => {
 
   const options = {
     mode: "single",
+    inline,
     static: true,
     monthSelectorType: "static",
     dateFormat: "M j, Y H:i",

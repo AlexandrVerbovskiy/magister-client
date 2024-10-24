@@ -10,7 +10,7 @@ import {
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
-import BookingModal from "./BookingModal";
+import SendCompleteRequestModal from "./SendCompleteRequestModal";
 import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -31,8 +31,8 @@ const SingleListingsContent = ({
   const [mapCenter, setMapCenter] = useState(null);
   const [currentApprove, setCurrentApprove] = useState(false);
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
-  const [currentApproveFromDate, setCurrentApproveFromDate] = useState(null);
-  const [currentApproveToDate, setCurrentApproveToDate] = useState(null);
+  const [currentApproveFinishTime, setCurrentApproveFinishTime] =
+    useState(null);
   const [listing, setListing] = useState(prevListing);
   const isMobile = useIsMobile();
 
@@ -51,22 +51,20 @@ const SingleListingsContent = ({
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const handleBeforeMakeBooking = ({ price, fromDate, toDate }) => {
+  const handleBeforeSendRequest = ({ price, finishTime }) => {
     setCurrentApprovePrice(price);
-    setCurrentApproveFromDate(fromDate);
-    setCurrentApproveToDate(toDate);
+    setCurrentApproveFinishTime(finishTime);
     setCurrentApprove(true);
     setCreateOrderModalActive(false);
   };
 
-  const handleMakeBooking = async ({ feeActive, sendingMessage }) => {
+  const handleSendRequest = async ({ sendingMessage }) => {
     try {
       const id = await createOrder(
         {
-          startDate: currentApproveFromDate,
-          endDate: currentApproveToDate,
+          totalPrice: currentApprovePrice,
+          finishTime: currentApproveFinishTime,
           listingId: listing.id,
-          feeActive,
           message: sendingMessage,
         },
         authToken
@@ -80,7 +78,7 @@ const SingleListingsContent = ({
     }
   };
 
-  const handleMakeBookingTriggerClick = (e) => {
+  const handleSendRequestTriggerClick = (e) => {
     e.preventDefault();
 
     if (sessionUser) {
@@ -555,7 +553,7 @@ const SingleListingsContent = ({
                           <button
                             type="button"
                             className="default-btn w-100"
-                            onClick={handleMakeBookingTriggerClick}
+                            onClick={handleSendRequestTriggerClick}
                           >
                             Send request {moneyFormatVisual(listing.totalPrice)}
                           </button>
@@ -619,7 +617,7 @@ const SingleListingsContent = ({
 
           {currentApprove && (
             <OrderApprovementSection
-              handleApprove={handleMakeBooking}
+              handleApprove={handleSendRequest}
               setCurrentOpenImg={setCurrentOpenImg}
               listing={{
                 ...listing,
@@ -629,21 +627,20 @@ const SingleListingsContent = ({
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}
               handleGoBack={() => setCurrentApprove(false)}
-              fromDate={currentApproveFromDate}
-              toDate={currentApproveToDate}
+              finishTime={currentApproveFinishTime}
               price={currentApprovePrice}
               fee={workerBaseCommissionPercent}
-              setToDate={setCurrentApproveToDate}
-              setFromDate={setCurrentApproveFromDate}
+              setFinishTime={setCurrentApproveFinishTime}
             />
           )}
         </div>
       </section>
 
       {sessionUser && (
-        <BookingModal
-          handleMakeBooking={handleBeforeMakeBooking}
+        <SendCompleteRequestModal
+          handleSendRequest={handleBeforeSendRequest}
           price={listing.totalPrice}
+          finishTime={listing.finishTime}
           fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
@@ -652,7 +649,7 @@ const SingleListingsContent = ({
         />
       )}
 
-      {isMobile && (
+      {isMobile && !currentApprove && (
         <div className="mobile-booking-section">
           <div className="listings-sidebar d-flex flex-column">
             <div className="listings-widget book_listings">
@@ -661,16 +658,14 @@ const SingleListingsContent = ({
                   <ul style={{ listStyle: "none", padding: "0" }}>
                     <li className="d-flex">
                       <div className="row-dots-end mt-0">
-                        <span>
-                          {moneyFormatVisual(listing.totalPrice)}
-                        </span>
+                        <span>{moneyFormatVisual(listing.totalPrice)}</span>
                       </div>
                     </li>
                   </ul>
                   <button
                     type="button"
                     className="default-btn w-100"
-                    onClick={handleMakeBookingTriggerClick}
+                    onClick={handleSendRequestTriggerClick}
                   >
                     Send rental request {moneyFormatVisual(listing.totalPrice)}
                   </button>
