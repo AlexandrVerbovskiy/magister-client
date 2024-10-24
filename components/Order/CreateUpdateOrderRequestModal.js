@@ -245,7 +245,7 @@ const CreateUpdateOrderRequestModal = ({
           </span>
         </div>
       </div>
-      <div className="mt-3 booking-form left-scrollable">
+      <div className="mt-3 sending-request-form left-scrollable">
         <div className="row">
           <div className="col col-12 col-md-6">
             <span className="sub-title mb-2 d-flex d-md-none">

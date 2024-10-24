@@ -131,7 +131,6 @@ const TableItem = ({
   totalRents,
   totalSpent,
   briefBio,
-  lastRenterDate,
   facebookUrl,
   instagramUrl,
   linkedinUrl,
@@ -317,15 +316,8 @@ const TableItem = ({
                       Activity
                     </div>
                     <SubInfoRow
-                      label="Last rental"
-                      value={
-                        lastRenterDate ? dateConverter(lastRenterDate) : "-"
-                      }
-                      newRow={true}
-                    />
-                    <SubInfoRow
-                      label="Renter Disputes"
-                      value={tenantDisputesCount}
+                      label="Worker Disputes"
+                      value={workerDisputesCount}
                       newRow={true}
                     />
                     <SubInfoRow

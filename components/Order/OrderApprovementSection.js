@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { calculateFeeByDaysCount, getFactOrderDays, validateBigText } from "../../utils";
+import { calculateFee, validateBigText } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -11,16 +11,11 @@ const OrderApprovementSection = ({
   setCurrentOpenImg,
   listing,
   handleGoBack,
-  fromDate,
-  toDate,
+  finishTime,
   price,
   fee,
-  setToDate,
-  setFromDate,
-  blockedDates,
-  minRentalDays,
+  setFinishTime,
 }) => {
-  const [feeActive, setFeeActive] = useState(false);
   const [sendingMessage, setSendingMessage] = useState("");
   const [sendingMessageError, setSendingMessageError] = useState(null);
   const [dateError, setDateError] = useState(null);
@@ -28,14 +23,13 @@ const OrderApprovementSection = ({
     useState(false);
 
   const handleApprove = () => {
-    baseHandleApprove({ feeActive, sendingMessage });
+    baseHandleApprove({ sendingMessage });
     setActiveAcceptSendBookingRequest(false);
   };
 
-  const duration = getFactOrderDays(fromDate, toDate);
-  const subtotalPrice = price * duration;
-  const totalFee = calculateFeeByDaysCount(duration, price, fee, true);
-  const totalPrice = subtotalPrice + totalFee;
+  const totalFee = calculateFee(price, fee, true);
+  console.log(totalFee);
+  const totalPrice = price + totalFee;
 
   const onSendClick = (e) => {
     e.preventDefault();
@@ -50,21 +44,6 @@ const OrderApprovementSection = ({
     if (validateBigText(sendingMessage) !== true) {
       hasError = true;
       setSendingMessageError(validateBigText(sendingMessage));
-    }
-
-    if (fromDate > toDate) {
-      hasError = true;
-      setDateError('"From date" can\'t be larger than "To date"');
-    }
-
-    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-      hasError = true;
-      setDateError(
-        `Rental duration can't be lower than ${getFactOrderDays(
-          fromDate,
-          toDate
-        )} days`
-      );
     }
 
     if (hasError) {
@@ -83,8 +62,6 @@ const OrderApprovementSection = ({
             handleGoBack={handleGoBack}
             setSendingMessage={setSendingMessage}
             sendingMessage={sendingMessage}
-            fromDate={fromDate}
-            toDate={toDate}
             price={price}
             listing={listing}
             minRentalDays={minRentalDays}
@@ -98,21 +75,11 @@ const OrderApprovementSection = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetails
-            needFeeSwitch={true}
-            feeActive={feeActive}
-            setFeeActive={setFeeActive}
-            fromDate={fromDate}
-            toDate={toDate}
-            price={price}
-            setToDate={setToDate}
-            setFromDate={setFromDate}
-            blockedDates={blockedDates}
+            finishTime={finishTime}
+            setFinishTime={setFinishTime}
             totalPrice={totalPrice}
-            subtotalPrice={subtotalPrice}
             dateError={dateError}
-            duration={duration}
             totalFee={totalFee}
-            setDateError={setDateError}
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
@@ -129,8 +96,7 @@ const OrderApprovementSection = ({
       </div>
 
       <YesNoRentalModal
-        fromDate={fromDate}
-        toDate={toDate}
+        finishTime={finishTime}
         price={price}
         listing={listing}
         handleApprove={handleApprove}

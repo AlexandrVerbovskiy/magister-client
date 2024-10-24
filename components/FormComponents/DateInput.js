@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
 
-const DateInput = ({ value, name, onInput, min = null }) => {
-  const inputRef = useRef(null);
-  const [showedPicker, setShowedPicker] = useState(false);
+const DateInput = ({ value, name, placeholder, onInput, inline = true }) => {
+  const [pickerValue, setPickerValue] = useState(value ? [value] : []);
 
   const showPicker = () => {
     if (!showedPicker) {
@@ -11,6 +10,7 @@ const DateInput = ({ value, name, onInput, min = null }) => {
 
   const options = {
     mode: "single",
+    inline,
     static: true,
     monthSelectorType: "static",
     dateFormat: "M j, Y H:i",

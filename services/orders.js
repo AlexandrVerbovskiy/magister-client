@@ -2,18 +2,12 @@ import { initAxios } from "../utils";
 const { get, post, getPdfByPath } = initAxios("/orders");
 
 export const createOrder = async (
-  { startDate, endDate, listingId, feeActive, message },
+  { totalPrice, finishTime, listingId, message },
   authToken
 ) => {
-  if (startDate > endDate) {
-    let temp = startDate;
-    startDate = endDate;
-    endDate = temp;
-  }
-
   const data = await post(
     `/create`,
-    { startDate, endDate, listingId, feeActive, message },
+    { totalPrice, finishTime, listingId, message },
     authToken
   );
   return data.body.id;

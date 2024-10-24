@@ -18051,7 +18051,7 @@ input:-internal-autofill-selected {
   padding: 30px;
 }
 
-.booking-form {
+.sending-request-form {
   max-height: calc(100vh - 180px);
   overflow: auto;
 }

@@ -3,8 +3,8 @@ import STATIC from "../static";
 
 export const moneyFormat = (money) => +money.toFixed(2);
 
-export const calculateFeeByDaysCount = (count, price, fee, needMin = false) => {
-  const totalFee = (fee * price * count) / 100;
+export const calculateFee = (price, fee, needMin = false) => {
+  const totalFee = (fee * price) / 100;
 
   if (needMin && totalFee < STATIC.LIMITS.MIN_TENANT_COMMISSION) {
     return STATIC.LIMITS.MIN_TENANT_COMMISSION;

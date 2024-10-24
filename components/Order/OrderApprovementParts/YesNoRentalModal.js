@@ -1,9 +1,8 @@
-import { dateConverter, moneyFormatVisual } from "../../../utils";
+import { fullDateConverter, moneyFormatVisual } from "../../../utils";
 import YesNoModal from "../../_App/YesNoModal";
 
 const YesNoRentalModal = ({
-  fromDate,
-  toDate,
+  finishTime,
   price,
   listing,
   handleApprove,
@@ -11,17 +10,9 @@ const YesNoRentalModal = ({
   activeAcceptSendBookingRequest,
   setActiveAcceptSendBookingRequest,
 }) => {
-  let message = `'${listing.name}' rental`;
-
-  if (new Date(fromDate).toDateString() == new Date(toDate).toDateString()) {
-    message += ` during ${dateConverter(fromDate)} `;
-  } else {
-    message += ` from ${dateConverter(fromDate)} to ${dateConverter(toDate)} `;
-  }
-
-  message += `for ${moneyFormatVisual(
-    price
-  )} per day, total amount of ${moneyFormatVisual(
+  let message = `'${listing.name}' complete task before ${fullDateConverter(
+    finishTime
+  )} and get ${moneyFormatVisual(price)}, total amount of ${moneyFormatVisual(
     totalPrice
   )} (including fees).`;
 

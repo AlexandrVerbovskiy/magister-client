@@ -1,5 +1,4 @@
 import STATIC from "../../static";
-import BookingModal from "../SingleListings/BookingModal";
 import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
