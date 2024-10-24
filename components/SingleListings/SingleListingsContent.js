@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   activateAuthPopup,
@@ -11,11 +11,7 @@ import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import SendCompleteRequestModal from "./SendCompleteRequestModal";
-import {
-  changeListingFavorite,
-  createOrder,
-  predictTempOrderDispute,
-} from "../../services";
+import { changeListingFavorite, createOrder } from "../../services";
 import { useRouter } from "next/router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -27,7 +23,7 @@ import { useIsMobile } from "../../hooks";
 const SingleListingsContent = ({
   comments,
   listing: prevListing,
-  renterBaseCommissionPercent,
+  workerBaseCommissionPercent,
   ownerRatingInfo,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
@@ -35,9 +31,8 @@ const SingleListingsContent = ({
   const [mapCenter, setMapCenter] = useState(null);
   const [currentApprove, setCurrentApprove] = useState(false);
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
-  const [currentApproveFinishDate, setCurrentApproveFinishDate] =
+  const [currentApproveFinishTime, setCurrentApproveFinishTime] =
     useState(null);
-  const [currentApproveStartDate, setCurrentApproveStartDate] = useState(null);
   const [listing, setListing] = useState(prevListing);
   const isMobile = useIsMobile();
 
@@ -53,46 +48,24 @@ const SingleListingsContent = ({
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const [createOrderModalActive, setCreateOrderModalActive] = useState(false);
-  const [disputeProbability, setDisputeProbability] = useState(null);
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const handleBeforeSendRequest = ({ price, startDate, finishDate }) => {
+  const handleBeforeSendRequest = ({ price, finishTime }) => {
     setCurrentApprovePrice(price);
-    setCurrentApproveStartDate(startDate);
-    setCurrentApproveFinishDate(finishDate);
+    setCurrentApproveFinishTime(finishTime);
     setCurrentApprove(true);
     setCreateOrderModalActive(false);
   };
-
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      const probabilityOfDelay = await predictTempOrderDispute(
-        {
-          price: currentApprovePrice,
-          startDate: currentApproveStartDate,
-          finishDate: currentApproveFinishDate,
-          listingId: listing.id,
-        },
-        authToken
-      );
-
-      setDisputeProbability(probabilityOfDelay);
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [currentApprovePrice, currentApproveStartDate, currentApproveFinishDate]);
 
   const handleSendRequest = async ({ sendingMessage }) => {
     try {
       const id = await createOrder(
         {
-          price: currentApprovePrice,
-          startDate: currentApproveStartDate,
-          finishDate: currentApproveFinishDate,
+          totalPrice: currentApprovePrice,
+          finishTime: currentApproveFinishTime,
           listingId: listing.id,
           message: sendingMessage,
-          disputeProbability,
         },
         authToken
       );
@@ -181,11 +154,7 @@ const SingleListingsContent = ({
                     checked={true}
                     countClass="rating-count"
                     centerAlign={true}
-<<<<<<< HEAD
-                    commentName="order"
-=======
                     commentName="task"
->>>>>>> ebc90ab (listing updated)
                   />
 
                   <ul className="d-flex align-items-center">
@@ -325,11 +294,7 @@ const SingleListingsContent = ({
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
-<<<<<<< HEAD
-                                <div>Rental Description</div>
-=======
                                 <div>Task Description</div>
->>>>>>> ebc90ab (listing updated)
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
@@ -581,11 +546,7 @@ const SingleListingsContent = ({
                 <div className="listings-sidebar d-flex flex-column">
                   {!isMobile && (
                     <div className="listings-widget book_listings">
-<<<<<<< HEAD
-                      <h3>Start Rental</h3>
-=======
                       <h3>Complete Task</h3>
->>>>>>> ebc90ab (listing updated)
 
                       {sessionUser?.id != listing.ownerId ? (
                         <div>
@@ -594,16 +555,12 @@ const SingleListingsContent = ({
                             className="default-btn w-100"
                             onClick={handleSendRequestTriggerClick}
                           >
-                            Send request {moneyFormatVisual(listing.price)}
+                            Send request {moneyFormatVisual(listing.totalPrice)}
                           </button>
                         </div>
                       ) : (
                         <div className="status-background-orange">
-<<<<<<< HEAD
-                          You can't complete your own item
-=======
                           You can't complete your own listing
->>>>>>> ebc90ab (listing updated)
                         </div>
                       )}
                     </div>
@@ -625,13 +582,8 @@ const SingleListingsContent = ({
                           </h4>
                           <span>
                             {listing.userCountItems}{" "}
-<<<<<<< HEAD
-                            {autoMultiEnding(listing.userCountItems, "Order")}{" "}
-                            for rent
-=======
                             {autoMultiEnding(listing.userCountItems, "Task")}{" "}
                             for complete
->>>>>>> ebc90ab (listing updated)
                           </span>
                         </div>
                       </div>
@@ -675,13 +627,10 @@ const SingleListingsContent = ({
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}
               handleGoBack={() => setCurrentApprove(false)}
-              disputeProbability={disputeProbability}
-              startDate={currentApproveStartDate}
-              finishDate={currentApproveFinishDate}
+              finishTime={currentApproveFinishTime}
               price={currentApprovePrice}
-              fee={renterBaseCommissionPercent}
-              setStartDate={setCurrentApproveStartDate}
-              setFinishDate={setCurrentApproveFinishDate}
+              fee={workerBaseCommissionPercent}
+              setFinishTime={setCurrentApproveFinishTime}
             />
           )}
         </div>
@@ -690,11 +639,9 @@ const SingleListingsContent = ({
       {sessionUser && (
         <SendCompleteRequestModal
           handleSendRequest={handleBeforeSendRequest}
-          price={listing.price}
-          startDate={listing.startDate}
-          finishDate={listing.finishDate}
-          blockedDates={listing.blockedDates}
-          fee={renterBaseCommissionPercent}
+          price={listing.totalPrice}
+          finishTime={listing.finishTime}
+          fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
@@ -708,33 +655,24 @@ const SingleListingsContent = ({
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
-<<<<<<< HEAD
-=======
                   <ul style={{ listStyle: "none", padding: "0" }}>
                     <li className="d-flex">
                       <div className="row-dots-end mt-0">
-                        <span>
-                          {moneyFormatVisual(listing.totalPrice)}
-                        </span>
+                        <span>{moneyFormatVisual(listing.totalPrice)}</span>
                       </div>
                     </li>
                   </ul>
->>>>>>> ebc90ab (listing updated)
                   <button
                     type="button"
                     className="default-btn w-100"
                     onClick={handleSendRequestTriggerClick}
                   >
-                    Send completing request {moneyFormatVisual(listing.price)}
+                    Send rental request {moneyFormatVisual(listing.totalPrice)}
                   </button>
                 </div>
               ) : (
                 <div className="status-background-orange">
-<<<<<<< HEAD
-                  You can't rent your own dress
-=======
                   You can't complete your own listing
->>>>>>> ebc90ab (listing updated)
                 </div>
               )}
             </div>

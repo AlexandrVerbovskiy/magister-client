@@ -1,13 +1,8 @@
-import {
-  dateConverter,
-  fullDateConverter,
-  moneyFormatVisual,
-} from "../../../utils";
+import { fullDateConverter, moneyFormatVisual } from "../../../utils";
 import YesNoModal from "../../_App/YesNoModal";
 
 const YesNoRentalModal = ({
-  finishDate,
-  startDate,
+  finishTime,
   price,
   listing,
   handleApprove,
@@ -15,11 +10,11 @@ const YesNoRentalModal = ({
   activeAcceptSendBookingRequest,
   setActiveAcceptSendBookingRequest,
 }) => {
-  let message = `Rent '${listing.name}' from ${dateConverter(
-    startDate
-  )} to ${dateConverter(finishDate)} and pay ${moneyFormatVisual(
-    price
-  )}, total amount of ${moneyFormatVisual(totalPrice)} (including fees).`;
+  let message = `'${listing.name}' complete task before ${fullDateConverter(
+    finishTime
+  )} and get ${moneyFormatVisual(price)}, total amount of ${moneyFormatVisual(
+    totalPrice
+  )} (including fees).`;
 
   message +=
     "<br><b>PS: you will not be charged yet, this is just a request</b>";

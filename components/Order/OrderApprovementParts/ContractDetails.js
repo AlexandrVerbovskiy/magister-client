@@ -1,62 +1,21 @@
-import {
-  dateConverter,
-  fullDateConverter,
-  getFactOrderDays,
-  getPriceByDays,
-  moneyFormatVisual,
-  renterPaysCalculate,
-  renterPaysFeeCalculate,
-} from "../../../utils";
+import { fullDateConverter, moneyFormatVisual } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 
-const ContractDetails = ({ price, dateError, finishDate, startDate, fee }) => {
-  const clearPrice = getPriceByDays(price, startDate, finishDate);
-  const totalPrice = renterPaysCalculate(clearPrice, fee);
-
+const ContractDetails = ({ totalPrice, dateError, finishTime, totalFee }) => {
   return (
     <div className="listings-widget listings_contact_details">
       <h3>Rental Details</h3>
 
       <div>
         <div style={{ marginTop: "20px", marginBottom: "20px" }}>
-          <div className="d-flex">
-            <DateInput
-              label="Withdrawal"
-              value={fromDate}
-              setValue={setFromDate}
-              blockedDates={blockedDates}
-              setDateError={setDateError}
-            />
-
-            <DateInput
-              label="Devolution"
-              value={toDate}
-              setValue={setToDate}
-              blockedDates={blockedDates}
-              setDateError={setDateError}
-            />
-          </div>
           <ErrorSpan className="d-block" error={dateError} />
         </div>
         <div
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div>Duration</div>
-          <div>
-            {dateConverter(startDate)} - {dateConverter(finishDate)}
-          </div>
-        </div>
-
-        <div
-          className="d-flex justify-content-between"
-          style={{ marginTop: "10px", marginBottom: "10px" }}
-        >
-          <div>Price</div>
-          <div>
-            {getFactOrderDays(startDate, finishDate)} x{" "}
-            {moneyFormatVisual(clearPrice)}
-          </div>
+          <div>Finish Time</div>
+          <div>{fullDateConverter(finishTime)}</div>
         </div>
 
         <div
@@ -64,9 +23,7 @@ const ContractDetails = ({ price, dateError, finishDate, startDate, fee }) => {
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>Service Fee</div>
-          <div>
-            {moneyFormatVisual(renterPaysFeeCalculate(clearPrice, fee))}
-          </div>
+          <div>{moneyFormatVisual(totalFee)}</div>
         </div>
       </div>
 

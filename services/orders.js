@@ -2,27 +2,15 @@ import { initAxios } from "../utils";
 const { get, post, getPdfByPath } = initAxios("/orders");
 
 export const createOrder = async (
-  { price, startDate, finishDate, listingId, message, disputeProbability },
+  { totalPrice, finishTime, listingId, message },
   authToken
 ) => {
   const data = await post(
     `/create`,
-    { price, startDate, finishDate, listingId, message, disputeProbability },
+    { totalPrice, finishTime, listingId, message },
     authToken
   );
   return data.body.id;
-};
-
-export const predictTempOrderDispute = async (
-  { price, startDate, finishDate, listingId },
-  authToken
-) => {
-  const data = await post(
-    `/predict-temp-order-dispute`,
-    { price, startDate, finishDate, listingId },
-    authToken
-  );
-  return data.body.probabilityOfDelay;
 };
 
 export const getOrderFullInfo = async (id, authToken) => {
@@ -42,16 +30,6 @@ export const getAdminOrderList = async (params, authToken) => {
 
 export const acceptOrder = async (id, authToken) => {
   const data = await post(`/accept-booking`, { id }, authToken);
-  return data.body;
-};
-
-export const finishOrder = async (id, authToken) => {
-  const data = await post(`/finish`, { id }, authToken);
-  return data.body;
-};
-
-export const acceptFinishOrder = async (id, authToken) => {
-  const data = await post(`/accept-finish`, { id }, authToken);
   return data.body;
 };
 

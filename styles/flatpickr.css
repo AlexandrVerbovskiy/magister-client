@@ -224,29 +224,16 @@ span.flatpickr-weekday {
 .flatpickr-day.selected.endRange,
 .flatpickr-day.endRange {
   border-radius: 0 !important;
-<<<<<<< HEAD
   background-color: #a5eadc !important;
-=======
-  background-color: #594fbf !important;
->>>>>>> ebc90ab (listing updated)
   color: var(--whiteColor) !important;
   font-weight: 400 !important;
   text-decoration: none !important;
 }
 
-<<<<<<< HEAD
-.flatpickr-day.endRange,
-.flatpickr-day.startRange,
-.flatpickr-day.selected,
-.flatpickr-day.selected.endRange {
-  border-radius: 0 !important;
-  background-color: #a5eadc !important;
-=======
 .flatpickr-day.startRange,
 .flatpickr-day.selected {
   border-radius: 0 !important;
-  background-color: #ede7f6 !important;
->>>>>>> ebc90ab (listing updated)
+  background-color: #a5eadc !important;
   color: #212529 !important;
   font-weight: 600 !important;
   text-decoration: underline !important;
@@ -308,7 +295,6 @@ span.flatpickr-weekday {
   height: 50px;
   padding-top: 10px;
 }
-<<<<<<< HEAD
 
 .flatpickr-parent-wrapper.popup-widget [name='new-finish-time']{
   display: none!important;
@@ -330,5 +316,3 @@ span.flatpickr-weekday {
   padding-bottom: 10px;
   height: 50px;
 }
-=======
->>>>>>> ebc90ab (listing updated)
