@@ -14,7 +14,7 @@ import {
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
-  calculateFeeByDaysCount,
+  calculateFee,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -42,15 +42,10 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
   const subtotalPrice = calculateTotalPriceByDaysCount(
     getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
-    payment.offerPricePerDay
+    payment.offerPrice
   );
 
-  const totalFee = calculateFeeByDaysCount(
-    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
-    payment.offerPricePerDay,
-    payment.tenantFee,
-    true
-  );
+  const totalFee = calculateFee(payment.offerPrice, payment.workerFee, true);
 
   const handleAccept = async () => {
     await approveSenderPaymentTransaction(
@@ -197,7 +192,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={moneyFormat(payment.offerPricePerDay)}
+                                value={moneyFormat(payment.offerPrice)}
                                 label={`Offer Price (${STATIC.CURRENCY})`}
                                 name="price"
                                 placeholder="Offer Price"

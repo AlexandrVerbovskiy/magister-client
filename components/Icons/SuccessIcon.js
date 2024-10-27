@@ -12,8 +12,8 @@ export default ({ width = 33, height = 32, style={} }) => (
         cx="16.5"
         cy="16"
         r="15"
-        fill="#594FBF"
-        stroke="#594FBF"
+        fill="#0ec6c6"
+        stroke="#0ec6c6"
         strokeWidth="2"
       />
     </g>

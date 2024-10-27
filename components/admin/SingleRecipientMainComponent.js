@@ -34,11 +34,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = tenantPaymentCalculate(
-    recipient.offerStartDate,
-    recipient.offerEndDate,
-    recipient.tenantFee,
-    recipient.offerPricePerDay
+  const totalPayed = workerPaymentCalculate(
+    recipient.offerPrice,
+    recipient.workerFee,
   );
 
   let paymentNumber = "-";
@@ -200,7 +198,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={moneyFormat(recipient.offerPricePerDay)}
+                                value={moneyFormat(recipient.offerPrice)}
                                 label={`Offer Price (${STATIC.CURRENCY})`}
                                 name="offer-price"
                                 placeholder="Offer Price"

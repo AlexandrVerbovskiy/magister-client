@@ -28,7 +28,7 @@ const TableItem = (props) => {
     cancelStatus,
     offerStartDate,
     offerEndDate,
-    offerPricePerDay,
+    offerPrice,
     listingAddress,
     listingCategoryName = null,
     listingOtherCategory = null,
@@ -63,7 +63,7 @@ const TableItem = (props) => {
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
-            {moneyFormatVisual(getFactOrderDays(offerStartDate, offerEndDate) * offerPricePerDay)}
+            {moneyFormatVisual(offerPrice)}
           </div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

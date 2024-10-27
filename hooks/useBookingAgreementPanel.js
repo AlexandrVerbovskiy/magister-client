@@ -22,15 +22,12 @@ const useBookingAgreementPanel = ({
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
   const { authToken, error, success, sessionUser } = useContext(IndiceContext);
-  const handleCreateUpdateRequest = async ({
-    order,
-    price,
-    fromDate,
-    toDate,
-  }) => {
+  const handleCreateUpdateRequest = async ({ order, price, finishTime }) => {
     if (disabled) {
       return;
     }
+
+    console.log(price, finishTime)
 
     try {
       setDisabled(true);
@@ -39,9 +36,8 @@ const useBookingAgreementPanel = ({
       const result = await createOrderUpdateRequest(
         {
           orderId: order.id,
-          newStartDate: fromDate,
-          newEndDate: toDate,
-          newPricePerDay: price,
+          newPrice: price,
+          newFinishTime: finishTime,
         },
         authToken
       );

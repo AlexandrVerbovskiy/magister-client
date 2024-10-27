@@ -1,9 +1,6 @@
-import { useContext } from "react";
-import { IndiceContext } from "../contexts";
 import {
   checkStringDateLowerOrEqualCurrentDate,
-  dateConverter,
-  isOrderCanBeAccepted,
+  fullDateConverter,
 } from "../utils";
 import STATIC from "../static";
 
@@ -19,34 +16,17 @@ const Parent = ({ children, tooltipText }) => {
   return <div>{children}</div>;
 };
 
-const BaseDateSpan = ({
-  startDate,
-  endDate,
-  className = "",
-  tooltipText = null,
-}) => {
-  if (dateConverter(startDate) === dateConverter(endDate)) {
-    return (
-      <Parent tooltipText={tooltipText}>
-        Rental date:{" "}
-        <span className={className}>{dateConverter(startDate)}</span>
-      </Parent>
-    );
-  }
-
+const BaseDateSpan = ({ finishTime, className = "", tooltipText = null }) => {
   return (
     <Parent tooltipText={tooltipText}>
-      Rental duration:{" "}
-      <span className={className}>{dateConverter(startDate)}</span> -{" "}
-      <span className={className}>{dateConverter(endDate)}</span>
+      Finish by:{" "}
+      <span className={className}>{fullDateConverter(finishTime)}</span>
     </Parent>
   );
 };
 
 const useOrderDateError = ({ order }) => {
-  const { sessionUser } = useContext(IndiceContext);
-
-  const checkErrorData = (startDate) => {
+  const checkErrorData = (finishTime) => {
     let tooltipErrorMessage = "";
     let blocked = false;
 
@@ -55,14 +35,8 @@ const useOrderDateError = ({ order }) => {
         order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) &&
       order.cancelStatus == null
     ) {
-      if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+      if (checkStringDateLowerOrEqualCurrentDate(finishTime)) {
         tooltipErrorMessage = "Order start date is overdue";
-        blocked = true;
-      }
-
-      if (!isOrderCanBeAccepted(order) && order.ownerId == sessionUser?.id) {
-        tooltipErrorMessage =
-          "There are more priority bookings or orders for these dates";
         blocked = true;
       }
     }
@@ -70,13 +44,12 @@ const useOrderDateError = ({ order }) => {
     return { tooltipErrorMessage, blocked };
   };
 
-  const CanBeErrorBaseDateSpan = ({ startDate, endDate }) => {
-    const { tooltipErrorMessage, blocked } = checkErrorData(startDate);
+  const CanBeErrorBaseDateSpan = ({ finishTime }) => {
+    const { tooltipErrorMessage, blocked } = checkErrorData(finishTime);
 
     return (
       <BaseDateSpan
-        startDate={startDate}
-        endDate={endDate}
+        finishTime={finishTime}
         className={blocked ? "error-span" : ""}
         tooltipText={tooltipErrorMessage}
       />

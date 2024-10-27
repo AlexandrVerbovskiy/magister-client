@@ -5,9 +5,7 @@ import SuccessIcon from "../../Icons/SuccessIcon";
 import ErrorIcon from "../../Icons/ErrorIcon";
 import SingleRatingStar from "../SingleRatingStar";
 import {
-  autoMultiEnding,
-  calculateCurrentTotalPrice,
-  dateConverter,
+  autoCalculateCurrentTotalPrice,
   getDisputeTitle,
   getFactOrderDays,
   getFilePath,
@@ -227,21 +225,17 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.NEW_EXTENSION ||
     type === STATIC.MESSAGE_TYPES.UPDATE_EXTENSION
   ) {
-    const forOwnerPrice = calculateCurrentTotalPrice({
-      startDate: content.offerStartDate,
-      endDate: content.offerEndDate,
-      pricePerDay: content.offerPrice,
+    const forOwnerPrice = autoCalculateCurrentTotalPrice({
+      price: content.offerPrice,
       type: "owner",
       isOwner: true,
       ownerFee: order.ownerFee,
       tenantFee: order.tenantFee,
     });
 
-    const forTenantPrice = calculateCurrentTotalPrice({
-      startDate: content.offerStartDate,
-      endDate: content.offerEndDate,
-      pricePerDay: content.offerPrice,
-      type: "tenant",
+    const forWorkerPrice = autoCalculateCurrentTotalPrice({
+      price: content.offerPrice,
+      type: "worker",
       isOwner: false,
       ownerFee: order.ownerFee,
       tenantFee: order.tenantFee,

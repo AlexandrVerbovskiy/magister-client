@@ -16,41 +16,44 @@ export const calculateFee = (price, fee, needMin = false) => {
 export const calculateTotalPriceByDaysCount = (count, price) =>
   moneyFormat(price * count);
 
-export const calculateFullTotalByDaysCount = (
-  count,
-  price,
-  fee,
-  type = "sum"
-) => {
+export const calculateFullTotalByType = (price, fee, type = "sum") => {
   let total;
 
   if (type == "sum") {
-    total =
-      +calculateTotalPriceByDaysCount(count, price) +
-      +calculateFeeByDaysCount(count, price, fee, true);
+    total = workerPaymentCalculate(price, fee);
   }
 
   if (type == "reject") {
-    total =
-      +calculateTotalPriceByDaysCount(count, price, fee) -
-      +calculateFeeByDaysCount(count, price, fee);
+    total = ownerGetsCalculate(price, fee);
   }
 
-  return moneyFormat(total);
+  return total;
 };
 
-export const tenantPaymentCalculate = (startDay, endDay, fee, pricePerDay) => {
-  const duration = getFactOrderDays(startDay, endDay);
-  const resPayment =
-    duration * pricePerDay +
-    calculateFeeByDaysCount(duration, pricePerDay, fee, true);
-  return +resPayment.toFixed(2);
+export const autoCalculateCurrentTotalPrice = ({
+  price,
+  ownerFee,
+  workerFee,
+  type = null,
+  isOwner = null,
+}) => {
+  if (!type) {
+    type = isOwner ? "owner" : "worker";
+  }
+
+  const fee = type == "owner" ? ownerFee : workerFee;
+  const calculationFunc =
+    type == "owner" ? ownerGetsCalculate : workerPaymentCalculate;
+
+  return calculationFunc(price, fee);
 };
 
-export const ownerGetsCalculate = (startDay, endDay, fee, pricePerDay) => {
-  const duration = getFactOrderDays(startDay, endDay);
-  const resPayment =
-    duration * pricePerDay -
-    calculateFeeByDaysCount(duration, pricePerDay, fee);
-  return +resPayment.toFixed(2);
+export const workerPaymentCalculate = (price, fee) => {
+  const result = price + calculateFee(price, fee);
+  return moneyFormat(result);
+};
+
+export const ownerGetsCalculate = (price, fee) => {
+  const result = price - calculateFee(price, fee);
+  return moneyFormat(result);
 };

@@ -1,9 +1,6 @@
 import STATIC from "../static";
-import { generateDatesBetween } from "./dateHelpers";
 import {
   moneyFormat,
-  ownerGetsCalculate,
-  tenantPaymentCalculate,
 } from "./priceCalculations";
 
 export const capitalizeFirstLetter = (str) => {
@@ -63,26 +60,6 @@ export const getRelativeCoordinates = (child, parent) => {
     top: childRect.top - parentRect.top,
     right: childRect.right - parentRect.right,
   };
-};
-
-export const calculateCurrentTotalPrice = ({
-  startDate,
-  endDate,
-  pricePerDay,
-  ownerFee,
-  tenantFee,
-  type = null,
-  isOwner = null,
-}) => {
-  if (!type) {
-    type = isOwner ? "owner" : "tenant";
-  }
-
-  const fee = type == "owner" ? ownerFee : tenantFee;
-  const calculationFunc =
-    type == "owner" ? ownerGetsCalculate : tenantPaymentCalculate;
-
-  return calculationFunc(startDate, endDate, fee, pricePerDay);
 };
 
 export const getPaymentNameByType = (type) => {

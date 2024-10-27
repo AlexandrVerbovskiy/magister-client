@@ -53,7 +53,6 @@ const OfferOwnPrice = ({
         type="number"
         value={offerPrice}
         error={offerPriceError}
-        label="Your proposal price per day:"
         placeholder="532.00"
         onInput={handleChangePrice}
         name="proposal-price"

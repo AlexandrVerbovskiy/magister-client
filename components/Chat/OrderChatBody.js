@@ -6,7 +6,7 @@ import MessageLi from "./MessageLi";
 import OrderModals from "./OrderModals";
 import { IndiceContext } from "../../contexts";
 import {
-  calculateCurrentTotalPrice,
+  autoCalculateCurrentTotalPrice,
   dateName,
   getFactOrderDays,
 } from "../../utils";
@@ -41,9 +41,9 @@ const OrderChatBody = ({
   };
 
   const setUpdatedOffer = ({ status, cancelStatus = null }) => {
-    const offerPricePerDay = actualUpdateRequest
-      ? actualUpdateRequest.newPricePerDay
-      : order.offerPricePerDay;
+    const offerPrice = actualUpdateRequest
+      ? actualUpdateRequest.newPrice
+      : order.offerPrice;
     const offerStartDate = actualUpdateRequest
       ? actualUpdateRequest.newStartDate
       : order.offerStartDate;
@@ -51,17 +51,15 @@ const OrderChatBody = ({
       ? actualUpdateRequest.newEndDate
       : order.offerEndDate;
 
-    const totalPrice = calculateCurrentTotalPrice({
+    const totalPrice = autoCalculateCurrentTotalPrice({
       isOwner,
-      startDate: order.offerStartDate,
-      endDate: order.offerEndDate,
-      pricePerDay: order.offerPricePerDay,
+      price: order.offerPrice,
       ownerFee: order.ownerFee,
       tenantFee: order.tenantFee,
     });
 
     const updatedFields = {
-      offerPricePerDay,
+      offerPrice,
       offerStartDate,
       offerEndDate,
       duration: getFactOrderDays(offerStartDate, offerEndDate),
@@ -97,7 +95,7 @@ const OrderChatBody = ({
         senderId: sessionUser?.id,
         newStartDate: fromDate,
         newEndDate: toDate,
-        newPricePerDay: price,
+        newPrice: price,
       },
       conflictOrders: [],
     };

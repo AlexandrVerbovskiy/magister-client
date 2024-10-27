@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
-  getFactOrderDays,
-  tenantPaymentCalculate,
+  workerPaymentCalculate,
   dateConverter,
   moneyFormatVisual,
-  calculateFeeByDaysCount,
+  calculateFee,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -49,16 +48,8 @@ const InvoiceTable = ({
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
-  const offerDuration = getFactOrderDays(offer.startDate, offer.endDate);
-
-  const subTotalPrice = offer.pricePerDay * offerDuration;
-
-  const totalFee = calculateFeeByDaysCount(
-    offerDuration,
-    offer.pricePerDay,
-    offer.fee,
-    true
-  );
+  const subTotalPrice = offer.price;
+  const totalFee = calculateFee(subTotalPrice, offer.fee, true);
 
   const handlePdfDownload = async () => {
     try {
@@ -82,12 +73,7 @@ const InvoiceTable = ({
     </a>
   );
 
-  const totalPayed = tenantPaymentCalculate(
-    offer.startDate,
-    offer.endDate,
-    offer.fee,
-    offer.pricePerDay
-  );
+  const totalPayed = workerPaymentCalculate(offer.price, offer.fee);
 
   return (
     <>
@@ -167,16 +153,7 @@ const InvoiceTable = ({
               <tr>
                 <td>01</td>
                 <td>{offer.listingName}</td>
-                <td className="text-right">
-                  {moneyFormatVisual(offer.pricePerDay)}
-                </td>
-                <td className="text-right">
-                  {offer.startDate == offer.endDate
-                    ? dateConverter(offer.startDate)
-                    : `${dateConverter(offer.startDate)} - ${dateConverter(
-                        offer.endDate
-                      )}`}
-                </td>
+                <td className="text-right">{moneyFormatVisual(offer.price)}</td>
                 <td className="text-right">
                   {moneyFormatVisual(subTotalPrice)}
                 </td>

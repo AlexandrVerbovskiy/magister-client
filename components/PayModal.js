@@ -1,21 +1,14 @@
 import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import {
-  getFactOrderDays,
-  dateConverter,
-  moneyFormatVisual,
-  tenantPaymentCalculate,
-} from "../utils";
+import { moneyFormatVisual, workerPaymentCalculate } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
 const PayModal = ({
   amount,
   orderId,
   listingName,
-  onTenantPayed = null,
-  pricePerDay,
-  offerStartDate,
-  offerEndDate,
+  onWorkerPayed = null,
+  price,
   offerFee,
   modalActive,
   closeModal,
@@ -34,19 +27,7 @@ const PayModal = ({
     }, 100);
   };
 
-  const durationInfo =
-    dateConverter(offerStartDate) === dateConverter(offerEndDate)
-      ? dateConverter(offerStartDate)
-      : `${dateConverter(offerStartDate)} - ${dateConverter(offerEndDate)}`;
-
-  const subtotal = pricePerDay * getFactOrderDays(offerStartDate, offerEndDate);
-
-  const total = tenantPaymentCalculate(
-    offerStartDate,
-    offerEndDate,
-    offerFee,
-    pricePerDay
-  );
+  const total = workerPaymentCalculate(price, offerFee);
 
   const handleClose = () => {
     if (disabled) {
@@ -70,13 +51,7 @@ const PayModal = ({
               <span>Rental payment</span>
             </span>
             <div className="form-group">Listing: {listingName}</div>
-            <div className="form-group">
-              Price: {moneyFormatVisual(pricePerDay)}
-            </div>
-            <div className="form-group">Duration: {durationInfo}</div>
-            <div className="form-group">
-              Subtotal: {moneyFormatVisual(subtotal)}
-            </div>
+            <div className="form-group">Price: {moneyFormatVisual(price)}</div>
             <div className="form-group">Fee: {offerFee}% </div>
             <div className="form-group">
               <b>Total to pay: {moneyFormatVisual(total)}</b>

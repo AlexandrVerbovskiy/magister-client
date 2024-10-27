@@ -2,14 +2,9 @@ import { useContext } from "react";
 import STATIC from "../../static";
 import {
   getFactOrderDays,
-  calculateCurrentTotalPrice,
+  autoCalculateCurrentTotalPrice,
   getDisputeTitle,
   getFilePath,
-  dateConverter,
-  autoMultiEnding,
-  moneyFormat,
-  getListingImageByType,
-  moneyFormatVisual,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
@@ -205,10 +200,8 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.NEW_EXTENSION ||
     type === STATIC.MESSAGE_TYPES.UPDATE_EXTENSION
   ) {
-    const totalPrice = calculateCurrentTotalPrice({
-      startDate: content.offerStartDate,
-      endDate: content.offerEndDate,
-      pricePerDay: content.offerPrice,
+    const totalPrice = autoCalculateCurrentTotalPrice({
+      price: content.offerPrice,
       type,
       isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,

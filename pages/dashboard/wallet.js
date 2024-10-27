@@ -8,7 +8,7 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import {
-  calculateFeeByDaysCount,
+  calculateFee,
   calculateTotalPriceByDaysCount,
   getFactOrderDays,
   moneyFormat,
@@ -137,20 +137,10 @@ const Wallet = ({
                 {earnings.length > 0 ? (
                   <ul>
                     {earnings.map((earning) => {
-                      const pricePerDuration = calculateTotalPriceByDaysCount(
-                        getFactOrderDays(
-                          earning.offerStartDate,
-                          earning.offerEndDate
-                        ),
-                        earning.offerPricePerDay
-                      );
+                      const price = earning.offerPrice;
 
-                      const feePerDuration = calculateFeeByDaysCount(
-                        getFactOrderDays(
-                          earning.offerStartDate,
-                          earning.offerEndDate
-                        ),
-                        earning.offerPricePerDay,
+                      const fee = calculateFee(
+                        earning.offerPrice,
                         earning.ownerFee
                       );
 
@@ -166,11 +156,11 @@ const Wallet = ({
                               </li>
                               <li>Order: #{earning.orderId}</li>
                               <li className="price">
-                                {moneyFormatVisual(pricePerDuration)}
+                                {moneyFormatVisual(price)}
                               </li>
                               <li className="fee-price">
                                 Fee:
-                                {moneyFormatVisual(feePerDuration)}
+                                {moneyFormatVisual(fee)}
                               </li>
                               <li className="price">
                                 Net Earning:{" "}
@@ -237,21 +227,11 @@ const Wallet = ({
                 {sendings.length > 0 ? (
                   <ul>
                     {sendings.map((sending) => {
-                      const pricePerDuration = calculateTotalPriceByDaysCount(
-                        getFactOrderDays(
-                          sending.offerStartDate,
-                          sending.offerEndDate
-                        ),
-                        sending.offerPricePerDay
-                      );
+                      const price = sending.offerPrice;
 
-                      const feePerDuration = calculateFeeByDaysCount(
-                        getFactOrderDays(
-                          sending.offerStartDate,
-                          sending.offerEndDate
-                        ),
-                        sending.offerPricePerDay,
-                        sending.tenantFee,
+                      const fee = calculateFee(
+                        sending.offerPrice,
+                        sending.workerFee,
                         true
                       );
 
@@ -265,10 +245,10 @@ const Wallet = ({
                               <li>Date: {dateConverter(sending.createdAt)}</li>
                               <li>Order: #{sending.orderId}</li>
                               <li className="price">
-                                {moneyFormatVisual(pricePerDuration)}
+                                {moneyFormatVisual(price)}
                               </li>
                               <li className="fee-price">
-                                Fee: {moneyFormatVisual(feePerDuration)}
+                                Fee: {moneyFormatVisual(fee)}
                               </li>
                               <li className="price">
                                 Net Paid:{" "}

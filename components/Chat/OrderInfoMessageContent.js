@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import {
   getListingImageByType,
-  moneyFormat,
   autoMultiEnding,
   dateConverter,
   moneyFormatVisual,
@@ -9,10 +8,9 @@ import {
 import StatusBlock from "../Listings/StatusBlock";
 import { IndiceContext } from "../../contexts";
 import OrderMessageActions from "./OrderMessageActions";
-import STATIC from "../../static";
 
 const OrderInfoMessageContent = ({
-  totalPrice,
+  price,
   content,
   entity,
   type,
@@ -42,7 +40,7 @@ const OrderInfoMessageContent = ({
       />
 
       <div className="my-1">
-        <b>Total price: {moneyFormatVisual(totalPrice)}</b>
+        <b>Price: {moneyFormatVisual(price)}</b>
       </div>
 
       <div className="mb-1">

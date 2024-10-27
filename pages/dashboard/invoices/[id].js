@@ -53,9 +53,7 @@ const Invoice = (baseProps) => {
           offer={{
             fee: payment.tenantFee,
             listingName: payment.listingName,
-            pricePerDay: payment.orderOfferPricePerDay,
-            startDate: payment.orderOfferStartDate,
-            endDate: payment.orderOfferEndDate,
+            price: payment.orderOfferPrice,
           }}
           waitingApproved={payment.waitingApproved}
           adminApproved={payment.adminApproved}

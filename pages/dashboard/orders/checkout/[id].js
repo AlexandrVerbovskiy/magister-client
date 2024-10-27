@@ -8,8 +8,8 @@ import { authSideProps } from "../../../../middlewares";
 import { getOrderCheckoutInfo } from "../../../../services";
 import {
   autoMultiEnding,
-  calculateCurrentTotalPrice,
-  calculateFeeByDaysCount,
+  autoCalculateCurrentTotalPrice,
+  calculateFee,
   getFactOrderDays,
   moneyFormatVisual,
 } from "../../../../utils";
@@ -26,16 +26,9 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const price = order.offerPricePerDay;
-  const duration = getFactOrderDays(order.offerStartDate, order.offerEndDate);
-  const subtotalPrice = price * duration;
-  const totalFee = calculateFeeByDaysCount(
-    duration,
-    price,
-    tenantBaseCommission,
-    true
-  );
-  const totalPrice = subtotalPrice + totalFee;
+  const price = order.offerPrice;
+  const totalFee = calculateFee(price, workerBaseCommission, true);
+  const totalPrice = price + totalFee;
 
   const onTenantPayed = () => {
     router.push(`/dashboard/orders/${order.id}?success=Payed successfully`);
@@ -89,11 +82,7 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                       className="d-flex justify-content-between"
                       style={{ marginTop: "10px", marginBottom: "10px" }}
                     >
-                      <div>
-                        {moneyFormatVisual(price)} x {duration}{" "}
-                        {autoMultiEnding(duration, "day")}
-                      </div>
-                      <div>{moneyFormatVisual(subtotalPrice)}</div>
+                      <div>{moneyFormatVisual(price)}</div>
                     </div>
 
                     <div
@@ -202,11 +191,9 @@ const Checkout = ({ order, tenantBaseCommission, bankInfo, authToken }) => {
                       authToken={authToken}
                       onTenantPayed={onTenantPayed}
                       orderId={order.id}
-                      amount={calculateCurrentTotalPrice({
+                      amount={autoCalculateCurrentTotalPrice({
                         isOwner: false,
-                        startDate: order.offerStartDate,
-                        endDate: order.offerEndDate,
-                        pricePerDay: order.offerPricePerDay,
+                        price: order.offerPrice,
                         ownerFee: order.ownerFee,
                         tenantFee: order.tenantFee,
                         type: "tenant",

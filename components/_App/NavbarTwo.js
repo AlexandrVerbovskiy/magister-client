@@ -214,7 +214,7 @@ const NavbarTwo = ({
   };
 
   const { handleClick: handleListingClick } = useListingListClick({
-    link: "/dashboard/listings/add/",
+    link: "/listings",
   });
 
   const isMobile = useIsMobile();

@@ -9,7 +9,7 @@ import {
 } from "../../../services";
 import { authSideProps } from "../../../middlewares";
 import {
-  calculateFullTotalByDaysCount,
+  calculateFullTotalByType,
   downloadFileUrl,
   getFactOrderDays,
   moneyFormatVisual,
@@ -56,10 +56,9 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
       },
     });
 
-  const totalPrice = calculateFullTotalByDaysCount(
-    getFactOrderDays(order.offerStartDate, order.offerEndDate),
-    order.offerPricePerDay,
-    order.tenantFee,
+  const totalPrice = calculateFullTotalByType(
+    order.offerPrice,
+    order.workerFee,
     "sum"
   );
 

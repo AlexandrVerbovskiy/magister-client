@@ -219,7 +219,7 @@ const Navbar = ({
   };
 
   const { handleClick: handleListingClick } = useListingListClick({
-    link: "/dashboard/listings/add/",
+    link: "/listings",
   });
 
   return (

@@ -25,6 +25,7 @@ const config = {
   },
   ORDER_ACTION_BUTTONS: {
     BOOKING_AGREEMENT_SECTION: "booking-agreement-section",
+    BOOKING_UPDATING_SECTION: "booking-updating-section",
     PAY_BUTTON: "pay-button",
     PAY_UPDATE_BUTTON: "pay-update-button",
     CANCEL_BUTTON: "cancel-button",

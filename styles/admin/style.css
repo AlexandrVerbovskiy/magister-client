@@ -608,7 +608,7 @@ div.add-listings-box.dropzone > .gallery-flex {
   transition: 0.5s;
   border: none;
   text-align: center;
-  border: 1px solid #594fbf;
+  border: 1px solid #0ec6c6;
   box-shadow: 4px 4px #aba5ea;
   background-color: #ffffff;
   color: #221638;
@@ -621,8 +621,8 @@ div.add-listings-box.dropzone > .gallery-flex {
   cursor: pointer !important;
 }
 .default-btn:hover {
-  border-color: #594fbf;
-  box-shadow: 4px 4px #594fbf;
+  border-color: #0ec6c6;
+  box-shadow: 4px 4px #0ec6c6;
   color: #221638;
 }
 
@@ -643,12 +643,12 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .categories-select-option.back-button {
-  color: #594fbf;
+  color: #0ec6c6;
   display: none;
 }
 
 .categories-select-option.back-button svg {
-  fill: #594fbf;
+  fill: #0ec6c6;
   transition: 0.2s ease-in-out all;
 }
 

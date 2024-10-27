@@ -3,12 +3,7 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import {
-  calculateCurrentTotalPrice,
-  getOrderBlockedDatesToExtend,
-  getOrderBlockedDatesToUpdate,
-  getStartExtendOrderDate,
-} from "../../utils";
+import { autoCalculateCurrentTotalPrice } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 
@@ -62,26 +57,24 @@ const OrderPopups = ({
 
   return (
     <>
-      {actionButtons.includes(
+      {(actionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-      ) && (
+      ) ||
+        actionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+        )) && (
         <BookingActionModals
           order={order}
-          listingPricePerDay={order.listingPricePerDay}
+          listingPrice={order.listingPrice}
           proposalPrice={
             actualUpdateRequest
-              ? actualUpdateRequest.newPricePerDay
-              : order.offerPricePerDay
+              ? actualUpdateRequest.newPrice
+              : order.offerPrice
           }
-          proposalStartDate={
+          proposalFinishTime={
             actualUpdateRequest
-              ? actualUpdateRequest.newStartDate
-              : order.offerStartDate
-          }
-          proposalEndDate={
-            actualUpdateRequest
-              ? actualUpdateRequest.newEndDate
-              : order.offerEndDate
+              ? actualUpdateRequest.newFinishTime
+              : order.offerFinishTime
           }
           listingMinRentalDays={order.listingMinRentalDays}
           fee={currentFee}
@@ -102,6 +95,9 @@ const OrderPopups = ({
           rejectOrderModalActive={rejectOrderModalActive}
           setRejectOrderModalActive={setRejectOrderModalActive}
           handleAcceptRejectOrder={handleAcceptRejectOrder}
+          canApprove={actionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+          )}
         />
       )}
 
@@ -145,22 +141,18 @@ const OrderPopups = ({
       <PayModal
         modalActive={paypalModalActive}
         closeModal={() => setPaypalModalActive(false)}
-        amount={calculateCurrentTotalPrice({
+        amount={autoCalculateCurrentTotalPrice({
           isOwner: false,
-          startDate: order.offerStartDate,
-          endDate: order.offerEndDate,
-          pricePerDay: order.offerPricePerDay,
+          price: order.offerPrice,
           ownerFee: order.ownerFee,
           tenantFee: order.tenantFee,
           type: "tenant",
         })}
         orderId={order.id}
         listingName={order.listingName}
-        onTenantPayed={onTenantPayed}
-        pricePerDay={order.offerPricePerDay}
-        offerStartDate={order.offerStartDate}
-        offerEndDate={order.offerEndDate}
-        offerFee={order.tenantFee}
+        onWorkerPayed={onWorkerPayed}
+        price={order.offerPrice}
+        offerFee={order.workerFee}
         authToken={authToken}
         bankInfo={bankInfo}
       />
