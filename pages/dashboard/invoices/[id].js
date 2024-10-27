@@ -49,13 +49,11 @@ const Invoice = (baseProps) => {
           invoiceDate={payment.createdAt}
           purchaseOrderId={payment.orderId}
           dueDate={payment.createdAt}
-          indiceAdmin="DressRenter"
+          indiceAdmin="RentAbout"
           offer={{
-            fee: payment.renterFee,
+            fee: payment.workerFee,
             listingName: payment.listingName,
-            price: payment.offerPrice,
-            startDate: payment.offerStartDate,
-            finishDate: payment.offerFinishDate,
+            price: payment.orderOfferPrice,
           }}
           waitingApproved={payment.waitingApproved}
           adminApproved={payment.adminApproved}
@@ -63,7 +61,7 @@ const Invoice = (baseProps) => {
           canUpdate={
             !payment.disputeStatus &&
             !payment.orderCancelStatus &&
-            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT
+            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT
           }
         />
       </div>

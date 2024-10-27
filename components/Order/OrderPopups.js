@@ -3,10 +3,9 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import { autoCalculateCurrentTotalPrice, getPriceByDays } from "../../utils";
+import { autoCalculateCurrentTotalPrice } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
-import YesNoModal from "../_App/YesNoModal";
 
 const OrderPopups = ({
   order,
@@ -38,14 +37,7 @@ const OrderPopups = ({
   setPaypalModalActive,
   bankInfo,
 
-  onRenterPayed = null,
-
-  finishModalActive,
-  setFinishModalActive,
-  handleAcceptFinishModalActive,
-  acceptFinishModalActive,
-  setAcceptFinishModalActive,
-  handleAcceptAcceptFinishModalActive,
+  onWorkerPayed = null,
 }) => {
   const { authToken } = useContext(IndiceContext);
 
@@ -69,18 +61,13 @@ const OrderPopups = ({
               ? actualUpdateRequest.newPrice
               : order.offerPrice
           }
-          proposalStartDate={
+          proposalFinishTime={
             actualUpdateRequest
-              ? actualUpdateRequest.newStartDate
-              : order.offerStartDate
-          }
-          proposalFinishDate={
-            actualUpdateRequest
-              ? actualUpdateRequest.newFinishDate
-              : order.offerFinishDate
+              ? actualUpdateRequest.newFinishTime
+              : order.offerFinishTime
           }
           fee={currentFee}
-          renterFee={order.renterFee}
+          workerFee={order.workerFee}
           commissionType={
             order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
               ? "reject"
@@ -110,32 +97,6 @@ const OrderPopups = ({
         />
       )}
 
-      {actionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON) && (
-        <YesNoModal
-          active={finishModalActive}
-          closeModal={() => setFinishModalActive(false)}
-          title="Finish order"
-          body="To send finish request, click 'Confirm'"
-          onAccept={handleAcceptFinishModalActive}
-          acceptText="Confirm"
-          closeModalText="Close"
-        />
-      )}
-
-      {actionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
-      ) && (
-        <YesNoModal
-          active={acceptFinishModalActive}
-          closeModal={() => setAcceptFinishModalActive(false)}
-          title="Accept Finish"
-          body="To accept finish request, click 'Confirm'"
-          onAccept={handleAcceptAcceptFinishModalActive}
-          acceptText="Confirm"
-          closeModalText="Close"
-        />
-      )}
-
       {actionButtons.includes(
         STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON
       ) && (
@@ -153,22 +114,16 @@ const OrderPopups = ({
         closeModal={() => setPaypalModalActive(false)}
         amount={autoCalculateCurrentTotalPrice({
           isOwner: false,
-          price: getPriceByDays(
-            order.offerPrice,
-            order.offerStartDate,
-            order.offerFinishDate
-          ),
+          price: order.offerPrice,
           ownerFee: order.ownerFee,
-          renterFee: order.renterFee,
-          type: "renter",
+          workerFee: order.workerFee,
+          type: "worker",
         })}
         orderId={order.id}
         listingName={order.listingName}
-        onRenterPayed={onRenterPayed}
+        onWorkerPayed={onWorkerPayed}
         price={order.offerPrice}
-        startDate={order.startDate}
-        finishDate={order.finishDate}
-        offerFee={order.renterFee}
+        offerFee={order.workerFee}
         authToken={authToken}
         bankInfo={bankInfo}
       />

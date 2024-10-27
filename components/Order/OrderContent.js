@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   autoCalculateCurrentTotalPrice,
+  calculateFee,
   generateProfileFilePath,
   getDisputeTitle,
+  getFactOrderDays,
   getListingImageByType,
-  getPriceByDays,
   moneyFormatVisual,
-  ownerEarnFeeCalculate,
-  renterPaysFeeCalculate,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -30,14 +29,14 @@ import OrderPopups from "./OrderPopups";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
-  STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
-  STATIC.ORDER_STATUSES.PENDING_RENTER,
+  STATIC.ORDER_STATUSES.PENDING_WORKER,
 ];
 
 const OrderContent = ({
   order: baseOrder,
-  renterBaseCommission,
+  workerBaseCommission,
   bankInfo,
   operationsDisabled = false,
 }) => {
@@ -53,14 +52,14 @@ const OrderContent = ({
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   const [isOwner, setIsOwner] = useState(false);
-  const [isRenter, setIsRenter] = useState(false);
+  const [isWorker, setIsWorker] = useState(false);
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
   const isBookingWithoutAgreement =
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-    order.status == STATIC.ORDER_STATUSES.PENDING_RENTER;
+    order.status == STATIC.ORDER_STATUSES.PENDING_WORKER;
 
   const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
     order,
@@ -72,17 +71,17 @@ const OrderContent = ({
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
-    setIsRenter(order.renterId == sessionUser?.id);
+    setIsWorker(order.workerId == sessionUser?.id);
 
     if (isBookingWithoutAgreement) {
+      console.log(order.previousUpdateRequest);
       if (order.previousUpdateRequest) {
         setPrevUpdateRequest(order.previousUpdateRequest);
       } else {
         if (order.actualUpdateRequest) {
           setPrevUpdateRequest({
-            senderId: order.renterId,
-            startDate: order.offerStartDate,
-            finishDate: order.offerFinishDate,
+            senderId: order.workerId,
+            finishTime: order.offerFinishTime,
             price: order.offerPrice,
           });
         }
@@ -103,7 +102,7 @@ const OrderContent = ({
         onClose = () => {
           router.push(
             `/dashboard/orders/?type=${
-              sessionUser?.id == order.ownerId ? "owner" : "renter"
+              sessionUser?.id == order.ownerId ? "owner" : "worker"
             }`
           );
         };
@@ -130,33 +129,26 @@ const OrderContent = ({
     });
   };
 
-  const localCalculateCurrentTotalPrice = ({
-    price,
-    startDate,
-    finishDate,
-    type = null,
-  }) =>
+  const localCalculateCurrentTotalPrice = ({ price, type = null }) =>
     autoCalculateCurrentTotalPrice({
-      price: getPriceByDays(price, startDate, finishDate),
+      price,
       type,
       isOwner,
       ownerFee: order.ownerFee,
-      renterFee: order.renterFee,
+      workerFee: order.workerFee,
     });
 
-  const onCreateUpdateRequest = ({ price, startDate, finishDate }) => {
+  const onCreateUpdateRequest = ({ price, fromDate, toDate }) => {
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
-        finishDate: actualUpdateRequest.newFinishDate,
-        startDate: actualUpdateRequest.newStartDate,
+        finishTime: actualUpdateRequest.newFinishTime,
         price: actualUpdateRequest.newPrice,
       });
     } else {
       setPrevUpdateRequest({
-        senderId: order.renterId,
-        startDate: order.offerStartDate,
-        finishDate: order.offerFinishDate,
+        senderId: order.workerId,
+        finishTime: order.offerFinishTime,
         price: order.offerPrice,
       });
     }
@@ -164,14 +156,12 @@ const OrderContent = ({
     setActualUpdateRequest({
       senderId: sessionUser?.id,
       newPrice: price,
-      newStartDate: startDate,
-      newFinishDate: finishDate,
     });
 
     if (isOwner) {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_RENTER,
+        status: STATIC.ORDER_STATUSES.PENDING_WORKER,
       }));
     } else {
       setOrder((prev) => ({
@@ -182,8 +172,8 @@ const OrderContent = ({
 
     activateSuccessOrderPopup({
       text:
-        "Conditions updates successfully. Wait for a response from the " +
-        (isOwner ? "renter" : "owner"),
+        "Booking updates successfully. Wait for a response from the " +
+        (isOwner ? "worker" : "owner"),
     });
   };
 
@@ -192,18 +182,8 @@ const OrderContent = ({
       ? actualUpdateRequest.newPrice
       : order.offerPrice;
 
-    const offerStartDate = actualUpdateRequest
-      ? actualUpdateRequest.newStartDate
-      : order.offerStartDate;
-
-    const offerFinishDate = actualUpdateRequest
-      ? actualUpdateRequest.newFinishDate
-      : order.offerFinishDate;
-
     const totalPrice = localCalculateCurrentTotalPrice({
       price: offerPrice,
-      startDate: offerStartDate,
-      finishDate: offerFinishDate,
     });
 
     const updatedFields = {
@@ -226,7 +206,7 @@ const OrderContent = ({
     }));
   };
 
-  const onRenterPayed = () => {
+  const onWorkerPayed = () => {
     activateSuccessOrderPopup({
       text: "Order started!",
       onClose: () => {},
@@ -269,28 +249,9 @@ const OrderContent = ({
     }));
   };
 
-  const onFinishOrder = () => {
-    setOrder((prev) => ({
-      ...prev,
-      status: STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
-    }));
-  };
-
-  const onAcceptFinishOrder = () => {
-    setOrder((prev) => ({
-      ...prev,
-      status: STATIC.ORDER_STATUSES.FINISHED,
-    }));
-  };
-
-  const currentFee = isOwner ? order.ownerFee : order.renterFee;
-  const currentFeeCalculate = (price, startDate, finishDate, fee) =>
-    isOwner
-      ? ownerEarnFeeCalculate(getPriceByDays(price, startDate, finishDate), fee)
-      : renterPaysFeeCalculate(
-          getPriceByDays(price, startDate, finishDate),
-          fee
-        );
+  const currentFee = isOwner ? order.ownerFee : order.workerFee;
+  const currentFeeCalculate = (price, fee) =>
+    calculateFee(price, fee, !isOwner);
 
   const currentActionButtons = useOrderActions({
     order,
@@ -302,7 +263,7 @@ const OrderContent = ({
         {
           title: "Accepted",
           finished:
-            order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
+            order.status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
         },
         {
           title: "Payment Confirmation",
@@ -334,12 +295,10 @@ const OrderContent = ({
     setUpdatedOffer,
     setActualUpdateRequest,
     setPrevUpdateRequest,
-    onCreateUpdateRequest,
+    onCreateUpdateRequest: onCreateUpdateRequest,
     onCancel,
     onPayedFastCancel,
     setError: error.set,
-    onFinishOrder,
-    onAcceptFinishOrder,
   });
 
   return (
@@ -470,13 +429,8 @@ const OrderContent = ({
                     markers={[
                       {
                         id: 1,
-<<<<<<< HEAD
-                        lat: order.listingRentalLat,
-                        lng: order.listingRentalLng,
-=======
                         lat: order.listingLat,
                         lng: order.listingLng,
->>>>>>> ebc90ab (listing updated)
                         radius: order.listingRadius,
                       },
                     ]}
@@ -496,7 +450,7 @@ const OrderContent = ({
         </div>
       </div>
 
-      {isRenter && (
+      {isWorker && (
         <div id="user-info" className="add-listings-box">
           <h3>Listing Owner Details</h3>
 
@@ -533,13 +487,13 @@ const OrderContent = ({
 
       {isOwner && (
         <div id="user-info" className="add-listings-box">
-          <h3>Renter Details</h3>
+          <h3>Worker Details</h3>
 
           <div className="order-info-main-opponent-info mb-4">
             <div className="d-flex align-items-center">
               <img
-                src={generateProfileFilePath(order.renterPhoto)}
-                alt={order.renterName}
+                src={generateProfileFilePath(order.workerPhoto)}
+                alt={order.workerName}
               />
             </div>
           </div>
@@ -547,19 +501,19 @@ const OrderContent = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Renter Name:"
+                label="Worker Name:"
                 icon="bx bx-envelope"
-                placeholder="Renter Name"
-                value={order.renterName}
+                placeholder="Worker Name"
+                value={order.workerName}
               />
             </div>
 
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Renter Email:"
+                label="Worker Email:"
                 icon="bx bx-envelope"
-                placeholder="Renter Email"
-                value={order.renterEmail}
+                placeholder="Worker Email"
+                value={order.workerEmail}
               />
             </div>
           </div>
@@ -588,18 +542,14 @@ const OrderContent = ({
                       Listing price: {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
-
                 <li>Offer price: {moneyFormatVisual(order.offerPrice)}</li>
                 <li>
-                  <CanBeErrorBaseDateSpan
-                    finishDate={order.offerFinishDate}
-                    startDate={order.offerStartDate}
-                  />
+                  <CanBeErrorBaseDateSpan finishTime={order.offerFinishTime} />
                 </li>
                 <li>Fee: {currentFee}%</li>
 
                 {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
-                  order.status != STATIC.ORDER_STATUSES.PENDING_RENTER) && (
+                  order.status != STATIC.ORDER_STATUSES.PENDING_WORKER) && (
                   <li className="order-status">
                     Status:{" "}
                     <StatusBlock
@@ -607,30 +557,13 @@ const OrderContent = ({
                       statusCancelled={order.cancelStatus}
                       disputeStatus={order.disputeStatus}
                       ownerId={order.ownerId}
-                      renterId={order.renterId}
+                      workerId={order.workerId}
                       userId={sessionUser?.id}
-                      finishDate={order.offerFinishDate}
+                      endDate={order.offerEndDate}
                       payedId={order.paymentInfo?.id}
                       adminApproved={order.paymentInfo?.adminApproved}
                       waitingApproved={order.paymentInfo?.waitingApproved}
                     />
-                  </li>
-                )}
-
-                {order.disputeProbability !== null && (
-                  <li>
-                    Dispute Probability:{" "}
-                    <span
-                      className={
-                        order.disputeProbability < 34
-                          ? "text-success"
-                          : order.disputeProbability < 67
-                          ? "text-warning"
-                          : "text-danger"
-                      }
-                    >
-                      {order.disputeProbability}%
-                    </span>
                   </li>
                 )}
 
@@ -641,7 +574,7 @@ const OrderContent = ({
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price:{" "}
+                      Subtotal price with listing price{" "}
                       {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
@@ -654,12 +587,7 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(
-                      order.offerPrice,
-                      order.offerStartDate,
-                      order.offerFinishDate,
-                      currentFee
-                    )
+                    currentFeeCalculate(order.offerPrice, currentFee)
                   )}
                 </li>
 
@@ -677,15 +605,13 @@ const OrderContent = ({
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               price: order.listingPrice,
-                              startDate: order.offerStartDate,
-                              finishDate: order.offerFinishDate,
                               type: "owner",
                             })
                           )}
                         </li>
                       )}
 
-                      {isRenter && (
+                      {isWorker && (
                         <li
                           style={{
                             fontWeight: 700,
@@ -696,9 +622,7 @@ const OrderContent = ({
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               price: order.listingPrice,
-                              startDate: order.offerStartDate,
-                              finishDate: order.offerFinishDate,
-                              type: "renter",
+                              type: "worker",
                             })
                           )}
                         </li>
@@ -712,36 +636,26 @@ const OrderContent = ({
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.offerPrice,
-                        startDate: order.offerStartDate,
-                        finishDate: order.offerFinishDate,
                         type: "owner",
                       })
                     )}
                   </li>
                 )}
 
-                {isRenter && (
+                {isWorker && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay:{" "}
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.offerPrice,
-                        startDate: order.offerStartDate,
-                        finishDate: order.offerFinishDate,
-                        type: "renter",
+                        type: "worker",
                       })
                     )}
                   </li>
                 )}
-                {checkErrorData(order.offerStartDate, order.offerFinishDate)
-                  .blocked && (
+                {checkErrorData(order.offerFinishTime).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
-                    {
-                      checkErrorData(
-                        order.offerStartDate,
-                        order.offerFinishDate
-                      ).tooltipErrorMessage
-                    }
+                    {checkErrorData(order.offerFinishTime).tooltipErrorMessage}
                   </ErrorBlockMessage>
                 )}
               </ul>
@@ -759,11 +673,11 @@ const OrderContent = ({
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-              (isRenter &&
-                order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) ? (
+              (isWorker &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) ? (
                 <h3>Your Proposal Info</h3>
               ) : (
-                <h3>{isOwner ? "Renter" : "Owner"} Proposal</h3>
+                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
               )}
 
               <ul style={{ listStyle: "none", padding: "0" }}>
@@ -773,8 +687,7 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
-                    startDate={prevUpdateRequest.startDate}
-                    finishDate={prevUpdateRequest.finishDate}
+                    finishTime={prevUpdateRequest.finishTime}
                   />
                 </li>
 
@@ -787,7 +700,7 @@ const OrderContent = ({
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price:{" "}
+                      Subtotal price with listing price{" "}
                       {moneyFormatVisual(prevUpdateRequest.price)}
                     </li>
                   )}
@@ -800,12 +713,7 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(
-                      prevUpdateRequest.price,
-                      prevUpdateRequest.startDate,
-                      prevUpdateRequest.finishDate,
-                      currentFee
-                    )
+                    currentFeeCalculate(prevUpdateRequest.price, currentFee)
                   )}
                 </li>
 
@@ -820,34 +728,25 @@ const OrderContent = ({
                       {moneyFormatVisual(
                         localCalculateCurrentTotalPrice({
                           price: order.listingPrice,
-                          startDate: order.offerStartDate,
-                          finishDate: order.offerFinishDate,
                         })
                       )}
                     </li>
                   )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to pay" : "to get"}:{" "}
+                  Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: prevUpdateRequest.price,
-                      startDate: prevUpdateRequest.startDate,
-                      finishDate: prevUpdateRequest.finishDate,
                     })
                   )}
                 </li>
 
-                {checkErrorData(
-                  prevUpdateRequest.startDate,
-                  prevUpdateRequest.finishDate
-                ).blocked && (
+                {checkErrorData(prevUpdateRequest.finishTime).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.finishDate
-                      ).tooltipErrorMessage
+                      checkErrorData(prevUpdateRequest.finishTime)
+                        .tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
                 )}
@@ -859,9 +758,9 @@ const OrderContent = ({
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-              (isRenter &&
-                order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) ? (
-                <h3>{isOwner ? "Renter" : "Owner"} Proposal</h3>
+              (isWorker &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) ? (
+                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
               ) : (
                 <h3>Your Proposal Info</h3>
               )}
@@ -874,8 +773,7 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
-                    startDate={actualUpdateRequest.newStartDate}
-                    finishDate={actualUpdateRequest.newFinishDate}
+                    finishTime={actualUpdateRequest.newFinishTime}
                   />
                 </li>
 
@@ -887,7 +785,7 @@ const OrderContent = ({
                       textDecoration: "line-through",
                     }}
                   >
-                    Subtotal price with listing price:{" "}
+                    Subtotal price with listing price
                     {moneyFormatVisual(order.listingPrice)}
                   </li>
                 )}
@@ -902,8 +800,6 @@ const OrderContent = ({
                   {moneyFormatVisual(
                     currentFeeCalculate(
                       actualUpdateRequest.newPrice,
-                      actualUpdateRequest.newStartDate,
-                      actualUpdateRequest.newFinishDate,
                       currentFee
                     )
                   )}
@@ -915,39 +811,30 @@ const OrderContent = ({
                       textDecoration: "line-through",
                     }}
                   >
-                    Price {isOwner ? "to pay" : "to get"} with listing price per
-                    day:{" "}
+                    Price {isOwner ? "to get" : "to pay"} with listing price per
+                    day:
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.listingPrice,
-                        startDate: order.offerStartDate,
-                        finishDate: order.offerFinishDate,
                       })
                     )}
                   </li>
                 )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to pay" : "to get"}:{" "}
+                  Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: actualUpdateRequest.newPrice,
-                      startDate: actualUpdateRequest.newStartDate,
-                      finishDate: actualUpdateRequest.newFinishDate,
                     })
                   )}
                 </li>
 
-                {checkErrorData(
-                  actualUpdateRequest.newStartDate,
-                  actualUpdateRequest.newFinishDate
-                ).blocked && (
+                {checkErrorData(actualUpdateRequest.newFinishTime).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newFinishDate
-                      ).tooltipErrorMessage
+                      checkErrorData(actualUpdateRequest.newFinishTime)
+                        .tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
                 )}
@@ -1051,35 +938,11 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
-            ) && (
-              <button
-                type="button"
-                onClick={() => orderPopupsData.setFinishModalActive(true)}
-                className="default-btn"
-              >
-                <i className="bx bx-check-circle"></i> Send Finish Request
-              </button>
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
-            ) && (
-              <button
-                type="button"
-                onClick={() => orderPopupsData.setAcceptFinishModalActive(true)}
-                className="default-btn"
-              >
-                <i className="bx bx-check-circle"></i> Accept Finish
-              </button>
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
+              STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
             ) && (
               <Link
                 className="default-btn"
-                href={`/dashboard/creating-renter-review/${order.id}`}
+                href={`/dashboard/creating-worker-review/${order.id}`}
               >
                 Leave a review
               </Link>
@@ -1159,10 +1022,10 @@ const OrderContent = ({
               {...orderPopupsData}
               order={order}
               actualUpdateRequest={actualUpdateRequest}
-              renterBaseCommission={renterBaseCommission}
+              workerBaseCommission={workerBaseCommission}
               currentFee={currentFee}
               actionButtons={currentActionButtons}
-              onRenterPayed={onRenterPayed}
+              onWorkerPayed={onWorkerPayed}
               bankInfo={bankInfo}
             />
           </div>

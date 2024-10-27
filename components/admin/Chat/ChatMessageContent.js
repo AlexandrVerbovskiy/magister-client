@@ -9,7 +9,6 @@ import {
   getDisputeTitle,
   getFactOrderDays,
   getFilePath,
-  getPriceByDays,
 } from "../../../utils";
 
 const DownloadButton = ({ src }) => {
@@ -84,7 +83,7 @@ const OwnerCommentMessage = ({ content }) => {
   );
 };
 
-const RenterCommentMessage = ({ content }) => {
+const WorkerCommentMessage = ({ content }) => {
   const items = [
     { label: "Care", value: content.care },
     { label: "Timeliness", value: content.timeliness },
@@ -217,28 +216,25 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const forOwnerPrice = autoCalculateCurrentTotalPrice({
-      price: getPriceByDays(
-        content.offerPrice,
-        content.offerStartDate,
-        content.offerFinishDate
-      ),
+      price: content.offerPrice,
       type: "owner",
       isOwner: true,
       ownerFee: order.ownerFee,
-      renterFee: order.renterFee,
+      workerFee: order.workerFee,
     });
 
-    const forRenterPrice = autoCalculateCurrentTotalPrice({
-      price: getPriceByDays(
-        content.offerPrice,
-        content.offerStartDate,
-        content.offerFinishDate
-      ),
-      type: "renter",
+    const forWorkerPrice = autoCalculateCurrentTotalPrice({
+      price: content.offerPrice,
+      type: "worker",
       isOwner: false,
       ownerFee: order.ownerFee,
-      renterFee: order.renterFee,
+      workerFee: order.workerFee,
     });
+
+    const duration = getFactOrderDays(
+      content.offerStartDate,
+      content.offerEndDate
+    );
 
     let title = "Request";
 
@@ -250,8 +246,9 @@ const orderMessageContent = ({
       <OrderInfoMessageContent
         messageClassName={messageClassName}
         forOwnerPrice={forOwnerPrice}
-        forRenterPrice={forRenterPrice}
+        forWorkerPrice={forWorkerPrice}
         content={content}
+        duration={duration}
         order={order}
         dispute={dispute}
         title={title}
@@ -263,26 +260,26 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
-      STATIC.MESSAGE_TYPES.RENTER_PAYED,
-      STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.PENDED_TO_WORKER,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
-      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE,
     ].includes(type)
   ) {
     let title = "Proposal accepted";
     let description = "";
 
-    if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED) {
-      title = "Payment іuccessfully";
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED) {
+      title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING) {
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
       title = "Request for confirmation of rent payment was successfully sent";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE) {
-      title = "Waiting owner approve";
+    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_WORKER) {
+      title = "Got the item";
     }
 
     if (type == STATIC.MESSAGE_TYPES.FINISHED) {
@@ -334,8 +331,8 @@ const orderMessageContent = ({
       <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
           <b>
-            {dispute.senderId == dispute.renterId
-              ? dispute.renterName
+            {dispute.senderId == dispute.workerId
+              ? dispute.workerName
               : dispute.ownerName}{" "}
             started dispute
           </b>
@@ -357,19 +354,19 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,
-      STATIC.MESSAGE_TYPES.RENTER_REVIEW,
+      STATIC.MESSAGE_TYPES.WORKER_REVIEW,
     ].includes(type)
   ) {
-    const isRenterReview = type == STATIC.MESSAGE_TYPES.RENTER_REVIEW;
+    const isWorkerReview = type == STATIC.MESSAGE_TYPES.WORKER_REVIEW;
 
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
-          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
+          <b>{isWorkerReview ? "Worker review" : "Owner review"}</b>
         </div>
 
-        {isRenterReview ? (
-          <RenterCommentMessage content={content} />
+        {isWorkerReview ? (
+          <WorkerCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
         )}

@@ -30,9 +30,14 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
+import DateInput from "../FormComponents/DateInput";
 
-const labelCities = STATIC.CITIES.map(city=>({value: city.value, label: city.title}))
-const baseCity = STATIC.CITIES[0]["value"];
+const cityOptions = [
+  { value: "Warrington", label: "Warrington" },
+  { value: "Manchester", label: "Manchester" },
+];
+
+const baseCity = cityOptions[0]["value"];
 
 const EditForm = ({
   categories,
@@ -112,6 +117,9 @@ const EditForm = ({
 
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
+
+  const [finishTime, setFinishTime] = useState("");
+  const [finishTimeError, setFinishTimeError] = useState(null);
 
   const [changePopupActive, setChangePopupActive] = useState(null);
 
@@ -266,6 +274,12 @@ const EditForm = ({
     setMainError(null);
   };
 
+  const handleChangeFinishTine = (value) => {
+    setFinishTime(value);
+    setFinishTimeError(null);
+    setMainError(null);
+  };
+
   useEffect(() => {
     if (listing.id) return;
 
@@ -301,18 +315,11 @@ const EditForm = ({
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
-<<<<<<< HEAD
       price: listing.price ?? "",
-      lat: lat,
-      lng: lng,
-      radius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
-=======
-      totalPrice: listing.totalPrice ?? "",
       finishTime: listing.finishTime ?? "",
       lat: lat,
       lng: lng,
       rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
->>>>>>> ebc90ab (listing updated)
       listingImages,
       active: listing.active ?? true,
       otherCategory: listing.otherCategory ?? "",
@@ -339,18 +346,11 @@ const EditForm = ({
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
-<<<<<<< HEAD
       price,
-      lat,
-      lng,
-      radius,
-=======
-      totalPrice,
       finishTime,
       lat: lat,
       lng: lng,
       rentalRadius: radius,
->>>>>>> ebc90ab (listing updated)
       listingImages,
       active,
     };
@@ -378,18 +378,11 @@ const EditForm = ({
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
-<<<<<<< HEAD
     setPrice(data.price);
-    setLat(data.lat);
-    setLng(data.lng);
-    setRadius(data.radius);
-=======
-    setTotalPrice(data.totalPrice);
     setFinishTime(data.finishTime);
     setLat(data.lat);
     setLng(data.lng);
     setRadius(data.rentalRadius);
->>>>>>> ebc90ab (listing updated)
     setAddress(data.address);
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);
@@ -496,17 +489,8 @@ const EditForm = ({
       hasError = true;
     }
 
-<<<<<<< HEAD
     if (!price) {
       setPrice("Required field");
-      hasError = true;
-    }
-
-    if (price && validatePrice(price) !== true) {
-      setPriceError(validatePrice(price));
-=======
-    if (!totalPrice) {
-      setTotalPrice("Required field");
       hasError = true;
     }
 
@@ -515,9 +499,8 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (totalPrice && validatePrice(totalPrice) !== true) {
-      setTotalPriceError(validatePrice(totalPrice));
->>>>>>> ebc90ab (listing updated)
+    if (price && validatePrice(price) !== true) {
+      setPriceError(validatePrice(price));
       hasError = true;
     }
 
@@ -650,11 +633,7 @@ const EditForm = ({
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
-<<<<<<< HEAD
-                placeholder="Name of your order"
-=======
                 placeholder="Name of your task"
->>>>>>> ebc90ab (listing updated)
                 value={name}
                 onInput={handleChangeName}
                 error={nameError}
@@ -705,8 +684,6 @@ const EditForm = ({
                 name="priceError"
               />
             </div>
-<<<<<<< HEAD
-=======
 
             <div className="col-lg-6 col-md-6">
               <div className="form-group ">
@@ -720,7 +697,6 @@ const EditForm = ({
                 </ErrorIconWrapper>
               </div>
             </div>
->>>>>>> ebc90ab (listing updated)
           </div>
         </div>
 
@@ -729,10 +705,10 @@ const EditForm = ({
             Collection Location{" "}
             <div className="form-hint">
               The location is where you plan to hand over the item to the
-              renter. It could be your home, workplace, or any other convenient
+              worker. It could be your home, workplace, or any other convenient
               place. <br />
               <b>Note:</b> Your safety is our priority. The exact location will
-              only be shared with the renter once you approve the rental.
+              only be shared with the worker once you approve the rental.
             </div>
           </h3>
           <div className="row">
@@ -744,7 +720,7 @@ const EditForm = ({
                     value={city}
                     label="City:"
                     icon="bx bx-menu-alt-left"
-                    options={labelCities}
+                    options={cityOptions}
                     isSearchable={false}
                     name="city"
                   />
@@ -906,11 +882,7 @@ const EditForm = ({
           body={
             listing.id
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
-<<<<<<< HEAD
-              : "When you create a listing, you should send request to verify it. Users will not be able to complete the order until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
-=======
               : "When you create a listing, you should send request to verify it. Users will not be able to complete the task until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
->>>>>>> ebc90ab (listing updated)
           }
           acceptText="Confirm"
           actionsParentClass="mt-4"

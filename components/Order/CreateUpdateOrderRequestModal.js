@@ -2,16 +2,17 @@ import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
+  calculateFee,
   calculateFullTotalByType,
+  fullDateConverter,
   getMaxFlatpickrDate,
   moneyFormat,
   moneyFormatVisual,
-  ownerEarnFeeCalculate,
+  ownerGetsCalculate,
   separateDate,
-  renterPaysFeeCalculate,
-  getPriceByDays,
-  dateConverter,
+  workerPaymentCalculate,
 } from "../../utils";
+import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
@@ -21,17 +22,13 @@ const CreateUpdateOrderRequestModal = ({
   price: defaultPrice,
   fee,
   proposalPrice,
-  proposalFinishDate,
-  proposalStartDate,
+  proposalFinishTime,
   updateRequestModalActive,
   closeActiveUpdateRequest,
-  minRentalDays,
   listingName,
-  blockedDates,
   commissionType,
 }) => {
-  const baseStartDate = new Date();
-  const baseFinishDate = new Date();
+  const baseFinishTime = new Date();
 
   const { error } = useContext(IndiceContext);
 
@@ -45,86 +42,45 @@ const CreateUpdateOrderRequestModal = ({
   const calendarRef = useRef(null);
   const prevCalendarRef = useRef(null);
 
-  useEffect(() => {
-    setPrice(defaultPrice);
-  }, [defaultPrice]);
+  useEffect(() => {}, [calendarRef.prevCalendarRef]);
 
-  const [finishDate, setFinishDate] = useState(baseFinishDate);
-  const [startDate, setStartDate] = useState(baseStartDate);
+  const [finishTime, setFinishTime] = useState(baseFinishTime);
+  const [calendarError, setCalendarError] = useState(null);
 
+  const [totalPrice, setTotalPrice] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
   const [fullTotal, setFullTotal] = useState(0);
 
-  const recalculateTotalInfo = ({ startDate, finishDate, price, fee }) => {
-    const clearPrice = getPriceByDays(price, finishDate, startDate);
-
+  const recalculateTotalInfo = ({ price, fee }) => {
     if (commissionType == "sum") {
-      setTotalFee(renterPaysFeeCalculate(clearPrice, fee));
+      setTotalPrice(workerPaymentCalculate(price, fee));
+      setTotalFee(calculateFee(price, fee, true));
     } else {
-      setTotalFee(ownerEarnFeeCalculate(clearPrice, fee));
+      setTotalPrice(ownerGetsCalculate(price, fee));
+      setTotalFee(calculateFee(price, fee, false));
     }
 
-    setFullTotal(calculateFullTotalByType(clearPrice, fee, commissionType));
+    setFullTotal(calculateFullTotalByType(price, fee, commissionType));
   };
-
-  const handleChangeDates = (dates) => {
-    let [from, to] = dates;
-    const fromTime = from ? new Date(from) : null;
-    let toTime = to ? new Date(to) : null;
-
-    if (fromTime > toTime) {
-      toTime = new Date(fromTime);
-    }
-
-    if (from && to) {
-      setFinishDate(fromTime);
-      setStartDate(toTime);
-    }
-  };
-
-  useEffect(() => {
-    const defaultCountDays = minRentalDays ? minRentalDays : 1;
-    const baseFromDate = findFirstAvailableDate(blockedDates, defaultCountDays);
-
-    const baseToDate = new Date(
-      baseFromDate.getTime() + dateToSeconds(defaultCountDays - 1)
-    );
-
-    setToDate(baseToDate);
-    setFromDate(baseFromDate);
-
-    setPrice(defaultPrice);
-  }, [
-    defaultPrice,
-    fee,
-    proposalPrice,
-    proposalStartDate,
-    proposalEndDate,
-    minRentalDays,
-    listingName,
-    blockedDates,
-    commissionType,
-  ]);
 
   useEffect(() => {
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
-      mode: "range",
-      dateFormat: "M j, Y",
+      mode: "single",
+      dateFormat: "M j, Y H:i",
       minDate: "today",
       maxDate: getMaxFlatpickrDate(),
       static: true,
-      defaultDate: [finishDate, startDate],
-      enableTime: false,
-      time_24hr: false,
+      defaultDate: [finishTime],
+      enableTime: true,
+      time_24hr: true,
       monthSelectorType: "static",
-      disable: groupDates(blockedDates),
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
       },
       onChange: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
-        handleChangeDates(selectedDates);
+        setFinishTime(selectedDates[0]);
       },
       disableMobile: true,
     });
@@ -133,18 +89,15 @@ const CreateUpdateOrderRequestModal = ({
 
     const prevCalendar = flatpickr(prevCalendarContainer.current, {
       inline: true,
-      mode: "range",
-      dateFormat: "M j, Y",
-      minDate: "today",
-      maxDate: getMaxFlatpickrDate(),
-      static: true,
-      defaultDate: [new Date(proposalStartDate), new Date(proposalFinishDate)],
+      mode: "single",
+      dateFormat: "M j, Y H:i",
+      defaultDate: [proposalFinishTime],
       monthSelectorType: "static",
       onChange: (selectedDates, dateStr, instance) => {
-        instance.setDate(`${proposalStartDate} to ${proposalFinishDate}`);
+        instance.setDate(`${proposalFinishTime}`);
       },
-      enableTime: false,
-      time_24hr: false,
+      enableTime: true,
+      time_24hr: true,
     });
 
     prevCalendarRef.current = prevCalendar;
@@ -158,40 +111,21 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, [finishDate, startDate, proposalFinishDate, proposalStartDate]);
+  }, [finishTime, proposalFinishTime]);
 
   useEffect(() => {
     recalculateTotalInfo({
       price,
-      finishDate,
-      startDate,
       fee,
     });
-  }, [finishDate, startDate, price, fee]);
+  }, [price, fee]);
 
   const handleSubmit = () => {
     let hasError = false;
 
-    if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-      setCalendarError(
-        `You can rent a listing only for a period of more than ${minRentalDays} days`
-      );
-      hasError = true;
-    }
-
-    if (
-      getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION
-    ) {
-      setCalendarError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
     if (
       proposalPrice == price &&
-      proposalFinishDate == separateDate(finishDate) &&
-      proposalStartDate == separateDate(startDate)
+      proposalFinishTime == separateDate(finishTime)
     ) {
       error.set(
         "You cannot submit these changes as they are the same as proposed"
@@ -208,9 +142,8 @@ const CreateUpdateOrderRequestModal = ({
 
   const handleSendBookingRequest = () => {
     handleCreateUpdateRequest({
-      price: price,
-      finishDate: separateDate(finishDate),
-      startDate: separateDate(startDate),
+      price,
+      finishTime: separateDate(finishTime),
     });
 
     setActiveAcceptSendBookingRequest(false);
@@ -262,6 +195,16 @@ const CreateUpdateOrderRequestModal = ({
               style={{ flexDirection: "column", alignItems: "center" }}
             >
               <div ref={calendarContainer}></div>
+              {calendarError && (
+                <div
+                  className="w-full form-group p-2"
+                  style={{ margin: "-5px -20px -30px -35px " }}
+                >
+                  <div className="is-invalid">
+                    <ErrorSpan error={calendarError} />
+                  </div>
+                </div>
+              )}
             </div>
 
             <OfferOwnPrice
@@ -277,19 +220,16 @@ const CreateUpdateOrderRequestModal = ({
               title="Please confirm new booking conditions"
               onAccept={handleSendBookingRequest}
               acceptText="Confirm"
-              body={`Rental '${listingName}' period will be from ${dateConverter(
-                proposalStartDate
-              )} to ${dateConverter(proposalFinishDate)} by ${moneyFormatVisual(
-                fullTotal
-              )}`}
+              body={`'${listingName}' task will be completed by ${fullDateConverter(
+                proposalFinishTime
+              )} by ${moneyFormatVisual(fullTotal)}`}
             />
           </div>
         </div>
         <div className="border-top d-flex justify-content-between">
           <div className="d-flex flex-column mt-4 ">
             <div>
-              <b>Duration:</b> {dateConverter(startDate)} -{" "}
-              {dateConverter(finishDate)}
+              <b>Finish Time:</b> {fullDateConverter(finishTime)}
             </div>
 
             <div>

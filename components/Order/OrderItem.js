@@ -2,10 +2,9 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
-  dateConverter,
-  fullDateConverter,
   generateProfileFilePath,
   getDisputeTitle,
+  getFactOrderDays,
   getPaymentNameByType,
   moneyFormatVisual,
 } from "../../utils";
@@ -22,9 +21,11 @@ const OrderInfo = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickFinish,
-  handleClickAcceptFinish,
 }) => {
+  const { checkErrorData } = useOrderDateError({
+    order,
+  });
+
   const { sessionUser } = useContext(IndiceContext);
 
   const currentActionButtons = useOrderActions({
@@ -46,10 +47,10 @@ const OrderInfo = ({
             status={order.status}
             disputeStatus={order.disputeStatus}
             ownerId={order.ownerId}
-            renterId={order.renterId}
+            workerId={order.workerId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
-            finishDate={order.offerFinishDate}
+            endDate={order.offerEndDate}
             statusCancelled={order.cancelStatus}
             payedId={order.paymentInfo?.id}
             adminApproved={order.paymentInfo?.adminApproved}
@@ -58,27 +59,6 @@ const OrderInfo = ({
         </h4>
 
         <ul>
-          <li className="row-dots-end">
-            <i className="bx bx-error-circle"></i>
-            <span>Dispute probability: </span>
-            <span
-              className={
-                order.disputeProbability === null ||
-                order.disputeProbability === undefined
-                  ? ""
-                  : order.disputeProbability < 34
-                  ? "text-success"
-                  : order.disputeProbability < 67
-                  ? "text-warning"
-                  : "text-danger"
-              }
-            >
-              {order.disputeProbability !== null &&
-              order.disputeProbability !== undefined
-                ? `${order.disputeProbability}%`
-                : "-"}
-            </span>
-          </li>
           <li className="row-dots-end">
             <i className="bx bx-map"></i>
             <span>Address: </span>
@@ -93,27 +73,12 @@ const OrderInfo = ({
                 : moneyFormatVisual(order.offerPrice)}
             </span>
           </li>
-
-          <li className="row-dots-end" style={{ color: "black" }}>
-            <i className="bx bx-purchase-tag"></i>
-            <span>Duration: </span>
-            <span>
-              {dateConverter(
-                order.requestId ? order.newStartDate : order.offerStartDate
-              )}{" "}
-              -
-              {dateConverter(
-                order.requestId ? order.newFinishDate : order.offerFinishDate
-              )}
-            </span>
-          </li>
-
           <li>
             <i className="bx bx-credit-card-front"></i>
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
+                STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
                 STATIC.ORDER_STATUSES.IN_PROCESS,
                 STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
                 STATIC.ORDER_STATUSES.FINISHED,
@@ -127,6 +92,19 @@ const OrderInfo = ({
               )}
             </span>
           </li>
+          {checkErrorData(
+            order.requestId ? order.newStartDate : order.offerStartDate
+          ).blocked && (
+            <li className="order-list-item-error">
+              <ErrorBlockMessage>
+                {
+                  checkErrorData(
+                    order.requestId ? order.newStartDate : order.offerStartDate
+                  ).tooltipErrorMessage
+                }
+              </ErrorBlockMessage>
+            </li>
+          )}
 
           {order.disputeId && (
             <li className="order-list-item-error">
@@ -156,27 +134,20 @@ const OrderInfo = ({
           <i className="bx bx-detail"></i> View details
         </Link>
 
-        {(currentActionButtons.includes(
+        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-        ) ||
-          currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
-          )) && (
+        ) && (
           <>
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-            ) && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleClickAccept(order.id);
-                }}
-                className="default-btn"
-              >
-                <i className="bx bx-check-circle"></i> Accept
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClickAccept(order.id);
+              }}
+              className="default-btn"
+            >
+              <i className="bx bx-check-circle"></i> Accept
+            </button>
 
             <button
               type="button"
@@ -224,41 +195,11 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickFinish(order.id);
-            }}
-            className="default-btn"
-          >
-            <i className="bx bx-check-circle"></i> Send Finish Request
-          </button>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickAcceptFinish(order.id);
-            }}
-            className="default-btn"
-          >
-            <i className="bx bx-check-circle"></i> Accept Finish
-          </button>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
+          STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-renter-review/${order.id}/`}
+            href={`/dashboard/creating-worker-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -352,21 +293,19 @@ const OrderItem = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickFinish,
-  handleClickAcceptFinish,
 }) => {
-  const userName = filterType == "renter" ? order.ownerName : order.renterName;
+  const userName = filterType == "worker" ? order.ownerName : order.workerName;
   const userEmail =
-    filterType == "renter" ? order.ownerEmail : order.renterEmail;
+    filterType == "worker" ? order.ownerEmail : order.workerEmail;
   const userPhoto =
-    filterType == "renter" ? order.ownerPhoto : order.renterPhoto;
+    filterType == "worker" ? order.ownerPhoto : order.workerPhoto;
 
   return (
     <div className="tr">
       <div className="td name">
         <img src={generateProfileFilePath(userPhoto)} alt="image" />
         <div className="info">
-          <span className="row-dots-end mb-0">{userName}</span>
+          <span className="row-dots-end">{userName}</span>
           <ul>
             <li>
               <Link className="row-dots-end" href={`mailto:${userEmail}`}>
@@ -392,8 +331,6 @@ const OrderItem = ({
         handleClickUpdateRequest={handleClickUpdateRequest}
         handleClickReject={handleClickReject}
         handleClickAccept={handleClickAccept}
-        handleClickFinish={handleClickFinish}
-        handleClickAcceptFinish={handleClickAcceptFinish}
         link={link}
       />
     </div>

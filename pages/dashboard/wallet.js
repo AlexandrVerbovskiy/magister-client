@@ -8,12 +8,12 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import {
+  calculateFee,
+  calculateTotalPriceByDaysCount,
+  getFactOrderDays,
   moneyFormat,
   dateConverter,
   moneyFormatVisual,
-  ownerEarnFeeCalculate,
-  renterPaysFeeCalculate,
-  getPriceByDays,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -137,14 +137,10 @@ const Wallet = ({
                 {earnings.length > 0 ? (
                   <ul>
                     {earnings.map((earning) => {
-                      const price = getPriceByDays(
-                        earning.offerPrice,
-                        earning.offerStartDate,
-                        earning.offerFinishDate
-                      );
+                      const price = earning.offerPrice;
 
-                      const fee = ownerEarnFeeCalculate(
-                        price,
+                      const fee = calculateFee(
+                        earning.offerPrice,
                         earning.ownerFee
                       );
 
@@ -223,7 +219,7 @@ const Wallet = ({
               <h3>
                 Payout History{" "}
                 <span className="comission-taken">
-                  Fee: {feeInfo.renterBaseCommissionPercent}%
+                  Fee: {feeInfo.workerBaseCommissionPercent}%
                 </span>
               </h3>
 
@@ -233,13 +229,10 @@ const Wallet = ({
                     {sendings.map((sending) => {
                       const price = sending.offerPrice;
 
-                      const fee = renterPaysFeeCalculate(
-                        getPriceByDays(
-                          sending.offerPrice,
-                          sending.offerStartDate,
-                          sending.offerFinishDate
-                        ),
-                        sending.renterFee
+                      const fee = calculateFee(
+                        sending.offerPrice,
+                        sending.workerFee,
+                        true
                       );
 
                       return (

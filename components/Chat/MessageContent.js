@@ -5,7 +5,6 @@ import {
   autoCalculateCurrentTotalPrice,
   getDisputeTitle,
   getFilePath,
-  getPriceByDays,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
@@ -75,7 +74,7 @@ const OwnerCommentMessage = ({ content }) => {
   );
 };
 
-const RenterCommentMessage = ({ content }) => {
+const WorkerCommentMessage = ({ content }) => {
   const items = [
     { label: "Care", value: content.care },
     { label: "Timeliness", value: content.timeliness },
@@ -188,16 +187,17 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const totalPrice = autoCalculateCurrentTotalPrice({
-      price: getPriceByDays(
-        content.offerPrice,
-        content.offerStartDate,
-        content.offerFinishDate
-      ),
+      price: content.offerPrice,
       type,
       isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,
-      renterFee: entity.renterFee,
+      workerFee: entity.workerFee,
     });
+
+    const duration = getFactOrderDays(
+      content.offerStartDate,
+      content.offerEndDate
+    );
 
     let title = "Request";
 
@@ -207,16 +207,15 @@ const orderMessageContent = ({
 
     return (
       <OrderInfoMessageContent
-        price={totalPrice}
+        totalPrice={totalPrice}
         content={content}
         entity={entity}
         type={type}
+        duration={duration}
         title={title}
         hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
         senderId={senderId}
         popupsData={popupsData}
-        finishDate={content.offerFinishDate}
-        startDate={content.offerStartDate}
       />
     );
   }
@@ -224,9 +223,9 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
-      STATIC.MESSAGE_TYPES.RENTER_PAYED,
-      STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING,
-      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.PENDED_TO_WORKER,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
     ].includes(type)
@@ -235,17 +234,17 @@ const orderMessageContent = ({
     let style = {};
     let description = "";
 
-    if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED) {
-      title = "Payment successfully";
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED) {
+      title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING) {
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
       title = "Request for confirmation of rent payment was successfully sent";
       style = { maxWidth: "200px", textAlign: "center" };
     }
 
-    if (type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE) {
-      title = "Waiting owner approve";
+    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_WORKER) {
+      title = "Got the item";
     }
 
     if (type == STATIC.MESSAGE_TYPES.FINISHED) {
@@ -303,7 +302,7 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
     let senderName =
-      entity.ownerId == senderId ? entity.ownerName : entity.renterName;
+      entity.ownerId == senderId ? entity.ownerName : entity.workerName;
 
     if (sessionUser?.id == senderId) {
       senderName = "You";
@@ -339,19 +338,19 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,
-      STATIC.MESSAGE_TYPES.RENTER_REVIEW,
+      STATIC.MESSAGE_TYPES.WORKER_REVIEW,
     ].includes(type)
   ) {
-    const isRenterReview = type == STATIC.MESSAGE_TYPES.RENTER_REVIEW;
+    const isWorkerReview = type == STATIC.MESSAGE_TYPES.WORKER_REVIEW;
 
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="mb-2">
-          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
+          <b>{isWorkerReview ? "Worker review" : "Owner review"}</b>
         </div>
 
-        {isRenterReview ? (
-          <RenterCommentMessage content={content} />
+        {isWorkerReview ? (
+          <WorkerCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
         )}

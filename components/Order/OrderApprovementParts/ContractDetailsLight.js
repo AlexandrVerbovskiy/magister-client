@@ -1,13 +1,11 @@
 import {
-  getPriceByDays,
+  calculateFee,
   moneyFormatVisual,
-  renterPaysFeeCalculate,
 } from "../../../utils";
 
-const ContractDetailsLight = ({ price, startDate, finishDate, fee }) => {
-  const clearPrice = getPriceByDays(price, startDate, finishDate);
-  const totalFee = renterPaysFeeCalculate(clearPrice, fee);
-  const totalPrice = clearPrice + totalFee;
+const ContractDetailsLight = ({ price, fee }) => {
+  const totalFee = calculateFee(price, fee, true);
+  const totalPrice = price + totalFee;
 
   return (
     <div className="listings-widget listings_contact_details">
@@ -18,7 +16,7 @@ const ContractDetailsLight = ({ price, startDate, finishDate, fee }) => {
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div>{moneyFormatVisual(clearPrice)}</div>
+          <div>{moneyFormatVisual(price)}</div>
         </div>
 
         <div

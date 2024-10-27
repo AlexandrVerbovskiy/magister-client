@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
-  renterPaysCalculate,
+  workerPaymentCalculate,
   dateConverter,
   moneyFormatVisual,
-  renterPaysFeeCalculate,
-  getPriceByDays,
+  calculateFee,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -49,8 +48,8 @@ const InvoiceTable = ({
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
-  const subTotalPrice = getPriceByDays(offer.price);
-  const totalFee = renterPaysFeeCalculate(subTotalPrice, offer.fee);
+  const subTotalPrice = offer.price;
+  const totalFee = calculateFee(subTotalPrice, offer.fee, true);
 
   const handlePdfDownload = async () => {
     try {
@@ -74,10 +73,7 @@ const InvoiceTable = ({
     </a>
   );
 
-  const totalPayed = renterPaysCalculate(
-    getPriceByDays(offer.price, offer.startDate, offer.finishDate),
-    offer.fee
-  );
+  const totalPayed = workerPaymentCalculate(offer.price, offer.fee);
 
   return (
     <>
@@ -149,7 +145,7 @@ const InvoiceTable = ({
                 <th>#</th>
                 <th>Description</th>
                 <th>Per Day</th>
-                <th>Order duration</th>
+                <th>Rental duration</th>
                 <th>Total</th>
               </tr>
             </thead>
@@ -158,7 +154,6 @@ const InvoiceTable = ({
                 <td>01</td>
                 <td>{offer.listingName}</td>
                 <td className="text-right">{moneyFormatVisual(offer.price)}</td>
-                <td className="text-right">{dateConverter(offer.startDate)} - {dateConverter(offer.finishDate)}</td>
                 <td className="text-right">
                   {moneyFormatVisual(subTotalPrice)}
                 </td>

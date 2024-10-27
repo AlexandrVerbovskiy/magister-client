@@ -3,7 +3,7 @@ import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 import {
   calculateFullTotalByType,
-  getPriceByDays,
+  getFactOrderDays,
   moneyFormatVisual,
 } from "../../utils";
 
@@ -30,20 +30,16 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
   let message = "To confirm the cancellation of the order, click 'Confirm'";
   if (order) {
     const totalPayed = calculateFullTotalByType(
-      getPriceByDays(
-        order.offerPrice,
-        order.offerStartDate,
-        order.offerFinishDate
-      ),
-      order.renterFee,
+      order.offerPrice,
+      order.workerFee,
       "sum"
     );
 
-    const totalBack = (totalPayed * (100 - order.renterCancelFee)) / 100;
+    const totalBack = (totalPayed * (100 - order.workerCancelFee)) / 100;
 
     message =
       `The cancellation fee is ${
-        order.renterCancelFee
+        order.workerCancelFee
       }% of the full payment. \nYou paid ${moneyFormatVisual(
         totalPayed
       )}\n. The size of the return cats will be ${moneyFormatVisual(

@@ -22,15 +22,12 @@ const useBookingAgreementPanel = ({
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
   const { authToken, error, success, sessionUser } = useContext(IndiceContext);
-  const handleCreateUpdateRequest = async ({
-    order,
-    price,
-    startDate,
-    finishDate,
-  }) => {
+  const handleCreateUpdateRequest = async ({ order, price, finishTime }) => {
     if (disabled) {
       return;
     }
+
+    console.log(price, finishTime)
 
     try {
       setDisabled(true);
@@ -40,8 +37,7 @@ const useBookingAgreementPanel = ({
         {
           orderId: order.id,
           newPrice: price,
-          newStartDate: startDate,
-          newFinishDate: finishDate,
+          newFinishTime: finishTime,
         },
         authToken
       );
@@ -50,8 +46,8 @@ const useBookingAgreementPanel = ({
         onCreateUpdateRequest({
           orderId: order.id,
           price,
-          startDate,
-          finishDate,
+          fromDate,
+          toDate,
           ...result,
         });
       }
@@ -59,8 +55,8 @@ const useBookingAgreementPanel = ({
       return {
         orderId: order.id,
         price,
-        startDate,
-        finishDate,
+        fromDate,
+        toDate,
         ...result,
       };
     } catch (e) {
@@ -84,17 +80,13 @@ const useBookingAgreementPanel = ({
         onAcceptOrder(result);
       }
 
+      const updatedOrderInfo = {
+        id: order.id,
+        status: STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
+      };
+
       if (setUpdatedOffer) {
-        setUpdatedOffer({
-          id: result.id,
-          status: result.status,
-          offerStartDate: result.startDate,
-          prevStartDate: result.prevStartDate,
-          offerFinishDate: result.finishDate,
-          prevFinishDate: result.prevFinishDate,
-          offerPrice: result.price,
-          prevPrice: result.prevPrice,
-        });
+        setUpdatedOffer(updatedOrderInfo);
       }
 
       setTimeout(() => {
@@ -108,7 +100,7 @@ const useBookingAgreementPanel = ({
       }, 0);
 
       success.set("Order accepted successfully");
-      return result;
+      return updatedOrderInfo;
     } catch (e) {
       error.set(e.message);
     } finally {

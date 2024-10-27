@@ -1,15 +1,7 @@
 import STATIC from "../static";
-<<<<<<< HEAD
-import { isDateBlocked } from "./dateHelpers";
-import { moneyFormat } from "./priceCalculations";
-=======
-import { generateDatesBetween } from "./dateHelpers";
 import {
   moneyFormat,
-  ownerGetsCalculate,
-  workerPaymentCalculate,
 } from "./priceCalculations";
->>>>>>> ebc90ab (listing updated)
 
 export const capitalizeFirstLetter = (str) => {
   if (!str) {
@@ -88,65 +80,20 @@ export const isPayedUsedPaypal = (type) =>
     type
   );
 
-export function recipientStatuses({
-  status,
-  plannedTime,
-  admin,
-  failedDescription,
-  orderStatus,
-}) {
-  if (status === "failed") {
-    return failedDescription
-      ? `Payment failed: ${failedDescription}`
-      : "Payment failed";
-  }
-
-  if (status === "completed") {
-    return "Payment completed";
-  }
-
-  if (status === "cancelled") {
-    return "Payment cancelled";
-  }
-
-  if (status === "pending") {
-    if (orderStatus === "cancelled") {
-      return "Order cancelled, payment not required";
-    }
-    if (plannedTime) {
-      return `Payment scheduled for ${plannedTime}`;
-    }
-    return "Payment pending admin approval";
-  }
-
-  return "Payment status unknown";
-}
-
 export const hasPayError = ({ sessionUser, order }) => {
   if (!sessionUser?.verified) {
     return "You need to be verified to make a payment";
   }
 
-  if (!order.renterVerified) {
-    return "To make a payment, the renter must be verified";
+  if (!order.ownerVerified) {
+    return "To make a payment, the owner of the product must be verified";
   }
 
-  if (!order.renterPaypalId) {
-    return "To make a payment, the renter must confirm his PayPal account";
+  if (!order.ownerPaypalId) {
+    return "To make a payment, the owner of the product must confirm his PayPal account";
   }
 
   return null;
-};
-
-export const getOrderBlockedDatesToExtend = (order) => {
-  if (!order) {
-    return [];
-  }
-
-  return removeDuplicates([
-    ...getOrderBlockedDatesToUpdate(order),
-    ...generateDatesBetween(order.offerStartDate, order.offerEndDate),
-  ]);
 };
 
 export const removeDuplicates = (arr) => [...new Set(arr)];
@@ -190,7 +137,7 @@ export const getDisputeTitle = (name) => {
 };
 
 export const getFilePath = (part) =>
-  process.env.NEXT_PUBLIC_BUCKET_URL + "/public/" + part;
+  process.env.NEXT_PUBLIC_SERVER_URL + "/public/" + part;
 
 export const generateProfileFilePath = (path) => {
   return path ? getFilePath(path) : STATIC.DEFAULTS.PROFILE_PHOTO_LINK;
@@ -223,38 +170,3 @@ export const moneyFormatVisual = (value, needCurrencyName = false) => {
 
   return result;
 };
-<<<<<<< HEAD
-
-export const findFirstAvailableDate = (blockedDates, startDate = null) => {
-  if (!startDate || startDate < new Date()) {
-    startDate = new Date();
-  }
-
-  let firstAvailableDate = null;
-  let daysToCheck = 0;
-
-  while (!firstAvailableDate) {
-    let currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + daysToCheck);
-
-    if (!isDateBlocked(currentDate, blockedDates, 1)) {
-      firstAvailableDate = currentDate;
-    } else {
-      daysToCheck++;
-    }
-  }
-
-  return firstAvailableDate;
-};
-
-export const isItemKeyDraggable = (key) =>
-  Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN)
-    .map((operation) => operation.key)
-    .includes(key);
-
-export const isKeyOperation = (key) =>
-  Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
-    .map((op) => op.key)
-    .includes(key);
-=======
->>>>>>> ebc90ab (listing updated)

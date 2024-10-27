@@ -2,13 +2,12 @@ import React from "react";
 import InputView from "../../FormComponents/InputView";
 import {
   moneyFormat,
-  ownerEarnCalculate,
-  renterPaysCalculate,
+  ownerGetsCalculate,
+  workerPaymentCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
-  getPriceByDays,
 } from "../../../utils";
 import STATIC from "../../../static";
 
@@ -54,9 +53,9 @@ const EarningTable = ({
   type,
   data,
   offerStartDate,
-  offerFinishDate,
+  offerEndDate,
   offerPrice,
-  renterFee,
+  workerFee,
   ownerFee,
   orderId,
   id,
@@ -132,7 +131,7 @@ const EarningTable = ({
             <InputView
               label="Offer End Date"
               placeholder="Offer End Date"
-              value={dateConverter(offerFinishDate)}
+              value={dateConverter(offerEndDate)}
               icon="bx bx-calendar"
             />
           </div>
@@ -153,10 +152,10 @@ const EarningTable = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Renter Fee"
-                placeholder="Renter Fee"
+                label="Worker Fee"
+                placeholder="Worker Fee"
                 icon="bx bx-tag"
-                value={`${renterFee}`}
+                value={`${workerFee}`}
               />
             </div>
 
@@ -165,10 +164,7 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${renterPaysCalculate(
-                  getPriceByDays(offerPrice, offerStartDate, offerFinishDate),
-                  renterFee
-                )}`}
+                value={`${workerPaymentCalculate(offerPrice, workerFee)}`}
               />
             </div>
           </div>
@@ -188,10 +184,7 @@ const EarningTable = ({
                 label="Total Get"
                 placeholder="Total Get"
                 icon="bx bx-dollar-circle"
-                value={`${ownerEarnCalculate(
-                  getPriceByDays(offerPrice, offerStartDate, offerFinishDate),
-                  ownerFee
-                )}`}
+                value={`${ownerGetsCalculate(offerPrice, ownerFee)}`}
               />
             </div>
           </div>
@@ -234,7 +227,7 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (renterPaysCalculate(offerPrice, renterFee) *
+                  (workerPaymentCalculate(offerPrice, workerFee) *
                     (100 - refundCommission)) /
                     100
                 )}`}

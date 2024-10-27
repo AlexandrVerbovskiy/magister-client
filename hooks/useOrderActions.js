@@ -38,35 +38,30 @@ const useOrderActions = ({ order }) => {
     }
 
     const isOwner = order.ownerId == sessionUser?.id;
-    const isRenter = order.renterId == sessionUser?.id;
+    const isWorker = order.workerId == sessionUser?.id;
 
     if (
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-      (isRenter && order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
+      (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
     ) {
       if (
-        checkErrorData(
-          order.actualUpdateRequest?.newStartDate ??
-            order.newStartDate ??
-            order.offerStartDate,
-          order.actualUpdateRequest?.newFinishDate ??
-            order.newFinishDate ??
-            order.offerFinishDate
+        !checkErrorData(
+          order.actualUpdateRequest?.newFinishTime ?? order.offerFinishTime
         ).blocked
       ) {
         newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
         );
       } else {
         newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
         );
       }
     }
 
     if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT &&
-      isRenter
+      order.status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT &&
+      isWorker
     ) {
       if (order.paymentInfo) {
         if (
@@ -81,21 +76,19 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      !order.paymentInfo?.waitingApproved &&
-      ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_RENTER) ||
-        (isRenter && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT == order.status)
+      !(order.paymentInfo && order.paymentInfo.waitingApproved) &&
+      ((isOwner &&
+        [
+          STATIC.ORDER_STATUSES.PENDING_WORKER,
+          STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
+        ].includes(order.status)) ||
+        (isWorker &&
+          [
+            STATIC.ORDER_STATUSES.PENDING_OWNER,
+            STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
+          ].includes(order.status)))
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
-    }
-
-    if (
-      isOwner &&
-      order.status === STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
-    ) {
-      newActionButtons.push(
-        STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
-      );
     }
 
     if (
@@ -109,23 +102,21 @@ const useOrderActions = ({ order }) => {
     }
 
     if (order.status == STATIC.ORDER_STATUSES.IN_PROCESS) {
-      if (isRenter) {
+      if (isWorker) {
         if (order.canFastCancelPayed) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
         } else {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
         }
-
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON);
       }
     }
 
     if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
-      if (isOwner && !order.renterCommentId) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW);
+      if (isOwner && !order.workerCommentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW);
       }
 
-      if (isRenter && !order.ownerCommentId) {
+      if (isWorker && !order.ownerCommentId) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
       }
     }

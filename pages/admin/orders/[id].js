@@ -7,13 +7,12 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
   autoCalculateCurrentTotalPrice,
+  calculateFee,
   getFilePath,
   getListingImageByType,
   moneyFormat,
-  ownerEarnCalculate,
-  renterPaysFeeCalculate,
-  renterPaysCalculate,
-  getPriceByDays,
+  ownerGetsCalculate,
+  workerPaymentCalculate,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -23,6 +22,24 @@ import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 import { useIdPage } from "../../../hooks";
 import STATIC from "../../../static";
+
+const ImageView = ({ path, onImageClick = () => {} }) => {
+  const handleImageClick = (e) => {
+    e.stopPropagation();
+    onImageClick();
+  };
+
+  return (
+    <div className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
+      <div
+        className="flex flex-col form-group cursor-zoom-in"
+        onClick={handleImageClick}
+      >
+        <img src={path} />
+      </div>
+    </div>
+  );
+};
 
 const PreviousProposalElem = ({
   index,
@@ -115,7 +132,7 @@ const Order = (baseProps) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.renterName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.workerName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}
@@ -179,10 +196,10 @@ const Order = (baseProps) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={order.renterName}
-                                label="Renter"
-                                placeholder="Renter Name"
-                                name="renter"
+                                value={order.workerName}
+                                label="Rental"
+                                placeholder="Rental Name"
+                                name="rental"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -230,11 +247,11 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="renter_fee"
-                                label="Renter Fee (%)"
-                                placeholder="Renter Fee"
+                                name="worker_fee"
+                                label="Worker Fee (%)"
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.renterFee}
+                                value={order.workerFee}
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -249,20 +266,12 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? ownerEarnCalculate(
-                                        getPriceByDays(
-                                          activeRequestsToUpdate.newPrice,
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newFinishDate
-                                        ),
+                                    ? ownerGetsCalculate(
+                                        activeRequestsToUpdate.newPrice,
                                         order.ownerFee
                                       )
-                                    : ownerEarnCalculate(
-                                        getPriceByDays(
-                                          order.offerPrice,
-                                          order.offerStartDate,
-                                          order.offerFinishDate
-                                        ),
+                                    : ownerGetsCalculate(
+                                        order.offerPrice,
                                         order.ownerFee
                                       )
                                 }
@@ -272,28 +281,21 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="renter_total_fee"
-                                label={`Renter Total Fee (${STATIC.CURRENCY})`}
-                                placeholder="Renter Fee"
+                                name="worker_total_fee"
+                                label={`Worker Total Fee (${STATIC.CURRENCY})`}
+                                placeholder="Worker Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? renterPaysFeeCalculate(
-                                        getPriceByDays(
-                                          activeRequestsToUpdate.newPrice,
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newFinishDate
-                                        ),
-                                        order.renterFee
+                                    ? calculateFee(
+                                        activeRequestsToUpdate.newPrice,
+                                        order.workerFee,
+                                        true
                                       )
-                                    : renterPaysFeeCalculate(
-                                        getPriceByDays(
-                                          order.offerPrice,
-                                          order.offerStartDate,
-                                          order.offerFinishDate
-                                        ),
+                                    : calculateFee(
                                         order.offerPrice,
-                                        order.renterFee
+                                        order.workerFee,
+                                        true
                                       )
                                 }
                                 inputClassName="form-input w-full"
@@ -311,22 +313,14 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        ownerEarnCalculate(
-                                          getPriceByDays(
-                                            activeRequestsToUpdate.newPrice,
-                                            activeRequestsToUpdate.newStartDate,
-                                            activeRequestsToUpdate.newFinishDate
-                                          ),
+                                        ownerGetsCalculate(
+                                          activeRequestsToUpdate.newPrice,
                                           order.ownerFee
                                         )
                                       )
                                     : moneyFormat(
-                                        ownerEarnCalculate(
-                                          getPriceByDays(
-                                            order.offerPrice,
-                                            order.offerStartDate,
-                                            order.offerFinishDate
-                                          ),
+                                        ownerGetsCalculate(
+                                          order.offerPrice,
                                           order.ownerFee
                                         )
                                       )
@@ -337,30 +331,22 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="renter_price"
-                                label={`Renter Send Total Price (${STATIC.CURRENCY})`}
-                                placeholder="Renter Send Total Price"
+                                name="worker_price"
+                                label={`Worker Send Total Price (${STATIC.CURRENCY})`}
+                                placeholder="Worker Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        renterPaysCalculate(
-                                          getPriceByDays(
-                                            activeRequestsToUpdate.newPrice,
-                                            activeRequestsToUpdate.newStartDate,
-                                            activeRequestsToUpdate.newFinishDate
-                                          ),
-                                          order.renterFee
+                                        workerPaymentCalculate(
+                                          activeRequestsToUpdate.newPrice,
+                                          order.workerFee
                                         )
                                       )
                                     : moneyFormat(
-                                        renterPaysCalculate(
-                                          getPriceByDays(
-                                            order.offerPrice,
-                                            order.offerStartDate,
-                                            order.offerFinishDate
-                                          ),
-                                          order.renterFee
+                                        workerPaymentCalculate(
+                                          order.offerPrice,
+                                          order.workerFee
                                         )
                                       )
                                 }
@@ -423,13 +409,8 @@ const Order = (baseProps) => {
                                 markers={[
                                   {
                                     id: 1,
-<<<<<<< HEAD
-                                    lat: order.listingRentalLat,
-                                    lng: order.listingRentalLng,
-=======
                                     lat: order.listingLat,
                                     lng: order.listingLng,
->>>>>>> ebc90ab (listing updated)
                                     radius: order.radius,
                                   },
                                 ]}
@@ -491,15 +472,11 @@ const Order = (baseProps) => {
                             prevPrice={order.prevPrice ?? order.offerPrice}
                             prevTotalPrice={autoCalculateCurrentTotalPrice({
                               isOwner: false,
-                              price: getPriceByDays(
-                                order.prevPrice ?? order.offerPrice,
-                                order.prevStartDate ?? order.offerStartDate,
-                                order.prevFinishDate ?? order.offerFinishDate
-                              ),
+                              price: order.prevPrice ?? order.offerPrice,
                               ownerFee: order.ownerFee,
-                              renterFee: order.renterFee,
+                              workerFee: order.workerFee,
                             })}
-                            prevSenderName={order.renterName}
+                            prevSenderName={order.workerName}
                             prevGetterName={order.ownerName}
                             needBottomMargin={true}
                           />
@@ -512,23 +489,18 @@ const Order = (baseProps) => {
                               prevTotalPrice={autoCalculateCurrentTotalPrice({
                                 isOwner: false,
                                 price: request.newPrice,
-                                price: getPriceByDays(
-                                  request.newPrice,
-                                  request.newStartDate,
-                                  request.newFinishDate
-                                ),
                                 ownerFee: order.ownerFee,
-                                renterFee: order.renterFee,
+                                workerFee: request.newFee,
                               })}
                               prevSenderName={
-                                request.senderId == order.renterId
-                                  ? order.renterName
+                                request.senderId == order.workerId
+                                  ? order.workerName
                                   : order.ownerName
                               }
                               prevGetterName={
-                                request.senderId == order.renterId
+                                request.senderId == order.workerId
                                   ? order.ownerName
-                                  : order.renterName
+                                  : order.workerName
                               }
                               needBottomMargin={
                                 index != requestsToUpdate.length - 1
@@ -541,6 +513,211 @@ const Order = (baseProps) => {
                   </div>
                 </div>
               </div>
+
+              {order.workerChecklistId && (
+                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                  <div className="flex flex-col md:flex-row md:-mr-px">
+                    <div className="grow w-full">
+                      <div className="p-6 space-y-6">
+                        <section className="flex w-full">
+                          <div
+                            className={
+                              "w-full" + order.ownerChecklistId ? "mb-4" : ""
+                            }
+                          >
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Checklist by worker
+                            </h2>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm the that the item matches the description provided in the listing?"
+                                name="workerChecklistItemMatchesDescription"
+                                value={
+                                  order.workerChecklistItemMatchesDescription ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div
+                              className="flex flex-wrap mt-5"
+                              style={{ width: "100%", gridGap: "0.5rem" }}
+                            >
+                              <label className="block text-sm font-medium mb-1">
+                                Please upload clear, date stamped photos of the
+                                item within the last 24 hours, highlighting all
+                                sides and any existing damage or imperfections
+                                and also showing the serial number.
+                              </label>
+
+                              {order.ownerChecklistsImages.map(
+                                (image, index) => (
+                                  <ListingPhotoView
+                                    key={index}
+                                    src={getFilePath(image.link)}
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do the photos provided accurately represent the current state of the item?"
+                                name="workerChecklistItemMatchesPhotos"
+                                value={
+                                  order.workerChecklistItemMatchesPhotos || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm that the item is fully functional and meets the described specifications?"
+                                name="workerChecklistItemFullyFunctional"
+                                value={
+                                  order.workerChecklistItemFullyFunctional ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Are all the listed accessories and parts present and in good condition?"
+                                name="workerChecklistPartsGoodCondition"
+                                value={
+                                  order.workerChecklistPartsGoodCondition || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do you understand how to use the item properly and follow the provided guidelines?"
+                                name="workerChecklistProvidedGuidelines"
+                                value={
+                                  order.workerChecklistProvidedGuidelines || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {order.ownerChecklistId && (
+                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                  <div className="flex flex-col md:flex-row md:-mr-px">
+                    <div className="grow w-full">
+                      <div className="p-6 space-y-6">
+                        <section className="flex w-full">
+                          <div className="w-full">
+                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                              Checklist by owner
+                            </h2>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm the that the item matches the description provided in the listing?"
+                                name="ownerChecklistItemMatchesDescription"
+                                value={
+                                  order.ownerChecklistItemMatchesDescription ||
+                                  "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div
+                              className="flex flex-wrap mt-5"
+                              style={{ width: "100%", gridGap: "0.5rem" }}
+                            >
+                              <label className="block text-sm font-medium mb-1">
+                                Please upload clear, date stamped photos of the
+                                item within the last 24 hours, highlighting all
+                                sides and any existing damage or imperfections
+                                and also showing the serial number.
+                              </label>
+
+                              {order.workerChecklistsImages.map(
+                                (image, index) => (
+                                  <ListingPhotoView
+                                    key={index}
+                                    src={getFilePath(image.link)}
+                                  />
+                                )
+                              )}
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do the photos provided accurately represent the current state of the item?"
+                                name="ownerChecklistItemMatchesPhotos"
+                                value={
+                                  order.ownerChecklistItemMatchesPhotos || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Can you confirm that the item is fully functional and meets the described specifications?"
+                                name="ownerChecklistItemFullyFunctional"
+                                value={
+                                  order.ownerChecklistItemFullyFunctional || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Are all the listed accessories and parts present and in good condition?"
+                                name="ownerChecklistPartsGoodCondition"
+                                value={
+                                  order.ownerChecklistPartsGoodCondition || "-"
+                                }
+                                row="4"
+                                labelClassName="block text-sm font-medium mb-1"
+                              />
+                            </div>
+
+                            <div className="w-full mb-2">
+                              <TextareaView
+                                label="Do you understand how to use the item properly and follow the provided guidelines?"
+                                name="ownerChecklistProvidedGuidelines"
+                                value={
+                                  order.ownerChecklistProvidedGuidelines || "-"
+                                }
+                                labelClassName="block text-sm font-medium mb-1"
+                                row="4"
+                              />
+                            </div>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </main>

@@ -3,22 +3,22 @@ import ImagePopup from "../../../../components/_App/ImagePopup";
 import Navbar from "../../../../components/_App/Navbar";
 import PageBanner from "../../../../components/Common/PageBanner";
 import ItemInfo from "../../../../components/Order/OrderApprovementParts/ItemInfo";
+import OwnerInfo from "../../../../components/Order/OrderApprovementParts/OwnerInfo";
 import { authSideProps } from "../../../../middlewares";
 import { getOrderCheckoutInfo } from "../../../../services";
 import {
+  autoMultiEnding,
   autoCalculateCurrentTotalPrice,
+  calculateFee,
+  getFactOrderDays,
   moneyFormatVisual,
-  dateConverter,
-  renterPaysFeeCalculate,
-  getPriceByDays,
 } from "../../../../utils";
 import PaymentSection from "../../../../components/_App/PaymentSection";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../../contexts";
 import Link from "next/link";
-import RenterInfo from "../../../../components/Order/OrderApprovementParts/RenterInfo";
 
-const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
+const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
   const { sessionUser } = useContext(IndiceContext);
   const router = useRouter();
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -26,21 +26,17 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const price = getPriceByDays(
-    order.offerPrice,
-    order.offerStartDate,
-    order.offerFinishDate
-  );
-  const totalFee = renterPaysFeeCalculate(price, renterBaseCommission);
+  const price = order.offerPrice;
+  const totalFee = calculateFee(price, workerBaseCommission, true);
   const totalPrice = price + totalFee;
 
-  const onRenterPayed = () => {
+  const onWorkerPayed = () => {
     router.push(`/dashboard/orders/${order.id}?success=Payed successfully`);
   };
 
   return (
     <>
-      <Navbar canShowSearch={false} />
+      <Navbar canShowSearch={false} needBetaAlert={false} />
 
       <PageBanner
         pageTitle="Checkout"
@@ -62,23 +58,22 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
             <div className="listings-sidebar row m-0">
               <div className="col-12 col-lg-4">
                 <div className="h-100 listings-widget listings_contact_details">
-                  <h3>Order Details</h3>
+                  <h3>Rental Details</h3>
 
                   <div>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                       <div className="d-flex">
                         <div className="date-info date-info-view">
-                          <div className="date-info-label">Duration</div>
+                          <div className="date-info-label">Withdrawal</div>
                           <div className="date-info-value">
-                            {dateConverter(order.offerStartDate)} -{" "}
-                            {dateConverter(order.offerFinishDate)}
+                            {order.offerStartDate}
                           </div>
                         </div>
 
                         <div className="date-info date-info-view">
-                          <div className="date-info-label">Price</div>
+                          <div className="date-info-label">Devolution</div>
                           <div className="date-info-value">
-                            {moneyFormatVisual(order.offerPrice)}
+                            {order.offerEndDate}
                           </div>
                         </div>
                       </div>
@@ -87,7 +82,6 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                       className="d-flex justify-content-between"
                       style={{ marginTop: "10px", marginBottom: "10px" }}
                     >
-                      <div>Offer Price</div>
                       <div>{moneyFormatVisual(price)}</div>
                     </div>
 
@@ -109,17 +103,17 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                 </div>
               </div>
               <div className="col-12 mt-4 mt-lg-0 col-lg-4">
-                <RenterInfo
+                <OwnerInfo
                   data={{
-                    userId: order.renterId,
-                    userName: order.renterName,
-                    userPhoto: order.renterPhoto,
-                    userCountItems: +order.renterCountItems,
-                    userCommentCount: order.renterCommentCount,
-                    userAverageRating: order.renterAverageRating,
+                    userId: order.ownerId,
+                    userName: order.ownerName,
+                    userPhoto: order.ownerPhoto,
+                    userCountItems: +order.ownerCountItems,
+                    userCommentCount: order.ownerCommentCount,
+                    userAverageRating: order.ownerAverageRating,
                   }}
-                  countItemsType="completed"
-                  title="Renter"
+                  countItemsType="for rental"
+                  title="Owner"
                   wrapperClassName="h-100"
                 />
               </div>
@@ -164,7 +158,7 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                   </div>
                 )}
 
-                {!(order.renterVerified && order.renterPaypalId) && (
+                {!(order.ownerVerified && order.ownerPaypalId) && (
                   <div className="card">
                     <div className="card-body">
                       <div
@@ -173,39 +167,36 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                       >
                         <i className="bx bx-x-circle icon-danger me-1"></i>
                         <b>
-                          To make a payment, the renter must be verified and
-                          confirm his PayPal account.
+                          To make a payment, the owner of the product must be
+                          verified and confirm his PayPal account.
                         </b>
                       </div>
                       <Link
                         className="default-btn mt-3"
                         href={"/dashboard/chats/" + order.chatId}
                       >
-                        Notify renter
+                        Notify owner
                       </Link>
                     </div>
                   </div>
                 )}
 
-                {order.renterVerified &&
-                  order.renterPaypalId &&
+                {order.ownerVerified &&
+                  order.ownerPaypalId &&
                   sessionUser?.verified && (
                     <PaymentSection
                       disabled={disabled}
                       setDisabled={setDisabled}
                       bankInfo={bankInfo}
                       authToken={authToken}
-                      onRenterPayed={onRenterPayed}
+                      onWorkerPayed={onWorkerPayed}
                       orderId={order.id}
                       amount={autoCalculateCurrentTotalPrice({
-                        price: getPriceByDays(
-                          order.offerPrice,
-                          order.offerStartDate,
-                          order.offerFinishDate
-                        ),
+                        isOwner: false,
+                        price: order.offerPrice,
                         ownerFee: order.ownerFee,
-                        renterFee: order.renterFee,
-                        type: "renter",
+                        workerFee: order.workerFee,
+                        type: "worker",
                       })}
                     />
                   )}

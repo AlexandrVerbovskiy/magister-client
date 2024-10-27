@@ -4,7 +4,7 @@ import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
-import { getPaymentNameByType, moneyFormatVisual } from "../../../utils";
+import { getFactOrderDays, getPaymentNameByType, moneyFormatVisual } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";
@@ -15,19 +15,19 @@ const TableItem = (props) => {
   const {
     id,
     listingName,
-    renterName,
-    renterEmail,
-    renterPhone,
+    workerName,
+    workerEmail,
+    workerPhone,
     ownerName,
     ownerEmail,
     ownerPhone,
     listingId,
-    renterId,
+    workerId,
     ownerId,
     status,
     cancelStatus,
     offerStartDate,
-    offerFinishDate,
+    offerEndDate,
     offerPrice,
     listingAddress,
     listingCategoryName = null,
@@ -36,9 +36,9 @@ const TableItem = (props) => {
     payedAdminApproved,
     payedWaitingApproved,
     listingRentalCount,
-    renterAverageRating,
+    workerAverageRating,
     ownerAverageRating,
-    renterCommentCount,
+    workerCommentCount,
     ownerCommentCount,
     payedId,
   } = props;
@@ -59,7 +59,7 @@ const TableItem = (props) => {
           <TableDateView date={offerStartDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <TableDateView date={offerFinishDate} />
+          <TableDateView date={offerEndDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">
@@ -148,21 +148,21 @@ const TableItem = (props) => {
         <td className="px-2 py-3 whitespace-nowrap overflow-separate align-top border-r">
           <div>
             <SubInfoTitle
-              title="Renter"
-              href={`/admin/users/edit/${renterId}`}
-              canMove={isAdmin && sessionUser?.id != renterId}
+              title="Worker"
+              href={`/admin/users/edit/${workerId}`}
+              canMove={isAdmin && sessionUser?.id != workerId}
             />
-            <SubInfoRow label="Name" value={renterName} />
-            <SubInfoRow label="Email" value={renterEmail} />
+            <SubInfoRow label="Name" value={workerName} />
+            <SubInfoRow label="Email" value={workerEmail} />
             <SubInfoRow
               label="Phone"
-              value={renterPhone && renterPhone.length ? renterPhone : "-"}
+              value={workerPhone && workerPhone.length ? workerPhone : "-"}
             />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
-                value={renterAverageRating}
-                count={renterCommentCount}
-                commentName="renter"
+                value={workerAverageRating}
+                count={workerCommentCount}
+                commentName="worker"
               />
             </SubInfoRowWithChild>
           </div>

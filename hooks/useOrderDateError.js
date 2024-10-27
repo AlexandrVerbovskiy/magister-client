@@ -1,6 +1,5 @@
 import {
   checkStringDateLowerOrEqualCurrentDate,
-  dateConverter,
   fullDateConverter,
 } from "../utils";
 import STATIC from "../static";
@@ -17,38 +16,26 @@ const Parent = ({ children, tooltipText }) => {
   return <div>{children}</div>;
 };
 
-const BaseDateSpan = ({
-  startDate,
-  finishDate,
-  className = "",
-  tooltipText = null,
-}) => {
+const BaseDateSpan = ({ finishTime, className = "", tooltipText = null }) => {
   return (
     <Parent tooltipText={tooltipText}>
-      Rental duration:{" "}
-      <span className={className}>
-        {dateConverter(startDate)} - {dateConverter(finishDate)}
-      </span>
+      Finish by:{" "}
+      <span className={className}>{fullDateConverter(finishTime)}</span>
     </Parent>
   );
 };
 
 const useOrderDateError = ({ order }) => {
-  const checkErrorData = (startDate, finishDate) => {
+  const checkErrorData = (finishTime) => {
     let tooltipErrorMessage = "";
     let blocked = false;
 
     if (
       (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) &&
       order.cancelStatus == null
     ) {
-      if (checkStringDateLowerOrEqualCurrentDate(finishDate)) {
-        tooltipErrorMessage = "Order finish date is overdue";
-        blocked = true;
-      }
-
-      if (checkStringDateLowerOrEqualCurrentDate(startDate)) {
+      if (checkStringDateLowerOrEqualCurrentDate(finishTime)) {
         tooltipErrorMessage = "Order start date is overdue";
         blocked = true;
       }
@@ -57,16 +44,12 @@ const useOrderDateError = ({ order }) => {
     return { tooltipErrorMessage, blocked };
   };
 
-  const CanBeErrorBaseDateSpan = ({ finishDate, startDate }) => {
-    const { tooltipErrorMessage, blocked } = checkErrorData(
-      startDate,
-      finishDate
-    );
+  const CanBeErrorBaseDateSpan = ({ finishTime }) => {
+    const { tooltipErrorMessage, blocked } = checkErrorData(finishTime);
 
     return (
       <BaseDateSpan
-        startDate={startDate}
-        finishDate={finishDate}
+        finishTime={finishTime}
         className={blocked ? "error-span" : ""}
         tooltipText={tooltipErrorMessage}
       />

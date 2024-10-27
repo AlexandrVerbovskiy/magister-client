@@ -31,7 +31,12 @@ import STATIC from "../../../static";
 import ErrorSpan from "../ErrorSpan";
 import CategorySelect from "./CategorySelect";
 
-const baseCity = STATIC.CITIES[0]["value"];
+const cityOptions = [
+  { value: "Warrington", title: "Warrington" },
+  { value: "Manchester", title: "Manchester" },
+];
+
+const baseCity = cityOptions[0]["value"];
 
 const OwnerSection = ({
   ownerId,
@@ -170,36 +175,18 @@ const EditForm = ({ listing, categories, save }) => {
 
   const [postcode, setPostcode] = useState("");
   const [postcodeError, setPostcodeError] = useState(null);
-
   const [city, setCity] = useState(baseCity);
-
-  const [compensationCost, setCompensationCost] = useState("");
-  const [compensationCostError, setCompensationCostError] = useState(null);
-
-  const [countStoredItems, setCountStoredItems] = useState("");
-  const [countStoredItemsError, setCountStoredItemsError] = useState(null);
-
-  const [pricePerDay, setPricePerDay] = useState("");
-  const [pricePerDayError, setPricePerDayError] = useState(null);
-
-  const [minRentalDays, setMinRentalDays] = useState("");
-  const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const baseCoords = getCityCoords(baseCity);
 
   const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
-<<<<<<< HEAD
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
-=======
-  const [totalPrice, setTotalPrice] = useState("");
-  const [totalPriceError, setTotalPriceError] = useState(null);
 
   const [finishTime, setFinishTime] = useState("");
   const [finishTimeError, setFinishTimeError] = useState(null);
->>>>>>> ebc90ab (listing updated)
 
   const [lat, setLat] = useState(baseCoords.lat);
   const [lng, setLng] = useState(baseCoords.lng);
@@ -289,12 +276,8 @@ const EditForm = ({ listing, categories, save }) => {
       categoryInfo = "-";
     }
 
-<<<<<<< HEAD
     setPrice(data.price);
-=======
-    setTotalPrice(data.totalPrice);
     setFinishTime(data.finishTime);
->>>>>>> ebc90ab (listing updated)
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
@@ -302,11 +285,7 @@ const EditForm = ({ listing, categories, save }) => {
     setCity(data.city);
     setLat(data.lat);
     setLng(data.lng);
-<<<<<<< HEAD
-    setCenter({ lat: data.lat, lng: data.lng });
-=======
     setCenter({ lat: data.lat, lng: data.lLng });
->>>>>>> ebc90ab (listing updated)
     setRadius(data.radius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
@@ -350,12 +329,8 @@ const EditForm = ({ listing, categories, save }) => {
       city: city,
       lat,
       lng,
-<<<<<<< HEAD
-      radius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
-=======
       radius:
         prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
->>>>>>> ebc90ab (listing updated)
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -363,12 +338,8 @@ const EditForm = ({ listing, categories, save }) => {
       active: prevListing.active ?? true,
       otherCategory: prevListing.otherCategory ?? "",
       otherCategoryParentId: listing.otherCategoryParentId ?? null,
-<<<<<<< HEAD
       price: prevListing.price ?? "",
-=======
-      totalPrice: prevListing.totalPrice ?? "",
       finishTime: prevListing.finishTime ?? "",
->>>>>>> ebc90ab (listing updated)
     };
 
     if (categoryId) {
@@ -398,17 +369,9 @@ const EditForm = ({ listing, categories, save }) => {
       approved,
       ownerId,
       active,
-<<<<<<< HEAD
       price,
-=======
-      totalPrice,
       finishTime,
->>>>>>> ebc90ab (listing updated)
     };
-
-    if (`${minRentalDays}`.trim()) {
-      dataToSave["minRentalDays"] = minRentalDays;
-    }
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
@@ -450,17 +413,8 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-<<<<<<< HEAD
       if (!price) {
         setPrice("Required field");
-        hasError = true;
-      }
-
-      if (price && validatePrice(price) !== true) {
-        setPriceError(validatePrice(price));
-=======
-      if (!totalPrice) {
-        setTotalPrice("Required field");
         hasError = true;
       }
 
@@ -469,9 +423,8 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (totalPrice && validatePrice(totalPrice) !== true) {
-        setTotalPriceError(validatePrice(totalPrice));
->>>>>>> ebc90ab (listing updated)
+      if (price && validatePrice(price) !== true) {
+        setPriceError(validatePrice(price));
         hasError = true;
       }
 
@@ -502,37 +455,6 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (minRentalDays && validateInteger(minRentalDays) !== true) {
-        setMinRentalDaysError(validateInteger(minRentalDays));
-        hasError = true;
-      }
-
-      if (minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
-        setMinRentalDaysError(
-          `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-        );
-        hasError = true;
-      }
-
-      if (!countStoredItems) {
-        setCountStoredItemsError("Required field");
-        hasError = true;
-      }
-
-      if (countStoredItems && validateInteger(countStoredItems) !== true) {
-        setCountStoredItemsError(validateInteger(countStoredItems));
-        hasError = true;
-      }
-
-      if (
-        countStoredItems &&
-        validateInteger(countStoredItems) === true &&
-        Number(countStoredItems) == 0
-      ) {
-        setCountStoredItemsError("Field must be higher than zero");
-        hasError = true;
-      }
-
       if (description && validateBigText(description) !== true) {
         setDescriptionError(validateBigText(description));
         hasError = true;
@@ -540,21 +462,6 @@ const EditForm = ({ listing, categories, save }) => {
 
       if (!ownerId) {
         setOwnerIdError("Required field");
-        hasError = true;
-      }
-
-      if (pricePerDay && validatePrice(pricePerDay) !== true) {
-        setPricePerDayError(validatePrice(pricePerDay));
-        hasError = true;
-      }
-
-      if (!compensationCost) {
-        setCompensationCostError("Required field");
-        hasError = true;
-      }
-
-      if (compensationCost && validatePrice(compensationCost) !== true) {
-        setCompensationCostError(validatePrice(compensationCost));
         hasError = true;
       }
 
@@ -718,21 +625,6 @@ const EditForm = ({ listing, categories, save }) => {
                             </div>
                           )}
 
-<<<<<<< HEAD
-                          <div>
-                            <Textarea
-                              name="description"
-                              value={description}
-                              setValue={setDescription}
-                              error={descriptionError}
-                              setError={setDescriptionError}
-                              label="Description"
-                              placeholder="Details..."
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <Input
@@ -741,19 +633,8 @@ const EditForm = ({ listing, categories, save }) => {
                                 setValue={setPrice}
                                 error={priceError}
                                 setError={setPriceError}
-                                label="Price per day"
-                                placeholder="Price per day"
-=======
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="total-price"
-                                value={totalPrice}
-                                setValue={setTotalPrice}
-                                error={totalPriceError}
-                                setError={setTotalPriceError}
-                                label="Total Price"
-                                placeholder="Total Price"
+                                label="Price"
+                                placeholder="Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -768,83 +649,11 @@ const EditForm = ({ listing, categories, save }) => {
                                 error={finishTimeError}
                                 setError={setFinishTimeError}
                                 placeholder="Finish Time"
->>>>>>> ebc90ab (listing updated)
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
                             </div>
                           </div>
-<<<<<<< HEAD
-                        </div>
-                      </section>
-
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Pricing
-                        </h2>
-
-                        <div className="flex flex-col gap-2">
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="pricePerPay"
-                                value={pricePerDay}
-                                setValue={setPricePerDay}
-                                error={pricePerDayError}
-                                setError={setPricePerDayError}
-                                label={`Rental price per day (${STATIC.CURRENCY})`}
-                                placeholder="12.00"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="compensationCost"
-                                label={`Item value (${STATIC.CURRENCY})`}
-                                placeholder="532.00"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={compensationCost}
-                                setValue={setCompensationCost}
-                                error={compensationCostError}
-                                setError={setCompensationCostError}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="minRentalDays"
-                                value={minRentalDays}
-                                setValue={setMinRentalDays}
-                                error={minRentalDaysError}
-                                setError={setMinRentalDaysError}
-                                label="Minimum rental days"
-                                placeholder="0"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="countStoredItems"
-                                label="Quantity"
-                                placeholder="1"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={countStoredItems}
-                                setValue={setCountStoredItems}
-                                error={countStoredItemsError}
-                                setError={setCountStoredItemsError}
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-=======
->>>>>>> ebc90ab (listing updated)
                         </div>
                       </section>
 
@@ -863,7 +672,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 City
                               </label>
                               <DropdownClassic
-                                options={STATIC.CITIES}
+                                options={cityOptions}
                                 selected={city}
                                 setSelected={handleChangeCity}
                                 needSearch={false}

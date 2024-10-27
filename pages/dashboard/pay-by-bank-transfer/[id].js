@@ -11,7 +11,7 @@ import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByType,
   downloadFileUrl,
-  getPriceByDays,
+  getFactOrderDays,
   moneyFormatVisual,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
@@ -57,12 +57,8 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
     });
 
   const totalPrice = calculateFullTotalByType(
-    getPriceByDays(
-      order.offerPrice,
-      order.offerStartDate,
-      order.offerFinishDate
-    ),
-    order.renterFee,
+    order.offerPrice,
+    order.workerFee,
     "sum"
   );
 

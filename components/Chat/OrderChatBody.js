@@ -9,7 +9,6 @@ import {
   autoCalculateCurrentTotalPrice,
   dateName,
   getFactOrderDays,
-  getPriceByDays,
 } from "../../utils";
 import STATIC from "../../static";
 import DisputeModal from "../Order/DisputeModal";
@@ -48,29 +47,25 @@ const OrderChatBody = ({
     const offerStartDate = actualUpdateRequest
       ? actualUpdateRequest.newStartDate
       : order.offerStartDate;
-    const offerFinishDate = actualUpdateRequest
-      ? actualUpdateRequest.newFinishDate
-      : order.offerFinishDate;
+    const offerEndDate = actualUpdateRequest
+      ? actualUpdateRequest.newEndDate
+      : order.offerEndDate;
 
     const totalPrice = autoCalculateCurrentTotalPrice({
       isOwner,
-      price: getPriceByDays(
-        order.offerPrice,
-        order.offerStartDate,
-        order.offerFinishDate
-      ),
+      price: order.offerPrice,
       ownerFee: order.ownerFee,
-      renterFee: order.renterFee,
+      workerFee: order.workerFee,
     });
 
     const updatedFields = {
-      offerPrice: order.offerPrice,
-      offerStartDate: order.offerStartDate,
-      offerFinishDate: order.offerFinishDate,
-      duration: getFactOrderDays(offerStartDate, offerFinishDate),
+      offerPrice,
+      offerStartDate,
+      offerEndDate,
+      duration: getFactOrderDays(offerStartDate, offerEndDate),
       factTotalPrice: totalPrice,
       requestId: null,
-      newFinishDate: null,
+      newEndDate: null,
       newStartDate: null,
     };
 
@@ -99,13 +94,13 @@ const OrderChatBody = ({
         ...request,
         senderId: sessionUser?.id,
         newStartDate: fromDate,
-        newFinishDate: toDate,
+        newEndDate: toDate,
         newPrice: price,
       },
     };
 
     if (isOwner) {
-      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_RENTER;
+      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_WORKER;
     } else {
       newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -146,19 +141,6 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
-  const onAcceptFinishOrder = ({ chatMessage, status }) => {
-    updateOrder({ status });
-    actions.appendMessage(chatMessage);
-    windowProps.scrollBodyBottom();
-  };
-
-  const onFinishOrder = (data) => {
-    const { chatMessage, status } = data;
-    updateOrder({ status });
-    actions.appendMessage(chatMessage);
-    windowProps.scrollBodyBottom();
-  };
-
   const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
     updateOrder({ status, cancelStatus });
     actions.appendMessage(chatMessage);
@@ -171,7 +153,7 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
-  const onRenterPayed = async ({ chatMessage, orderPart }) => {
+  const onWorkerPayed = async ({ chatMessage, orderPart }) => {
     setTimeout(() => {
       actions.appendMessage(chatMessage);
       updateOrder(orderPart);
@@ -190,8 +172,6 @@ const OrderChatBody = ({
     onRejectOrder,
     onPayedFastCancel,
     onDisputeOpened,
-    onAcceptFinishOrder,
-    onFinishOrder,
   });
 
   /*  activeDisputeWindow,
@@ -268,7 +248,7 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
-        onRenterPayed={onRenterPayed}
+        onWorkerPayed={onWorkerPayed}
       />
 
       {currentActionButtons.includes(
