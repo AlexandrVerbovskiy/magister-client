@@ -1,15 +1,11 @@
 import {
-  autoMultiEnding,
-  calculateFeeByDaysCount,
-  getFactOrderDays,
+  calculateFee,
   moneyFormatVisual,
 } from "../../../utils";
 
-const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
-  const duration = getFactOrderDays(fromDate, toDate);
-  const subtotalPrice = price * duration;
-  const totalFee = calculateFeeByDaysCount(duration, price, fee, true);
-  const totalPrice = subtotalPrice + totalFee;
+const ContractDetailsLight = ({ price, fee }) => {
+  const totalFee = calculateFee(price, fee, true);
+  const totalPrice = price + totalFee;
 
   return (
     <div className="listings-widget listings_contact_details">
@@ -20,22 +16,7 @@ const ContractDetailsLight = ({ fromDate, toDate, price, fee }) => {
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div>Rental period</div>
-
-          <div>
-            {duration} {autoMultiEnding(duration, "day")}
-          </div>
-        </div>
-
-        <div
-          className="d-flex justify-content-between"
-          style={{ marginTop: "10px", marginBottom: "10px" }}
-        >
-          <div>
-            {moneyFormatVisual(price)} x {duration}{" "}
-            {autoMultiEnding(duration, "day")}
-          </div>
-          <div>{moneyFormatVisual(subtotalPrice)}</div>
+          <div>{moneyFormatVisual(price)}</div>
         </div>
 
         <div

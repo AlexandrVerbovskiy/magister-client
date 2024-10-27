@@ -78,9 +78,7 @@ const ListingReviewForm = ({
         <div className="listings-sidebar">
           <ContractDetailsLight
             fee={order.workerFee}
-            fromDate={order.offerStartDate}
-            toDate={order.offerEndDate}
-            price={order.offerPricePerDay}
+            price={order.offerPrice}
           />
 
           <ItemInfo

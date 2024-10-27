@@ -5,9 +5,7 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import {
-  workerPaymentCalculate,
-} from "../../utils";
+import { workerPaymentCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 
@@ -19,7 +17,6 @@ const OrdersListFastActinsModals = ({
   handleAcceptPayedFastCancel,
   activeFastCancel,
   closeActiveFastCancel,
-  activeFastCancelOrder,
 
   handleAcceptUpdateRequest,
   activeUpdateRequest,
@@ -38,21 +35,16 @@ const OrdersListFastActinsModals = ({
   closePay,
   onWorkerPayed,
   activePayOrder,
-  workerCancelFee,
 
-  workerBaseCommission,
   successIconPopupState,
-
   bankInfo,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
   const [updateRequestProposalPrice, setUpdateRequestProposalPrice] =
     useState(0);
-  const [updateRequestProposalStartDate, setUpdateRequestProposalStartDate] =
-    useState(Date.now());
-  const [updateRequestProposalEndDate, setUpdateRequestProposalEndDate] =
-    useState(Date.now());
+  const [updateRequestProposalFinishTime, setUpdateRequestProposalFinishTime] =
+    useState(new Date());
   const [updateRequestFee, setUpdateRequestFee] = useState(0);
   const [updateRequestCommissionType, setUpdateRequestCommissionType] =
     useState("sum");
@@ -61,31 +53,22 @@ const OrdersListFastActinsModals = ({
   const [payAmount, setPayAmount] = useState(0);
   const [payOrderId, setPayOrderId] = useState(null);
   const [payListingName, setPayListingName] = useState("");
-  const [payPricePerDay, setPayPricePerDay] = useState(0);
-  const [payOfferStartDate, setPayOfferStartDate] = useState(Date.now());
-  const [payOfferEndDate, setPayOfferEndDate] = useState(Date.now());
+  const [payPrice, setPayPrice] = useState(0);
   const [payOfferFee, setPayOfferFee] = useState(0);
   const [payedFastCancelDisabled, setPayedFastCancelDisabled] = useState(false);
 
   useEffect(() => {
     if (updateRequestModalActiveOrder) {
-      setUpdateRequestPrice(
-        updateRequestModalActiveOrder.listingPricePerDay ?? 0
-      );
+      setUpdateRequestPrice(updateRequestModalActiveOrder.listingPrice ?? 0);
       setUpdateRequestProposalPrice(
-        updateRequestModalActiveOrder.newPricePerDay ??
-          updateRequestModalActiveOrder.offerPricePerDay ??
+        updateRequestModalActiveOrder.newPrice ??
+          updateRequestModalActiveOrder.offerPrice ??
           0
       );
-      setUpdateRequestProposalStartDate(
-        updateRequestModalActiveOrder.newStartDate ??
-          updateRequestModalActiveOrder.offerStartDate ??
-          Date.now()
-      );
-      setUpdateRequestProposalEndDate(
-        updateRequestModalActiveOrder.newEndDate ??
-          updateRequestModalActiveOrder.offerEndDate ??
-          Date.now()
+      setUpdateRequestProposalFinishTime(
+        updateRequestModalActiveOrder.newFinishTime ??
+          updateRequestModalActiveOrder.offerFinishTime ??
+          new Date()
       );
       setUpdateRequestFee(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
@@ -104,19 +87,15 @@ const OrdersListFastActinsModals = ({
   useEffect(() => {
     const newAmount = activePayOrder
       ? workerPaymentCalculate(
-          activePayOrder.offerStartDate,
-          activePayOrder.offerEndDate,
-          activePayOrder.workerFee,
-          activePayOrder.offerPricePerDay
+          activePayOrder.offerPrice,
+          activePayOrder.workerFee
         )
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
     setPayListingName(activePayOrder?.listingName ?? "");
     setPayOfferFee(activePayOrder?.workerFee ?? 0);
-    setPayPricePerDay(activePayOrder?.offerPricePerDay ?? 0);
-    setPayOfferStartDate(activePayOrder?.offerStartDate ?? Date.now());
-    setPayOfferEndDate(activePayOrder?.offerEndDate ?? Date.now());
+    setPayPrice(activePayOrder?.offerPrice ?? 0);
   }, [activePayOrder, sessionUser]);
 
   return (
@@ -150,8 +129,7 @@ const OrdersListFastActinsModals = ({
         handleCreateUpdateRequest={handleAcceptUpdateRequest}
         price={updateRequestPrice}
         proposalPrice={updateRequestProposalPrice}
-        proposalStartDate={updateRequestProposalStartDate}
-        proposalEndDate={updateRequestProposalEndDate}
+        proposalFinishTime={updateRequestProposalFinishTime}
         fee={updateRequestFee}
         commissionType={updateRequestCommissionType}
         updateRequestModalActive={activeUpdateRequest}
@@ -165,9 +143,7 @@ const OrdersListFastActinsModals = ({
         orderId={payOrderId}
         listingName={payListingName}
         onWorkerPayed={onWorkerPayed}
-        pricePerDay={payPricePerDay}
-        offerStartDate={payOfferStartDate}
-        offerEndDate={payOfferEndDate}
+        price={payPrice}
         offerFee={payOfferFee}
         modalActive={activePay}
         closeModal={closePay}

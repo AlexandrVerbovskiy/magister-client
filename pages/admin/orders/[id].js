@@ -6,9 +6,8 @@ import Header from "../../../partials/admin/Header";
 import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
-  calculateCurrentTotalPrice,
-  calculateFeeByDaysCount,
-  getFactOrderDays,
+  autoCalculateCurrentTotalPrice,
+  calculateFee,
   getFilePath,
   getListingImageByType,
   moneyFormat,
@@ -44,9 +43,6 @@ const ImageView = ({ path, onImageClick = () => {} }) => {
 
 const PreviousProposalElem = ({
   index,
-  prevStartDate,
-  prevEndDate,
-  prevPricePerDay,
   prevTotalPrice,
   prevSenderName,
   prevGetterName,
@@ -73,30 +69,6 @@ const PreviousProposalElem = ({
               label="Request Recipient"
               name={`prev_getter_name_${index}`}
               placeholder="Prev Recipient"
-              labelClassName="block text-sm font-medium mb-1"
-              inputClassName="form-input w-full"
-            />
-          </div>
-        </div>
-
-        <div className="flex w-full gap-2">
-          <div className="w-full sm:w-1/2">
-            <InputView
-              value={prevStartDate}
-              label="Previous Start Date"
-              name={`prev_start_date_${index}`}
-              placeholder="Prev Start Date"
-              labelClassName="block text-sm font-medium mb-1"
-              inputClassName="form-input w-full"
-            />
-          </div>
-
-          <div className="w-1/2">
-            <InputView
-              value={prevEndDate}
-              label="Previous End Date"
-              name={`prev_end_date_${index}`}
-              placeholder="Prev End Date"
               labelClassName="block text-sm font-medium mb-1"
               inputClassName="form-input w-full"
             />
@@ -245,38 +217,6 @@ const Order = (baseProps) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="from_date"
-                                label="From Date"
-                                placeholder="From Date"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={
-                                  activeRequestsToUpdate
-                                    ? activeRequestsToUpdate.newStartDate
-                                    : order.offerStartDate
-                                }
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <InputView
-                                name="to_date"
-                                label="To Date"
-                                placeholder="To Date"
-                                labelClassName="block text-sm font-medium mb-1"
-                                value={
-                                  activeRequestsToUpdate
-                                    ? activeRequestsToUpdate.newEndDate
-                                    : order.offerEndDate
-                                }
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <InputView
                                 name="total_price"
                                 label={`Total Price (${STATIC.CURRENCY})`}
                                 placeholder="Total Price"
@@ -284,18 +224,9 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        getFactOrderDays(
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newEndDate
-                                        ) *
-                                          activeRequestsToUpdate.newPricePerDay
+                                        activeRequestsToUpdate.newPrice
                                       )
-                                    : moneyFormat(
-                                        getFactOrderDays(
-                                          order.offerStartDate,
-                                          order.offerEndDate
-                                        ) * order.offerPricePerDay
-                                      )
+                                    : moneyFormat(order.offerPrice)
                                 }
                                 inputClassName="form-input w-full"
                               />
@@ -336,16 +267,12 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? ownerGetsCalculate(
-                                        activeRequestsToUpdate.newStartDate,
-                                        activeRequestsToUpdate.newEndDate,
-                                        order.ownerFee,
-                                        activeRequestsToUpdate.newPricePerDay
+                                        activeRequestsToUpdate.newPrice,
+                                        order.ownerFee
                                       )
                                     : ownerGetsCalculate(
-                                        order.offerStartDate,
-                                        order.offerEndDate,
-                                        order.ownerFee,
-                                        order.offerPricePerDay
+                                        order.offerPrice,
+                                        order.ownerFee
                                       )
                                 }
                                 inputClassName="form-input w-full"
@@ -360,21 +287,13 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? calculateFeeByDaysCount(
-                                        getFactOrderDays(
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newEndDate
-                                        ),
-                                        activeRequestsToUpdate.newPricePerDay,
+                                    ? calculateFee(
+                                        activeRequestsToUpdate.newPrice,
                                         order.workerFee,
                                         true
                                       )
-                                    : calculateFeeByDaysCount(
-                                        getFactOrderDays(
-                                          order.offerStartDate,
-                                          order.offerEndDate
-                                        ),
-                                        order.offerPricePerDay,
+                                    : calculateFee(
+                                        order.offerPrice,
                                         order.workerFee,
                                         true
                                       )
@@ -395,18 +314,14 @@ const Order = (baseProps) => {
                                   activeRequestsToUpdate
                                     ? moneyFormat(
                                         ownerGetsCalculate(
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newEndDate,
-                                          order.ownerFee,
-                                          activeRequestsToUpdate.newPricePerDay
+                                          activeRequestsToUpdate.newPrice,
+                                          order.ownerFee
                                         )
                                       )
                                     : moneyFormat(
                                         ownerGetsCalculate(
-                                          order.offerStartDate,
-                                          order.offerEndDate,
-                                          order.ownerFee,
-                                          order.offerPricePerDay
+                                          order.offerPrice,
+                                          order.ownerFee
                                         )
                                       )
                                 }
@@ -424,18 +339,14 @@ const Order = (baseProps) => {
                                   activeRequestsToUpdate
                                     ? moneyFormat(
                                         workerPaymentCalculate(
-                                          activeRequestsToUpdate.newStartDate,
-                                          activeRequestsToUpdate.newEndDate,
-                                          order.workerFee,
-                                          activeRequestsToUpdate.newPricePerDay
+                                          activeRequestsToUpdate.newPrice,
+                                          order.workerFee
                                         )
                                       )
                                     : moneyFormat(
                                         workerPaymentCalculate(
-                                          order.offerStartDate,
-                                          order.offerEndDate,
-                                          order.workerFee,
-                                          order.offerPricePerDay
+                                          order.offerPrice,
+                                          order.workerFee
                                         )
                                       )
                                 }
@@ -558,22 +469,10 @@ const Order = (baseProps) => {
 
                           <PreviousProposalElem
                             index={0}
-                            prevStartDate={
-                              order.prevStartDate ?? order.offerStartDate
-                            }
-                            prevEndDate={
-                              order.prevEndDate ?? order.offerEndDate
-                            }
-                            prevPricePerDay={
-                              order.prevPricePerDay ?? order.offerPricePerDay
-                            }
-                            prevTotalPrice={calculateCurrentTotalPrice({
+                            prevPrice={order.prevPrice ?? order.offerPrice}
+                            prevTotalPrice={autoCalculateCurrentTotalPrice({
                               isOwner: false,
-                              startDate:
-                                order.prevStartDate ?? order.offerStartDate,
-                              endDate: order.prevEndDate ?? order.offerEndDate,
-                              pricePerDay:
-                                order.prevPricePerDay ?? order.offerPricePerDay,
+                              price: order.prevPrice ?? order.offerPrice,
                               ownerFee: order.ownerFee,
                               workerFee: order.workerFee,
                             })}
@@ -586,14 +485,10 @@ const Order = (baseProps) => {
                             <PreviousProposalElem
                               key={request.id}
                               index={index + 1}
-                              prevStartDate={request.newStartDate}
-                              prevEndDate={request.newEndDate}
-                              prevPricePerDay={request.newPricePerDay}
-                              prevTotalPrice={calculateCurrentTotalPrice({
+                              prevPrice={request.newPrice}
+                              prevTotalPrice={autoCalculateCurrentTotalPrice({
                                 isOwner: false,
-                                startDate: request.newStartDate,
-                                endDate: request.newEndDate,
-                                pricePerDay: request.newPricePerDay,
+                                price: request.newPrice,
                                 ownerFee: order.ownerFee,
                                 workerFee: request.newFee,
                               })}

@@ -115,8 +115,8 @@ const EditForm = ({
 
   const [city, setCity] = useState(baseCity);
 
-  const [totalPrice, setTotalPrice] = useState("");
-  const [totalPriceError, setTotalPriceError] = useState(null);
+  const [price, setPrice] = useState("");
+  const [priceError, setPriceError] = useState(null);
 
   const [finishTime, setFinishTime] = useState("");
   const [finishTimeError, setFinishTimeError] = useState(null);
@@ -268,9 +268,9 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeTotalPrice = (e) => {
-    setTotalPrice(e.target.value);
-    setTotalPriceError(null);
+  const handleChangePrice = (e) => {
+    setPrice(e.target.value);
+    setPriceError(null);
     setMainError(null);
   };
 
@@ -315,7 +315,7 @@ const EditForm = ({
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
-      totalPrice: listing.totalPrice ?? "",
+      price: listing.price ?? "",
       finishTime: listing.finishTime ?? "",
       lat: lat,
       lng: lng,
@@ -346,7 +346,7 @@ const EditForm = ({
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
-      totalPrice,
+      price,
       finishTime,
       lat: lat,
       lng: lng,
@@ -378,7 +378,7 @@ const EditForm = ({
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
-    setTotalPrice(data.totalPrice);
+    setPrice(data.price);
     setFinishTime(data.finishTime);
     setLat(data.lat);
     setLng(data.lng);
@@ -489,8 +489,8 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!totalPrice) {
-      setTotalPrice("Required field");
+    if (!price) {
+      setPrice("Required field");
       hasError = true;
     }
 
@@ -499,8 +499,8 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (totalPrice && validatePrice(totalPrice) !== true) {
-      setTotalPriceError(validatePrice(totalPrice));
+    if (price && validatePrice(price) !== true) {
+      setPriceError(validatePrice(price));
       hasError = true;
     }
 
@@ -675,13 +675,13 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label={`Total price (${STATIC.CURRENCY}):`}
+                label={`Price (${STATIC.CURRENCY}):`}
                 icon="bx bx-purchase-tag"
                 placeholder="532.00"
-                value={totalPrice}
-                onInput={handleChangeTotalPrice}
-                error={totalPriceError}
-                name="totalPriceError"
+                value={price}
+                onInput={handleChangePrice}
+                error={priceError}
+                name="priceError"
               />
             </div>
 

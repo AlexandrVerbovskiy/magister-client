@@ -11,10 +11,7 @@ import STATIC from "../static";
 import { useRouter } from "next/router";
 import useCreateDispute from "./useCreateDispute";
 
-const useOrderFastActions = ({
-  orders,
-  setItemFields,
-}) => {
+const useOrderFastActions = ({ orders, setItemFields }) => {
   const { error, success, sessionUser, authToken } = useContext(IndiceContext);
 
   const router = useRouter();
@@ -212,21 +209,10 @@ const useOrderFastActions = ({
 
   const getUpdatedByRequestOrderInfo = (orderId) => {
     const order = findCurrentOrderById(orderId);
-
-    const offerPricePerDay = order.requestId
-      ? order.newPricePerDay
-      : order.offerPricePerDay;
-    const offerStartDate = order.requestId
-      ? order.newStartDate
-      : order.offerStartDate;
-    const offerEndDate = order.requestId
-      ? order.newEndDate
-      : order.offerEndDate;
+    const offerPrice = order.requestId ? order.newPrice : order.offerPrice;
 
     return {
-      offerPricePerDay,
-      offerStartDate,
-      offerEndDate,
+      offerPrice,
       requestId: null,
       newEndDate: null,
       newStartDate: null,

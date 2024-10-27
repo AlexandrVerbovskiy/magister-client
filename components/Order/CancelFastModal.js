@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 import {
-  calculateFullTotalByDaysCount,
+  calculateFullTotalByType,
   getFactOrderDays,
   moneyFormatVisual,
 } from "../../utils";
@@ -29,9 +29,8 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
 
   let message = "To confirm the cancellation of the order, click 'Confirm'";
   if (order) {
-    const totalPayed = calculateFullTotalByDaysCount(
-      getFactOrderDays(order.offerStartDate, order.offerEndDate),
-      order.offerPricePerDay,
+    const totalPayed = calculateFullTotalByType(
+      order.offerPrice,
       order.workerFee,
       "sum"
     );

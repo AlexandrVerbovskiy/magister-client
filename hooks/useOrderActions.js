@@ -1,10 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../contexts";
 import STATIC from "../static";
+import useOrderDateError from "./useOrderDateError";
 
 const useOrderActions = ({ order }) => {
   const { sessionUser } = useContext(IndiceContext);
   const [currentActionButtons, setCurrentActionButtons] = useState([]);
+
+  const { checkErrorData } = useOrderDateError({
+    order,
+  });
 
   useEffect(() => {
     const newActionButtons = [];
@@ -39,9 +44,19 @@ const useOrderActions = ({ order }) => {
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
       (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
     ) {
-      newActionButtons.push(
-        STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-      );
+      if (
+        !checkErrorData(
+          order.actualUpdateRequest?.newFinishTime ?? order.offerFinishTime
+        ).blocked
+      ) {
+        newActionButtons.push(
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+        );
+      } else {
+        newActionButtons.push(
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+        );
+      }
     }
 
     if (

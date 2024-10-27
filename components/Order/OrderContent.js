@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
-  calculateCurrentTotalPrice,
-  calculateFeeByDaysCount,
+  autoCalculateCurrentTotalPrice,
+  calculateFee,
   generateProfileFilePath,
   getDisputeTitle,
   getFactOrderDays,
@@ -34,90 +34,13 @@ const bookingStatuses = [
   STATIC.ORDER_STATUSES.PENDING_WORKER,
 ];
 
-const SubOrderItem = ({
-  subOrder,
-  isOwner,
-  localCalculateCurrentTotalPrice,
-  BaseDateSpan,
-}) => {
-  const { sessionUser } = useContext(IndiceContext);
-  const workerName = subOrder.workerName;
-  const workerId = subOrder.workerId;
-
-  const startDate = subOrder.newStartDate ?? subOrder.offerStartDate;
-  const endDate = subOrder.newEndDate ?? subOrder.offerEndDate;
-  const pricePerDay = subOrder.newPricePerDay ?? subOrder.offerPricePerDay;
-
-  const totalPrice = localCalculateCurrentTotalPrice({
-    startDate,
-    endDate,
-    pricePerDay,
-  });
-
-  return (
-    <li className="form-group">
-      <div className="d-flex justify-content-between">
-        <div>
-          Id:{" "}
-          <Link href={`/dashboard/orders/${subOrder.id}/`}>#{subOrder.id}</Link>
-        </div>
-
-        <Link href={`/dashboard/orders/${subOrder.id}/`}>
-          <StatusBlock
-            status={subOrder.status}
-            statusCancelled={subOrder.cancelStatus}
-            disputeStatus={subOrder.disputeStatus}
-            ownerId={subOrder.ownerId}
-            workerId={subOrder.workerId}
-            userId={sessionUser?.id}
-            dopClass="order-status-small-span"
-            endDate={subOrder.offerEndDate}
-            payedId={subOrder.paymentInfo?.id}
-            adminApproved={subOrder.paymentInfo?.adminApproved}
-            waitingApproved={subOrder.paymentInfo?.waitingApproved}
-          />
-        </Link>
-      </div>
-
-      <div>
-        Type: {bookingStatuses.includes(subOrder.status) ? "Booking" : "Order"}
-      </div>
-
-      <div className="w-100 row-dots-end">
-        Rental:{" "}
-        <Link
-          className="w-100 row-dots-end"
-          href={`/owner-listings/${workerId}/`}
-        >
-          {workerName}
-        </Link>
-      </div>
-
-      <div>
-        <BaseDateSpan startDate={startDate} endDate={endDate} />
-      </div>
-
-      <div>Price per day: {moneyFormatVisual(pricePerDay)}</div>
-
-      <div>
-        <b>
-          Total price {isOwner ? "to get" : "to pay"}:{" "}
-          {moneyFormatVisual(totalPrice)}
-        </b>
-      </div>
-    </li>
-  );
-};
-
 const OrderContent = ({
   order: baseOrder,
-  authToken,
-  ownerBaseCommission,
   workerBaseCommission,
   bankInfo,
   operationsDisabled = false,
 }) => {
-  const { success, error, sessionUser } = useContext(IndiceContext);
+  const { error, sessionUser } = useContext(IndiceContext);
   const [order, setOrder] = useState(baseOrder);
   const [userLocation, setUserLocation] = useState(null);
   const [mapCenter, setMapCenter] = useState(null);
@@ -138,10 +61,9 @@ const OrderContent = ({
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
     order.status == STATIC.ORDER_STATUSES.PENDING_WORKER;
 
-  const { CanBeErrorBaseDateSpan, checkErrorData, BaseDateSpan } =
-    useOrderDateError({
-      order,
-    });
+  const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
+    order,
+  });
 
   useEffect(() => {
     setOrder(baseOrder);
@@ -152,15 +74,15 @@ const OrderContent = ({
     setIsWorker(order.workerId == sessionUser?.id);
 
     if (isBookingWithoutAgreement) {
+      console.log(order.previousUpdateRequest);
       if (order.previousUpdateRequest) {
         setPrevUpdateRequest(order.previousUpdateRequest);
       } else {
         if (order.actualUpdateRequest) {
           setPrevUpdateRequest({
             senderId: order.workerId,
-            startDate: order.offerStartDate,
-            endDate: order.offerEndDate,
-            pricePerDay: order.offerPricePerDay,
+            finishTime: order.offerFinishTime,
+            price: order.offerPrice,
           });
         }
       }
@@ -207,16 +129,9 @@ const OrderContent = ({
     });
   };
 
-  const localCalculateCurrentTotalPrice = ({
-    type = null,
-    startDate,
-    endDate,
-    pricePerDay,
-  }) =>
-    calculateCurrentTotalPrice({
-      startDate,
-      endDate,
-      pricePerDay,
+  const localCalculateCurrentTotalPrice = ({ price, type = null }) =>
+    autoCalculateCurrentTotalPrice({
+      price,
       type,
       isOwner,
       ownerFee: order.ownerFee,
@@ -227,24 +142,20 @@ const OrderContent = ({
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
-        startDate: actualUpdateRequest.newStartDate,
-        endDate: actualUpdateRequest.newEndDate,
-        pricePerDay: actualUpdateRequest.newPricePerDay,
+        finishTime: actualUpdateRequest.newFinishTime,
+        price: actualUpdateRequest.newPrice,
       });
     } else {
       setPrevUpdateRequest({
         senderId: order.workerId,
-        startDate: order.offerStartDate,
-        endDate: order.offerEndDate,
-        pricePerDay: order.offerPricePerDay,
+        finishTime: order.offerFinishTime,
+        price: order.offerPrice,
       });
     }
 
     setActualUpdateRequest({
       senderId: sessionUser?.id,
-      newStartDate: fromDate,
-      newEndDate: toDate,
-      newPricePerDay: price,
+      newPrice: price,
     });
 
     if (isOwner) {
@@ -267,31 +178,18 @@ const OrderContent = ({
   };
 
   const setUpdatedOffer = ({ status, cancelStatus = null }) => {
-    const offerPricePerDay = actualUpdateRequest
-      ? actualUpdateRequest.newPricePerDay
-      : order.offerPricePerDay;
-    const offerStartDate = actualUpdateRequest
-      ? actualUpdateRequest.newStartDate
-      : order.offerStartDate;
-    const offerEndDate = actualUpdateRequest
-      ? actualUpdateRequest.newEndDate
-      : order.offerEndDate;
+    const offerPrice = actualUpdateRequest
+      ? actualUpdateRequest.newPrice
+      : order.offerPrice;
 
     const totalPrice = localCalculateCurrentTotalPrice({
-      startDate: offerStartDate,
-      endDate: offerEndDate,
-      pricePerDay: offerPricePerDay,
+      price: offerPrice,
     });
 
     const updatedFields = {
-      offerPricePerDay,
-      offerStartDate,
-      offerEndDate,
-      duration: getFactOrderDays(offerStartDate, offerEndDate),
+      offerPrice,
       factTotalPrice: totalPrice,
       requestId: null,
-      newEndDate: null,
-      newStartDate: null,
     };
 
     if (status) {
@@ -310,7 +208,7 @@ const OrderContent = ({
 
   const onWorkerPayed = () => {
     activateSuccessOrderPopup({
-      text: "The rental starts!",
+      text: "Order started!",
       onClose: () => {},
       closeButtonText: "Return to Order",
     });
@@ -352,8 +250,8 @@ const OrderContent = ({
   };
 
   const currentFee = isOwner ? order.ownerFee : order.workerFee;
-  const currentFeeCalculate = (count, price, fee) =>
-    calculateFeeByDaysCount(count, price, fee, !isOwner);
+  const currentFeeCalculate = (price, fee) =>
+    calculateFee(price, fee, !isOwner);
 
   const currentActionButtons = useOrderActions({
     order,
@@ -633,27 +531,20 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 {isBookingWithoutAgreement &&
-                  order.listingPricePerDay != order.offerPricePerDay && (
+                  order.listingPrice != order.offerPrice && (
                     <li
                       style={
-                        order.listingPricePerDay != order.offerPricePerDay
+                        order.listingPrice != order.offerPrice
                           ? { textDecoration: "line-through" }
                           : {}
                       }
                     >
-                      Listing price per day:{" "}
-                      {moneyFormatVisual(order.listingPricePerDay)}
+                      Listing price: {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
+                <li>Offer price: {moneyFormatVisual(order.offerPrice)}</li>
                 <li>
-                  Offer price per day:{" "}
-                  {moneyFormatVisual(order.offerPricePerDay)}
-                </li>
-                <li>
-                  <CanBeErrorBaseDateSpan
-                    startDate={order.offerStartDate}
-                    endDate={order.offerEndDate}
-                  />
+                  <CanBeErrorBaseDateSpan finishTime={order.offerFinishTime} />
                 </li>
                 <li>Fee: {currentFee}%</li>
 
@@ -677,47 +568,31 @@ const OrderContent = ({
                 )}
 
                 {isBookingWithoutAgreement &&
-                  order.offerPricePerDay != order.listingPricePerDay && (
+                  order.offerPrice != order.listingPrice && (
                     <li
                       style={{
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price per day{" "}
-                      {moneyFormatVisual(
-                        order.listingPricePerDay *
-                          getFactOrderDays(
-                            order.offerStartDate,
-                            order.offerEndDate
-                          )
-                      )}
+                      Subtotal price with listing price{" "}
+                      {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
 
                 <li>
                   Fact offer subtotal price:{" "}
-                  {moneyFormatVisual(
-                    order.offerPricePerDay *
-                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
-                  )}
+                  {moneyFormatVisual(order.offerPrice)}
                 </li>
 
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(
-                      getFactOrderDays(
-                        order.offerStartDate,
-                        order.offerEndDate
-                      ),
-                      order.offerPricePerDay,
-                      currentFee
-                    )
+                    currentFeeCalculate(order.offerPrice, currentFee)
                   )}
                 </li>
 
                 {isBookingWithoutAgreement &&
-                  order.offerPricePerDay != order.listingPricePerDay && (
+                  order.offerPrice != order.listingPrice && (
                     <>
                       {isOwner && (
                         <li
@@ -726,12 +601,10 @@ const OrderContent = ({
                             textDecoration: "line-through",
                           }}
                         >
-                          Price with listing price per day to get{" "}
+                          Price with listing price to get{" "}
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
-                              startDate: order.offerStartDate,
-                              endDate: order.offerEndDate,
-                              pricePerDay: order.listingPricePerDay,
+                              price: order.listingPrice,
                               type: "owner",
                             })
                           )}
@@ -745,12 +618,10 @@ const OrderContent = ({
                             textDecoration: "line-through",
                           }}
                         >
-                          Price with listing price per day to pay{" "}
+                          Price with listing price to pay{" "}
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
-                              startDate: order.offerStartDate,
-                              endDate: order.offerEndDate,
-                              pricePerDay: order.listingPricePerDay,
+                              price: order.listingPrice,
                               type: "worker",
                             })
                           )}
@@ -764,9 +635,7 @@ const OrderContent = ({
                     Fact offer price to get:{" "}
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
-                        startDate: order.offerStartDate,
-                        endDate: order.offerEndDate,
-                        pricePerDay: order.offerPricePerDay,
+                        price: order.offerPrice,
                         type: "owner",
                       })
                     )}
@@ -778,17 +647,15 @@ const OrderContent = ({
                     Fact offer price to pay:{" "}
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
-                        startDate: order.offerStartDate,
-                        endDate: order.offerEndDate,
-                        pricePerDay: order.offerPricePerDay,
+                        price: order.offerPrice,
                         type: "worker",
                       })
                     )}
                   </li>
                 )}
-                {checkErrorData(order.offerStartDate).blocked && (
+                {checkErrorData(order.offerFinishTime).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
-                    {checkErrorData(order.offerStartDate).tooltipErrorMessage}
+                    {checkErrorData(order.offerFinishTime).tooltipErrorMessage}
                   </ErrorBlockMessage>
                 )}
               </ul>
@@ -815,75 +682,52 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day:{" "}
-                  {moneyFormatVisual(prevUpdateRequest.pricePerDay)}
+                  Offer price: {moneyFormatVisual(prevUpdateRequest.price)}
                 </li>
 
                 <li>
-                  <BaseDateSpan
-                    startDate={prevUpdateRequest.startDate}
-                    endDate={prevUpdateRequest.endDate}
+                  <CanBeErrorBaseDateSpan
+                    finishTime={prevUpdateRequest.finishTime}
                   />
                 </li>
 
                 <li>Fee: {currentFee}%</li>
 
                 {isBookingWithoutAgreement &&
-                  prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
+                  prevUpdateRequest.price != order.listingPrice && (
                     <li
                       style={{
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price per day{" "}
-                      {moneyFormatVisual(
-                        prevUpdateRequest.pricePerDay *
-                          getFactOrderDays(
-                            prevUpdateRequest.startDate,
-                            prevUpdateRequest.endDate
-                          )
-                      )}
+                      Subtotal price with listing price{" "}
+                      {moneyFormatVisual(prevUpdateRequest.price)}
                     </li>
                   )}
 
                 <li>
                   Fact offer subtotal price:{" "}
-                  {moneyFormatVisual(
-                    prevUpdateRequest.pricePerDay *
-                      getFactOrderDays(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.endDate
-                      )
-                  )}
+                  {moneyFormatVisual(prevUpdateRequest.price)}
                 </li>
 
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(
-                      getFactOrderDays(
-                        prevUpdateRequest.startDate,
-                        prevUpdateRequest.endDate
-                      ),
-                      prevUpdateRequest.pricePerDay,
-                      currentFee
-                    )
+                    currentFeeCalculate(prevUpdateRequest.price, currentFee)
                   )}
                 </li>
 
                 {isBookingWithoutAgreement &&
-                  prevUpdateRequest.pricePerDay != order.listingPricePerDay && (
+                  prevUpdateRequest.price != order.listingPrice && (
                     <li
                       style={{
                         textDecoration: "line-through",
                       }}
                     >
-                      Price with listing price per day:
+                      Price with listing price:
                       {moneyFormatVisual(
                         localCalculateCurrentTotalPrice({
-                          startDate: prevUpdateRequest.startDate,
-                          endDate: prevUpdateRequest.endDate,
-                          pricePerDay: order.listingPricePerDay,
+                          price: order.listingPrice,
                         })
                       )}
                     </li>
@@ -893,12 +737,19 @@ const OrderContent = ({
                   Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
-                      startDate: prevUpdateRequest.startDate,
-                      endDate: prevUpdateRequest.endDate,
-                      pricePerDay: prevUpdateRequest.pricePerDay,
+                      price: prevUpdateRequest.price,
                     })
                   )}
                 </li>
+
+                {checkErrorData(prevUpdateRequest.finishTime).blocked && (
+                  <ErrorBlockMessage dopClassName="mb-0">
+                    {
+                      checkErrorData(prevUpdateRequest.finishTime)
+                        .tooltipErrorMessage
+                    }
+                  </ErrorBlockMessage>
+                )}
               </ul>
             </div>
           </div>
@@ -916,64 +767,45 @@ const OrderContent = ({
 
               <ul style={{ listStyle: "none", padding: "0" }}>
                 <li>
-                  Offer price per day:
-                  {moneyFormatVisual(actualUpdateRequest.newPricePerDay)}
+                  Offer price:
+                  {moneyFormatVisual(actualUpdateRequest.newPrice)}
                 </li>
 
                 <li>
                   <CanBeErrorBaseDateSpan
-                    startDate={actualUpdateRequest.newStartDate}
-                    endDate={actualUpdateRequest.newEndDate}
+                    finishTime={actualUpdateRequest.newFinishTime}
                   />
                 </li>
 
                 <li>Fee: {currentFee}%</li>
 
-                {actualUpdateRequest.newPricePerDay !=
-                  order.listingPricePerDay && (
+                {actualUpdateRequest.newPrice != order.listingPrice && (
                   <li
                     style={{
                       textDecoration: "line-through",
                     }}
                   >
-                    Subtotal price with listing price per day
-                    {moneyFormatVisual(
-                      actualUpdateRequest.newPricePerDay *
-                        getFactOrderDays(
-                          actualUpdateRequest.newStartDate,
-                          actualUpdateRequest.newEndDate
-                        )
-                    )}
+                    Subtotal price with listing price
+                    {moneyFormatVisual(order.listingPrice)}
                   </li>
                 )}
 
                 <li>
                   Fact offer subtotal price:{" "}
-                  {moneyFormatVisual(
-                    actualUpdateRequest.newPricePerDay *
-                      getFactOrderDays(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newEndDate
-                      )
-                  )}
+                  {moneyFormatVisual(actualUpdateRequest.newPrice)}
                 </li>
 
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
                     currentFeeCalculate(
-                      getFactOrderDays(
-                        actualUpdateRequest.newStartDate,
-                        actualUpdateRequest.newEndDate
-                      ),
-                      actualUpdateRequest.newPricePerDay,
+                      actualUpdateRequest.newPrice,
                       currentFee
                     )
                   )}
                 </li>
 
-                {actualUpdateRequest.newPricePerDay !=
-                  order.listingPricePerDay && (
+                {actualUpdateRequest.newPrice != order.listingPrice && (
                   <li
                     style={{
                       textDecoration: "line-through",
@@ -983,9 +815,7 @@ const OrderContent = ({
                     day:
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
-                        startDate: actualUpdateRequest.newStartDate,
-                        endDate: actualUpdateRequest.newEndDate,
-                        pricePerDay: order.listingPricePerDay,
+                        price: order.listingPrice,
                       })
                     )}
                   </li>
@@ -995,17 +825,15 @@ const OrderContent = ({
                   Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
-                      startDate: actualUpdateRequest.newStartDate,
-                      endDate: actualUpdateRequest.newEndDate,
-                      pricePerDay: actualUpdateRequest.newPricePerDay,
+                      price: actualUpdateRequest.newPrice,
                     })
                   )}
                 </li>
 
-                {checkErrorData(actualUpdateRequest.newStartDate).blocked && (
+                {checkErrorData(actualUpdateRequest.newFinishTime).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(actualUpdateRequest.newStartDate)
+                      checkErrorData(actualUpdateRequest.newFinishTime)
                         .tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
@@ -1041,20 +869,27 @@ const OrderContent = ({
             )}
 
           <div className="booking-operations form-group">
-            {currentActionButtons.includes(
+            {(currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-            ) && (
+            ) ||
+              currentActionButtons.includes(
+                STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+              )) && (
               <>
-                <button
-                  className="default-btn"
-                  type="button"
-                  onClick={() =>
-                    orderPopupsData.setAcceptOrderModalActive(true)
-                  }
-                  disabled={orderPopupsData.bookingActionsDisabled}
-                >
-                  Accept
-                </button>
+                {currentActionButtons.includes(
+                  STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+                ) && (
+                  <button
+                    className="default-btn"
+                    type="button"
+                    onClick={() =>
+                      orderPopupsData.setAcceptOrderModalActive(true)
+                    }
+                    disabled={orderPopupsData.bookingActionsDisabled}
+                  >
+                    Accept
+                  </button>
+                )}
 
                 <button
                   className="default-btn"

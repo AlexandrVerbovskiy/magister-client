@@ -101,7 +101,7 @@ const SendCompleteRequestModal = ({
 
           <div className="popup-widget order-info-widget">
             <div className="d-flex align-items-center">
-              Listing Price Per Day: ${moneyFormat(defaultPrice)}{" "}
+              Task Price: ${moneyFormat(defaultPrice)}{" "}
               {!(price != defaultPrice) && (
                 <i
                   className="bx bx-pencil ms-1"

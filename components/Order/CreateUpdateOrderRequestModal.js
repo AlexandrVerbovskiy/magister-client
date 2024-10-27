@@ -2,40 +2,33 @@ import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
-  autoMultiEnding,
-  calculateFeeByDaysCount,
-  calculateFullTotalByDaysCount,
-  calculateTotalPriceByDaysCount,
-  getFactOrderDays,
+  calculateFee,
+  calculateFullTotalByType,
+  fullDateConverter,
   getMaxFlatpickrDate,
+  moneyFormat,
   moneyFormatVisual,
+  ownerGetsCalculate,
   separateDate,
+  workerPaymentCalculate,
 } from "../../utils";
 import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
-import STATIC from "../../static";
 
 const CreateUpdateOrderRequestModal = ({
   handleCreateUpdateRequest,
   price: defaultPrice,
   fee,
   proposalPrice,
-  proposalStartDate,
-  proposalEndDate,
+  proposalFinishTime,
   updateRequestModalActive,
   closeActiveUpdateRequest,
   listingName,
   commissionType,
 }) => {
-  const proposalCountDays = getFactOrderDays(
-    proposalStartDate,
-    proposalEndDate
-  );
-
-  const baseFromDate = new Date();
-  const baseToDate = new Date();
+  const baseFinishTime = new Date();
 
   const { error } = useContext(IndiceContext);
 
@@ -51,59 +44,43 @@ const CreateUpdateOrderRequestModal = ({
 
   useEffect(() => {}, [calendarRef.prevCalendarRef]);
 
-  const [fromDate, setFromDate] = useState(baseFromDate);
-  const [toDate, setToDate] = useState(baseToDate);
+  const [finishTime, setFinishTime] = useState(baseFinishTime);
   const [calendarError, setCalendarError] = useState(null);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
   const [fullTotal, setFullTotal] = useState(0);
 
-  const recalculateTotalInfo = ({ fromDate, toDate, price, fee }) => {
-    const countDays = getFactOrderDays(fromDate, toDate);
-
-    setTotalPrice(calculateTotalPriceByDaysCount(countDays, price, fee));
-    setTotalFee(
-      calculateFeeByDaysCount(countDays, price, fee, commissionType == "sum")
-    );
-    setFullTotal(
-      calculateFullTotalByDaysCount(countDays, price, fee, commissionType)
-    );
-  };
-
-  const handleChangeDates = (dates) => {
-    let [from, to] = dates;
-    const fromDate = from ? new Date(from) : null;
-    let toDate = to ? new Date(to) : null;
-
-    if (fromDate > toDate) {
-      toDate = new Date(fromDate);
+  const recalculateTotalInfo = ({ price, fee }) => {
+    if (commissionType == "sum") {
+      setTotalPrice(workerPaymentCalculate(price, fee));
+      setTotalFee(calculateFee(price, fee, true));
+    } else {
+      setTotalPrice(ownerGetsCalculate(price, fee));
+      setTotalFee(calculateFee(price, fee, false));
     }
 
-    if (from && to) {
-      setFromDate(fromDate);
-      setToDate(toDate);
-    }
-
-    setCalendarError(null);
+    setFullTotal(calculateFullTotalByType(price, fee, commissionType));
   };
 
   useEffect(() => {
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
-      mode: "range",
-      dateFormat: "Y-m-d",
+      mode: "single",
+      dateFormat: "M j, Y H:i",
       minDate: "today",
       maxDate: getMaxFlatpickrDate(),
       static: true,
-      defaultDate: [fromDate, toDate],
+      defaultDate: [finishTime],
+      enableTime: true,
+      time_24hr: true,
       monthSelectorType: "static",
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
       },
       onChange: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
-        handleChangeDates(selectedDates);
+        setFinishTime(selectedDates[0]);
       },
       disableMobile: true,
     });
@@ -112,13 +89,15 @@ const CreateUpdateOrderRequestModal = ({
 
     const prevCalendar = flatpickr(prevCalendarContainer.current, {
       inline: true,
-      mode: "range",
-      dateFormat: "Y-m-d",
-      defaultDate: [new Date(proposalStartDate), new Date(proposalEndDate)],
+      mode: "single",
+      dateFormat: "M j, Y H:i",
+      defaultDate: [proposalFinishTime],
       monthSelectorType: "static",
       onChange: (selectedDates, dateStr, instance) => {
-        instance.setDate(`${proposalStartDate} to ${proposalEndDate}`);
+        instance.setDate(`${proposalFinishTime}`);
       },
+      enableTime: true,
+      time_24hr: true,
     });
 
     prevCalendarRef.current = prevCalendar;
@@ -132,24 +111,21 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, [fromDate, toDate, proposalStartDate, proposalEndDate]);
+  }, [finishTime, proposalFinishTime]);
 
   useEffect(() => {
     recalculateTotalInfo({
-      fromDate,
-      toDate,
       price,
       fee,
     });
-  }, [fromDate, toDate, price, fee]);
+  }, [price, fee]);
 
   const handleSubmit = () => {
     let hasError = false;
 
     if (
       proposalPrice == price &&
-      proposalStartDate == separateDate(fromDate) &&
-      proposalEndDate == separateDate(toDate)
+      proposalFinishTime == separateDate(finishTime)
     ) {
       error.set(
         "You cannot submit these changes as they are the same as proposed"
@@ -167,8 +143,7 @@ const CreateUpdateOrderRequestModal = ({
   const handleSendBookingRequest = () => {
     handleCreateUpdateRequest({
       price,
-      fromDate: separateDate(fromDate),
-      toDate: separateDate(toDate),
+      finishTime: separateDate(finishTime),
     });
 
     setActiveAcceptSendBookingRequest(false);
@@ -245,36 +220,51 @@ const CreateUpdateOrderRequestModal = ({
               title="Please confirm new booking conditions"
               onAccept={handleSendBookingRequest}
               acceptText="Confirm"
-              body={
-                fromDate.toDateString() == toDate.toDateString()
-                  ? `'${listingName}' rental during ${fromDate.toDateString()} for ${moneyFormatVisual(
-                      price
-                    )} per day`
-                  : `'${listingName}' rental from ${fromDate.toDateString()} to ${toDate.toDateString()} for ${moneyFormatVisual(
-                      price
-                    )} per day`
-              }
+              body={`'${listingName}' task will be completed by ${fullDateConverter(
+                proposalFinishTime
+              )} by ${moneyFormatVisual(fullTotal)}`}
             />
           </div>
         </div>
         <div className="border-top d-flex justify-content-between">
           <div className="d-flex flex-column mt-4 ">
             <div>
-              <b>Previous duration: </b>
-              {proposalCountDays} {autoMultiEnding(proposalCountDays, "day")}
+              <b>Finish Time:</b> {fullDateConverter(finishTime)}
             </div>
+
             <div>
-              <b>Duration: </b>
-              {getFactOrderDays(fromDate, toDate)}{" "}
-              {autoMultiEnding(getFactOrderDays(fromDate, toDate), "day")}
+              <b>Proposal Price:</b> ${moneyFormat(defaultPrice)}{" "}
+              {!(price != defaultPrice) && (
+                <i
+                  className="bx bx-pencil ms-1"
+                  onClick={handleOfferYourPrice}
+                  style={{ cursor: "pointer" }}
+                ></i>
+              )}
             </div>
+
+            {price != defaultPrice && (
+              <div>
+                <b>Offered price:</b> ${moneyFormat(price)}{" "}
+                <i
+                  className="bx bx-pencil ms-1"
+                  onClick={handleOfferYourPrice}
+                  style={{ cursor: "pointer" }}
+                ></i>
+              </div>
+            )}
+
+            <div>
+              <b>Fee:</b> {moneyFormat(totalFee)}
+            </div>
+
             <div className="total-booking-price">
               <b>
                 Total: <span>{moneyFormatVisual(fullTotal)}</span>
               </b>
             </div>
           </div>
-          <div className="d-flex justify-content-end mt-4 align-items-center">
+          <div className="d-flex justify-content-end mt-4 align-items-end">
             <button
               className="cancel-modal-button"
               type="button"

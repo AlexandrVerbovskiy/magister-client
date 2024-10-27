@@ -22,11 +22,11 @@ const OrderInfo = ({
   handleClickReject,
   handleClickAccept,
 }) => {
-  const { sessionUser } = useContext(IndiceContext);
-
-  const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
+  const { checkErrorData } = useOrderDateError({
     order,
   });
+
+  const { sessionUser } = useContext(IndiceContext);
 
   const currentActionButtons = useOrderActions({
     order,
@@ -64,28 +64,13 @@ const OrderInfo = ({
             <span>Address: </span>
             <span>{order.listingCity}</span>
           </li>
-          <li className="order-list-item-date">
-            <i className="bx bx-calendar"></i>
-            <CanBeErrorBaseDateSpan
-              startDate={
-                order.requestId ? order.newStartDate : order.offerStartDate
-              }
-              endDate={order.requestId ? order.newEndDate : order.offerEndDate}
-            />
-          </li>
           <li className="row-dots-end" style={{ color: "black" }}>
             <i className="bx bx-purchase-tag"></i>
             <span>Price: </span>
             <span>
               {order.requestId
-                ? moneyFormatVisual(
-                    order.newPricePerDay *
-                      getFactOrderDays(order.newStartDate, order.newEndDate)
-                  )
-                : moneyFormatVisual(
-                    order.offerPricePerDay *
-                      getFactOrderDays(order.offerStartDate, order.offerEndDate)
-                  )}
+                ? moneyFormatVisual(order.newPrice)
+                : moneyFormatVisual(order.offerPrice)}
             </span>
           </li>
           <li>

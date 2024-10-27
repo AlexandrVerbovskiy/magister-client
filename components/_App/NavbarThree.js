@@ -17,7 +17,7 @@ const NavbarThree = ({ children = null }) => {
   const isMobile = useIsMobile();
 
   const { handleClick: handleListingClick } = useListingListClick({
-    link: "/dashboard/listings/add/",
+    link: "/listings",
   });
   return (
     <>
@@ -58,9 +58,7 @@ const NavbarThree = ({ children = null }) => {
                   </Link>
                 </li>
 
-                <ListingLi
-                  handleListingClick={handleListingClick}
-                />
+                <ListingLi handleListingClick={handleListingClick} />
 
                 {isAuth && (
                   <li className="nav-item">

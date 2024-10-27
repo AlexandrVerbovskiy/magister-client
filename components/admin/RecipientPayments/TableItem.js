@@ -52,7 +52,7 @@ const TableItem = ({
   listingName,
   listingAddress,
   listingCity,
-  listingPricePerDay,
+  listingPrice,
   handleApproveClick,
   createdAt,
   type,
@@ -194,7 +194,7 @@ const TableItem = ({
                   <SubInfoRow label="City" value={listingCity} />
                   <SubInfoRow
                     label="Price"
-                    value={listingPricePerDay}
+                    value={listingPrice}
                   />
                 </td>
               </tr>

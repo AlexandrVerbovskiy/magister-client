@@ -18,14 +18,11 @@ import {
 } from "../../../hooks";
 import {
   convertToSelectPopupCategories,
-  uniqueId,
   uniqueImageId,
   validateBigText,
-  validateInteger,
   validatePrice,
   validateSmallText,
   byteConverter,
-  getFilePath,
   getCityCoords,
   sortListingImages,
 } from "../../../utils";
@@ -185,8 +182,8 @@ const EditForm = ({ listing, categories, save }) => {
   const [center, setCenter] = useState(baseCoords);
   const [markerActive, setMarkerActive] = useState(false);
 
-  const [totalPrice, setTotalPrice] = useState("");
-  const [totalPriceError, setTotalPriceError] = useState(null);
+  const [price, setPrice] = useState("");
+  const [priceError, setPriceError] = useState(null);
 
   const [finishTime, setFinishTime] = useState("");
   const [finishTimeError, setFinishTimeError] = useState(null);
@@ -279,7 +276,7 @@ const EditForm = ({ listing, categories, save }) => {
       categoryInfo = "-";
     }
 
-    setTotalPrice(data.totalPrice);
+    setPrice(data.price);
     setFinishTime(data.finishTime);
     setName(data.name);
     setCategory(categoryInfo);
@@ -341,7 +338,7 @@ const EditForm = ({ listing, categories, save }) => {
       active: prevListing.active ?? true,
       otherCategory: prevListing.otherCategory ?? "",
       otherCategoryParentId: listing.otherCategoryParentId ?? null,
-      totalPrice: prevListing.totalPrice ?? "",
+      price: prevListing.price ?? "",
       finishTime: prevListing.finishTime ?? "",
     };
 
@@ -372,7 +369,7 @@ const EditForm = ({ listing, categories, save }) => {
       approved,
       ownerId,
       active,
-      totalPrice,
+      price,
       finishTime,
     };
 
@@ -416,8 +413,8 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (!totalPrice) {
-        setTotalPrice("Required field");
+      if (!price) {
+        setPrice("Required field");
         hasError = true;
       }
 
@@ -426,8 +423,8 @@ const EditForm = ({ listing, categories, save }) => {
         hasError = true;
       }
 
-      if (totalPrice && validatePrice(totalPrice) !== true) {
-        setTotalPriceError(validatePrice(totalPrice));
+      if (price && validatePrice(price) !== true) {
+        setPriceError(validatePrice(price));
         hasError = true;
       }
 
@@ -631,13 +628,13 @@ const EditForm = ({ listing, categories, save }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <Input
-                                name="total-price"
-                                value={totalPrice}
-                                setValue={setTotalPrice}
-                                error={totalPriceError}
-                                setError={setTotalPriceError}
-                                label="Total Price"
-                                placeholder="Total Price"
+                                name="price"
+                                value={price}
+                                setValue={setPrice}
+                                error={priceError}
+                                setError={setPriceError}
+                                label="Price"
+                                placeholder="Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

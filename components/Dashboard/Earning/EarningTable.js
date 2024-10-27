@@ -1,8 +1,6 @@
 import React from "react";
 import InputView from "../../FormComponents/InputView";
 import {
-  calculateTotalPriceByDaysCount,
-  getFactOrderDays,
   moneyFormat,
   ownerGetsCalculate,
   workerPaymentCalculate,
@@ -56,7 +54,7 @@ const EarningTable = ({
   data,
   offerStartDate,
   offerEndDate,
-  offerPricePerDay,
+  offerPrice,
   workerFee,
   ownerFee,
   orderId,
@@ -145,19 +143,7 @@ const EarningTable = ({
               label="Offer Price"
               placeholder="Offer Price"
               icon="bx bx-dollar-circle"
-              value={`${moneyFormat(offerPricePerDay)}`}
-            />
-          </div>
-
-          <div className="col-lg-6 col-md-6">
-            <InputView
-              label="Subtotal Price"
-              placeholder="Subtotal Price"
-              icon="bx bx-dollar-circle"
-              value={`${calculateTotalPriceByDaysCount(
-                getFactOrderDays(offerStartDate, offerEndDate),
-                offerPricePerDay
-              )}`}
+              value={`${moneyFormat(offerPrice)}`}
             />
           </div>
         </div>
@@ -178,12 +164,7 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${workerPaymentCalculate(
-                  offerStartDate,
-                  offerEndDate,
-                  workerFee,
-                  offerPricePerDay
-                )}`}
+                value={`${workerPaymentCalculate(offerPrice, workerFee)}`}
               />
             </div>
           </div>
@@ -203,12 +184,7 @@ const EarningTable = ({
                 label="Total Get"
                 placeholder="Total Get"
                 icon="bx bx-dollar-circle"
-                value={`${ownerGetsCalculate(
-                  offerStartDate,
-                  offerEndDate,
-                  ownerFee,
-                  offerPricePerDay
-                )}`}
+                value={`${ownerGetsCalculate(offerPrice, ownerFee)}`}
               />
             </div>
           </div>
@@ -251,12 +227,7 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (workerPaymentCalculate(
-                    offerStartDate,
-                    offerEndDate,
-                    workerFee,
-                    offerPricePerDay
-                  ) *
+                  (workerPaymentCalculate(offerPrice, workerFee) *
                     (100 - refundCommission)) /
                     100
                 )}`}

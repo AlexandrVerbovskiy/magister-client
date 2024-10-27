@@ -82,6 +82,7 @@ const OrderApprovementSection = ({
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
+          
           <OwnerInfo
             data={{
               userName: listing.userName,
