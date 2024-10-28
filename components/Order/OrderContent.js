@@ -5,7 +5,6 @@ import {
   calculateFee,
   generateProfileFilePath,
   getDisputeTitle,
-  getFactOrderDays,
   getListingImageByType,
   moneyFormatVisual,
 } from "../../utils";
@@ -138,7 +137,7 @@ const OrderContent = ({
       workerFee: order.workerFee,
     });
 
-  const onCreateUpdateRequest = ({ price, fromDate, toDate }) => {
+  const onCreateUpdateRequest = ({ price, finishTime }) => {
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
@@ -156,6 +155,7 @@ const OrderContent = ({
     setActualUpdateRequest({
       senderId: sessionUser?.id,
       newPrice: price,
+      newFinishTime: finishTime,
     });
 
     if (isOwner) {
@@ -295,7 +295,7 @@ const OrderContent = ({
     setUpdatedOffer,
     setActualUpdateRequest,
     setPrevUpdateRequest,
-    onCreateUpdateRequest: onCreateUpdateRequest,
+    onCreateUpdateRequest,
     onCancel,
     onPayedFastCancel,
     setError: error.set,
@@ -574,7 +574,7 @@ const OrderContent = ({
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price{" "}
+                      Subtotal price with listing price:{" "}
                       {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
@@ -700,7 +700,7 @@ const OrderContent = ({
                         textDecoration: "line-through",
                       }}
                     >
-                      Subtotal price with listing price{" "}
+                      Subtotal price with listing price:{" "}
                       {moneyFormatVisual(prevUpdateRequest.price)}
                     </li>
                   )}
@@ -785,7 +785,7 @@ const OrderContent = ({
                       textDecoration: "line-through",
                     }}
                   >
-                    Subtotal price with listing price
+                    Subtotal price with listing price:{" "}
                     {moneyFormatVisual(order.listingPrice)}
                   </li>
                 )}

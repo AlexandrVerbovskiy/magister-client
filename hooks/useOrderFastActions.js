@@ -5,8 +5,6 @@ import {
   orderFullCancelPayed,
   orderFullCancel,
   rejectOrder,
-  acceptFinishOrder,
-  finishOrder,
 } from "../services";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
@@ -50,12 +48,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const [activeFastCancel, setActiveFastCancel] = useState(false);
   const [activeFastCancelOrder, setActiveFastCancelOrder] = useState(null);
-
-  const [activeFinish, setActiveFinish] = useState(false);
-  const [activeFinishOrder, setActiveFinishOrder] = useState(null);
-
-  const [activeAcceptFinish, setActiveAcceptFinish] = useState(false);
-  const [activeAcceptFinishOrder, setActiveAcceptFinishOrder] = useState(null);
 
   const [orderToDispute, setOrderToDispute] = useState(null);
   const [disputeWindowActive, setDisputeWindowActive] = useState(false);
@@ -118,7 +110,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     return { id: foundOrder.id, data };
   };
 
-  const onRenterPayed = () => {
+  const onWorkerPayed = () => {
     setItemFields(
       {
         status: STATIC.ORDER_STATUSES.IN_PROCESS,
@@ -149,8 +141,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
       }
 
-      setItemFields(newOrderData, activeCancelId);
-
       setActiveCancelId(null);
       setActiveCancel(false);
       activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
@@ -180,13 +170,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      setItemFields(
-        {
-          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-        },
-        activeFastCancelOrder.id
-      );
-
       setActiveFastCancelOrder(null);
       setActiveFastCancel(false);
       activateSuccessOrderPopup({
@@ -208,12 +191,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({ orderId, price, startDate, finishDate }) => {
+  const onCreateUpdateRequest = ({ orderId, price, finishTime }) => {
     let status = null;
     const updatedOrder = findCurrentOrderById(orderId);
 
     if (updatedOrder.ownerId === sessionUser?.id) {
-      status = STATIC.ORDER_STATUSES.PENDING_RENTER;
+      status = STATIC.ORDER_STATUSES.PENDING_WORKER;
     } else {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -221,8 +204,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setItemFields(
       {
         newPrice: price,
-        newStartDate: startDate,
-        newFinishDate: finishDate,
+        newFinishTime: finishTime,
         status,
       },
       orderId
@@ -236,7 +218,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     return {
       offerPrice,
       requestId: null,
-      newFinishDate: null,
+      newEndDate: null,
       newStartDate: null,
     };
   };
@@ -281,12 +263,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(rejectOrderModalActiveId);
     let updatedInfo = await handleAcceptRejectOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-
-    setItemFields(
-      { ...updateOrderInfo, ...updatedInfo },
-      rejectOrderModalActiveId
-    );
-
+    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
     setRejectOrderModalActiveId(null);
   };
 
@@ -299,12 +276,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(acceptOrderModalActiveId);
     let updatedInfo = await handleAcceptAcceptOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-
-    setItemFields(
-      { ...updateOrderInfo, ...updatedInfo },
-      acceptOrderModalActiveId
-    );
-
+    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
     setAcceptOrderModalActiveId(null);
   };
 
@@ -327,38 +299,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const closeRejectOrderModal = () => {
     setRejectOrderModalActive(false);
-  };
-
-  const handleClickFinish = (orderId) => {
-    setActiveFinishOrder(orderId);
-    setActiveFinish(true);
-  };
-
-  const handleAcceptFinish = async () => {
-    const result = await finishOrder(activeFinishOrder, authToken);
-    setItemFields(result, activeFinishOrder);
-    closeFinish();
-  };
-
-  const closeFinish = () => {
-    setActiveFinish(false);
-    setActiveFinishOrder(null);
-  };
-
-  const handleClickAcceptFinish = (orderId) => {
-    setActiveAcceptFinishOrder(orderId);
-    setActiveAcceptFinish(true);
-  };
-
-  const handleAcceptAcceptFinish = async () => {
-    const result = await acceptFinishOrder(activeAcceptFinishOrder, authToken);
-    setItemFields({ ...result }, activeAcceptFinishOrder);
-    closeAcceptFinish();
-  };
-
-  const closeAcceptFinish = () => {
-    setActiveAcceptFinish(false);
-    setActiveAcceptFinishOrder(null);
   };
 
   return {
@@ -391,7 +331,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     activePay,
     closePay,
-    onRenterPayed,
+    onWorkerPayed,
     activePayOrder,
 
     successIconPopupState,
@@ -401,16 +341,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     disputeCreate,
     closeDisputeWindow,
     onCreateDispute,
-
-    handleClickFinish,
-    handleAcceptFinish,
-    activeFinish,
-    closeFinish,
-
-    handleClickAcceptFinish,
-    handleAcceptAcceptFinish,
-    activeAcceptFinish,
-    closeAcceptFinish,
   };
 };
 
