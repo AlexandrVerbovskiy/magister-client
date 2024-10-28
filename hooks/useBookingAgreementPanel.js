@@ -27,8 +27,6 @@ const useBookingAgreementPanel = ({
       return;
     }
 
-    console.log(price, finishTime)
-
     try {
       setDisabled(true);
       setUpdateRequestModalActive(false);
@@ -46,8 +44,7 @@ const useBookingAgreementPanel = ({
         onCreateUpdateRequest({
           orderId: order.id,
           price,
-          fromDate,
-          toDate,
+          finishTime,
           ...result,
         });
       }
@@ -55,8 +52,7 @@ const useBookingAgreementPanel = ({
       return {
         orderId: order.id,
         price,
-        fromDate,
-        toDate,
+        finishTime,
         ...result,
       };
     } catch (e) {

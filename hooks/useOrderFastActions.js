@@ -75,7 +75,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      autoParentOrderSetItemField(
+      setItemFields(
         {
           disputeId: orderPart.disputeId,
           disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
@@ -110,13 +110,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     return { id: foundOrder.id, data };
   };
 
-  const autoParentOrderSetItemField = (data, orderId) => {
-    const updatedInfo = getAutoParentOrderUpdatedField(data, orderId);
-    setItemFields(updatedInfo.data, updatedInfo.id);
-  };
-
   const onWorkerPayed = () => {
-    autoParentOrderSetItemField(
+    setItemFields(
       {
         status: STATIC.ORDER_STATUSES.IN_PROCESS,
       },
@@ -196,7 +191,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({ orderId }) => {
+  const onCreateUpdateRequest = ({ orderId, price, finishTime }) => {
     let status = null;
     const updatedOrder = findCurrentOrderById(orderId);
 
@@ -205,6 +200,15 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     } else {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
+
+    setItemFields(
+      {
+        newPrice: price,
+        newFinishTime: finishTime,
+        status,
+      },
+      orderId
+    );
   };
 
   const getUpdatedByRequestOrderInfo = (orderId) => {

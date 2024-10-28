@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validatePrice } from "../../utils";
 import BaseModal from "../_App/BaseModal";
 import InputWithIcon from "../FormComponents/InputWithIcon";
@@ -38,6 +38,8 @@ const OfferOwnPrice = ({
     setOfferPrice(newPrice);
     setOfferPriceError(null);
   };
+
+  useEffect(() => setOfferPrice(price), [price]);
 
   return (
     <BaseModal
