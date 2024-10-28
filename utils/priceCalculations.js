@@ -49,11 +49,11 @@ export const autoCalculateCurrentTotalPrice = ({
 };
 
 export const workerPaymentCalculate = (price, fee) => {
-  const result = price + calculateFee(price, fee);
+  const result = price - calculateFee(price, fee);
   return moneyFormat(result);
 };
 
 export const ownerGetsCalculate = (price, fee) => {
-  const result = price - calculateFee(price, fee);
+  const result = price + calculateFee(price, fee);
   return moneyFormat(result);
 };

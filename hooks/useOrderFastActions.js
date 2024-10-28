@@ -196,7 +196,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      autoParentOrderSetItemField(
+      setItemFields(
         {
           disputeId: orderPart.disputeId,
           disputeStatus: STATIC.DISPUTE_STATUSES.OPEN,
@@ -264,13 +264,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     }
   };
 
-  const autoParentOrderSetItemField = (data, orderId) => {
-    const updatedInfo = getAutoParentOrderUpdatedField(data, orderId);
-    setItemFields(updatedInfo.data, updatedInfo.id);
-  };
-
-  const onTenantPayed = () => {
-    autoParentOrderSetItemField(
+  const onWorkerPayed = () => {
+    setItemFields(
       {
         status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
       },
@@ -440,13 +435,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({
-    orderId,
-    price,
-    fromDate,
-    toDate,
-    request,
-  }) => {
+  const onCreateUpdateRequest = ({ orderId, price, finishTime }) => {
     let status = null;
     const requestId = request.id;
     const updatedOrder = findCurrentOrderById(orderId);
@@ -457,31 +446,14 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
 
-    const updatedParts = {
-      newPricePerDay: price,
-      newStartDate: fromDate,
-      newEndDate: toDate,
-      status,
-      requestId,
-      conflictOrders: [],
-    };
-
-    let ordersToUpdateBase = {};
-    if (updatedOrder.ownerId === sessionUser?.id) {
-      ordersToUpdateBase = getUpdateConflictOrders({
-        ...updatedOrder,
-        ...updatedParts,
-      });
-    } else {
-      ordersToUpdateBase = getRemovedConflictOrders(updatedOrder);
-    }
-
-    const ordersToUpdate = addConflictOrderInfoToList(ordersToUpdateBase, {
-      ...updatedParts,
-      id: orderId,
-    });
-
-    updateItemsParticularly(ordersToUpdate);
+    setItemFields(
+      {
+        newPrice: price,
+        newFinishTime: finishTime,
+        status,
+      },
+      orderId
+    );
   };
 
   const getUpdatedByRequestOrderInfo = (orderId) => {

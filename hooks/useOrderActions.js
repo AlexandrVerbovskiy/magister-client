@@ -50,7 +50,7 @@ const useOrderActions = ({ order }) => {
     ) {
       if (
         !checkErrorData(
-          order.actualUpdateRequest?.newFinishTime ?? order.offerFinishTime
+          order.newFinishTime ?? order.offerFinishTime
         ).blocked
       ) {
         newActionButtons.push(

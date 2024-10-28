@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
+  fullDateConverter,
   generateProfileFilePath,
   getDisputeTitle,
   getFactOrderDays,
@@ -27,6 +28,8 @@ const OrderInfo = ({
   handleClickExtend,
   extension = false,
 }) => {
+  console.log(order);
+
   const { checkErrorData } = useOrderDateError({
     order,
   });
@@ -78,6 +81,17 @@ const OrderInfo = ({
                 : moneyFormatVisual(order.offerPrice)}
             </span>
           </li>
+
+          <li className="row-dots-end" style={{ color: "black" }}>
+            <i className="bx bx-purchase-tag"></i>
+            <span>Finish Time: </span>
+            <span>
+              {fullDateConverter(
+                order.requestId ? order.newFinishTime : order.finishTime
+              )}
+            </span>
+          </li>
+
           <li>
             <i className="bx bx-credit-card-front"></i>
             <span>Payment: </span>

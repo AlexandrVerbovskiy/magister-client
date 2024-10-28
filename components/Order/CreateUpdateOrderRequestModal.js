@@ -44,10 +44,11 @@ const CreateUpdateOrderRequestModal = ({
   const calendarRef = useRef(null);
   const prevCalendarRef = useRef(null);
 
-  useEffect(() => {}, [calendarRef.prevCalendarRef]);
+  useEffect(() => {
+    setPrice(defaultPrice);
+  }, [defaultPrice]);
 
   const [finishTime, setFinishTime] = useState(baseFinishTime);
-  const [calendarError, setCalendarError] = useState(null);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
@@ -185,7 +186,7 @@ const CreateUpdateOrderRequestModal = ({
 
   const handleSendBookingRequest = () => {
     handleCreateUpdateRequest({
-      price,
+      price: price,
       finishTime: separateDate(finishTime),
     });
 
@@ -238,16 +239,6 @@ const CreateUpdateOrderRequestModal = ({
               style={{ flexDirection: "column", alignItems: "center" }}
             >
               <div ref={calendarContainer}></div>
-              {calendarError && (
-                <div
-                  className="w-full form-group p-2"
-                  style={{ margin: "-5px -20px -30px -35px " }}
-                >
-                  <div className="is-invalid">
-                    <ErrorSpan error={calendarError} />
-                  </div>
-                </div>
-              )}
             </div>
 
             <OfferOwnPrice
