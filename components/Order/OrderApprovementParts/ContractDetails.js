@@ -4,7 +4,7 @@ import ErrorSpan from "../../ErrorSpan";
 const ContractDetails = ({ totalPrice, dateError, finishTime, totalFee }) => {
   return (
     <div className="listings-widget listings_contact_details">
-      <h3>Rental Details</h3>
+      <h3>Worker Details</h3>
 
       <div>
         <div style={{ marginTop: "20px", marginBottom: "20px" }}>

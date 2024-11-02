@@ -137,9 +137,9 @@ const TableItem = (props) => {
                   <SubInfoRow label="Order Id" value={orderId} />
                 </td>
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
-                  <div className="font-semibold flex items-center">Order</div>
-                  <SubInfoRow label="Order Title" value={listingName} />
-                  <SubInfoRow label="Order Id" value={listingId} />
+                  <div className="font-semibold flex items-center">Task</div>
+                  <SubInfoRow label="Task Title" value={listingName} />
+                  <SubInfoRow label="Task Id" value={listingId} />
                 </td>
                 <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
                   <div className="font-semibold flex items-center">

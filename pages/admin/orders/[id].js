@@ -197,9 +197,9 @@ const Order = (baseProps) => {
                             <div className="w-1/2">
                               <InputView
                                 value={order.workerName}
-                                label="Rental"
-                                placeholder="Rental Name"
-                                name="rental"
+                                label="Worker"
+                                placeholder="Worker Name"
+                                name="worker"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

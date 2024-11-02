@@ -14,8 +14,8 @@ const CancelStatus = ({ status, baseClass = "" }) => {
     dopClassName = "bg-amber-100 text-amber-500";
   }
 
-  if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE) {
-    text = "Pending Renter Cancel";
+  if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE) {
+    text = "Pending Worker Cancel";
     dopClassName = "bg-yellow-100 text-yellow-500";
   }
 

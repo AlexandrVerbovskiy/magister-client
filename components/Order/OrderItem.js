@@ -23,8 +23,6 @@ const OrderInfo = ({
   handleClickReject,
   handleClickAccept,
 }) => {
-  console.log(order);
-
   const { checkErrorData } = useOrderDateError({
     order,
   });
@@ -82,7 +80,7 @@ const OrderInfo = ({
             <span>Finish Time: </span>
             <span>
               {fullDateConverter(
-                order.requestId ? order.newFinishTime : order.finishTime
+                order.requestId ? order.newFinishTime : order.offerFinishTime
               )}
             </span>
           </li>
@@ -106,19 +104,6 @@ const OrderInfo = ({
               )}
             </span>
           </li>
-          {checkErrorData(
-            order.requestId ? order.newStartDate : order.offerStartDate
-          ).blocked && (
-            <li className="order-list-item-error">
-              <ErrorBlockMessage>
-                {
-                  checkErrorData(
-                    order.requestId ? order.newStartDate : order.offerStartDate
-                  ).tooltipErrorMessage
-                }
-              </ErrorBlockMessage>
-            </li>
-          )}
 
           {order.disputeId && (
             <li className="order-list-item-error">
@@ -148,20 +133,27 @@ const OrderInfo = ({
           <i className="bx bx-detail"></i> View details
         </Link>
 
-        {currentActionButtons.includes(
+        {(currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
-        ) && (
+        ) ||
+          currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+          )) && (
           <>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClickAccept(order.id);
-              }}
-              className="default-btn"
-            >
-              <i className="bx bx-check-circle"></i> Accept
-            </button>
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+            ) && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClickAccept(order.id);
+                }}
+                className="default-btn"
+              >
+                <i className="bx bx-check-circle"></i> Accept
+              </button>
+            )}
 
             <button
               type="button"

@@ -40,21 +40,21 @@ const useOrderActions = ({ order }) => {
     const isOwner = order.ownerId == sessionUser?.id;
     const isWorker = order.workerId == sessionUser?.id;
 
+    console.log(order);
+
     if (
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
       (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
     ) {
       if (
-        !checkErrorData(
-          order.newFinishTime ?? order.offerFinishTime
-        ).blocked
+        checkErrorData(order.actualUpdateRequest?.newFinishTime ?? order.newFinishTime ?? order.offerFinishTime).blocked
       ) {
         newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
         );
       } else {
         newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
+          STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
         );
       }
     }
@@ -76,17 +76,10 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      !(order.paymentInfo && order.paymentInfo.waitingApproved) &&
-      ((isOwner &&
-        [
-          STATIC.ORDER_STATUSES.PENDING_WORKER,
-          STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
-        ].includes(order.status)) ||
-        (isWorker &&
-          [
-            STATIC.ORDER_STATUSES.PENDING_OWNER,
-            STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
-          ].includes(order.status)))
+      !order.paymentInfo?.waitingApproved &&
+      ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_WORKER) ||
+        (isWorker && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+        STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT == order.status)
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
     }

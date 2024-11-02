@@ -145,7 +145,7 @@ const InvoiceTable = ({
                 <th>#</th>
                 <th>Description</th>
                 <th>Per Day</th>
-                <th>Rental duration</th>
+                <th>Order duration</th>
                 <th>Total</th>
               </tr>
             </thead>

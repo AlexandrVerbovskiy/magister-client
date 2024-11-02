@@ -667,12 +667,12 @@ const SingleListingsContent = ({
                     className="default-btn w-100"
                     onClick={handleSendRequestTriggerClick}
                   >
-                    Send rental request {moneyFormatVisual(listing.totalPrice)}
+                    Send completing request {moneyFormatVisual(listing.totalPrice)}
                   </button>
                 </div>
               ) : (
                 <div className="status-background-orange">
-                  You can't complete your own listing
+                  You can't complete your own task
                 </div>
               )}
             </div>

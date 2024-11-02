@@ -19,7 +19,7 @@ import PaginationLoadingWrapper from "../../../components/_App/PaginationLoading
 
 const Wrapper = ({
   children,
-  countForRenter,
+  countForWorker,
   countForOwner,
   type,
   changeType,
@@ -35,15 +35,15 @@ const Wrapper = ({
           {isMobile && (
             <ul
               className="list-group list-group-flush pt-1 mt-2"
-              style={{ borderTop: "1px solid #30eded" }}
+              style={{ borderTop: "1px solid #ede7f6" }}
             >
-              <div className="py-1" onClick={() => changeType("renter")}>
+              <div className="py-1" onClick={() => changeType("worker")}>
                 <div
                   className="form-check px-0"
-                  style={type == "renter" ? { color: "var(--mainColor)" } : {}}
+                  style={type == "worker" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Renting ({countForRenter})
+                    My completing requests ({countForWorker})
                   </label>
                 </div>
               </div>
@@ -54,7 +54,7 @@ const Wrapper = ({
                   style={type == "owner" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Hosting ({countForOwner})
+                    Requests for my tasks ({countForOwner})
                   </label>
                 </div>
               </div>
@@ -88,7 +88,7 @@ const Wrapper = ({
 };
 
 const TabHeaderSection = ({
-  countForRenter,
+  countForWorker,
   countForOwner,
   type,
   changeType,
@@ -101,12 +101,12 @@ const TabHeaderSection = ({
       style={{ marginBottom: "21px" }}
       onClick={(e) => {
         e.preventDefault();
-        changeType("renter");
+        changeType("worker");
       }}
     >
-      <a className={`nav-link ${type == "renter" ? "active" : ""}`}>
+      <a className={`nav-link ${type == "worker" ? "active" : ""}`}>
         <span className="menu-title">
-          Renting ({countForRenter})
+          My completing requests ({countForWorker})
         </span>
       </a>
     </li>
@@ -121,7 +121,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
         <span className="menu-title">
-          Hosting ({countForOwner})
+          Requests for my listings ({countForOwner})
         </span>
       </a>
     </li>
@@ -131,7 +131,7 @@ const TabHeaderSection = ({
 const Orders = (pageProps) => {
   const router = useRouter();
   const { error, authToken } = useContext(IndiceContext);
-  const [type, setType] = useState(router.query.type ?? "renter");
+  const [type, setType] = useState(router.query.type ?? "worker");
 
   const {
     page,
@@ -151,7 +151,7 @@ const Orders = (pageProps) => {
     getDopProps: () => ({
       type: {
         value: type,
-        hidden: (value) => value == "renter",
+        hidden: (value) => value == "worker",
       },
     }),
   });
@@ -189,19 +189,9 @@ const Orders = (pageProps) => {
 
     activePay,
     closePay,
-    onRenterPayed,
+    onWorkerPayed,
     activePayOrder,
     successIconPopupState,
-
-    handleClickFinish,
-    handleAcceptFinish,
-    activeFinish,
-    closeFinish,
-
-    handleClickAcceptFinish,
-    handleAcceptAcceptFinish,
-    activeAcceptFinish,
-    closeAcceptFinish,
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
@@ -214,7 +204,7 @@ const Orders = (pageProps) => {
     <Wrapper
       type={type}
       changeType={changeType}
-      countForRenter={pageProps.countForRenter}
+      countForWorker={pageProps.countForWorker}
       countForOwner={pageProps.countForOwner}
     >
       <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
@@ -223,7 +213,7 @@ const Orders = (pageProps) => {
             style={{ marginBottom: "0" }}
             type={type}
             changeType={changeType}
-            countForRenter={pageProps.countForRenter}
+            countForWorker={pageProps.countForWorker}
             countForOwner={pageProps.countForOwner}
           />
         )}
@@ -252,8 +242,6 @@ const Orders = (pageProps) => {
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
-                      handleClickFinish={handleClickFinish}
-                      handleClickAcceptFinish={handleClickAcceptFinish}
                     />
                   ))}
                 </div>
@@ -271,7 +259,7 @@ const Orders = (pageProps) => {
       </section>
 
       <OrdersListFastActinsModals
-        renterBaseCommission={pageProps.renterBaseFee}
+        workerBaseCommission={pageProps.workerBaseFee}
         activeCancel={activeCancel}
         closeActiveCancel={closeActiveCancel}
         handleAcceptCancel={handleAcceptCancel}
@@ -290,16 +278,10 @@ const Orders = (pageProps) => {
         updateRequestModalActiveOrder={updateRequestModalActiveOrder}
         activePay={activePay}
         closePay={closePay}
-        onRenterPayed={onRenterPayed}
+        onWorkerPayed={onWorkerPayed}
         activePayOrder={activePayOrder}
         successIconPopupState={successIconPopupState}
         bankInfo={pageProps.bankInfo}
-        handleAcceptFinish={handleAcceptFinish}
-        activeFinish={activeFinish}
-        closeFinish={closeFinish}
-        handleAcceptAcceptFinish={handleAcceptAcceptFinish}
-        activeAcceptFinish={activeAcceptFinish}
-        closeAcceptFinish={closeAcceptFinish}
       />
 
       <Pagination
@@ -315,7 +297,7 @@ const Orders = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const type = context.query.type === "owner" ? "owner" : "renter";
+  const type = context.query.type === "owner" ? "owner" : "worker";
   const params = { ...baseListPageParams(context.query), type };
   const options = await getOrderListOptions(params, baseSideProps.authToken);
   return { ...options };

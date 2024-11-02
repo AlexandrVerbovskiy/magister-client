@@ -25,8 +25,8 @@ const ListFilter = ({
               <input
                 type="checkbox"
                 name="facilities-list"
-                checked={type == "renter"}
-                onChange={() => changeType("renter")}
+                checked={type == "worker"}
+                onChange={() => changeType("worker")}
               />
               <span>Rental</span>
             </label>
@@ -61,7 +61,7 @@ const ListFilter = ({
         <DateFilter
           value={[fromTime, toTime]}
           onChange={handleChangeTimeFilter}
-          placeholder="Completing dates of the order"
+          placeholder="Completing dates of the task"
         />
       </div>
     </li>
