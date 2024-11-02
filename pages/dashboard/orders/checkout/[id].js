@@ -58,7 +58,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
             <div className="listings-sidebar row m-0">
               <div className="col-12 col-lg-4">
                 <div className="h-100 listings-widget listings_contact_details">
-                  <h3>Rental Details</h3>
+                  <h3>Task Details</h3>
 
                   <div>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>

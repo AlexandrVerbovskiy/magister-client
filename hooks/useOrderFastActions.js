@@ -141,6 +141,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
       }
 
+      setItemFields(newOrderData, activeCancelId);
+
       setActiveCancelId(null);
       setActiveCancel(false);
       activateSuccessOrderPopup({ text: "Booking cancelled successfully" });
@@ -168,6 +170,13 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           cardNumber,
         },
         authToken
+      );
+
+      setItemFields(
+        {
+          cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
+        },
+        activeFastCancelOrder.id
       );
 
       setActiveFastCancelOrder(null);
@@ -263,7 +272,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(rejectOrderModalActiveId);
     let updatedInfo = await handleAcceptRejectOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
+
+    setItemFields(
+      { ...updateOrderInfo, ...updatedInfo },
+      rejectOrderModalActiveId
+    );
+
     setRejectOrderModalActiveId(null);
   };
 
@@ -276,7 +290,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(acceptOrderModalActiveId);
     let updatedInfo = await handleAcceptAcceptOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
+
+    setItemFields(
+      { ...updateOrderInfo, ...updatedInfo },
+      acceptOrderModalActiveId
+    );
+
     setAcceptOrderModalActiveId(null);
   };
 

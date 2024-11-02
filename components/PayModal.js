@@ -48,7 +48,7 @@ const PayModal = ({
         <div className="card card-shadow">
           <div className="card-body">
             <span className="sub-title mb-2" style={{ fontSize: "18px" }}>
-              <span>Rental payment</span>
+              <span>Worker payment</span>
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">Price: {moneyFormatVisual(price)}</div>

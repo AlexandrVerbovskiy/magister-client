@@ -182,12 +182,10 @@ const ProfileSection = ({ formInfo }) => {
             </div>
           )}
 
-          <div className="col-lg-12 col-md-12">
-            <div className="form-group">
+          <div className="col-12">
               <button type="button" onClick={handleProfileSaveClick}>
                 Save Change
               </button>
-            </div>
           </div>
         </div>
       </form>

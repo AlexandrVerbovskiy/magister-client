@@ -15,7 +15,7 @@ const CancelStatus = ({ status, baseClass = "" }) => {
   }
 
   if (status == STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE) {
-    text = "Pending Rental Cancel";
+    text = "Pending Worker Cancel";
     dopClassName = "bg-yellow-100 text-yellow-500";
   }
 

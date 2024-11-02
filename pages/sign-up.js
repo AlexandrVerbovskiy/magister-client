@@ -44,7 +44,6 @@ const SignUp = () => {
   const handleEmailVerifyCode = async () => {
     try {
       const res = await verifyEmail(email, emailVerifiedCode);
-      console.log(res);
 
       await signIn("credentials", {
         userId: res.userId,

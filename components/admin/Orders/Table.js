@@ -14,10 +14,10 @@ const Table = ({
   loading,
 }) => {
   const ths = [
-    { title: "Rental Id", value: "id", width: "15%" },
+    { title: "Task Id", value: "id", width: "15%" },
     { title: "Item", value: "listings.name", width: "20%" },
-    { title: "Rental Start", value: "orders.start_date", width: "15%" },
-    { title: "Rental End", value: "orders.end_date", width: "15%" },
+    { title: "Task Start", value: "orders.start_date", width: "15%" },
+    { title: "Task End", value: "orders.end_date", width: "15%" },
     {
       title: "Total Amount",
       value: "owners.total_amount",

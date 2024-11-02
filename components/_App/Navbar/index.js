@@ -186,7 +186,6 @@ const Navbar = ({
     tab = "login"
   ) => {
     closeModals();
-    console.log(res);
 
     if (res.emailVerifiedCodeSent) {
       setEmailVerifiedCodeModalActive(true);
