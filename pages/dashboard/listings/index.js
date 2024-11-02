@@ -140,7 +140,7 @@ const StatusBlock = ({ requestId, requestApproved, active = false }) => {
     listingStatus = "approved";
     icon = "bx bx-check-circle";
     tooltip = sessionUser?.verified
-      ? "The item has been approved. Users can now view and submit rental requests for your item"
+      ? "The item has been approved. Users can now view and submit completing requests for your item"
       : "Account still unverified and item cannot be rented";
   }
 
@@ -148,7 +148,7 @@ const StatusBlock = ({ requestId, requestApproved, active = false }) => {
     listingStatus = "deleted";
     icon = "bx bx-x-circle";
     tooltip =
-      "The item has been deleted. Users can't now view and submit rental requests for your item";
+      "The item has been deleted. Users can't now view and submit completing requests for your item";
   }
 
   return (

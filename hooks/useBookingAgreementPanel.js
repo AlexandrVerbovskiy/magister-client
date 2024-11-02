@@ -76,13 +76,16 @@ const useBookingAgreementPanel = ({
         onAcceptOrder(result);
       }
 
-      const updatedOrderInfo = {
-        id: order.id,
-        status: STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-      };
-
       if (setUpdatedOffer) {
-        setUpdatedOffer(updatedOrderInfo);
+        setUpdatedOffer({
+          id: result.id,
+          status: result.status,
+          offerFinishTime: result.finishTime,
+          prevFinishTime: result.prevFinishTime,
+          offerPrice: result.price,
+          prevPrice: result.prevPrice,
+
+        });
       }
 
       setTimeout(() => {
@@ -96,7 +99,7 @@ const useBookingAgreementPanel = ({
       }, 0);
 
       success.set("Order accepted successfully");
-      return updatedOrderInfo;
+      return result;
     } catch (e) {
       error.set(e.message);
     } finally {

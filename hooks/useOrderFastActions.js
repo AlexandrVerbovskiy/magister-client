@@ -324,7 +324,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
           STATIC.ORDER_CANCELATION_STATUSES.CANCELLED;
       }
 
-      updateItemsParticularly(ordersToUpdate);
+      setItemFields(newOrderData, activeCancelId);
 
       setActiveCancelId(null);
       setActiveCancel(false);
@@ -404,15 +404,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
         authToken
       );
 
-      const ordersToUpdate = addConflictOrderInfoToList(
-        getRemovedConflictOrders(activeFastCancelOrder),
+      setItemFields(
         {
           cancelStatus: STATIC.ORDER_CANCELATION_STATUSES.CANCELLED,
-          id: activeFastCancelOrder.id,
-        }
+        },
+        activeFastCancelOrder.id
       );
-
-      updateItemsParticularly(ordersToUpdate);
 
       setActiveFastCancelOrder(null);
       setActiveFastCancel(false);
@@ -508,17 +505,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(rejectOrderModalActiveId);
     let updatedInfo = await handleAcceptRejectOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
 
-    const ordersToUpdate = addConflictOrderInfoToList(
-      getRemovedConflictOrders(order),
-      {
-        ...updatedInfo,
-        id: order.id,
-      }
+    setItemFields(
+      { ...updateOrderInfo, ...updatedInfo },
+      rejectOrderModalActiveId
     );
 
-    updateItemsParticularly(ordersToUpdate);
     setRejectOrderModalActiveId(null);
   };
 
@@ -531,17 +523,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     const order = findCurrentOrderById(acceptOrderModalActiveId);
     let updatedInfo = await handleAcceptAcceptOrder(order);
     const updateOrderInfo = getUpdatedByRequestOrderInfo(order.id);
-    updatedInfo = { ...updatedInfo, ...updateOrderInfo };
 
-    const ordersToUpdate = addConflictOrderInfoToList(
-      getAddConflictOrders(order),
-      {
-        ...updatedInfo,
-        id: order.id,
-      }
+    setItemFields(
+      { ...updateOrderInfo, ...updatedInfo },
+      acceptOrderModalActiveId
     );
 
-    updateItemsParticularly(ordersToUpdate);
     setAcceptOrderModalActiveId(null);
   };
 

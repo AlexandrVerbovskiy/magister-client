@@ -59,6 +59,7 @@ const useSingleOrderActions = ({
   const handleCancelApprove = async () => {
     try {
       let result = null;
+
       if (isOwner) {
         result = await rejectOrder(order?.id, authToken);
       } else {

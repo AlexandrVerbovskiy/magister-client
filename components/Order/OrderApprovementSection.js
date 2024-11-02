@@ -28,7 +28,6 @@ const OrderApprovementSection = ({
   };
 
   const totalFee = calculateFee(price, fee, true);
-  console.log(totalFee);
   const totalPrice = price + totalFee;
 
   const onSendClick = (e) => {

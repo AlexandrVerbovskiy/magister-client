@@ -18,7 +18,7 @@ const ApprovedSection = ({ type }) => {
       />
 
       <h3 className="mt-4 mb-4">
-        {type == "finish" ? "The rental finished!" : "The rental starts!"}
+        {type == "finish" ? "The task finished!" : "The task starts!"}
       </h3>
 
       <Link className="base-main-button" href="/dashboard/orders/">

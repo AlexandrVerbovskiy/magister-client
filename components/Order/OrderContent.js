@@ -85,7 +85,6 @@ const OrderContent = ({
     setIsTenant(order.tenantId == sessionUser?.id);
 
     if (isBookingWithoutAgreement) {
-      console.log(order.previousUpdateRequest);
       if (order.previousUpdateRequest) {
         setPrevUpdateRequest(order.previousUpdateRequest);
       } else {
@@ -186,8 +185,8 @@ const OrderContent = ({
 
     activateSuccessOrderPopup({
       text:
-        "Booking updates successfully. Wait for a response from the " +
-        (isOwner ? "tenant" : "owner"),
+        "Conditions updates successfully. Wait for a response from the " +
+        (isOwner ? "worker" : "owner"),
     });
   };
 
@@ -756,7 +755,7 @@ const OrderContent = ({
                 order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ? (
                 <h3>Your Proposal Info</h3>
               ) : (
-                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
+                <h3>{isOwner ? "Worker" : "Owner"} Proposal</h3>
               )}
 
               <ul style={{ listStyle: "none", padding: "0" }}>
@@ -813,7 +812,7 @@ const OrderContent = ({
                   )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
+                  Fact offer price {isOwner ? "to pay" : "to get"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: prevUpdateRequest.price,
@@ -837,9 +836,9 @@ const OrderContent = ({
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-              (isTenant &&
-                order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ? (
-                <h3>{isOwner ? "Rental" : "Owner"} Proposal</h3>
+              (isWorker &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) ? (
+                <h3>{isOwner ? "Worker" : "Owner"} Proposal</h3>
               ) : (
                 <h3>Your Proposal Info</h3>
               )}
@@ -890,8 +889,8 @@ const OrderContent = ({
                       textDecoration: "line-through",
                     }}
                   >
-                    Price {isOwner ? "to get" : "to pay"} with listing price per
-                    day:
+                    Price {isOwner ? "to pay" : "to get"} with listing price per
+                    day:{" "}
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.listingPrice,
@@ -901,7 +900,7 @@ const OrderContent = ({
                 )}
 
                 <li style={{ fontWeight: 700 }}>
-                  Fact offer price {isOwner ? "to get" : "to pay"}:{" "}
+                  Fact offer price {isOwner ? "to pay" : "to get"}:{" "}
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: actualUpdateRequest.newPrice,

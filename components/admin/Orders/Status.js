@@ -15,8 +15,8 @@ const Status = ({
     dopClassName = "bg-teal-100 text-teal-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-    text = "Rental in Progress";
+  if (status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED) {
+    text = "Worker in Progress";
     dopClassName = "bg-orange-100 text-orange-500";
   }
 

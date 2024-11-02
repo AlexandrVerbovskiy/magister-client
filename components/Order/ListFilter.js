@@ -61,7 +61,7 @@ const ListFilter = ({
         <DateFilter
           value={[fromTime, toTime]}
           onChange={handleChangeTimeFilter}
-          placeholder="Rental dates of the listing"
+          placeholder="Completing dates of the task"
         />
       </div>
     </li>

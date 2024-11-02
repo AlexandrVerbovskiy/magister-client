@@ -43,7 +43,7 @@ const Wrapper = ({
                   style={type == "tenant" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    My rental requests ({countForTenant})
+                    My completing requests ({countForWorker})
                   </label>
                 </div>
               </div>
@@ -54,7 +54,7 @@ const Wrapper = ({
                   style={type == "owner" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Requests for my items ({countForOwner})
+                    Requests for my tasks ({countForOwner})
                   </label>
                 </div>
               </div>
@@ -106,7 +106,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "tenant" ? "active" : ""}`}>
         <span className="menu-title">
-          My rental requests ({countForTenant})
+          My completing requests ({countForWorker})
         </span>
       </a>
     </li>
