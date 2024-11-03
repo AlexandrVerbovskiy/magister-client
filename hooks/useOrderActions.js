@@ -47,7 +47,11 @@ const useOrderActions = ({ order }) => {
       (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
     ) {
       if (
-        checkErrorData(order.actualUpdateRequest?.newFinishTime ?? order.newFinishTime ?? order.offerFinishTime).blocked
+        checkErrorData(
+          order.actualUpdateRequest?.newFinishTime ??
+            order.newFinishTime ??
+            order.offerFinishTime
+        ).blocked
       ) {
         newActionButtons.push(
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
@@ -60,8 +64,8 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT &&
-      isWorker
+      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT &&
+      isOwner
     ) {
       if (order.paymentInfo) {
         if (
@@ -79,9 +83,16 @@ const useOrderActions = ({ order }) => {
       !order.paymentInfo?.waitingApproved &&
       ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_WORKER) ||
         (isWorker && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT == order.status)
+        STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT == order.status)
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
+    }
+
+    if (
+      isOwner &&
+      order.status === STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
+    ) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON);
     }
 
     if (
@@ -101,6 +112,10 @@ const useOrderActions = ({ order }) => {
         } else {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
         }
+        
+        newActionButtons.push(
+          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+        );
       }
     }
 

@@ -1,10 +1,10 @@
 import {
-  calculateFee,
   moneyFormatVisual,
+  workerGetsFeeCalculate,
 } from "../../../utils";
 
 const ContractDetailsLight = ({ price, fee }) => {
-  const totalFee = calculateFee(price, fee, true);
+  const totalFee = workerGetsFeeCalculate(price, fee);
   const totalPrice = price + totalFee;
 
   return (

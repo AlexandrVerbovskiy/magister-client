@@ -2,17 +2,17 @@ import { useEffect, useRef, useState, useContext } from "react";
 import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
-  calculateFee,
   calculateFullTotalByType,
   fullDateConverter,
   getMaxFlatpickrDate,
   moneyFormat,
   moneyFormatVisual,
-  ownerGetsCalculate,
+  ownerPaymentCalculate,
+  ownerPaymentFeeCalculate,
   separateDate,
-  workerPaymentCalculate,
+  workerGetsFeeCalculate,
+  workerGetsCalculate,
 } from "../../utils";
-import ErrorSpan from "../ErrorSpan";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
@@ -54,11 +54,11 @@ const CreateUpdateOrderRequestModal = ({
 
   const recalculateTotalInfo = ({ price, fee }) => {
     if (commissionType == "sum") {
-      setTotalPrice(workerPaymentCalculate(price, fee));
-      setTotalFee(calculateFee(price, fee, true));
+      setTotalPrice(workerGetsCalculate(price, fee));
+      setTotalFee(workerGetsFeeCalculate(price, fee));
     } else {
-      setTotalPrice(ownerGetsCalculate(price, fee));
-      setTotalFee(calculateFee(price, fee, false));
+      setTotalPrice(ownerPaymentCalculate(price, fee));
+      setTotalFee(ownerPaymentFeeCalculate(price, fee));
     }
 
     setFullTotal(calculateFullTotalByType(price, fee, commissionType));

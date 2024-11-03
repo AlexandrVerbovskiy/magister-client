@@ -5,7 +5,6 @@ import {
   fullDateConverter,
   generateProfileFilePath,
   getDisputeTitle,
-  getFactOrderDays,
   getPaymentNameByType,
   moneyFormatVisual,
 } from "../../utils";
@@ -22,11 +21,9 @@ const OrderInfo = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
+  handleClickFinish,
+  handleClickAcceptFinish,
 }) => {
-  const { checkErrorData } = useOrderDateError({
-    order,
-  });
-
   const { sessionUser } = useContext(IndiceContext);
 
   const currentActionButtons = useOrderActions({
@@ -90,7 +87,7 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT,
+                STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
                 STATIC.ORDER_STATUSES.IN_PROCESS,
                 STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
                 STATIC.ORDER_STATUSES.FINISHED,
@@ -201,6 +198,36 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickFinish(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-check-circle"></i> Send Finish Request
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickAcceptFinish(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-check-circle"></i> Accept Finish
+          </button>
+        )}
+
+        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
         ) && (
           <Link
@@ -299,6 +326,8 @@ const OrderItem = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
+  handleClickFinish,
+  handleClickAcceptFinish,
 }) => {
   const userName = filterType == "worker" ? order.ownerName : order.workerName;
   const userEmail =
@@ -337,6 +366,8 @@ const OrderItem = ({
         handleClickUpdateRequest={handleClickUpdateRequest}
         handleClickReject={handleClickReject}
         handleClickAccept={handleClickAccept}
+        handleClickFinish={handleClickFinish}
+        handleClickAcceptFinish={handleClickAcceptFinish}
         link={link}
       />
     </div>

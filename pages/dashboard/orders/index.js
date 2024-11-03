@@ -192,6 +192,16 @@ const Orders = (pageProps) => {
     onWorkerPayed,
     activePayOrder,
     successIconPopupState,
+
+    handleClickFinish,
+    handleAcceptFinish,
+    activeFinish,
+    closeFinish,
+
+    handleClickAcceptFinish,
+    handleAcceptAcceptFinish,
+    activeAcceptFinish,
+    closeAcceptFinish,
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
@@ -242,6 +252,8 @@ const Orders = (pageProps) => {
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
+                      handleClickFinish={handleClickFinish}
+                      handleClickAcceptFinish={handleClickAcceptFinish}
                     />
                   ))}
                 </div>
@@ -282,6 +294,12 @@ const Orders = (pageProps) => {
         activePayOrder={activePayOrder}
         successIconPopupState={successIconPopupState}
         bankInfo={pageProps.bankInfo}
+        handleAcceptFinish={handleAcceptFinish}
+        activeFinish={activeFinish}
+        closeFinish={closeFinish}
+        handleAcceptAcceptFinish={handleAcceptAcceptFinish}
+        activeAcceptFinish={activeAcceptFinish}
+        closeAcceptFinish={closeAcceptFinish}
       />
 
       <Pagination

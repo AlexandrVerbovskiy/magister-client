@@ -7,12 +7,12 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import ListingPhotoView from "../../../components/admin/Listings/PhotoPopupView";
 import {
   autoCalculateCurrentTotalPrice,
-  calculateFee,
   getFilePath,
   getListingImageByType,
   moneyFormat,
-  ownerGetsCalculate,
-  workerPaymentCalculate,
+  ownerPaymentCalculate,
+  workerGetsFeeCalculate,
+  workerGetsCalculate,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -22,24 +22,6 @@ import Status from "../../../components/admin/Orders/Status";
 import CancelStatus from "../../../components/admin/Orders/CancelStatus";
 import { useIdPage } from "../../../hooks";
 import STATIC from "../../../static";
-
-const ImageView = ({ path, onImageClick = () => {} }) => {
-  const handleImageClick = (e) => {
-    e.stopPropagation();
-    onImageClick();
-  };
-
-  return (
-    <div className="bg-gray-100 border relative rounded-lg overflow-hidden shadow-md xl:w-1/4 lg:w-1/3 md:w-1/2 gallery-flex-parent">
-      <div
-        className="flex flex-col form-group cursor-zoom-in"
-        onClick={handleImageClick}
-      >
-        <img src={path} />
-      </div>
-    </div>
-  );
-};
 
 const PreviousProposalElem = ({
   index,
@@ -266,11 +248,11 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? ownerGetsCalculate(
+                                    ? ownerPaymentCalculate(
                                         activeRequestsToUpdate.newPrice,
                                         order.ownerFee
                                       )
-                                    : ownerGetsCalculate(
+                                    : ownerPaymentCalculate(
                                         order.offerPrice,
                                         order.ownerFee
                                       )
@@ -287,15 +269,13 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? calculateFee(
+                                    ? workerGetsFeeCalculate(
                                         activeRequestsToUpdate.newPrice,
-                                        order.workerFee,
-                                        true
+                                        order.workerFee
                                       )
-                                    : calculateFee(
+                                    : workerGetsFeeCalculate(
                                         order.offerPrice,
-                                        order.workerFee,
-                                        true
+                                        order.workerFee
                                       )
                                 }
                                 inputClassName="form-input w-full"
@@ -313,13 +293,13 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        ownerGetsCalculate(
+                                        ownerPaymentCalculate(
                                           activeRequestsToUpdate.newPrice,
                                           order.ownerFee
                                         )
                                       )
                                     : moneyFormat(
-                                        ownerGetsCalculate(
+                                        ownerPaymentCalculate(
                                           order.offerPrice,
                                           order.ownerFee
                                         )
@@ -338,13 +318,13 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        workerPaymentCalculate(
+                                        workerGetsCalculate(
                                           activeRequestsToUpdate.newPrice,
                                           order.workerFee
                                         )
                                       )
                                     : moneyFormat(
-                                        workerPaymentCalculate(
+                                        workerGetsCalculate(
                                           order.offerPrice,
                                           order.workerFee
                                         )

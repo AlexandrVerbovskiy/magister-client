@@ -72,7 +72,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         canActions = true;
       }
 
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT) {
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
         if (order?.paymentInfo?.id) {
           if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
             canActions = true;

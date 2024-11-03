@@ -26,6 +26,9 @@ const useSingleOrderActions = ({
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
 
+  const [finishModalActive, setFinishModalActive] = useState(false);
+  const [acceptFinishModalActive, setAcceptFinishModalActive] = useState(false);
+
   const ownerId = order?.ownerId;
 
   const {
@@ -84,6 +87,10 @@ const useSingleOrderActions = ({
     }
   };
 
+  const handleAcceptFinishModalActive = async () => {};
+
+  const handleAcceptAcceptFinishModalActive = async () => {};
+
   return {
     bookingActionsDisabled,
     updateRequestModalActive,
@@ -105,6 +112,12 @@ const useSingleOrderActions = ({
     setPayedCancelDisabled,
     handleCancelApprove,
     handlePayedFastCancel,
+    finishModalActive,
+    setFinishModalActive,
+    handleAcceptFinishModalActive,
+    acceptFinishModalActive,
+    setAcceptFinishModalActive,
+    handleAcceptAcceptFinishModalActive,
   };
 };
 

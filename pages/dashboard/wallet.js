@@ -8,12 +8,11 @@ import {
 } from "../../services";
 import { authSideProps } from "../../middlewares";
 import {
-  calculateFee,
-  calculateTotalPriceByDaysCount,
-  getFactOrderDays,
   moneyFormat,
   dateConverter,
   moneyFormatVisual,
+  ownerPaymentFeeCalculate,
+  workerGetsFeeCalculate,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -139,7 +138,7 @@ const Wallet = ({
                     {earnings.map((earning) => {
                       const price = earning.offerPrice;
 
-                      const fee = calculateFee(
+                      const fee = ownerPaymentFeeCalculate(
                         earning.offerPrice,
                         earning.ownerFee
                       );
@@ -229,10 +228,9 @@ const Wallet = ({
                     {sendings.map((sending) => {
                       const price = sending.offerPrice;
 
-                      const fee = calculateFee(
+                      const fee = workerGetsFeeCalculate(
                         sending.offerPrice,
-                        sending.workerFee,
-                        true
+                        sending.workerFee
                       );
 
                       return (

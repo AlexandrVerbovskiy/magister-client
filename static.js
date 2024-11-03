@@ -6,7 +6,7 @@ const config = {
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",
     PENDING_WORKER: "pending_worker",
-    PENDING_WORKER_PAYMENT: "pending_worker_payment",
+    PENDING_OWNER_PAYMENT: "pending_owner_payment",
     IN_PROCESS: "in_process",
     PENDING_OWNER_FINISHED: "pending_owner_finished",
     FINISHED: "finished",
@@ -37,6 +37,8 @@ const config = {
     OPEN_DISPUTE: "open-dispute",
     ORDER_CHAT: "order-chat",
     VIEW_DISPUTE_CHAT: "view-dispute-chat",
+    ACCEPT_OWNER_FINISH_BUTTON: "accept-owner-finish-button",
+    FINISH_BUTTON: "finish-button",
   },
   ACCEPT_IMAGE_FORMAT: {
     "image/png": [".png"],
@@ -127,6 +129,7 @@ const config = {
     SMALL_FILE_SIZE: 1 * 1024 * 1024,
     SUMMARY_FILE_SIZE: 25 * 1024 * 1024,
     MIN_WORKER_COMMISSION: 5,
+    MIN_OWNER_COMMISSION: 5,
   },
   DEFAULTS: {
     LISTING_MAP_CIRCLE_RADIUS: 500,

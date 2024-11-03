@@ -8,13 +8,11 @@ import {
   rejectSenderPaymentTransaction,
 } from "../../../services";
 import {
-  calculateTotalPriceByDaysCount,
-  getFactOrderDays,
   getFilePath,
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
-  calculateFee,
+  workerGetsFeeCalculate,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -40,12 +38,12 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
     parentLink = "/admin/payments/failed-senders-paypal/";
   }
 
-  const subtotalPrice = calculateTotalPriceByDaysCount(
-    getFactOrderDays(payment.offerStartDate, payment.offerEndDate),
-    payment.offerPrice
-  );
+  const subtotalPrice = payment.offerPrice;
 
-  const totalFee = calculateFee(payment.offerPrice, payment.workerFee, true);
+  const totalFee = workerGetsFeeCalculate(
+    payment.offerPrice,
+    payment.workerFee
+  );
 
   const handleAccept = async () => {
     await approveSenderPaymentTransaction(
