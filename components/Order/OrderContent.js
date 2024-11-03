@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   autoCalculateCurrentTotalPrice,
-  calculateFee,
   generateProfileFilePath,
   getDisputeTitle,
   getListingImageByType,
   isOrderCanBeAccepted,
   moneyFormatVisual,
+  ownerPaymentFeeCalculate,
+  workerGetsFeeCalculate,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -33,7 +34,7 @@ import FinishOrderModal from "./FinishOrderModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
-  STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
   STATIC.ORDER_STATUSES.PENDING_TENANT,
 ];
@@ -264,7 +265,9 @@ const OrderContent = ({
 
   const currentFee = isOwner ? order.ownerFee : order.workerFee;
   const currentFeeCalculate = (price, fee) =>
-    calculateFee(price, fee, !isOwner);
+    isOwner
+      ? ownerPaymentFeeCalculate(price, fee)
+      : workerGetsFeeCalculate(price, fee);
 
   const currentActionButtons = useOrderActions({
     order,
@@ -289,8 +292,7 @@ const OrderContent = ({
         { title: "Make Booking", finished: true },
         {
           title: "Accepted",
-          finished:
-            order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
+          finished: order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
         },
         {
           title: "Payment Confirmation",
@@ -1079,7 +1081,31 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+              STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+            ) && (
+              <button
+                type="button"
+                onClick={() => orderPopupsData.setFinishModalActive(true)}
+                className="default-btn"
+              >
+                <i className="bx bx-check-circle"></i> Send Finish Request
+              </button>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+            ) && (
+              <button
+                type="button"
+                onClick={() => orderPopupsData.setAcceptFinishModalActive(true)}
+                className="default-btn"
+              >
+                <i className="bx bx-check-circle"></i> Accept Finish
+              </button>
+            )}
+
+            {currentActionButtons.includes(
+              STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
             ) && (
               <Link
                 className="default-btn"

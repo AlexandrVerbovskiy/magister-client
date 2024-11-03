@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import {
   downloadFileUrl,
-  workerPaymentCalculate,
+  workerGetsCalculate,
   dateConverter,
   moneyFormatVisual,
-  calculateFee,
+  workerGetsFeeCalculate,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -49,7 +49,7 @@ const InvoiceTable = ({
   const [disabled, setDisabled] = useState(false);
 
   const subTotalPrice = offer.price;
-  const totalFee = calculateFee(subTotalPrice, offer.fee, true);
+  const totalFee = workerGetsFeeCalculate(subTotalPrice, offer.fee);
 
   const handlePdfDownload = async () => {
     try {
@@ -73,7 +73,7 @@ const InvoiceTable = ({
     </a>
   );
 
-  const totalPayed = workerPaymentCalculate(offer.price, offer.fee);
+  const totalPayed = workerGetsCalculate(offer.price, offer.fee);
 
   return (
     <>

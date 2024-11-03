@@ -5,10 +5,10 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { workerPaymentCalculate } from "../../utils";
+import { workerGetsCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
-import BookingModal from "../SingleListings/BookingModal";
+import YesNoModal from "../_App/YesNoModal";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -38,6 +38,14 @@ const OrdersListFastActinsModals = ({
   activePayOrder,
   successIconPopupState,
   bankInfo,
+
+  handleAcceptFinish,
+  activeFinish,
+  closeFinish,
+
+  handleAcceptAcceptFinish,
+  activeAcceptFinish,
+  closeAcceptFinish,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -95,10 +103,7 @@ const OrdersListFastActinsModals = ({
 
   useEffect(() => {
     const newAmount = activePayOrder
-      ? workerPaymentCalculate(
-          activePayOrder.offerPrice,
-          activePayOrder.workerFee
-        )
+      ? workerGetsCalculate(activePayOrder.offerPrice, activePayOrder.workerFee)
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
@@ -178,19 +183,24 @@ const OrdersListFastActinsModals = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      <BookingModal
-        handleMakeBooking={handleClickApproveExtendOrder}
-        price={extendModalActiveOrder?.offerPricePerDay ?? 0}
-        minRentalDays={extendModalActiveOrder?.listingMinRentalDays ?? 0}
-        fee={tenantBaseCommission}
-        createOrderModalActive={extendModalActive}
-        closeModal={closeExtendOrder}
-        listingName={extendModalActiveOrder?.listingName ?? ""}
-        blockedDates={getOrderBlockedDatesToExtend(extendModalActiveOrder)}
-        title="Extend Now"
-        startDate={extendStartDate}
-        isExtend={true}
-        fullVersion={true}
+      <YesNoModal
+        active={activeFinish}
+        closeModal={closeFinish}
+        title="Finish order"
+        body="To send finish request, click 'Confirm'"
+        onAccept={handleAcceptFinish}
+        acceptText="Confirm"
+        closeModalText="Close"
+      />
+
+      <YesNoModal
+        active={activeAcceptFinish}
+        closeModal={closeAcceptFinish}
+        title="Accept Finish"
+        body="To accept finish request, click 'Confirm'"
+        onAccept={handleAcceptAcceptFinish}
+        acceptText="Confirm"
+        closeModalText="Close"
       />
     </>
   );

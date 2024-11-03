@@ -31,6 +31,9 @@ const useSingleOrderActions = ({
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
 
+  const [finishModalActive, setFinishModalActive] = useState(false);
+  const [acceptFinishModalActive, setAcceptFinishModalActive] = useState(false);
+
   const ownerId = order?.ownerId;
 
   const {
@@ -89,33 +92,9 @@ const useSingleOrderActions = ({
     }
   };
 
-  const handleMakeBooking = async ({
-    feeActive,
-    sendingMessage,
-    price,
-    fromDate,
-    toDate,
-  }) => {
-    try {
-      const result = await extendOrder(
-        {
-          startDate: fromDate,
-          endDate: toDate,
-          listingId: order?.listingId,
-          feeActive,
-          message: sendingMessage,
-          parentOrderId: order?.orderParentId ?? order?.id,
-        },
-        authToken
-      );
+  const handleAcceptFinishModalActive = async () => {};
 
-      if (onExtendOrder) {
-        onExtendOrder(result);
-      }
-    } catch (e) {
-      setError(e.message);
-    }
-  };
+  const handleAcceptAcceptFinishModalActive = async () => {};
 
   return {
     bookingActionsDisabled,
@@ -144,7 +123,12 @@ const useSingleOrderActions = ({
 
     handleCancelApprove,
     handlePayedFastCancel,
-    handleMakeBooking,
+    finishModalActive,
+    setFinishModalActive,
+    handleAcceptFinishModalActive,
+    acceptFinishModalActive,
+    setAcceptFinishModalActive,
+    handleAcceptAcceptFinishModalActive,
   };
 };
 

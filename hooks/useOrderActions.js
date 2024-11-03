@@ -51,7 +51,11 @@ const useOrderActions = ({ order }) => {
       (isTenant && order.status == STATIC.ORDER_STATUSES.PENDING_TENANT)
     ) {
       if (
-        checkErrorData(order.actualUpdateRequest?.newFinishTime ?? order.newFinishTime ?? order.offerFinishTime).blocked
+        checkErrorData(
+          order.actualUpdateRequest?.newFinishTime ??
+            order.newFinishTime ??
+            order.offerFinishTime
+        ).blocked
       ) {
         newActionButtons.push(
           STATIC.ORDER_ACTION_BUTTONS.BOOKING_UPDATING_SECTION
@@ -64,8 +68,8 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT &&
-      isTenant
+      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT &&
+      isOwner
     ) {
       if (order.paymentInfo) {
         if (
@@ -83,21 +87,27 @@ const useOrderActions = ({ order }) => {
       !order.paymentInfo?.waitingApproved &&
       ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_WORKER) ||
         (isWorker && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT == order.status)
+        STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT == order.status)
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
     }
 
-    if (order.orderParentId) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW);
-    } else {
-      if (
-        order.extendOrders &&
-        order.extendOrders.length > 0 &&
-        order.extendOrders.length > 1
-      ) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST);
-      }
+    if (
+      isOwner &&
+      order.status === STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
+    ) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON);
+    }
+
+    if (
+      [
+        STATIC.ORDER_STATUSES.IN_PROCESS,
+        STATIC.ORDER_STATUSES.FINISHED,
+        STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
+      ].includes(order.status)
+    ) {
+      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
+    }
 
       if (
         [
@@ -158,6 +168,10 @@ const useOrderActions = ({ order }) => {
         if (isTenant && !order.ownerCommentId) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
         }
+        
+        newActionButtons.push(
+          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+        );
       }
     }
 

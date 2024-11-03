@@ -1,30 +1,41 @@
-import { getFactOrderDays } from "./dateHelpers";
 import STATIC from "../static";
 
 export const moneyFormat = (money) => +money.toFixed(2);
 
-export const calculateFee = (price, fee, needMin = false) => {
-  const totalFee = (fee * price) / 100;
-
-  if (needMin && totalFee < STATIC.LIMITS.MIN_TENANT_COMMISSION) {
-    return STATIC.LIMITS.MIN_TENANT_COMMISSION;
-  }
-
-  return moneyFormat(totalFee);
+const paymentFeeCalculate = (price, fee) => {
+  const resPayment = (fee * price) / 100;
+  return +resPayment.toFixed(2);
 };
 
-export const calculateTotalPriceByDaysCount = (count, price) =>
-  moneyFormat(price * count);
+export const workerGetsFeeCalculate = (price, fee) => {
+  const result = paymentFeeCalculate(price, fee);
+
+  if (result < STATIC.LIMITS.MIN_WORKER_COMMISSION) {
+    return STATIC.LIMITS.MIN_WORKER_COMMISSION;
+  }
+
+  return result;
+};
+
+export const ownerPaymentFeeCalculate = (price, fee) => {
+  const result = paymentFeeCalculate(price, fee);
+
+  if (result < STATIC.LIMITS.MIN_OWNER_COMMISSION) {
+    return STATIC.LIMITS.MIN_OWNER_COMMISSION;
+  }
+
+  return result;
+};
 
 export const calculateFullTotalByType = (price, fee, type = "sum") => {
   let total;
 
   if (type == "sum") {
-    total = workerPaymentCalculate(price, fee);
+    total = workerGetsCalculate(price, fee);
   }
 
   if (type == "reject") {
-    total = ownerGetsCalculate(price, fee);
+    total = ownerPaymentCalculate(price, fee);
   }
 
   return total;
@@ -43,17 +54,17 @@ export const autoCalculateCurrentTotalPrice = ({
 
   const fee = type == "owner" ? ownerFee : workerFee;
   const calculationFunc =
-    type == "owner" ? ownerGetsCalculate : workerPaymentCalculate;
+    type == "owner" ? ownerPaymentCalculate : workerGetsCalculate;
 
   return calculationFunc(price, fee);
 };
 
-export const workerPaymentCalculate = (price, fee) => {
-  const result = price - calculateFee(price, fee);
+export const workerGetsCalculate = (price, fee) => {
+  const result = price - workerGetsFeeCalculate(price, fee);
   return moneyFormat(result);
 };
 
-export const ownerGetsCalculate = (price, fee) => {
-  const result = price + calculateFee(price, fee);
+export const ownerPaymentCalculate = (price, fee) => {
+  const result = price + ownerPaymentFeeCalculate(price, fee);
   return moneyFormat(result);
 };

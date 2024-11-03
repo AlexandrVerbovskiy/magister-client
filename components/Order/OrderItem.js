@@ -5,7 +5,6 @@ import {
   fullDateConverter,
   generateProfileFilePath,
   getDisputeTitle,
-  getFactOrderDays,
   getPaymentNameByType,
   isOrderCanBeAccepted,
   moneyFormatVisual,
@@ -25,13 +24,9 @@ const OrderInfo = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickExtend,
-  extension = false,
+  handleClickFinish,
+  handleClickAcceptFinish,
 }) => {
-  const { checkErrorData } = useOrderDateError({
-    order,
-  });
-
   const { sessionUser } = useContext(IndiceContext);
 
   const currentActionButtons = useOrderActions({
@@ -95,9 +90,9 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
-                STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+                STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
+                STATIC.ORDER_STATUSES.IN_PROCESS,
+                STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
                 STATIC.ORDER_STATUSES.FINISHED,
               ].includes(order.status) && paymentType ? (
                 <>
@@ -205,7 +200,37 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
+          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickFinish(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-check-circle"></i> Send Finish Request
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+        ) && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickAcceptFinish(order.id);
+            }}
+            className="default-btn"
+          >
+            <i className="bx bx-check-circle"></i> Accept Finish
+          </button>
+        )}
+
+        {currentActionButtons.includes(
+          STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
         ) && (
           <Link
             className="default-btn"
@@ -351,7 +376,8 @@ const OrderItem = ({
   handleClickUpdateRequest,
   handleClickReject,
   handleClickAccept,
-  handleClickExtend,
+  handleClickFinish,
+  handleClickAcceptFinish,
 }) => {
   const [showedAllExtends, setShowedAllExtends] = useState(false);
   const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
@@ -408,49 +434,18 @@ const OrderItem = ({
         />
       </div>
 
-      {extendOrders.map((extendOrder, index) => {
-        extendOrder["extendOrders"] = order.extendOrders;
-
-        return (
-          <div className="tr extension-tr" key={extendOrder.id}>
-            <div
-              className="td name"
-              style={
-                order.extendOrders.length != index + 1
-                  ? { borderBottom: 0, borderTop: 0 }
-                  : { borderTop: 0 }
-              }
-            ></div>
-
-            <OrderInfo
-              order={extendOrder}
-              handleClickCancel={handleClickCancel}
-              handleClickPayedFastCancel={handleClickPayedFastCancel}
-              handleClickUpdateRequest={handleClickUpdateRequest}
-              handleClickReject={handleClickReject}
-              handleClickAccept={handleClickAccept}
-              handleClickExtend={handleClickExtend}
-              link={link}
-              extension={true}
-            />
-          </div>
-        );
-      })}
-
-      {order.extendOrders.length > baseShowedExtendsCount && (
-        <div className="tr extension-tr">
-          <div colSpan={3} className="td show-more-table-rows">
-            <button
-              onClick={() => setShowedAllExtends(!showedAllExtends)}
-              type="button"
-              className="default-btn"
-            >
-              {showedAllExtends ? "Show Less" : "Show More"}
-            </button>
-          </div>
-        </div>
-      )}
-    </>
+      <OrderInfo
+        order={order}
+        handleClickCancel={handleClickCancel}
+        handleClickPayedFastCancel={handleClickPayedFastCancel}
+        handleClickUpdateRequest={handleClickUpdateRequest}
+        handleClickReject={handleClickReject}
+        handleClickAccept={handleClickAccept}
+        handleClickFinish={handleClickFinish}
+        handleClickAcceptFinish={handleClickAcceptFinish}
+        link={link}
+      />
+    </div>
   );
 };
 

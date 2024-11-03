@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
-  tenantPaymentCalculate,
+  workerGetsCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -17,7 +17,6 @@ import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
 import InputView from "./Form/InputView";
 import AcceptModal from "./RecipientPayments/AcceptModal";
 import STATIC from "../../static";
-import StatusSpan from "./RecipientPayments/StatusSpan";
 
 const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   const { authToken } = useContext(IndiceContext);
@@ -34,7 +33,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = workerPaymentCalculate(
+  const totalPayed = workerGetsCalculate(
     recipient.offerPrice,
     recipient.workerFee,
   );

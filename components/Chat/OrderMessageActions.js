@@ -123,11 +123,9 @@ const OrderMessageActions = ({
         canActions = true;
       }
 
-      if (
-        checkingOrder.status == STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT
-      ) {
-        if (checkingOrder?.paymentInfo?.id) {
-          if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
+        if (order?.paymentInfo?.id) {
+          if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
             canActions = true;
           }
         } else {

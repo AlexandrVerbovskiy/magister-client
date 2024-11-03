@@ -58,6 +58,16 @@ export const acceptOrder = async (id, authToken) => {
   return data.body;
 };
 
+export const finishOrder = async (id, authToken) => {
+  const data = await post(`/finish`, { id }, authToken);
+  return data.body;
+};
+
+export const acceptFinishOrder = async (id, authToken) => {
+  const data = await post(`/accept-finish`, { id }, authToken);
+  return data.body;
+};
+
 export const paypalOrderPayed = async (orderId, authToken) => {
   const data = await post(`/paypal-order-payed`, { orderId }, authToken);
   return data.body;

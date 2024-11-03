@@ -198,6 +198,16 @@ const Orders = (pageProps) => {
     extendModalActiveOrder,
     closeExtendOrder,
     successIconPopupState,
+
+    handleClickFinish,
+    handleAcceptFinish,
+    activeFinish,
+    closeFinish,
+
+    handleClickAcceptFinish,
+    handleAcceptAcceptFinish,
+    activeAcceptFinish,
+    closeAcceptFinish,
   } = useOrderFastActions({
     orders: orders,
     setItemFields,
@@ -248,7 +258,8 @@ const Orders = (pageProps) => {
                       handleClickUpdateRequest={handleClickUpdateRequest}
                       handleClickReject={handleClickReject}
                       handleClickAccept={handleClickAccept}
-                      handleClickExtend={handleClickExtendOrder}
+                      handleClickFinish={handleClickFinish}
+                      handleClickAcceptFinish={handleClickAcceptFinish}
                     />
                   ))}
                 </div>
@@ -294,6 +305,12 @@ const Orders = (pageProps) => {
         closeExtendOrder={closeExtendOrder}
         successIconPopupState={successIconPopupState}
         bankInfo={pageProps.bankInfo}
+        handleAcceptFinish={handleAcceptFinish}
+        activeFinish={activeFinish}
+        closeFinish={closeFinish}
+        handleAcceptAcceptFinish={handleAcceptAcceptFinish}
+        activeAcceptFinish={activeAcceptFinish}
+        closeAcceptFinish={closeAcceptFinish}
       />
 
       <Pagination

@@ -6,6 +6,8 @@ import {
   orderFullCancelPayed,
   orderFullCancel,
   rejectOrder,
+  acceptFinishOrder,
+  finishOrder,
 } from "../services";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
@@ -50,6 +52,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
   const [activeFastCancel, setActiveFastCancel] = useState(false);
   const [activeFastCancelOrder, setActiveFastCancelOrder] = useState(null);
+
+  const [activeFinish, setActiveFinish] = useState(false);
+  const [activeFinishOrder, setActiveFinishOrder] = useState(null);
+
+  const [activeAcceptFinish, setActiveAcceptFinish] = useState(false);
+  const [activeAcceptFinishOrder, setActiveAcceptFinishOrder] = useState(null);
 
   const [orderToDispute, setOrderToDispute] = useState(null);
   const [disputeWindowActive, setDisputeWindowActive] = useState(false);
@@ -553,6 +561,38 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setRejectOrderModalActive(false);
   };
 
+  const handleClickFinish = (orderId) => {
+    setActiveFinishOrder(orderId);
+    setActiveFinish(true);
+  };
+
+  const handleAcceptFinish = async () => {
+    const result = await finishOrder(activeFinishOrder);
+    setItemFields(result, activeFinishOrder);
+    closeFinish();
+  };
+
+  const closeFinish = () => {
+    setActiveFinish(false);
+    setActiveFinishOrder(null);
+  };
+
+  const handleClickAcceptFinish = (orderId) => {
+    setActiveAcceptFinishOrder(orderId);
+    setActiveAcceptFinish(true);
+  };
+
+  const handleAcceptAcceptFinish = async () => {
+    const result = await acceptFinishOrder(activeAcceptFinishOrder);
+    setItemFields({ ...result }, activeAcceptFinishOrder);
+    closeAcceptFinish();
+  };
+
+  const closeAcceptFinish = () => {
+    setActiveAcceptFinish(false);
+    setActiveAcceptFinishOrder(null);
+  };
+
   return {
     handleAcceptCancel,
     handleClickCancel,
@@ -599,6 +639,16 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     disputeCreate,
     closeDisputeWindow,
     onCreateDispute,
+
+    handleClickFinish,
+    handleAcceptFinish,
+    activeFinish,
+    closeFinish,
+
+    handleClickAcceptFinish,
+    handleAcceptAcceptFinish,
+    activeAcceptFinish,
+    closeAcceptFinish,
   };
 };
 
