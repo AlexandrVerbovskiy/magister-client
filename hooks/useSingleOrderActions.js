@@ -2,8 +2,6 @@ import { useContext, useState } from "react";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import { IndiceContext } from "../contexts";
 import {
-  acceptFinishOrder,
-  finishOrder,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
@@ -20,8 +18,6 @@ const useSingleOrderActions = ({
   onAcceptOrder = null,
   onRejectOrder = null,
   onPayedFastCancel = null,
-  onAcceptFinishOrder = null,
-  onFinishOrder = null,
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
@@ -54,8 +50,6 @@ const useSingleOrderActions = ({
     onCreateUpdateRequest,
     onAcceptOrder,
     onRejectOrder,
-    onAcceptFinishOrder,
-    onFinishOrder,
   });
 
   const isOwner = sessionUser?.id == ownerId;
@@ -93,21 +87,9 @@ const useSingleOrderActions = ({
     }
   };
 
-  const handleAcceptFinishModalActive = async () => {
-    const result = await finishOrder(order?.id, authToken);
+  const handleAcceptFinishModalActive = async () => {};
 
-    if (onFinishOrder) {
-      onFinishOrder(result);
-    }
-  };
-
-  const handleAcceptAcceptFinishModalActive = async () => {
-    const result = await acceptFinishOrder(order?.id, authToken);
-
-    if (onAcceptFinishOrder) {
-      onAcceptFinishOrder(result);
-    }
-  };
+  const handleAcceptAcceptFinishModalActive = async () => {};
 
   return {
     bookingActionsDisabled,

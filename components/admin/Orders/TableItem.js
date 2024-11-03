@@ -4,7 +4,7 @@ import CancelStatus from "./CancelStatus";
 import Status from "./Status";
 import ShowMore from "../FastActions/ShowMore";
 import TableDateView from "../../admin/TableDateView";
-import { getFactOrderDays, getPaymentNameByType, moneyFormatVisual } from "../../../utils";
+import { getPaymentNameByType, moneyFormatVisual } from "../../../utils";
 import { IndiceContext } from "../../../contexts";
 import SubInfoRow from "../SubInfoRow";
 import SubInfoTitle from "../SubInfoTitle";

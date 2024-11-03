@@ -3,20 +3,19 @@ import ImagePopup from "../../../../components/_App/ImagePopup";
 import Navbar from "../../../../components/_App/Navbar";
 import PageBanner from "../../../../components/Common/PageBanner";
 import ItemInfo from "../../../../components/Order/OrderApprovementParts/ItemInfo";
-import OwnerInfo from "../../../../components/Order/OrderApprovementParts/OwnerInfo";
 import { authSideProps } from "../../../../middlewares";
 import { getOrderCheckoutInfo } from "../../../../services";
 import {
-  autoMultiEnding,
   autoCalculateCurrentTotalPrice,
-  calculateFee,
-  getFactOrderDays,
   moneyFormatVisual,
+  dateConverter,
+  workerGetsFeeCalculate,
 } from "../../../../utils";
 import PaymentSection from "../../../../components/_App/PaymentSection";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../../contexts";
 import Link from "next/link";
+import WorkerInfo from "../../../../components/Order/OrderApprovementParts/WorkerInfo";
 
 const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
   const { sessionUser } = useContext(IndiceContext);
@@ -27,7 +26,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   const price = order.offerPrice;
-  const totalFee = calculateFee(price, workerBaseCommission, true);
+  const totalFee = workerGetsFeeCalculate(price, workerBaseCommission);
   const totalPrice = price + totalFee;
 
   const onWorkerPayed = () => {
@@ -64,16 +63,16 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                       <div className="d-flex">
                         <div className="date-info date-info-view">
-                          <div className="date-info-label">Withdrawal</div>
+                          <div className="date-info-label">Finish Time</div>
                           <div className="date-info-value">
-                            {order.offerStartDate}
+                            {dateConverter(order.offerFinishTime)}
                           </div>
                         </div>
 
                         <div className="date-info date-info-view">
-                          <div className="date-info-label">Devolution</div>
+                          <div className="date-info-label">Price</div>
                           <div className="date-info-value">
-                            {order.offerEndDate}
+                            {moneyFormatVisual(order.offerPrice)}
                           </div>
                         </div>
                       </div>
@@ -82,6 +81,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                       className="d-flex justify-content-between"
                       style={{ marginTop: "10px", marginBottom: "10px" }}
                     >
+                      <div>Offer Price</div>
                       <div>{moneyFormatVisual(price)}</div>
                     </div>
 
@@ -103,17 +103,17 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                 </div>
               </div>
               <div className="col-12 mt-4 mt-lg-0 col-lg-4">
-                <OwnerInfo
+                <WorkerInfo
                   data={{
-                    userId: order.ownerId,
-                    userName: order.ownerName,
-                    userPhoto: order.ownerPhoto,
-                    userCountItems: +order.ownerCountItems,
-                    userCommentCount: order.ownerCommentCount,
-                    userAverageRating: order.ownerAverageRating,
+                    userId: order.workerId,
+                    userName: order.workerName,
+                    userPhoto: order.workerPhoto,
+                    userCountItems: +order.workerCountItems,
+                    userCommentCount: order.workerCommentCount,
+                    userAverageRating: order.workerAverageRating,
                   }}
-                  countItemsType="for rental"
-                  title="Owner"
+                  countItemsType="completed"
+                  title="Worker"
                   wrapperClassName="h-100"
                 />
               </div>
@@ -158,7 +158,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                   </div>
                 )}
 
-                {!(order.ownerVerified && order.ownerPaypalId) && (
+                {!(order.workerVerified && order.workerPaypalId) && (
                   <div className="card">
                     <div className="card-body">
                       <div
@@ -167,22 +167,22 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                       >
                         <i className="bx bx-x-circle icon-danger me-1"></i>
                         <b>
-                          To make a payment, the owner of the product must be
-                          verified and confirm his PayPal account.
+                          To make a payment, the worker must be verified and
+                          confirm his PayPal account.
                         </b>
                       </div>
                       <Link
                         className="default-btn mt-3"
                         href={"/dashboard/chats/" + order.chatId}
                       >
-                        Notify owner
+                        Notify worker
                       </Link>
                     </div>
                   </div>
                 )}
 
-                {order.ownerVerified &&
-                  order.ownerPaypalId &&
+                {order.workerVerified &&
+                  order.workerPaypalId &&
                   sessionUser?.verified && (
                     <PaymentSection
                       disabled={disabled}
@@ -192,11 +192,10 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                       onWorkerPayed={onWorkerPayed}
                       orderId={order.id}
                       amount={autoCalculateCurrentTotalPrice({
-                        isOwner: false,
                         price: order.offerPrice,
                         ownerFee: order.ownerFee,
                         workerFee: order.workerFee,
-                        type: "worker",
+                        type: "owner",
                       })}
                     />
                   )}

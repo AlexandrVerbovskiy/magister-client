@@ -3,7 +3,6 @@ import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 import {
   calculateFullTotalByType,
-  getFactOrderDays,
   moneyFormatVisual,
 } from "../../utils";
 

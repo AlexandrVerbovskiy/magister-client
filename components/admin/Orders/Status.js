@@ -40,7 +40,7 @@ const Status = ({
     dopClassName = "bg-rose-100 text-rose-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_WORKER_PAYMENT) {
+  if (status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
     text = "Waiting for Payment";
     dopClassName = "bg-sky-100 text-sky-500";
 

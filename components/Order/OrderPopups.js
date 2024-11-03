@@ -6,6 +6,7 @@ import PayModal from "../PayModal";
 import { autoCalculateCurrentTotalPrice } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
+import YesNoModal from "../_App/YesNoModal";
 
 const OrderPopups = ({
   order,
@@ -38,6 +39,13 @@ const OrderPopups = ({
   bankInfo,
 
   onWorkerPayed = null,
+
+  finishModalActive,
+  setFinishModalActive,
+  handleAcceptFinishModalActive,
+  acceptFinishModalActive,
+  setAcceptFinishModalActive,
+  handleAcceptAcceptFinishModalActive,
 }) => {
   const { authToken } = useContext(IndiceContext);
 
@@ -94,6 +102,32 @@ const OrderPopups = ({
           handleCancel={handleCancelApprove}
           modalActive={cancelModalActive}
           closeModal={() => setCancelModalActive(false)}
+        />
+      )}
+
+      {actionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON) && (
+        <YesNoModal
+          active={finishModalActive}
+          closeModal={() => setFinishModalActive(false)}
+          title="Finish order"
+          body="To send finish request, click 'Confirm'"
+          onAccept={handleAcceptFinishModalActive}
+          acceptText="Confirm"
+          closeModalText="Close"
+        />
+      )}
+
+      {actionButtons.includes(
+        STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+      ) && (
+        <YesNoModal
+          active={acceptFinishModalActive}
+          closeModal={() => setAcceptFinishModalActive(false)}
+          title="Accept Finish"
+          body="To accept finish request, click 'Confirm'"
+          onAccept={handleAcceptAcceptFinishModalActive}
+          acceptText="Confirm"
+          closeModalText="Close"
         />
       )}
 

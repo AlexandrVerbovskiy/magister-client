@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { moneyFormatVisual, workerPaymentCalculate } from "../utils";
+import { moneyFormatVisual, workerGetsCalculate } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
 const PayModal = ({
@@ -27,7 +27,7 @@ const PayModal = ({
     }, 100);
   };
 
-  const total = workerPaymentCalculate(price, offerFee);
+  const total = workerGetsCalculate(price, offerFee);
 
   const handleClose = () => {
     if (disabled) {

@@ -5,9 +5,10 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { workerPaymentCalculate } from "../../utils";
+import { workerGetsCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
+import YesNoModal from "../_App/YesNoModal";
 
 const OrdersListFastActinsModals = ({
   activeCancel,
@@ -38,6 +39,14 @@ const OrdersListFastActinsModals = ({
 
   successIconPopupState,
   bankInfo,
+
+  handleAcceptFinish,
+  activeFinish,
+  closeFinish,
+
+  handleAcceptAcceptFinish,
+  activeAcceptFinish,
+  closeAcceptFinish,
 }) => {
   const { sessionUser, authToken } = useContext(IndiceContext);
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
@@ -86,10 +95,7 @@ const OrdersListFastActinsModals = ({
 
   useEffect(() => {
     const newAmount = activePayOrder
-      ? workerPaymentCalculate(
-          activePayOrder.offerPrice,
-          activePayOrder.workerFee
-        )
+      ? workerGetsCalculate(activePayOrder.offerPrice, activePayOrder.workerFee)
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
@@ -157,6 +163,26 @@ const OrdersListFastActinsModals = ({
         textWeight={successIconPopupState.textWeight}
         text={successIconPopupState.text}
         mainCloseButtonText={successIconPopupState.closeButtonText}
+      />
+
+      <YesNoModal
+        active={activeFinish}
+        closeModal={closeFinish}
+        title="Finish order"
+        body="To send finish request, click 'Confirm'"
+        onAccept={handleAcceptFinish}
+        acceptText="Confirm"
+        closeModalText="Close"
+      />
+
+      <YesNoModal
+        active={activeAcceptFinish}
+        closeModal={closeAcceptFinish}
+        title="Accept Finish"
+        body="To accept finish request, click 'Confirm'"
+        onAccept={handleAcceptAcceptFinish}
+        acceptText="Confirm"
+        closeModalText="Close"
       />
     </>
   );

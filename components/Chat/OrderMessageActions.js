@@ -27,7 +27,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         order.cancelStatus ==
-        STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE
+        STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE
       ) {
         canActions = true;
       }
@@ -36,7 +36,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         type == STATIC.MESSAGE_TYPES.NEW_ORDER &&
         !order.actualUpdateRequest &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
+          order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
       ) {
         canActions = true;
       }
@@ -46,13 +46,13 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         order.actualUpdateRequest &&
         order.actualUpdateRequest.id == content.requestId &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
+          order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
       ) {
         canActions = true;
       }
 
       if (
-        type == STATIC.MESSAGE_TYPES.RENTER_PAYED &&
+        type == STATIC.MESSAGE_TYPES.WORKER_PAYED &&
         order.status == STATIC.ORDER_STATUSES.IN_PROCESS
       ) {
         canActions = true;
@@ -60,7 +60,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         type == STATIC.MESSAGE_TYPES.IN_PROCESS &&
-        order.status == STATIC.ORDER_STATUSES.IN_PROCESS
+        order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
       ) {
         canActions = true;
       }
@@ -72,16 +72,9 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         canActions = true;
       }
 
-      if (
-        type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
-      ) {
-        canActions = true;
-      }
-
-      if (order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT) {
+      if (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
         if (order?.paymentInfo?.id) {
-          if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING) {
+          if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
             canActions = true;
           }
         } else {

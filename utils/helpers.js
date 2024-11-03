@@ -85,12 +85,12 @@ export const hasPayError = ({ sessionUser, order }) => {
     return "You need to be verified to make a payment";
   }
 
-  if (!order.ownerVerified) {
-    return "To make a payment, the owner of the product must be verified";
+  if (!order.workerVerified) {
+    return "To make a payment, the worker must be verified";
   }
 
-  if (!order.ownerPaypalId) {
-    return "To make a payment, the owner of the product must confirm his PayPal account";
+  if (!order.workerPaypalId) {
+    return "To make a payment, the worker must confirm his PayPal account";
   }
 
   return null;

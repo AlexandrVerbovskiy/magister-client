@@ -6,9 +6,9 @@ const StatusBlock = ({
   statusCancelled,
   disputeStatus,
   ownerId,
-  renterId,
+  workerId,
   userId,
-  finishDate,
+  endDate,
   payedId,
   dopClass = "",
   adminApproved,
@@ -22,7 +22,7 @@ const StatusBlock = ({
 
   if (
     [
-      STATIC.ORDER_STATUSES.PENDING_RENTER,
+      STATIC.ORDER_STATUSES.PENDING_WORKER,
       STATIC.ORDER_STATUSES.PENDING_OWNER,
     ].includes(orderStatus)
   ) {
@@ -30,7 +30,7 @@ const StatusBlock = ({
     text = "Waiting for Confirmation";
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT) {
+  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for Payment";
 
@@ -80,7 +80,7 @@ const StatusBlock = ({
   }
 
   if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE
   ) {
     color = "status-background-red";
     text = "In Dispute";

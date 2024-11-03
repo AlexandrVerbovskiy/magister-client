@@ -11,7 +11,6 @@ import { authSideProps } from "../../../middlewares";
 import {
   calculateFullTotalByType,
   downloadFileUrl,
-  getFactOrderDays,
   moneyFormatVisual,
 } from "../../../utils";
 import { useDropzone } from "react-dropzone";
