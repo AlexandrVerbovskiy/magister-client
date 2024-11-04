@@ -9,7 +9,7 @@ const ContractDetailsLight = ({ price, fee }) => {
 
   return (
     <div className="listings-widget listings_contact_details">
-      <h3>Worker Details</h3>
+      <h3>Task Details</h3>
 
       <div>
         <div

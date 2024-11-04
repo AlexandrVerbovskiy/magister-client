@@ -101,7 +101,7 @@ const MultyMarkersMap = ({
             radius={marker.radius}
             onMouseOver={() => onMouseOver(marker.id)}
             onMouseOut={() => onMouseOut(marker.id)}
-            color="#847BDD"
+            color="#0ec6c6"
             strokeOpacity={marker.active ? 0.35 : 0.35}
             fillOpacity={marker.active ? 0.25 : 0.15}
           />

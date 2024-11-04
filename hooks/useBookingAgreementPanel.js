@@ -84,7 +84,6 @@ const useBookingAgreementPanel = ({
           prevFinishTime: result.prevFinishTime,
           offerPrice: result.price,
           prevPrice: result.prevPrice,
-
         });
       }
 

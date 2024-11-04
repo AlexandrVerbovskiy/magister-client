@@ -194,11 +194,6 @@ const orderMessageContent = ({
       workerFee: entity.workerFee,
     });
 
-    const duration = getFactOrderDays(
-      content.offerStartDate,
-      content.offerEndDate
-    );
-
     let title = "Request";
 
     if (type === STATIC.MESSAGE_TYPES.UPDATE_ORDER) {
@@ -207,15 +202,15 @@ const orderMessageContent = ({
 
     return (
       <OrderInfoMessageContent
-        totalPrice={totalPrice}
+        price={totalPrice}
         content={content}
         entity={entity}
         type={type}
-        duration={duration}
         title={title}
         hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
         senderId={senderId}
         popupsData={popupsData}
+        finishTime={content.offerFinishTime}
       />
     );
   }
@@ -225,7 +220,7 @@ const orderMessageContent = ({
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.WORKER_PAYED,
       STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
-      STATIC.MESSAGE_TYPES.PENDED_TO_WORKER,
+      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
     ].includes(type)
@@ -243,8 +238,8 @@ const orderMessageContent = ({
       style = { maxWidth: "200px", textAlign: "center" };
     }
 
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_WORKER) {
-      title = "Got the item";
+    if (type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE) {
+      title = "Waiting owner approve";
     }
 
     if (type == STATIC.MESSAGE_TYPES.FINISHED) {
