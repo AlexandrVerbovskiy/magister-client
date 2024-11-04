@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
+import Flatpickr from "react-flatpickr";
+import React, { useEffect, useState } from "react";
+import { getMaxFlatpickrDate } from "../../utils";
 
 const DateInput = ({ value, name, placeholder, onInput, inline = true }) => {
   const [pickerValue, setPickerValue] = useState(value ? [value] : []);
 
-  const showPicker = () => {
-    if (!showedPicker) {
-      inputRef.current.showPicker();
-    }
+  useEffect(() => {
+    setPickerValue(value ? [value] : []);
+  }, [value]);
 
   const options = {
     mode: "single",
@@ -14,14 +15,9 @@ const DateInput = ({ value, name, placeholder, onInput, inline = true }) => {
     static: true,
     monthSelectorType: "static",
     dateFormat: "M j, Y H:i",
-<<<<<<< HEAD
-    enableTime: false,
-    time_24hr: false,
-    minDate: new Date(),
-=======
     enableTime: true,
     time_24hr: true,
->>>>>>> ebc90ab (listing updated)
+    minDate: new Date(),
     prevArrow:
       '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow:
@@ -39,18 +35,15 @@ const DateInput = ({ value, name, placeholder, onInput, inline = true }) => {
   };
 
   return (
-    <input
-      ref={inputRef}
-      className="date-input"
-      type="date"
-      value={value}
-      onChange={handleInput}
-      name={name}
-      id={name}
-      onClick={showPicker}
-      min={min}
-      onBlur={handleBlur}
-    />
+    <div className="w-100">
+      <Flatpickr
+        value={pickerValue}
+        options={options}
+        placeholder={placeholder}
+        name={name}
+        className="form-control d-flex align-items-center cursor-pointer w-100"
+      />
+    </div>
   );
 };
 

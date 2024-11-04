@@ -60,7 +60,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         type == STATIC.MESSAGE_TYPES.IN_PROCESS &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
+        order.status == STATIC.ORDER_STATUSES.IN_PROCESS
       ) {
         canActions = true;
       }
@@ -68,6 +68,13 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
       if (
         type == STATIC.MESSAGE_TYPES.FINISHED &&
         order.status == STATIC.ORDER_STATUSES.FINISHED
+      ) {
+        canActions = true;
+      }
+
+      if (
+        type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
       ) {
         canActions = true;
       }

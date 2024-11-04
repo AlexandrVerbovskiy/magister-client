@@ -62,7 +62,7 @@ const SingleListingsContent = ({
     try {
       const id = await createOrder(
         {
-          totalPrice: currentApprovePrice,
+          price: currentApprovePrice,
           finishTime: currentApproveFinishTime,
           listingId: listing.id,
           message: sendingMessage,
@@ -555,7 +555,7 @@ const SingleListingsContent = ({
                             className="default-btn w-100"
                             onClick={handleSendRequestTriggerClick}
                           >
-                            Send request {moneyFormatVisual(listing.totalPrice)}
+                            Send request {moneyFormatVisual(listing.price)}
                           </button>
                         </div>
                       ) : (
@@ -639,7 +639,7 @@ const SingleListingsContent = ({
       {sessionUser && (
         <SendCompleteRequestModal
           handleSendRequest={handleBeforeSendRequest}
-          price={listing.totalPrice}
+          price={listing.price}
           finishTime={listing.finishTime}
           fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
@@ -655,19 +655,12 @@ const SingleListingsContent = ({
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
-                  <ul style={{ listStyle: "none", padding: "0" }}>
-                    <li className="d-flex">
-                      <div className="row-dots-end mt-0">
-                        <span>{moneyFormatVisual(listing.totalPrice)}</span>
-                      </div>
-                    </li>
-                  </ul>
                   <button
                     type="button"
                     className="default-btn w-100"
                     onClick={handleSendRequestTriggerClick}
                   >
-                    Send completing request {moneyFormatVisual(listing.totalPrice)}
+                    Send completing request {moneyFormatVisual(listing.price)}
                   </button>
                 </div>
               ) : (

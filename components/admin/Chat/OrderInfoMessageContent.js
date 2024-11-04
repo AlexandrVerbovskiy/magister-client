@@ -9,15 +9,14 @@ import CancelStatus from "../Orders/CancelStatus";
 
 const OrderInfoMessageContent = ({
   forOwnerPrice,
-  forRenterPrice,
+  forWorkerPrice,
   content,
   title,
   messageClassName,
   order,
   dispute,
   hasDescription = false,
-  finishDate,
-  startDate,
+  finishTime,
 }) => {
   return (
     <div className={`flex flex-col items-center ${messageClassName}`}>
@@ -36,12 +35,10 @@ const OrderInfoMessageContent = ({
       <div className="my-1">
         <b>Owner get: {moneyFormatVisual(forOwnerPrice)}</b>
         <br />
-        <b>Renter payed: {moneyFormatVisual(forRenterPrice)}</b>
+        <b>Worker payed: {moneyFormatVisual(forWorkerPrice)}</b>
       </div>
 
-      <div className="mb-1">
-        {startDate}-{finishDate}
-      </div>
+      <div className="mb-1">{finishTime}</div>
 
       <div className="my-2">
         {order.cancelStatus ? (

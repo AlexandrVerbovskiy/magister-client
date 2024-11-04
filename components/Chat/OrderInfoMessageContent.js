@@ -18,8 +18,7 @@ const OrderInfoMessageContent = ({
   senderId,
   popupsData,
   hasDescription = false,
-  finishDate,
-  startDate,
+  finishTime,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -42,9 +41,7 @@ const OrderInfoMessageContent = ({
         <b>Price: {moneyFormatVisual(price)}</b>
       </div>
 
-      <div className="mb-1">
-        {dateConverter(startDate)}-{dateConverter(finishDate)}
-      </div>
+      <div className="mb-1">{finishTime}</div>
 
       <div className="mb-1">
         <StatusBlock
@@ -52,7 +49,7 @@ const OrderInfoMessageContent = ({
           statusCancelled={entity.cancelStatus}
           disputeStatus={entity.disputeStatus}
           ownerId={entity.ownerId}
-          renterId={entity.renterId}
+          workerId={entity.workerId}
           userId={sessionUser?.id}
           payedId={entity.paymentInfo?.id}
           adminApproved={entity.paymentInfo?.adminApproved}

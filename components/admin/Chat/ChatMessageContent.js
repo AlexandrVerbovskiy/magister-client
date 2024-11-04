@@ -231,11 +231,6 @@ const orderMessageContent = ({
       workerFee: order.workerFee,
     });
 
-    const duration = getFactOrderDays(
-      content.offerStartDate,
-      content.offerEndDate
-    );
-
     let title = "Request";
 
     if (type === STATIC.MESSAGE_TYPES.UPDATE_ORDER) {
@@ -248,7 +243,6 @@ const orderMessageContent = ({
         forOwnerPrice={forOwnerPrice}
         forWorkerPrice={forWorkerPrice}
         content={content}
-        duration={duration}
         order={order}
         dispute={dispute}
         title={title}
@@ -262,9 +256,9 @@ const orderMessageContent = ({
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
       STATIC.MESSAGE_TYPES.WORKER_PAYED,
       STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
-      STATIC.MESSAGE_TYPES.PENDED_TO_WORKER,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
+      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE
     ].includes(type)
   ) {
     let title = "Proposal accepted";
@@ -278,8 +272,8 @@ const orderMessageContent = ({
       title = "Request for confirmation of rent payment was successfully sent";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_WORKER) {
-      title = "Got the item";
+    if (type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE) {
+      title = "Waiting owner approve";
     }
 
     if (type == STATIC.MESSAGE_TYPES.FINISHED) {

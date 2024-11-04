@@ -141,6 +141,18 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
+  const onAcceptFinishOrder = ({ chatMessage, status }) => {
+    updateOrder({ status });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
+  const onFinishOrder = ({ chatMessage, status }) => {
+    updateOrder({ status });
+    actions.appendMessage(chatMessage);
+    windowProps.scrollBodyBottom();
+  };
+
   const onRejectOrder = ({ chatMessage, status, cancelStatus }) => {
     updateOrder({ status, cancelStatus });
     actions.appendMessage(chatMessage);
@@ -172,6 +184,8 @@ const OrderChatBody = ({
     onRejectOrder,
     onPayedFastCancel,
     onDisputeOpened,
+    onAcceptFinishOrder,
+    onFinishOrder
   });
 
   /*  activeDisputeWindow,
