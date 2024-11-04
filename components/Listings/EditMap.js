@@ -59,7 +59,7 @@ const EditMap = ({
           draggable={markerActive}
           editable={markerActive}
           onClick={() => setMarkerActive(true)}
-          color="#847BDD"
+          color="#0ec6c6"
           onRadiusChanged={() => {
             if (!circleRef.current) return;
             setRadius(circleRef.current.state.circle.radius);

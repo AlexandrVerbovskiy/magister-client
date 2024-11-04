@@ -14,13 +14,11 @@ const OrderInfoMessageContent = ({
   content,
   entity,
   type,
-  duration,
   title,
   senderId,
   popupsData,
-  extensionPopupsData = null,
   hasDescription = false,
-  isExtensionActions = false,
+  finishTime,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -43,20 +41,16 @@ const OrderInfoMessageContent = ({
         <b>Price: {moneyFormatVisual(price)}</b>
       </div>
 
-      <div className="mb-1">
-        {duration} {autoMultiEnding(duration, "day")} (
-        {dateConverter(content.offerStartDate)} -{" "}
-        {dateConverter(content.offerEndDate)})
-      </div>
+      <div className="mb-1">{finishTime}</div>
+
       <div className="mb-1">
         <StatusBlock
           status={entity.status}
           statusCancelled={entity.cancelStatus}
           disputeStatus={entity.disputeStatus}
           ownerId={entity.ownerId}
-          tenantId={entity.tenantId}
+          workerId={entity.workerId}
           userId={sessionUser?.id}
-          endDate={entity.offerEndDate}
           payedId={entity.paymentInfo?.id}
           adminApproved={entity.paymentInfo?.adminApproved}
           waitingApproved={entity.paymentInfo?.waitingApproved}
@@ -74,8 +68,6 @@ const OrderInfoMessageContent = ({
         content={content}
         senderId={senderId}
         popupsData={popupsData}
-        extensionPopupsData={extensionPopupsData}
-        isExtensionActions={isExtensionActions}
       />
     </div>
   );

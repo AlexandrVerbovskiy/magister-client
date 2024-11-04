@@ -9,11 +9,7 @@ import {
   getDisputeTitle,
   getFactOrderDays,
   getFilePath,
-  getListingImageByType,
-  moneyFormatVisual,
 } from "../../../utils";
-import CancelStatus from "../Orders/CancelStatus";
-import StatusBlock from "../../Listings/StatusBlock";
 
 const DownloadButton = ({ src }) => {
   return (
@@ -87,7 +83,7 @@ const OwnerCommentMessage = ({ content }) => {
   );
 };
 
-const TenantCommentMessage = ({ content }) => {
+const WorkerCommentMessage = ({ content }) => {
   const items = [
     { label: "Care", value: content.care },
     { label: "Timeliness", value: content.timeliness },
@@ -214,23 +210,17 @@ const orderMessageContent = ({
   order,
   dispute,
   messageClassName,
-  senderId,
 }) => {
-  const senderName =
-    senderId == order.ownerId ? order.ownerName : order.tenantName;
-
   if (
     type === STATIC.MESSAGE_TYPES.NEW_ORDER ||
-    type === STATIC.MESSAGE_TYPES.UPDATE_ORDER ||
-    type === STATIC.MESSAGE_TYPES.NEW_EXTENSION ||
-    type === STATIC.MESSAGE_TYPES.UPDATE_EXTENSION
+    type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const forOwnerPrice = autoCalculateCurrentTotalPrice({
       price: content.offerPrice,
       type: "owner",
       isOwner: true,
       ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
+      workerFee: order.workerFee,
     });
 
     const forWorkerPrice = autoCalculateCurrentTotalPrice({
@@ -238,13 +228,8 @@ const orderMessageContent = ({
       type: "worker",
       isOwner: false,
       ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
+      workerFee: order.workerFee,
     });
-
-    const duration = getFactOrderDays(
-      content.offerStartDate,
-      content.offerEndDate
-    );
 
     let title = "Request";
 
@@ -252,78 +237,43 @@ const orderMessageContent = ({
       title = "Updating Request";
     }
 
-    if (type === STATIC.MESSAGE_TYPES.NEW_EXTENSION) {
-      title = "Extension Request";
-    }
-
-    if (type === STATIC.MESSAGE_TYPES.UPDATE_EXTENSION) {
-      title = "Updating Extension Request";
-    }
-
     return (
       <OrderInfoMessageContent
         messageClassName={messageClassName}
         forOwnerPrice={forOwnerPrice}
-        forTenantPrice={forTenantPrice}
+        forWorkerPrice={forWorkerPrice}
         content={content}
-        duration={duration}
         order={order}
         dispute={dispute}
         title={title}
-        hasDescription={
-          type === STATIC.MESSAGE_TYPES.NEW_ORDER ||
-          type === STATIC.MESSAGE_TYPES.NEW_EXTENSION
-        }
+        hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
       />
     );
   }
 
   if (
     [
-      STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION,
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
-      STATIC.MESSAGE_TYPES.TENANT_PAYED,
-      STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING,
-      STATIC.MESSAGE_TYPES.TENANT_PAYED_EXTENSION,
-      STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING_EXTENSION,
-      STATIC.MESSAGE_TYPES.PENDED_TO_TENANT,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED,
+      STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
+      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE
     ].includes(type)
   ) {
     let title = "Proposal accepted";
     let description = "";
 
-    if (type == STATIC.MESSAGE_TYPES.ACCEPTED_EXTENSION) {
-      title = `Extension proposal accepted`;
-      description = `(From ${dateConverter(content.offerStartDate)} to
-      ${dateConverter(content.offerEndDate)})`;
-    }
-
-    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED) {
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED) {
       title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING) {
+    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
       title = "Request for confirmation of rent payment was successfully sent";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_EXTENSION) {
-      title = "Paid for the extension";
-      description = `New end date for rental: ${dateConverter(
-        content.offerEndDate
-      )}`;
-    }
-
-    if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING_EXTENSION) {
-      title =
-        "Request for confirmation of extension payment was successfully sent";
-      description = `(From ${dateConverter(content.offerStartDate)} to
-      ${dateConverter(content.offerEndDate)})`;
-    }
-
-    if (type == STATIC.MESSAGE_TYPES.PENDED_TO_TENANT) {
-      title = "Got the item";
+    if (type == STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE) {
+      title = "Waiting owner approve";
     }
 
     if (type == STATIC.MESSAGE_TYPES.FINISHED) {
@@ -346,8 +296,6 @@ const orderMessageContent = ({
 
   if (
     [
-      STATIC.MESSAGE_TYPES.CANCELED_EXTENSION,
-      STATIC.MESSAGE_TYPES.REJECTED_EXTENSION,
       STATIC.MESSAGE_TYPES.CANCELED_ORDER,
       STATIC.MESSAGE_TYPES.REJECTED_ORDER,
       STATIC.MESSAGE_TYPES.CREATED_CANCEL_REQUEST,
@@ -361,14 +309,6 @@ const orderMessageContent = ({
 
     if (type == STATIC.MESSAGE_TYPES.CREATED_CANCEL_REQUEST) {
       title = "Created cancel request";
-    }
-
-    if (type == STATIC.MESSAGE_TYPES.REJECTED_EXTENSION) {
-      title = "Extension rejected";
-    }
-
-    if (type == STATIC.MESSAGE_TYPES.CANCELED_EXTENSION) {
-      title = "Extension canceled";
     }
 
     return (
@@ -385,8 +325,8 @@ const orderMessageContent = ({
       <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
           <b>
-            {dispute.senderId == dispute.tenantId
-              ? dispute.tenantName
+            {dispute.senderId == dispute.workerId
+              ? dispute.workerName
               : dispute.ownerName}{" "}
             started dispute
           </b>
@@ -408,19 +348,19 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,
-      STATIC.MESSAGE_TYPES.TENANT_REVIEW,
+      STATIC.MESSAGE_TYPES.WORKER_REVIEW,
     ].includes(type)
   ) {
-    const isRenterReview = type == STATIC.MESSAGE_TYPES.TENANT_REVIEW;
+    const isWorkerReview = type == STATIC.MESSAGE_TYPES.WORKER_REVIEW;
 
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
-          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
+          <b>{isWorkerReview ? "Worker review" : "Owner review"}</b>
         </div>
 
-        {isRenterReview ? (
-          <TenantCommentMessage content={content} />
+        {isWorkerReview ? (
+          <WorkerCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
         )}
@@ -434,81 +374,6 @@ const orderMessageContent = ({
           <div className="w-full mt-1">
             <b>Private feedback: </b>
             {content.leaveFeedback}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (type == STATIC.MESSAGE_TYPES.TENANT_PAYED_WAITING_EXTENSION) {
-    const forOwnerPrice = calculateCurrentTotalPrice({
-      startDate: content.offerStartDate,
-      endDate: content.offerEndDate,
-      pricePerDay: content.offerPrice,
-      type: "owner",
-      isOwner: true,
-      ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
-    });
-
-    const forTenantPrice = calculateCurrentTotalPrice({
-      startDate: content.offerStartDate,
-      endDate: content.offerEndDate,
-      pricePerDay: content.offerPrice,
-      type: "tenant",
-      isOwner: false,
-      ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
-    });
-
-    const duration = getFactOrderDays(
-      content.offerStartDate,
-      content.offerEndDate
-    );
-
-    return (
-      <div className={`flex flex-col items-center ${messageClassName}`}>
-        <div className="mb-2">
-          <b>{senderName} started new booking based on extension</b>
-        </div>
-        <img
-          height="100"
-          className="small-message-media"
-          src={getListingImageByType(
-            content.listingPhotoPath,
-            content.listingPhotoType
-          )}
-          style={{ width: "200px", height: "200px" }}
-        />
-        <div className="my-1">
-          <b>Owner get: {moneyFormatVisual(forOwnerPrice)}</b>
-          <br />
-          <b>Renter payed: {moneyFormatVisual(forTenantPrice)}</b>
-        </div>
-        <div className="mb-1">
-          {duration} {autoMultiEnding(duration, "day")} (
-          {dateConverter(content.offerStartDate)} -{" "}
-          {dateConverter(content.offerEndDate)})
-        </div>
-        <div className="my-2">
-          {order.cancelStatus ? (
-            <CancelStatus
-              status={order.cancelStatus}
-              baseClass="px-3 rounded-full shadow-2xl w-max"
-            />
-          ) : (
-            <StatusBlock
-              status={order.status}
-              payedId={order.paymentInfo?.id}
-              payedAdminApproved={order.paymentInfo?.adminApproved}
-              payedWaitingApproved={order.paymentInfo?.waitingApproved}
-              baseClass="px-3 rounded-full shadow-2xl w-max"
-            />
-          )}
-        </div>
-        {hasDescription && (
-          <div className="w-full mb-1">
-            <b>Description: </b> {content.description}
           </div>
         )}
       </div>

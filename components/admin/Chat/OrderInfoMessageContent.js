@@ -11,12 +11,12 @@ const OrderInfoMessageContent = ({
   forOwnerPrice,
   forTenantPrice,
   content,
-  duration,
   title,
   messageClassName,
   order,
   dispute,
   hasDescription = false,
+  finishTime,
 }) => {
   return (
     <div className={`flex flex-col items-center ${messageClassName}`}>
@@ -37,11 +37,9 @@ const OrderInfoMessageContent = ({
         <br />
         <b>Renter payed: {moneyFormatVisual(forTenantPrice)}</b>
       </div>
-      <div className="mb-1">
-        {duration} {autoMultiEnding(duration, "day")} (
-        {dateConverter(content.offerStartDate)} -{" "}
-        {dateConverter(content.offerEndDate)})
-      </div>
+
+      <div className="mb-1">{finishTime}</div>
+
       <div className="my-2">
         {order.cancelStatus ? (
           <CancelStatus

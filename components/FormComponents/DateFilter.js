@@ -20,6 +20,7 @@ const DateFilter = ({ value, onChange, placeholder = "Filter date" }) => {
       new Date(),
     ],
     maxDate: getMaxFlatpickrDate(),
+    minDate: "today",
     onReady: (selectedDates, dateStr, instance) => {
       instance.element.value = dateStr.replace("to", "-");
     },

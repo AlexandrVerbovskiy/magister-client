@@ -199,6 +199,30 @@ const OrderActions = ({
           )}
 
           {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
+          ) && (
+            <button
+              type="button"
+              onClick={() => popupsData.setFinishModalActive(true)}
+              className={actionClass}
+            >
+              <i className="bx bx-check-circle"></i> Send Finish Request
+            </button>
+          )}
+
+          {currentActionButtons.includes(
+            STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+          ) && (
+            <button
+              type="button"
+              className={actionClass}
+              onClick={() => popupsData.setAcceptFinishModalActive(true)}
+            >
+              {needIcon && <i className="bx bx-check-circle"></i>} Accept Finish
+            </button>
+          )}
+
+          {currentActionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON
           ) && (
             <button

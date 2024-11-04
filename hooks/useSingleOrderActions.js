@@ -2,7 +2,8 @@ import { useContext, useState } from "react";
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import { IndiceContext } from "../contexts";
 import {
-  extendOrder,
+  acceptFinishOrder,
+  finishOrder,
   orderFullCancel,
   orderFullCancelPayed,
   rejectOrder,
@@ -15,18 +16,16 @@ const useSingleOrderActions = ({
   setPrevUpdateRequest = null,
   onCreateUpdateRequest = null,
   onCancel = null,
-  onExtendOrder = null,
   setError,
   onAcceptOrder = null,
   onRejectOrder = null,
   onPayedFastCancel = null,
+  onAcceptFinishOrder = null,
+  onFinishOrder = null,
 }) => {
   const { authToken, sessionUser } = useContext(IndiceContext);
 
-  const [extendPopupActive, setExtendPopupActive] = useState(false);
-  const [extendApproveData, setExtendApproveData] = useState(null);
   const [paypalModalActive, setPaypalModalActive] = useState(false);
-
   const [cancelModalActive, setCancelModalActive] = useState(false);
   const [payedCancelModalActive, setPayedCancelModalActive] = useState(false);
   const [payedCancelDisabled, setPayedCancelDisabled] = useState(false);
@@ -55,6 +54,8 @@ const useSingleOrderActions = ({
     onCreateUpdateRequest,
     onAcceptOrder,
     onRejectOrder,
+    onAcceptFinishOrder,
+    onFinishOrder,
   });
 
   const isOwner = sessionUser?.id == ownerId;
@@ -92,9 +93,21 @@ const useSingleOrderActions = ({
     }
   };
 
-  const handleAcceptFinishModalActive = async () => {};
+  const handleAcceptFinishModalActive = async () => {
+    const result = await finishOrder(order?.id, authToken);
 
-  const handleAcceptAcceptFinishModalActive = async () => {};
+    if (onFinishOrder) {
+      onFinishOrder(result);
+    }
+  };
+
+  const handleAcceptAcceptFinishModalActive = async () => {
+    const result = await acceptFinishOrder(order?.id, authToken);
+
+    if (onAcceptFinishOrder) {
+      onAcceptFinishOrder(result);
+    }
+  };
 
   return {
     bookingActionsDisabled,
@@ -107,11 +120,6 @@ const useSingleOrderActions = ({
     rejectOrderModalActive,
     setRejectOrderModalActive,
     handleAcceptAcceptOrder,
-
-    extendPopupActive,
-    setExtendPopupActive,
-    extendApproveData,
-    setExtendApproveData,
     paypalModalActive,
     setPaypalModalActive,
     cancelModalActive,
@@ -120,7 +128,6 @@ const useSingleOrderActions = ({
     setPayedCancelModalActive,
     payedCancelDisabled,
     setPayedCancelDisabled,
-
     handleCancelApprove,
     handlePayedFastCancel,
     finishModalActive,
