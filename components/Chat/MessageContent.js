@@ -218,8 +218,8 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.ACCEPTED_ORDER,
-      STATIC.MESSAGE_TYPES.WORKER_PAYED,
-      STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING,
+      STATIC.MESSAGE_TYPES.OWNER_PAYED,
+      STATIC.MESSAGE_TYPES.OWNER_PAYED_WAITING,
       STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
@@ -229,11 +229,11 @@ const orderMessageContent = ({
     let style = {};
     let description = "";
 
-    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED) {
+    if (type == STATIC.MESSAGE_TYPES.OWNER_PAYED) {
       title = "Paid for the rental";
     }
 
-    if (type == STATIC.MESSAGE_TYPES.WORKER_PAYED_WAITING) {
+    if (type == STATIC.MESSAGE_TYPES.OWNER_PAYED_WAITING) {
       title = "Request for confirmation of rent payment was successfully sent";
       style = { maxWidth: "200px", textAlign: "center" };
     }
