@@ -6,7 +6,7 @@ const useAdminChatList = (props) => {
     ...props,
     getChatList: getAdminChatList,
     chatHasRelationToOther: (chat, chatId) =>
-      [chat.id, chat.ownerChatId, chat.workerChatId].includes(chatId),
+      [chat.id, chat.ownerChatId, chat.renterChatId].includes(chatId),
     checkMainRelationToOther: (chat, chatId) => chat.id === chatId,
   });
 

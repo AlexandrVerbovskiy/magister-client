@@ -83,7 +83,7 @@ const OwnerCommentMessage = ({ content }) => {
   );
 };
 
-const WorkerCommentMessage = ({ content }) => {
+const RenterCommentMessage = ({ content }) => {
   const items = [
     { label: "Care", value: content.care },
     { label: "Timeliness", value: content.timeliness },
@@ -220,15 +220,15 @@ const orderMessageContent = ({
       type: "owner",
       isOwner: true,
       ownerFee: order.ownerFee,
-      workerFee: order.workerFee,
+      renterFee: order.renterFee,
     });
 
-    const forWorkerPrice = autoCalculateCurrentTotalPrice({
+    const forRenterPrice = autoCalculateCurrentTotalPrice({
       price: content.offerPrice,
-      type: "worker",
+      type: "renter",
       isOwner: false,
       ownerFee: order.ownerFee,
-      workerFee: order.workerFee,
+      renterFee: order.renterFee,
     });
 
     let title = "Request";
@@ -241,7 +241,7 @@ const orderMessageContent = ({
       <OrderInfoMessageContent
         messageClassName={messageClassName}
         forOwnerPrice={forOwnerPrice}
-        forWorkerPrice={forWorkerPrice}
+        forRenterPrice={forRenterPrice}
         content={content}
         order={order}
         dispute={dispute}
@@ -325,8 +325,8 @@ const orderMessageContent = ({
       <div className={`flex flex-col ${messageClassName} w-max`}>
         <div className="text-center mb-1">
           <b>
-            {dispute.senderId == dispute.workerId
-              ? dispute.workerName
+            {dispute.senderId == dispute.renterId
+              ? dispute.renterName
               : dispute.ownerName}{" "}
             started dispute
           </b>
@@ -348,19 +348,19 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,
-      STATIC.MESSAGE_TYPES.WORKER_REVIEW,
+      STATIC.MESSAGE_TYPES.RENTER_REVIEW,
     ].includes(type)
   ) {
-    const isWorkerReview = type == STATIC.MESSAGE_TYPES.WORKER_REVIEW;
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.RENTER_REVIEW;
 
     return (
       <div className={`flex flex-col items-center ${messageClassName} w-max`}>
         <div className="mb-1">
-          <b>{isWorkerReview ? "Worker review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        {isWorkerReview ? (
-          <WorkerCommentMessage content={content} />
+        {isRenterReview ? (
+          <RenterCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
         )}

@@ -38,16 +38,19 @@ const useOrderActions = ({ order }) => {
     }
 
     const isOwner = order.ownerId == sessionUser?.id;
-    const isWorker = order.workerId == sessionUser?.id;
+    const isRenter = order.renterId == sessionUser?.id;
 
     console.log(order);
 
     if (
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-      (isWorker && order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
+      (isRenter && order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
     ) {
       if (
         checkErrorData(
+          order.actualUpdateRequest?.newStartTime ??
+            order.newStartTime ??
+            order.offerStartTime,
           order.actualUpdateRequest?.newFinishTime ??
             order.newFinishTime ??
             order.offerFinishTime
@@ -81,8 +84,8 @@ const useOrderActions = ({ order }) => {
 
     if (
       !order.paymentInfo?.waitingApproved &&
-      ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_WORKER) ||
-        (isWorker && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
+      ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_RENTER) ||
+        (isRenter && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
         STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT == order.status)
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
@@ -92,7 +95,9 @@ const useOrderActions = ({ order }) => {
       isOwner &&
       order.status === STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED
     ) {
-      newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON);
+      newActionButtons.push(
+        STATIC.ORDER_ACTION_BUTTONS.ACCEPT_OWNER_FINISH_BUTTON
+      );
     }
 
     if (
@@ -106,25 +111,23 @@ const useOrderActions = ({ order }) => {
     }
 
     if (order.status == STATIC.ORDER_STATUSES.IN_PROCESS) {
-      if (isWorker) {
+      if (isRenter) {
         if (order.canFastCancelPayed) {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FAST_CANCEL_BUTTON);
         } else {
           newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OPEN_DISPUTE);
         }
-        
-        newActionButtons.push(
-          STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON
-        );
+
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.FINISH_BUTTON);
       }
     }
 
     if (order.status == STATIC.ORDER_STATUSES.FINISHED) {
-      if (isOwner && !order.workerCommentId) {
-        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW);
+      if (isOwner && !order.renterCommentId) {
+        newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW);
       }
 
-      if (isWorker && !order.ownerCommentId) {
+      if (isRenter && !order.ownerCommentId) {
         newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.OWNER_REVIEW);
       }
     }

@@ -77,7 +77,7 @@ const ListingReviewForm = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetailsLight
-            fee={order.workerFee}
+            fee={order.renterFee}
             price={order.offerPrice}
           />
 

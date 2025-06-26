@@ -92,7 +92,7 @@ const UserReviewForm = ({
               userAverageRating: data.userAverageRating,
               userCommentCount: data.userCommentCount,
             }}
-            title={type == "worker" ? "Worker" : "Owner"}
+            title={type == "renter" ? "Renter" : "Owner"}
           />
         </div>
       </div>

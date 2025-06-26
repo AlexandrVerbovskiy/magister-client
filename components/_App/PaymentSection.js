@@ -19,7 +19,7 @@ const getPaymentFormStyles = (type) => {
 };
 
 const PaymentSection = ({
-  onWorkerPayed,
+  onRenterPayed,
   orderId,
   disabled,
   setDisabled,
@@ -34,7 +34,7 @@ const PaymentSection = ({
   const onApprove = async (data, err) => {
     try {
       const result = await paypalOrderPayed(data.orderID, authToken);
-      onWorkerPayed(result);
+      onRenterPayed(result);
     } catch (e) {
       error.set(e.message);
     }

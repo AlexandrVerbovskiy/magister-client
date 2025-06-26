@@ -85,11 +85,11 @@ const OrderActions = ({
           )}
 
           {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
+            STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
           ) && (
             <Link
               className={actionClass}
-              href={`/dashboard/creating-worker-review/${order.id}/`}
+              href={`/dashboard/creating-renter-review/${order.id}/`}
             >
               {needIcon && <i className="bx bx-comment-detail"></i>} Leave a
               review

@@ -21,8 +21,8 @@ const Settings = ({
   userLogActive: baseUserLogActive,
   ownerBaseCommissionPercent: baseOwnerBaseCommissionPercent,
   ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
-  workerBaseCommissionPercent: baseWorkerBaseCommissionPercent,
-  workerCancelFeePercent: baseWorkerCancelFeePercent,
+  renterBaseCommissionPercent: baseRenterBaseCommissionPercent,
+  renterCancelFeePercent: baseRenterCancelFeePercent,
   bankAccountIban: baseBankAccountIban,
   bankAccountSwiftBic: baseBankAccountSwiftBic,
   bankAccountBeneficiary: baseBankAccountBeneficiary,
@@ -33,8 +33,8 @@ const Settings = ({
     userLogActive: baseUserLogActive,
     ownerBaseCommissionPercent: baseOwnerBaseCommissionPercent,
     ownerBoostCommissionPercent: baseOwnerBoostCommissionPercent,
-    workerBaseCommissionPercent: baseWorkerBaseCommissionPercent,
-    workerCancelFeePercent: baseWorkerCancelFeePercent,
+    renterBaseCommissionPercent: baseRenterBaseCommissionPercent,
+    renterCancelFeePercent: baseRenterCancelFeePercent,
     bankAccountIban: baseBankAccountIban,
     bankAccountSwiftBic: baseBankAccountSwiftBic,
     bankAccountBeneficiary: baseBankAccountBeneficiary,
@@ -57,17 +57,17 @@ const Settings = ({
     setOwnerBoostCommissionPercentError,
   ] = useState(null);
 
-  const [workerBaseCommissionPercent, setWorkerBaseCommissionPercent] =
-    useState(baseWorkerBaseCommissionPercent ?? 0);
+  const [renterBaseCommissionPercent, setRenterBaseCommissionPercent] =
+    useState(baseRenterBaseCommissionPercent ?? 0);
   const [
-    workerBaseCommissionPercentError,
-    setWorkerBaseCommissionPercentError,
+    renterBaseCommissionPercentError,
+    setRenterBaseCommissionPercentError,
   ] = useState(null);
 
-  const [workerCancelFeePercent, setWorkerCancelFeePercent] = useState(
-    baseWorkerCancelFeePercent ?? 0
+  const [renterCancelFeePercent, setRenterCancelFeePercent] = useState(
+    baseRenterCancelFeePercent ?? 0
   );
-  const [workerCancelFeePercentError, setWorkerCancelFeePercentError] =
+  const [renterCancelFeePercentError, setRenterCancelFeePercentError] =
     useState(null);
 
   const [bankAccountIban, setBankAccountIban] = useState(
@@ -111,8 +111,8 @@ const Settings = ({
   const commissionStateToOptions = () => ({
     ownerBaseCommissionPercent,
     ownerBoostCommissionPercent,
-    workerBaseCommissionPercent,
-    workerCancelFeePercent,
+    renterBaseCommissionPercent,
+    renterCancelFeePercent,
   });
 
   const bankAccountStateToOptions = () => ({
@@ -127,8 +127,8 @@ const Settings = ({
 
     setOwnerBaseCommissionPercent(props.ownerBaseCommissionPercent);
     setOwnerBoostCommissionPercent(props.ownerBoostCommissionPercent);
-    setWorkerBaseCommissionPercent(props.workerBaseCommissionPercent);
-    setWorkerCancelFeePercent(props.workerCancelFeePercent);
+    setRenterBaseCommissionPercent(props.renterBaseCommissionPercent);
+    setRenterCancelFeePercent(props.renterCancelFeePercent);
 
     setBankAccountIban(props.bankAccountIban);
     setBankAccountSwiftBic(props.bankAccountSwiftBic);
@@ -140,8 +140,8 @@ const Settings = ({
     return !lodash.isEqual(commissionStateToOptions(), {
       ownerBaseCommissionPercent: baseProps.ownerBaseCommissionPercent,
       ownerBoostCommissionPercent: baseProps.ownerBoostCommissionPercent,
-      workerBaseCommissionPercent: baseProps.workerBaseCommissionPercent,
-      workerCancelFeePercent: baseProps.workerCancelFeePercent,
+      renterBaseCommissionPercent: baseProps.renterBaseCommissionPercent,
+      renterCancelFeePercent: baseProps.renterCancelFeePercent,
     });
   };
 
@@ -192,33 +192,33 @@ const Settings = ({
       hasError = true;
     }
 
-    if (!workerCancelFeePercent) {
-      setWorkerCancelFeePercentError("Requested field");
+    if (!renterCancelFeePercent) {
+      setRenterCancelFeePercentError("Requested field");
       hasError = true;
     }
 
     if (
-      workerCancelFeePercent &&
-      (isNaN(Number(workerCancelFeePercent)) ||
-        Number(workerCancelFeePercent) < 0 ||
-        Number(workerCancelFeePercent) > 99)
+      renterCancelFeePercent &&
+      (isNaN(Number(renterCancelFeePercent)) ||
+        Number(renterCancelFeePercent) < 0 ||
+        Number(renterCancelFeePercent) > 99)
     ) {
-      setWorkerCancelFeePercentError("Invalid field");
+      setRenterCancelFeePercentError("Invalid field");
       hasError = true;
     }
 
-    if (!workerBaseCommissionPercent) {
-      setWorkerBaseCommissionPercentError("Requested field");
+    if (!renterBaseCommissionPercent) {
+      setRenterBaseCommissionPercentError("Requested field");
       hasError = true;
     }
 
     if (
-      workerBaseCommissionPercent &&
-      (isNaN(Number(workerBaseCommissionPercent)) ||
-        Number(workerBaseCommissionPercent) < 0 ||
-        Number(workerBaseCommissionPercent) > 99)
+      renterBaseCommissionPercent &&
+      (isNaN(Number(renterBaseCommissionPercent)) ||
+        Number(renterBaseCommissionPercent) < 0 ||
+        Number(renterBaseCommissionPercent) > 99)
     ) {
-      setWorkerBaseCommissionPercentError("Invalid field");
+      setRenterBaseCommissionPercentError("Invalid field");
       hasError = true;
     }
 
@@ -399,10 +399,10 @@ const Settings = ({
                           <div className="sm:w-5/12">
                             <Input
                               name="boostOwnerCommission"
-                              value={workerBaseCommissionPercent}
-                              setValue={setWorkerBaseCommissionPercent}
-                              error={workerBaseCommissionPercentError}
-                              setError={setWorkerBaseCommissionPercentError}
+                              value={renterBaseCommissionPercent}
+                              setValue={setRenterBaseCommissionPercent}
+                              error={renterBaseCommissionPercentError}
+                              setError={setRenterBaseCommissionPercentError}
                               label="Rental Rent Commission (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
@@ -413,12 +413,12 @@ const Settings = ({
                         <div className="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                           <div className="sm:w-5/12">
                             <Input
-                              name="workerCancelCommission"
-                              value={workerCancelFeePercent}
-                              setValue={setWorkerCancelFeePercent}
-                              error={workerCancelFeePercentError}
-                              setError={setWorkerCancelFeePercentError}
-                              label="Worker Cancel Commission (%)"
+                              name="renterCancelCommission"
+                              value={renterCancelFeePercent}
+                              setValue={setRenterCancelFeePercent}
+                              error={renterCancelFeePercentError}
+                              setError={setRenterCancelFeePercentError}
+                              label="Renter Cancel Commission (%)"
                               labelClassName="block text-sm font-medium mb-1"
                               inputClassName="form-input w-full"
                             />

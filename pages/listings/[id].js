@@ -20,7 +20,7 @@ const Listing = (baseProps) => {
       <SingleListingsContent
         listing={props.listing}
         comments={props.comments}
-        workerBaseCommissionPercent={props.workerBaseCommissionPercent}
+        renterBaseCommissionPercent={props.renterBaseCommissionPercent}
         ownerRatingInfo={props.ownerRatingInfo}
       />
 

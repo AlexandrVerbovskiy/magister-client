@@ -3,10 +3,10 @@ import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import { supportSideProps } from "../../middlewares";
 import {
-  getAdminWorkerCommentListOptions,
-  getWorkerCommentList,
-  workerCommentApprove,
-  workerCommentReject,
+  getAdminRenterCommentListOptions,
+  getRenterCommentList,
+  renterCommentApprove,
+  renterCommentReject,
 } from "../../services";
 import { baseAdminTimeListPageParams } from "../../utils";
 import { useContext, useState } from "react";
@@ -16,7 +16,7 @@ import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 import UserCommentsTable from "../../components/admin/UserComments/Table";
 
-const WorkerReviews = (pageProps) => {
+const RenterReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
@@ -52,7 +52,7 @@ const WorkerReviews = (pageProps) => {
     setItemFields,
     loading: paginationLoading,
   } = usePagination({
-    getItemsFunc: (data) => getWorkerCommentList(data, authToken),
+    getItemsFunc: (data) => getRenterCommentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
@@ -70,7 +70,7 @@ const WorkerReviews = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="mb-8">
-                <BreadCrumbs links={[{ title: "Worker Reviews" }]} />
+                <BreadCrumbs links={[{ title: "Renter Reviews" }]} />
               </div>
 
               <BaseListSubHeader
@@ -112,11 +112,11 @@ const WorkerReviews = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
-                userColumnTitle="Worker"
-                rejectReview={workerCommentReject}
-                approveReview={workerCommentApprove}
+                userColumnTitle="Renter"
+                rejectReview={renterCommentReject}
+                approveReview={renterCommentApprove}
                 loading={paginationLoading}
-                type="worker"
+                type="renter"
               />
 
               <div className="mt-8">
@@ -142,7 +142,7 @@ const WorkerReviews = (pageProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const type = context.query.type ?? null;
   const params = { ...baseAdminTimeListPageParams(context.query), type };
-  const options = await getAdminWorkerCommentListOptions(
+  const options = await getAdminRenterCommentListOptions(
     params,
     baseSideProps.authToken
   );
@@ -153,7 +153,7 @@ export const getServerSideProps = (context) =>
   supportSideProps({
     context,
     callback: boostServerSideProps,
-    baseProps: { pageTitle: "Worker reviews" },
+    baseProps: { pageTitle: "Renter reviews" },
   });
 
-export default WorkerReviews;
+export default RenterReviews;

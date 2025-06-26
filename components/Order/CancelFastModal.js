@@ -30,15 +30,15 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
   if (order) {
     const totalPayed = calculateFullTotalByType(
       order.offerPrice,
-      order.workerFee,
+      order.renterFee,
       "sum"
     );
 
-    const totalBack = (totalPayed * (100 - order.workerCancelFee)) / 100;
+    const totalBack = (totalPayed * (100 - order.renterCancelFee)) / 100;
 
     message =
       `The cancellation fee is ${
-        order.workerCancelFee
+        order.renterCancelFee
       }% of the full payment. \nYou paid ${moneyFormatVisual(
         totalPayed
       )}\n. The size of the return cats will be ${moneyFormatVisual(

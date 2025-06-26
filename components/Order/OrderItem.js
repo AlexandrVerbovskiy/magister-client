@@ -45,7 +45,7 @@ const OrderInfo = ({
             status={order.status}
             disputeStatus={order.disputeStatus}
             ownerId={order.ownerId}
-            workerId={order.workerId}
+            renterId={order.renterId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
@@ -74,8 +74,11 @@ const OrderInfo = ({
 
           <li className="row-dots-end" style={{ color: "black" }}>
             <i className="bx bx-purchase-tag"></i>
-            <span>Finish Time: </span>
+            <span>Duration: </span>
             <span>
+              {fullDateConverter(
+                order.requestId ? order.newStartTime : order.offerStartTime
+              )} - 
               {fullDateConverter(
                 order.requestId ? order.newFinishTime : order.offerFinishTime
               )}
@@ -228,11 +231,11 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
+          STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
         ) && (
           <Link
             className="default-btn"
-            href={`/dashboard/creating-worker-review/${order.id}/`}
+            href={`/dashboard/creating-renter-review/${order.id}/`}
           >
             <i className="bx bx-comment-detail"></i> Leave a review
           </Link>
@@ -329,11 +332,11 @@ const OrderItem = ({
   handleClickFinish,
   handleClickAcceptFinish,
 }) => {
-  const userName = filterType == "worker" ? order.ownerName : order.workerName;
+  const userName = filterType == "renter" ? order.ownerName : order.renterName;
   const userEmail =
-    filterType == "worker" ? order.ownerEmail : order.workerEmail;
+    filterType == "renter" ? order.ownerEmail : order.renterEmail;
   const userPhoto =
-    filterType == "worker" ? order.ownerPhoto : order.workerPhoto;
+    filterType == "renter" ? order.ownerPhoto : order.renterPhoto;
 
   return (
     <div className="tr">

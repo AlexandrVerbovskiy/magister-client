@@ -264,8 +264,8 @@ export const getAdminDashboardOptions = async (body, authToken) => {
   return data.body;
 };
 
-export const getOrderReviewByWorkerOptions = async (id, authToken) => {
-  const data = await get(`/get-order-review-by-worker/${id}`, authToken);
+export const getOrderReviewByRenterOptions = async (id, authToken) => {
+  const data = await get(`/get-order-review-by-renter/${id}`, authToken);
   return data.body;
 };
 
@@ -274,9 +274,9 @@ export const getOrderReviewByOwnerOptions = async (id, authToken) => {
   return data.body;
 };
 
-export const getAdminWorkerCommentListOptions = async (params, authToken) => {
+export const getAdminRenterCommentListOptions = async (params, authToken) => {
   const data = await post(
-    `/admin-worker-comment-list-options`,
+    `/admin-renter-comment-list-options`,
     params,
     authToken
   );

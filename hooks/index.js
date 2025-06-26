@@ -14,7 +14,7 @@ export { default as useWindowSizeUpdate } from "./useWindowSizeUpdate";
 export { default as useTimeTypeFilter } from "./useTimeTypeFilter";
 export { default as useBaseAdminFilter } from "./useBaseAdminFilter";
 export { default as useOwnerReview } from "./useOwnerReview";
-export { default as useWorkerReview } from "./useWorkerReview";
+export { default as useRenterReview } from "./useRenterReview";
 export { default as useListingReview } from "./useListingReview";
 export { default as useCreateDispute } from "./useCreateDispute";
 export { default as useSocketInit } from "./useSocketInit";

@@ -1,10 +1,10 @@
 import { autoMultiEnding, generateProfileFilePath } from "../../../utils";
 import StarRating from "../../StarRating";
 
-const WorkerInfo = ({
+const RenterInfo = ({
   data,
   countItemsType = "completed",
-  title = "Worker",
+  title = "Renter",
   wrapperClassName = "",
 }) => {
   return (
@@ -34,11 +34,11 @@ const WorkerInfo = ({
           centerAlign={true}
           countClass="rating-count"
           pointsValue={true}
-          commentName="worker"
+          commentName="renter"
         />
       </div>
     </div>
   );
 };
 
-export default WorkerInfo;
+export default RenterInfo;

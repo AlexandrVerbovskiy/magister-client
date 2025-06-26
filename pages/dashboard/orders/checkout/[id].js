@@ -9,15 +9,15 @@ import {
   autoCalculateCurrentTotalPrice,
   moneyFormatVisual,
   dateConverter,
-  workerGetsFeeCalculate,
+  renterGetsFeeCalculate,
 } from "../../../../utils";
 import PaymentSection from "../../../../components/_App/PaymentSection";
 import { useRouter } from "next/router";
 import { IndiceContext } from "../../../../contexts";
 import Link from "next/link";
-import WorkerInfo from "../../../../components/Order/OrderApprovementParts/WorkerInfo";
+import RenterInfo from "../../../../components/Order/OrderApprovementParts/RenterInfo";
 
-const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
+const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
   const { sessionUser } = useContext(IndiceContext);
   const router = useRouter();
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
@@ -26,10 +26,10 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   const price = order.offerPrice;
-  const totalFee = workerGetsFeeCalculate(price, workerBaseCommission);
+  const totalFee = renterGetsFeeCalculate(price, renterBaseCommission);
   const totalPrice = price + totalFee;
 
-  const onWorkerPayed = () => {
+  const onRenterPayed = () => {
     router.push(`/dashboard/orders/${order.id}?success=Payed successfully`);
   };
 
@@ -63,8 +63,9 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>
                       <div className="d-flex">
                         <div className="date-info date-info-view">
-                          <div className="date-info-label">Finish Time</div>
+                          <div className="date-info-label">Duration</div>
                           <div className="date-info-value">
+                            {dateConverter(order.offerStartTime)} -{" "}
                             {dateConverter(order.offerFinishTime)}
                           </div>
                         </div>
@@ -103,17 +104,17 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                 </div>
               </div>
               <div className="col-12 mt-4 mt-lg-0 col-lg-4">
-                <WorkerInfo
+                <RenterInfo
                   data={{
-                    userId: order.workerId,
-                    userName: order.workerName,
-                    userPhoto: order.workerPhoto,
-                    userCountItems: +order.workerCountItems,
-                    userCommentCount: order.workerCommentCount,
-                    userAverageRating: order.workerAverageRating,
+                    userId: order.renterId,
+                    userName: order.renterName,
+                    userPhoto: order.renterPhoto,
+                    userCountItems: +order.renterCountItems,
+                    userCommentCount: order.renterCommentCount,
+                    userAverageRating: order.renterAverageRating,
                   }}
                   countItemsType="completed"
-                  title="Worker"
+                  title="Renter"
                   wrapperClassName="h-100"
                 />
               </div>
@@ -158,7 +159,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                   </div>
                 )}
 
-                {!(order.workerVerified && order.workerPaypalId) && (
+                {!(order.renterVerified && order.renterPaypalId) && (
                   <div className="card">
                     <div className="card-body">
                       <div
@@ -167,7 +168,7 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                       >
                         <i className="bx bx-x-circle icon-danger me-1"></i>
                         <b>
-                          To make a payment, the worker must be verified and
+                          To make a payment, the renter must be verified and
                           confirm his PayPal account.
                         </b>
                       </div>
@@ -175,26 +176,26 @@ const Checkout = ({ order, workerBaseCommission, bankInfo, authToken }) => {
                         className="default-btn mt-3"
                         href={"/dashboard/chats/" + order.chatId}
                       >
-                        Notify worker
+                        Notify renter
                       </Link>
                     </div>
                   </div>
                 )}
 
-                {order.workerVerified &&
-                  order.workerPaypalId &&
+                {order.renterVerified &&
+                  order.renterPaypalId &&
                   sessionUser?.verified && (
                     <PaymentSection
                       disabled={disabled}
                       setDisabled={setDisabled}
                       bankInfo={bankInfo}
                       authToken={authToken}
-                      onWorkerPayed={onWorkerPayed}
+                      onRenterPayed={onRenterPayed}
                       orderId={order.id}
                       amount={autoCalculateCurrentTotalPrice({
                         price: order.offerPrice,
                         ownerFee: order.ownerFee,
-                        workerFee: order.workerFee,
+                        renterFee: order.renterFee,
                         type: "owner",
                       })}
                     />

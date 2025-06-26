@@ -7,11 +7,47 @@ const paymentFeeCalculate = (price, fee) => {
   return +resPayment.toFixed(2);
 };
 
-export const workerGetsFeeCalculate = (price, fee) => {
+export const calculateFeeByDaysCount = (count, price, fee, needMin = false) => {
+  const totalFee = (fee * price * count) / 100;
+
+  if (needMin && totalFee < STATIC.LIMITS.MIN_TENANT_COMMISSION) {
+    return STATIC.LIMITS.MIN_TENANT_COMMISSION;
+  }
+
+  return moneyFormat(totalFee);
+};
+
+export const calculateTotalPriceByDaysCount = (count, price) =>
+  moneyFormat(price * count);
+
+export const calculateFullTotalByDaysCount = (
+  count,
+  price,
+  fee,
+  type = "sum"
+) => {
+  let total;
+
+  if (type == "sum") {
+    total =
+      +calculateTotalPriceByDaysCount(count, price) +
+      +calculateFeeByDaysCount(count, price, fee, true);
+  }
+
+  if (type == "reject") {
+    total =
+      +calculateTotalPriceByDaysCount(count, price, fee) -
+      +calculateFeeByDaysCount(count, price, fee);
+  }
+
+  return moneyFormat(total);
+};
+
+export const renterGetsFeeCalculate = (price, fee) => {
   const result = paymentFeeCalculate(price, fee);
 
-  if (result < STATIC.LIMITS.MIN_WORKER_COMMISSION) {
-    return STATIC.LIMITS.MIN_WORKER_COMMISSION;
+  if (result < STATIC.LIMITS.MIN_RENTER_COMMISSION) {
+    return STATIC.LIMITS.MIN_RENTER_COMMISSION;
   }
 
   return result;
@@ -31,7 +67,7 @@ export const calculateFullTotalByType = (price, fee, type = "sum") => {
   let total;
 
   if (type == "sum") {
-    total = workerGetsCalculate(price, fee);
+    total = renterGetsCalculate(price, fee);
   }
 
   if (type == "reject") {
@@ -44,23 +80,23 @@ export const calculateFullTotalByType = (price, fee, type = "sum") => {
 export const autoCalculateCurrentTotalPrice = ({
   price,
   ownerFee,
-  workerFee,
+  renterFee,
   type = null,
   isOwner = null,
 }) => {
   if (!type) {
-    type = isOwner ? "owner" : "worker";
+    type = isOwner ? "owner" : "renter";
   }
 
-  const fee = type == "owner" ? ownerFee : workerFee;
+  const fee = type == "owner" ? ownerFee : renterFee;
   const calculationFunc =
-    type == "owner" ? ownerPaymentCalculate : workerGetsCalculate;
+    type == "owner" ? ownerPaymentCalculate : renterGetsCalculate;
 
   return calculationFunc(price, fee);
 };
 
-export const workerGetsCalculate = (price, fee) => {
-  const result = price - workerGetsFeeCalculate(price, fee);
+export const renterGetsCalculate = (price, fee) => {
+  const result = price - renterGetsFeeCalculate(price, fee);
   return moneyFormat(result);
 };
 

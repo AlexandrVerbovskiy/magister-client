@@ -1,7 +1,5 @@
 import STATIC from "../static";
-import {
-  moneyFormat,
-} from "./priceCalculations";
+import { moneyFormat } from "./priceCalculations";
 
 export const capitalizeFirstLetter = (str) => {
   if (!str) {
@@ -85,12 +83,12 @@ export const hasPayError = ({ sessionUser, order }) => {
     return "You need to be verified to make a payment";
   }
 
-  if (!order.workerVerified) {
-    return "To make a payment, the worker must be verified";
+  if (!order.renterVerified) {
+    return "To make a payment, the renter must be verified";
   }
 
-  if (!order.workerPaypalId) {
-    return "To make a payment, the worker must confirm his PayPal account";
+  if (!order.renterPaypalId) {
+    return "To make a payment, the renter must confirm his PayPal account";
   }
 
   return null;
@@ -169,4 +167,26 @@ export const moneyFormatVisual = (value, needCurrencyName = false) => {
   }
 
   return result;
+};
+
+export const findFirstAvailableDate = (blockedDates, startDate = null) => {
+  if (!startDate || startDate < new Date()) {
+    startDate = new Date();
+  }
+
+  let firstAvailableDate = null;
+  let daysToCheck = 0;
+
+  while (!firstAvailableDate) {
+    let currentDate = new Date(startDate);
+    currentDate.setDate(startDate.getDate() + daysToCheck);
+
+    if (!isDateBlocked(currentDate, blockedDates, 1)) {
+      firstAvailableDate = currentDate;
+    } else {
+      daysToCheck++;
+    }
+  }
+
+  return firstAvailableDate;
 };

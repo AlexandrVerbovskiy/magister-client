@@ -12,7 +12,7 @@ import {
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
-  workerGetsFeeCalculate,
+  renterGetsFeeCalculate,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -40,9 +40,9 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
   const subtotalPrice = payment.offerPrice;
 
-  const totalFee = workerGetsFeeCalculate(
+  const totalFee = renterGetsFeeCalculate(
     payment.offerPrice,
-    payment.workerFee
+    payment.renterFee
   );
 
   const handleAccept = async () => {
@@ -214,10 +214,10 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={payment.workerFee}
-                                label="Worker Fee (%)"
-                                name="worker-fee"
-                                placeholder="Worker Fee"
+                                value={payment.renterFee}
+                                label="Renter Fee (%)"
+                                name="renter-fee"
+                                placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />

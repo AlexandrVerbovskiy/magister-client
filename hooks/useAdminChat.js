@@ -28,7 +28,7 @@ const useAdminChat = ({
 
   const onChatIdUpdate = async (chatId) => {
     let mainSelectedChatInfo = chats.find((chat) =>
-      [chat.id, chat.ownerChatId, chat.workerChatId].includes(chatId)
+      [chat.id, chat.ownerChatId, chat.renterChatId].includes(chatId)
     );
 
     if (mainSelectedChatInfo) {

@@ -3,6 +3,7 @@ import YesNoModal from "../../_App/YesNoModal";
 
 const YesNoRentalModal = ({
   finishTime,
+  startTime,
   price,
   listing,
   handleApprove,
@@ -10,11 +11,11 @@ const YesNoRentalModal = ({
   activeAcceptSendBookingRequest,
   setActiveAcceptSendBookingRequest,
 }) => {
-  let message = `'${listing.name}' complete task before ${fullDateConverter(
-    finishTime
-  )} and get ${moneyFormatVisual(price)}, total amount of ${moneyFormatVisual(
-    totalPrice
-  )} (including fees).`;
+  let message = `Rent '${listing.name}' from ${fullDateConverter(
+    startTime
+  )} to ${fullDateConverter(finishTime)} and pay ${moneyFormatVisual(
+    price
+  )}, total amount of ${moneyFormatVisual(totalPrice)} (including fees).`;
 
   message +=
     "<br><b>PS: you will not be charged yet, this is just a request</b>";

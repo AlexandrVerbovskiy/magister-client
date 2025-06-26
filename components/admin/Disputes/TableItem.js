@@ -18,11 +18,11 @@ const TableItem = ({
   ownerPhoto,
   ownerEmail,
   ownerPhone,
-  workerId,
-  workerName,
-  workerPhoto,
-  workerEmail,
-  workerPhone,
+  renterId,
+  renterName,
+  renterPhoto,
+  renterEmail,
+  renterPhone,
   listingId,
   listingName,
   id,
@@ -43,7 +43,7 @@ const TableItem = ({
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
-  const canMoveToWorker = isAdmin && sessionUser?.id != workerId;
+  const canMoveToRenter = isAdmin && sessionUser?.id != renterId;
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
@@ -62,7 +62,7 @@ const TableItem = ({
           <TableUserLink id={ownerId} name={ownerName} photo={ownerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink id={workerId} name={workerName} photo={workerPhoto} />
+          <TableUserLink id={renterId} name={renterName} photo={renterPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link href={`/listings/${listingId}/`} className="flex items-center">
@@ -143,16 +143,16 @@ const TableItem = ({
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate border-r align-top">
           <div>
             <SubInfoTitle
-              title="Worker"
-              href={`/admin/users/edit/${workerId}`}
-              canMove={canMoveToWorker}
+              title="Renter"
+              href={`/admin/users/edit/${renterId}`}
+              canMove={canMoveToRenter}
             />
-            <SubInfoRow label="Name" value={workerName} />
-            <SubInfoRow label="Email" value={workerEmail} />
+            <SubInfoRow label="Name" value={renterName} />
+            <SubInfoRow label="Email" value={renterEmail} />
             <SubInfoRow
               label="Phone"
               value={
-                workerPhone && workerPhone.length ? workerPhone.length : "-"
+                renterPhone && renterPhone.length ? renterPhone.length : "-"
               }
             />
           </div>

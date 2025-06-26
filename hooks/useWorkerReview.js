@@ -4,13 +4,13 @@ const options = [
   {
     title: "Care",
     description:
-      "How carefully do you think the worker handled the item and returned it in the same condition?",
+      "How carefully do you think the renter handled the item and returned it in the same condition?",
     key: "care",
   },
   {
     title: "Timeliness",
     description:
-      "How do you evaluate the worker in relation to the return period?",
+      "How do you evaluate the renter in relation to the return period?",
     key: "timeliness",
   },
   {
@@ -39,24 +39,24 @@ const options = [
   {
     title: "Honesty",
     description:
-      "How honest was the worker about the condition of the item upon return?",
+      "How honest was the renter about the condition of the item upon return?",
     key: "honesty",
   },
   {
     title: "Reliability",
     description:
-      "How do you assess the worker reliability in terms of pickup, usage, and return the item?",
+      "How do you assess the renter reliability in terms of pickup, usage, and return the item?",
     key: "reliability",
   },
   {
     title: "Satisfaction",
     description:
-      "How satisfied were you with the overall experience provided by the worker?",
+      "How satisfied were you with the overall experience provided by the renter?",
     key: "satisfaction",
   },
 ];
 
-const useWorkerReview = () => {
+const useRenterReview = () => {
   const baseOptions = options.map((option) => ({
     ...option,
     value: 0,
@@ -91,4 +91,4 @@ const useWorkerReview = () => {
   };
 };
 
-export default useWorkerReview;
+export default useRenterReview;

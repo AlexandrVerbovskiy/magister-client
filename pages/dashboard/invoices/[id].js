@@ -51,7 +51,7 @@ const Invoice = (baseProps) => {
           dueDate={payment.createdAt}
           indiceAdmin="RentAbout"
           offer={{
-            fee: payment.workerFee,
+            fee: payment.renterFee,
             listingName: payment.listingName,
             price: payment.orderOfferPrice,
           }}

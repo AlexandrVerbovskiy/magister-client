@@ -74,7 +74,7 @@ const OwnerCommentMessage = ({ content }) => {
   );
 };
 
-const WorkerCommentMessage = ({ content }) => {
+const RenterCommentMessage = ({ content }) => {
   const items = [
     { label: "Care", value: content.care },
     { label: "Timeliness", value: content.timeliness },
@@ -191,7 +191,7 @@ const orderMessageContent = ({
       type,
       isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,
-      workerFee: entity.workerFee,
+      renterFee: entity.renterFee,
     });
 
     let title = "Request";
@@ -211,6 +211,7 @@ const orderMessageContent = ({
         senderId={senderId}
         popupsData={popupsData}
         finishTime={content.offerFinishTime}
+        startTime={content.offerStartTime}
       />
     );
   }
@@ -297,7 +298,7 @@ const orderMessageContent = ({
 
   if (STATIC.MESSAGE_TYPES.STARTED_DISPUTE == type) {
     let senderName =
-      entity.ownerId == senderId ? entity.ownerName : entity.workerName;
+      entity.ownerId == senderId ? entity.ownerName : entity.renterName;
 
     if (sessionUser?.id == senderId) {
       senderName = "You";
@@ -333,19 +334,19 @@ const orderMessageContent = ({
   if (
     [
       STATIC.MESSAGE_TYPES.OWNER_REVIEW,
-      STATIC.MESSAGE_TYPES.WORKER_REVIEW,
+      STATIC.MESSAGE_TYPES.RENTER_REVIEW,
     ].includes(type)
   ) {
-    const isWorkerReview = type == STATIC.MESSAGE_TYPES.WORKER_REVIEW;
+    const isRenterReview = type == STATIC.MESSAGE_TYPES.RENTER_REVIEW;
 
     return (
       <div className="d-flex flex-column align-items-center">
         <div className="mb-2">
-          <b>{isWorkerReview ? "Worker review" : "Owner review"}</b>
+          <b>{isRenterReview ? "Renter review" : "Owner review"}</b>
         </div>
 
-        {isWorkerReview ? (
-          <WorkerCommentMessage content={content} />
+        {isRenterReview ? (
+          <RenterCommentMessage content={content} />
         ) : (
           <OwnerCommentMessage content={content} />
         )}

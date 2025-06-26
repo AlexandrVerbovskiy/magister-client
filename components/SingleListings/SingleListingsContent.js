@@ -23,7 +23,7 @@ import { useIsMobile } from "../../hooks";
 const SingleListingsContent = ({
   comments,
   listing: prevListing,
-  workerBaseCommissionPercent,
+  renterBaseCommissionPercent,
   ownerRatingInfo,
 }) => {
   const { success, error, sessionUser, authToken } = useContext(IndiceContext);
@@ -33,6 +33,7 @@ const SingleListingsContent = ({
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
   const [currentApproveFinishTime, setCurrentApproveFinishTime] =
     useState(null);
+  const [currentApproveStartTime, setCurrentApproveStartTime] = useState(null);
   const [listing, setListing] = useState(prevListing);
   const isMobile = useIsMobile();
 
@@ -51,8 +52,9 @@ const SingleListingsContent = ({
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const handleBeforeSendRequest = ({ price, finishTime }) => {
+  const handleBeforeSendRequest = ({ price, startTime, finishTime }) => {
     setCurrentApprovePrice(price);
+    setCurrentApproveStartTime(startTime);
     setCurrentApproveFinishTime(finishTime);
     setCurrentApprove(true);
     setCreateOrderModalActive(false);
@@ -63,6 +65,7 @@ const SingleListingsContent = ({
       const id = await createOrder(
         {
           price: currentApprovePrice,
+          startTime: currentApproveStartTime,
           finishTime: currentApproveFinishTime,
           listingId: listing.id,
           message: sendingMessage,
@@ -627,9 +630,11 @@ const SingleListingsContent = ({
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}
               handleGoBack={() => setCurrentApprove(false)}
+              startTime={currentApproveStartTime}
               finishTime={currentApproveFinishTime}
               price={currentApprovePrice}
-              fee={workerBaseCommissionPercent}
+              fee={renterBaseCommissionPercent}
+              setStartTime={setCurrentApproveStartTime}
               setFinishTime={setCurrentApproveFinishTime}
             />
           )}
@@ -640,8 +645,10 @@ const SingleListingsContent = ({
         <SendCompleteRequestModal
           handleSendRequest={handleBeforeSendRequest}
           price={listing.price}
+          startTime={listing.startTime}
           finishTime={listing.finishTime}
-          fee={workerBaseCommissionPercent}
+          blockedDates={listing.blockedDates}
+          fee={renterBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}

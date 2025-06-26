@@ -38,7 +38,7 @@ const OrderPopups = ({
   setPaypalModalActive,
   bankInfo,
 
-  onWorkerPayed = null,
+  onRenterPayed = null,
 
   finishModalActive,
   setFinishModalActive,
@@ -69,13 +69,18 @@ const OrderPopups = ({
               ? actualUpdateRequest.newPrice
               : order.offerPrice
           }
+          proposalStartTime={
+            actualUpdateRequest
+              ? actualUpdateRequest.newStartTime
+              : order.offerStartTime
+          }
           proposalFinishTime={
             actualUpdateRequest
               ? actualUpdateRequest.newFinishTime
               : order.offerFinishTime
           }
           fee={currentFee}
-          workerFee={order.workerFee}
+          renterFee={order.renterFee}
           commissionType={
             order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
               ? "reject"
@@ -150,14 +155,14 @@ const OrderPopups = ({
           isOwner: false,
           price: order.offerPrice,
           ownerFee: order.ownerFee,
-          workerFee: order.workerFee,
-          type: "worker",
+          renterFee: order.renterFee,
+          type: "renter",
         })}
         orderId={order.id}
         listingName={order.listingName}
-        onWorkerPayed={onWorkerPayed}
+        onRenterPayed={onRenterPayed}
         price={order.offerPrice}
-        offerFee={order.workerFee}
+        offerFee={order.renterFee}
         authToken={authToken}
         bankInfo={bankInfo}
       />

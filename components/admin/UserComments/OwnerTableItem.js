@@ -137,7 +137,7 @@ const OwnerTableItem = ({
                       <SingleRatingStar
                         value={reviewerAverageRating}
                         count={reviewerCommentCount}
-                        commentName="worker"
+                        commentName="renter"
                       />
                     </SubInfoRowWithChild>
                   </div>

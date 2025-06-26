@@ -28,7 +28,7 @@ const StartEarning = () => {
                   <p className="mb-4">
                     Share your things, earn cash! Earn by renting out your stuff
                     locally when you're not using it. Relax with verified
-                    workers and an owners’ guarantee.
+                    renters and an owners’ guarantee.
                   </p>
                 </div>
               </div>
