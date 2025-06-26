@@ -3,10 +3,10 @@ import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
 import { supportSideProps } from "../../middlewares";
 import {
-  getAdminTenantCommentListOptions,
-  getTenantCommentList,
-  tenantCommentApprove,
-  tenantCommentReject,
+  getAdminRenterCommentListOptions,
+  getRenterCommentList,
+  renterCommentApprove,
+  renterCommentReject,
 } from "../../services";
 import { baseAdminTimeListPageParams } from "../../utils";
 import { useContext, useState } from "react";
@@ -16,7 +16,7 @@ import PaginationNumeric from "../../components/admin/PaginationNumeric";
 import BaseListSubHeader from "../../components/admin/BaseListSubHeader";
 import UserCommentsTable from "../../components/admin/UserComments/Table";
 
-const TenantReviews = (pageProps) => {
+const RenterReviews = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { error, authToken } = useContext(IndiceContext);
   const [typesCount, setTypesCount] = useState(pageProps.typesCount);
@@ -52,7 +52,7 @@ const TenantReviews = (pageProps) => {
     setItemFields,
     loading: paginationLoading,
   } = usePagination({
-    getItemsFunc: (data) => getTenantCommentList(data, authToken),
+    getItemsFunc: (data) => getRenterCommentList(data, authToken),
     onError: (e) => error.set(e.message),
     getDopProps: getBaseAdminFilterDopProps,
     defaultData: pageProps,
@@ -112,9 +112,9 @@ const TenantReviews = (pageProps) => {
                 onClickTh={handleChangeOrder}
                 totalCount={countItems}
                 setItemFields={setItemFields}
-                userColumnTitle="Tenant"
-                rejectReview={tenantCommentReject}
-                approveReview={tenantCommentApprove}
+                userColumnTitle="Renter"
+                rejectReview={renterCommentReject}
+                approveReview={renterCommentApprove}
                 loading={paginationLoading}
                 type="renter"
               />
@@ -142,7 +142,7 @@ const TenantReviews = (pageProps) => {
 const boostServerSideProps = async ({ baseSideProps, context }) => {
   const type = context.query.type ?? null;
   const params = { ...baseAdminTimeListPageParams(context.query), type };
-  const options = await getAdminTenantCommentListOptions(
+  const options = await getAdminRenterCommentListOptions(
     params,
     baseSideProps.authToken
   );
@@ -156,4 +156,4 @@ export const getServerSideProps = (context) =>
     baseProps: { pageTitle: "Renter reviews" },
   });
 
-export default TenantReviews;
+export default RenterReviews;

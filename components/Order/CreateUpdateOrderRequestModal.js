@@ -10,8 +10,8 @@ import {
   ownerPaymentCalculate,
   ownerPaymentFeeCalculate,
   separateDate,
-  workerGetsFeeCalculate,
-  workerGetsCalculate,
+  renterGetsFeeCalculate,
+  renterGetsCalculate,
 } from "../../utils";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
@@ -23,6 +23,7 @@ const CreateUpdateOrderRequestModal = ({
   fee,
   proposalPrice,
   proposalFinishTime,
+  proposalStartTime,
   updateRequestModalActive,
   closeActiveUpdateRequest,
   minRentalDays,
@@ -30,6 +31,7 @@ const CreateUpdateOrderRequestModal = ({
   blockedDates,
   commissionType,
 }) => {
+  const baseStartTime = new Date();
   const baseFinishTime = new Date();
 
   const { error } = useContext(IndiceContext);
@@ -49,6 +51,7 @@ const CreateUpdateOrderRequestModal = ({
   }, [defaultPrice]);
 
   const [finishTime, setFinishTime] = useState(baseFinishTime);
+  const [startTime, setStartTime] = useState(baseStartTime);
 
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
@@ -56,14 +59,31 @@ const CreateUpdateOrderRequestModal = ({
 
   const recalculateTotalInfo = ({ price, fee }) => {
     if (commissionType == "sum") {
-      setTotalPrice(workerGetsCalculate(price, fee));
-      setTotalFee(workerGetsFeeCalculate(price, fee));
+      setTotalPrice(renterGetsCalculate(price, fee));
+      setTotalFee(renterGetsFeeCalculate(price, fee));
     } else {
       setTotalPrice(ownerPaymentCalculate(price, fee));
       setTotalFee(ownerPaymentFeeCalculate(price, fee));
     }
 
     setFullTotal(calculateFullTotalByType(price, fee, commissionType));
+  };
+
+  const handleChangeDates = (dates) => {
+    let [from, to] = dates;
+    const fromTime = from ? new Date(from) : null;
+    let toTime = to ? new Date(to) : null;
+
+    if (fromTime > toTime) {
+      toTime = new Date(fromTime);
+    }
+
+    if (from && to) {
+      setFinishTime(fromTime);
+      setStartTime(toTime);
+    }
+
+    setCalendarError(null);
   };
 
   useEffect(() => {
@@ -98,7 +118,7 @@ const CreateUpdateOrderRequestModal = ({
       minDate: "today",
       maxDate: getMaxFlatpickrDate(),
       static: true,
-      defaultDate: [finishTime],
+      defaultDate: [finishTime, startTime],
       enableTime: true,
       time_24hr: true,
       monthSelectorType: "static",
@@ -108,7 +128,7 @@ const CreateUpdateOrderRequestModal = ({
       },
       onChange: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
-        setFinishTime(selectedDates[0]);
+        handleChangeDates(selectedDates);
       },
       disableMobile: true,
     });
@@ -117,13 +137,14 @@ const CreateUpdateOrderRequestModal = ({
 
     const prevCalendar = flatpickr(prevCalendarContainer.current, {
       inline: true,
-      mode: "single",
+      mode: "range",
       dateFormat: "M j, Y H:i",
-      defaultDate: [proposalFinishTime],
+      defaultDate: [new Date(proposalStartTime), new Date(proposalFinishTime)],
       monthSelectorType: "static",
       onChange: (selectedDates, dateStr, instance) => {
-        instance.setDate(`${proposalFinishTime}`);
+        instance.setDate(`${proposalStartTime} to ${proposalFinishTime}`);
       },
+
       enableTime: true,
       time_24hr: true,
     });
@@ -139,7 +160,7 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, [finishTime, proposalFinishTime]);
+  }, [finishTime, startTime, proposalFinishTime, proposalStartTime]);
 
   useEffect(() => {
     recalculateTotalInfo({
@@ -169,7 +190,8 @@ const CreateUpdateOrderRequestModal = ({
 
     if (
       proposalPrice == price &&
-      proposalFinishTime == separateDate(finishTime)
+      proposalFinishTime == separateDate(finishTime) &&
+      proposalStartTime == separateDate(startTime)
     ) {
       error.set(
         "You cannot submit these changes as they are the same as proposed"
@@ -188,6 +210,7 @@ const CreateUpdateOrderRequestModal = ({
     handleCreateUpdateRequest({
       price: price,
       finishTime: separateDate(finishTime),
+      startTime: separateDate(startTime),
     });
 
     setActiveAcceptSendBookingRequest(false);
@@ -254,7 +277,9 @@ const CreateUpdateOrderRequestModal = ({
               title="Please confirm new booking conditions"
               onAccept={handleSendBookingRequest}
               acceptText="Confirm"
-              body={`'${listingName}' task will be completed by ${fullDateConverter(
+              body={`Rental '${listingName}' period will be from ${fullDateConverter(
+                proposalStartTime
+              )} to ${fullDateConverter(
                 proposalFinishTime
               )} by ${moneyFormatVisual(fullTotal)}`}
             />
@@ -263,7 +288,8 @@ const CreateUpdateOrderRequestModal = ({
         <div className="border-top d-flex justify-content-between">
           <div className="d-flex flex-column mt-4 ">
             <div>
-              <b>Finish Time:</b> {fullDateConverter(finishTime)}
+              <b>Duration:</b> {fullDateConverter(startTime)} -{" "}
+              {fullDateConverter(finishTime)}
             </div>
 
             <div>

@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../contexts";
 import {
   createDispute,
-  extendOrder,
   orderFullCancelPayed,
   orderFullCancel,
   rejectOrder,
@@ -12,7 +11,6 @@ import {
 import useBookingAgreementPanel from "./useBookingAgreementPanel";
 import STATIC from "../static";
 import { useRouter } from "next/router";
-import { cloneObject, getDaysDifference } from "../utils";
 import useCreateDispute from "./useCreateDispute";
 
 const useOrderFastActions = ({ orders, setItemFields }) => {
@@ -62,125 +60,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [orderToDispute, setOrderToDispute] = useState(null);
   const [disputeWindowActive, setDisputeWindowActive] = useState(false);
   const createDisputeData = useCreateDispute({ order: orderToDispute });
-
-  const getOrdersWithOrderListing = (order) => {
-    return orders.filter(
-      (checkOrder) =>
-        checkOrder.listingId === order.listingId && checkOrder.id !== order.id
-    );
-  };
-
-  const getRemovedConflictOrders = (order) => {
-    const newOrderParts = {};
-    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
-
-    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
-      const newConflictOrders = orderWithCurrentListing.conflictOrders.filter(
-        (conflictOrder) => conflictOrder.id != order.id
-      );
-
-      const newExtendOrders = orderWithCurrentListing.extendOrders.map(
-        (extendOrder) => {
-          if (extendOrder.id == order.id) {
-            return { ...extendOrder, ...order };
-          } else {
-            return {
-              ...extendOrder,
-              conflictOrders: extendOrder.conflictOrders.filter(
-                (conflictOrder) => conflictOrder.id != order.id
-              ),
-            };
-          }
-        }
-      );
-
-      newOrderParts[orderWithCurrentListing.id] = {
-        conflictOrders: newConflictOrders,
-        extendOrders: newExtendOrders,
-      };
-    });
-
-    return newOrderParts;
-  };
-
-  const getUpdateConflictOrders = (order) => {
-    const newOrderParts = {};
-    const ordersWithCurrentListing = getOrdersWithOrderListing(order);
-
-    ordersWithCurrentListing.forEach((orderWithCurrentListing) => {
-      const newConflictOrders = orderWithCurrentListing.conflictOrders.filter(
-        (conflictOrder) => conflictOrder.id != order.id
-      );
-
-      const newExtendOrders = orderWithCurrentListing.extendOrders.map(
-        (extendOrder) => {
-          if (extendOrder.id == order.id) {
-            return { ...extendOrder, ...order };
-          } else {
-            const extendConflictOrders = extendOrder.conflictOrders.filter(
-              (conflictOrder) => conflictOrder.id != order.id
-            );
-
-            return {
-              ...extendOrder,
-              conflictOrders: [
-                ...extendConflictOrders,
-                {
-                  id: order.id,
-                  requestId: order.requestId,
-                  offerStartDate: order.offerStartDate,
-                  offerEndDate: order.offerEndDate,
-                  newStartDate: order.newStartDate,
-                  newEndDate: order.newEndDate,
-                },
-              ],
-            };
-          }
-        }
-      );
-
-      newOrderParts[orderWithCurrentListing.id] = {
-        conflictOrders: [...newConflictOrders, order],
-        extendOrders: newExtendOrders,
-      };
-    });
-
-    return newOrderParts;
-  };
-
-  const getAddConflictOrders = (order) => {
-    const blockedStartDate = order.requestId
-      ? order.newStartDate
-      : order.offerStartDate;
-    const blockedEndDate = order.requestId
-      ? order.newEndDate
-      : order.offerEndDate;
-
-    const updatedOrder = {
-      ...order,
-      offerStartDate: blockedStartDate,
-      offerEndDate: blockedEndDate,
-      newStartDate: null,
-      newEndDate: null,
-    };
-
-    return getUpdateConflictOrders(updatedOrder);
-  };
-
-  const addConflictOrderInfoToList = (list, order) => {
-    const orderToUpdateInfo = getAutoParentOrderUpdatedField(order, order.id);
-
-    if (list[orderToUpdateInfo.id]) {
-      list[orderToUpdateInfo.id] = {
-        ...list[orderToUpdateInfo.id],
-        ...orderToUpdateInfo.data,
-      };
-    } else {
-      list[orderToUpdateInfo.id] = orderToUpdateInfo.data;
-    }
-
-    return list;
-  };
 
   const disputeCreate = (orderId) => {
     const order = findCurrentOrderById(orderId);
@@ -232,50 +111,17 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const [rejectOrderModalActiveId, setRejectOrderModalActiveId] =
     useState(null);
 
-  const [extendModalActive, setExtendModalActive] = useState(false);
-  const [extendModalActiveOrder, setExtendModalActiveOrder] = useState(null);
-
-  const findCurrentOrderById = (id) => {
-    let foundOrder = orders.find((order) => order.id === id);
-
-    if (!foundOrder) {
-      for (let i = 0; i < orders.length; i++) {
-        for (let j = 0; j < orders[i].extendOrders.length; j++) {
-          if (orders[i].extendOrders[j].id === id) {
-            foundOrder = { ...orders[i], ...orders[i].extendOrders[j] };
-          }
-        }
-      }
-    }
-
-    return foundOrder;
-  };
+  const findCurrentOrderById = (id) => orders.find((order) => order.id === id);
 
   const getAutoParentOrderUpdatedField = (data, orderId) => {
     const foundOrder = findCurrentOrderById(orderId);
-    const parentId = foundOrder.orderParentId;
-
-    if (parentId) {
-      const parentOrder = findCurrentOrderById(foundOrder.orderParentId);
-      const extendOrders = parentOrder.extendOrders;
-      const newExtendOrders = extendOrders.map((order) => {
-        if (order.id === foundOrder.id) {
-          return { ...order, ...data };
-        } else {
-          return { ...order };
-        }
-      });
-
-      return { id: parentId, data: { extendOrders: newExtendOrders } };
-    } else {
-      return { id: foundOrder.id, data };
-    }
+    return { id: foundOrder.id, data };
   };
 
-  const onWorkerPayed = () => {
+  const onRenterPayed = () => {
     setItemFields(
       {
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
+        status: STATIC.ORDER_STATUSES.IN_PROCESS,
       },
       activePayOrder.id
     );
@@ -293,35 +139,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     try {
       const foundOrder = findCurrentOrderById(activeCancelId);
       const newOrderData = {};
-
-      let ordersToUpdate = {};
-
-      orders.forEach((order) => {
-        const newOrder = cloneObject(order);
-
-        newOrder.conflictOrders = newOrder.conflictOrders.filter(
-          (conflictOrder) => {
-            conflictOrder.id != activeCancelId;
-          }
-        );
-
-        newOrder.extendOrders = order.extendOrders.map((extension) => {
-          extension.conflictOrders.filter((conflictOrder) => {
-            conflictOrder.id != activeCancelId;
-          });
-          return extension;
-        });
-
-        if (foundOrder.orderParentId) {
-          if (newOrder.id == foundOrder.orderParentId) {
-            newOrder.extendOrders = order.extendOrders.filter(
-              (extension) => extension.id != activeCancelId
-            );
-          }
-        }
-
-        ordersToUpdate[newOrder.id] = newOrder;
-      });
 
       if (foundOrder.ownerId === sessionUser?.id) {
         await rejectOrder(activeCancelId, authToken);
@@ -345,55 +162,6 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   const handleClickCancel = (orderId) => {
     setActiveCancelId(orderId);
     setActiveCancel(true);
-  };
-
-  const closeExtendOrder = () => {
-    setExtendModalActiveOrder(null);
-    setExtendModalActive(false);
-  };
-
-  const handleClickExtendOrder = (orderId) => {
-    setExtendModalActiveOrder(findCurrentOrderById(orderId));
-    setExtendModalActive(true);
-  };
-
-  const handleClickApproveExtendOrder = async ({
-    price,
-    fromDate,
-    toDate,
-    feeActive,
-    sendingMessage,
-  }) => {
-    try {
-      const dayDiff = getDaysDifference(
-        extendModalActiveOrder.offerEndDate,
-        extendModalActiveOrder.fromDate
-      );
-
-      await extendOrder(
-        {
-          startDate: fromDate,
-          endDate: toDate,
-          listingId: extendModalActiveOrder.listingId,
-          feeActive,
-          message: sendingMessage,
-          parentOrderId: extendModalActiveOrder.id,
-        },
-        authToken
-      );
-
-      if (dayDiff == 1) {
-        success.set("Order extended successfully");
-      } else {
-        success.set("New booking created successfully");
-      }
-
-      router.push("/dashboard/orders/", undefined, {
-        unstable_skipClientCache: true,
-      });
-    } catch (e) {
-      error.set(e.message);
-    }
   };
 
   const handleAcceptPayedFastCancel = async ({
@@ -440,13 +208,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({ orderId, price, finishTime }) => {
+  const onCreateUpdateRequest = ({ orderId, price, startTime, finishTime }) => {
     let status = null;
-    const requestId = request.id;
     const updatedOrder = findCurrentOrderById(orderId);
 
     if (updatedOrder.ownerId === sessionUser?.id) {
-      status = STATIC.ORDER_STATUSES.PENDING_TENANT;
+      status = STATIC.ORDER_STATUSES.PENDING_RENTER;
     } else {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -454,6 +221,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setItemFields(
       {
         newPrice: price,
+        newStartTime: startTime,
         newFinishTime: finishTime,
         status,
       },
@@ -623,14 +391,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     activePay,
     closePay,
-    onTenantPayed,
+    onRenterPayed,
     activePayOrder,
-
-    handleClickExtendOrder,
-    handleClickApproveExtendOrder,
-    extendModalActive,
-    extendModalActiveOrder,
-    closeExtendOrder,
 
     successIconPopupState,
 

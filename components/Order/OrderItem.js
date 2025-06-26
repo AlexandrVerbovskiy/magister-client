@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
@@ -6,15 +6,12 @@ import {
   generateProfileFilePath,
   getDisputeTitle,
   getPaymentNameByType,
-  isOrderCanBeAccepted,
   moneyFormatVisual,
 } from "../../utils";
 import STATIC from "../../static";
 import { useOrderActions, useOrderDateError } from "../../hooks";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import Link from "next/link";
-
-const baseShowedExtendsCount = 5;
 
 const OrderInfo = ({
   order,
@@ -41,14 +38,14 @@ const OrderInfo = ({
         <h4 className="order-item-title-row">
           <div>
             <Link href={"/listings/" + order.listingId}>
-              {extension ? "Extension" : order.listingName}
+              {order.listingName}
             </Link>
           </div>
           <StatusBlock
             status={order.status}
             disputeStatus={order.disputeStatus}
             ownerId={order.ownerId}
-            tenantId={order.tenantId}
+            renterId={order.renterId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
             endDate={order.offerEndDate}
@@ -77,8 +74,11 @@ const OrderInfo = ({
 
           <li className="row-dots-end" style={{ color: "black" }}>
             <i className="bx bx-purchase-tag"></i>
-            <span>Finish Time: </span>
+            <span>Duration: </span>
             <span>
+              {fullDateConverter(
+                order.requestId ? order.newStartTime : order.offerStartTime
+              )} - 
               {fullDateConverter(
                 order.requestId ? order.newFinishTime : order.offerFinishTime
               )}
@@ -154,6 +154,7 @@ const OrderInfo = ({
                 <i className="bx bx-check-circle"></i> Accept
               </button>
             )}
+
             <button
               type="button"
               onClick={(e) => {
@@ -230,29 +231,7 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
-        ) && (
-          <Link
-            className="default-btn"
-            href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
-          >
-            <i className="bx bx-comment-detail"></i> Start the rental
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
-        ) && (
-          <Link
-            className="default-btn"
-            href={`${link}/${order.id}/?scroll-to=owner-qr-code`}
-          >
-            <i className="bx bx-comment-detail"></i> Finish the rental
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+          STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
         ) && (
           <Link
             className="default-btn"
@@ -283,21 +262,6 @@ const OrderInfo = ({
             <i className="bx bx-transfer-alt"></i>
             Open dispute
           </Link>
-        )}
-
-        {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
-        ) && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleClickExtend(order.id);
-            }}
-            className="default-btn"
-          >
-            <i className="bx bx-calendar"></i> Extend Offer
-          </button>
         )}
 
         {currentActionButtons.includes(
@@ -342,17 +306,6 @@ const OrderInfo = ({
         )}
 
         {currentActionButtons.includes(
-          STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT
-        ) && (
-          <Link
-            className="default-btn"
-            href={`/dashboard/chats/${order.parentChatId}`}
-          >
-            <i className="bx bx-chat"></i> Parent Chat
-          </Link>
-        )}
-
-        {currentActionButtons.includes(
           STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
         ) && (
           <Link
@@ -379,59 +332,34 @@ const OrderItem = ({
   handleClickFinish,
   handleClickAcceptFinish,
 }) => {
-  const [showedAllExtends, setShowedAllExtends] = useState(false);
-  const userName = filterType == "tenant" ? order.ownerName : order.tenantName;
+  const userName = filterType == "renter" ? order.ownerName : order.renterName;
   const userEmail =
-    filterType == "tenant" ? order.ownerEmail : order.tenantEmail;
+    filterType == "renter" ? order.ownerEmail : order.renterEmail;
   const userPhoto =
-    filterType == "tenant" ? order.ownerPhoto : order.tenantPhoto;
-
-  let extendOrders = order.extendOrders.sort((a, b) => a.id - b.id);
-
-  extendOrders = extendOrders.reverse();
-
-  if (!showedAllExtends) {
-    extendOrders = extendOrders.slice(0, baseShowedExtendsCount);
-  }
+    filterType == "renter" ? order.ownerPhoto : order.renterPhoto;
 
   return (
-    <>
-      <div className="tr">
-        <div
-          className="td name"
-          style={order.extendOrders.length > 0 ? { borderBottom: 0 } : {}}
-        >
-          <img src={generateProfileFilePath(userPhoto)} alt="image" />
-          <div className="info">
-            <span className="row-dots-end">{userName}</span>
-            <ul>
-              <li>
-                <Link className="row-dots-end" href={`mailto:${userEmail}`}>
-                  {userEmail}
-                </Link>
-              </li>
-            </ul>
-            {order.chatId && (
-              <Link
-                href={`/dashboard/chats/${order.chatId}/`}
-                className="default-btn"
-              >
-                <i className="bx bx-envelope"></i> Send Message
+    <div className="tr">
+      <div className="td name">
+        <img src={generateProfileFilePath(userPhoto)} alt="image" />
+        <div className="info">
+          <span className="row-dots-end">{userName}</span>
+          <ul>
+            <li>
+              <Link className="row-dots-end" href={`mailto:${userEmail}`}>
+                {userEmail}
               </Link>
-            )}
-          </div>
+            </li>
+          </ul>
+          {order.chatId && (
+            <Link
+              href={`/dashboard/chats/${order.chatId}/`}
+              className="default-btn"
+            >
+              <i className="bx bx-envelope"></i> Send Message
+            </Link>
+          )}
         </div>
-
-        <OrderInfo
-          order={order}
-          handleClickCancel={handleClickCancel}
-          handleClickPayedFastCancel={handleClickPayedFastCancel}
-          handleClickUpdateRequest={handleClickUpdateRequest}
-          handleClickReject={handleClickReject}
-          handleClickAccept={handleClickAccept}
-          handleClickExtend={handleClickExtend}
-          link={link}
-        />
       </div>
 
       <OrderInfo

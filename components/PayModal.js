@@ -1,13 +1,13 @@
 import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { moneyFormatVisual, workerGetsCalculate } from "../utils";
+import { moneyFormatVisual, renterGetsCalculate } from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
 const PayModal = ({
   amount,
   orderId,
   listingName,
-  onWorkerPayed = null,
+  onRenterPayed = null,
   price,
   offerFee,
   modalActive,
@@ -17,17 +17,17 @@ const PayModal = ({
 }) => {
   const [disabled, setDisabled] = useState(false);
 
-  const handleTenantPayed = (result) => {
+  const handleRenterPayed = (result) => {
     setTimeout(() => {
-      if (onTenantPayed) {
-        onTenantPayed(result);
+      if (onRenterPayed) {
+        onRenterPayed(result);
       }
 
       closeModal();
     }, 100);
   };
 
-  const total = workerGetsCalculate(price, offerFee);
+  const total = renterGetsCalculate(price, offerFee);
 
   const handleClose = () => {
     if (disabled) {
@@ -48,7 +48,7 @@ const PayModal = ({
         <div className="card card-shadow">
           <div className="card-body">
             <span className="sub-title mb-2" style={{ fontSize: "18px" }}>
-              <span>Worker payment</span>
+              <span>Renter payment</span>
             </span>
             <div className="form-group">Listing: {listingName}</div>
             <div className="form-group">Price: {moneyFormatVisual(price)}</div>
@@ -61,7 +61,7 @@ const PayModal = ({
 
         <PaymentSection
           cardClassName="mt-4 card-shadow"
-          onTenantPayed={handleTenantPayed}
+          onRenterPayed={handleRenterPayed}
           orderId={orderId}
           disabled={disabled}
           setDisabled={setDisabled}

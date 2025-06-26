@@ -6,7 +6,7 @@ const StatusBlock = ({
   statusCancelled,
   disputeStatus,
   ownerId,
-  tenantId,
+  renterId,
   userId,
   endDate,
   payedId,
@@ -22,7 +22,7 @@ const StatusBlock = ({
 
   if (
     [
-      STATIC.ORDER_STATUSES.PENDING_TENANT,
+      STATIC.ORDER_STATUSES.PENDING_RENTER,
       STATIC.ORDER_STATUSES.PENDING_OWNER,
     ].includes(orderStatus)
   ) {
@@ -47,19 +47,14 @@ const StatusBlock = ({
     }
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT) {
+  if (orderStatus == STATIC.ORDER_STATUSES.IN_PROCESS) {
     color = "status-background-green";
-    text = "Approved";
+    text = "In Process";
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER) {
-    if (separateDate(new Date()) < endDate) {
+  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED) {
       color = "status-background-orange";
-      text = "Rental in Progress";
-    } else {
-      color = "status-background-orange";
-      text = "Rental in Progress";
-    }
+      text = "Pending finished approve";
   }
 
   if (orderStatus == STATIC.ORDER_STATUSES.FINISHED) {
@@ -85,7 +80,7 @@ const StatusBlock = ({
   }
 
   if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_TENANT_APPROVE
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE
   ) {
     color = "status-background-red";
     text = "In Dispute";

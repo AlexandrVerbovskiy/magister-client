@@ -27,7 +27,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (
         order.cancelStatus ==
-        STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE
+        STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE
       ) {
         canActions = true;
       }
@@ -36,7 +36,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         type == STATIC.MESSAGE_TYPES.NEW_ORDER &&
         !order.actualUpdateRequest &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
+          order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
       ) {
         canActions = true;
       }
@@ -46,7 +46,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
         order.actualUpdateRequest &&
         order.actualUpdateRequest.id == content.requestId &&
         (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-          order.status == STATIC.ORDER_STATUSES.PENDING_WORKER)
+          order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)
       ) {
         canActions = true;
       }

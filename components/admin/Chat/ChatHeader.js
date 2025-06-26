@@ -10,7 +10,7 @@ const SubChatSelect = ({
   selectedChat,
   selectedChatId,
   onSelectSubChat,
-  tenant,
+  renter,
   owner,
   align = "right",
 }) => {
@@ -30,7 +30,7 @@ const SubChatSelect = ({
           >
             <img
               className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-              src={getFilePath(tenant.photo)}
+              src={getFilePath(renter.photo)}
               width="32"
               height="32"
               style={{ width: "32px", height: "32px" }}
@@ -52,15 +52,15 @@ const SubChatSelect = ({
           </div>
         )}
 
-        {selectedChat.tenantChatId == selectedChatId && (
+        {selectedChat.renterChatId == selectedChatId && (
           <div
             className={`flex items-center h-full px-4 sm:px-6 md:px-5 bg-white`}
-            href={"/admin/users/edit/" + tenant.id}
-            onClick={() => onSelectSubChat(selectedChat.tenantChatId)}
+            href={"/admin/users/edit/" + renter.id}
+            onClick={() => onSelectSubChat(selectedChat.renterChatId)}
           >
             <img
               className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-              src={getFilePath(tenant.photo)}
+              src={getFilePath(renter.photo)}
               width="32"
               height="32"
               style={{ width: "32px", height: "32px" }}
@@ -68,7 +68,7 @@ const SubChatSelect = ({
 
             <div className="truncate">
               <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                {tenant.name}
+                {renter.name}
               </span>
             </div>
           </div>
@@ -131,7 +131,7 @@ const SubChatSelect = ({
             >
               <img
                 className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-                src={getFilePath(tenant.photo)}
+                src={getFilePath(renter.photo)}
                 width="32"
                 height="32"
                 style={{ width: "32px", height: "32px" }}
@@ -153,17 +153,17 @@ const SubChatSelect = ({
             </button>
 
             <button
-              key={tenant.id}
+              key={renter.id}
               type="button"
               className={`flex items-center h-full px-4 sm:px-6 md:px-5 w-full`}
               onClick={() => {
-                onSelectSubChat(selectedChat.tenantChatId);
+                onSelectSubChat(selectedChat.renterChatId);
                 setDropdownOpen(false);
               }}
             >
               <img
                 className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-                src={getFilePath(tenant.photo)}
+                src={getFilePath(renter.photo)}
                 width="32"
                 height="32"
                 style={{ width: "32px", height: "32px" }}
@@ -171,7 +171,7 @@ const SubChatSelect = ({
 
               <div className="truncate">
                 <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                  {tenant.name}
+                  {renter.name}
                 </span>
               </div>
             </button>
@@ -247,10 +247,10 @@ const ChatHeader = ({
   setStatusPopupActive,
   showChatListWindow,
 }) => {
-  const tenant = {
-    id: order.tenantId,
-    name: order.tenantName,
-    photo: order.tenantPhoto,
+  const renter = {
+    id: order.renterId,
+    name: order.renterName,
+    photo: order.renterPhoto,
   };
 
   const owner = {
@@ -292,7 +292,7 @@ const ChatHeader = ({
               selectedChat={selectedChat}
               selectedChatId={selectedChatId}
               onSelectSubChat={onSelectSubChat}
-              tenant={tenant}
+              renter={renter}
               owner={owner}
             />
 
@@ -360,7 +360,7 @@ const ChatHeader = ({
             >
               <img
                 className="rounded-full border-2 border-white dark:border-slate-800 box-content mr-1"
-                src={getFilePath(tenant.photo)}
+                src={getFilePath(renter.photo)}
                 width="32"
                 height="32"
                 style={{ width: "32px", height: "32px" }}
@@ -381,8 +381,8 @@ const ChatHeader = ({
               </div>
             </button>
             <HeaderTab
-              user={tenant}
-              chatId={selectedChat.tenantChatId}
+              user={renter}
+              chatId={selectedChat.renterChatId}
               selectedChatId={selectedChatId}
               onSelectSubChat={onSelectSubChat}
             />

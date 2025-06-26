@@ -8,12 +8,10 @@ import {
   byteConverter,
   convertToSelectPopupCategories,
   getCityCoords,
-  getFilePath,
   onCurrentUserLocation,
   sortListingImages,
   uniqueImageId,
   validateBigText,
-  validateInteger,
   validatePrice,
   validateSmallText,
 } from "../../utils";
@@ -32,6 +30,7 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
+import DateInput from "../FormComponents/DateInput";
 
 const cityOptions = [
   { value: "Warrington", label: "Warrington" },
@@ -118,15 +117,6 @@ const EditForm = ({
 
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
-
-  const [countStoredItems, setCountStoredItems] = useState("");
-  const [countStoredItemsError, setCountStoredItemsError] = useState(null);
-
-  const [pricePerDay, setPricePerDay] = useState("");
-  const [pricePerDayError, setPricePerDayError] = useState(null);
-
-  const [minRentalDays, setMinRentalDays] = useState("");
-  const [minRentalDaysError, setMinRentalDaysError] = useState(null);
 
   const [changePopupActive, setChangePopupActive] = useState(null);
 
@@ -281,24 +271,6 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeCountStoredItems = (e) => {
-    setCountStoredItems(e.target.value);
-    setCountStoredItemsError(null);
-    setMainError(null);
-  };
-
-  const handleChangePricePerDay = (e) => {
-    setPricePerDay(e.target.value);
-    setPricePerDayError(null);
-    setMainError(null);
-  };
-
-  const handleChangeMinRentalDays = (e) => {
-    setMinRentalDays(e.target.value);
-    setMinRentalDaysError(null);
-    setMainError(null);
-  };
-
   useEffect(() => {
     if (listing.id) return;
 
@@ -335,7 +307,6 @@ const EditForm = ({
       postcode: listing.postcode ?? "",
       city: city,
       price: listing.price ?? "",
-      finishTime: listing.finishTime ?? "",
       lat: lat,
       lng: lng,
       rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
@@ -366,17 +337,12 @@ const EditForm = ({
       postcode: postcode.trim(),
       city: city.trim(),
       price,
-      finishTime,
       lat: lat,
       lng: lng,
       rentalRadius: radius,
       listingImages,
       active,
     };
-
-    if (`${minRentalDays}`.trim()) {
-      dataToSave["minRentalDays"] = minRentalDays;
-    }
 
     if (isOtherCategory) {
       dataToSave["otherCategory"] = otherCategory.trim();
@@ -402,7 +368,6 @@ const EditForm = ({
     setPostcode(data.postcode);
     setCity(data.city);
     setPrice(data.price);
-    setFinishTime(data.finishTime);
     setLat(data.lat);
     setLng(data.lng);
     setRadius(data.rentalRadius);
@@ -507,37 +472,6 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (minRentalDays && validateInteger(minRentalDays) !== true) {
-      setMinRentalDaysError(validateInteger(minRentalDays));
-      hasError = true;
-    }
-
-    if (minRentalDays && minRentalDays > STATIC.LIMITS.MAX_RENTAL_DURATION) {
-      setMinRentalDaysError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
-
-    if (!countStoredItems) {
-      setCountStoredItemsError("Required field");
-      hasError = true;
-    }
-
-    if (countStoredItems && validateInteger(countStoredItems) !== true) {
-      setCountStoredItemsError(validateInteger(countStoredItems));
-      hasError = true;
-    }
-
-    if (
-      countStoredItems &&
-      validateInteger(countStoredItems) === true &&
-      Number(countStoredItems) == 0
-    ) {
-      setCountStoredItemsError("Field must be higher than zero");
-      hasError = true;
-    }
-
     if (description && validateBigText(description) !== true) {
       setDescriptionError(validateBigText(description));
       hasError = true;
@@ -548,11 +482,6 @@ const EditForm = ({
       hasError = true;
     }
 
-    if(!finishTimeError){
-      setFinishTimeError("Required field");
-      hasError = true;
-    }
-
     if (price && validatePrice(price) !== true) {
       setPriceError(validatePrice(price));
       hasError = true;
@@ -560,11 +489,6 @@ const EditForm = ({
 
     if (files.length + linkFiles.length < 1) {
       setFileError("At least one photo is required");
-      hasError = true;
-    }
-
-    if (compensationCost && validatePrice(compensationCost) !== true) {
-      setCompensationCostError(validatePrice(compensationCost));
       hasError = true;
     }
 
@@ -730,9 +654,6 @@ const EditForm = ({
               </div>
             )}
           </div>
-        </div>
-        <div className="add-listings-box">
-          <h3>Pricing</h3>
 
           <div className="row">
             <div className="col-lg-6 col-md-6">
@@ -746,21 +667,9 @@ const EditForm = ({
                 name="priceError"
               />
             </div>
-
-            <div className="col-lg-6 col-md-6">
-              <div className="form-group ">
-                <ErrorIconWrapper label="Finish Time:" icon="bx bx-timer" error={finishTimeError}>
-                  <DateInput
-                    name="finishTime"
-                    value={finishTime}
-                    onInput={handleChangeFinishTine}
-                    placeholder="Finish Time"
-                  />
-                </ErrorIconWrapper>
-              </div>
-            </div>
           </div>
         </div>
+
         <div className="add-listings-box">
           <h3>
             Collection Location{" "}

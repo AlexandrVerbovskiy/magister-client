@@ -28,13 +28,13 @@ const FullReview = (baseProps) => {
   const { authToken, error } = useContext(IndiceContext);
   const [activeSaveModal, setActiveSaveModal] = useState(false);
   const {
-    starOptions: tenantStarOptions,
-    setStarOptions: setTenantStarOptions,
-    description: tenantDescription,
-    setDescription: setTenantDescription,
-    leaveFeedback: leaveTenantDescription,
-    setLeaveFeedback: setLeaveTenantDescription,
-    dataToSubmit: tenantDataToSubmit,
+    starOptions: renterStarOptions,
+    setStarOptions: setRenterStarOptions,
+    description: renterDescription,
+    setDescription: setRenterDescription,
+    leaveFeedback: leaveRenterDescription,
+    setLeaveFeedback: setLeaveRenterDescription,
+    dataToSubmit: renterDataToSubmit,
   } = useRenterReview();
 
   const [disabled, setDisabled] = useState(false);
@@ -48,7 +48,7 @@ const FullReview = (baseProps) => {
       setDisabled(true);
 
       await createRenterReview(
-        { tenantCommentInfo: tenantDataToSubmit(), orderId: id },
+        { renterCommentInfo: renterDataToSubmit(), orderId: id },
         authToken
       );
 
@@ -73,20 +73,20 @@ const FullReview = (baseProps) => {
         {currentStep == "renter" && (
           <UserReviewForm
             data={{
-              userName: props.order.tenantName,
-              userPhoto: props.order.tenantPhoto,
-              userCountItems: props.order.tenantCountItems,
-              userAverageRating: props.order.tenantAverageRating,
-              userCommentCount: props.order.tenantCommentCount,
+              userName: props.order.renterName,
+              userPhoto: props.order.renterPhoto,
+              userCountItems: props.order.renterCountItems,
+              userAverageRating: props.order.renterAverageRating,
+              userCommentCount: props.order.renterCommentCount,
             }}
             onSubmit={handleRenterReviewSubmit}
             disabled={disabled}
-            starOptions={tenantStarOptions}
-            setStarOptions={setTenantStarOptions}
-            description={tenantDescription}
-            setDescription={setTenantDescription}
-            leaveFeedback={leaveTenantDescription}
-            setLeaveFeedback={setLeaveTenantDescription}
+            starOptions={renterStarOptions}
+            setStarOptions={setRenterStarOptions}
+            description={renterDescription}
+            setDescription={setRenterDescription}
+            leaveFeedback={leaveRenterDescription}
+            setLeaveFeedback={setLeaveRenterDescription}
             type="renter"
           />
         )}

@@ -25,8 +25,8 @@ const ListFilter = ({
               <input
                 type="checkbox"
                 name="facilities-list"
-                checked={type == "tenant"}
-                onChange={() => changeType("tenant")}
+                checked={type == "renter"}
+                onChange={() => changeType("renter")}
               />
               <span>Rental</span>
             </label>

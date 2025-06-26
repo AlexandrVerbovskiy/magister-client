@@ -12,7 +12,7 @@ import {
   dateConverter,
   moneyFormatVisual,
   ownerPaymentFeeCalculate,
-  workerGetsFeeCalculate,
+  renterGetsFeeCalculate,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -218,7 +218,7 @@ const Wallet = ({
               <h3>
                 Payout History{" "}
                 <span className="comission-taken">
-                  Fee: {feeInfo.tenantBaseCommissionPercent}%
+                  Fee: {feeInfo.renterBaseCommissionPercent}%
                 </span>
               </h3>
 
@@ -228,9 +228,9 @@ const Wallet = ({
                     {sendings.map((sending) => {
                       const price = sending.offerPrice;
 
-                      const fee = workerGetsFeeCalculate(
+                      const fee = renterGetsFeeCalculate(
                         sending.offerPrice,
-                        sending.workerFee
+                        sending.renterFee
                       );
 
                       return (

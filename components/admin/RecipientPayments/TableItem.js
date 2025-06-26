@@ -32,11 +32,11 @@ const TypeSpan = ({ type }) => {
 
 const TableItem = ({
   id,
-  tenantId,
-  tenantName,
-  tenantEmail,
-  tenantPhone,
-  tenantPhoto,
+  renterId,
+  renterName,
+  renterEmail,
+  renterPhone,
+  renterPhoto,
   money,
   status,
   receivedType,
@@ -69,7 +69,7 @@ const TableItem = ({
           <div className="font-medium text-sky-500">#{id}</div>
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
+          <TableUserLink id={renterId} name={renterName} photo={renterPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <TableUserLink
@@ -127,15 +127,15 @@ const TableItem = ({
                 >
                   <SubInfoTitle
                     title="Renter"
-                    href={`/admin/users/edit/${tenantId}`}
+                    href={`/admin/users/edit/${renterId}`}
                     canMove={canMoveToRecipient}
                   />
-                  <SubInfoRow label="Name" value={tenantName} />
-                  <SubInfoRow label="Email" value={tenantEmail} />
+                  <SubInfoRow label="Name" value={renterName} />
+                  <SubInfoRow label="Email" value={renterEmail} />
                   <SubInfoRow
                     label="Phone"
                     value={
-                      tenantPhone && tenantPhone.length ? tenantPhone : "-"
+                      renterPhone && renterPhone.length ? renterPhone : "-"
                     }
                   />
                 </td>
@@ -195,14 +195,6 @@ const TableItem = ({
                   <SubInfoRow
                     label="Price"
                     value={listingPrice}
-                  />
-                  <SubInfoRow
-                    label="Minimum Rental Days"
-                    value={listingMinRentalDays}
-                  />
-                  <SubInfoRow
-                    label="Count Stored Items"
-                    value={listingCountStoredItems}
                   />
                 </td>
               </tr>

@@ -7,6 +7,7 @@ const BookingActionModals = ({
   order,
   listingPrice,
   proposalPrice,
+  proposalStartTime,
   proposalFinishTime,
   fee,
   commissionType,
@@ -28,12 +29,13 @@ const BookingActionModals = ({
   return (
     <>
       <CreateUpdateOrderRequestModal
-        handleCreateUpdateRequest={({ price, finishTime }) =>
-          handleCreateUpdateRequest({ order, price, finishTime })
+        handleCreateUpdateRequest={({ price, startTime, finishTime }) =>
+          handleCreateUpdateRequest({ order, price, startTime, finishTime })
         }
         price={listingPrice}
         proposalPrice={proposalPrice}
         proposalFinishTime={proposalFinishTime}
+        proposalStartTime={proposalStartTime}
         fee={fee}
         commissionType={commissionType}
         updateRequestModalActive={updateRequestModalActive}

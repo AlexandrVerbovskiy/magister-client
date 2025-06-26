@@ -22,7 +22,12 @@ const useBookingAgreementPanel = ({
   const [rejectOrderModalActive, setRejectOrderModalActive] = useState(false);
 
   const { authToken, error, success, sessionUser } = useContext(IndiceContext);
-  const handleCreateUpdateRequest = async ({ order, price, finishTime }) => {
+  const handleCreateUpdateRequest = async ({
+    order,
+    price,
+    startTime,
+    finishTime,
+  }) => {
     if (disabled) {
       return;
     }
@@ -35,6 +40,7 @@ const useBookingAgreementPanel = ({
         {
           orderId: order.id,
           newPrice: price,
+          newStartTime: startTime,
           newFinishTime: finishTime,
         },
         authToken
@@ -44,6 +50,7 @@ const useBookingAgreementPanel = ({
         onCreateUpdateRequest({
           orderId: order.id,
           price,
+          startTime,
           finishTime,
           ...result,
         });
@@ -52,6 +59,7 @@ const useBookingAgreementPanel = ({
       return {
         orderId: order.id,
         price,
+        startTime,
         finishTime,
         ...result,
       };
@@ -80,6 +88,8 @@ const useBookingAgreementPanel = ({
         setUpdatedOffer({
           id: result.id,
           status: result.status,
+          offerStartTime: result.startTime,
+          prevStartTime: result.prevStartTime,
           offerFinishTime: result.finishTime,
           prevFinishTime: result.prevFinishTime,
           offerPrice: result.price,

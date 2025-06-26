@@ -24,26 +24,26 @@ const useCreateDispute = ({ order = null }) => {
     setDescription("");
 
     if (order) {
-      setOpponentId(isOwnerCreateDispute ? order.tenantId : order.ownerId);
+      setOpponentId(isOwnerCreateDispute ? order.renterId : order.ownerId);
       setOpponentName(
-        isOwnerCreateDispute ? order.tenantName : order.ownerName
+        isOwnerCreateDispute ? order.renterName : order.ownerName
       );
       setOpponentPhoto(
-        isOwnerCreateDispute ? order.tenantPhoto : order.ownerPhoto
+        isOwnerCreateDispute ? order.renterPhoto : order.ownerPhoto
       );
       setOpponentCountItems(
-        isOwnerCreateDispute ? order.tenantCountItems : order.ownerCountItems
+        isOwnerCreateDispute ? order.renterCountItems : order.ownerCountItems
       );
       setOpponentItemsType(isOwnerCreateDispute ? "are rented" : "for rental");
 
       setOpponentAverageRating(
         isOwnerCreateDispute
-          ? order.tenantAverageRating
+          ? order.renterAverageRating
           : order.ownerAverageRating
       );
       setOpponentCommentCount(
         isOwnerCreateDispute
-          ? order.tenantCommentCount
+          ? order.renterCommentCount
           : order.ownerCommentCount
       );
 

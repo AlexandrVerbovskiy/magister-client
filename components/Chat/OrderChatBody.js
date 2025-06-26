@@ -55,7 +55,7 @@ const OrderChatBody = ({
       isOwner,
       price: order.offerPrice,
       ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
+      renterFee: order.renterFee,
     });
 
     const updatedFields = {
@@ -97,11 +97,10 @@ const OrderChatBody = ({
         newEndDate: toDate,
         newPrice: price,
       },
-      conflictOrders: [],
     };
 
     if (isOwner) {
-      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_TENANT;
+      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_RENTER;
     } else {
       newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -166,7 +165,7 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
-  const onTenantPayed = async ({ chatMessage, orderPart }) => {
+  const onRenterPayed = async ({ chatMessage, orderPart }) => {
     setTimeout(() => {
       actions.appendMessage(chatMessage);
       updateOrder(orderPart);
@@ -174,38 +173,12 @@ const OrderChatBody = ({
     }, 100);
   };
 
-  const onExtendOrder = (result) => {
-    const { id, chatMessage, opponent } = result;
-    if (chatMessage.chatId == selectedChat.id) {
-      updateOrder({ extendOrders: result.parentOrderExtendOrders });
-      actions.appendMessage(chatMessage);
-      windowProps.scrollBodyBottom();
-      success.set("Extension request created successfully");
-    } else {
-      actions.appendChatToListByMessage(chatMessage, opponent);
-      handleSelectChat(chatMessage.chatId);
-      success.set("New booking created successfully");
-    }
-  };
-
-  const activeExtension = order.extendOrders.find(
-    (extension) =>
-      extension.status != STATIC.ORDER_STATUSES.FINISHED &&
-      !extension.disputeStatus &&
-      !extension.cancelStatus
-  );
-
-  if (activeExtension) {
-    activeExtension["conflictOrders"] = [...order["conflictOrders"], order];
-  }
-
   const popupsData = useSingleOrderActions({
     order,
     setUpdatedOffer,
     setActualUpdateRequest,
     onCreateUpdateRequest,
     onCancel,
-    onExtendOrder,
     setError: error.set,
     onAcceptOrder,
     onRejectOrder,
@@ -213,34 +186,6 @@ const OrderChatBody = ({
     onDisputeOpened,
     onAcceptFinishOrder,
     onFinishOrder
-  });
-
-  const onExtensionChanged = (res) => {
-    const { chatMessage, extendOrders } = res;
-    updateOrder({
-      extendOrders,
-    });
-    actions.appendMessage(chatMessage);
-    windowProps.scrollBodyBottom();
-  };
-
-  const onExtensionCancel = (res) => {
-    const { chatMessage, extendOrders, conflictOrders } = res;
-    updateOrder({
-      extendOrders,
-      conflictOrders
-    });
-    actions.appendMessage(chatMessage);
-    windowProps.scrollBodyBottom();
-  };
-
-  const extensionPopupsData = useSingleOrderActions({
-    order: activeExtension,
-    setError: error.set,
-    onCancel: onExtensionCancel,
-    onCreateUpdateRequest: onExtensionChanged,
-    onAcceptOrder: onExtensionChanged,
-    onRejectOrder: onExtensionChanged,
   });
 
   /*  activeDisputeWindow,
@@ -293,7 +238,6 @@ const OrderChatBody = ({
                   handleDeleteMessage={actions.deleteMessage}
                   entity={order}
                   popupsData={popupsData}
-                  extensionPopupsData={extensionPopupsData}
                 />
               );
             })}
@@ -318,13 +262,7 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
-        onTenantPayed={onTenantPayed}
-      />
-
-      <OrderModals
-        {...dopOrderInfo}
-        order={activeExtension}
-        orderPopupsData={extensionPopupsData}
+        onRenterPayed={onRenterPayed}
       />
 
       {currentActionButtons.includes(

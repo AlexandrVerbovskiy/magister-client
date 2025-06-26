@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
-  workerGetsCalculate,
+  renterGetsCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -33,9 +33,9 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = workerGetsCalculate(
+  const totalPayed = renterGetsCalculate(
     recipient.offerPrice,
-    recipient.workerFee,
+    recipient.renterFee,
   );
 
   let paymentNumber = "-";
@@ -79,7 +79,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     operationMessage = "Operation mark as cancelled";
   }
 
-  if (recipient.receivedType === "rental") {
+  if (recipient.receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT) {
     operationMessage = recipientStatuses({
       status: recipient.status,
       plannedTime: recipient.plannedTime,
@@ -160,7 +160,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={recipient.tenantName}
+                                value={recipient.renterName}
                                 label="Renter Name"
                                 name="renter-name"
                                 placeholder="Renter Name"
@@ -324,7 +324,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
                         </section>
                       )}
 
-                      {recipient.receivedType === "rental" && (
+                      {recipient.receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT && (
                         <section>
                           <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
                             Payment Information

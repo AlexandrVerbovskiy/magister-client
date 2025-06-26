@@ -11,8 +11,8 @@ import {
   getListingImageByType,
   moneyFormat,
   ownerPaymentCalculate,
-  workerGetsFeeCalculate,
-  workerGetsCalculate,
+  renterGetsFeeCalculate,
+  renterGetsCalculate,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -114,7 +114,7 @@ const Order = (baseProps) => {
                   <div className="grow w-full">
                     <div className="p-6 space-y-6">
                       <h2 className="flex text-2xl text-slate-800 dark:text-slate-100 font-bold mb-5 justify-between">
-                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.tenantName}`}</div>
+                        <div className="order-form-title max-w-full overflow-separate">{`Order a ${order.listingName} by ${order.renterName}`}</div>
                         {order.cancelStatus ? (
                           <CancelStatus
                             status={order.cancelStatus}
@@ -178,10 +178,10 @@ const Order = (baseProps) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={order.workerName}
-                                label="Worker"
-                                placeholder="Worker Name"
-                                name="worker"
+                                value={order.renterName}
+                                label="Renter"
+                                placeholder="Renter Name"
+                                name="renter"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
@@ -229,11 +229,11 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_fee"
+                                name="renter_fee"
                                 label="Renter Fee (%)"
                                 placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
-                                value={order.tenantFee}
+                                value={order.renterFee}
                                 inputClassName="form-input w-full"
                               />
                             </div>
@@ -263,19 +263,19 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_total_fee"
+                                name="renter_total_fee"
                                 label={`Renter Total Fee (${STATIC.CURRENCY})`}
                                 placeholder="Renter Fee"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? workerGetsFeeCalculate(
+                                    ? renterGetsFeeCalculate(
                                         activeRequestsToUpdate.newPrice,
-                                        order.workerFee
+                                        order.renterFee
                                       )
-                                    : workerGetsFeeCalculate(
+                                    : renterGetsFeeCalculate(
                                         order.offerPrice,
-                                        order.workerFee
+                                        order.renterFee
                                       )
                                 }
                                 inputClassName="form-input w-full"
@@ -311,22 +311,22 @@ const Order = (baseProps) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                name="tenant_price"
+                                name="renter_price"
                                 label={`Renter Send Total Price (${STATIC.CURRENCY})`}
                                 placeholder="Renter Send Total Price"
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        workerGetsCalculate(
+                                        renterGetsCalculate(
                                           activeRequestsToUpdate.newPrice,
-                                          order.workerFee
+                                          order.renterFee
                                         )
                                       )
                                     : moneyFormat(
-                                        workerGetsCalculate(
+                                        renterGetsCalculate(
                                           order.offerPrice,
-                                          order.workerFee
+                                          order.renterFee
                                         )
                                       )
                                 }
@@ -454,9 +454,9 @@ const Order = (baseProps) => {
                               isOwner: false,
                               price: order.prevPrice ?? order.offerPrice,
                               ownerFee: order.ownerFee,
-                              tenantFee: order.tenantFee,
+                              renterFee: order.renterFee,
                             })}
-                            prevSenderName={order.tenantName}
+                            prevSenderName={order.renterName}
                             prevGetterName={order.ownerName}
                             needBottomMargin={true}
                           />
@@ -470,17 +470,17 @@ const Order = (baseProps) => {
                                 isOwner: false,
                                 price: request.newPrice,
                                 ownerFee: order.ownerFee,
-                                tenantFee: request.newFee,
+                                renterFee: request.newFee,
                               })}
                               prevSenderName={
-                                request.senderId == order.tenantId
-                                  ? order.tenantName
+                                request.senderId == order.renterId
+                                  ? order.renterName
                                   : order.ownerName
                               }
                               prevGetterName={
-                                request.senderId == order.tenantId
+                                request.senderId == order.renterId
                                   ? order.ownerName
-                                  : order.tenantName
+                                  : order.renterName
                               }
                               needBottomMargin={
                                 index != requestsToUpdate.length - 1
@@ -493,211 +493,6 @@ const Order = (baseProps) => {
                   </div>
                 </div>
               </div>
-
-              {order.tenantChecklistId && (
-                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
-                  <div className="flex flex-col md:flex-row md:-mr-px">
-                    <div className="grow w-full">
-                      <div className="p-6 space-y-6">
-                        <section className="flex w-full">
-                          <div
-                            className={
-                              "w-full" + order.ownerChecklistId ? "mb-4" : ""
-                            }
-                          >
-                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                              Checklist by renter
-                            </h2>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Can you confirm the that the item matches the description provided in the listing?"
-                                name="tenantChecklistItemMatchesDescription"
-                                value={
-                                  order.tenantChecklistItemMatchesDescription ||
-                                  "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div
-                              className="flex flex-wrap mt-5"
-                              style={{ width: "100%", gridGap: "0.5rem" }}
-                            >
-                              <label className="block text-sm font-medium mb-1">
-                                Please upload clear, date stamped photos of the
-                                item within the last 24 hours, highlighting all
-                                sides and any existing damage or imperfections
-                                and also showing the serial number.
-                              </label>
-
-                              {order.ownerChecklistsImages.map(
-                                (image, index) => (
-                                  <ListingPhotoView
-                                    key={index}
-                                    src={getFilePath(image.link)}
-                                  />
-                                )
-                              )}
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Do the photos provided accurately represent the current state of the item?"
-                                name="tenantChecklistItemMatchesPhotos"
-                                value={
-                                  order.tenantChecklistItemMatchesPhotos || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Can you confirm that the item is fully functional and meets the described specifications?"
-                                name="tenantChecklistItemFullyFunctional"
-                                value={
-                                  order.tenantChecklistItemFullyFunctional ||
-                                  "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Are all the listed accessories and parts present and in good condition?"
-                                name="tenantChecklistPartsGoodCondition"
-                                value={
-                                  order.tenantChecklistPartsGoodCondition || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Do you understand how to use the item properly and follow the provided guidelines?"
-                                name="tenantChecklistProvidedGuidelines"
-                                value={
-                                  order.tenantChecklistProvidedGuidelines || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-                          </div>
-                        </section>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {order.ownerChecklistId && (
-                <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
-                  <div className="flex flex-col md:flex-row md:-mr-px">
-                    <div className="grow w-full">
-                      <div className="p-6 space-y-6">
-                        <section className="flex w-full">
-                          <div className="w-full">
-                            <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                              Checklist by owner
-                            </h2>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Can you confirm the that the item matches the description provided in the listing?"
-                                name="ownerChecklistItemMatchesDescription"
-                                value={
-                                  order.ownerChecklistItemMatchesDescription ||
-                                  "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div
-                              className="flex flex-wrap mt-5"
-                              style={{ width: "100%", gridGap: "0.5rem" }}
-                            >
-                              <label className="block text-sm font-medium mb-1">
-                                Please upload clear, date stamped photos of the
-                                item within the last 24 hours, highlighting all
-                                sides and any existing damage or imperfections
-                                and also showing the serial number.
-                              </label>
-
-                              {order.tenantChecklistsImages.map(
-                                (image, index) => (
-                                  <ListingPhotoView
-                                    key={index}
-                                    src={getFilePath(image.link)}
-                                  />
-                                )
-                              )}
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Do the photos provided accurately represent the current state of the item?"
-                                name="ownerChecklistItemMatchesPhotos"
-                                value={
-                                  order.ownerChecklistItemMatchesPhotos || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Can you confirm that the item is fully functional and meets the described specifications?"
-                                name="ownerChecklistItemFullyFunctional"
-                                value={
-                                  order.ownerChecklistItemFullyFunctional || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Are all the listed accessories and parts present and in good condition?"
-                                name="ownerChecklistPartsGoodCondition"
-                                value={
-                                  order.ownerChecklistPartsGoodCondition || "-"
-                                }
-                                row="4"
-                                labelClassName="block text-sm font-medium mb-1"
-                              />
-                            </div>
-
-                            <div className="w-full mb-2">
-                              <TextareaView
-                                label="Do you understand how to use the item properly and follow the provided guidelines?"
-                                name="ownerChecklistProvidedGuidelines"
-                                value={
-                                  order.ownerChecklistProvidedGuidelines || "-"
-                                }
-                                labelClassName="block text-sm font-medium mb-1"
-                                row="4"
-                              />
-                            </div>
-                          </div>
-                        </section>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </main>

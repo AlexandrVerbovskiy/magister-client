@@ -5,15 +5,13 @@ import {
   generateProfileFilePath,
   getDisputeTitle,
   getListingImageByType,
-  isOrderCanBeAccepted,
   moneyFormatVisual,
   ownerPaymentFeeCalculate,
-  workerGetsFeeCalculate,
+  renterGetsFeeCalculate,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
 import STATIC from "../../static";
-import { approveClientGotListing, finishedByOwner } from "../../services";
 import ErrorBlockMessage from "../_App/ErrorBlockMessage";
 import StatusBlock from "../Listings/StatusBlock";
 import InputView from "../../components/FormComponents/InputView";
@@ -26,22 +24,19 @@ import {
 import StatusBar from "../StatusBar";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import { useRouter } from "next/router";
-import OrderExtendApprovementSection from "../Order/OrderExtendApprovementSection";
 import Link from "next/link";
 import OrderPopups from "./OrderPopups";
-import TenantGotListingApproveModal from "./TenantGotListingApproveModal";
-import FinishOrderModal from "./FinishOrderModal";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
   STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
-  STATIC.ORDER_STATUSES.PENDING_TENANT,
+  STATIC.ORDER_STATUSES.PENDING_RENTER,
 ];
 
 const OrderContent = ({
   order: baseOrder,
-  workerBaseCommission,
+  renterBaseCommission,
   bankInfo,
   operationsDisabled = false,
 }) => {
@@ -51,27 +46,20 @@ const OrderContent = ({
   const [mapCenter, setMapCenter] = useState(null);
   const [successIconPopupState, setSuccessIconPopupState] = useState({});
 
-  const [
-    tenantGotListingApproveModalActive,
-    setTenantGotListingApproveModalActive,
-  ] = useState(false);
-
-  const [finishOrderModalActive, setFinishOrderModalActive] = useState(false);
-
   const router = useRouter();
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   const [isOwner, setIsOwner] = useState(false);
-  const [isTenant, setIsTenant] = useState(false);
+  const [isRenter, setIsRenter] = useState(false);
 
   const [prevUpdateRequest, setPrevUpdateRequest] = useState(null);
   const [actualUpdateRequest, setActualUpdateRequest] = useState(null);
 
   const isBookingWithoutAgreement =
     order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-    order.status == STATIC.ORDER_STATUSES.PENDING_TENANT;
+    order.status == STATIC.ORDER_STATUSES.PENDING_RENTER;
 
   const { CanBeErrorBaseDateSpan, checkErrorData } = useOrderDateError({
     order,
@@ -83,7 +71,7 @@ const OrderContent = ({
 
   useEffect(() => {
     setIsOwner(order.ownerId == sessionUser?.id);
-    setIsTenant(order.tenantId == sessionUser?.id);
+    setIsRenter(order.renterId == sessionUser?.id);
 
     if (isBookingWithoutAgreement) {
       if (order.previousUpdateRequest) {
@@ -91,7 +79,8 @@ const OrderContent = ({
       } else {
         if (order.actualUpdateRequest) {
           setPrevUpdateRequest({
-            senderId: order.workerId,
+            senderId: order.renterId,
+            startTime: order.offerStartTime,
             finishTime: order.offerFinishTime,
             price: order.offerPrice,
           });
@@ -113,7 +102,7 @@ const OrderContent = ({
         onClose = () => {
           router.push(
             `/dashboard/orders/?type=${
-              sessionUser?.id == order.ownerId ? "owner" : "tenant"
+              sessionUser?.id == order.ownerId ? "owner" : "renter"
             }`
           );
         };
@@ -146,19 +135,21 @@ const OrderContent = ({
       type,
       isOwner,
       ownerFee: order.ownerFee,
-      tenantFee: order.tenantFee,
+      renterFee: order.renterFee,
     });
 
-  const onCreateUpdateRequest = ({ price, finishTime }) => {
+  const onCreateUpdateRequest = ({ price, startTime, finishTime }) => {
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
         finishTime: actualUpdateRequest.newFinishTime,
+        startTime: actualUpdateRequest.newStartTime,
         price: actualUpdateRequest.newPrice,
       });
     } else {
       setPrevUpdateRequest({
-        senderId: order.workerId,
+        senderId: order.renterId,
+        startTime: order.offerStartTime,
         finishTime: order.offerFinishTime,
         price: order.offerPrice,
       });
@@ -167,27 +158,26 @@ const OrderContent = ({
     setActualUpdateRequest({
       senderId: sessionUser?.id,
       newPrice: price,
+      newStartTime: startTime,
       newFinishTime: finishTime,
     });
 
     if (isOwner) {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_TENANT,
-        conflictOrders: [],
+        status: STATIC.ORDER_STATUSES.PENDING_RENTER,
       }));
     } else {
       setOrder((prev) => ({
         ...prev,
         status: STATIC.ORDER_STATUSES.PENDING_OWNER,
-        conflictOrders: [],
       }));
     }
 
     activateSuccessOrderPopup({
       text:
         "Conditions updates successfully. Wait for a response from the " +
-        (isOwner ? "worker" : "owner"),
+        (isOwner ? "renter" : "owner"),
     });
   };
 
@@ -220,7 +210,7 @@ const OrderContent = ({
     }));
   };
 
-  const onTenantPayed = () => {
+  const onRenterPayed = () => {
     activateSuccessOrderPopup({
       text: "Order started!",
       onClose: () => {},
@@ -230,7 +220,7 @@ const OrderContent = ({
     setTimeout(() => {
       setOrder((prev) => ({
         ...prev,
-        status: STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
+        status: STATIC.ORDER_STATUSES.IN_PROCESS,
       }));
     }, 100);
   };
@@ -263,29 +253,15 @@ const OrderContent = ({
     }));
   };
 
-  const currentFee = isOwner ? order.ownerFee : order.workerFee;
+  const currentFee = isOwner ? order.ownerFee : order.renterFee;
   const currentFeeCalculate = (price, fee) =>
     isOwner
       ? ownerPaymentFeeCalculate(price, fee)
-      : workerGetsFeeCalculate(price, fee);
+      : renterGetsFeeCalculate(price, fee);
 
   const currentActionButtons = useOrderActions({
     order,
   });
-
-  let countDopAction = 0;
-
-  if (
-    currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE)
-  ) {
-    countDopAction += 1;
-  }
-
-  if (
-    currentActionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE)
-  ) {
-    countDopAction += 1;
-  }
 
   const statusBarStatuses = bookingStatuses.includes(order.status)
     ? [
@@ -305,7 +281,7 @@ const OrderContent = ({
         {
           title: "Pending to Client",
           finished: [
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
+            STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
             STATIC.ORDER_STATUSES.FINISHED,
           ].includes(order.status),
         },
@@ -328,58 +304,7 @@ const OrderContent = ({
     onCancel,
     onPayedFastCancel,
     setError: error.set,
-    onExtendOrder,
   });
-
-  const updateFromDate = (fromDate) => {
-    orderPopupsData.setExtendApproveData({
-      ...orderPopupsData.extendApproveData,
-      fromDate,
-    });
-  };
-
-  const updateToDate = (toDate) => {
-    orderPopupsData.setExtendApproveData({
-      ...orderPopupsData.extendApproveData,
-      toDate,
-    });
-  };
-
-  const triggerFinishClick = () => {
-    setFinishOrderModalActive(true);
-  };
-
-  const triggerTenantQotListingClick = () => {
-    setTenantGotListingApproveModalActive(true);
-  };
-
-  if (orderPopupsData.extendApproveData) {
-    return (
-      <OrderExtendApprovementSection
-        handleApprove={orderPopupsData.handleMakeBooking}
-        setCurrentOpenImg={setCurrentOpenImg}
-        listing={{
-          id: order.listingId,
-          name: order.listingName,
-          userName: order.ownerName,
-          userPhoto: order.ownerPhoto,
-          listingImages: order.listingImages,
-          userCountItems: order.listingCountStoredItems,
-          ownerAverageRating: order.ownerAverageRating,
-          ownerCommentCount: order.ownerCommentCount,
-        }}
-        handleGoBack={() => orderPopupsData.setExtendApproveData(null)}
-        fromDate={orderPopupsData.extendApproveData.fromDate}
-        toDate={orderPopupsData.extendApproveData.toDate}
-        price={orderPopupsData.extendApproveData.price}
-        fee={tenantBaseCommission}
-        setToDate={updateToDate}
-        setFromDate={updateFromDate}
-        blockedDates={getOrderBlockedDatesToUpdate(order)}
-        minRentalDays={order.listingMinRentalDays}
-      />
-    );
-  }
 
   return (
     <>
@@ -530,7 +455,7 @@ const OrderContent = ({
         </div>
       </div>
 
-      {isTenant && (
+      {isRenter && (
         <div id="user-info" className="add-listings-box">
           <h3>Listing Owner Details</h3>
 
@@ -572,8 +497,8 @@ const OrderContent = ({
           <div className="order-info-main-opponent-info mb-4">
             <div className="d-flex align-items-center">
               <img
-                src={generateProfileFilePath(order.tenantPhoto)}
-                alt={order.tenantName}
+                src={generateProfileFilePath(order.renterPhoto)}
+                alt={order.renterName}
               />
             </div>
           </div>
@@ -584,7 +509,7 @@ const OrderContent = ({
                 label="Renter Name:"
                 icon="bx bx-envelope"
                 placeholder="Renter Name"
-                value={order.tenantName}
+                value={order.renterName}
               />
             </div>
 
@@ -593,7 +518,7 @@ const OrderContent = ({
                 label="Renter Email:"
                 icon="bx bx-envelope"
                 placeholder="Renter Email"
-                value={order.tenantEmail}
+                value={order.renterEmail}
               />
             </div>
           </div>
@@ -624,12 +549,15 @@ const OrderContent = ({
                   )}
                 <li>Offer price: {moneyFormatVisual(order.offerPrice)}</li>
                 <li>
-                  <CanBeErrorBaseDateSpan finishTime={order.offerFinishTime} />
+                  <CanBeErrorBaseDateSpan
+                    finishTime={order.offerFinishTime}
+                    startTime={order.offerStartTime}
+                  />
                 </li>
                 <li>Fee: {currentFee}%</li>
 
                 {(order.status != STATIC.ORDER_STATUSES.PENDING_OWNER ||
-                  order.status != STATIC.ORDER_STATUSES.PENDING_TENANT) && (
+                  order.status != STATIC.ORDER_STATUSES.PENDING_RENTER) && (
                   <li className="order-status">
                     Status:{" "}
                     <StatusBlock
@@ -637,7 +565,7 @@ const OrderContent = ({
                       statusCancelled={order.cancelStatus}
                       disputeStatus={order.disputeStatus}
                       ownerId={order.ownerId}
-                      tenantId={order.tenantId}
+                      renterId={order.renterId}
                       userId={sessionUser?.id}
                       endDate={order.offerEndDate}
                       payedId={order.paymentInfo?.id}
@@ -691,7 +619,7 @@ const OrderContent = ({
                         </li>
                       )}
 
-                      {isTenant && (
+                      {isRenter && (
                         <li
                           style={{
                             fontWeight: 700,
@@ -702,7 +630,7 @@ const OrderContent = ({
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               price: order.listingPrice,
-                              type: "worker",
+                              type: "renter",
                             })
                           )}
                         </li>
@@ -722,20 +650,26 @@ const OrderContent = ({
                   </li>
                 )}
 
-                {isTenant && (
+                {isRenter && (
                   <li style={{ fontWeight: 700 }}>
                     Fact offer price to pay:{" "}
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.offerPrice,
-                        type: "worker",
+                        type: "renter",
                       })
                     )}
                   </li>
                 )}
-                {checkErrorData(order.offerFinishTime).blocked && (
+                {checkErrorData(order.offerStartTime, order.offerFinishTime)
+                  .blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
-                    {checkErrorData(order.offerFinishTime).tooltipErrorMessage}
+                    {
+                      checkErrorData(
+                        order.offerStartTime,
+                        order.offerFinishTime
+                      ).tooltipErrorMessage
+                    }
                   </ErrorBlockMessage>
                 )}
               </ul>
@@ -753,11 +687,11 @@ const OrderContent = ({
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-              (isTenant &&
-                order.status == STATIC.ORDER_STATUSES.PENDING_TENANT) ? (
+              (isRenter &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) ? (
                 <h3>Your Proposal Info</h3>
               ) : (
-                <h3>{isOwner ? "Worker" : "Owner"} Proposal</h3>
+                <h3>{isOwner ? "Renter" : "Owner"} Proposal</h3>
               )}
 
               <ul style={{ listStyle: "none", padding: "0" }}>
@@ -767,6 +701,7 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
+                    startTime={prevUpdateRequest.startTime}
                     finishTime={prevUpdateRequest.finishTime}
                   />
                 </li>
@@ -822,11 +757,16 @@ const OrderContent = ({
                   )}
                 </li>
 
-                {checkErrorData(prevUpdateRequest.finishTime).blocked && (
+                {checkErrorData(
+                  prevUpdateRequest.startTime,
+                  prevUpdateRequest.finishTime
+                ).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(prevUpdateRequest.finishTime)
-                        .tooltipErrorMessage
+                      checkErrorData(
+                        prevUpdateRequest.startTime,
+                        prevUpdateRequest.finishTime
+                      ).tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
                 )}
@@ -838,9 +778,9 @@ const OrderContent = ({
             <div className="listings-widget order_widget order-proposal-info">
               {(isOwner &&
                 order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-              (isWorker &&
-                order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) ? (
-                <h3>{isOwner ? "Worker" : "Owner"} Proposal</h3>
+              (isRenter &&
+                order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) ? (
+                <h3>{isOwner ? "Renter" : "Owner"} Proposal</h3>
               ) : (
                 <h3>Your Proposal Info</h3>
               )}
@@ -853,6 +793,7 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
+                    startTime={actualUpdateRequest.newStartTime}
                     finishTime={actualUpdateRequest.newFinishTime}
                   />
                 </li>
@@ -910,10 +851,13 @@ const OrderContent = ({
                   )}
                 </li>
 
-                {checkErrorData(actualUpdateRequest.newFinishTime).blocked && (
+                {checkErrorData(
+                  actualUpdateRequest.newStartTime,
+                  actualUpdateRequest.newFinishTime
+                ).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(actualUpdateRequest.newFinishTime)
+                      checkErrorData(actualUpdateRequest.newStartTime, actualUpdateRequest.newFinishTime)
                         .tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
@@ -932,70 +876,7 @@ const OrderContent = ({
         mainCloseButtonText={successIconPopupState.closeButtonText}
       />
 
-      {((order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT &&
-        order.canAcceptTenantListing) ||
-        (order.status == STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER &&
-          order.canAcceptOwnerListing)) && <>{/* CHECKLIST */}</>}
-
-      {currentActionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
-      ) && (
-        <div id="tenant-qr-code" className="order_widget add-listings-box">
-          <h3>Renters QR code to confirm acceptance of the tool</h3>
-
-          <div className="booking-operations form-group">
-            <img
-              width="200px"
-              height="200px"
-              src={order.tenantAcceptListingQrcode}
-            />
-          </div>
-        </div>
-      )}
-
-      {currentActionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
-      ) && (
-        <div id="owner-qr-code" className="order_widget add-listings-box">
-          <h3>Owners QR code to confirm acceptance of the tool</h3>
-
-          <div className="booking-operations form-group">
-            <img
-              width="200px"
-              height="200px"
-              src={order.ownerAcceptListingQrcode}
-            />
-          </div>
-        </div>
-      )}
-
-      {isOwner &&
-        order.conflictOrders &&
-        order.status == STATIC.ORDER_STATUSES.PENDING_OWNER &&
-        order.conflictOrders.length > 0 && (
-          <div className="add-listings-box listings-sidebar listings-widget order_widget mt-0">
-            <h3>Conflict Bookings/Orders</h3>
-
-            <ul
-              className="conflicted-orders"
-              style={{ listStyle: "none", padding: "0" }}
-            >
-              {order.conflictOrders.map((conflictOrder) => (
-                <SubOrderItem
-                  key={conflictOrder.id}
-                  subOrder={conflictOrder}
-                  isOwner={isOwner}
-                  BaseDateSpan={BaseDateSpan}
-                  localCalculateCurrentTotalPrice={
-                    localCalculateCurrentTotalPrice
-                  }
-                />
-              ))}
-            </ul>
-          </div>
-        )}
-
-      {!operationsDisabled && currentActionButtons.length > countDopAction && (
+      {!operationsDisabled && (
         <div className="order_widget add-listings-box">
           <h3>Operations</h3>
 
@@ -1105,7 +986,7 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.WORKER_REVIEW
+              STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
             ) && (
               <Link
                 className="default-btn"
@@ -1124,42 +1005,6 @@ const OrderContent = ({
               >
                 Leave a review
               </Link>
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-            ) && (
-              <button
-                className="default-btn"
-                type="button"
-                onClick={triggerTenantQotListingClick}
-              >
-                Approve
-              </button>
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
-            ) && (
-              <button
-                className="default-btn"
-                type="button"
-                onClick={triggerFinishClick}
-              >
-                Finish
-              </button>
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
-            ) && (
-              <button
-                className="default-btn"
-                type="button"
-                onClick={() => orderPopupsData.setExtendPopupActive(true)}
-              >
-                Extend Offer
-              </button>
             )}
 
             {currentActionButtons.includes(
@@ -1210,17 +1055,6 @@ const OrderContent = ({
             )}
 
             {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.EXTENSION_CHAT
-            ) && (
-              <Link
-                className="default-btn"
-                href={`/dashboard/chats/${order.parentChatId}`}
-              >
-                Parent Chat
-              </Link>
-            )}
-
-            {currentActionButtons.includes(
               STATIC.ORDER_ACTION_BUTTONS.VIEW_DISPUTE_CHAT
             ) && (
               <Link
@@ -1236,81 +1070,12 @@ const OrderContent = ({
               {...orderPopupsData}
               order={order}
               actualUpdateRequest={actualUpdateRequest}
-              tenantBaseCommission={tenantBaseCommission}
+              renterBaseCommission={renterBaseCommission}
               currentFee={currentFee}
               actionButtons={currentActionButtons}
-              onTenantPayed={onTenantPayed}
+              onRenterPayed={onRenterPayed}
               bankInfo={bankInfo}
             />
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.TENANT_GOT_LISTING_APPROVE_BUTTON
-            ) && (
-              <TenantGotListingApproveModal
-                onApprove={handleTenantGotListingApprove}
-                modalActive={tenantGotListingApproveModalActive}
-                closeModal={() => setTenantGotListingApproveModalActive(false)}
-              />
-            )}
-
-            {currentActionButtons.includes(
-              STATIC.ORDER_ACTION_BUTTONS.ACCEPT_FINISH_BUTTON
-            ) && (
-              <FinishOrderModal
-                modalActive={finishOrderModalActive}
-                closeModal={() => setFinishOrderModalActive(false)}
-                onFinish={handleFinishOrder}
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      {currentActionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.EXTENSION_LIST
-      ) && (
-        <div
-          className="add-listings-box listings-sidebar listings-widget order_widget mt-0"
-          style={{ marginTop: 0 }}
-        >
-          <h3>Extensions</h3>
-
-          <div className="booking-operations form-group">
-            <ul
-              className="conflicted-orders w-100"
-              style={{ listStyle: "none", padding: "0" }}
-            >
-              {order.extendOrders
-                .filter((extension) => extension.id != order.id)
-                .sort((e1, e2) => {
-                  if (
-                    dateConverter(e1.offerStartDate) >
-                    dateConverter(e2.offerStartDate)
-                  ) {
-                    return 1;
-                  }
-
-                  if (
-                    dateConverter(e1.offerStartDate) <
-                    dateConverter(e2.offerStartDate)
-                  ) {
-                    return -1;
-                  }
-
-                  return 0;
-                })
-                .map((extension) => (
-                  <SubOrderItem
-                    key={extension.id}
-                    subOrder={extension}
-                    isOwner={isOwner}
-                    BaseDateSpan={BaseDateSpan}
-                    localCalculateCurrentTotalPrice={
-                      localCalculateCurrentTotalPrice
-                    }
-                  />
-                ))}
-            </ul>
           </div>
         </div>
       )}

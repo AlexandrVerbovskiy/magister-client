@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { validateBigText, workerGetsFeeCalculate } from "../../utils";
+import { validateBigText, renterGetsFeeCalculate } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -12,8 +12,10 @@ const OrderApprovementSection = ({
   listing,
   handleGoBack,
   finishTime,
+  startTime,
   price,
   fee,
+  setStartTime,
   setFinishTime,
 }) => {
   const [sendingMessage, setSendingMessage] = useState("");
@@ -27,7 +29,7 @@ const OrderApprovementSection = ({
     setActiveAcceptSendBookingRequest(false);
   };
 
-  const totalFee = workerGetsFeeCalculate(price, fee);
+  const totalFee = renterGetsFeeCalculate(price, fee);
   const totalPrice = price + totalFee;
 
   const onSendClick = (e) => {
@@ -74,7 +76,9 @@ const OrderApprovementSection = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetails
+            startTime={startTime}
             finishTime={finishTime}
+            setStartTime={setStartTime}
             setFinishTime={setFinishTime}
             totalPrice={totalPrice}
             dateError={dateError}
@@ -82,7 +86,7 @@ const OrderApprovementSection = ({
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
-          
+
           <OwnerInfo
             data={{
               userName: listing.userName,
@@ -96,6 +100,7 @@ const OrderApprovementSection = ({
       </div>
 
       <YesNoRentalModal
+        startTime={startTime}
         finishTime={finishTime}
         price={price}
         listing={listing}

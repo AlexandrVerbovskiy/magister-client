@@ -11,13 +11,8 @@ import YesNoModal from "../_App/YesNoModal";
 const OrderPopups = ({
   order,
   actualUpdateRequest = null,
-  tenantBaseCommission,
   currentFee,
   actionButtons,
-
-  extendPopupActive,
-  setExtendPopupActive,
-  handleMakeBooking,
 
   handleCancelApprove,
   cancelModalActive,
@@ -43,7 +38,7 @@ const OrderPopups = ({
   setPaypalModalActive,
   bankInfo,
 
-  onWorkerPayed = null,
+  onRenterPayed = null,
 
   finishModalActive,
   setFinishModalActive,
@@ -57,11 +52,6 @@ const OrderPopups = ({
   if (!order) {
     return;
   }
-
-  const extendStartDate = getStartExtendOrderDate(
-    order.offerEndDate,
-    order.extendOrders
-  );
 
   return (
     <>
@@ -79,21 +69,24 @@ const OrderPopups = ({
               ? actualUpdateRequest.newPrice
               : order.offerPrice
           }
+          proposalStartTime={
+            actualUpdateRequest
+              ? actualUpdateRequest.newStartTime
+              : order.offerStartTime
+          }
           proposalFinishTime={
             actualUpdateRequest
               ? actualUpdateRequest.newFinishTime
               : order.offerFinishTime
           }
-          listingMinRentalDays={order.listingMinRentalDays}
           fee={currentFee}
-          tenantFee={order.tenantFee}
+          renterFee={order.renterFee}
           commissionType={
             order.status == STATIC.ORDER_STATUSES.PENDING_OWNER
               ? "reject"
               : "sum"
           }
           listingName={order.listingName}
-          blockedDates={getOrderBlockedDatesToUpdate(order)}
           updateRequestModalActive={updateRequestModalActive}
           setUpdateRequestModalActive={setUpdateRequestModalActive}
           handleCreateUpdateRequest={handleCreateUpdateRequest}
@@ -106,23 +99,6 @@ const OrderPopups = ({
           canApprove={actionButtons.includes(
             STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
           )}
-        />
-      )}
-
-      {actionButtons.includes(STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON) && (
-        <BookingModal
-          createOrderModalActive={extendPopupActive}
-          closeModal={() => setExtendPopupActive(false)}
-          handleMakeBooking={handleMakeBooking}
-          fee={tenantBaseCommission}
-          price={order.offerPricePerDay}
-          minRentalDays={order.listingMinRentalDays}
-          listingName={order.listingName}
-          blockedDates={getOrderBlockedDatesToExtend(order)}
-          title="Extend Now"
-          startDate={extendStartDate}
-          fullVersion={true}
-          isExtend={true}
         />
       )}
 
@@ -179,14 +155,14 @@ const OrderPopups = ({
           isOwner: false,
           price: order.offerPrice,
           ownerFee: order.ownerFee,
-          tenantFee: order.tenantFee,
-          type: "tenant",
+          renterFee: order.renterFee,
+          type: "renter",
         })}
         orderId={order.id}
         listingName={order.listingName}
-        onWorkerPayed={onWorkerPayed}
+        onRenterPayed={onRenterPayed}
         price={order.offerPrice}
-        offerFee={order.workerFee}
+        offerFee={order.renterFee}
         authToken={authToken}
         bankInfo={bankInfo}
       />

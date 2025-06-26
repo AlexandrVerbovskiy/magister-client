@@ -18,11 +18,11 @@ const TableItem = ({
   ownerPhoto,
   ownerEmail,
   ownerPhone,
-  tenantId,
-  tenantName,
-  tenantPhoto,
-  tenantEmail,
-  tenantPhone,
+  renterId,
+  renterName,
+  renterPhoto,
+  renterEmail,
+  renterPhone,
   listingId,
   listingName,
   id,
@@ -43,7 +43,7 @@ const TableItem = ({
   const { sessionUser, isAdmin } = useContext(IndiceContext);
 
   const canMoveToOwner = isAdmin && sessionUser?.id != ownerId;
-  const canMoveToTenant = isAdmin && sessionUser?.id != tenantId;
+  const canMoveToRenter = isAdmin && sessionUser?.id != renterId;
 
   const fullListingPhotoPath = images[0]
     ? getListingImageByType(images[0].link, images[0].type)
@@ -62,7 +62,7 @@ const TableItem = ({
           <TableUserLink id={ownerId} name={ownerName} photo={ownerPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-          <TableUserLink id={tenantId} name={tenantName} photo={tenantPhoto} />
+          <TableUserLink id={renterId} name={renterName} photo={renterPhoto} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <Link href={`/listings/${listingId}/`} className="flex items-center">
@@ -144,15 +144,15 @@ const TableItem = ({
           <div>
             <SubInfoTitle
               title="Renter"
-              href={`/admin/users/edit/${tenantId}`}
-              canMove={canMoveToTenant}
+              href={`/admin/users/edit/${renterId}`}
+              canMove={canMoveToRenter}
             />
-            <SubInfoRow label="Name" value={tenantName} />
-            <SubInfoRow label="Email" value={tenantEmail} />
+            <SubInfoRow label="Name" value={renterName} />
+            <SubInfoRow label="Email" value={renterEmail} />
             <SubInfoRow
               label="Phone"
               value={
-                tenantPhone && tenantPhone.length ? tenantPhone.length : "-"
+                renterPhone && renterPhone.length ? renterPhone.length : "-"
               }
             />
           </div>

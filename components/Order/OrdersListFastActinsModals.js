@@ -5,7 +5,7 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { workerGetsCalculate } from "../../utils";
+import { renterGetsCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import YesNoModal from "../_App/YesNoModal";
@@ -34,8 +34,9 @@ const OrdersListFastActinsModals = ({
 
   activePay,
   closePay,
-  onTenantPayed,
+  onRenterPayed,
   activePayOrder,
+
   successIconPopupState,
   bankInfo,
 
@@ -51,15 +52,14 @@ const OrdersListFastActinsModals = ({
   const [updateRequestPrice, setUpdateRequestPrice] = useState(0);
   const [updateRequestProposalPrice, setUpdateRequestProposalPrice] =
     useState(0);
+  const [updateRequestProposalStartTime, setUpdateRequestProposalStartTime] =
+    useState(new Date());
   const [updateRequestProposalFinishTime, setUpdateRequestProposalFinishTime] =
     useState(new Date());
   const [updateRequestFee, setUpdateRequestFee] = useState(0);
   const [updateRequestCommissionType, setUpdateRequestCommissionType] =
     useState("sum");
   const [updateRequestListingName, setUpdateRequestListingName] = useState("");
-  const [updateRequestBlockedDates, setUpdateRequestBlockedDates] = useState(
-    []
-  );
 
   const [payAmount, setPayAmount] = useState(0);
   const [payOrderId, setPayOrderId] = useState(null);
@@ -76,18 +76,20 @@ const OrdersListFastActinsModals = ({
           updateRequestModalActiveOrder.offerPrice ??
           0
       );
+      setUpdateRequestProposalStartTime(
+        updateRequestModalActiveOrder.newStartTime ??
+          updateRequestModalActiveOrder.offerStartTime ??
+          new Date()
+      );
       setUpdateRequestProposalFinishTime(
         updateRequestModalActiveOrder.newFinishTime ??
           updateRequestModalActiveOrder.offerFinishTime ??
           new Date()
       );
-      setUpdateRequestMinRentalDays(
-        updateRequestModalActiveOrder.listingMinRentalDays ?? 0
-      );
       setUpdateRequestFee(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
           ? updateRequestModalActiveOrder.ownerFee
-          : updateRequestModalActiveOrder.tenantFee
+          : updateRequestModalActiveOrder.renterFee
       );
       setUpdateRequestCommissionType(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
@@ -95,31 +97,19 @@ const OrdersListFastActinsModals = ({
           : "sum"
       );
       setUpdateRequestListingName(updateRequestModalActiveOrder.listingName);
-      setUpdateRequestBlockedDates(
-        getOrderBlockedDatesToUpdate(updateRequestModalActiveOrder)
-      );
     }
   }, [updateRequestModalActiveOrder, sessionUser]);
 
   useEffect(() => {
     const newAmount = activePayOrder
-      ? workerGetsCalculate(activePayOrder.offerPrice, activePayOrder.workerFee)
+      ? renterGetsCalculate(activePayOrder.offerPrice, activePayOrder.renterFee)
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
     setPayListingName(activePayOrder?.listingName ?? "");
-    setPayOfferFee(activePayOrder?.workerFee ?? 0);
+    setPayOfferFee(activePayOrder?.renterFee ?? 0);
     setPayPrice(activePayOrder?.offerPrice ?? 0);
   }, [activePayOrder, sessionUser]);
-
-  let extendStartDate = null;
-
-  if (extendModalActiveOrder) {
-    extendStartDate = getStartExtendOrderDate(
-      extendModalActiveOrder.offerEndDate,
-      extendModalActiveOrder.extendOrders
-    );
-  }
 
   return (
     <>
@@ -152,21 +142,21 @@ const OrdersListFastActinsModals = ({
         handleCreateUpdateRequest={handleAcceptUpdateRequest}
         price={updateRequestPrice}
         proposalPrice={updateRequestProposalPrice}
+        proposalStartTime={updateRequestProposalStartTime}
         proposalFinishTime={updateRequestProposalFinishTime}
         fee={updateRequestFee}
         commissionType={updateRequestCommissionType}
         updateRequestModalActive={activeUpdateRequest}
         closeActiveUpdateRequest={closeActiveUpdateRequest}
         listingName={updateRequestListingName}
-        blockedDates={updateRequestBlockedDates}
-        tenantFee={updateRequestModalActiveOrder?.tenantFee ?? 0}
+        renterFee={updateRequestModalActiveOrder?.renterFee ?? 0}
       />
 
       <PayModal
         amount={payAmount}
         orderId={payOrderId}
         listingName={payListingName}
-        onWorkerPayed={onWorkerPayed}
+        onRenterPayed={onRenterPayed}
         price={payPrice}
         offerFee={payOfferFee}
         modalActive={activePay}

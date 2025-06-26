@@ -57,7 +57,7 @@ function PayByCreditCard({ orderId, order, bankAccount }) {
 
   const totalPrice = calculateFullTotalByType(
     order.offerPrice,
-    order.workerFee,
+    order.renterFee,
     "sum"
   );
 

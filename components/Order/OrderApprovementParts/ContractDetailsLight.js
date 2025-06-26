@@ -1,10 +1,10 @@
 import {
   moneyFormatVisual,
-  workerGetsFeeCalculate,
+  renterGetsFeeCalculate,
 } from "../../../utils";
 
 const ContractDetailsLight = ({ price, fee }) => {
-  const totalFee = workerGetsFeeCalculate(price, fee);
+  const totalFee = renterGetsFeeCalculate(price, fee);
   const totalPrice = price + totalFee;
 
   return (

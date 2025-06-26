@@ -15,14 +15,14 @@ const TableItem = (props) => {
   const {
     id,
     listingName,
-    tenantName,
-    tenantEmail,
-    tenantPhone,
+    renterName,
+    renterEmail,
+    renterPhone,
     ownerName,
     ownerEmail,
     ownerPhone,
     listingId,
-    tenantId,
+    renterId,
     ownerId,
     status,
     cancelStatus,
@@ -36,9 +36,9 @@ const TableItem = (props) => {
     payedAdminApproved,
     payedWaitingApproved,
     listingRentalCount,
-    tenantAverageRating,
+    renterAverageRating,
     ownerAverageRating,
-    tenantCommentCount,
+    renterCommentCount,
     ownerCommentCount,
     payedId,
   } = props;
@@ -149,19 +149,19 @@ const TableItem = (props) => {
           <div>
             <SubInfoTitle
               title="Renter"
-              href={`/admin/users/edit/${tenantId}`}
-              canMove={isAdmin && sessionUser?.id != tenantId}
+              href={`/admin/users/edit/${renterId}`}
+              canMove={isAdmin && sessionUser?.id != renterId}
             />
-            <SubInfoRow label="Name" value={tenantName} />
-            <SubInfoRow label="Email" value={tenantEmail} />
+            <SubInfoRow label="Name" value={renterName} />
+            <SubInfoRow label="Email" value={renterEmail} />
             <SubInfoRow
               label="Phone"
-              value={tenantPhone && tenantPhone.length ? tenantPhone : "-"}
+              value={renterPhone && renterPhone.length ? renterPhone : "-"}
             />
             <SubInfoRowWithChild label="Rating">
               <SingleRatingStar
-                value={tenantAverageRating}
-                count={tenantCommentCount}
+                value={renterAverageRating}
+                count={renterCommentCount}
                 commentName="renter"
               />
             </SubInfoRowWithChild>

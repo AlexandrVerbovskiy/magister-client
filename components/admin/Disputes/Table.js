@@ -31,7 +31,7 @@ const DisputesTable = ({
       width: "10%",
     },
     { title: "Owner", value: "owners.name", width: "15%" },
-    { title: "Renter", value: "tenants.name", width: "15%" },
+    { title: "Renter", value: "renters.name", width: "15%" },
     { title: "Item", value: "listings.name", width: "15%" },
     {
       title: "Start At",

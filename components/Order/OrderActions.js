@@ -1,7 +1,6 @@
 import Link from "next/link";
 import STATIC from "../../static";
 import { useRouter } from "next/router";
-import { isOrderCanBeAccepted } from "../../utils";
 
 const OrderActions = ({
   currentActionButtons,
@@ -23,27 +22,11 @@ const OrderActions = ({
     router.push(`/dashboard/chats/${order.disputeChatId}/`);
   };
 
-  const handleMoveToOrder = (id) => {
-    router.push(`/dashboard/orders/${id}/`);
-  };
-
   return (
     <>
       <Link className={actionClass} href={`${link}/${order.id}/`}>
         {needIcon && <i className="bx bx-detail"></i>} View details
       </Link>
-
-      {currentActionButtons.includes(
-        STATIC.ORDER_ACTION_BUTTONS.PARENT_VIEW
-      ) && (
-        <button
-          type="button"
-          className={actionClass}
-          onClick={() => handleMoveToOrder(order.orderParentId)}
-        >
-          {needIcon && <i className="bx bx-detail"></i>} View main order
-        </button>
-      )}
 
       {canActions && (
         <>
@@ -62,16 +45,15 @@ const OrderActions = ({
             STATIC.ORDER_ACTION_BUTTONS.BOOKING_AGREEMENT_SECTION
           ) && (
             <>
-              {isOrderCanBeAccepted(order) && (
-                <button
-                  type="button"
-                  className={actionClass}
-                  onClick={() => popupsData.setAcceptOrderModalActive(true)}
-                  disabled={popupsData.bookingActionsDisabled}
-                >
-                  {needIcon && <i className="bx bx-check-circle"></i>} Accept
-                </button>
-              )}
+              <button
+                type="button"
+                className={actionClass}
+                onClick={() => popupsData.setAcceptOrderModalActive(true)}
+                disabled={popupsData.bookingActionsDisabled}
+              >
+                {needIcon && <i className="bx bx-check-circle"></i>} Accept
+              </button>
+
               <button
                 type="button"
                 className={actionClass}
@@ -103,31 +85,7 @@ const OrderActions = ({
           )}
 
           {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.FOR_TENANT_QRCODE
-          ) && (
-            <Link
-              className={actionClass}
-              href={`${link}/${order.id}/?scroll-to=tenant-qr-code`}
-            >
-              {needIcon && <i className="bx bx-comment-detail"></i>} Start the
-              rental
-            </Link>
-          )}
-
-          {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.FOR_OWNER_QRCODE
-          ) && (
-            <Link
-              className={actionClass}
-              href={link + "/" + order.id + "?scroll-to=owner-qr-code"}
-            >
-              {needIcon && <i className="bx bx-comment-detail"></i>} Finish the
-              rental
-            </Link>
-          )}
-
-          {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.TENANT_REVIEW
+            STATIC.ORDER_ACTION_BUTTONS.RENTER_REVIEW
           ) && (
             <Link
               className={actionClass}
@@ -172,18 +130,6 @@ const OrderActions = ({
               {needIcon && <i className="bx bx-transfer-alt"></i>}
               Open dispute
             </Link>
-          )}
-
-          {currentActionButtons.includes(
-            STATIC.ORDER_ACTION_BUTTONS.EXTEND_BUTTON
-          ) && (
-            <button
-              type="button"
-              className={actionClass}
-              onClick={() => popupsData.setExtendPopupActive(true)}
-            >
-              {needIcon && <i className="bx bx-calendar"></i>} Extend Offer
-            </button>
           )}
 
           {currentActionButtons.includes(

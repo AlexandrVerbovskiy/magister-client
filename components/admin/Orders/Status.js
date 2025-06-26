@@ -16,7 +16,7 @@ const Status = ({
   }
 
   if (status == STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED) {
-    text = "Worker in Progress";
+    text = "Renter in Progress";
     dopClassName = "bg-orange-100 text-orange-500";
   }
 
@@ -30,7 +30,7 @@ const Status = ({
     dopClassName = "bg-purple-100 text-purple-500";
   }
 
-  if (status == STATIC.ORDER_STATUSES.PENDING_TENANT) {
+  if (status == STATIC.ORDER_STATUSES.PENDING_RENTER) {
     text = "Waiting for Confirmation";
     dopClassName = "bg-purple-100 text-purple-500";
   }

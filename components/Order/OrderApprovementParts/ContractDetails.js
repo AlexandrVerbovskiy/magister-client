@@ -1,7 +1,13 @@
 import { fullDateConverter, moneyFormatVisual } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 
-const ContractDetails = ({ totalPrice, dateError, finishTime, totalFee }) => {
+const ContractDetails = ({
+  totalPrice,
+  dateError,
+  finishTime,
+  startTime,
+  totalFee,
+}) => {
   return (
     <div className="listings-widget listings_contact_details">
       <h3>Task Details</h3>
@@ -31,8 +37,10 @@ const ContractDetails = ({ totalPrice, dateError, finishTime, totalFee }) => {
           className="d-flex justify-content-between"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div>Finish Time</div>
-          <div>{fullDateConverter(finishTime)}</div>
+          <div>Duration</div>
+          <div>
+            {fullDateConverter(startTime)} - {fullDateConverter(finishTime)}
+          </div>
         </div>
 
         <div

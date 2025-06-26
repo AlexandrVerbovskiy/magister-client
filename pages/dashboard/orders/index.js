@@ -19,7 +19,7 @@ import PaginationLoadingWrapper from "../../../components/_App/PaginationLoading
 
 const Wrapper = ({
   children,
-  countForTenant,
+  countForRenter,
   countForOwner,
   type,
   changeType,
@@ -37,13 +37,13 @@ const Wrapper = ({
               className="list-group list-group-flush pt-1 mt-2"
               style={{ borderTop: "1px solid #ede7f6" }}
             >
-              <div className="py-1" onClick={() => changeType("tenant")}>
+              <div className="py-1" onClick={() => changeType("renter")}>
                 <div
                   className="form-check px-0"
-                  style={type == "tenant" ? { color: "var(--mainColor)" } : {}}
+                  style={type == "renter" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    My completing requests ({countForWorker})
+                    My completing requests ({countForRenter})
                   </label>
                 </div>
               </div>
@@ -88,7 +88,7 @@ const Wrapper = ({
 };
 
 const TabHeaderSection = ({
-  countForTenant,
+  countForRenter,
   countForOwner,
   type,
   changeType,
@@ -101,12 +101,12 @@ const TabHeaderSection = ({
       style={{ marginBottom: "21px" }}
       onClick={(e) => {
         e.preventDefault();
-        changeType("tenant");
+        changeType("renter");
       }}
     >
-      <a className={`nav-link ${type == "tenant" ? "active" : ""}`}>
+      <a className={`nav-link ${type == "renter" ? "active" : ""}`}>
         <span className="menu-title">
-          My completing requests ({countForWorker})
+          My completing requests ({countForRenter})
         </span>
       </a>
     </li>
@@ -121,7 +121,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
         <span className="menu-title">
-          Requests for my items ({countForOwner})
+          Requests for my listings ({countForOwner})
         </span>
       </a>
     </li>
@@ -131,7 +131,7 @@ const TabHeaderSection = ({
 const Orders = (pageProps) => {
   const router = useRouter();
   const { error, authToken } = useContext(IndiceContext);
-  const [type, setType] = useState(router.query.type ?? "tenant");
+  const [type, setType] = useState(router.query.type ?? "renter");
 
   const {
     page,
@@ -151,7 +151,7 @@ const Orders = (pageProps) => {
     getDopProps: () => ({
       type: {
         value: type,
-        hidden: (value) => value == "tenant",
+        hidden: (value) => value == "renter",
       },
     }),
   });
@@ -189,14 +189,8 @@ const Orders = (pageProps) => {
 
     activePay,
     closePay,
-    onTenantPayed,
+    onRenterPayed,
     activePayOrder,
-
-    handleClickExtendOrder,
-    handleClickApproveExtendOrder,
-    extendModalActive,
-    extendModalActiveOrder,
-    closeExtendOrder,
     successIconPopupState,
 
     handleClickFinish,
@@ -220,7 +214,7 @@ const Orders = (pageProps) => {
     <Wrapper
       type={type}
       changeType={changeType}
-      countForTenant={pageProps.countForTenant}
+      countForRenter={pageProps.countForRenter}
       countForOwner={pageProps.countForOwner}
     >
       <section className="bookings-listings-box listing-area child-nav-tabs-mb-0">
@@ -229,7 +223,7 @@ const Orders = (pageProps) => {
             style={{ marginBottom: "0" }}
             type={type}
             changeType={changeType}
-            countForTenant={pageProps.countForTenant}
+            countForRenter={pageProps.countForRenter}
             countForOwner={pageProps.countForOwner}
           />
         )}
@@ -277,7 +271,7 @@ const Orders = (pageProps) => {
       </section>
 
       <OrdersListFastActinsModals
-        tenantBaseCommission={pageProps.tenantBaseFee}
+        renterBaseCommission={pageProps.renterBaseFee}
         activeCancel={activeCancel}
         closeActiveCancel={closeActiveCancel}
         handleAcceptCancel={handleAcceptCancel}
@@ -296,13 +290,8 @@ const Orders = (pageProps) => {
         updateRequestModalActiveOrder={updateRequestModalActiveOrder}
         activePay={activePay}
         closePay={closePay}
-        onTenantPayed={onTenantPayed}
+        onRenterPayed={onRenterPayed}
         activePayOrder={activePayOrder}
-        handleClickExtendOrder={handleClickExtendOrder}
-        handleClickApproveExtendOrder={handleClickApproveExtendOrder}
-        extendModalActive={extendModalActive}
-        extendModalActiveOrder={extendModalActiveOrder}
-        closeExtendOrder={closeExtendOrder}
         successIconPopupState={successIconPopupState}
         bankInfo={pageProps.bankInfo}
         handleAcceptFinish={handleAcceptFinish}
@@ -326,7 +315,7 @@ const Orders = (pageProps) => {
 };
 
 const boostServerSideProps = async ({ baseSideProps, context }) => {
-  const type = context.query.type === "owner" ? "owner" : "tenant";
+  const type = context.query.type === "owner" ? "owner" : "renter";
   const params = { ...baseListPageParams(context.query), type };
   const options = await getOrderListOptions(params, baseSideProps.authToken);
   return { ...options };

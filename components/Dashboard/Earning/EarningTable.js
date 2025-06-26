@@ -3,12 +3,13 @@ import InputView from "../../FormComponents/InputView";
 import {
   moneyFormat,
   ownerPaymentCalculate,
-  workerGetsCalculate,
+  renterGetsCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
 } from "../../../utils";
+import STATIC from "../../../static";
 
 const Status = ({ status, receivedType }) => {
   let statusName = "Unknown";
@@ -54,7 +55,7 @@ const EarningTable = ({
   offerStartDate,
   offerEndDate,
   offerPrice,
-  workerFee,
+  renterFee,
   ownerFee,
   orderId,
   id,
@@ -92,7 +93,7 @@ const EarningTable = ({
     operationMessage = "Operation mark as cancelled";
   }
 
-  if (receivedType === "rental") {
+  if (receivedType === STATIC.RECIPIENT_PAYMENT_TYPES.RECIPIENT) {
     operationMessage = recipientStatuses({
       status: status,
       plannedTime: plannedTime,
@@ -154,7 +155,7 @@ const EarningTable = ({
                 label="Renter Fee"
                 placeholder="Renter Fee"
                 icon="bx bx-tag"
-                value={`${tenantFee}`}
+                value={`${renterFee}`}
               />
             </div>
 
@@ -163,7 +164,7 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${workerGetsCalculate(offerPrice, workerFee)}`}
+                value={`${renterGetsCalculate(offerPrice, renterFee)}`}
               />
             </div>
           </div>
@@ -226,7 +227,7 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (workerGetsCalculate(offerPrice, workerFee) *
+                  (renterGetsCalculate(offerPrice, renterFee) *
                     (100 - refundCommission)) /
                     100
                 )}`}
