@@ -135,10 +135,10 @@ const TableItem = ({
   instagramUrl,
   linkedinUrl,
   ownerAverageRating,
-  workerAverageRating,
+  renterAverageRating,
   ownerCommentCount,
-  workerCommentCount,
-  workerDisputesCount,
+  renterCommentCount,
+  renterDisputesCount,
   ownerDisputesCount,
   verifyRequestId,
   verifyRequestHasResponse,
@@ -316,8 +316,8 @@ const TableItem = ({
                       Activity
                     </div>
                     <SubInfoRow
-                      label="Worker Disputes"
-                      value={workerDisputesCount}
+                      label="Renter Disputes"
+                      value={renterDisputesCount}
                       newRow={true}
                     />
                     <SubInfoRow
@@ -326,11 +326,11 @@ const TableItem = ({
                       newRow={true}
                     />
 
-                    <SubInfoRowWithChild label="Worker">
+                    <SubInfoRowWithChild label="Renter">
                       <SingleRatingStar
-                        value={workerAverageRating}
-                        count={workerCommentCount}
-                        commentName="worker"
+                        value={renterAverageRating}
+                        count={renterCommentCount}
+                        commentName="renter"
                       />
                     </SubInfoRowWithChild>
                     <SubInfoRowWithChild label="Owner">

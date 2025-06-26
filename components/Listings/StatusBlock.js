@@ -6,7 +6,7 @@ const StatusBlock = ({
   statusCancelled,
   disputeStatus,
   ownerId,
-  workerId,
+  renterId,
   userId,
   endDate,
   payedId,
@@ -22,7 +22,7 @@ const StatusBlock = ({
 
   if (
     [
-      STATIC.ORDER_STATUSES.PENDING_WORKER,
+      STATIC.ORDER_STATUSES.PENDING_RENTER,
       STATIC.ORDER_STATUSES.PENDING_OWNER,
     ].includes(orderStatus)
   ) {
@@ -80,7 +80,7 @@ const StatusBlock = ({
   }
 
   if (
-    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_WORKER_APPROVE
+    statusCancelled == STATIC.ORDER_CANCELATION_STATUSES.WAITING_RENTER_APPROVE
   ) {
     color = "status-background-red";
     text = "In Dispute";

@@ -3,7 +3,7 @@ import InputView from "../../FormComponents/InputView";
 import {
   moneyFormat,
   ownerPaymentCalculate,
-  workerGetsCalculate,
+  renterGetsCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -55,7 +55,7 @@ const EarningTable = ({
   offerStartDate,
   offerEndDate,
   offerPrice,
-  workerFee,
+  renterFee,
   ownerFee,
   orderId,
   id,
@@ -152,10 +152,10 @@ const EarningTable = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputView
-                label="Worker Fee"
-                placeholder="Worker Fee"
+                label="Renter Fee"
+                placeholder="Renter Fee"
                 icon="bx bx-tag"
-                value={`${workerFee}`}
+                value={`${renterFee}`}
               />
             </div>
 
@@ -164,7 +164,7 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${workerGetsCalculate(offerPrice, workerFee)}`}
+                value={`${renterGetsCalculate(offerPrice, renterFee)}`}
               />
             </div>
           </div>
@@ -227,7 +227,7 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (workerGetsCalculate(offerPrice, workerFee) *
+                  (renterGetsCalculate(offerPrice, renterFee) *
                     (100 - refundCommission)) /
                     100
                 )}`}

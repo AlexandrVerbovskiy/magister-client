@@ -118,7 +118,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     return { id: foundOrder.id, data };
   };
 
-  const onWorkerPayed = () => {
+  const onRenterPayed = () => {
     setItemFields(
       {
         status: STATIC.ORDER_STATUSES.IN_PROCESS,
@@ -208,12 +208,12 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({ orderId, price, finishTime }) => {
+  const onCreateUpdateRequest = ({ orderId, price, startTime, finishTime }) => {
     let status = null;
     const updatedOrder = findCurrentOrderById(orderId);
 
     if (updatedOrder.ownerId === sessionUser?.id) {
-      status = STATIC.ORDER_STATUSES.PENDING_WORKER;
+      status = STATIC.ORDER_STATUSES.PENDING_RENTER;
     } else {
       status = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -221,6 +221,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setItemFields(
       {
         newPrice: price,
+        newStartTime: startTime,
         newFinishTime: finishTime,
         status,
       },
@@ -390,7 +391,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
 
     activePay,
     closePay,
-    onWorkerPayed,
+    onRenterPayed,
     activePayOrder,
 
     successIconPopupState,

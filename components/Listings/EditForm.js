@@ -118,9 +118,6 @@ const EditForm = ({
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
 
-  const [finishTime, setFinishTime] = useState("");
-  const [finishTimeError, setFinishTimeError] = useState(null);
-
   const [changePopupActive, setChangePopupActive] = useState(null);
 
   const [active, setActive] = useState(true);
@@ -274,12 +271,6 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangeFinishTine = (value) => {
-    setFinishTime(value);
-    setFinishTimeError(null);
-    setMainError(null);
-  };
-
   useEffect(() => {
     if (listing.id) return;
 
@@ -316,7 +307,6 @@ const EditForm = ({
       postcode: listing.postcode ?? "",
       city: city,
       price: listing.price ?? "",
-      finishTime: listing.finishTime ?? "",
       lat: lat,
       lng: lng,
       rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
@@ -347,7 +337,6 @@ const EditForm = ({
       postcode: postcode.trim(),
       city: city.trim(),
       price,
-      finishTime,
       lat: lat,
       lng: lng,
       rentalRadius: radius,
@@ -379,7 +368,6 @@ const EditForm = ({
     setPostcode(data.postcode);
     setCity(data.city);
     setPrice(data.price);
-    setFinishTime(data.finishTime);
     setLat(data.lat);
     setLng(data.lng);
     setRadius(data.rentalRadius);
@@ -491,11 +479,6 @@ const EditForm = ({
 
     if (!price) {
       setPrice("Required field");
-      hasError = true;
-    }
-
-    if(!finishTimeError){
-      setFinishTimeError("Required field");
       hasError = true;
     }
 
@@ -684,19 +667,6 @@ const EditForm = ({
                 name="priceError"
               />
             </div>
-
-            <div className="col-lg-6 col-md-6">
-              <div className="form-group ">
-                <ErrorIconWrapper label="Finish Time:" icon="bx bx-timer" error={finishTimeError}>
-                  <DateInput
-                    name="finishTime"
-                    value={finishTime}
-                    onInput={handleChangeFinishTine}
-                    placeholder="Finish Time"
-                  />
-                </ErrorIconWrapper>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -705,10 +675,10 @@ const EditForm = ({
             Collection Location{" "}
             <div className="form-hint">
               The location is where you plan to hand over the item to the
-              worker. It could be your home, workplace, or any other convenient
+              renter. It could be your home, workplace, or any other convenient
               place. <br />
               <b>Note:</b> Your safety is our priority. The exact location will
-              only be shared with the worker once you approve the rental.
+              only be shared with the renter once you approve the rental.
             </div>
           </h3>
           <div className="row">

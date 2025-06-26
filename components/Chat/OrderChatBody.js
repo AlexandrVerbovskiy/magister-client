@@ -55,7 +55,7 @@ const OrderChatBody = ({
       isOwner,
       price: order.offerPrice,
       ownerFee: order.ownerFee,
-      workerFee: order.workerFee,
+      renterFee: order.renterFee,
     });
 
     const updatedFields = {
@@ -100,7 +100,7 @@ const OrderChatBody = ({
     };
 
     if (isOwner) {
-      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_WORKER;
+      newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_RENTER;
     } else {
       newOrderPart["status"] = STATIC.ORDER_STATUSES.PENDING_OWNER;
     }
@@ -165,7 +165,7 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
-  const onWorkerPayed = async ({ chatMessage, orderPart }) => {
+  const onRenterPayed = async ({ chatMessage, orderPart }) => {
     setTimeout(() => {
       actions.appendMessage(chatMessage);
       updateOrder(orderPart);
@@ -262,7 +262,7 @@ const OrderChatBody = ({
         {...dopOrderInfo}
         order={order}
         orderPopupsData={popupsData}
-        onWorkerPayed={onWorkerPayed}
+        onRenterPayed={onRenterPayed}
       />
 
       {currentActionButtons.includes(

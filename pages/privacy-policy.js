@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
       <div className="listings-area ptb-70 inform-page">
         <div className="container mt-4">
           <div className="row m-0">
-            <h3>PRIVACY POLICY – DRESSRENTER LIMITED</h3>
+            <h3>PRIVACY POLICY – RENTABOUT LIMITED</h3>
           </div>
         </div>
       </div>

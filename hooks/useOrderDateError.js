@@ -16,26 +16,38 @@ const Parent = ({ children, tooltipText }) => {
   return <div>{children}</div>;
 };
 
-const BaseDateSpan = ({ finishTime, className = "", tooltipText = null }) => {
+const BaseDateSpan = ({
+  startTime,
+  finishTime,
+  className = "",
+  tooltipText = null,
+}) => {
   return (
     <Parent tooltipText={tooltipText}>
-      Finish by:{" "}
-      <span className={className}>{fullDateConverter(finishTime)}</span>
+      Rental duration:{" "}
+      <span className={className}>
+        {fullDateConverter(startTime)} - {fullDateConverter(finishTime)}
+      </span>
     </Parent>
   );
 };
 
 const useOrderDateError = ({ order }) => {
-  const checkErrorData = (finishTime) => {
+  const checkErrorData = (startTime, finishTime) => {
     let tooltipErrorMessage = "";
     let blocked = false;
 
     if (
       (order.status == STATIC.ORDER_STATUSES.PENDING_OWNER ||
-        order.status == STATIC.ORDER_STATUSES.PENDING_WORKER) &&
+        order.status == STATIC.ORDER_STATUSES.PENDING_RENTER) &&
       order.cancelStatus == null
     ) {
       if (checkStringDateLowerOrEqualCurrentDate(finishTime)) {
+        tooltipErrorMessage = "Order finish date is overdue";
+        blocked = true;
+      }
+
+      if (checkStringDateLowerOrEqualCurrentDate(startTime)) {
         tooltipErrorMessage = "Order start date is overdue";
         blocked = true;
       }
@@ -44,11 +56,15 @@ const useOrderDateError = ({ order }) => {
     return { tooltipErrorMessage, blocked };
   };
 
-  const CanBeErrorBaseDateSpan = ({ finishTime }) => {
-    const { tooltipErrorMessage, blocked } = checkErrorData(finishTime);
+  const CanBeErrorBaseDateSpan = ({ finishTime, startTime }) => {
+    const { tooltipErrorMessage, blocked } = checkErrorData(
+      startTime,
+      finishTime
+    );
 
     return (
       <BaseDateSpan
+        startTime={startTime}
         finishTime={finishTime}
         className={blocked ? "error-span" : ""}
         tooltipText={tooltipErrorMessage}

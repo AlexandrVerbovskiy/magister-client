@@ -185,9 +185,6 @@ const EditForm = ({ listing, categories, save }) => {
   const [price, setPrice] = useState("");
   const [priceError, setPriceError] = useState(null);
 
-  const [finishTime, setFinishTime] = useState("");
-  const [finishTimeError, setFinishTimeError] = useState(null);
-
   const [lat, setLat] = useState(baseCoords.lat);
   const [lng, setLng] = useState(baseCoords.lng);
   const [radius, setRadius] = useState(
@@ -277,7 +274,6 @@ const EditForm = ({ listing, categories, save }) => {
     }
 
     setPrice(data.price);
-    setFinishTime(data.finishTime);
     setName(data.name);
     setCategory(categoryInfo);
     setDescription(data.description);
@@ -329,8 +325,7 @@ const EditForm = ({ listing, categories, save }) => {
       city: city,
       lat,
       lng,
-      radius:
-        prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+      radius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -339,7 +334,6 @@ const EditForm = ({ listing, categories, save }) => {
       otherCategory: prevListing.otherCategory ?? "",
       otherCategoryParentId: listing.otherCategoryParentId ?? null,
       price: prevListing.price ?? "",
-      finishTime: prevListing.finishTime ?? "",
     };
 
     if (categoryId) {
@@ -370,7 +364,6 @@ const EditForm = ({ listing, categories, save }) => {
       ownerId,
       active,
       price,
-      finishTime,
     };
 
     if (isOtherCategory) {
@@ -415,11 +408,6 @@ const EditForm = ({ listing, categories, save }) => {
 
       if (!price) {
         setPrice("Required field");
-        hasError = true;
-      }
-
-      if (!finishTime) {
-        setFinishTimeError("Required field");
         hasError = true;
       }
 
@@ -633,22 +621,8 @@ const EditForm = ({ listing, categories, save }) => {
                                 setValue={setPrice}
                                 error={priceError}
                                 setError={setPriceError}
-                                label="Price"
-                                placeholder="Price"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-
-                            <div className="w-full sm:w-1/2">
-                              <DateInput
-                                label="Finish Time"
-                                name="finishTime"
-                                value={finishTime}
-                                setValue={setFinishTime}
-                                error={finishTimeError}
-                                setError={setFinishTimeError}
-                                placeholder="Finish Time"
+                                label="Price per day"
+                                placeholder="Price per day"
                                 labelClassName="block text-sm font-medium mb-1"
                                 inputClassName="form-input w-full"
                               />
