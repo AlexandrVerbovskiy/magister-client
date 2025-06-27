@@ -28,6 +28,11 @@ import NavbarTwo from "../_App/NavbarTwo";
 
 const baseItemsPerPage = 6;
 
+const cities = [
+  { name: "London", value: "London", title: "London" },
+  { name: "Paris", value: "Paris", title: "Paris" },
+];
+
 const distances = [
   { name: "0.1km", value: 100, title: "0.1km" },
   { name: "1km", value: 1000, title: "1km" },
@@ -335,7 +340,7 @@ const ListingsWithMap = ({
     selectedCategories,
     selectedCities,
     categories,
-    cities: STATIC.CITIES,
+    cities,
     baseSearchCity: searchCity,
     baseSearchCategory: searchCategory,
     baseListing: searchListing,
@@ -506,6 +511,8 @@ const ListingsWithMap = ({
     categoriesNames.push(...names);
   });
 
+  const cityNames = cities.map((city) => city.name);
+
   const dopListingCards = [];
 
   while (listings.length + dopListingCards.length < baseItemsPerPage) {
@@ -591,12 +598,12 @@ const ListingsWithMap = ({
       >
         <div
           className="container mt-4"
-          style={{ borderTop: "1px solid #30eded" }}
+          style={{ borderTop: "1px solid #ede7f6" }}
         >
           <div
             className="page-title-bg p-0 mb-4"
             style={{
-              borderBottom: "1px solid #30eded",
+              borderBottom: "1px solid #ede7f6",
               backgroundColor: "inherit",
             }}
           >
@@ -621,7 +628,7 @@ const ListingsWithMap = ({
             selectedOthersCategories={selectedOthersCategories}
             setSelectedOthersCategories={handleSelectedOthersCategories}
             categories={categories}
-            cities={STATIC.CITIES}
+            cities={cities}
             distances={distances}
             searchCity={searchCity}
             searchCategory={searchCategory}
@@ -683,7 +690,7 @@ const ListingsWithMap = ({
                         handleSelectedOthersCategories
                       }
                       categories={categories}
-                      cities={STATIC.CITIES}
+                      cities={cities}
                       distances={distances}
                       searchCity={searchCity}
                       searchCategory={searchCategory}

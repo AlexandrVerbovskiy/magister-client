@@ -37,15 +37,15 @@ const Index = ({ categories }) => {
 
       <SafeWithUs />
 
-      <YourBusiness bgColor="bg-f9f9f9" />
-
       <Category topCategories={topCategories} />
+
+      <YourBusiness />
 
       <UnlockAccess />
 
-      <DestinationsTwo />
+      <StartEarning />
 
-      <StartEarning bgColor="bg-f9f9f9" />
+      <DestinationsTwo bgColor="bg-f9f9f9" />
 
       <Footer />
     </>

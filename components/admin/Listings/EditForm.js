@@ -32,8 +32,8 @@ import ErrorSpan from "../ErrorSpan";
 import CategorySelect from "./CategorySelect";
 
 const cityOptions = [
-  { value: "Warrington", title: "Warrington" },
-  { value: "Manchester", title: "Manchester" },
+  { value: "London", title: "London" },
+  { value: "Paris", title: "Paris" },
 ];
 
 const baseCity = cityOptions[0]["value"];
