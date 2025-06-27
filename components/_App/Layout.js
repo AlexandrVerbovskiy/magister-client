@@ -14,15 +14,15 @@ const Layout = ({ children, title }) => {
         <link
           rel="shortcut icon"
           type="image/x-icon"
-          href="/images/rent-about-logo.ico"
+          href="/images/logo.ico"
         />
         <meta
           name="description"
-          content="Rent and lease tools effortlessly in Warrington and Manchester. RentAbout makes it easy for users to lend and borrow tools with convenience."
+          content="Rent and lease tools effortlessly in few cities. DressRenter makes it easy for users to lend and borrow tools with convenience."
         />
         <meta
           name="keywords"
-          content="tool rental, tool leasing, rent tools in Warrington, rent tools in Manchester, RentAbout"
+          content="tool rental, tool leasing, rent tools in few cities, DressRenter"
         />
       </Head>
 

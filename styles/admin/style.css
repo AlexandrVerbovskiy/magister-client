@@ -338,7 +338,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .adaptive-logo-image {
-  background-image: url("/images/rent-about-logo-small.png");
+  background-image: url("/images/logo-short.svg");
   background-size: auto 100%;
   background-repeat: no-repeat;
 }
@@ -348,7 +348,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .sidebar-expanded .adaptive-logo-image {
-  background-image: url("/images/rent-about-logo.png");
+  background-image: url("/images/logo.svg");
 }
 
 .form-input,
@@ -358,7 +358,7 @@ div.add-listings-box.dropzone > .gallery-flex {
 
 @media (min-width: 1536px) {
   .adaptive-logo-image {
-    background-image: url("/images/rent-about-logo.png");
+    background-image: url("/images/logo.svg");
   }
 }
 

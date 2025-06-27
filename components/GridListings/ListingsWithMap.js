@@ -26,12 +26,11 @@ import AdaptiveSelect from "../FormComponents/AdaptiveSelect";
 import Loading from "../../components/GridListings/Loading";
 import NavbarTwo from "../_App/NavbarTwo";
 
-const defaultCenter = STATIC.DEFAULTS.CITY_COORDS;
 const baseItemsPerPage = 6;
 
 const cities = [
-  { name: "Warrington", value: "Warrington", title: "Warrington" },
-  { name: "Manchester", value: "Manchester", title: "Manchester" },
+  { name: "London", value: "London", title: "London" },
+  { name: "Paris", value: "Paris", title: "Paris" },
 ];
 
 const distances = [

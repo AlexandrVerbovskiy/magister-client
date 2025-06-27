@@ -143,7 +143,7 @@ const MobileNavbar = ({ onLoginClick = null }) => {
             onClick={toggleSideMenu}
           >
             <img
-              src="/images/rent-about-logo-black.png"
+              src="/images/logo-black.svg"
               className="logo-image"
               alt="logo"
             />

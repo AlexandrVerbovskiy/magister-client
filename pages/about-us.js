@@ -10,8 +10,8 @@ const AboutUs = () => {
       <Navbar canShowSearch={false} />
 
       <PageBanner
-        pageTitle="User Data Deletion"
-        pageName="User Data Deletion"
+        pageTitle="About Us"
+        pageName="About Us"
       />
 
       <div className="listings-area ptb-70">

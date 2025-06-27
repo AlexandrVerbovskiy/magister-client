@@ -35,19 +35,17 @@ const Index = ({ categories }) => {
 
       <Banner popularCategories={popularCategories} />
 
-      <YourBusiness />
-
       <SafeWithUs />
 
       <Category topCategories={topCategories} />
+
+      <YourBusiness />
 
       <UnlockAccess />
 
       <StartEarning />
 
       <DestinationsTwo bgColor="bg-f9f9f9" />
-
-      {/*<ListingArea listings={topListings} />*/}
 
       <Footer />
     </>

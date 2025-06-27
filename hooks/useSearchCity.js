@@ -3,7 +3,7 @@ import { IndiceContext } from "../contexts";
 
 const useSearchCity = () => {
   const [tipsPopupActive, setTipsPopupActive] = useState(false);
-  const cities = ["Warrington", "Manchester"];
+  const cities = ["London", "Paris"];
   const [cityTips, setCityTips] = useState([]);
 
   const { error } = useContext(IndiceContext);

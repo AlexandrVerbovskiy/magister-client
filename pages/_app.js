@@ -120,7 +120,7 @@ function MyApp({ Component, pageProps }) {
   const [scriptLoading, setScriptLoading] = useState(true);
 
   const pageType = pageProps.pageType;
-  const pageTitle = pageProps.pageTitle ?? "RentAbout";
+  const pageTitle = pageProps.pageTitle ?? "DressRenter";
   const sessionUser = pageProps.sessionUser;
   const authToken = pageProps.authToken;
   const categories = pageProps.categories ?? {};

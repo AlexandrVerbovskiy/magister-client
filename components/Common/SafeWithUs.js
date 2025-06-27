@@ -4,7 +4,7 @@ import React from "react";
 const SafeWithUs = ({ bgColor = "" }) => {
   return (
     <>
-      <section className={`how-it-works-area ptb-100 ${bgColor}`}>
+      <section className={`how-it-works-area ptb-70 ${bgColor}`}>
         <div className="container">
           <div className="section-title">
             <h2>You're safe with us</h2>
@@ -29,7 +29,7 @@ const SafeWithUs = ({ bgColor = "" }) => {
                   <img src="/images/home/icons-user_verification.png" />
                 </div>
                 <h3>User Verification</h3>
-                <p>RentAbout verifies all users prior to rental.</p>
+                <p>DressRenter verifies all users prior to rental.</p>
               </div>
             </div>
 
@@ -38,7 +38,7 @@ const SafeWithUs = ({ bgColor = "" }) => {
                 <div className="icon safe-with-us-img">
                   <img src="/images/home/icons-insurance_guarantee.png" />
                 </div>
-                <h3>RentAbout Has an Owner Guarantee</h3>
+                <h3>DressRenter Has an Owner Guarantee</h3>
               </div>
             </div>
           </div>

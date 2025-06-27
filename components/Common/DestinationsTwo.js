@@ -5,57 +5,57 @@ const campaigns = [
   {
     id: 1,
     col: 3,
-    title: "Cement mixers",
-    img: "/images/campaigns/a-photo-cement-transparent-thumbnail.png",
+    title: "Evening",
+    img: "/images/top-listings/top-1.png",
     backgroundColor: "#dbf5f6",
   },
   {
     id: 2,
     col: 3,
-    title: "DJ Equipment",
-    img: "/images/campaigns/a-photo-dj-transparent-thumbnail.png",
+    title: "Character Costumes",
+    img: "/images/top-listings/top-8.png",
     backgroundColor: "#ddf3da",
   },
   {
     id: 3,
     col: 3,
-    title: "Ladders",
-    img: "/images/campaigns/a-photo-ladders-transparent-thumbnail.png",
+    title: "Business",
+    img: "/images/top-listings/top-2.png",
     backgroundColor: "#f7f9cf",
   },
   {
     id: 4,
     col: 3,
-    title: "Cameras",
-    img: "/images/campaigns/a-photo-photo-transparent-thumbnail.png",
+    title: "Graduation",
+    img: "/images/top-listings/top-7.png",
     backgroundColor: "#dedcf2",
   },
   {
     id: 5,
     col: 3,
-    title: "Tools",
-    img: "/images/campaigns/a-photo-tools-transparent-thumbnail.png",
+    title: "Footwear",
+    img: "/images/top-listings/top-3.png",
     backgroundColor: "#dedcf2",
   },
   {
     id: 6,
     col: 3,
-    title: "Paddleboards",
-    img: "/images/campaigns/a-photo-paddleboard-transparent-thumbnail.png",
+    title: "Children's Festive",
+    img: "/images/top-listings/top-6.png",
     backgroundColor: "#dbf5f6",
   },
   {
     id: 7,
     col: 3,
-    title: "Tent",
-    img: "/images/campaigns/a-photo-tent-transparent-thumbnail.png",
+    title: "Accessories",
+    img: "/images/top-listings/top-4.png",
     backgroundColor: "#ddf3da",
   },
   {
     id: 8,
     col: 3,
-    title: "Trailers",
-    img: "/images/campaigns/a-photo-trailer-transparent-thumbnail.png",
+    title: "Carnival",
+    img: "/images/top-listings/top-5.png",
 
     backgroundColor: "#f7f9cf",
   },
@@ -76,7 +76,13 @@ const DestinationItem = (campaign) => {
         className="single-destinations-box"
         style={{ backgroundColor: campaign.backgroundColor }}
       >
-        <img src={campaign.img} alt="image" />
+        <img
+          src={campaign.img}
+          alt="image"
+          height="283px"
+          width="283px"
+          style={{ height: "283px", width: "283px", objectFit: "scale-down" }}
+        />
         <div className="country">{campaign.title}</div>
       </div>
     </div>
@@ -91,7 +97,7 @@ const Destinations = ({ bgColor = "", bgImage = "" }) => {
       >
         <div className="container">
           <div className="section-title">
-            <h2>Trending Items</h2>
+            <h2>Trending Dresses</h2>
           </div>
 
           <div className="row">

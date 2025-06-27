@@ -10,14 +10,14 @@ const HowItWorks = () => {
       <Navbar canShowSearch={false} />
 
       <PageBanner
-        pageTitle="User Data Deletion"
-        pageName="User Data Deletion"
+        pageTitle="How It Works"
+        pageName="How It Works"
       />
 
       <div className="listings-area ptb-70">
         <div className="container mt-4">
           <div className="row m-0">
-            <h3>About Us</h3>
+            <h3>How It Works</h3>
           </div>
         </div>
       </div>

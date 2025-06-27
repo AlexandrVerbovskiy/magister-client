@@ -223,7 +223,7 @@ const NavbarTwo = ({
     <div className="logo">
       <Link href="/">
         <img
-          src="/images/rent-about-logo-black.png"
+          src="/images/logo-black.svg"
           className="logo-image"
           alt="logo"
         />
@@ -302,7 +302,7 @@ const NavbarTwo = ({
             <nav className="navbar navbar-expand-md navbar-light">
               <Link href="/" className="navbar-brand">
                 <img
-                  src="/images/rent-about-logo-black.png"
+                  src="/images/logo-black.svg"
                   className="logo-image"
                   alt="logo"
                 />{" "}
@@ -407,7 +407,7 @@ const NavbarTwo = ({
               <nav className="navbar navbar-expand-md navbar-light">
                 <Link href="/" className="navbar-brand">
                   <img
-                    src="/images/rent-about-logo-black.png"
+                    src="/images/logo-black.svg"
                     className="logo-image"
                     alt="logo"
                   />{" "}

@@ -1,4 +1,5 @@
 import STATIC from "../static";
+import { isDateBlocked } from "./dateHelpers";
 import { moneyFormat } from "./priceCalculations";
 
 export const capitalizeFirstLetter = (str) => {

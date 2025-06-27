@@ -17,6 +17,9 @@ export const getCurrentUserUtc = () => {
 };
 
 export const dateConverter = (date) => {
+  if (!date) {
+    return;
+  }
   const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedDateParts = formattedDate.split("/");
@@ -30,6 +33,9 @@ export const dateConverter = (date) => {
 };
 
 export const fullDateConverter = (date) => {
+  if (!date) {
+    return;
+  }
   const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
@@ -161,48 +167,6 @@ export const checkStringDateLowerOrEqualCurrentDate = (date) => {
   return date < currentDate;
 };
 
-const isDateBlocked = (startDate, blockedDates, numOfDays) => {
-  for (let i = 0; i < numOfDays; i++) {
-    let tempDate = new Date(startDate);
-    tempDate.setDate(startDate.getDate() + i);
-
-    if (blockedDates.includes(separateDate(tempDate))) {
-      return true;
-    }
-  }
-  return false;
-};
-
-export const findFirstAvailableDate = (
-  blockedDates,
-  numOfDays,
-  startDate = null
-) => {
-  if (!startDate || startDate < new Date()) {
-    startDate = new Date();
-  }
-
-  let firstAvailableDate = null;
-  let daysToCheck = 0;
-
-  while (!firstAvailableDate) {
-    let currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + daysToCheck);
-
-    if (!numOfDays) {
-      numOfDays = 1;
-    }
-
-    if (!isDateBlocked(currentDate, blockedDates, numOfDays)) {
-      firstAvailableDate = currentDate;
-    } else {
-      daysToCheck++;
-    }
-  }
-
-  return firstAvailableDate;
-};
-
 export const increaseDateByOneDay = (dateString) => {
   const date = new Date(dateString);
   const newDate = new Date(date);
@@ -259,59 +223,14 @@ export const getMaxDate = (dates) => {
   return separateDate(date);
 };
 
-export const checkStartEndHasConflict = (startDate, endDate, conflictDates) => {
-  const selectedDates = generateDatesBetween(startDate, endDate);
+export const isDateBlocked = (startDate, blockedDates, numOfDays) => {
+  for (let i = 0; i < numOfDays; i++) {
+    let tempDate = new Date(startDate);
+    tempDate.setDate(startDate.getDate() + i);
 
-  const hasBlockedDate = selectedDates.find((selectedDate) =>
-    conflictDates.includes(selectedDate)
-  );
-
-  return !!hasBlockedDate;
-};
-
-export const getOrderBlockedDatesToUpdate = (order) => {
-  if (!order) {
-    return [];
+    if (blockedDates.includes(separateDate(tempDate))) {
+      return true;
+    }
   }
-
-  let blockedDatesToUpdate = [];
-
-  order.conflictOrders.map((conflictOrder) => {
-    const startDate = conflictOrder.requestId
-      ? conflictOrder.newStartDate
-      : conflictOrder.offerStartDate;
-
-    const endDate = conflictOrder.requestId
-      ? conflictOrder.newEndDate
-      : conflictOrder.offerEndDate;
-
-    blockedDatesToUpdate = [
-      ...blockedDatesToUpdate,
-      ...generateDatesBetween(startDate, endDate),
-    ];
-  });
-
-  return removeDuplicates(blockedDatesToUpdate);
-};
-
-export const getStartExtendOrderDate = (offerEndDate, extendOrders) => {
-  let lastOrderDate = offerEndDate;
-
-  if (extendOrders && extendOrders.length) {
-    const extendOrderDates = extendOrders
-      .filter(
-        (order) =>
-          [
-            STATIC.ORDER_STATUSES.PENDING_TENANT_PAYMENT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_TENANT,
-            STATIC.ORDER_STATUSES.PENDING_ITEM_TO_OWNER,
-            STATIC.ORDER_STATUSES.FINISHED,
-          ].includes(order.status) && !order.cancelStatus
-      )
-      .map((extendOrder) => extendOrder.offerEndDate);
-
-    lastOrderDate = getMaxDate(extendOrderDates);
-  }
-
-  return increaseDateByOneDay(lastOrderDate);
+  return false;
 };

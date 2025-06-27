@@ -90,7 +90,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
           >
             <span className="sr-only">Close sidebar</span>
             <img
-              src="/images/rent-about-logo.png"
+              src="/images/logo.svg"
               className="logo-image"
               alt="logo"
             />

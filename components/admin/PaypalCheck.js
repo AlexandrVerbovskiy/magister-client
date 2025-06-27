@@ -74,7 +74,7 @@ const PaypalCheck = ({
                 {moneyFormatVisual(rentalPrice, true)}
               </span>
             </h1>
-            <p>to RentAbout</p>
+            <p>to DressRenter</p>
             <p className="details-link">Details</p>
             <div className="item-details">
               <table>
@@ -195,7 +195,7 @@ const PaypalCheck = ({
               <p>
                 <strong>Merchant details</strong>
               </p>
-              <p>RentAbout</p>
+              <p>DressRenter</p>
             </div>
             <div className="merchant-details">
               <p>
