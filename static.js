@@ -1,7 +1,7 @@
 const config = {
   CITY_COORDS: {
-    Warrington: { lat: 53.390044, lng: -2.59695 },
-    Manchester: { lat: 53.48095, lng: -2.23743 },
+    London: { lat: 51.50722, lng: -0.1275 },
+    Paris: { lat: 48.8566, lng: 2.3522 },
   },
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",
@@ -132,13 +132,13 @@ const config = {
     MIN_RENTER_COMMISSION: 5,
     MIN_OWNER_COMMISSION: 5,
     MIN_TENANT_COMMISSION: 5,
-    MAX_RENTAL_DURATION: 100
+    MAX_RENTAL_DURATION: 100,
   },
   DEFAULTS: {
     LISTING_MAP_CIRCLE_RADIUS: 500,
     PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
     PHOTO_LINK: "/images/admin/default-photo.png",
-    ADMIN_CHAT_LOGO: "/images/short-rent-about-logo.png",
+    ADMIN_CHAT_LOGO: "/images/short-logo.svg",
     CITY_COORDS: { lat: 53.390044, lng: -2.59695 },
   },
   RECIPIENT_PAYMENT_TYPES: {
@@ -151,8 +151,8 @@ const config = {
   UNBLOB_CHUNK_SIZE: 256 * 1024,
   SERVER_API: "/api",
   SERVER_STORAGE: "/public",
-  SUPPORT_EMAIL: "support@rentabout.com",
-  HELLO_EMAIL: "hello@rentabout.com",
+  SUPPORT_EMAIL: "support@dressrenter.com",
+  HELLO_EMAIL: "hello@dressrenter.com",
   CURRENCY: "£", //"$"
   CURRENCY_NAME: "GBP", //"USD"
   MOBILE_SIZE: 1199,

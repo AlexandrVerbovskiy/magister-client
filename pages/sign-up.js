@@ -151,7 +151,7 @@ const SignUp = () => {
             <div className="coming-soon-content">
               <Link href="/" className="logo">
                 <img
-                  src="/images/rent-about-logo-black.png"
+                  src="/images/logo-black.svg"
                   className="logo-image"
                   alt="logo"
                 />{" "}

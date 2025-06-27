@@ -30,11 +30,10 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
-import DateInput from "../FormComponents/DateInput";
 
 const cityOptions = [
-  { value: "Warrington", label: "Warrington" },
-  { value: "Manchester", label: "Manchester" },
+  { value: "London", label: "London" },
+  { value: "Paris", label: "Paris" },
 ];
 
 const baseCity = cityOptions[0]["value"];

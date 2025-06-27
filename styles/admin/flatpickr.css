@@ -230,6 +230,7 @@ span.flatpickr-weekday {
   text-decoration: none !important;
 }
 
+.flatpickr-day.endRange,
 .flatpickr-day.startRange,
 .flatpickr-day.selected {
   border-radius: 0 !important;

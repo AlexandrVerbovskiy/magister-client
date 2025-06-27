@@ -17,6 +17,9 @@ export const getCurrentUserUtc = () => {
 };
 
 export const dateConverter = (date) => {
+  if (!date) {
+    return;
+  }
   const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedDateParts = formattedDate.split("/");
@@ -30,6 +33,9 @@ export const dateConverter = (date) => {
 };
 
 export const fullDateConverter = (date) => {
+  if (!date) {
+    return;
+  }
   const dateObject = new Date(date);
   const formattedDate = dateObject.toLocaleDateString("en-US");
   const formattedTime = dateObject.toLocaleTimeString("en-US", {
@@ -217,3 +223,14 @@ export const getMaxDate = (dates) => {
   return separateDate(date);
 };
 
+export const isDateBlocked = (startDate, blockedDates, numOfDays) => {
+  for (let i = 0; i < numOfDays; i++) {
+    let tempDate = new Date(startDate);
+    tempDate.setDate(startDate.getDate() + i);
+
+    if (blockedDates.includes(separateDate(tempDate))) {
+      return true;
+    }
+  }
+  return false;
+};
