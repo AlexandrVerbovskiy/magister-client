@@ -9,7 +9,7 @@ import {
   autoCalculateCurrentTotalPrice,
   moneyFormatVisual,
   dateConverter,
-  renterGetsFeeCalculate,
+  renterPaysFeeCalculate,
 } from "../../../../utils";
 import PaymentSection from "../../../../components/_App/PaymentSection";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
   const price = order.offerPrice;
-  const totalFee = renterGetsFeeCalculate(price, renterBaseCommission);
+  const totalFee = renterPaysFeeCalculate(price, renterBaseCommission);
   const totalPrice = price + totalFee;
 
   const onRenterPayed = () => {
@@ -57,7 +57,7 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
             <div className="listings-sidebar row m-0">
               <div className="col-12 col-lg-4">
                 <div className="h-100 listings-widget listings_contact_details">
-                  <h3>Task Details</h3>
+                  <h3>Order Details</h3>
 
                   <div>
                     <div style={{ marginTop: "20px", marginBottom: "20px" }}>

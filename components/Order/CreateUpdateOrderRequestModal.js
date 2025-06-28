@@ -7,11 +7,11 @@ import {
   getMaxFlatpickrDate,
   moneyFormat,
   moneyFormatVisual,
-  ownerPaymentCalculate,
-  ownerPaymentFeeCalculate,
+  ownerEarnCalculate,
+  ownerEarnFeeCalculate,
   separateDate,
-  renterGetsFeeCalculate,
-  renterGetsCalculate,
+  renterPaysFeeCalculate,
+  renterPaysCalculate,
 } from "../../utils";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
@@ -57,11 +57,11 @@ const CreateUpdateOrderRequestModal = ({
 
   const recalculateTotalInfo = ({ price, fee }) => {
     if (commissionType == "sum") {
-      setTotalPrice(renterGetsCalculate(price, fee));
-      setTotalFee(renterGetsFeeCalculate(price, fee));
+      setTotalPrice(renterPaysCalculate(price, fee));
+      setTotalFee(renterPaysFeeCalculate(price, fee));
     } else {
-      setTotalPrice(ownerPaymentCalculate(price, fee));
-      setTotalFee(ownerPaymentFeeCalculate(price, fee));
+      setTotalPrice(ownerEarnCalculate(price, fee));
+      setTotalFee(ownerEarnFeeCalculate(price, fee));
     }
 
     setFullTotal(calculateFullTotalByType(price, fee, commissionType));

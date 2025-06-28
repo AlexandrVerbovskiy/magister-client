@@ -12,7 +12,7 @@ import {
   moneyFormat,
   dateConverter,
   isPayedUsedPaypal,
-  renterGetsFeeCalculate,
+  renterPaysFeeCalculate,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -40,7 +40,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
   const subtotalPrice = payment.offerPrice;
 
-  const totalFee = renterGetsFeeCalculate(
+  const totalFee = renterPaysFeeCalculate(
     payment.offerPrice,
     payment.renterFee
   );

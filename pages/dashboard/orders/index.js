@@ -54,7 +54,7 @@ const Wrapper = ({
                   style={type == "owner" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Requests for my tasks ({countForOwner})
+                    Requests for my listings ({countForOwner})
                   </label>
                 </div>
               </div>

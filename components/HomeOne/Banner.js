@@ -47,12 +47,12 @@ const Banner = () => {
   ];
 
   const categories = [
-    "Ladders",
-    "Tools",
-    "Tents",
-    "Trailers",
-    "Cameras",
-    "Bikes",
+    "Women's Clothing",
+    "Men's Clothing",
+    "Kids' Clothing",
+    "Unisex Clothing",
+    "Accessories",
+    "Footwear",
   ];
 
   const { setLoading } = useContext(IndiceContext);

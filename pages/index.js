@@ -37,9 +37,9 @@ const Index = ({ categories }) => {
 
       <SafeWithUs />
 
-      <Category topCategories={topCategories} />
+      <YourBusiness bgColor="bg-f9f9f9" />
 
-      <YourBusiness />
+      <Category topCategories={topCategories} />
 
       <UnlockAccess />
 

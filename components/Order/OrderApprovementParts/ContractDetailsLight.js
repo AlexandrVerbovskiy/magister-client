@@ -1,15 +1,15 @@
 import {
   moneyFormatVisual,
-  renterGetsFeeCalculate,
+  renterPaysFeeCalculate,
 } from "../../../utils";
 
 const ContractDetailsLight = ({ price, fee }) => {
-  const totalFee = renterGetsFeeCalculate(price, fee);
+  const totalFee = renterPaysFeeCalculate(price, fee);
   const totalPrice = price + totalFee;
 
   return (
     <div className="listings-widget listings_contact_details">
-      <h3>Task Details</h3>
+      <h3>Rental Details</h3>
 
       <div>
         <div

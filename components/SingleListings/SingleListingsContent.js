@@ -157,7 +157,7 @@ const SingleListingsContent = ({
                     checked={true}
                     countClass="rating-count"
                     centerAlign={true}
-                    commentName="task"
+                    commentName="order"
                   />
 
                   <ul className="d-flex align-items-center">
@@ -297,7 +297,7 @@ const SingleListingsContent = ({
                           <div className="col-lg-6 col-md-6">
                             <div className="row m-0">
                               <div className="side">
-                                <div>Task Description</div>
+                                <div>Rental Description</div>
                               </div>
                               <div className="middle">
                                 <div className="bar-container">
@@ -549,7 +549,7 @@ const SingleListingsContent = ({
                 <div className="listings-sidebar d-flex flex-column">
                   {!isMobile && (
                     <div className="listings-widget book_listings">
-                      <h3>Complete Task</h3>
+                      <h3>Start Rental</h3>
 
                       {sessionUser?.id != listing.ownerId ? (
                         <div>
@@ -585,7 +585,7 @@ const SingleListingsContent = ({
                           </h4>
                           <span>
                             {listing.userCountItems}{" "}
-                            {autoMultiEnding(listing.userCountItems, "Task")}{" "}
+                            {autoMultiEnding(listing.userCountItems, "Order")}{" "}
                             for complete
                           </span>
                         </div>
@@ -672,7 +672,7 @@ const SingleListingsContent = ({
                 </div>
               ) : (
                 <div className="status-background-orange">
-                  You can't complete your own task
+                  You can't rent your own dress
                 </div>
               )}
             </div>

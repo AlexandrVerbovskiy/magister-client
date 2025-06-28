@@ -615,7 +615,7 @@ const EditForm = ({
               <InputWithIcon
                 label="Title:"
                 icon="bx bx-briefcase-alt"
-                placeholder="Name of your task"
+                placeholder="Name of your order"
                 value={name}
                 onInput={handleChangeName}
                 error={nameError}
@@ -851,7 +851,7 @@ const EditForm = ({
           body={
             listing.id
               ? "When you update a listing, it automatically changes to unapproved status. Until an administrator approves your listing, users will not be able to rent the listing. A confirmation request will be sent automatically to the administrators if it has not been sent before"
-              : "When you create a listing, you should send request to verify it. Users will not be able to complete the task until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
+              : "When you create a listing, you should send request to verify it. Users will not be able to complete the order until it is verified and your account is verified. A confirmation request will be sent automatically to administrators"
           }
           acceptText="Confirm"
           actionsParentClass="mt-4"

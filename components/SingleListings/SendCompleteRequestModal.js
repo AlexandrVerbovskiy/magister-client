@@ -20,7 +20,7 @@ import STATIC from "../../static";
 import YesNoModal from "../_App/YesNoModal";
 
 const SendCompleteRequestModal = ({
-  handleMakeBooking,
+  handleSendRequest,
   price: defaultPrice,
   fee,
   createOrderModalActive,
@@ -182,10 +182,10 @@ const SendCompleteRequestModal = ({
     if (fullVersion) {
       setYesNoActive(true);
     } else {
-      handleMakeBooking({
+      handleSendRequest({
         price,
-        fromDate: separateDate(fromDate),
-        toDate: separateDate(toDate),
+        startTime: separateDate(fromDate),
+        finishTime: separateDate(toDate),
         feeActive: false,
         sendingMessage: sendingMessage.trim(),
       });
@@ -199,10 +199,10 @@ const SendCompleteRequestModal = ({
   const onYesNoAccept = () => {
     setYesNoActive(false);
 
-    handleMakeBooking({
+    handleSendRequest({
       price,
-      fromDate: separateDate(fromDate),
-      toDate: separateDate(toDate),
+      startTime: separateDate(fromDate),
+      finishTime: separateDate(toDate),
       feeActive: false,
       sendingMessage: sendingMessage.trim(),
     });

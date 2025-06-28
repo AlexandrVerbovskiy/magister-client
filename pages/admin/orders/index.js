@@ -106,7 +106,7 @@ const Orders = (pageProps) => {
                   },
                 ]}
                 filter={filter}
-                filterPlaceholder="Search by Task Id"
+                filterPlaceholder="Search by Order Id"
                 handleChangeFilter={changeFilter}
                 timeFilterType={timeFilterType}
                 handleChangeTimeFilterType={handleChangeTimeFilterType}

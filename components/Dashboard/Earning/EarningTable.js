@@ -2,8 +2,8 @@ import React from "react";
 import InputView from "../../FormComponents/InputView";
 import {
   moneyFormat,
-  ownerPaymentCalculate,
-  renterGetsCalculate,
+  ownerEarnCalculate,
+  renterPaysCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -164,7 +164,7 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${renterGetsCalculate(offerPrice, renterFee)}`}
+                value={`${renterPaysCalculate(offerPrice, renterFee)}`}
               />
             </div>
           </div>
@@ -184,7 +184,7 @@ const EarningTable = ({
                 label="Total Get"
                 placeholder="Total Get"
                 icon="bx bx-dollar-circle"
-                value={`${ownerPaymentCalculate(offerPrice, ownerFee)}`}
+                value={`${ownerEarnCalculate(offerPrice, ownerFee)}`}
               />
             </div>
           </div>
@@ -227,7 +227,7 @@ const EarningTable = ({
                 placeholder="Total To Refund"
                 icon="bx bx-dollar-circle"
                 value={`${moneyFormat(
-                  (renterGetsCalculate(offerPrice, renterFee) *
+                  (renterPaysCalculate(offerPrice, renterFee) *
                     (100 - refundCommission)) /
                     100
                 )}`}
