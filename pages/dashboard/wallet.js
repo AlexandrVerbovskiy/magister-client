@@ -11,8 +11,8 @@ import {
   moneyFormat,
   dateConverter,
   moneyFormatVisual,
-  ownerPaymentFeeCalculate,
-  renterGetsFeeCalculate,
+  ownerEarnFeeCalculate,
+  renterPaysFeeCalculate,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import { useContext } from "react";
@@ -138,7 +138,7 @@ const Wallet = ({
                     {earnings.map((earning) => {
                       const price = earning.offerPrice;
 
-                      const fee = ownerPaymentFeeCalculate(
+                      const fee = ownerEarnFeeCalculate(
                         earning.offerPrice,
                         earning.ownerFee
                       );
@@ -228,7 +228,7 @@ const Wallet = ({
                     {sendings.map((sending) => {
                       const price = sending.offerPrice;
 
-                      const fee = renterGetsFeeCalculate(
+                      const fee = renterPaysFeeCalculate(
                         sending.offerPrice,
                         sending.renterFee
                       );

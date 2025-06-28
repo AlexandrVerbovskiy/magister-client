@@ -3,7 +3,7 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { validateBigText, renterGetsFeeCalculate } from "../../utils";
+import { validateBigText, renterPaysFeeCalculate } from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -29,7 +29,7 @@ const OrderApprovementSection = ({
     setActiveAcceptSendBookingRequest(false);
   };
 
-  const totalFee = renterGetsFeeCalculate(price, fee);
+  const totalFee = renterPaysFeeCalculate(price, fee);
   const totalPrice = price + totalFee;
 
   const onSendClick = (e) => {

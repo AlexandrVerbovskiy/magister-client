@@ -6,8 +6,8 @@ import {
   getDisputeTitle,
   getListingImageByType,
   moneyFormatVisual,
-  ownerPaymentFeeCalculate,
-  renterGetsFeeCalculate,
+  ownerEarnFeeCalculate,
+  renterPaysFeeCalculate,
 } from "../../utils";
 import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../Listings/MultyMarkersMap";
@@ -256,8 +256,8 @@ const OrderContent = ({
   const currentFee = isOwner ? order.ownerFee : order.renterFee;
   const currentFeeCalculate = (price, fee) =>
     isOwner
-      ? ownerPaymentFeeCalculate(price, fee)
-      : renterGetsFeeCalculate(price, fee);
+      ? ownerEarnFeeCalculate(price, fee)
+      : renterPaysFeeCalculate(price, fee);
 
   const currentActionButtons = useOrderActions({
     order,

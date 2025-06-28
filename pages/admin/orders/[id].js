@@ -10,9 +10,9 @@ import {
   getFilePath,
   getListingImageByType,
   moneyFormat,
-  ownerPaymentCalculate,
-  renterGetsFeeCalculate,
-  renterGetsCalculate,
+  ownerEarnCalculate,
+  renterPaysFeeCalculate,
+  renterPaysCalculate,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -248,11 +248,11 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? ownerPaymentCalculate(
+                                    ? ownerEarnCalculate(
                                         activeRequestsToUpdate.newPrice,
                                         order.ownerFee
                                       )
-                                    : ownerPaymentCalculate(
+                                    : ownerEarnCalculate(
                                         order.offerPrice,
                                         order.ownerFee
                                       )
@@ -269,11 +269,11 @@ const Order = (baseProps) => {
                                 labelClassName="block text-sm font-medium mb-1"
                                 value={
                                   activeRequestsToUpdate
-                                    ? renterGetsFeeCalculate(
+                                    ? renterPaysFeeCalculate(
                                         activeRequestsToUpdate.newPrice,
                                         order.renterFee
                                       )
-                                    : renterGetsFeeCalculate(
+                                    : renterPaysFeeCalculate(
                                         order.offerPrice,
                                         order.renterFee
                                       )
@@ -293,13 +293,13 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        ownerPaymentCalculate(
+                                        ownerEarnCalculate(
                                           activeRequestsToUpdate.newPrice,
                                           order.ownerFee
                                         )
                                       )
                                     : moneyFormat(
-                                        ownerPaymentCalculate(
+                                        ownerEarnCalculate(
                                           order.offerPrice,
                                           order.ownerFee
                                         )
@@ -318,13 +318,13 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? moneyFormat(
-                                        renterGetsCalculate(
+                                        renterPaysCalculate(
                                           activeRequestsToUpdate.newPrice,
                                           order.renterFee
                                         )
                                       )
                                     : moneyFormat(
-                                        renterGetsCalculate(
+                                        renterPaysCalculate(
                                           order.offerPrice,
                                           order.renterFee
                                         )
