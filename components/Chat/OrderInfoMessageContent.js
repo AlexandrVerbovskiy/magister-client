@@ -18,8 +18,8 @@ const OrderInfoMessageContent = ({
   senderId,
   popupsData,
   hasDescription = false,
-  finishTime,
-  startTime,
+  finishDate,
+  startDate,
 }) => {
   const { sessionUser } = useContext(IndiceContext);
 
@@ -43,7 +43,7 @@ const OrderInfoMessageContent = ({
       </div>
 
       <div className="mb-1">
-        {start - time}-{finishTime}
+        {startDate}-{finishDate}
       </div>
 
       <div className="mb-1">

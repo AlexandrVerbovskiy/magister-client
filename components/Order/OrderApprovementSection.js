@@ -3,7 +3,11 @@ import ItemInfo from "./OrderApprovementParts/ItemInfo";
 import OwnerInfo from "./OrderApprovementParts/OwnerInfo";
 import ContractDetails from "./OrderApprovementParts/ContractDetails";
 import RentalMessage from "./OrderApprovementParts/RentalMessage";
-import { validateBigText, renterPaysFeeCalculate } from "../../utils";
+import {
+  validateBigText,
+  renterPaysFeeCalculate,
+  getPriceByDays,
+} from "../../utils";
 import YesNoRentalModal from "./OrderApprovementParts/YesNoRentalModal";
 
 const OrderApprovementSection = ({
@@ -11,12 +15,12 @@ const OrderApprovementSection = ({
   setCurrentOpenImg,
   listing,
   handleGoBack,
-  finishTime,
-  startTime,
+  finishDate,
+  startDate,
   price,
   fee,
-  setStartTime,
-  setFinishTime,
+  setStartDate,
+  setFinishDate,
 }) => {
   const [sendingMessage, setSendingMessage] = useState("");
   const [sendingMessageError, setSendingMessageError] = useState(null);
@@ -29,8 +33,9 @@ const OrderApprovementSection = ({
     setActiveAcceptSendBookingRequest(false);
   };
 
-  const totalFee = renterPaysFeeCalculate(price, fee);
-  const totalPrice = price + totalFee;
+  const clearPrice = getPriceByDays(price, startDate, finishDate);
+  const totalFee = renterPaysFeeCalculate(clearPrice, fee);
+  const totalPrice = clearPrice + totalFee;
 
   const onSendClick = (e) => {
     e.preventDefault();
@@ -63,7 +68,7 @@ const OrderApprovementSection = ({
             handleGoBack={handleGoBack}
             setSendingMessage={setSendingMessage}
             sendingMessage={sendingMessage}
-            price={price}
+            price={clearPrice}
             listing={listing}
             totalPrice={totalPrice}
             sendingMessageError={sendingMessageError}
@@ -75,13 +80,13 @@ const OrderApprovementSection = ({
       <div className="col-lg-4 col-md-12">
         <div className="listings-sidebar">
           <ContractDetails
-            startTime={startTime}
-            finishTime={finishTime}
-            setStartTime={setStartTime}
-            setFinishTime={setFinishTime}
-            totalPrice={totalPrice}
+            startDate={startDate}
+            finishDate={finishDate}
+            setStartDate={setStartDate}
+            setFinishDate={setFinishDate}
+            price={price}
             dateError={dateError}
-            totalFee={totalFee}
+            fee={fee}
           />
 
           <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
@@ -99,9 +104,9 @@ const OrderApprovementSection = ({
       </div>
 
       <YesNoRentalModal
-        startTime={startTime}
-        finishTime={finishTime}
-        price={price}
+        startDate={startDate}
+        finishDate={finishDate}
+        price={clearPrice}
         listing={listing}
         handleApprove={handleApprove}
         totalPrice={totalPrice}

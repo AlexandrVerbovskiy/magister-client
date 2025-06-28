@@ -13,6 +13,7 @@ import {
   ownerEarnCalculate,
   renterPaysFeeCalculate,
   renterPaysCalculate,
+  getPriceByDays,
 } from "../../../utils";
 import { useState } from "react";
 import MultyMarkersMap from "../../../components/Listings/MultyMarkersMap";
@@ -249,11 +250,19 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? ownerEarnCalculate(
-                                        activeRequestsToUpdate.newPrice,
+                                        getPriceByDays(
+                                          activeRequestsToUpdate.newPrice,
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newFinishDate
+                                        ),
                                         order.ownerFee
                                       )
                                     : ownerEarnCalculate(
-                                        order.offerPrice,
+                                        getPriceByDays(
+                                          order.offerPrice,
+                                          order.offerStartDate,
+                                          order.offerFinishDate
+                                        ),
                                         order.ownerFee
                                       )
                                 }
@@ -270,10 +279,19 @@ const Order = (baseProps) => {
                                 value={
                                   activeRequestsToUpdate
                                     ? renterPaysFeeCalculate(
-                                        activeRequestsToUpdate.newPrice,
+                                        getPriceByDays(
+                                          activeRequestsToUpdate.newPrice,
+                                          activeRequestsToUpdate.newStartDate,
+                                          activeRequestsToUpdate.newFinishDate
+                                        ),
                                         order.renterFee
                                       )
                                     : renterPaysFeeCalculate(
+                                        getPriceByDays(
+                                          order.offerPrice,
+                                          order.offerStartDate,
+                                          order.offerFinishDate
+                                        ),
                                         order.offerPrice,
                                         order.renterFee
                                       )
@@ -294,13 +312,21 @@ const Order = (baseProps) => {
                                   activeRequestsToUpdate
                                     ? moneyFormat(
                                         ownerEarnCalculate(
-                                          activeRequestsToUpdate.newPrice,
+                                          getPriceByDays(
+                                            activeRequestsToUpdate.newPrice,
+                                            activeRequestsToUpdate.newStartDate,
+                                            activeRequestsToUpdate.newFinishDate
+                                          ),
                                           order.ownerFee
                                         )
                                       )
                                     : moneyFormat(
                                         ownerEarnCalculate(
-                                          order.offerPrice,
+                                          getPriceByDays(
+                                            order.offerPrice,
+                                            order.offerStartDate,
+                                            order.offerFinishDate
+                                          ),
                                           order.ownerFee
                                         )
                                       )
@@ -319,13 +345,21 @@ const Order = (baseProps) => {
                                   activeRequestsToUpdate
                                     ? moneyFormat(
                                         renterPaysCalculate(
-                                          activeRequestsToUpdate.newPrice,
+                                          getPriceByDays(
+                                            activeRequestsToUpdate.newPrice,
+                                            activeRequestsToUpdate.newStartDate,
+                                            activeRequestsToUpdate.newFinishDate
+                                          ),
                                           order.renterFee
                                         )
                                       )
                                     : moneyFormat(
                                         renterPaysCalculate(
-                                          order.offerPrice,
+                                          getPriceByDays(
+                                            order.offerPrice,
+                                            order.offerStartDate,
+                                            order.offerFinishDate
+                                          ),
                                           order.renterFee
                                         )
                                       )
@@ -452,7 +486,11 @@ const Order = (baseProps) => {
                             prevPrice={order.prevPrice ?? order.offerPrice}
                             prevTotalPrice={autoCalculateCurrentTotalPrice({
                               isOwner: false,
-                              price: order.prevPrice ?? order.offerPrice,
+                              price: getPriceByDays(
+                                order.prevPrice ?? order.offerPrice,
+                                order.prevStartDate ?? order.offerStartDate,
+                                order.prevFinishDate ?? order.offerFinishDate
+                              ),
                               ownerFee: order.ownerFee,
                               renterFee: order.renterFee,
                             })}
@@ -469,6 +507,11 @@ const Order = (baseProps) => {
                               prevTotalPrice={autoCalculateCurrentTotalPrice({
                                 isOwner: false,
                                 price: request.newPrice,
+                                price: getPriceByDays(
+                                  request.newPrice,
+                                  request.newStartDate,
+                                  request.newFinishDate
+                                ),
                                 ownerFee: order.ownerFee,
                                 renterFee: request.newFee,
                               })}

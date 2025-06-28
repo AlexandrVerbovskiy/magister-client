@@ -79,6 +79,8 @@ const ListingReviewForm = ({
           <ContractDetailsLight
             fee={order.renterFee}
             price={order.offerPrice}
+            startDate={order.offerStartDate}
+            finishDate={order.offerFinishDate}
           />
 
           <ItemInfo

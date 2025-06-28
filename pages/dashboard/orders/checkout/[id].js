@@ -10,6 +10,7 @@ import {
   moneyFormatVisual,
   dateConverter,
   renterPaysFeeCalculate,
+  getPriceByDays,
 } from "../../../../utils";
 import PaymentSection from "../../../../components/_App/PaymentSection";
 import { useRouter } from "next/router";
@@ -25,7 +26,11 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const price = order.offerPrice;
+  const price = getPriceByDays(
+    order.offerPrice,
+    order.offerStartDate,
+    order.offerFinishDate
+  );
   const totalFee = renterPaysFeeCalculate(price, renterBaseCommission);
   const totalPrice = price + totalFee;
 
@@ -65,8 +70,8 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                         <div className="date-info date-info-view">
                           <div className="date-info-label">Duration</div>
                           <div className="date-info-value">
-                            {dateConverter(order.offerStartTime)} -{" "}
-                            {dateConverter(order.offerFinishTime)}
+                            {dateConverter(order.offerStartDate)} -{" "}
+                            {dateConverter(order.offerFinishDate)}
                           </div>
                         </div>
 
@@ -193,7 +198,11 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                       onRenterPayed={onRenterPayed}
                       orderId={order.id}
                       amount={autoCalculateCurrentTotalPrice({
-                        price: order.offerPrice,
+                        price: getPriceByDays(
+                          order.offerPrice,
+                          order.offerStartDate,
+                          order.offerFinishDate
+                        ),
                         ownerFee: order.ownerFee,
                         renterFee: order.renterFee,
                         type: "owner",

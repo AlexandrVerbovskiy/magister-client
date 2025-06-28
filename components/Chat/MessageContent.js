@@ -5,6 +5,7 @@ import {
   autoCalculateCurrentTotalPrice,
   getDisputeTitle,
   getFilePath,
+  getPriceByDays,
 } from "../../utils";
 import { IndiceContext } from "../../contexts";
 import OrderInfoMessageContent from "./OrderInfoMessageContent";
@@ -187,7 +188,11 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const totalPrice = autoCalculateCurrentTotalPrice({
-      price: content.offerPrice,
+      price: getPriceByDays(
+        content.offerPrice,
+        content.offerStartDate,
+        content.offerFinishDate
+      ),
       type,
       isOwner: sessionUser?.id == entity.ownerId,
       ownerFee: entity.ownerFee,
@@ -210,8 +215,8 @@ const orderMessageContent = ({
         hasDescription={type === STATIC.MESSAGE_TYPES.NEW_ORDER}
         senderId={senderId}
         popupsData={popupsData}
-        finishTime={content.offerFinishTime}
-        startTime={content.offerStartTime}
+        finishDate={content.offerFinishDate}
+        startDate={content.offerStartDate}
       />
     );
   }

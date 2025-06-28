@@ -5,6 +5,7 @@ import {
   generateProfileFilePath,
   getDisputeTitle,
   getListingImageByType,
+  getPriceByDays,
   moneyFormatVisual,
   ownerEarnFeeCalculate,
   renterPaysFeeCalculate,
@@ -29,7 +30,7 @@ import OrderPopups from "./OrderPopups";
 
 const bookingStatuses = [
   STATIC.ORDER_STATUSES.REJECTED,
-  STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
+  STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
   STATIC.ORDER_STATUSES.PENDING_OWNER,
   STATIC.ORDER_STATUSES.PENDING_RENTER,
 ];
@@ -80,8 +81,8 @@ const OrderContent = ({
         if (order.actualUpdateRequest) {
           setPrevUpdateRequest({
             senderId: order.renterId,
-            startTime: order.offerStartTime,
-            finishTime: order.offerFinishTime,
+            startDate: order.offerStartDate,
+            finishDate: order.offerFinishDate,
             price: order.offerPrice,
           });
         }
@@ -129,28 +130,33 @@ const OrderContent = ({
     });
   };
 
-  const localCalculateCurrentTotalPrice = ({ price, type = null }) =>
+  const localCalculateCurrentTotalPrice = ({
+    price,
+    startDate,
+    finishDate,
+    type = null,
+  }) =>
     autoCalculateCurrentTotalPrice({
-      price,
+      price: getPriceByDays(price, startDate, finishDate),
       type,
       isOwner,
       ownerFee: order.ownerFee,
       renterFee: order.renterFee,
     });
 
-  const onCreateUpdateRequest = ({ price, startTime, finishTime }) => {
+  const onCreateUpdateRequest = ({ price, startDate, finishDate }) => {
     if (actualUpdateRequest) {
       setPrevUpdateRequest({
         senderId: actualUpdateRequest.senderId,
-        finishTime: actualUpdateRequest.newFinishTime,
-        startTime: actualUpdateRequest.newStartTime,
+        finishDate: actualUpdateRequest.newFinishDate,
+        startDate: actualUpdateRequest.newStartDate,
         price: actualUpdateRequest.newPrice,
       });
     } else {
       setPrevUpdateRequest({
         senderId: order.renterId,
-        startTime: order.offerStartTime,
-        finishTime: order.offerFinishTime,
+        startDate: order.offerStartDate,
+        finishDate: order.offerFinishDate,
         price: order.offerPrice,
       });
     }
@@ -158,8 +164,8 @@ const OrderContent = ({
     setActualUpdateRequest({
       senderId: sessionUser?.id,
       newPrice: price,
-      newStartTime: startTime,
-      newFinishTime: finishTime,
+      newStartDate: startDate,
+      newFinishDate: finishDate,
     });
 
     if (isOwner) {
@@ -186,8 +192,18 @@ const OrderContent = ({
       ? actualUpdateRequest.newPrice
       : order.offerPrice;
 
+    const offerStartDate = actualUpdateRequest
+      ? actualUpdateRequest.newStartDate
+      : order.offerStartDate;
+
+    const offerFinishDate = actualUpdateRequest
+      ? actualUpdateRequest.newFinishDate
+      : order.offerFinishDate;
+
     const totalPrice = localCalculateCurrentTotalPrice({
       price: offerPrice,
+      startDate: offerStartDate,
+      finishDate: offerFinishDate,
     });
 
     const updatedFields = {
@@ -253,11 +269,28 @@ const OrderContent = ({
     }));
   };
 
+  const onFinishOrder = () => {
+    setOrder((prev) => ({
+      ...prev,
+      status: STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
+    }));
+  };
+
+  const onAcceptFinishOrder = () => {
+    setOrder((prev) => ({
+      ...prev,
+      status: STATIC.ORDER_STATUSES.FINISHED,
+    }));
+  };
+
   const currentFee = isOwner ? order.ownerFee : order.renterFee;
-  const currentFeeCalculate = (price, fee) =>
+  const currentFeeCalculate = (price, startDate, finishDate, fee) =>
     isOwner
-      ? ownerEarnFeeCalculate(price, fee)
-      : renterPaysFeeCalculate(price, fee);
+      ? ownerEarnFeeCalculate(getPriceByDays(price, startDate, finishDate), fee)
+      : renterPaysFeeCalculate(
+          getPriceByDays(price, startDate, finishDate),
+          fee
+        );
 
   const currentActionButtons = useOrderActions({
     order,
@@ -268,7 +301,8 @@ const OrderContent = ({
         { title: "Make Booking", finished: true },
         {
           title: "Accepted",
-          finished: order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
+          finished:
+            order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
         },
         {
           title: "Payment Confirmation",
@@ -304,6 +338,8 @@ const OrderContent = ({
     onCancel,
     onPayedFastCancel,
     setError: error.set,
+    onFinishOrder,
+    onAcceptFinishOrder,
   });
 
   return (
@@ -550,8 +586,8 @@ const OrderContent = ({
                 <li>Offer price: {moneyFormatVisual(order.offerPrice)}</li>
                 <li>
                   <CanBeErrorBaseDateSpan
-                    finishTime={order.offerFinishTime}
-                    startTime={order.offerStartTime}
+                    finishDate={order.offerFinishDate}
+                    startDate={order.offerStartDate}
                   />
                 </li>
                 <li>Fee: {currentFee}%</li>
@@ -567,7 +603,7 @@ const OrderContent = ({
                       ownerId={order.ownerId}
                       renterId={order.renterId}
                       userId={sessionUser?.id}
-                      endDate={order.offerEndDate}
+                      finishDate={order.offerFinishDate}
                       payedId={order.paymentInfo?.id}
                       adminApproved={order.paymentInfo?.adminApproved}
                       waitingApproved={order.paymentInfo?.waitingApproved}
@@ -595,7 +631,12 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(order.offerPrice, currentFee)
+                    currentFeeCalculate(
+                      order.offerPrice,
+                      order.offerStartDate,
+                      order.offerFinishDate,
+                      currentFee
+                    )
                   )}
                 </li>
 
@@ -613,6 +654,8 @@ const OrderContent = ({
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               price: order.listingPrice,
+                              startDate: order.offerStartDate,
+                              finishDate: order.offerFinishDate,
                               type: "owner",
                             })
                           )}
@@ -630,6 +673,8 @@ const OrderContent = ({
                           {moneyFormatVisual(
                             localCalculateCurrentTotalPrice({
                               price: order.listingPrice,
+                              startDate: order.offerStartDate,
+                              finishDate: order.offerFinishDate,
                               type: "renter",
                             })
                           )}
@@ -644,6 +689,8 @@ const OrderContent = ({
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.offerPrice,
+                        startDate: order.offerStartDate,
+                        finishDate: order.offerFinishDate,
                         type: "owner",
                       })
                     )}
@@ -656,18 +703,20 @@ const OrderContent = ({
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.offerPrice,
+                        startDate: order.offerStartDate,
+                        finishDate: order.offerFinishDate,
                         type: "renter",
                       })
                     )}
                   </li>
                 )}
-                {checkErrorData(order.offerStartTime, order.offerFinishTime)
+                {checkErrorData(order.offerStartDate, order.offerFinishDate)
                   .blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
                       checkErrorData(
-                        order.offerStartTime,
-                        order.offerFinishTime
+                        order.offerStartDate,
+                        order.offerFinishDate
                       ).tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
@@ -701,8 +750,8 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
-                    startTime={prevUpdateRequest.startTime}
-                    finishTime={prevUpdateRequest.finishTime}
+                    startDate={prevUpdateRequest.startDate}
+                    finishDate={prevUpdateRequest.finishDate}
                   />
                 </li>
 
@@ -728,7 +777,12 @@ const OrderContent = ({
                 <li>
                   Total fee price:{" "}
                   {moneyFormatVisual(
-                    currentFeeCalculate(prevUpdateRequest.price, currentFee)
+                    currentFeeCalculate(
+                      prevUpdateRequest.price,
+                      prevUpdateRequest.startDate,
+                      prevUpdateRequest.finishDate,
+                      currentFee
+                    )
                   )}
                 </li>
 
@@ -743,6 +797,8 @@ const OrderContent = ({
                       {moneyFormatVisual(
                         localCalculateCurrentTotalPrice({
                           price: order.listingPrice,
+                          startDate: order.offerStartDate,
+                          finishDate: order.offerFinishDate,
                         })
                       )}
                     </li>
@@ -753,19 +809,21 @@ const OrderContent = ({
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: prevUpdateRequest.price,
+                      startDate: prevUpdateRequest.startDate,
+                      finishDate: prevUpdateRequest.finishDate,
                     })
                   )}
                 </li>
 
                 {checkErrorData(
-                  prevUpdateRequest.startTime,
-                  prevUpdateRequest.finishTime
+                  prevUpdateRequest.startDate,
+                  prevUpdateRequest.finishDate
                 ).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
                       checkErrorData(
-                        prevUpdateRequest.startTime,
-                        prevUpdateRequest.finishTime
+                        prevUpdateRequest.startDate,
+                        prevUpdateRequest.finishDate
                       ).tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
@@ -793,8 +851,8 @@ const OrderContent = ({
 
                 <li>
                   <CanBeErrorBaseDateSpan
-                    startTime={actualUpdateRequest.newStartTime}
-                    finishTime={actualUpdateRequest.newFinishTime}
+                    startDate={actualUpdateRequest.newStartDate}
+                    finishDate={actualUpdateRequest.newFinishDate}
                   />
                 </li>
 
@@ -821,6 +879,8 @@ const OrderContent = ({
                   {moneyFormatVisual(
                     currentFeeCalculate(
                       actualUpdateRequest.newPrice,
+                      actualUpdateRequest.newStartDate,
+                      actualUpdateRequest.newFinishDate,
                       currentFee
                     )
                   )}
@@ -837,6 +897,8 @@ const OrderContent = ({
                     {moneyFormatVisual(
                       localCalculateCurrentTotalPrice({
                         price: order.listingPrice,
+                        startDate: order.offerStartDate,
+                        finishDate: order.offerFinishDate,
                       })
                     )}
                   </li>
@@ -847,18 +909,22 @@ const OrderContent = ({
                   {moneyFormatVisual(
                     localCalculateCurrentTotalPrice({
                       price: actualUpdateRequest.newPrice,
+                      startDate: actualUpdateRequest.newStartDate,
+                      finishDate: actualUpdateRequest.newFinishDate,
                     })
                   )}
                 </li>
 
                 {checkErrorData(
-                  actualUpdateRequest.newStartTime,
-                  actualUpdateRequest.newFinishTime
+                  actualUpdateRequest.newStartDate,
+                  actualUpdateRequest.newFinishDate
                 ).blocked && (
                   <ErrorBlockMessage dopClassName="mb-0">
                     {
-                      checkErrorData(actualUpdateRequest.newStartTime, actualUpdateRequest.newFinishTime)
-                        .tooltipErrorMessage
+                      checkErrorData(
+                        actualUpdateRequest.newStartDate,
+                        actualUpdateRequest.newFinishDate
+                      ).tooltipErrorMessage
                     }
                   </ErrorBlockMessage>
                 )}

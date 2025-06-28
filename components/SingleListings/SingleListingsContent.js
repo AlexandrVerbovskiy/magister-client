@@ -31,9 +31,9 @@ const SingleListingsContent = ({
   const [mapCenter, setMapCenter] = useState(null);
   const [currentApprove, setCurrentApprove] = useState(false);
   const [currentApprovePrice, setCurrentApprovePrice] = useState(null);
-  const [currentApproveFinishTime, setCurrentApproveFinishTime] =
+  const [currentApproveFinishDate, setCurrentApproveFinishDate] =
     useState(null);
-  const [currentApproveStartTime, setCurrentApproveStartTime] = useState(null);
+  const [currentApproveStartDate, setCurrentApproveStartDate] = useState(null);
   const [listing, setListing] = useState(prevListing);
   const isMobile = useIsMobile();
 
@@ -52,10 +52,10 @@ const SingleListingsContent = ({
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
-  const handleBeforeSendRequest = ({ price, startTime, finishTime }) => {
+  const handleBeforeSendRequest = ({ price, startDate, finishDate }) => {
     setCurrentApprovePrice(price);
-    setCurrentApproveStartTime(startTime);
-    setCurrentApproveFinishTime(finishTime);
+    setCurrentApproveStartDate(startDate);
+    setCurrentApproveFinishDate(finishDate);
     setCurrentApprove(true);
     setCreateOrderModalActive(false);
   };
@@ -65,8 +65,8 @@ const SingleListingsContent = ({
       const id = await createOrder(
         {
           price: currentApprovePrice,
-          startTime: currentApproveStartTime,
-          finishTime: currentApproveFinishTime,
+          startDate: currentApproveStartDate,
+          finishDate: currentApproveFinishDate,
           listingId: listing.id,
           message: sendingMessage,
         },
@@ -630,12 +630,12 @@ const SingleListingsContent = ({
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}
               handleGoBack={() => setCurrentApprove(false)}
-              startTime={currentApproveStartTime}
-              finishTime={currentApproveFinishTime}
+              startDate={currentApproveStartDate}
+              finishDate={currentApproveFinishDate}
               price={currentApprovePrice}
               fee={renterBaseCommissionPercent}
-              setStartTime={setCurrentApproveStartTime}
-              setFinishTime={setCurrentApproveFinishTime}
+              setStartDate={setCurrentApproveStartDate}
+              setFinishDate={setCurrentApproveFinishDate}
             />
           )}
         </div>
@@ -645,8 +645,8 @@ const SingleListingsContent = ({
         <SendCompleteRequestModal
           handleSendRequest={handleBeforeSendRequest}
           price={listing.price}
-          startTime={listing.startTime}
-          finishTime={listing.finishTime}
+          startDate={listing.startDate}
+          finishDate={listing.finishDate}
           blockedDates={listing.blockedDates}
           fee={renterBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}

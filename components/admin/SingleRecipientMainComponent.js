@@ -10,6 +10,7 @@ import {
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
+  getPriceByDays,
 } from "../../utils";
 import Sidebar from "../../partials/admin/Sidebar";
 import Header from "../../partials/admin/Header";
@@ -34,7 +35,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
   };
 
   const totalPayed = renterPaysCalculate(
-    recipient.offerPrice,
+    getPriceByDays(recipient.offerPrice, recipient.offerStartDate, recipient.offerFinishDate),
     recipient.renterFee,
   );
 
@@ -184,7 +185,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
 
                             <div className="w-full sm:w-1/2">
                               <InputView
-                                value={recipient.offerEndDate}
+                                value={recipient.offerFinishDate}
                                 label="Offer End Date"
                                 name="offer-end-date"
                                 placeholder="Offer End Date"

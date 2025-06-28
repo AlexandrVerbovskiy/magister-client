@@ -9,6 +9,7 @@ import {
   getDisputeTitle,
   getFactOrderDays,
   getFilePath,
+  getPriceByDays,
 } from "../../../utils";
 
 const DownloadButton = ({ src }) => {
@@ -216,7 +217,11 @@ const orderMessageContent = ({
     type === STATIC.MESSAGE_TYPES.UPDATE_ORDER
   ) {
     const forOwnerPrice = autoCalculateCurrentTotalPrice({
-      price: content.offerPrice,
+      price: getPriceByDays(
+        content.offerPrice,
+        content.offerStartDate,
+        content.offerFinishDate
+      ),
       type: "owner",
       isOwner: true,
       ownerFee: order.ownerFee,
@@ -224,7 +229,11 @@ const orderMessageContent = ({
     });
 
     const forRenterPrice = autoCalculateCurrentTotalPrice({
-      price: content.offerPrice,
+      price: getPriceByDays(
+        content.offerPrice,
+        content.offerStartDate,
+        content.offerFinishDate
+      ),
       type: "renter",
       isOwner: false,
       ownerFee: order.ownerFee,
@@ -258,7 +267,7 @@ const orderMessageContent = ({
       STATIC.MESSAGE_TYPES.OWNER_PAYED_WAITING,
       STATIC.MESSAGE_TYPES.FINISHED,
       STATIC.MESSAGE_TYPES.ACCEPTED_CANCEL_REQUEST,
-      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE
+      STATIC.MESSAGE_TYPES.WAITING_FINISHED_APPROVE,
     ].includes(type)
   ) {
     let title = "Proposal accepted";

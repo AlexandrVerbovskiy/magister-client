@@ -16,8 +16,8 @@ const OrderInfoMessageContent = ({
   order,
   dispute,
   hasDescription = false,
-  finishTime,
-  startTime,
+  finishDate,
+  startDate,
 }) => {
   return (
     <div className={`flex flex-col items-center ${messageClassName}`}>
@@ -40,7 +40,7 @@ const OrderInfoMessageContent = ({
       </div>
 
       <div className="mb-1">
-        {startTime}-{finishTime}
+        {startDate}-{finishDate}
       </div>
 
       <div className="my-2">

@@ -25,8 +25,8 @@ const useBookingAgreementPanel = ({
   const handleCreateUpdateRequest = async ({
     order,
     price,
-    startTime,
-    finishTime,
+    startDate,
+    finishDate,
   }) => {
     if (disabled) {
       return;
@@ -40,8 +40,8 @@ const useBookingAgreementPanel = ({
         {
           orderId: order.id,
           newPrice: price,
-          newStartTime: startTime,
-          newFinishTime: finishTime,
+          newStartDate: startDate,
+          newFinishDate: finishDate,
         },
         authToken
       );
@@ -50,8 +50,8 @@ const useBookingAgreementPanel = ({
         onCreateUpdateRequest({
           orderId: order.id,
           price,
-          startTime,
-          finishTime,
+          startDate,
+          finishDate,
           ...result,
         });
       }
@@ -59,8 +59,8 @@ const useBookingAgreementPanel = ({
       return {
         orderId: order.id,
         price,
-        startTime,
-        finishTime,
+        startDate,
+        finishDate,
         ...result,
       };
     } catch (e) {
@@ -88,10 +88,10 @@ const useBookingAgreementPanel = ({
         setUpdatedOffer({
           id: result.id,
           status: result.status,
-          offerStartTime: result.startTime,
-          prevStartTime: result.prevStartTime,
-          offerFinishTime: result.finishTime,
-          prevFinishTime: result.prevFinishTime,
+          offerStartDate: result.startDate,
+          prevStartDate: result.prevStartDate,
+          offerFinishDate: result.finishDate,
+          prevFinishDate: result.prevFinishDate,
           offerPrice: result.price,
           prevPrice: result.prevPrice,
         });

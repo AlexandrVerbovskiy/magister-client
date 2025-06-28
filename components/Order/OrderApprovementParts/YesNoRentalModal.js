@@ -1,9 +1,13 @@
-import { fullDateConverter, moneyFormatVisual } from "../../../utils";
+import {
+  dateConverter,
+  fullDateConverter,
+  moneyFormatVisual,
+} from "../../../utils";
 import YesNoModal from "../../_App/YesNoModal";
 
 const YesNoRentalModal = ({
-  finishTime,
-  startTime,
+  finishDate,
+  startDate,
   price,
   listing,
   handleApprove,
@@ -11,9 +15,9 @@ const YesNoRentalModal = ({
   activeAcceptSendBookingRequest,
   setActiveAcceptSendBookingRequest,
 }) => {
-  let message = `Rent '${listing.name}' from ${fullDateConverter(
-    startTime
-  )} to ${fullDateConverter(finishTime)} and pay ${moneyFormatVisual(
+  let message = `Rent '${listing.name}' from ${dateConverter(
+    startDate
+  )} to ${dateConverter(finishDate)} and pay ${moneyFormatVisual(
     price
   )}, total amount of ${moneyFormatVisual(totalPrice)} (including fees).`;
 

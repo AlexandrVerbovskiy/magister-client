@@ -3,6 +3,7 @@ import YesNoModal from "../_App/YesNoModal";
 import { IndiceContext } from "../../contexts";
 import {
   calculateFullTotalByType,
+  getPriceByDays,
   moneyFormatVisual,
 } from "../../utils";
 
@@ -29,7 +30,11 @@ const CancelFastModal = ({ onCancel, modalActive, closeModal, order }) => {
   let message = "To confirm the cancellation of the order, click 'Confirm'";
   if (order) {
     const totalPayed = calculateFullTotalByType(
-      order.offerPrice,
+      getPriceByDays(
+        order.offerPrice,
+        order.offerStartDate,
+        order.offerFinishDate
+      ),
       order.renterFee,
       "sum"
     );

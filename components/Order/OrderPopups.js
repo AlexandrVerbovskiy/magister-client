@@ -3,7 +3,7 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import { autoCalculateCurrentTotalPrice } from "../../utils";
+import { autoCalculateCurrentTotalPrice, getPriceByDays } from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import YesNoModal from "../_App/YesNoModal";
@@ -69,15 +69,15 @@ const OrderPopups = ({
               ? actualUpdateRequest.newPrice
               : order.offerPrice
           }
-          proposalStartTime={
+          proposalStartDate={
             actualUpdateRequest
-              ? actualUpdateRequest.newStartTime
-              : order.offerStartTime
+              ? actualUpdateRequest.newStartDate
+              : order.offerStartDate
           }
-          proposalFinishTime={
+          proposalFinishDate={
             actualUpdateRequest
-              ? actualUpdateRequest.newFinishTime
-              : order.offerFinishTime
+              ? actualUpdateRequest.newFinishDate
+              : order.offerFinishDate
           }
           fee={currentFee}
           renterFee={order.renterFee}
@@ -153,7 +153,11 @@ const OrderPopups = ({
         closeModal={() => setPaypalModalActive(false)}
         amount={autoCalculateCurrentTotalPrice({
           isOwner: false,
-          price: order.offerPrice,
+          price: getPriceByDays(
+            order.offerPrice,
+            order.offerStartDate,
+            order.offerFinishDate
+          ),
           ownerFee: order.ownerFee,
           renterFee: order.renterFee,
           type: "renter",
@@ -162,6 +166,8 @@ const OrderPopups = ({
         listingName={order.listingName}
         onRenterPayed={onRenterPayed}
         price={order.offerPrice}
+        startDate={order.startDate}
+        finishDate={order.finishDate}
         offerFee={order.renterFee}
         authToken={authToken}
         bankInfo={bankInfo}

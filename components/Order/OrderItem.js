@@ -48,7 +48,7 @@ const OrderInfo = ({
             renterId={order.renterId}
             userId={sessionUser?.id}
             dopClass="bookings-status order-item-status"
-            endDate={order.offerEndDate}
+            finishDate={order.offerFinishDate}
             statusCancelled={order.cancelStatus}
             payedId={order.paymentInfo?.id}
             adminApproved={order.paymentInfo?.adminApproved}
@@ -76,11 +76,12 @@ const OrderInfo = ({
             <i className="bx bx-purchase-tag"></i>
             <span>Duration: </span>
             <span>
-              {fullDateConverter(
-                order.requestId ? order.newStartTime : order.offerStartTime
-              )} - 
-              {fullDateConverter(
-                order.requestId ? order.newFinishTime : order.offerFinishTime
+              {dateConverter(
+                order.requestId ? order.newStartDate : order.offerStartDate
+              )}{" "}
+              -
+              {dateConverter(
+                order.requestId ? order.newFinishDate : order.offerFinishDate
               )}
             </span>
           </li>
@@ -90,7 +91,7 @@ const OrderInfo = ({
             <span>Payment: </span>
             <span className="row-dots-end">
               {[
-                STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT,
+                STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT,
                 STATIC.ORDER_STATUSES.IN_PROCESS,
                 STATIC.ORDER_STATUSES.PENDING_OWNER_FINISHED,
                 STATIC.ORDER_STATUSES.FINISHED,

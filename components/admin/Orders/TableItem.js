@@ -27,7 +27,7 @@ const TableItem = (props) => {
     status,
     cancelStatus,
     offerStartDate,
-    offerEndDate,
+    offerFinishDate,
     offerPrice,
     listingAddress,
     listingCategoryName = null,
@@ -59,7 +59,7 @@ const TableItem = (props) => {
           <TableDateView date={offerStartDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <TableDateView date={offerEndDate} />
+          <TableDateView date={offerFinishDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
           <div className="font-medium text-green-600">

@@ -2,12 +2,12 @@ import { initAxios } from "../utils";
 const { get, post, getPdfByPath } = initAxios("/orders");
 
 export const createOrder = async (
-  { price, startTime, finishTime, listingId, message },
+  { price, startDate, finishDate, listingId, message },
   authToken
 ) => {
   const data = await post(
     `/create`,
-    { price, startTime, finishTime, listingId, message },
+    { price, startDate, finishDate, listingId, message },
     authToken
   );
   return data.body.id;

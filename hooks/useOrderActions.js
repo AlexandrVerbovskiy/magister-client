@@ -48,12 +48,12 @@ const useOrderActions = ({ order }) => {
     ) {
       if (
         checkErrorData(
-          order.actualUpdateRequest?.newStartTime ??
-            order.newStartTime ??
-            order.offerStartTime,
-          order.actualUpdateRequest?.newFinishTime ??
-            order.newFinishTime ??
-            order.offerFinishTime
+          order.actualUpdateRequest?.newStartDate ??
+            order.newStartDate ??
+            order.offerStartDate,
+          order.actualUpdateRequest?.newFinishDate ??
+            order.newFinishDate ??
+            order.offerFinishDate
         ).blocked
       ) {
         newActionButtons.push(
@@ -67,8 +67,8 @@ const useOrderActions = ({ order }) => {
     }
 
     if (
-      order.status == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT &&
-      isOwner
+      order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT &&
+      isRenter
     ) {
       if (order.paymentInfo) {
         if (
@@ -86,7 +86,7 @@ const useOrderActions = ({ order }) => {
       !order.paymentInfo?.waitingApproved &&
       ((isOwner && order.status === STATIC.ORDER_STATUSES.PENDING_RENTER) ||
         (isRenter && order.status === STATIC.ORDER_STATUSES.PENDING_OWNER) ||
-        STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT == order.status)
+        STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT == order.status)
     ) {
       newActionButtons.push(STATIC.ORDER_ACTION_BUTTONS.CANCEL_BUTTON);
     }

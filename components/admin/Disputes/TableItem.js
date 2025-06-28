@@ -28,7 +28,7 @@ const TableItem = ({
   id,
   images,
   offerStartDate,
-  offerEndDate,
+  offerFinishDate,
   createdAt,
   status,
   type,
@@ -80,7 +80,7 @@ const TableItem = ({
           <TableDateView date={offerStartDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-          <TableDateView date={offerEndDate} />
+          <TableDateView date={offerFinishDate} />
         </td>
         <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
           <TableDateView date={createdAt} />

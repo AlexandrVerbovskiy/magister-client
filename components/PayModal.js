@@ -1,6 +1,11 @@
 import { useState } from "react";
 import BaseModal from "./_App/BaseModal";
-import { moneyFormatVisual, renterPaysCalculate } from "../utils";
+import {
+  getFactOrderDays,
+  getPriceByDays,
+  moneyFormatVisual,
+  renterPaysCalculate,
+} from "../utils";
 import PaymentSection from "./_App/PaymentSection";
 
 const PayModal = ({
@@ -9,6 +14,8 @@ const PayModal = ({
   listingName,
   onRenterPayed = null,
   price,
+  startDate,
+  finishDate,
   offerFee,
   modalActive,
   closeModal,
@@ -27,7 +34,10 @@ const PayModal = ({
     }, 100);
   };
 
-  const total = renterPaysCalculate(price, offerFee);
+  const total = renterPaysCalculate(
+    getPriceByDays(price, startDate, finishDate),
+    offerFee
+  );
 
   const handleClose = () => {
     if (disabled) {
@@ -51,7 +61,10 @@ const PayModal = ({
               <span>Renter payment</span>
             </span>
             <div className="form-group">Listing: {listingName}</div>
-            <div className="form-group">Price: {moneyFormatVisual(price)}</div>
+            <div className="form-group">
+              Price: {getFactOrderDays(startDate, finishDate)} x{" "}
+              {moneyFormatVisual(price)}
+            </div>
             <div className="form-group">Fee: {offerFee}% </div>
             <div className="form-group">
               <b>Total to pay: {moneyFormatVisual(total)}</b>

@@ -88,19 +88,19 @@ export const getDateByCurrentReject = (daysToReject = 0) => {
   return date;
 };
 
-export const getDaysDifference = (startDate, endDate) => {
-  if (!startDate || !endDate) {
+export const getDaysDifference = (startDate, finishDate) => {
+  if (!startDate || !finishDate) {
     return 0;
   }
 
   const start = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
+  const end = new Date(finishDate).getTime();
   const difference = Math.abs(end - start);
   return Math.ceil(difference / (1000 * 3600 * 24));
 };
 
-export const getFactOrderDays = (startDate, endDate) => {
-  return getDaysDifference(startDate, endDate) + 1;
+export const getFactOrderDays = (startDate, finishDate) => {
+  return getDaysDifference(startDate, finishDate) + 1;
 };
 
 export const groupDates = (dates) => {
@@ -149,11 +149,11 @@ export const separateDate = (date) => {
 export const generateDatesBetween = (start, end) => {
   const datesObj = {};
   const startDate = new Date(start);
-  const endDate = new Date(end);
+  const finishDate = new Date(end);
 
   let currentDate = startDate;
 
-  while (currentDate <= endDate) {
+  while (currentDate <= finishDate) {
     const formattedDate = separateDate(currentDate);
     datesObj[formattedDate] = true;
     currentDate.setDate(currentDate.getDate() + 1);
@@ -163,8 +163,8 @@ export const generateDatesBetween = (start, end) => {
 };
 
 export const checkStringDateLowerOrEqualCurrentDate = (date) => {
-  const currentDate = separateDate(new Date());
-  return date < currentDate;
+  const currentDate = new Date(dateConverter(new Date()));
+  return new Date(dateConverter(date)) < currentDate;
 };
 
 export const increaseDateByOneDay = (dateString) => {
