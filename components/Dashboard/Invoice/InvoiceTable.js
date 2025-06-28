@@ -5,6 +5,7 @@ import {
   dateConverter,
   moneyFormatVisual,
   renterPaysFeeCalculate,
+  getPriceByDays,
 } from "../../../utils";
 import Link from "next/link";
 import { generateSenderInvoicePdf } from "../../../services/senderPaymentRequests";
@@ -48,7 +49,7 @@ const InvoiceTable = ({
   const { authToken, error } = useContext(IndiceContext);
   const [disabled, setDisabled] = useState(false);
 
-  const subTotalPrice = offer.price;
+  const subTotalPrice = getPriceByDays(offer.price);
   const totalFee = renterPaysFeeCalculate(subTotalPrice, offer.fee);
 
   const handlePdfDownload = async () => {
@@ -73,7 +74,10 @@ const InvoiceTable = ({
     </a>
   );
 
-  const totalPayed = renterPaysCalculate(offer.price, offer.fee);
+  const totalPayed = renterPaysCalculate(
+    getPriceByDays(offer.price, offer.startDate, offerFinishDate),
+    offer.fee
+  );
 
   return (
     <>

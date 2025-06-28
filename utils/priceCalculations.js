@@ -1,6 +1,10 @@
 import STATIC from "../static";
+import { getFactOrderDays } from "./dateHelpers";
 
 export const moneyFormat = (money) => +money.toFixed(2);
+
+export const getPriceByDays = (pricePerDay, startDate, finishDate) =>
+  getFactOrderDays(startDate, finishDate) * pricePerDay;
 
 const paymentFeeCalculate = (price, fee) => {
   const resPayment = (fee * price) / 100;
@@ -96,11 +100,11 @@ export const autoCalculateCurrentTotalPrice = ({
 };
 
 export const renterPaysCalculate = (price, fee) => {
-  const result = price - renterPaysFeeCalculate(price, fee);
+  const result = price + renterPaysFeeCalculate(price, fee);
   return moneyFormat(result);
 };
 
 export const ownerEarnCalculate = (price, fee) => {
-  const result = price + ownerEarnFeeCalculate(price, fee);
+  const result = price - ownerEarnFeeCalculate(price, fee);
   return moneyFormat(result);
 };

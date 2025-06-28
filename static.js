@@ -6,7 +6,7 @@ const config = {
   ORDER_STATUSES: {
     PENDING_OWNER: "pending_owner",
     PENDING_RENTER: "pending_renter",
-    PENDING_OWNER_PAYMENT: "pending_owner_payment",
+    PENDING_RENTER_PAYMENT: "pending_renter_payment",
     IN_PROCESS: "in_process",
     PENDING_OWNER_FINISHED: "pending_owner_finished",
     FINISHED: "finished",

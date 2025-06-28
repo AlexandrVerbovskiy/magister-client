@@ -9,6 +9,7 @@ import {
   autoCalculateCurrentTotalPrice,
   dateName,
   getFactOrderDays,
+  getPriceByDays,
 } from "../../utils";
 import STATIC from "../../static";
 import DisputeModal from "../Order/DisputeModal";
@@ -47,25 +48,29 @@ const OrderChatBody = ({
     const offerStartDate = actualUpdateRequest
       ? actualUpdateRequest.newStartDate
       : order.offerStartDate;
-    const offerEndDate = actualUpdateRequest
-      ? actualUpdateRequest.newEndDate
-      : order.offerEndDate;
+    const offerFinishDate = actualUpdateRequest
+      ? actualUpdateRequest.newFinishDate
+      : order.offerFinishDate;
 
     const totalPrice = autoCalculateCurrentTotalPrice({
       isOwner,
-      price: order.offerPrice,
+      price: getPriceByDays(
+        order.offerPrice,
+        order.offerStartDate,
+        order.offerFinishDate
+      ),
       ownerFee: order.ownerFee,
       renterFee: order.renterFee,
     });
 
     const updatedFields = {
-      offerPrice,
-      offerStartDate,
-      offerEndDate,
-      duration: getFactOrderDays(offerStartDate, offerEndDate),
+      offerPrice: order.offerPrice,
+      offerStartDate: order.offerStartDate,
+      offerFinishDate: order.offerFinishDate,
+      duration: getFactOrderDays(offerStartDate, offerFinishDate),
       factTotalPrice: totalPrice,
       requestId: null,
-      newEndDate: null,
+      newFinishDate: null,
       newStartDate: null,
     };
 
@@ -94,7 +99,7 @@ const OrderChatBody = ({
         ...request,
         senderId: sessionUser?.id,
         newStartDate: fromDate,
-        newEndDate: toDate,
+        newFinishDate: toDate,
         newPrice: price,
       },
     };
@@ -147,7 +152,8 @@ const OrderChatBody = ({
     windowProps.scrollBodyBottom();
   };
 
-  const onFinishOrder = ({ chatMessage, status }) => {
+  const onFinishOrder = (data) => {
+    const { chatMessage, status } = data;
     updateOrder({ status });
     actions.appendMessage(chatMessage);
     windowProps.scrollBodyBottom();
@@ -185,7 +191,7 @@ const OrderChatBody = ({
     onPayedFastCancel,
     onDisputeOpened,
     onAcceptFinishOrder,
-    onFinishOrder
+    onFinishOrder,
   });
 
   /*  activeDisputeWindow,

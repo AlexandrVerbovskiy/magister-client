@@ -8,7 +8,7 @@ const StatusBlock = ({
   ownerId,
   renterId,
   userId,
-  endDate,
+  finishDate,
   payedId,
   dopClass = "",
   adminApproved,
@@ -30,7 +30,7 @@ const StatusBlock = ({
     text = "Waiting for Confirmation";
   }
 
-  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT) {
+  if (orderStatus == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT) {
     color = "status-background-green";
     text = "Waiting for Payment";
 
