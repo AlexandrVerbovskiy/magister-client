@@ -208,7 +208,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setActivePay(false);
   };
 
-  const onCreateUpdateRequest = ({ orderId, price, startTime, finishTime }) => {
+  const onCreateUpdateRequest = ({ orderId, price, startDate, finishDate }) => {
     let status = null;
     const updatedOrder = findCurrentOrderById(orderId);
 
@@ -221,8 +221,8 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     setItemFields(
       {
         newPrice: price,
-        newStartTime: startTime,
-        newFinishTime: finishTime,
+        newStartDate: startDate,
+        newFinishDate: finishDate,
         status,
       },
       orderId
@@ -236,7 +236,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
     return {
       offerPrice,
       requestId: null,
-      newEndDate: null,
+      newFinishDate: null,
       newStartDate: null,
     };
   };

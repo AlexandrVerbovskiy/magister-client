@@ -1,17 +1,18 @@
 import {
   dateConverter,
   fullDateConverter,
+  getFactOrderDays,
+  getPriceByDays,
   moneyFormatVisual,
+  renterPaysCalculate,
+  renterPaysFeeCalculate,
 } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 
-const ContractDetails = ({
-  totalPrice,
-  dateError,
-  finishTime,
-  startTime,
-  totalFee,
-}) => {
+const ContractDetails = ({ price, dateError, finishDate, startDate, fee }) => {
+  const clearPrice = getPriceByDays(price, startDate, finishDate);
+  const totalPrice = renterPaysCalculate(clearPrice, fee);
+
   return (
     <div className="listings-widget listings_contact_details">
       <h3>Rental Details</h3>
@@ -43,7 +44,7 @@ const ContractDetails = ({
         >
           <div>Duration</div>
           <div>
-            {dateConverter(startTime)} - {dateConverter(finishTime)}
+            {dateConverter(startDate)} - {dateConverter(finishDate)}
           </div>
         </div>
 
@@ -52,7 +53,10 @@ const ContractDetails = ({
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>Price</div>
-          <div>{moneyFormatVisual(totalFee)}</div>
+          <div>
+            {getFactOrderDays(startDate, finishDate)} x{" "}
+            {moneyFormatVisual(clearPrice)}
+          </div>
         </div>
 
         <div
@@ -60,7 +64,9 @@ const ContractDetails = ({
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
           <div>Service Fee</div>
-          <div>{moneyFormatVisual(totalFee)}</div>
+          <div>
+            {moneyFormatVisual(renterPaysFeeCalculate(clearPrice, fee))}
+          </div>
         </div>
       </div>
 

@@ -184,8 +184,8 @@ const SendCompleteRequestModal = ({
     } else {
       handleSendRequest({
         price,
-        startTime: separateDate(fromDate),
-        finishTime: separateDate(toDate),
+        startDate: separateDate(fromDate),
+        finishDate: separateDate(toDate),
         feeActive: false,
         sendingMessage: sendingMessage.trim(),
       });
@@ -201,8 +201,8 @@ const SendCompleteRequestModal = ({
 
     handleSendRequest({
       price,
-      startTime: separateDate(fromDate),
-      finishTime: separateDate(toDate),
+      startDate: separateDate(fromDate),
+      finishDate: separateDate(toDate),
       feeActive: false,
       sendingMessage: sendingMessage.trim(),
     });

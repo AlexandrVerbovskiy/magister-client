@@ -3,15 +3,14 @@ import BaseModal from "../_App/BaseModal";
 import flatpickr from "flatpickr";
 import {
   calculateFullTotalByType,
-  fullDateConverter,
   getMaxFlatpickrDate,
   moneyFormat,
   moneyFormatVisual,
-  ownerEarnCalculate,
   ownerEarnFeeCalculate,
   separateDate,
   renterPaysFeeCalculate,
-  renterPaysCalculate,
+  getPriceByDays,
+  dateConverter,
 } from "../../utils";
 import OfferOwnPrice from "../SingleListings/OfferOwnPrice";
 import YesNoModal from "../_App/YesNoModal";
@@ -22,8 +21,8 @@ const CreateUpdateOrderRequestModal = ({
   price: defaultPrice,
   fee,
   proposalPrice,
-  proposalFinishTime,
-  proposalStartTime,
+  proposalFinishDate,
+  proposalStartDate,
   updateRequestModalActive,
   closeActiveUpdateRequest,
   minRentalDays,
@@ -31,8 +30,8 @@ const CreateUpdateOrderRequestModal = ({
   blockedDates,
   commissionType,
 }) => {
-  const baseStartTime = new Date();
-  const baseFinishTime = new Date();
+  const baseStartDate = new Date();
+  const baseFinishDate = new Date();
 
   const { error } = useContext(IndiceContext);
 
@@ -50,23 +49,22 @@ const CreateUpdateOrderRequestModal = ({
     setPrice(defaultPrice);
   }, [defaultPrice]);
 
-  const [finishTime, setFinishTime] = useState(baseFinishTime);
-  const [startTime, setStartTime] = useState(baseStartTime);
+  const [finishDate, setFinishDate] = useState(baseFinishDate);
+  const [startDate, setStartDate] = useState(baseStartDate);
 
-  const [totalPrice, setTotalPrice] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
   const [fullTotal, setFullTotal] = useState(0);
 
-  const recalculateTotalInfo = ({ price, fee }) => {
+  const recalculateTotalInfo = ({ startDate, finishDate, price, fee }) => {
+    const clearPrice = getPriceByDays(price, finishDate, startDate);
+
     if (commissionType == "sum") {
-      setTotalPrice(renterPaysCalculate(price, fee));
-      setTotalFee(renterPaysFeeCalculate(price, fee));
+      setTotalFee(renterPaysFeeCalculate(clearPrice, fee));
     } else {
-      setTotalPrice(ownerEarnCalculate(price, fee));
-      setTotalFee(ownerEarnFeeCalculate(price, fee));
+      setTotalFee(ownerEarnFeeCalculate(clearPrice, fee));
     }
 
-    setFullTotal(calculateFullTotalByType(price, fee, commissionType));
+    setFullTotal(calculateFullTotalByType(clearPrice, fee, commissionType));
   };
 
   const handleChangeDates = (dates) => {
@@ -79,11 +77,9 @@ const CreateUpdateOrderRequestModal = ({
     }
 
     if (from && to) {
-      setFinishTime(fromTime);
-      setStartTime(toTime);
+      setFinishDate(fromTime);
+      setStartDate(toTime);
     }
-
-    setCalendarError(null);
   };
 
   useEffect(() => {
@@ -113,14 +109,14 @@ const CreateUpdateOrderRequestModal = ({
   useEffect(() => {
     const calendar = flatpickr(calendarContainer.current, {
       inline: true,
-      mode: "single",
-      dateFormat: "M j, Y H:i",
+      mode: "range",
+      dateFormat: "M j, Y",
       minDate: "today",
       maxDate: getMaxFlatpickrDate(),
       static: true,
-      defaultDate: [finishTime, startTime],
-      enableTime: true,
-      time_24hr: true,
+      defaultDate: [finishDate, startDate],
+      enableTime: false,
+      time_24hr: false,
       monthSelectorType: "static",
       disable: groupDates(blockedDates),
       onReady: (selectedDates, dateStr, instance) => {
@@ -138,15 +134,17 @@ const CreateUpdateOrderRequestModal = ({
     const prevCalendar = flatpickr(prevCalendarContainer.current, {
       inline: true,
       mode: "range",
-      dateFormat: "M j, Y H:i",
-      defaultDate: [new Date(proposalStartTime), new Date(proposalFinishTime)],
+      dateFormat: "M j, Y",
+      minDate: "today",
+      maxDate: getMaxFlatpickrDate(),
+      static: true,
+      defaultDate: [new Date(proposalStartDate), new Date(proposalFinishDate)],
       monthSelectorType: "static",
       onChange: (selectedDates, dateStr, instance) => {
-        instance.setDate(`${proposalStartTime} to ${proposalFinishTime}`);
+        instance.setDate(`${proposalStartDate} to ${proposalFinishDate}`);
       },
-
-      enableTime: true,
-      time_24hr: true,
+      enableTime: false,
+      time_24hr: false,
     });
 
     prevCalendarRef.current = prevCalendar;
@@ -160,14 +158,16 @@ const CreateUpdateOrderRequestModal = ({
         prevCalendar.destroy();
       }
     };
-  }, [finishTime, startTime, proposalFinishTime, proposalStartTime]);
+  }, [finishDate, startDate, proposalFinishDate, proposalStartDate]);
 
   useEffect(() => {
     recalculateTotalInfo({
       price,
+      finishDate,
+      startDate,
       fee,
     });
-  }, [price, fee]);
+  }, [finishDate, startDate, price, fee]);
 
   const handleSubmit = () => {
     let hasError = false;
@@ -190,8 +190,8 @@ const CreateUpdateOrderRequestModal = ({
 
     if (
       proposalPrice == price &&
-      proposalFinishTime == separateDate(finishTime) &&
-      proposalStartTime == separateDate(startTime)
+      proposalFinishDate == separateDate(finishDate) &&
+      proposalStartDate == separateDate(startDate)
     ) {
       error.set(
         "You cannot submit these changes as they are the same as proposed"
@@ -209,8 +209,8 @@ const CreateUpdateOrderRequestModal = ({
   const handleSendBookingRequest = () => {
     handleCreateUpdateRequest({
       price: price,
-      finishTime: separateDate(finishTime),
-      startTime: separateDate(startTime),
+      finishDate: separateDate(finishDate),
+      startDate: separateDate(startDate),
     });
 
     setActiveAcceptSendBookingRequest(false);
@@ -277,19 +277,19 @@ const CreateUpdateOrderRequestModal = ({
               title="Please confirm new booking conditions"
               onAccept={handleSendBookingRequest}
               acceptText="Confirm"
-              body={`Rental '${listingName}' period will be from ${fullDateConverter(
-                proposalStartTime
-              )} to ${fullDateConverter(
-                proposalFinishTime
-              )} by ${moneyFormatVisual(fullTotal)}`}
+              body={`Rental '${listingName}' period will be from ${dateConverter(
+                proposalStartDate
+              )} to ${dateConverter(proposalFinishDate)} by ${moneyFormatVisual(
+                fullTotal
+              )}`}
             />
           </div>
         </div>
         <div className="border-top d-flex justify-content-between">
           <div className="d-flex flex-column mt-4 ">
             <div>
-              <b>Duration:</b> {fullDateConverter(startTime)} -{" "}
-              {fullDateConverter(finishTime)}
+              <b>Duration:</b> {dateConverter(startDate)} -{" "}
+              {dateConverter(finishDate)}
             </div>
 
             <div>

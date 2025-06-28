@@ -53,7 +53,9 @@ const Invoice = (baseProps) => {
           offer={{
             fee: payment.renterFee,
             listingName: payment.listingName,
-            price: payment.orderOfferPrice,
+            price: payment.offerPrice,
+            startDate: payment.offerStartDate,
+            finishDate: payment.offerFinishDate,
           }}
           waitingApproved={payment.waitingApproved}
           adminApproved={payment.adminApproved}
@@ -61,7 +63,7 @@ const Invoice = (baseProps) => {
           canUpdate={
             !payment.disputeStatus &&
             !payment.orderCancelStatus &&
-            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_OWNER_PAYMENT
+            payment.orderStatus == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT
           }
         />
       </div>

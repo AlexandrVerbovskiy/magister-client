@@ -8,6 +8,7 @@ import {
   getPaymentNameByType,
   isPayedUsedPaypal,
   recipientStatuses,
+  getPriceByDays,
 } from "../../../utils";
 import STATIC from "../../../static";
 
@@ -53,7 +54,7 @@ const EarningTable = ({
   type,
   data,
   offerStartDate,
-  offerEndDate,
+  offerFinishDate,
   offerPrice,
   renterFee,
   ownerFee,
@@ -131,7 +132,7 @@ const EarningTable = ({
             <InputView
               label="Offer End Date"
               placeholder="Offer End Date"
-              value={dateConverter(offerEndDate)}
+              value={dateConverter(offerFinishDate)}
               icon="bx bx-calendar"
             />
           </div>
@@ -164,7 +165,10 @@ const EarningTable = ({
                 label="Total Paid"
                 placeholder="Total Paid"
                 icon="bx bx-dollar-circle"
-                value={`${renterPaysCalculate(offerPrice, renterFee)}`}
+                value={`${renterPaysCalculate(
+                  getPriceByDays(offerPrice, offerStartDate, offerFinishDate),
+                  renterFee
+                )}`}
               />
             </div>
           </div>
@@ -184,7 +188,10 @@ const EarningTable = ({
                 label="Total Get"
                 placeholder="Total Get"
                 icon="bx bx-dollar-circle"
-                value={`${ownerEarnCalculate(offerPrice, ownerFee)}`}
+                value={`${ownerEarnCalculate(
+                  getPriceByDays(offerPrice, offerStartDate, offerFinishDate),
+                  ownerFee
+                )}`}
               />
             </div>
           </div>

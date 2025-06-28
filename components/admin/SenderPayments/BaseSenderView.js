@@ -13,6 +13,7 @@ import {
   dateConverter,
   isPayedUsedPaypal,
   renterPaysFeeCalculate,
+  getPriceByDays,
 } from "../../../utils";
 import InputView from "../Form/InputView";
 import { IndiceContext } from "../../../contexts";
@@ -41,7 +42,11 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
   const subtotalPrice = payment.offerPrice;
 
   const totalFee = renterPaysFeeCalculate(
-    payment.offerPrice,
+    getPriceByDays(
+      payment.offerPrice,
+      payment.offerStartDate,
+      payment.offerFinishDate
+    ),
     payment.renterFee
   );
 
@@ -177,7 +182,7 @@ const BaseSenderView = ({ parentType = "senders", payment }) => {
 
                             <div className="w-1/2">
                               <InputView
-                                value={dateConverter(payment.offerEndDate)}
+                                value={dateConverter(payment.offerFinishDate)}
                                 label="Offer End Name"
                                 placeholder="Offer End Name"
                                 name="offer-end-date"
