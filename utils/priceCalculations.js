@@ -43,7 +43,7 @@ export const calculateFullTotalByDaysCount = (
   return moneyFormat(total);
 };
 
-export const renterGetsFeeCalculate = (price, fee) => {
+export const renterPaysFeeCalculate = (price, fee) => {
   const result = paymentFeeCalculate(price, fee);
 
   if (result < STATIC.LIMITS.MIN_RENTER_COMMISSION) {
@@ -53,7 +53,7 @@ export const renterGetsFeeCalculate = (price, fee) => {
   return result;
 };
 
-export const ownerPaymentFeeCalculate = (price, fee) => {
+export const ownerEarnFeeCalculate = (price, fee) => {
   const result = paymentFeeCalculate(price, fee);
 
   if (result < STATIC.LIMITS.MIN_OWNER_COMMISSION) {
@@ -67,11 +67,11 @@ export const calculateFullTotalByType = (price, fee, type = "sum") => {
   let total;
 
   if (type == "sum") {
-    total = renterGetsCalculate(price, fee);
+    total = renterPaysCalculate(price, fee);
   }
 
   if (type == "reject") {
-    total = ownerPaymentCalculate(price, fee);
+    total = ownerEarnCalculate(price, fee);
   }
 
   return total;
@@ -90,17 +90,17 @@ export const autoCalculateCurrentTotalPrice = ({
 
   const fee = type == "owner" ? ownerFee : renterFee;
   const calculationFunc =
-    type == "owner" ? ownerPaymentCalculate : renterGetsCalculate;
+    type == "owner" ? ownerEarnCalculate : renterPaysCalculate;
 
   return calculationFunc(price, fee);
 };
 
-export const renterGetsCalculate = (price, fee) => {
-  const result = price - renterGetsFeeCalculate(price, fee);
+export const renterPaysCalculate = (price, fee) => {
+  const result = price - renterPaysFeeCalculate(price, fee);
   return moneyFormat(result);
 };
 
-export const ownerPaymentCalculate = (price, fee) => {
-  const result = price + ownerPaymentFeeCalculate(price, fee);
+export const ownerEarnCalculate = (price, fee) => {
+  const result = price + ownerEarnFeeCalculate(price, fee);
   return moneyFormat(result);
 };

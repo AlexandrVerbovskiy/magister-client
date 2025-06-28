@@ -1,25 +1,6 @@
-import Link from "next/link";
-import React from "react";
 import { useListingListClick } from "../../hooks";
 
-const YourBusiness = () => {
-  /*const items = [
-    {
-      id: 1,
-      title: `Unlock value. Start earning.`,
-      image: "/images/home/icons-value.png",
-    },
-    {
-      id: 2,
-      title: `Reduce waste. Live sustainably.`,
-      image: "/images/home/icons-sustainability.png",
-    },
-    {
-      id: 3,
-      title: `Open access. Access on demand.`,
-      image: "/images/home/icons-how_it_works-2_contact.png",
-    },
-  ];*/
+const YourBusiness = ({ bgColor = "" }) => {
   const { handleClick: handleStartEarningClick } = useListingListClick({
     link: "/dashboard/listings/add",
   });
@@ -44,8 +25,14 @@ const YourBusiness = () => {
 
   return (
     <>
-      <section className="features-area ptb-100">
+      <section className={`features-area ptb-70 ${bgColor}`}>
         <div className="container">
+          <div className="section-title">
+            <h2>
+              Your <span>Business</span>
+            </h2>
+          </div>
+
           <div className="row justify-content-center">
             {items.map((item) => (
               <div key={item.id} className="col-lg-4 col-md-6 col-sm-6 d-flex">
@@ -69,8 +56,6 @@ const YourBusiness = () => {
             </button>
           </div>
         </div>
-
-        <div className="divider"></div>
       </section>
     </>
   );

@@ -4,7 +4,7 @@ import { getFilePath } from "../../utils";
 const Category = ({ bgColor = "", topCategories }) => {
   return (
     <>
-      <section className={`category-area pb-70 ${bgColor}`}>
+      <section className={`category-area ptb-100 ${bgColor} position-relative`}>
         <div className="container">
           <div className="section-title">
             <h2>
@@ -47,6 +47,8 @@ const Category = ({ bgColor = "", topCategories }) => {
             ))}
           </div>
         </div>
+
+        <div className="divider"></div>
       </section>
     </>
   );

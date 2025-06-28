@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   moneyFormat,
-  renterGetsCalculate,
+  renterPaysCalculate,
   dateConverter,
   getPaymentNameByType,
   isPayedUsedPaypal,
@@ -33,7 +33,7 @@ const SingleRecipientMainComponent = ({ recipient, refundCommission }) => {
     router.push("/admin/payments/recipients/");
   };
 
-  const totalPayed = renterGetsCalculate(
+  const totalPayed = renterPaysCalculate(
     recipient.offerPrice,
     recipient.renterFee,
   );

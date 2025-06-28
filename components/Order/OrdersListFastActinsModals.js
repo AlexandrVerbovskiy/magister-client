@@ -5,7 +5,7 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { renterGetsCalculate } from "../../utils";
+import { renterPaysCalculate } from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import YesNoModal from "../_App/YesNoModal";
@@ -102,7 +102,7 @@ const OrdersListFastActinsModals = ({
 
   useEffect(() => {
     const newAmount = activePayOrder
-      ? renterGetsCalculate(activePayOrder.offerPrice, activePayOrder.renterFee)
+      ? renterPaysCalculate(activePayOrder.offerPrice, activePayOrder.renterFee)
       : 0;
     setPayAmount(newAmount);
     setPayOrderId(activePayOrder?.id ?? null);
