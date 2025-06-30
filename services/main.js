@@ -1,5 +1,5 @@
 import { initAxios } from "../utils";
-const { get, post, generateFullUrl } = initAxios("/main");
+const { get, post } = initAxios("/main");
 
 export const getIndexOptions = async (authToken = null) => {
   const data = await get(`/index-options`, authToken);
@@ -82,18 +82,6 @@ export const getAdminUserListPageOptions = async (params, authToken) => {
 
 export const getAdminLogListPageOptions = async (params, authToken) => {
   const data = await post(`/admin-log-list-options`, params, authToken);
-  return data.body;
-};
-
-export const getAdminDisputePredictionModelListPageOptions = async (
-  params,
-  authToken
-) => {
-  const data = await post(
-    `/admin-dispute-prediction-model-list-options`,
-    params,
-    authToken
-  );
   return data.body;
 };
 
@@ -356,23 +344,5 @@ export const getOrderCheckoutInfo = async (id, authToken) => {
 
 export const getTableRelations = async (authToken) => {
   const data = await get(`/get-table-relations`, authToken);
-  return data.body;
-};
-
-export const getDisputePredictionModelDetails = async (id, authToken) => {
-  const data = await get(
-    `/get-dispute-prediction-model-details/${id}`,
-    authToken
-  );
-  return data.body;
-};
-
-export const getModelQuery = async (params) => {
-  const data = await post(`/build-more-query`, { params }, authToken);
-  return data.body;
-};
-
-export const checkModelQuery = async (params) => {
-  const data = await post(`/check-more-query`, { params }, authToken);
   return data.body;
 };

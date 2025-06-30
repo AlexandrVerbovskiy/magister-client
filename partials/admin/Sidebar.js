@@ -29,7 +29,11 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   useEffect(() => {
     if (sidebarOpen) {
       const clickHandler = ({ target }) => {
-        if (!sidebar.current || !sidebarOpen || sidebar.current.contains(target)) {
+        if (
+          !sidebar.current ||
+          !sidebarOpen ||
+          sidebar.current.contains(target)
+        ) {
           return;
         }
 
@@ -89,11 +93,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             aria-expanded={sidebarOpen}
           >
             <span className="sr-only">Close sidebar</span>
-            <img
-              src="/images/logo.svg"
-              className="logo-image"
-              alt="logo"
-            />
+            <img src="/images/logo.svg" className="logo-image" alt="logo" />
           </Link>
           {/* Logo */}
           <Link href="/" className="hidden lg:block w-full">
@@ -509,6 +509,32 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           }`}
                         ></path>
                       </g>
+                    </svg>
+                  )}
+                />
+              )}
+
+              {isAdmin && (
+                <SidebarTypicalLink
+                  title="Dispute Prediction"
+                  link="dispute-prediction"
+                  SVG={({ current }) => (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      height="24"
+                      width="24"
+                      viewBox="0 0 24 24"
+                      className={`stroke-current ${
+                        current ? "text-teal-500" : "text-slate-50"
+                      }`}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12h6m2 0a2 2 0 100-4 2 2 0 000 4zm-10 0a2 2 0 100-4 2 2 0 000 4zm4-10v2m0 12v2m10-10h-2m-12 0H2"
+                      />
                     </svg>
                   )}
                 />
