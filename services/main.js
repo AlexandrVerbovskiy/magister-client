@@ -341,3 +341,8 @@ export const getOrderCheckoutInfo = async (id, authToken) => {
   const data = await get(`/get-order-checkout-info/${id}`, authToken);
   return data.body;
 };
+
+export const getTableRelations = async (authToken) => {
+  const data = await get(`/get-table-relations`, authToken);
+  return data.body;
+};
