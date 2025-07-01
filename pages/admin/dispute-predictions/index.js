@@ -1,11 +1,10 @@
-import { useAdminPage } from "../../hooks";
-import BreadCrumbs from "../../partials/admin/base/BreadCrumbs";
-import Header from "../../partials/admin/Header";
-import Sidebar from "../../partials/admin/Sidebar";
-import { getTableRelations } from "../../services";
-import { adminSideProps } from "../../middlewares";
+import { useAdminPage } from "../../../hooks";
+import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
+import Header from "../../../partials/admin/Header";
+import Sidebar from "../../../partials/admin/Sidebar";
+import { adminSideProps } from "../../../middlewares";
 
-const DisputePrediction = (pageProps) => {
+const DisputePredictionList = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   console.log(pageProps);
 
@@ -20,7 +19,7 @@ const DisputePrediction = (pageProps) => {
           <div className="relative">
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <div className="md:flex md:justify-between md:items-center mb-8">
-                <BreadCrumbs links={[{ title: "Dispute Prediction" }]} />
+                <BreadCrumbs links={[{ title: "Dispute Predictions" }]} />
               </div>
 
               <div className="mt-8"></div>
@@ -32,16 +31,10 @@ const DisputePrediction = (pageProps) => {
   );
 };
 
-const boostServerSideProps = async ({ baseSideProps }) => {
-  const options = await getTableRelations(baseSideProps.authToken);
-  return { ...options };
-};
-
 export const getServerSideProps = (context) =>
   adminSideProps({
     context,
-    callback: boostServerSideProps,
-    baseProps: { pageTitle: "Dispute Prediction" },
+    baseProps: { pageTitle: "Dispute Predictions" },
   });
 
-export default DisputePrediction;
+export default DisputePredictionList;

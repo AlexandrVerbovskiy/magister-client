@@ -515,9 +515,19 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
               )}
 
               {isAdmin && (
-                <SidebarTypicalLink
-                  title="Dispute Prediction"
-                  link="dispute-prediction"
+                <SidebarGroupedLinks
+                  setSidebarExpanded={setSidebarExpanded}
+                  title="Dispute Predictions"
+                  sublinks={[
+                    {
+                      href: "dispute-predictions",
+                      title: "List",
+                    },
+                    {
+                      href: "dispute-predictions/create",
+                      title: "Add New Model",
+                    },
+                  ]}
                   SVG={({ current }) => (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
