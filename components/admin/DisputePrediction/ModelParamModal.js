@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ModalBlank from "../ModalBlank";
 import Input from "../Form/Input";
 import { cloneObject } from "../../../utils";
+import Builder from "./Builder";
 
 const ModelParamModal = ({
   onSaveClick,
@@ -34,7 +35,7 @@ const ModelParamModal = ({
       <div className="p-5 flex space-x-4 w-full h-full">
         {/* Content */}
         <div className="flex flex-col w-full justify-between h-full">
-          <div className="flex flex-col w-full justify-between h-full mb-4">
+          <div className="flex flex-col w-full justify-between h-full mb-4 overflow-y-hidden">
             {/* Modal header */}
             <div className="mb-2">
               <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
@@ -42,8 +43,8 @@ const ModelParamModal = ({
               </div>
             </div>
             {/* Modal content */}
-            <div className="h-full">
-              <div className="flex flex-col h-full justify-between">
+            <div className="h-full overflow-y-hidden">
+              <div className="flex flex-col h-full justify-between overflow-y-hidden">
                 <div className="w-full mb-4">
                   <Input
                     name="field-name"
@@ -58,15 +59,7 @@ const ModelParamModal = ({
                   />
                 </div>
 
-                <div className="flex space-x-4 w-full h-full">
-                  <div className="w-1/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full">
-                    <div className="font-bold">Actions</div>
-                  </div>
-
-                  <div className="w-3/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full">
-                    <div className="font-bold">Builder</div>
-                  </div>
-                </div>
+                <Builder />
               </div>
             </div>
           </div>
