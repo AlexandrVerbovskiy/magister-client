@@ -40,8 +40,6 @@ const useOrderActions = ({ order }) => {
     const isOwner = order.ownerId == sessionUser?.id;
     const isRenter = order.renterId == sessionUser?.id;
 
-    console.log(order);
-
     if (
       (isOwner && order.status == STATIC.ORDER_STATUSES.PENDING_OWNER) ||
       (isRenter && order.status == STATIC.ORDER_STATUSES.PENDING_RENTER)

@@ -6,7 +6,6 @@ import { adminSideProps } from "../../../middlewares";
 
 const DisputePredictionList = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  console.log(pageProps);
 
   return (
     <div className="flex h-[100dvh] overflow-hidden">
