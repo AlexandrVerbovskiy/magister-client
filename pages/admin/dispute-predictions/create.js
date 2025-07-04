@@ -10,7 +10,6 @@ import ModelParamModal from "../../../components/admin/DisputePrediction/ModelPa
 
 const CreateDisputePrediction = (pageProps) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
-  console.log(pageProps);
   const [modelParams, setModelParams] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [activeModelParam, setActiveModelParam] = useState(null);
