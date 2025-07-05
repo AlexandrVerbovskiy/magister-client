@@ -17,9 +17,15 @@ const itemsParent1 = [
   { type: "3", body: "3" },
 ];
 
-const ItemByType = ({ item }) => {
+const ItemByType = ({ item, getDroppableParent, activeDrag }) => {
   if (item.type === "1") {
-    return <NestableDraggable item={item} />;
+    return (
+      <NestableDraggable
+        item={item}
+        activeDrag={activeDrag}
+        getDroppableParent={getDroppableParent}
+      />
+    );
   }
 
   return <UniversalDraggable item={item} />;
@@ -29,29 +35,77 @@ const Builder = () => {
   const parent2Ref = useRef(null);
   const [itemsParent2, setItemsParent2] = useState([]);
   const [activeDrag, setActiveDrag] = useState(null); // Для overlay
-  const currentMouseRef = useRef(null);
-
-  useEffect(() => {
-    document.addEventListener(
-      "mousemove",
-      (e) => (currentMouseRef.current = e)
-    );
-  }, []);
 
   const handleDragStart = (event) => {
     setActiveDrag(event.active);
   };
 
+  const getDroppableParent = (
+    itemId,
+    checkableItems = null,
+    needCheck = true
+  ) => {
+    if (checkableItems === null) {
+      checkableItems = itemsParent2;
+    }
+
+    for (let i = 0; i < checkableItems.length; i++) {
+      const checkableItem = checkableItems[i];
+
+      if (checkableItem.type === "1") {
+        for (let j = 0; j < checkableItem.subItems.length; j++) {
+          const checkableChild = checkableItem.subItems[j];
+
+          if (needCheck && checkableChild.type !== "1") {
+            break;
+          }
+
+          if (checkableChild.id === itemId) {
+            return checkableItem;
+          }
+        }
+
+        const resChildCheck = getDroppableParent(
+          itemId,
+          checkableItem.subItems,
+          needCheck
+        );
+
+        if (resChildCheck) {
+          return resChildCheck;
+        }
+      }
+    }
+
+    return null;
+  };
+
   const updateItemRecursively = (items, overId, itemDetails) => {
     return items.map((item) => {
-      if (item.type === "1" && item.id === overId) {
-        return {
-          ...item,
-          subItems: [
-            ...(item.subItems || []),
-            { ...cloneObject(itemDetails), id: generateRandomString() },
-          ],
-        };
+      if (item.type === "1") {
+        if (item.id === overId) {
+          return {
+            ...item,
+            subItems: [
+              ...(item.subItems || []),
+              { ...cloneObject(itemDetails), id: generateRandomString() },
+            ],
+          };
+        }
+
+        for (let i = 0; i < item.subItems.length; i++) {
+          const childItem = item.subItems[i];
+
+          if (childItem.id === overId && childItem.type !== "1") {
+            return {
+              ...item,
+              subItems: [
+                ...(item.subItems || []),
+                { ...cloneObject(itemDetails), id: generateRandomString() },
+              ],
+            };
+          }
+        }
       }
 
       if (item.subItems && item.subItems.length > 0) {
@@ -108,14 +162,78 @@ const Builder = () => {
     return findAndReorder(items);
   };
 
+  const insertItemById = (items, targetId, itemToInsert) => {
+    return items.map((item) => {
+      if (item.id === targetId) {
+        return {
+          ...item,
+          subItems: [...(item.subItems || []), itemToInsert],
+        };
+      }
+
+      if (item.subItems?.length) {
+        return {
+          ...item,
+          subItems: insertItemById(item.subItems, targetId, itemToInsert),
+        };
+      }
+
+      return item;
+    });
+  };
+
+  const findAndRemoveItem = (items, targetId) => {
+    let found = null;
+
+    const filtered = items
+      .map((item) => {
+        if (item.id === targetId) {
+          found = item;
+          return null;
+        }
+
+        if (item.subItems?.length) {
+          const [cleanedChildren, removed] = findAndRemoveItem(
+            item.subItems,
+            targetId
+          );
+          if (removed) {
+            found = removed;
+            return { ...item, subItems: cleanedChildren };
+          }
+        }
+
+        return item;
+      })
+      .filter(Boolean);
+
+    return [filtered, found];
+  };
+
+  const getItemById = (id, items = null) => {
+    if (items === null) {
+      items = itemsParent2;
+    }
+
+    for (let item of items) {
+      if (item.id === id) {
+        return item;
+      }
+
+      if (item.subItems && item.subItems.length > 0) {
+        const foundItem = getItemById(id, item.subItems);
+        if (foundItem) {
+          return foundItem;
+        }
+      }
+    }
+    return null;
+  };
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     const isNew = active.data.current?.example;
     setActiveDrag(null);
-
-    const parent2Rect = parent2Ref.current?.getBoundingClientRect();
-    const mouseX = currentMouseRef.current.screenX;
-    const mouseY = currentMouseRef.current.screenY;
 
     // Видалення: якщо перетягнули елемент з правої колонки і відпустили не над droppable
     if (!over || over.id === sidebarId) {
@@ -126,29 +244,70 @@ const Builder = () => {
       return;
     }
 
-    // Додаємо новий елемент у правий блок
-    if (isNew) {
-      const itemDetails = itemsParent1.find((item) => item.type === active.id);
-
-      if (over.id === dropdownId) {
-        setItemsParent2([
-          ...itemsParent2,
-          { ...cloneObject(itemDetails), id: generateRandomString() },
-        ]);
-      } else {
-        setItemsParent2((items) =>
-          updateItemRecursively(items, over.id, itemDetails)
-        );
-      }
-
+    if (over.id === active.id) {
       return;
     }
 
+    const itemDetails = isNew
+      ? {
+          ...cloneObject(itemsParent1.find((item) => item.type === active.id)),
+          id: generateRandomString(),
+        }
+      : getItemById(active.id);
+
+    if (over.id === dropdownId) {
+      return setItemsParent2((prevItemsPaten2) => {
+        let res = [];
+
+        if (isNew) {
+          res = prevItemsPaten2;
+        } else {
+          let [filtered] = findAndRemoveItem(prevItemsPaten2, active.id);
+          res = filtered;
+        }
+
+        return [...res, itemDetails];
+      });
+    }
+
+    // Додаємо новий елемент у правий блок
+    if (isNew) {
+      for (let i = 0; i < itemsParent2.length; i++) {
+        const childItem = itemsParent2[i];
+
+        if (childItem.id === over.id && childItem.type !== "1") {
+          return setItemsParent2([
+            ...itemsParent2,
+            { ...cloneObject(itemDetails), id: generateRandomString() },
+          ]);
+        }
+      }
+
+      return setItemsParent2((items) =>
+        updateItemRecursively(items, over.id, itemDetails)
+      );
+    }
+
+    const overDetails = getItemById(over.id);
+    const activeDetails = getItemById(active.id);
+
     // Пересортовування у правому блоці
-    if (!isNew && over.id !== active.id && over.id !== dropdownId) {
-      setItemsParent2((items) =>
+    if (
+      getDroppableParent(active.id, null, false)?.id ===
+      getDroppableParent(over.id, null, false)?.id
+    ) {
+      return setItemsParent2((items) =>
         reorderItemRecursively(items, active.id, over.id)
       );
+    } else {
+      if (overDetails.type !== "1") {
+        return;
+      }
+
+      return setItemsParent2((prevItemsPaten2) => {
+        const [filtered] = findAndRemoveItem(prevItemsPaten2, active.id);
+        return insertItemById(filtered, over.id, itemDetails);
+      });
     }
   };
 
@@ -157,18 +316,29 @@ const Builder = () => {
       <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden">
         <DroppableParent1>
           {itemsParent1.map((item) => (
-            <UniversalDraggable key={item.type} item={item} example />
+            <div className="relative" key={item.type}>
+              <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white absolute top-0 left-0 w-full">
+                {item.body}
+              </div>
+
+              <UniversalDraggable item={item} example />
+            </div>
           ))}
         </DroppableParent1>
 
-        <DroppableParent2 ref={parent2Ref}>
+        <DroppableParent2 ref={parent2Ref} items={itemsParent2}>
           <SortableContext
             id={dropdownId}
             items={itemsParent2.map((item) => item.id)}
             strategy={verticalListSortingStrategy}
           >
             {itemsParent2.map((item) => (
-              <ItemByType item={item} key={item.id} />
+              <ItemByType
+                item={item}
+                getDroppableParent={getDroppableParent}
+                key={item.id}
+                activeDrag={activeDrag}
+              />
             ))}
           </SortableContext>
         </DroppableParent2>
@@ -187,11 +357,22 @@ const Builder = () => {
 };
 
 const ItemTree = ({ item }) => (
-  <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white">
+  <div
+    className="cursor-pointer p-2 mb-2 border border-slate-300"
+    style={{
+      width: "100%",
+      minHeight: 40 + (item.subItems?.length ? item.subItems.length * 40 : 0),
+    }}
+  >
     {item.body}
-    {item.subItems?.map((subItem) => (
-      <ItemTree key={subItem.id} item={subItem} />
-    ))}
+
+    {item.subItems && (
+      <div style={{ marginRight: "16px" }}>
+        {item.subItems.map((subItem) => (
+          <ItemTree key={subItem.id} item={subItem} />
+        ))}
+      </div>
+    )}
   </div>
 );
 
@@ -232,6 +413,7 @@ const DroppableParent1 = React.forwardRef(function DroppableParent1(
         if (ref) ref.current = node;
       }}
       className="w-1/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto overflow-x-hidden"
+      data-id={sidebarId}
     >
       {props.children}
     </div>
@@ -242,7 +424,19 @@ const DroppableParent2 = React.forwardRef(function DroppableParent2(
   props,
   ref
 ) {
-  const { setNodeRef } = useDroppable({ id: dropdownId });
+  const { setNodeRef, over } = useDroppable({ id: dropdownId });
+  let totalIsOver = over?.id === dropdownId;
+
+  if (!totalIsOver && over?.id) {
+    for (let i = 0; i < props.items.length; i++) {
+      const checkableChild = props.items[i];
+
+      if (checkableChild.id === over?.id && checkableChild.type !== "1") {
+        totalIsOver = true;
+      }
+    }
+  }
+
   return (
     <div
       ref={(node) => {
@@ -250,6 +444,10 @@ const DroppableParent2 = React.forwardRef(function DroppableParent2(
         if (ref) ref.current = node;
       }}
       className="w-3/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto"
+      style={{
+        border: totalIsOver && "1px dashed blue",
+      }}
+      data-id={dropdownId}
     >
       {props.children}
     </div>
@@ -287,7 +485,11 @@ const UniversalDraggable = ({ item, example = false }) => {
 
   let dopClassName = isDragging ? "opacity-0" : "";
 
-  const renderComponent = (childComponent = "") => (
+  if (example) {
+    dopClassName += " relative z-100";
+  }
+
+  return (
     <div
       ref={(node) => {
         setNodeRef(node);
@@ -295,7 +497,7 @@ const UniversalDraggable = ({ item, example = false }) => {
       }}
       {...listeners}
       {...attributes}
-      className={`cursor-pointer p-2 mb-2 border border-slate-300 ${dopClassName} ${childComponent}`}
+      className={`cursor-pointer p-2 mb-2 border border-slate-300 ${dopClassName}`}
       style={{
         transform: transform
           ? `translate(${transform.x || 0}px, ${transform.y || 0}px)`
@@ -304,26 +506,14 @@ const UniversalDraggable = ({ item, example = false }) => {
         zIndex: isDragging ? 100 : "auto",
         width: isDragging ? `${initialWidth}px` : "100%",
       }}
+      data-id={id ?? type}
     >
       {body}
     </div>
   );
-
-  if (!example) {
-    return renderComponent();
-  }
-
-  return (
-    <div className="relative">
-      <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white absolute top-0 left-0 w-full">
-        {body}
-      </div>
-      {renderComponent("relative z-100")}
-    </div>
-  );
 };
 
-const NestableDraggable = ({ item }) => {
+const NestableDraggable = ({ item, activeDrag, getDroppableParent }) => {
   const { id, body, subItems = [] } = item;
   const [initialWidth, setInitialWidth] = useState(0);
   const nodeRef = useRef(null);
@@ -337,14 +527,18 @@ const NestableDraggable = ({ item }) => {
     transform,
     transition,
     over,
+    isSorting,
+    isOver,
   } = useSortable({ id });
 
   // droppable
-  const { setNodeRef: setDropRef, isOver } = useDroppable({
+  const { setNodeRef: setDropRef } = useDroppable({
     id,
   });
 
-  const totalIsOver = isOver && (!isDragging || over?.id !== id);
+  const totalIsOver =
+    (over?.id === id || getDroppableParent(over?.id)?.id === id) &&
+    ((!isSorting && !isDragging) || isOver);
 
   useEffect(() => {
     if (nodeRef.current && !isDragging) {
@@ -366,7 +560,7 @@ const NestableDraggable = ({ item }) => {
       ref={setRefs}
       {...attributes}
       {...listeners}
-      className={`cursor-pointer p-2 mb-2 border border-slate-300 ${dopClassName}`}
+      className={`mb-2 p-2 border border-slate-300 ${dopClassName}`}
       style={{
         border: totalIsOver && "1px dashed blue",
         transform: transform
@@ -375,18 +569,27 @@ const NestableDraggable = ({ item }) => {
         transition,
         width: isDragging ? `${initialWidth}px` : "100%",
         minHeight: totalIsOver
-          ? 40 + (subItems.length > 0 ? subItems.length * 40 : 40)
+          ? 40 + (subItems.length > 0 ? subItems.length * 40 : 0)
           : 40,
       }}
+      data-id={id}
     >
+      {/* Окрема зона для drag handle */}
       <div>{body}</div>
+
+      {/* Інший контент, який не є draggable */}
       <div style={{ marginLeft: 16 }}>
         <SortableContext
-          items={subItems.map((i) => i.id)}
+          items={subItems.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
           {subItems.map((child) => (
-            <ItemByType item={child} key={child.id} />
+            <ItemByType
+              key={child.id}
+              item={child}
+              getDroppableParent={getDroppableParent}
+              activeDrag={activeDrag}
+            />
           ))}
         </SortableContext>
       </div>
