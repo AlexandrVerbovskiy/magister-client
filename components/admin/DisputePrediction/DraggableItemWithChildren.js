@@ -11,9 +11,6 @@ const DraggableItemWithChildren = ({
   item,
   activeDrag,
   getDroppableParent,
-  tableStructure,
-  setActiveTableDetails,
-  setCustomValue,
 }) => {
   const { id, body, subItems = [] } = item;
   const [initialWidth, setInitialWidth] = useState(0);
@@ -72,7 +69,7 @@ const DraggableItemWithChildren = ({
       }}
       data-id={id}
     >
-      <div style={{ marginBottom: "4px" }}>{body}</div>
+      <div>{body}</div>
 
       <div style={{ marginLeft: 16 }}>
         <SortableContext
@@ -85,9 +82,6 @@ const DraggableItemWithChildren = ({
               item={child}
               getDroppableParent={getDroppableParent}
               activeDrag={activeDrag}
-              tableStructure={tableStructure}
-              setActiveTableDetails={setActiveTableDetails}
-              setCustomValue={setCustomValue}
             />
           ))}
         </SortableContext>

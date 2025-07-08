@@ -4,7 +4,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import React from "react";
-import { isItemKeyDraggable } from "../../../utils";
 
 const Content = React.forwardRef(function Content(
   { id, items, keyField, Component },
@@ -17,10 +16,7 @@ const Content = React.forwardRef(function Content(
     for (let i = 0; i < items.length; i++) {
       const checkableChild = items[i];
 
-      if (
-        checkableChild.id === over?.id &&
-        !isItemKeyDraggable(checkableChild.key)
-      ) {
+      if (checkableChild.id === over?.id && checkableChild.type !== "1") {
         totalIsOver = true;
       }
     }
@@ -37,7 +33,7 @@ const Content = React.forwardRef(function Content(
   return (
     <div
       ref={setRefs}
-      className="w-8/12 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto"
+      className="w-3/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto"
       style={{
         border: totalIsOver && "1px dashed blue",
       }}

@@ -1,8 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { useEffect, useRef, useState } from "react";
 
-const DraggableItem = ({ children, item, example = false }) => {
-  const { id, key } = item;
+const DraggableItem = ({ item, example = false }) => {
+  const { id, type, body } = item;
   const [initialWidth, setInitialWidth] = useState(0);
 
   const nodeRef = useRef(null);
@@ -14,7 +14,7 @@ const DraggableItem = ({ children, item, example = false }) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: id ?? key, data: { example } });
+  } = useSortable({ id: id ?? type, data: { example } });
 
   useEffect(() => {
     if (nodeRef.current && !isDragging) {
@@ -36,24 +36,11 @@ const DraggableItem = ({ children, item, example = false }) => {
     nodeRef.current = node;
   };
 
-  const handlePointerDown = (event) => {
-    if (
-      event.target.classList.contains("drag-ignore-section") ||
-      event.target.closest(".drag-ignore-section")
-    ) {
-      event.stopPropagation();
-      return;
-    }
-
-    listeners.onPointerDown?.(event);
-  };
-
   return (
     <div
       ref={setRefs}
       {...listeners}
       {...attributes}
-      onPointerDown={handlePointerDown}
       className={`cursor-pointer p-2 mb-2 border border-slate-300 ${dopClassName}`}
       style={{
         transform: transform
@@ -63,9 +50,9 @@ const DraggableItem = ({ children, item, example = false }) => {
         zIndex: isDragging ? 100 : "auto",
         width: isDragging ? `${initialWidth}px` : "100%",
       }}
-      data-id={id ?? key}
+      data-id={id ?? type}
     >
-      {children}
+      {body}
     </div>
   );
 };

@@ -1,48 +1,24 @@
-import STATIC from "../../../static";
-import Input from "../Form/Input";
+import React from "react";
 
-const ItemTree = ({ item }) => {
-  if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
-    return (
-      <div
-        className="cursor-pointer p-2 text-sm mb-2 border border-slate-300 w-full"
-        style={{ transform: "none", zIndex: "auto", width: "100%" }}
-      >
-        {item.content.pseudonym || "-"}
+const ItemTree = ({ item }) => (
+  <div
+    className="cursor-pointer p-2 mb-2 border border-slate-300"
+    style={{
+      width: "100%",
+      minHeight: 40 + (item.subItems?.length ? item.subItems.length * 40 : 0),
+    }}
+  >
+    {item.body}
+
+    {item.subItems && (
+      <div style={{ marginRight: "16px" }}>
+        {item.subItems.map((subItem) => (
+          <ItemTree key={subItem.id} item={subItem} />
+        ))}
       </div>
-    );
-  }
-
-  if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.CUSTOM_VALUE.key) {
-    return (
-      <div
-        className="cursor-pointer p-2 text-sm mb-2 border border-slate-300 w-full"
-        style={{ transform: "none", zIndex: "auto", width: "100%" }}
-      >
-        <Input inputClassName="w-full border-slate-300 focus:border-slate-300" value={item.content.value || ""} />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className="cursor-pointer p-2 mb-2 border border-slate-300 w-full"
-      style={{
-        minHeight: 40 + (item.subItems?.length ? item.subItems.length * 40 : 0),
-      }}
-    >
-      {item.body}
-
-      {item.subItems && (
-        <div style={{ marginRight: "16px" }}>
-          {item.subItems.map((subItem) => (
-            <ItemTree key={subItem.id} item={subItem} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+    )}
+  </div>
+);
 
 const OverlayItem = ({ active, examples, items }) => {
   let item = null;
@@ -60,7 +36,7 @@ const OverlayItem = ({ active, examples, items }) => {
   };
 
   if (isNew) {
-    item = examples.find((i) => i.key === active.id);
+    item = examples.find((i) => i.type === active.id);
   } else {
     item = findItemById(items, active.id);
   }

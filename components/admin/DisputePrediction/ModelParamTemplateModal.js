@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ModalBlank from "../ModalBlank";
+import Input from "../Form/Input";
 import { cloneObject } from "../../../utils";
 import Builder from "./Builder";
 
@@ -7,58 +8,20 @@ const ModelParamTemplateModal = ({
   onSaveClick,
   modalOpen,
   closeModal,
+  index = null,
   content: baseContent = [],
   pseudonym: basePseudonym = "",
-  conditions: baseConditions = [],
-  groups: baseGroups = [],
-  comparisonType: baseComparisonType = null,
-  tableStructure,
-  defaultValue: baseDefaultValue = "",
 }) => {
-  const [content, setContent] = useState([]);
+  const [content, setContent] = useState("");
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
-  const [conditions, setConditions] = useState([]);
-  const [groups, setGroups] = useState([]);
-  const [comparisonType, setComparisonType] = useState("numerical");
-  const [defaultValue, setDefaultValue] = useState("");
-  const [defaultValueError, setDefaultValueError] = useState("");
 
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
 
-  useEffect(() => setConditions(cloneObject(baseConditions)), [baseConditions]);
-
-  useEffect(() => setGroups(cloneObject(baseGroups)), [baseGroups]);
-
-  useEffect(() => setDefaultValue(baseDefaultValue), [baseDefaultValue]);
-
-  useEffect(
-    () => setComparisonType(baseComparisonType ?? "numerical"),
-    [baseComparisonType]
-  );
-
   const handleSaveClick = () => {
-    onSaveClick(
-      cloneObject({
-        pseudonym,
-        type: "template",
-        content: content,
-        conditions: conditions,
-        groups: groups,
-        comparisonType,
-        defaultValue,
-      })
-    );
-
-    setContent([]);
-    setPseudonym("");
-    setConditions([]);
-    setGroups([]);
-    setDefaultValue("");
-
-    closeModal();
+    onSaveClick({ pseudonym, type: "template", content }, index);
   };
 
   return (
@@ -80,27 +43,21 @@ const ModelParamTemplateModal = ({
 
             <div className="h-full overflow-y-hidden">
               <div className="flex flex-col h-full justify-between overflow-y-hidden">
-                <Builder
-                  tableStructure={tableStructure}
-                  dopProps={{
-                    content,
-                    setContent,
-                    pseudonym,
-                    setPseudonym,
-                    pseudonymError,
-                    setPseudonymError,
-                    conditions,
-                    setConditions,
-                    groups,
-                    setGroups,
-                    comparisonType,
-                    setComparisonType,
-                    defaultValue,
-                    setDefaultValue,
-                    defaultValueError,
-                    setDefaultValueError,
-                  }}
-                />
+                <div className="w-full mb-4">
+                  <Input
+                    name="field-pseudonym"
+                    value={pseudonym}
+                    setValue={setPseudonym}
+                    error={pseudonymError}
+                    setError={setPseudonymError}
+                    label="Field Pseudonym (for visual distinction)"
+                    placeholder="Enter Field Pseudonym"
+                    labelClassName="block text-sm font-medium mb-1"
+                    inputClassName="form-input w-full"
+                  />
+                </div>
+
+                <Builder />
               </div>
             </div>
           </div>

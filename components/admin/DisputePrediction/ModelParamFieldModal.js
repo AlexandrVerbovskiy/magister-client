@@ -1,34 +1,27 @@
 import Input from "../Form/Input";
 import ModalBlank from "../ModalBlank";
-import { useEffect, useState } from "react";
-import { cloneObject, validateSmallText } from "../../../utils";
-import TableSelect from "./TableSelect";
-import _ from "lodash";
 import DropdownClassic from "../DropdownClassic";
+import ErrorSpan from "../ErrorSpan";
+import { useEffect, useState } from "react";
 
 const ModelParamFieldModal = ({
   onSaveClick,
   modalOpen,
   closeModal,
   tableStructure,
+  index = null,
   pseudonym: basePseudonym = "",
-  fieldName: baseFieldName = null,
-  tableName: baseTableName = null,
-  comparisonType: baseComparisonType = null,
-  needComparisonType = true,
-  joins: baseJoins = [],
-  defaultValue: baseDefaultValue = "",
+  fieldName: baseFieldName = "",
+  tableName: baseTableName = "",
 }) => {
-  const [comparisonType, setComparisonType] = useState("numerical");
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
+
   const [tableName, setTableName] = useState(null);
   const [tableNameError, setTableNameError] = useState(null);
+
   const [fieldName, setFieldName] = useState(null);
   const [fieldNameError, setFieldNameError] = useState(null);
-  const [defaultValue, setDefaultValue] = useState("");
-  const [defaultValueError, setDefaultValueError] = useState(null);
-  const [joins, setJoins] = useState([]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
 
@@ -36,71 +29,48 @@ const ModelParamFieldModal = ({
 
   useEffect(() => setFieldName(baseFieldName), [baseFieldName]);
 
-  useEffect(() => setDefaultValue(baseDefaultValue), [baseDefaultValue]);
-
-  useEffect(
-    () => setComparisonType(baseComparisonType ?? "numerical"),
-    [baseComparisonType]
-  );
-
-  useEffect(() => {
-    if (!_.isEqual(baseJoins, joins)) {
-      setJoins(baseJoins);
-    }
-  }, [baseJoins]);
-
   const handleSaveClick = () => {
-    let hasError = false;
-
-    if (!fieldName) {
-      setFieldNameError("Required Field");
-      hasError = true;
-    }
-
-    if (!tableName) {
-      setTableNameError("Required Field");
-      hasError = true;
-    }
-
-    if (pseudonym) {
-      let resPseudonymValidation = validateSmallText(pseudonym);
-
-      if (resPseudonymValidation !== true) {
-        setPseudonymError(resPseudonymValidation);
-        hasError = true;
-      }
-    } else {
-      setPseudonymError("Required Field");
-      hasError = true;
-    }
-
-    if (hasError) {
-      return;
-    }
-
-    const data = {
-      pseudonym,
-      tableName,
-      fieldName,
-      joins: cloneObject(joins),
-      defaultValue,
-    };
-
-    if (needComparisonType) {
-      data["comparisonType"] = comparisonType;
-    }
-
-    onSaveClick(data);
-
-    setPseudonym("");
-    setTableName(null);
-    setFieldName(null);
-    setJoins([]);
-    setComparisonType("numerical");
-    setDefaultValue("");
-
-    closeModal();
+    onSaveClick(
+      { pseudonym, type: "field", content: { tableName, fieldName } },
+      index
+    );
   };
+
+  const handleChangeTableName = (newValue) => {
+    setTableName(newValue);
+    setTableNameError(null);
+  };
+
+  const handleChangeFieldName = (newValue) => {
+    setFieldName(newValue);
+    setFieldNameError(null);
+  };
+
+  const tableOptions = [
+    {
+      value: null,
+      title: "Select table",
+      default: true,
+    },
+    ...Object.keys(tableStructure).map((table) => ({
+      value: table,
+      title: table,
+    })),
+  ];
+
+  const fieldOptions = [
+    {
+      value: null,
+      title: "Select field",
+      default: true,
+    },
+  ];
+
+  if (tableName) {
+    tableStructure[tableName]["fields"].forEach((field) => {
+      fieldOptions.push({ value: field.columnName, title: field.columnName });
+    });
+  }
 
   return (
     <ModalBlank
@@ -120,19 +90,34 @@ const ModelParamFieldModal = ({
 
             <div className="h-full">
               <div className="flex flex-col h-full justify-between">
-                <TableSelect
-                  tableStructure={tableStructure}
-                  tableName={tableName}
-                  setTableName={setTableName}
-                  fieldName={fieldName}
-                  setFieldName={setFieldName}
-                  joins={joins}
-                  setJoins={setJoins}
-                  tableNameError={tableNameError}
-                  setTableNameError={setTableNameError}
-                  fieldNameError={fieldNameError}
-                  setFieldNameError={setFieldNameError}
-                />
+                <div className="w-full mb-4 flex gap-2">
+                  <div className="w-full sm:w-[calc(100%-4px)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Table Name
+                    </label>
+                    <DropdownClassic
+                      selected={tableName}
+                      setSelected={handleChangeTableName}
+                      needSearch={true}
+                      options={tableOptions}
+                    />
+                    <ErrorSpan error={tableNameError} />
+                  </div>
+
+                  <div className="w-full sm:w-[calc(100%-4px)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Field Name
+                    </label>
+                    <DropdownClassic
+                      selected={fieldName}
+                      setSelected={handleChangeFieldName}
+                      needSearch={true}
+                      dropdownDisabled={!tableName}
+                      options={fieldOptions}
+                    />
+                    <ErrorSpan error={fieldNameError} />
+                  </div>
+                </div>
 
                 <div className="w-full mb-4">
                   <Input
@@ -147,44 +132,6 @@ const ModelParamFieldModal = ({
                     inputClassName="form-input w-full"
                   />
                 </div>
-
-                <div className="w-full mb-4">
-                  <Input
-                    name="default-value"
-                    value={defaultValue}
-                    setValue={setDefaultValue}
-                    error={defaultValueError}
-                    setError={setDefaultValueError}
-                    label="Default Value"
-                    placeholder="Enter Value"
-                    labelClassName="block text-sm font-medium mb-1"
-                    inputClassName="form-input w-full"
-                  />
-                </div>
-
-                {comparisonType && (
-                  <div className="w-full mb-4">
-                    <label className="block text-sm font-semibold mb-1">
-                      Comparison Type
-                    </label>
-                    <DropdownClassic
-                      name="field-type"
-                      selected={comparisonType}
-                      setSelected={setComparisonType}
-                      needSearch={false}
-                      options={[
-                        {
-                          value: "numerical",
-                          title: "Numerical field",
-                        },
-                        {
-                          value: "categorical",
-                          title: "Categorical field",
-                        },
-                      ]}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           </div>

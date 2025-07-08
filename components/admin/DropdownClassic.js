@@ -10,7 +10,6 @@ function DropdownClassic({
   needSearch = true,
   disabledText = null,
   dropdownDisabled = false,
-  popupBindClassName = "top-full",
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,10 +53,10 @@ function DropdownClassic({
     : options.find((option) => option.default)?.title;
 
   return (
-    <div className="dropdown-classic relative inline-flex w-full drag-ignore-section">
+    <div className="dropdown-classic relative inline-flex w-full">
       <button
         ref={trigger}
-        className="w-full btn justify-between bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200"
+        className="w-full btn justify-between min-w-44 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200"
         aria-label="Select date range"
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -65,7 +64,7 @@ function DropdownClassic({
         disabled={dropdownDisabled}
       >
         <span className="flex items-center">
-          <span className="whitespace-nowrap">{selectedTitle}</span>
+          <span>{selectedTitle}</span>
         </span>
         <svg
           className="shrink-0 ml-1 fill-current text-slate-400"
@@ -79,7 +78,7 @@ function DropdownClassic({
       <Transition
         show={dropdownOpen}
         tag="div"
-        className={`z-10 absolute ${popupBindClassName} left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 pt-1.5 rounded shadow-lg overflow-hidden mt-1`}
+        className="z-10 absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
         enter="transition ease-out duration-100 transform"
         enterStart="opacity-0 -translate-y-2"
         enterEnd="opacity-100 translate-y-0"
@@ -136,11 +135,7 @@ function DropdownClassic({
                     >
                       <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                     </svg>
-                    <span
-                      className={`whitespace-nowrap ${
-                        disabled ? "text-gray-200" : ""
-                      }`}
-                    >
+                    <span className={disabled ? "text-gray-200" : ""}>
                       {option.title}
                     </span>
                   </button>
