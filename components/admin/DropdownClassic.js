@@ -9,6 +9,7 @@ function DropdownClassic({
   setSelected,
   needSearch = true,
   disabledText = null,
+  dropdownDisabled = false,
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -60,6 +61,7 @@ function DropdownClassic({
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
+        disabled={dropdownDisabled}
       >
         <span className="flex items-center">
           <span>{selectedTitle}</span>
