@@ -6,32 +6,45 @@ import { getTableRelations } from "../../../services";
 import { adminSideProps } from "../../../middlewares";
 import { useState } from "react";
 import { cloneObject } from "../../../utils";
-import ModelParamModal from "../../../components/admin/DisputePrediction/ModelParamModal";
+import ModelParamTemplateModal from "../../../components/admin/DisputePrediction/ModelParamTemplateModal";
+import ModelParamFieldModal from "../../../components/admin/DisputePrediction/ModelParamFieldModal";
 
-const CreateDisputePrediction = (pageProps) => {
+const CreateDisputePrediction = ({structure: tableStructure}) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [modelParams, setModelParams] = useState([]);
   const [disabled, setDisabled] = useState(false);
-  const [activeModelParam, setActiveModelParam] = useState(null);
+  const [activeModelTemplateParam, setActiveModelTemplateParam] =
+    useState(null);
+  const [activeModelFieldParam, setActiveModelFieldParam] = useState(null);
 
   const handleSubmit = async () => {
     console.log(modelParams);
   };
 
   const updateModelParam = (index) => {
-    modelParams[index];
-    setActiveModelParam({
+    setActiveModelTemplateParam({
       index,
-      fieldName: modelParams[index].fieldName,
+      pseudonym: modelParams[index].pseudonym,
       content: cloneObject(modelParams[index].content),
     });
   };
 
-  const createModelParam = () => {
-    setActiveModelParam({ fieldName: "", content: [] });
+  const createModelTemplateParam = () => {
+    setActiveModelTemplateParam({
+      pseudonym: "",
+      content: [],
+    });
   };
 
-  const saveModelParam = (param, index = null) => {
+  const createModelFieldParam = () => {
+    setActiveModelFieldParam({
+      pseudonym: "",
+      tableName: "",
+      fieldName: "",
+    });
+  };
+
+  const saveModelTemplateParam = (param, index = null) => {
     if (index === null) {
       setModelParams((prev) => [...prev, param]);
       return;
@@ -39,7 +52,24 @@ const CreateDisputePrediction = (pageProps) => {
 
     setModelParams((prev) => {
       prev.map((prevModelParam, prevModelParamIndex) => {
-        return prevModelParamIndex === index ? param : prevModelParam;
+        return prevModelParamIndex === index
+          ? { ...prevModelParam, ...param }
+          : prevModelParam;
+      });
+    });
+  };
+
+  const saveModelFieldParam = (param, index = null) => {
+    if (index === null) {
+      setModelParams((prev) => [...prev, param]);
+      return;
+    }
+
+    setModelParams((prev) => {
+      prev.map((prevModelParam, prevModelParamIndex) => {
+        return prevModelParamIndex === index
+          ? { ...prevModelParam, ...param }
+          : prevModelParam;
       });
     });
   };
@@ -75,10 +105,17 @@ const CreateDisputePrediction = (pageProps) => {
                       <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
                         <div className="flex self-end">
                           <button
-                            onClick={createModelParam}
+                            onClick={createModelFieldParam}
                             className="btn bg-blue-500 hover:bg-blue-600 text-white"
                           >
-                            Add New Param
+                            Add Field
+                          </button>
+
+                          <button
+                            onClick={createModelTemplateParam}
+                            className="btn bg-blue-500 hover:bg-blue-600 text-white ml-3"
+                          >
+                            Formula Builder
                           </button>
 
                           <button
@@ -100,13 +137,24 @@ const CreateDisputePrediction = (pageProps) => {
         </main>
       </div>
 
-      <ModelParamModal
-        onSaveClick={saveModelParam}
-        modalOpen={!!activeModelParam}
-        closeModal={() => setActiveModelParam(null)}
-        index={activeModelParam?.index ?? null}
-        content={activeModelParam?.content ?? []}
-        fieldName={activeModelParam?.fieldName ?? ""}
+      <ModelParamTemplateModal
+        onSaveClick={saveModelTemplateParam}
+        modalOpen={!!activeModelTemplateParam}
+        closeModal={() => setActiveModelTemplateParam(null)}
+        index={activeModelTemplateParam?.index ?? null}
+        content={activeModelTemplateParam?.content ?? []}
+        pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
+      />
+
+      <ModelParamFieldModal
+        onSaveClick={saveModelFieldParam}
+        modalOpen={!!activeModelFieldParam}
+        closeModal={() => setActiveModelFieldParam(null)}
+        tableStructure={tableStructure}
+        index={activeModelTemplateParam?.index ?? null}
+        pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
+        fieldName={activeModelTemplateParam?.fieldName ?? null}
+        tableName={activeModelTemplateParam?.tableName ?? null}
       />
     </div>
   );
