@@ -3,6 +3,7 @@ import ModalBlank from "../ModalBlank";
 import Input from "../Form/Input";
 import { cloneObject } from "../../../utils";
 import Builder from "./Builder";
+import DropdownClassic from "../DropdownClassic";
 
 const ModelParamTemplateModal = ({
   onSaveClick,
@@ -11,18 +12,107 @@ const ModelParamTemplateModal = ({
   index = null,
   content: baseContent = [],
   pseudonym: basePseudonym = "",
+  condition: baseCondition = {},
+  tableStructure,
 }) => {
   const [content, setContent] = useState("");
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
 
+  const [conditionMainTable, setConditionMainTable] = useState(null);
+  const [conditionMainField, setConditionMainField] = useState(null);
+  const [conditionSubTable, setConditionSubTable] = useState(null);
+  const [conditionSubField, setConditionSubField] = useState(null);
+  const [conditionOperation, setConditionOperation] = useState(null);
+
+  const operationOptions = [
+    {
+      value: null,
+      title: "Select operation",
+    },
+    ...[">", "<", "=", "!=", ">=", "<="].map((operation) => ({
+      value: operation,
+      title: operation,
+    })),
+  ];
+
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
 
+  useEffect(() => {
+    setConditionMainTable(baseCondition.mainTable ?? null);
+    setConditionMainField(baseCondition.mainField ?? null);
+    setConditionSubTable(baseCondition.subTable ?? null);
+    setConditionSubField(baseCondition.subField ?? null);
+    setConditionOperation(baseCondition.operation ?? null);
+  }, [baseCondition]);
+
   const handleSaveClick = () => {
-    onSaveClick({ pseudonym, type: "template", content }, index);
+    onSaveClick(
+      {
+        pseudonym,
+        type: "template",
+        content,
+        condition: {
+          mainTable: conditionMainTable,
+          mainField: conditionMainField,
+          subTable: conditionSubTable,
+          subField: conditionSubField,
+          operation: conditionOperation,
+        },
+      },
+      index
+    );
   };
+
+  const mainTableOptions = [
+    {
+      value: null,
+      title: "Select table",
+      default: true,
+    },
+    ...Object.keys(tableStructure).map((table) => ({
+      value: table,
+      title: table,
+    })),
+  ];
+
+  const subTableOptions = cloneObject(mainTableOptions);
+
+  const mainFieldOptions = [
+    {
+      value: null,
+      title: "Select field",
+      default: true,
+    },
+  ];
+
+  if (conditionMainTable) {
+    tableStructure[conditionMainTable]["fields"].forEach((field) => {
+      mainFieldOptions.push({
+        value: field.columnName,
+        title: field.columnName,
+      });
+    });
+  }
+
+  const subFieldOptions = [
+    {
+      value: null,
+      title: "Select field",
+      default: true,
+    },
+  ];
+
+  if (conditionSubTable) {
+    tableStructure[conditionSubTable]["fields"].forEach((field) => {
+      subFieldOptions.push({
+        value: field.columnName,
+        title: field.columnName,
+      });
+    });
+  }
 
   return (
     <ModalBlank
@@ -58,6 +148,81 @@ const ModelParamTemplateModal = ({
                 </div>
 
                 <Builder />
+
+                <div className="w-full mt-4 flex justify-between">
+                  <div className="w-full sm:w-[calc((100%-40px)/5)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Condition Main Table
+                    </label>
+                    <DropdownClassic
+                      selected={conditionMainTable}
+                      setSelected={(newValue) =>
+                        setConditionMainTable(newValue)
+                      }
+                      needSearch={true}
+                      options={mainTableOptions}
+                      popupBindClassName="bottom-full"
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-[calc((100%-40px)/5)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Condition Main Field
+                    </label>
+                    <DropdownClassic
+                      selected={conditionMainField}
+                      setSelected={(newValue) =>
+                        setConditionMainField(newValue)
+                      }
+                      needSearch={true}
+                      options={mainFieldOptions}
+                      dropdownDisabled={!conditionMainTable}
+                      popupBindClassName="bottom-full"
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-[calc((100%-40px)/5)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Condition
+                    </label>
+                    <DropdownClassic
+                      selected={conditionOperation}
+                      setSelected={(newValue) =>
+                        setConditionOperation(newValue)
+                      }
+                      needSearch={true}
+                      options={operationOptions}
+                      popupBindClassName="bottom-full"
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-[calc((100%-40px)/5)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Condition Sub Table
+                    </label>
+                    <DropdownClassic
+                      selected={conditionSubTable}
+                      setSelected={(newValue) => setConditionSubTable(newValue)}
+                      needSearch={true}
+                      options={subTableOptions}
+                      popupBindClassName="bottom-full"
+                    />
+                  </div>
+
+                  <div className="w-full sm:w-[calc((100%-40px)/5)]">
+                    <label className="block text-sm font-medium mb-1">
+                      Condition Sub Field
+                    </label>
+                    <DropdownClassic
+                      selected={conditionSubField}
+                      setSelected={(newValue) => setConditionSubField(newValue)}
+                      needSearch={true}
+                      options={subFieldOptions}
+                      dropdownDisabled={!conditionSubTable}
+                      popupBindClassName="bottom-full"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
