@@ -1,23 +1,51 @@
 import React, { useRef, useState } from "react";
 import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { cloneObject, generateRandomString } from "../../../utils";
+import {
+  cloneObject,
+  generateRandomString,
+  isItemKeyDraggable,
+} from "../../../utils";
 import Sidebar from "./Sidebar";
 import Content from "./Content";
 import ContentItem from "./ContentItem";
 import OverlayItem from "./OverlayItem";
 import DraggableItem from "./DraggableItem";
+import STATIC from "../../../static";
+import Query from "./Query";
 
 const sidebarId = "dispute-prediction-sidebar";
 const dropdownId = "dispute-prediction-content";
 
-const sidebarItems = [
-  { type: "1", body: "1", subItems: [] },
-  { type: "2", body: "2" },
-  { type: "3", body: "3" },
-];
+const withChildrenItems = Object.keys(
+  STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN
+).map((operationKey) => ({
+  key: STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN[operationKey].key,
+  body: STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN[operationKey].label,
+  subItems: [],
+}));
 
-const Builder = () => {
+const operationItems = Object.keys(
+  STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS
+).map((operationKey) => ({
+  key: STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS[operationKey].key,
+  body: STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS[operationKey].label,
+}));
+
+const customItems = Object.keys(STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM).map(
+  (operationKey) => ({
+    key: STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM[operationKey].key,
+    body: STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM[operationKey].label,
+    content: {
+      tableName: null,
+      fieldName: null,
+      connectTableName: null,
+      connectFieldName: null,
+    },
+  })
+);
+
+const Builder = ({ tableStructure }) => {
   const contentRef = useRef(null);
   const [contentItems, setContentItems] = useState([]);
   const [activeDrag, setActiveDrag] = useState(null);
@@ -38,11 +66,11 @@ const Builder = () => {
     for (let i = 0; i < checkableItems.length; i++) {
       const checkableItem = checkableItems[i];
 
-      if (checkableItem.type === "1") {
+      if (isItemKeyDraggable(checkableItem.key)) {
         for (let j = 0; j < checkableItem.subItems.length; j++) {
           const checkableChild = checkableItem.subItems[j];
 
-          if (needCheck && checkableChild.type !== "1") {
+          if (needCheck && !isItemKeyDraggable(checkableChild.key)) {
             break;
           }
 
@@ -68,7 +96,7 @@ const Builder = () => {
 
   const updateItemRecursively = (items, overId, itemDetails) => {
     return items.map((item) => {
-      if (item.type === "1") {
+      if (isItemKeyDraggable(item.key)) {
         if (item.id === overId) {
           return {
             ...item,
@@ -82,7 +110,7 @@ const Builder = () => {
         for (let i = 0; i < item.subItems.length; i++) {
           const childItem = item.subItems[i];
 
-          if (childItem.id === overId && childItem.type !== "1") {
+          if (childItem.id === overId && !isItemKeyDraggable(childItem.key)) {
             return {
               ...item,
               subItems: [
@@ -235,7 +263,11 @@ const Builder = () => {
 
     const itemDetails = isExample
       ? {
-          ...cloneObject(sidebarItems.find((item) => item.type === active.id)),
+          ...cloneObject(
+            [...withChildrenItems, ...operationItems, ...customItems].find(
+              (item) => item.key === active.id
+            )
+          ),
           id: generateRandomString(),
         }
       : getItemById(active.id);
@@ -259,7 +291,7 @@ const Builder = () => {
       for (let i = 0; i < contentItems.length; i++) {
         const childItem = contentItems[i];
 
-        if (childItem.id === over.id && childItem.type !== "1") {
+        if (childItem.id === over.id && !isItemKeyDraggable(childItem.key)) {
           return setContentItems([
             ...contentItems,
             { ...cloneObject(itemDetails), id: generateRandomString() },
@@ -283,7 +315,7 @@ const Builder = () => {
         reorderItemRecursively(items, active.id, over.id)
       );
     } else {
-      if (overDetails.type !== "1") {
+      if (!isItemKeyDraggable(overDetails.key)) {
         return;
       }
 
@@ -299,10 +331,27 @@ const Builder = () => {
       <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden">
         <Sidebar
           id={sidebarId}
-          items={sidebarItems}
-          keyField="type"
+          items={[
+            {
+              label: "Combined Operations",
+              list: withChildrenItems,
+            },
+            {
+              label: "Math Operations",
+              list: operationItems,
+            },
+            {
+              label: "Custom Operations",
+              list: customItems,
+            },
+          ]}
+          keyField="key"
           bodyField="body"
-          Component={({ item }) => <DraggableItem item={item} example />}
+          Component={({ item }) => (
+            <DraggableItem item={item} example>
+              {item.body}
+            </DraggableItem>
+          )}
         />
 
         <Content
@@ -312,20 +361,24 @@ const Builder = () => {
           keyField="id"
           Component={({ item }) => (
             <ContentItem
+              tableStructure={tableStructure}
               item={item}
               getDroppableParent={getDroppableParent}
               key={item.id}
               activeDrag={activeDrag}
+              setItems={setContentItems}
             />
           )}
         />
+
+        <Query />
       </div>
 
       <DragOverlay dropAnimation={null}>
         {activeDrag ? (
           <OverlayItem
             active={activeDrag}
-            examples={sidebarItems}
+            examples={[...withChildrenItems, ...operationItems, ...customItems]}
             items={contentItems}
           />
         ) : null}

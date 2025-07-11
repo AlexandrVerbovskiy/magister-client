@@ -157,6 +157,28 @@ const config = {
   CURRENCY_NAME: "GBP", //"USD"
   MOBILE_SIZE: 1199,
   PHONE_COUNTRIES_CODES: ["gb", "ua"],
+  DISPUTE_PREDICTION_BLOCK: {
+    WITH_CHILDREN: {
+      BRACKETS: { key: "brackets", label: "Brackets" },
+      DAY: { key: "day_date_part", label: "Day" },
+      DOW: { key: "dow_date_part", label: "Day of Week" },
+      DOY: { key: "doy_date_part", label: "Day of Year" },
+      HOUR: { key: "hour_date_part", label: "Hour" },
+      MONTH: { key: "month_date_part", label: "Month" },
+      QUARTER: { key: "quarter", label: "Quarter" },
+      WEEK: { key: "week_date_part", label: "Week" },
+      YEAR: { key: "year_date_part", label: "Year" },
+    },
+    OPERATIONS: {
+      SUM: { key: "+", label: "+" },
+      DIFF: { key: "-", label: "-" },
+      MULTIPLICATION: { key: "*", label: "*" },
+      DIVISION: { key: "/", label: "/" },
+    },
+    CUSTOM: {
+      TABLE_SELECTS: { key: "table_selects", label: "Table Selects" },
+    },
+  },
 };
 
 config["DEFAULT_PHONE_INFO"] = {
