@@ -21,14 +21,21 @@ const Sidebar = React.forwardRef(function Sidebar(
       className="w-1/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto overflow-x-hidden"
       data-id={id}
     >
-      {items.map((item) => (
-        <div className="relative" key={item[keyField]}>
-          <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white absolute top-0 left-0 w-full">
-            {item[bodyField]}
+      {items.map((item, itemIndex) => (
+        <>
+          <div className={`mb-2${itemIndex === 0 ? "" : " mt-2"}`}>
+            <b>{item.label}</b>
           </div>
+          {item.list.map((operation) => (
+            <div className="relative" key={operation[keyField]}>
+              <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white absolute top-0 left-0 w-full">
+                {operation[bodyField]}
+              </div>
 
-          <Component item={item} />
-        </div>
+              <Component item={operation} />
+            </div>
+          ))}
+        </>
       ))}
     </div>
   );
