@@ -202,3 +202,8 @@ export const findFirstAvailableDate = (blockedDates, startDate = null) => {
 
   return firstAvailableDate;
 };
+
+export const isItemKeyDraggable = (key) =>
+  Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN)
+    .map((operation) => operation.key)
+    .includes(key);
