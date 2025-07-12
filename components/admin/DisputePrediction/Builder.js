@@ -13,6 +13,7 @@ import OverlayItem from "./OverlayItem";
 import DraggableItem from "./DraggableItem";
 import STATIC from "../../../static";
 import Query from "./Query";
+import Where from "./Where";
 
 const sidebarId = "dispute-prediction-sidebar";
 const dropdownId = "dispute-prediction-content";
@@ -45,7 +46,7 @@ const customItems = Object.keys(STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM).map(
   })
 );
 
-const Builder = ({ tableStructure }) => {
+const Builder = ({ tableStructure, dopProps }) => {
   const contentRef = useRef(null);
   const [contentItems, setContentItems] = useState([]);
   const [activeDrag, setActiveDrag] = useState(null);
@@ -328,7 +329,7 @@ const Builder = ({ tableStructure }) => {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden">
+      <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden mb-4">
         <Sidebar
           id={sidebarId}
           items={[
@@ -371,8 +372,14 @@ const Builder = ({ tableStructure }) => {
           )}
         />
 
-        <Query />
+        <Where tableStructure={tableStructure} {...dopProps} />
       </div>
+
+      <Query
+        tableStructure={tableStructure}
+        items={contentItems}
+        {...dopProps}
+      />
 
       <DragOverlay dropAnimation={null}>
         {activeDrag ? (

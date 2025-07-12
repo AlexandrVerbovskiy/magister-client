@@ -160,6 +160,8 @@ const config = {
   DISPUTE_PREDICTION_BLOCK: {
     WITH_CHILDREN: {
       BRACKETS: { key: "brackets", label: "Brackets" },
+      AVG: { key: "avg", label: "Avg" },
+      SUM: { key: "sum", label: "Sum" },
       DAY: { key: "day_date_part", label: "Day" },
       DOW: { key: "dow_date_part", label: "Day of Week" },
       DOY: { key: "doy_date_part", label: "Day of Year" },
