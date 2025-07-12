@@ -25,17 +25,6 @@ const ModelParamTemplateModal = ({
   const [conditionSubField, setConditionSubField] = useState(null);
   const [conditionOperation, setConditionOperation] = useState(null);
 
-  const operationOptions = [
-    {
-      value: null,
-      title: "Select operation",
-    },
-    ...[">", "<", "=", "!=", ">=", "<="].map((operation) => ({
-      value: operation,
-      title: operation,
-    })),
-  ];
-
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
@@ -66,54 +55,6 @@ const ModelParamTemplateModal = ({
     );
   };
 
-  const mainTableOptions = [
-    {
-      value: null,
-      title: "Select table",
-      default: true,
-    },
-    ...Object.keys(tableStructure).map((table) => ({
-      value: table,
-      title: table,
-    })),
-  ];
-
-  const subTableOptions = cloneObject(mainTableOptions);
-
-  const mainFieldOptions = [
-    {
-      value: null,
-      title: "Select field",
-      default: true,
-    },
-  ];
-
-  if (conditionMainTable) {
-    tableStructure[conditionMainTable]["fields"].forEach((field) => {
-      mainFieldOptions.push({
-        value: field.columnName,
-        title: field.columnName,
-      });
-    });
-  }
-
-  const subFieldOptions = [
-    {
-      value: null,
-      title: "Select field",
-      default: true,
-    },
-  ];
-
-  if (conditionSubTable) {
-    tableStructure[conditionSubTable]["fields"].forEach((field) => {
-      subFieldOptions.push({
-        value: field.columnName,
-        title: field.columnName,
-      });
-    });
-  }
-
   return (
     <ModalBlank
       id="model-param-template-modal"
@@ -133,104 +74,25 @@ const ModelParamTemplateModal = ({
 
             <div className="h-full overflow-y-hidden">
               <div className="flex flex-col h-full justify-between overflow-y-hidden">
-                <div className="w-full mb-4">
-                  <Input
-                    name="field-pseudonym"
-                    value={pseudonym}
-                    setValue={setPseudonym}
-                    error={pseudonymError}
-                    setError={setPseudonymError}
-                    label="Field Pseudonym (for visual distinction)"
-                    placeholder="Enter Field Pseudonym"
-                    labelClassName="block text-sm font-medium mb-1"
-                    inputClassName="form-input w-full"
-                  />
-                </div>
-
-                <Builder tableStructure={tableStructure} />
-
-                <div className="flex flex-col gap-4 mt-4">
-                  <div className="w-full flex justify-between">
-                    <div className="w-full sm:w-[calc((100%-30px)/3)]">
-                      <label className="block text-sm font-medium mb-1">
-                        Condition Main Table
-                      </label>
-                      <DropdownClassic
-                        selected={conditionMainTable}
-                        setSelected={(newValue) =>
-                          setConditionMainTable(newValue)
-                        }
-                        needSearch={true}
-                        options={mainTableOptions}
-                        popupBindClassName="bottom-full"
-                      />
-                    </div>
-
-                    <div className="w-full sm:w-[calc((100%-30px)/3)]">
-                      <label className="block text-sm font-medium mb-1">
-                        Condition Main Field
-                      </label>
-                      <DropdownClassic
-                        selected={conditionMainField}
-                        setSelected={(newValue) =>
-                          setConditionMainField(newValue)
-                        }
-                        needSearch={true}
-                        options={mainFieldOptions}
-                        dropdownDisabled={!conditionMainTable}
-                        popupBindClassName="bottom-full"
-                      />
-                    </div>
-
-                    <div className="w-full sm:w-[calc((100%-30px)/3)]">
-                      <label className="block text-sm font-medium mb-1">
-                        Condition
-                      </label>
-                      <DropdownClassic
-                        selected={conditionOperation}
-                        setSelected={(newValue) =>
-                          setConditionOperation(newValue)
-                        }
-                        needSearch={true}
-                        options={operationOptions}
-                        popupBindClassName="bottom-full"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="w-full flex justify-between">
-                    <div className="w-full sm:w-[calc((100%-20px)/2)]">
-                      <label className="block text-sm font-medium mb-1">
-                        Condition Sub Table
-                      </label>
-                      <DropdownClassic
-                        selected={conditionSubTable}
-                        setSelected={(newValue) =>
-                          setConditionSubTable(newValue)
-                        }
-                        needSearch={true}
-                        options={subTableOptions}
-                        popupBindClassName="bottom-full"
-                      />
-                    </div>
-
-                    <div className="w-full sm:w-[calc((100%-20px)/2)]">
-                      <label className="block text-sm font-medium mb-1">
-                        Condition Sub Field
-                      </label>
-                      <DropdownClassic
-                        selected={conditionSubField}
-                        setSelected={(newValue) =>
-                          setConditionSubField(newValue)
-                        }
-                        needSearch={true}
-                        options={subFieldOptions}
-                        dropdownDisabled={!conditionSubTable}
-                        popupBindClassName="bottom-full"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <Builder
+                  tableStructure={tableStructure}
+                  dopProps={{
+                    pseudonym,
+                    setPseudonym,
+                    pseudonymError,
+                    setPseudonymError,
+                    conditionMainTable,
+                    setConditionMainTable,
+                    conditionMainField,
+                    setConditionMainField,
+                    conditionSubTable,
+                    setConditionSubTable,
+                    conditionSubField,
+                    setConditionSubField,
+                    conditionOperation,
+                    setConditionOperation,
+                  }}
+                />
               </div>
             </div>
           </div>

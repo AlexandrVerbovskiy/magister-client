@@ -37,7 +37,7 @@ const Content = React.forwardRef(function Content(
   return (
     <div
       ref={setRefs}
-      className="w-3/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto"
+      className="w-8/12 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto"
       style={{
         border: totalIsOver && "1px dashed blue",
       }}
