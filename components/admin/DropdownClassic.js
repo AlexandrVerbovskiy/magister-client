@@ -57,7 +57,7 @@ function DropdownClassic({
     <div className="dropdown-classic relative inline-flex w-full drag-ignore-section">
       <button
         ref={trigger}
-        className="w-full btn justify-between min-w-44 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200"
+        className="w-full btn justify-between bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200"
         aria-label="Select date range"
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -65,7 +65,7 @@ function DropdownClassic({
         disabled={dropdownDisabled}
       >
         <span className="flex items-center">
-          <span>{selectedTitle}</span>
+          <span className="whitespace-nowrap">{selectedTitle}</span>
         </span>
         <svg
           className="shrink-0 ml-1 fill-current text-slate-400"
@@ -136,7 +136,11 @@ function DropdownClassic({
                     >
                       <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                     </svg>
-                    <span className={disabled ? "text-gray-200" : ""}>
+                    <span
+                      className={`whitespace-nowrap ${
+                        disabled ? "text-gray-200" : ""
+                      }`}
+                    >
                       {option.title}
                     </span>
                   </button>

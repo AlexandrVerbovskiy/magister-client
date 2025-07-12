@@ -18,7 +18,7 @@ const Sidebar = React.forwardRef(function Sidebar(
   return (
     <div
       ref={setSidebarRef}
-      className="w-1/4 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto overflow-x-hidden"
+      className="w-2/12 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm h-full overflow-y-auto overflow-x-hidden"
       data-id={id}
     >
       {items.map((item, itemIndex) => (
