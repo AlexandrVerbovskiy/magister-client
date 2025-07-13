@@ -1,17 +1,7 @@
 import STATIC from "../../../static";
 
-const Query = ({
-  tableStructure,
-  items,
-  pseudonym,
-  conditionMainTable,
-  conditionMainField,
-  conditionSubTable,
-  conditionSubField,
-  conditionOperation,
-}) => {
+const Query = ({ tableStructure, items, pseudonym, conditions }) => {
   let query = "";
-  console.log(items);
 
   const addQueryByItem = (item) => {
     const datePartKeys = {
@@ -69,8 +59,28 @@ const Query = ({
 
     query += " FROM orders";
 
-    if (conditionSubField && conditionMainField) {
-      query += ` WHERE ${conditionMainTable}.${conditionMainField} ${conditionOperation} ${conditionSubTable}.${conditionSubField}`;
+    items.forEach((item) => {
+      if (
+        item.key !== STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key
+      ) {
+        return;
+      }
+
+      item.content.joins.forEach((join) => {
+        query += ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.joinedTable}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
+      });
+    });
+
+    if (conditions.length > 0) {
+      query += ` WHERE `;
+
+      conditions.forEach((condition, index) => {
+        if (index > 0) {
+          query += " AND ";
+        }
+
+        query += `${condition.baseTable}.${condition.baseField} ${condition.joinCondition} ${condition.joinedTable}.${condition.joinedField}`;
+      });
     }
   }
 
@@ -81,7 +91,7 @@ const Query = ({
       </label>
       <div
         className="w-full bg-gray-100 border border-slate-200 px-3 py-2 text-sm leading-5 text-slate-800 shadow-sm overflow-y-auto overflow-x-hidden"
-        style={{ height: "170px" }}
+        style={{ height: "120px" }}
       >
         {query}
       </div>

@@ -37,7 +37,11 @@ const DraggableItem = ({ children, item, example = false }) => {
   };
 
   const handlePointerDown = (event) => {
-    if (event.target.closest(".drag-ignore-section")) {
+    if (
+      event.target.classList.contains("drag-ignore-section") ||
+      event.target.closest(".drag-ignore-section")
+    ) {
+      event.stopPropagation();
       return;
     }
 
