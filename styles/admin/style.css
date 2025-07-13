@@ -338,9 +338,10 @@ div.add-listings-box.dropzone > .gallery-flex {
 }
 
 .adaptive-logo-image {
-  background-image: url("/images/logo-short.svg");
+  background-image: url("/images/short-logo.svg");
   background-size: auto 100%;
   background-repeat: no-repeat;
+  background-position-x: 50%;
 }
 
 .listing-gallery-flex-parent > div {

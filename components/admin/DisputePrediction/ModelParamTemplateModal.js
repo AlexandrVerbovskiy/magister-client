@@ -1,58 +1,37 @@
 import { useEffect, useState } from "react";
 import ModalBlank from "../ModalBlank";
-import Input from "../Form/Input";
 import { cloneObject } from "../../../utils";
 import Builder from "./Builder";
-import DropdownClassic from "../DropdownClassic";
 
 const ModelParamTemplateModal = ({
   onSaveClick,
   modalOpen,
   closeModal,
-  index = null,
-  content: baseContent = [],
+  content: baseContent = {},
   pseudonym: basePseudonym = "",
-  condition: baseCondition = {},
+  conditions: baseConditions = [],
   tableStructure,
 }) => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState({});
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
-
-  const [conditionMainTable, setConditionMainTable] = useState(null);
-  const [conditionMainField, setConditionMainField] = useState(null);
-  const [conditionSubTable, setConditionSubTable] = useState(null);
-  const [conditionSubField, setConditionSubField] = useState(null);
-  const [conditionOperation, setConditionOperation] = useState(null);
+  const [conditions, setConditions] = useState([]);
 
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
 
-  useEffect(() => {
-    setConditionMainTable(baseCondition.mainTable ?? null);
-    setConditionMainField(baseCondition.mainField ?? null);
-    setConditionSubTable(baseCondition.subTable ?? null);
-    setConditionSubField(baseCondition.subField ?? null);
-    setConditionOperation(baseCondition.operation ?? null);
-  }, [baseCondition]);
+  useEffect(() => setConditions(cloneObject(baseConditions)), [baseConditions]);
 
   const handleSaveClick = () => {
-    onSaveClick(
-      {
-        pseudonym,
-        type: "template",
-        content,
-        condition: {
-          mainTable: conditionMainTable,
-          mainField: conditionMainField,
-          subTable: conditionSubTable,
-          subField: conditionSubField,
-          operation: conditionOperation,
-        },
-      },
-      index
-    );
+    onSaveClick({
+      pseudonym,
+      type: "template",
+      content,
+      conditions,
+    });
+
+    closeModal();
   };
 
   return (
@@ -81,16 +60,8 @@ const ModelParamTemplateModal = ({
                     setPseudonym,
                     pseudonymError,
                     setPseudonymError,
-                    conditionMainTable,
-                    setConditionMainTable,
-                    conditionMainField,
-                    setConditionMainField,
-                    conditionSubTable,
-                    setConditionSubTable,
-                    conditionSubField,
-                    setConditionSubField,
-                    conditionOperation,
-                    setConditionOperation,
+                    conditions,
+                    setConditions,
                   }}
                 />
               </div>

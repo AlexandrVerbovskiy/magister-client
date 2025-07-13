@@ -1,91 +1,43 @@
+import { useState } from "react";
 import DropdownClassic from "../DropdownClassic";
 import ErrorSpan from "../ErrorSpan";
-
-const getTableRelations = ({ tableStructure, selectedTable, selectedField }) =>
-  (tableStructure[selectedTable]?.["relations"] ?? []).filter(
-    (relation) => relation.targetColumn == selectedField
-  );
-
-const getFieldRelations = ({
-  tableStructure,
-  selectedTable,
-  selectedField,
-  connectedTable,
-}) =>
-  (tableStructure[selectedTable]?.["relations"] ?? []).filter(
-    (relation) =>
-      relation.targetColumn == selectedField &&
-      relation.sourceTable === connectedTable
-  );
+import Input from "../Form/Input";
+import ModalBlank from "../ModalBlank";
 
 const TableSelect = ({
   tableStructure,
 
+  joins,
+  setJoins,
   tableName,
   setTableName,
   fieldName,
   setFieldName,
-  connectTableName,
-  setConnectTableName,
-  connectFieldName,
-  setConnectFieldName,
 
   tableNameError = null,
   setTableNameError = () => {},
   fieldNameError = null,
   setFieldNameError = () => {},
-  connectTableNameError = null,
-  setConnectTableNameError = () => {},
-  connectFieldNameError = null,
-  setConnectFieldNameError = () => {},
 }) => {
+  const [activeJoin, setActiveJoin] = useState(null);
+
   const handleChangeTableName = (newValue) => {
     setTableName(newValue);
     setTableNameError(null);
     setFieldName(null);
-    setConnectFieldName(null);
-    setConnectTableName(null);
   };
 
   const handleChangeFieldName = (newValue) => {
     setFieldName(newValue);
     setFieldNameError(null);
-
-    const connectTables = getTableRelations({
-      tableStructure,
-      selectedTable: tableName,
-      selectedField: newValue,
-    });
-
-    if (connectTables.length === 1) {
-      setConnectFieldName(connectTables[0]["sourceColumn"]);
-      setConnectTableName(connectTables[0]["sourceTable"]);
-    } else {
-      setConnectFieldName(null);
-      setConnectTableName(null);
-    }
   };
 
-  const handleChangeConnectTableName = (newValue) => {
-    setConnectTableName(newValue);
-    setConnectTableNameError(null);
-    const connectFields = getFieldRelations({
-      tableStructure,
-      selectedTable: tableName,
-      selectedField: fieldName,
-      connectedTable: newValue,
-    });
+  const getTableNameOnBaseTable = (table) => {
+    const joinRes = joins.find(
+      (join) => join.joinedTable === table || join.pseudonym === table
+    );
 
-    if (connectFields.length === 1) {
-      setConnectFieldName(connectFields[0]["sourceColumn"]);
-    } else {
-      setConnectFieldName(null);
-    }
-  };
-
-  const handleChangeConnectFieldName = (newValue) => {
-    setConnectFieldName(newValue);
-    setConnectFieldNameError(null);
+    return joinRes?.joinedTable || table;
   };
 
   const tableOptions = [
@@ -94,9 +46,11 @@ const TableSelect = ({
       title: "Select table",
       default: true,
     },
-    ...Object.keys(tableStructure).map((table) => ({
-      value: table,
-      title: table,
+    ...Array.from(
+      new Set([...joins.map((join) => join.pseudonym), "orders"])
+    ).map((pseudonym) => ({
+      value: pseudonym,
+      title: pseudonym,
     })),
   ];
 
@@ -108,13 +62,15 @@ const TableSelect = ({
     },
   ];
 
-  if (tableName) {
-    tableStructure[tableName]["fields"].forEach((field) => {
-      fieldOptions.push({ value: field.columnName, title: field.columnName });
-    });
+  if (tableName && tableStructure[getTableNameOnBaseTable(tableName)]) {
+    tableStructure[getTableNameOnBaseTable(tableName)]["fields"].forEach(
+      (field) => {
+        fieldOptions.push({ value: field.columnName, title: field.columnName });
+      }
+    );
   }
 
-  const connectTableOptions = [
+  const activeBaseTableOptions = [
     {
       value: null,
       title: "Select table",
@@ -122,22 +78,23 @@ const TableSelect = ({
     },
   ];
 
-  if (fieldName) {
-    console.log(tableStructure[tableName]);
-
-    getTableRelations({
-      tableStructure,
-      selectedTable: tableName,
-      selectedField: fieldName,
-    }).forEach((relation) => {
-      connectTableOptions.push({
-        value: relation.sourceTable,
-        title: relation.sourceTable,
-      });
-    });
+  if (activeJoin) {
+    Array.from(
+      new Set([
+        ...joins
+          .filter((join, joinIndex) => activeJoin.index !== joinIndex)
+          .map((join) => join.pseudonym),
+        "orders",
+      ])
+    ).forEach((pseudonym) =>
+      activeBaseTableOptions.push({
+        value: pseudonym,
+        title: pseudonym,
+      })
+    );
   }
 
-  const connectFieldOptions = [
+  const activeBaseFieldOptions = [
     {
       value: null,
       title: "Select field",
@@ -145,25 +102,132 @@ const TableSelect = ({
     },
   ];
 
-  if (connectTableName) {
-    getFieldRelations({
-      tableStructure,
-      selectedTable: tableName,
-      selectedField: fieldName,
-      connectedTable: connectTableName,
-    }).forEach((relation) => {
-      connectFieldOptions.push({
-        value: relation.sourceColumn,
-        title: relation.sourceColumn,
+  if (
+    activeJoin?.baseTable &&
+    tableStructure[getTableNameOnBaseTable(activeJoin?.baseTable)]
+  ) {
+    tableStructure[getTableNameOnBaseTable(activeJoin?.baseTable)][
+      "fields"
+    ].forEach((field) => {
+      activeBaseFieldOptions.push({
+        value: field.columnName,
+        title: field.columnName,
       });
     });
   }
 
+  const activeJoinTableOptions = [
+    {
+      value: null,
+      title: "Select table",
+      default: true,
+    },
+  ];
+
+  let checkedTables = [];
+
+  [
+    ...joins.map((join) => ({
+      connectedTable: join.connectedTable,
+      pseudonym: join.pseudonym,
+    })),
+    {
+      connectedTable: getTableNameOnBaseTable(activeJoin?.baseTable),
+      pseudonym: activeJoin?.baseTable,
+    },
+  ].forEach((join) => {
+    if (
+      checkedTables.includes(join.connectedTable) ||
+      !tableStructure[join.connectedTable]
+    ) {
+      return;
+    }
+
+    tableStructure[join.connectedTable]["relations"].forEach((relation) => {
+      if (relation.targetColumn === activeJoin?.baseField) {
+        activeJoinTableOptions.push({
+          value: relation.sourceTable,
+          title: relation.sourceTable,
+        });
+      }
+    });
+
+    Object.keys(tableStructure).forEach((tableName) => {
+      if (tableStructure[tableName]["relations"]) {
+        tableStructure[tableName]["relations"].forEach((relation) => {
+          if (
+            relation.sourceTable ===
+              getTableNameOnBaseTable(activeJoin?.baseTable) &&
+            relation.sourceColumn === activeJoin?.baseField
+          ) {
+            activeJoinTableOptions.push({
+              value: tableName,
+              title: tableName,
+              joinedField: relation.targetColumn,
+            });
+          }
+        });
+      }
+    });
+  });
+
+  const handleSaveCondition = () => {
+    if (!activeJoin) return;
+
+    const newJoin = {
+      baseTable: activeJoin.baseTable,
+      baseField: activeJoin.baseField,
+      joinedTable: activeJoin.joinedTable,
+      joinedField: activeJoin.joinedField,
+      pseudonym: activeJoin.pseudonym,
+    };
+
+    setJoins((prev) => {
+      const updatedJoins = [...prev];
+      if (activeJoin.index !== undefined) {
+        updatedJoins[activeJoin.index] = newJoin;
+      } else {
+        updatedJoins.push(newJoin);
+      }
+      return updatedJoins;
+    });
+
+    setActiveJoin(null);
+  };
+
+  const onSelectConnectedTable = (newValue) => {
+    if (!activeJoin) return;
+
+    const option = activeJoinTableOptions.find(
+      (join) => join.value === newValue
+    );
+
+    setActiveJoin({
+      ...activeJoin,
+      joinedTable: newValue,
+      joinedField: option.joinedField,
+    });
+  };
+
   return (
     <>
+      <div className="w-full gap-2 mb-4">
+        {joins.map((join, index) => (
+          <div
+            key={index}
+            className="border border-slate-200 w-full px-3 py-2 cursor-pointer rounded-md mb-4"
+            onClick={() => setActiveJoin({ ...join, index })}
+          >
+            {join.pseudonym || "-"}
+          </div>
+        ))}
+      </div>
+
       <div className="w-full mb-4 flex gap-2">
-        <div className="w-full sm:w-[calc(100%-4px)]">
-          <label className="block text-sm font-medium mb-1">Table Name</label>
+        <div className="w-full sm:w-[calc((100%-90px)/2)]">
+          <label className="block text-sm font-medium mb-1">
+            Table Name
+          </label>
           <DropdownClassic
             selected={tableName}
             setSelected={handleChangeTableName}
@@ -173,7 +237,7 @@ const TableSelect = ({
           <ErrorSpan error={tableNameError} />
         </div>
 
-        <div className="w-full sm:w-[calc(100%-4px)]">
+        <div className="w-full sm:w-[calc((100%-90px)/2)]">
           <label className="block text-sm font-medium mb-1">Field Name</label>
           <DropdownClassic
             selected={fieldName}
@@ -184,39 +248,129 @@ const TableSelect = ({
           />
           <ErrorSpan error={fieldNameError} />
         </div>
-      </div>
 
-      <div className="w-full mb-4 flex gap-2">
-        <div className="w-full sm:w-[calc(100%-4px)]">
-          <label className="block text-sm font-medium mb-1">
-            Connection Table Name
-          </label>
-          <DropdownClassic
-            selected={connectTableName}
-            setSelected={handleChangeConnectTableName}
-            needSearch={true}
-            dropdownDisabled={!fieldName || connectTableOptions.length < 3}
-            options={connectTableOptions}
-          />
-          <ErrorSpan error={connectTableNameError} />
-        </div>
-
-        <div className="w-full sm:w-[calc(100%-4px)]">
-          <label className="block text-sm font-medium mb-1">
-            Connection field name
-          </label>
-          <DropdownClassic
-            selected={connectFieldName}
-            setSelected={handleChangeConnectFieldName}
-            needSearch={true}
-            dropdownDisabled={
-              !connectTableName || connectFieldOptions.length < 3
+        <div className="w-[90px] flex items-end">
+          <button
+            onClick={() =>
+              setJoins((prev) => [
+                ...prev,
+                {
+                  baseTable: null,
+                  joinTable: null,
+                  baseField: null,
+                  joinedField: null,
+                  pseudonym: "",
+                },
+              ])
             }
-            options={connectFieldOptions}
-          />
-          <ErrorSpan error={connectFieldNameError} />
+            className="btn bg-teal-500 hover:bg-teal-600 text-white"
+          >
+            Add Join
+          </button>
         </div>
       </div>
+
+      <ModalBlank
+        modalOpen={!!activeJoin}
+        setModalOpen={() => setActiveJoin(null)}
+      >
+        <div className="p-5 flex flex-col">
+          <div className="w-full">
+            <div className="mb-4">
+              <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+                <span>Join Details</span>
+              </div>
+            </div>
+
+            <div
+              className="text-sm mb-4 w-full flex flex-col space-y-4"
+              style={{ overflow: "auto", height: "400px" }}
+            >
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Condition Main Table
+                </label>
+                <DropdownClassic
+                  selected={activeJoin?.baseTable}
+                  setSelected={(newValue) =>
+                    setActiveJoin({
+                      ...activeJoin,
+                      baseTable: newValue,
+                    })
+                  }
+                  needSearch={true}
+                  options={activeBaseTableOptions}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Condition Main Field
+                </label>
+                <DropdownClassic
+                  selected={activeJoin?.baseField}
+                  setSelected={(newValue) =>
+                    setActiveJoin({
+                      ...activeJoin,
+                      baseField: newValue,
+                    })
+                  }
+                  needSearch={true}
+                  options={activeBaseFieldOptions}
+                  dropdownDisabled={!activeJoin?.baseTable}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">
+                  Condition Join Table
+                </label>
+                <DropdownClassic
+                  selected={activeJoin?.joinedTable}
+                  setSelected={onSelectConnectedTable}
+                  needSearch={true}
+                  options={activeJoinTableOptions}
+                  dropdownDisabled={!activeJoin?.baseField}
+                />
+              </div>
+
+              <div className="w-full mb-4">
+                <Input
+                  name="field-pseudonym"
+                  value={activeJoin?.pseudonym ?? ""}
+                  setValue={(newValue) =>
+                    setActiveJoin({
+                      ...activeJoin,
+                      pseudonym: newValue,
+                    })
+                  }
+                  label="Field Pseudonym"
+                  placeholder="Enter Field Pseudonym"
+                  labelClassName="block text-sm font-semibold mb-1"
+                  inputClassName="form-input w-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-wrap justify-end space-x-2">
+            <button
+              type="button"
+              onClick={() => setActiveJoin(null)}
+              className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveCondition}
+              className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </ModalBlank>
     </>
   );
 };

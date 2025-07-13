@@ -1,13 +1,13 @@
+import { useState } from "react";
 import STATIC from "../../../static";
-import { isItemKeyDraggable } from "../../../utils";
+import { cloneObject, isItemKeyDraggable } from "../../../utils";
 import DraggableItem from "./DraggableItem";
 import DraggableItemWithChildren from "./DraggableItemWithChildren";
-import TableSelect from "./TableSelect";
 
 const ContentItem = ({
   tableStructure,
   item,
-  setItems,
+  setActiveTableDetails,
   getDroppableParent,
   activeDrag,
 }) => {
@@ -17,44 +17,21 @@ const ContentItem = ({
         item={item}
         activeDrag={activeDrag}
         getDroppableParent={getDroppableParent}
-        setItems={setItems}
+        setActiveTableDetails={setActiveTableDetails}
         tableStructure={tableStructure}
       />
     );
   }
 
   if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
-    const setItemPart = (name, value) =>
-      setItems((prevItems) =>
-        prevItems.map((prevItem) => {
-          if (prevItem.id !== item.id) {
-            return prevItem;
-          }
-
-          return {
-            ...prevItem,
-            content: { ...prevItem.content, [name]: value },
-          };
-        })
-      );
-
     return (
       <DraggableItem item={item}>
-        <TableSelect
-          tableStructure={tableStructure}
-          tableName={item.content.tableName}
-          setTableName={(newValue) => setItemPart("tableName", newValue)}
-          fieldName={item.content.fieldName}
-          setFieldName={(newValue) => setItemPart("fieldName", newValue)}
-          connectTableName={item.content.connectTableName}
-          setConnectTableName={(newValue) =>
-            setItemPart("connectTableName", newValue)
-          }
-          connectFieldName={item.content.connectFieldName}
-          setConnectFieldName={(newValue) =>
-            setItemPart("connectFieldName", newValue)
-          }
-        />
+        <div
+          className="drag-ignore-section w-fit position-relative z-1"
+          onClick={() => setActiveTableDetails(item)}
+        >
+          {item.content.pseudonym || "-"}
+        </div>
       </DraggableItem>
     );
   }
