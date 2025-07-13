@@ -22,10 +22,11 @@ const Sidebar = React.forwardRef(function Sidebar(
       data-id={id}
     >
       {items.map((item, itemIndex) => (
-        <>
+        <React.Fragment key={itemIndex}>
           <div className={`mb-2${itemIndex === 0 ? "" : " mt-2"}`}>
             <b>{item.label}</b>
           </div>
+
           {item.list.map((operation) => (
             <div className="relative" key={operation[keyField]}>
               <div className="cursor-pointer p-2 mb-2 border border-slate-300 bg-white absolute top-0 left-0 w-full">
@@ -35,7 +36,7 @@ const Sidebar = React.forwardRef(function Sidebar(
               <Component item={operation} />
             </div>
           ))}
-        </>
+        </React.Fragment>
       ))}
     </div>
   );

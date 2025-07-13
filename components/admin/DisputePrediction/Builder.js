@@ -14,6 +14,7 @@ import DraggableItem from "./DraggableItem";
 import STATIC from "../../../static";
 import Query from "./Query";
 import Where from "./Where";
+import ModelParamFieldModal from "./ModelParamFieldModal";
 
 const sidebarId = "dispute-prediction-sidebar";
 const dropdownId = "dispute-prediction-content";
@@ -40,8 +41,8 @@ const customItems = Object.keys(STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM).map(
     content: {
       tableName: null,
       fieldName: null,
-      connectTableName: null,
-      connectFieldName: null,
+      pseudonym: "",
+      joins: [],
     },
   })
 );
@@ -50,6 +51,7 @@ const Builder = ({ tableStructure, dopProps }) => {
   const contentRef = useRef(null);
   const [contentItems, setContentItems] = useState([]);
   const [activeDrag, setActiveDrag] = useState(null);
+  const [activeTableDetails, setActiveTableDetails] = useState(null);
 
   const handleDragStart = (event) => {
     setActiveDrag(event.active);
@@ -95,7 +97,7 @@ const Builder = ({ tableStructure, dopProps }) => {
     return null;
   };
 
-  const updateItemRecursively = (items, overId, itemDetails) => {
+  const updateItemSubItemsRecursively = (items, overId, itemDetails) => {
     return items.map((item) => {
       if (isItemKeyDraggable(item.key)) {
         if (item.id === overId) {
@@ -121,6 +123,30 @@ const Builder = ({ tableStructure, dopProps }) => {
             };
           }
         }
+      }
+
+      if (item.subItems && item.subItems.length > 0) {
+        return {
+          ...item,
+          subItems: updateItemSubItemsRecursively(
+            item.subItems,
+            overId,
+            itemDetails
+          ),
+        };
+      }
+
+      return item;
+    });
+  };
+
+  const updateItemRecursively = (prevItems, overId, itemDetails) => {
+    return prevItems.map((item) => {
+      if (item.id === overId) {
+        return {
+          ...item,
+          ...itemDetails,
+        };
       }
 
       if (item.subItems && item.subItems.length > 0) {
@@ -301,7 +327,7 @@ const Builder = ({ tableStructure, dopProps }) => {
       }
 
       return setContentItems((items) =>
-        updateItemRecursively(items, over.id, itemDetails)
+        updateItemSubItemsRecursively(items, over.id, itemDetails)
       );
     }
 
@@ -327,70 +353,99 @@ const Builder = ({ tableStructure, dopProps }) => {
     }
   };
 
+  const setTableDetails = ({ tableName, fieldName, joins, pseudonym }) => {
+    setContentItems((prevItems) =>
+      updateItemRecursively(prevItems, activeTableDetails.id, {
+        content: { tableName, fieldName, joins, pseudonym },
+      })
+    );
+  };
+
   return (
-    <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden mb-4">
-        <Sidebar
-          id={sidebarId}
-          items={[
-            {
-              label: "Combined Operations",
-              list: withChildrenItems,
-            },
-            {
-              label: "Math Operations",
-              list: operationItems,
-            },
-            {
-              label: "Custom Operations",
-              list: customItems,
-            },
-          ]}
-          keyField="key"
-          bodyField="body"
-          Component={({ item }) => (
-            <DraggableItem item={item} example>
-              {item.body}
-            </DraggableItem>
-          )}
-        />
-
-        <Content
-          ref={contentRef}
-          id={dropdownId}
-          items={contentItems}
-          keyField="id"
-          Component={({ item }) => (
-            <ContentItem
-              tableStructure={tableStructure}
-              item={item}
-              getDroppableParent={getDroppableParent}
-              key={item.id}
-              activeDrag={activeDrag}
-              setItems={setContentItems}
-            />
-          )}
-        />
-
-        <Where tableStructure={tableStructure} {...dopProps} />
-      </div>
-
-      <Query
-        tableStructure={tableStructure}
-        items={contentItems}
-        {...dopProps}
-      />
-
-      <DragOverlay dropAnimation={null}>
-        {activeDrag ? (
-          <OverlayItem
-            active={activeDrag}
-            examples={[...withChildrenItems, ...operationItems, ...customItems]}
-            items={contentItems}
+    <>
+      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <div className="flex space-x-4 w-full h-full h-max-full overflow-y-hidden mb-4">
+          <Sidebar
+            id={sidebarId}
+            items={[
+              {
+                label: "Combined Operations",
+                list: withChildrenItems,
+              },
+              {
+                label: "Math Operations",
+                list: operationItems,
+              },
+              {
+                label: "Custom Operations",
+                list: customItems,
+              },
+            ]}
+            keyField="key"
+            bodyField="body"
+            Component={({ item }) => (
+              <DraggableItem item={item} example>
+                {item.body}
+              </DraggableItem>
+            )}
           />
-        ) : null}
-      </DragOverlay>
-    </DndContext>
+
+          <Content
+            ref={contentRef}
+            id={dropdownId}
+            items={contentItems}
+            keyField="id"
+            Component={({ item }) => (
+              <ContentItem
+                tableStructure={tableStructure}
+                item={item}
+                getDroppableParent={getDroppableParent}
+                key={item.id}
+                activeDrag={activeDrag}
+                setActiveTableDetails={setActiveTableDetails}
+              />
+            )}
+          />
+
+          <Where
+            tableStructure={tableStructure}
+            items={contentItems}
+            {...dopProps}
+          />
+        </div>
+
+        <Query
+          tableStructure={tableStructure}
+          items={contentItems}
+          {...dopProps}
+        />
+
+        <DragOverlay dropAnimation={null}>
+          {activeDrag ? (
+            <OverlayItem
+              active={activeDrag}
+              examples={[
+                ...withChildrenItems,
+                ...operationItems,
+                ...customItems,
+              ]}
+              items={contentItems}
+            />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
+
+      <ModelParamFieldModal
+        tableStructure={tableStructure}
+        onSaveClick={setTableDetails}
+        modalOpen={!!activeTableDetails}
+        closeModal={() => setActiveTableDetails(null)}
+        pseudonym={activeTableDetails?.content?.pseudonym ?? ""}
+        fieldName={activeTableDetails?.content?.fieldName ?? ""}
+        tableName={activeTableDetails?.content?.tableName ?? ""}
+        joins={activeTableDetails?.content?.joins ?? []}
+      />
+    </>
   );
 };
 

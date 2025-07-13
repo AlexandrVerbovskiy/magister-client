@@ -27,13 +27,7 @@ const CreateDisputePrediction = ({ structure: tableStructure }) => {
         index,
         pseudonym: modelParams[index].pseudonym,
         content: cloneObject(modelParams[index].content),
-        condition: {
-          mainTable: modelParams[index].mainTable ?? null,
-          mainField: modelParams[index].mainField ?? null,
-          operation: modelParams[index].operation ?? null,
-          subTable: modelParams[index].subTable ?? null,
-          subField: modelParams[index].subField ?? null,
-        },
+        conditions: modelParams[index].conditions,
       });
     }
 
@@ -43,8 +37,7 @@ const CreateDisputePrediction = ({ structure: tableStructure }) => {
         pseudonym: modelParams[index].pseudonym,
         tableName: modelParams[index].content.tableName,
         fieldName: modelParams[index].content.fieldName,
-        connectTableName: modelParams[index].content.connectTableName,
-        connectFieldName: modelParams[index].content.connectFieldName,
+        joins: modelParams[index].content.joins,
       });
     }
   };
@@ -53,23 +46,16 @@ const CreateDisputePrediction = ({ structure: tableStructure }) => {
     setActiveModelTemplateParam({
       pseudonym: "",
       content: [],
-      condition: {
-        mainTable: null,
-        mainField: null,
-        operation: null,
-        subTable: null,
-        subField: null,
-      },
+      conditions: [],
     });
   };
 
   const createModelFieldParam = () => {
     setActiveModelFieldParam({
       pseudonym: "",
-      tableName: "",
+      joins: [],
+      tableName: "orders",
       fieldName: "",
-      connectTableName: "",
-      connectFieldName: "",
     });
   };
 
@@ -161,18 +147,41 @@ const CreateDisputePrediction = ({ structure: tableStructure }) => {
       </div>
 
       <ModelParamTemplateModal
-        onSaveClick={saveModelParam}
+        onSaveClick={({ pseudonym, content, conditions }) =>
+          saveModelParam(
+            {
+              pseudonym,
+              type: "template",
+              content,
+              conditions,
+            },
+            activeModelTemplateParam?.index
+          )
+        }
         modalOpen={!!activeModelTemplateParam}
         closeModal={() => setActiveModelTemplateParam(null)}
         index={activeModelTemplateParam?.index ?? null}
         content={activeModelTemplateParam?.content ?? []}
-        condition={activeModelTemplateParam?.condition ?? {}}
+        conditions={activeModelTemplateParam?.conditions ?? []}
         pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
         tableStructure={tableStructure}
       />
 
       <ModelParamFieldModal
-        onSaveClick={saveModelParam}
+        onSaveClick={({ tableName, fieldName, joins, pseudonym }) =>
+          saveModelParam(
+            {
+              pseudonym,
+              type: "field",
+              content: {
+                tableName,
+                fieldName,
+                joins,
+              },
+            },
+            activeModelTemplateParam?.index
+          )
+        }
         modalOpen={!!activeModelFieldParam}
         closeModal={() => setActiveModelFieldParam(null)}
         tableStructure={tableStructure}
@@ -180,8 +189,7 @@ const CreateDisputePrediction = ({ structure: tableStructure }) => {
         pseudonym={activeModelFieldParam?.pseudonym ?? ""}
         fieldName={activeModelFieldParam?.fieldName ?? null}
         tableName={activeModelFieldParam?.tableName ?? null}
-        connectFieldName={activeModelFieldParam?.connectFieldName ?? null}
-        connectTableName={activeModelFieldParam?.connectTableName ?? null}
+        joins={activeModelFieldParam?.joins ?? []}
       />
     </div>
   );

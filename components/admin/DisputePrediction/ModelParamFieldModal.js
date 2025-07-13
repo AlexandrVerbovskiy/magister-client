@@ -3,18 +3,17 @@ import ModalBlank from "../ModalBlank";
 import { useEffect, useState } from "react";
 import { validateSmallText } from "../../../utils";
 import TableSelect from "./TableSelect";
+import _ from "lodash";
 
 const ModelParamFieldModal = ({
   onSaveClick,
   modalOpen,
   closeModal,
   tableStructure,
-  index = null,
   pseudonym: basePseudonym = "",
   fieldName: baseFieldName = null,
   tableName: baseTableName = null,
-  connectFieldName: baseConnectFieldName = null,
-  connectTableName: baseConnectTableName = null,
+  joins: baseJoins = [],
 }) => {
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
@@ -25,11 +24,7 @@ const ModelParamFieldModal = ({
   const [fieldName, setFieldName] = useState(null);
   const [fieldNameError, setFieldNameError] = useState(null);
 
-  const [connectTableName, setConnectTableName] = useState(null);
-  const [connectTableNameError, setConnectTableNameError] = useState(null);
-
-  const [connectFieldName, setConnectFieldName] = useState(null);
-  const [connectFieldNameError, setConnectFieldNameError] = useState(null);
+  const [joins, setJoins] = useState([]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
 
@@ -37,15 +32,11 @@ const ModelParamFieldModal = ({
 
   useEffect(() => setFieldName(baseFieldName), [baseFieldName]);
 
-  useEffect(
-    () => setConnectFieldName(baseConnectFieldName),
-    [baseConnectFieldName]
-  );
-
-  useEffect(
-    () => setConnectTableName(baseConnectTableName),
-    [baseConnectTableName]
-  );
+  useEffect(() => {
+    if (!_.isEqual(baseJoins, joins)) {
+      setJoins(baseJoins);
+    }
+  }, [baseJoins]);
 
   const handleSaveClick = () => {
     let hasError = false;
@@ -57,16 +48,6 @@ const ModelParamFieldModal = ({
 
     if (!tableName) {
       setTableNameError("Required Field");
-      hasError = true;
-    }
-
-    if (!connectTableName) {
-      setConnectTableNameError("Required Field");
-      hasError = true;
-    }
-
-    if (!connectFieldName) {
-      setConnectFieldNameError("Required Field");
       hasError = true;
     }
 
@@ -86,19 +67,12 @@ const ModelParamFieldModal = ({
       return;
     }
 
-    onSaveClick(
-      {
-        pseudonym,
-        type: "field",
-        content: {
-          tableName,
-          fieldName,
-          connectTableName,
-          connectFieldName,
-        },
-      },
-      index
-    );
+    onSaveClick({
+      pseudonym,
+      tableName,
+      fieldName,
+      joins,
+    });
 
     closeModal();
   };
@@ -127,18 +101,12 @@ const ModelParamFieldModal = ({
                   setTableName={setTableName}
                   fieldName={fieldName}
                   setFieldName={setFieldName}
-                  connectTableName={connectTableName}
-                  setConnectTableName={setConnectTableName}
-                  connectFieldName={connectFieldName}
-                  setConnectFieldName={setConnectFieldName}
+                  joins={joins}
+                  setJoins={setJoins}
                   tableNameError={tableNameError}
                   setTableNameError={setTableNameError}
                   fieldNameError={fieldNameError}
                   setFieldNameError={setFieldNameError}
-                  connectTableNameError={connectTableNameError}
-                  setConnectTableNameError={setConnectTableNameError}
-                  connectFieldNameError={connectFieldNameError}
-                  setConnectFieldNameError={setConnectFieldNameError}
                 />
 
                 <div className="w-full mb-4">
