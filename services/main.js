@@ -85,6 +85,18 @@ export const getAdminLogListPageOptions = async (params, authToken) => {
   return data.body;
 };
 
+export const getAdminDisputePredictionModelListPageOptions = async (
+  params,
+  authToken
+) => {
+  const data = await post(
+    `/admin-dispute-prediction-model-list-options`,
+    params,
+    authToken
+  );
+  return data.body;
+};
+
 export const getAdminUserEventLogListPageOptions = async (
   params,
   authToken
@@ -344,5 +356,13 @@ export const getOrderCheckoutInfo = async (id, authToken) => {
 
 export const getTableRelations = async (authToken) => {
   const data = await get(`/get-table-relations`, authToken);
+  return data.body;
+};
+
+export const getDisputePredictionModelDetails = async (id, authToken) => {
+  const data = await get(
+    `/get-dispute-prediction-model-details/${id}`,
+    authToken
+  );
   return data.body;
 };

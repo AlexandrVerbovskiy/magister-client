@@ -15,3 +15,4 @@ export * from "./senderPaymentRequests";
 export * from "./recipientPaymentRequests";
 export * from "./comments";
 export * from "./dispute";
+export * from "./disputePredictionModels";
