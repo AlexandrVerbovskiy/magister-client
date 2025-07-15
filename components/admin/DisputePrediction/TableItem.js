@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TableDateView from "../../admin/TableDateView";
+import TableDateView from "../TableDateView";
 
 const StatusSpan = ({ started, stopped, finished }) => {
   let text = "Pending Started";
@@ -20,7 +20,13 @@ const StatusSpan = ({ started, stopped, finished }) => {
     text = "Started";
   }
 
-  return <div className={className}>{text}</div>;
+  return (
+    <div
+      className={`max-w-full text-center text-xs inline-flex font-medium rounded-full px-2.5 py-1 overflow-separate ${className}`}
+    >
+      {text}
+    </div>
+  );
 };
 
 const TableItem = ({
@@ -52,11 +58,11 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div
-          className={
+          className={`max-w-full text-center text-xs inline-flex font-medium rounded-full px-2.5 py-1 overflow-separate ${
             active
               ? "bg-emerald-100 text-emerald-500"
               : "bg-rose-100 text-rose-500"
-          }
+          }`}
         >
           {active ? "Active" : "Not Active"}
         </div>
@@ -72,15 +78,16 @@ const TableItem = ({
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <TableDateView date={createdAt} />
       </td>
-      <td>
-        {!active && finished && (
+
+      <td className="flex flex-col gap-2 my-4">
+        {!finished && !stopped && (
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onActivateModelClick();
             }}
-            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
           >
             Activate
           </button>
@@ -93,7 +100,7 @@ const TableItem = ({
               e.stopPropagation();
               onStopModelClick();
             }}
-            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4"
+            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
           >
             Stop
           </button>
@@ -106,7 +113,7 @@ const TableItem = ({
               e.stopPropagation();
               onUnstopModelClick();
             }}
-            className="bg-rose-100 hover:bg-rose-200 flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4"
+            className="bg-rose-100 hover:bg-rose-200 flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4 w-fit"
           >
             Continue
           </button>
@@ -114,7 +121,7 @@ const TableItem = ({
 
         <Link
           href={`/admin/dispute-predictions/create?id=${id}/`}
-          className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4"
+          className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4 w-fit"
         >
           Clone
         </Link>
@@ -122,7 +129,7 @@ const TableItem = ({
         {finished && (
           <Link
             href={`/admin/dispute-predictions/edit/${id}/`}
-            className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4"
+            className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4 w-fit"
           >
             Edit
           </Link>

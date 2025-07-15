@@ -11,8 +11,8 @@ export const unstopDisputePredictionModel = async (id, authToken) => {
   return data.body;
 };
 
-export const activateDisputePredictionModel = async (id, authToken) => {
-  const data = await post(`/set-active`, { id }, authToken);
+export const activateDisputePredictionModel = async (id, rebuild, authToken) => {
+  const data = await post(`/set-active`, { id, rebuild }, authToken);
   return data.body;
 };
 
