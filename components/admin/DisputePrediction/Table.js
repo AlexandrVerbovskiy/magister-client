@@ -17,10 +17,10 @@ const DisputePredictionModelsTable = ({
 }) => {
   const ths = [
     { title: "Id", value: "id", width: "10%" },
-    { title: "Status", value: "success", canOrder: false, width: "20%" },
-    { title: "Active", value: "active", canOrder: false, width: "20%" },
+    { title: "Status", value: "success", canOrder: false, width: "15%" },
+    { title: "Active", value: "active", canOrder: false, width: "15%" },
     { title: "Fields", value: "fields", canOrder: false, width: "25%" },
-    { title: "Accuracy", value: "accuracy", canOrder: false, width: "5%" },
+    { title: "Accuracy", value: "accuracy", canOrder: false, width: "15%" },
     { title: "Date", value: "create_at", width: "10%" },
     { title: "", value: "actions", width: "10%", canOrder: false },
   ];
