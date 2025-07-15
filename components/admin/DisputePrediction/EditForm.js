@@ -10,18 +10,15 @@ import { useContext, useState } from "react";
 import { cloneObject } from "../../../utils";
 import ModelParamTemplateModal from "../../../components/admin/DisputePrediction/ModelParamTemplateModal";
 import ModelParamFieldModal from "../../../components/admin/DisputePrediction/ModelParamFieldModal";
-import FullQuery from "../../../components/admin/DisputePrediction/FullQuery";
 import Switch from "../../../partials/admin/base/Switch";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
-import DropdownClassic from "../DropdownClassic";
 
 const EditForm = ({ structure: tableStructure, base, setBase }) => {
   const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { authToken, success, error } = useContext(IndiceContext);
   const [modelParams, setModelParams] = useState(base?.body ?? []);
-  const [checkField, setCheckField] = useState(base?.checkField ?? "");
   const [disabled, setDisabled] = useState(false);
 
   const [afterFinishActive, setAfterFinishActive] = useState(
@@ -44,7 +41,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
             body: modelParams,
             afterFinishActive,
             afterFinishRebuild,
-            checkField,
           },
           authToken
         );
@@ -56,7 +52,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
             body: modelParams,
             afterFinishActive,
             afterFinishRebuild,
-            checkField,
           },
           authToken
         );
@@ -81,9 +76,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         pseudonym: modelParams[index].pseudonym,
         content: cloneObject(modelParams[index].content),
         conditions: modelParams[index].conditions,
-        groups: modelParams[index].groups,
-        comparisonType: modelParams[index].comparisonType,
-        defaultValue: modelParams[index].defaultValue ?? null,
       });
     }
 
@@ -94,8 +86,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         tableName: modelParams[index].content.tableName,
         fieldName: modelParams[index].content.fieldName,
         joins: modelParams[index].content.joins,
-        comparisonType: modelParams[index].comparisonType,
-        defaultValue: modelParams[index].defaultValue ?? null,
       });
     }
   };
@@ -105,9 +95,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       pseudonym: "",
       content: [],
       conditions: [],
-      groups: [],
-      comparisonType: "numerical",
-      defaultValue: null,
     });
   };
 
@@ -117,8 +104,6 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       joins: [],
       tableName: "orders",
       fieldName: "",
-      comparisonType: "numerical",
-      defaultValue: null,
     });
   };
 
@@ -138,15 +123,15 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
   };
 
   return (
-    <div className="flex h-[100dvh]">
+    <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden dark:bg-slate-900">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <main className="grow">
-          <div className="relative">
-            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between">
+        <main className="grow overflow-hidden">
+          <div className="relative h-full">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between overflow-hidden">
               <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs
                   links={[
@@ -159,11 +144,10 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                 />
               </div>
 
-              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between min-h-full overflow-hidden">
-                <div className="gap-2 flex flex-col m-4 ">
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between h-full overflow-hidden">
+                <div className="overflow-auto max-h-full h-full gap-2 flex flex-col m-4 ">
                   {modelParams.map((param, index) => (
                     <div
-                      key={index}
                       className="p-4 rounded-xs border border-slate-200 cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out"
                       onClick={() => updateModelParam(index)}
                     >
@@ -172,85 +156,55 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                   ))}
                 </div>
 
-                <div className="p-6 space-y-6">
-                  <section>
-                    <div className="w-full mb-4">
-                      <label className="block text-sm font-semibold mb-1">
-                        Target Field
-                      </label>
-                      <DropdownClassic
-                        name="target-field"
-                        selected={checkField}
-                        setSelected={setCheckField}
-                        needSearch={false}
-                        options={[
-                          {
-                            value: "",
-                            title: "Not Selected",
-                          },
-                          ...modelParams.map((param) => ({
-                            value: param.pseudonym,
-                            title: param.pseudonym,
-                          })),
-                        ]}
-                      />
-                    </div>
-                  </section>
-
-                  {!base?.finished && (
-                    <>
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Active after finish
-                        </h2>
-                        <div className="flex flex-wrap mt-2">
-                          <div className="mr-2">
-                            <label
-                              className="block text-sm font-medium mb-1"
-                              htmlFor="after_finish"
-                            ></label>
-                          </div>
-                          <Switch
-                            id="after_finish"
-                            checked={afterFinishActive}
-                            changeChecked={() =>
-                              setAfterFinishActive(!afterFinishActive)
-                            }
-                            onText="Active"
-                            offText="Inactive"
-                          />
+                {!base?.finished && (
+                  <div className=" p-6 space-y-6">
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Active after finish
+                      </h2>
+                      <div className="flex flex-wrap mt-2">
+                        <div className="mr-2">
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            htmlFor="after_finish"
+                          ></label>
                         </div>
-                      </section>
+                        <Switch
+                          id="after_finish"
+                          checked={afterFinishActive}
+                          changeChecked={() =>
+                            setAfterFinishActive(!afterFinishActive)
+                          }
+                          onText="Active"
+                          offText="Inactive"
+                        />
+                      </div>
+                    </section>
 
-                      <section>
-                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                          Rebuild after finish
-                        </h2>
-                        <div className="flex flex-wrap mt-2">
-                          <div className="mr-2">
-                            <label
-                              className="block text-sm font-medium mb-1"
-                              htmlFor="after_finish_rebuild"
-                            ></label>
-                          </div>
-                          <Switch
-                            id="after_finish_rebuild"
-                            checked={afterFinishRebuild}
-                            changeChecked={() =>
-                              setAfterFinishRebuild(!afterFinishRebuild)
-                            }
-                            onText="Yes"
-                            offText="Not"
-                          />
+                    <section>
+                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                        Rebuild after finish
+                      </h2>
+                      <div className="flex flex-wrap mt-2">
+                        <div className="mr-2">
+                          <label
+                            className="block text-sm font-medium mb-1"
+                            htmlFor="after_finish_rebuild"
+                          ></label>
                         </div>
-                      </section>
-                    </>
-                  )}
-                </div>
-
-                <div className="p-6 space-y-6">
-                  <FullQuery modelParams={modelParams} />
-                </div>
+                        <Switch
+                          id="after_finish_rebuild"
+                          checked={afterFinishRebuild}
+                          changeChecked={() =>
+                            setAfterFinishRebuild(!afterFinishRebuild)
+                          }
+                          onText="Yes"
+                          offText="Not"
+                        />
+                      </div>
+                    </section>
+                  </div>
+                )}
 
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
@@ -291,23 +245,13 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       </div>
 
       <ModelParamTemplateModal
-        onSaveClick={({
-          comparisonType,
-          pseudonym,
-          content,
-          conditions,
-          groups,
-          defaultValue,
-        }) =>
+        onSaveClick={({ pseudonym, content, conditions }) =>
           saveModelParam(
             {
               pseudonym,
               type: "template",
               content,
               conditions,
-              groups,
-              comparisonType,
-              defaultValue,
             },
             activeModelTemplateParam?.index
           )
@@ -317,35 +261,23 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         index={activeModelTemplateParam?.index ?? null}
         content={activeModelTemplateParam?.content ?? []}
         conditions={activeModelTemplateParam?.conditions ?? []}
-        groups={activeModelTemplateParam?.groups ?? []}
-        comparisonType={activeModelTemplateParam?.comparisonType ?? null}
         pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
-        defaultValue={activeModelTemplateParam?.defaultValue ?? ""}
         tableStructure={tableStructure}
       />
 
       <ModelParamFieldModal
-        onSaveClick={({
-          comparisonType,
-          tableName,
-          fieldName,
-          joins,
-          pseudonym,
-          defaultValue,
-        }) =>
+        onSaveClick={({ tableName, fieldName, joins, pseudonym }) =>
           saveModelParam(
             {
               pseudonym,
               type: "field",
-              comparisonType,
               content: {
                 tableName,
                 fieldName,
                 joins,
               },
-              defaultValue,
             },
-            activeModelFieldParam?.index
+            activeModelTemplateParam?.index
           )
         }
         modalOpen={!!activeModelFieldParam}
@@ -355,9 +287,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         pseudonym={activeModelFieldParam?.pseudonym ?? ""}
         fieldName={activeModelFieldParam?.fieldName ?? null}
         tableName={activeModelFieldParam?.tableName ?? null}
-        comparisonType={activeModelFieldParam?.comparisonType ?? null}
         joins={activeModelFieldParam?.joins ?? []}
-        defaultValue={activeModelFieldParam?.defaultValue ?? ""}
       />
     </div>
   );

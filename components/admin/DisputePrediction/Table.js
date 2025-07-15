@@ -14,15 +14,13 @@ const DisputePredictionModelsTable = ({
   setModelIdToStop,
   setModelIdToUnstop,
   setModelIdToActivate,
-  setModelIdToStartTraining,
 }) => {
   const ths = [
-    { title: "Id", value: "id", width: "5%" },
-    { title: "Status", value: "success", canOrder: false, width: "10%" },
-    { title: "Active", value: "active", canOrder: false, width: "10%" },
+    { title: "Id", value: "id", width: "10%" },
+    { title: "Status", value: "success", canOrder: false, width: "15%" },
+    { title: "Active", value: "active", canOrder: false, width: "15%" },
     { title: "Fields", value: "fields", canOrder: false, width: "25%" },
     { title: "Accuracy", value: "accuracy", canOrder: false, width: "15%" },
-    { title: "Training percent", value: "training-percent", canOrder: false, width: "15%" },
     { title: "Date", value: "create_at", width: "10%" },
     { title: "", value: "actions", width: "10%", canOrder: false },
   ];
@@ -63,9 +61,6 @@ const DisputePredictionModelsTable = ({
                     onStopModelClick={() => setModelIdToStop(model.id)}
                     onUnstopModelClick={() => setModelIdToUnstop(model.id)}
                     onActivateModelClick={() => setModelIdToActivate(model.id)}
-                    onStartTrainingClick={() =>
-                      setModelIdToStartTraining(model.id)
-                    }
                     {...model}
                   />
                 ))}
