@@ -45,10 +45,6 @@ const TableItem = ({
   return (
     <tr
       className="cursor-pointer"
-      onClick={(e) => {
-        e.stopPropagation();
-        onSelectPanelItem(id);
-      }}
     >
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
@@ -100,7 +96,7 @@ const TableItem = ({
               e.stopPropagation();
               onStopModelClick();
             }}
-            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
+            className="bg-rose-100 hover:bg-rose-200 flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4 w-fit"
           >
             Stop
           </button>
@@ -113,14 +109,14 @@ const TableItem = ({
               e.stopPropagation();
               onUnstopModelClick();
             }}
-            className="bg-rose-100 hover:bg-rose-200 flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4 w-fit"
+            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
           >
             Continue
           </button>
         )}
 
         <Link
-          href={`/admin/dispute-predictions/create?id=${id}/`}
+          href={`/admin/dispute-predictions/clone/${id}/`}
           className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4 w-fit"
         >
           Clone
