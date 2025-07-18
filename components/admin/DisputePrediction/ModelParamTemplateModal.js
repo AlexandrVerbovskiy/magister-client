@@ -7,15 +7,17 @@ const ModelParamTemplateModal = ({
   onSaveClick,
   modalOpen,
   closeModal,
-  content: baseContent = {},
+  content: baseContent = [],
   pseudonym: basePseudonym = "",
   conditions: baseConditions = [],
+  groups: baseGroups = [],
   tableStructure,
 }) => {
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState([]);
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
   const [conditions, setConditions] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
@@ -23,13 +25,23 @@ const ModelParamTemplateModal = ({
 
   useEffect(() => setConditions(cloneObject(baseConditions)), [baseConditions]);
 
+  useEffect(() => setGroups(cloneObject(baseGroups)), [baseGroups]);
+
   const handleSaveClick = () => {
-    onSaveClick({
-      pseudonym,
-      type: "template",
-      content,
-      conditions,
-    });
+    onSaveClick(
+      cloneObject({
+        pseudonym,
+        type: "template",
+        content: content,
+        conditions: conditions,
+        groups: groups,
+      })
+    );
+
+    setContent([]);
+    setPseudonym("");
+    setConditions([]);
+    setGroups([]);
 
     closeModal();
   };
@@ -56,12 +68,16 @@ const ModelParamTemplateModal = ({
                 <Builder
                   tableStructure={tableStructure}
                   dopProps={{
+                    content,
+                    setContent,
                     pseudonym,
                     setPseudonym,
                     pseudonymError,
                     setPseudonymError,
                     conditions,
                     setConditions,
+                    groups,
+                    setGroups,
                   }}
                 />
               </div>
