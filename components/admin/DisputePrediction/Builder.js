@@ -49,7 +49,6 @@ const customItems = Object.keys(STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM).map(
 
 const Builder = ({ tableStructure, dopProps }) => {
   const contentRef = useRef(null);
-  const [contentItems, setContentItems] = useState([]);
   const [activeDrag, setActiveDrag] = useState(null);
   const [activeTableDetails, setActiveTableDetails] = useState(null);
 
@@ -63,7 +62,7 @@ const Builder = ({ tableStructure, dopProps }) => {
     needCheck = true
   ) => {
     if (checkableItems === null) {
-      checkableItems = contentItems;
+      checkableItems = dopProps.content;
     }
 
     for (let i = 0; i < checkableItems.length; i++) {
@@ -143,17 +142,17 @@ const Builder = ({ tableStructure, dopProps }) => {
   const updateItemRecursively = (prevItems, overId, itemDetails) => {
     return prevItems.map((item) => {
       if (item.id === overId) {
-        return {
+        return cloneObject({
           ...item,
           ...itemDetails,
-        };
+        });
       }
 
       if (item.subItems && item.subItems.length > 0) {
-        return {
+        return cloneObject({
           ...item,
           subItems: updateItemRecursively(item.subItems, overId, itemDetails),
-        };
+        });
       }
 
       return item;
@@ -168,10 +167,10 @@ const Builder = ({ tableStructure, dopProps }) => {
         }
 
         if (item.subItems && item.subItems.length > 0) {
-          return {
+          return cloneObject({
             ...item,
             subItems: removeItemRecursively(item.subItems, targetId),
-          };
+          });
         }
 
         return item;
@@ -253,7 +252,7 @@ const Builder = ({ tableStructure, dopProps }) => {
 
   const getItemById = (id, items = null) => {
     if (items === null) {
-      items = contentItems;
+      items = dopProps.content;
     }
 
     for (let item of items) {
@@ -278,7 +277,7 @@ const Builder = ({ tableStructure, dopProps }) => {
 
     if (!over || over.id === sidebarId) {
       if (!isExample) {
-        setContentItems((items) => removeItemRecursively(items, active.id));
+        dopProps.setContent((items) => removeItemRecursively(items, active.id));
       }
 
       return;
@@ -300,7 +299,7 @@ const Builder = ({ tableStructure, dopProps }) => {
       : getItemById(active.id);
 
     if (over.id === dropdownId) {
-      return setContentItems((prevItemsPaten2) => {
+      return dopProps.setContent((prevItemsPaten2) => {
         let res = [];
 
         if (isExample) {
@@ -315,18 +314,18 @@ const Builder = ({ tableStructure, dopProps }) => {
     }
 
     if (isExample) {
-      for (let i = 0; i < contentItems.length; i++) {
-        const childItem = contentItems[i];
+      for (let i = 0; i < dopProps.content.length; i++) {
+        const childItem = dopProps.content[i];
 
         if (childItem.id === over.id && !isItemKeyDraggable(childItem.key)) {
-          return setContentItems([
-            ...contentItems,
+          return dopProps.setContent([
+            ...dopProps.content,
             { ...cloneObject(itemDetails), id: generateRandomString() },
           ]);
         }
       }
 
-      return setContentItems((items) =>
+      return dopProps.setContent((items) =>
         updateItemSubItemsRecursively(items, over.id, itemDetails)
       );
     }
@@ -338,7 +337,7 @@ const Builder = ({ tableStructure, dopProps }) => {
       getDroppableParent(active.id, null, false)?.id ===
       getDroppableParent(over.id, null, false)?.id
     ) {
-      return setContentItems((items) =>
+      return dopProps.setContent((items) =>
         reorderItemRecursively(items, active.id, over.id)
       );
     } else {
@@ -346,7 +345,7 @@ const Builder = ({ tableStructure, dopProps }) => {
         return;
       }
 
-      return setContentItems((prevItemsPaten2) => {
+      return dopProps.setContent((prevItemsPaten2) => {
         const [filtered] = findAndRemoveItem(prevItemsPaten2, active.id);
         return insertItemById(filtered, over.id, itemDetails);
       });
@@ -354,7 +353,7 @@ const Builder = ({ tableStructure, dopProps }) => {
   };
 
   const setTableDetails = ({ tableName, fieldName, joins, pseudonym }) => {
-    setContentItems((prevItems) =>
+    dopProps.setContent((prevItems) =>
       updateItemRecursively(prevItems, activeTableDetails.id, {
         content: { tableName, fieldName, joins, pseudonym },
       })
@@ -393,7 +392,7 @@ const Builder = ({ tableStructure, dopProps }) => {
           <Content
             ref={contentRef}
             id={dropdownId}
-            items={contentItems}
+            items={dopProps.content}
             keyField="id"
             Component={({ item }) => (
               <ContentItem
@@ -409,14 +408,14 @@ const Builder = ({ tableStructure, dopProps }) => {
 
           <Where
             tableStructure={tableStructure}
-            items={contentItems}
+            items={dopProps.content}
             {...dopProps}
           />
         </div>
 
         <Query
           tableStructure={tableStructure}
-          items={contentItems}
+          items={dopProps.content}
           {...dopProps}
         />
 
@@ -429,7 +428,7 @@ const Builder = ({ tableStructure, dopProps }) => {
                 ...operationItems,
                 ...customItems,
               ]}
-              items={contentItems}
+              items={dopProps.content}
             />
           ) : null}
         </DragOverlay>

@@ -76,6 +76,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         pseudonym: modelParams[index].pseudonym,
         content: cloneObject(modelParams[index].content),
         conditions: modelParams[index].conditions,
+        groups: modelParams[index].groups,
       });
     }
 
@@ -95,6 +96,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       pseudonym: "",
       content: [],
       conditions: [],
+      groups:[]
     });
   };
 
@@ -245,13 +247,14 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       </div>
 
       <ModelParamTemplateModal
-        onSaveClick={({ pseudonym, content, conditions }) =>
+        onSaveClick={({ pseudonym, content, conditions, groups }) =>
           saveModelParam(
             {
               pseudonym,
               type: "template",
               content,
               conditions,
+              groups,
             },
             activeModelTemplateParam?.index
           )
@@ -261,6 +264,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         index={activeModelTemplateParam?.index ?? null}
         content={activeModelTemplateParam?.content ?? []}
         conditions={activeModelTemplateParam?.conditions ?? []}
+        groups={activeModelTemplateParam?.groups ?? []}
         pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
         tableStructure={tableStructure}
       />

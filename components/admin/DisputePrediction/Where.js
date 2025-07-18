@@ -16,22 +16,36 @@ const Where = ({
 
   conditions,
   setConditions,
+
+  groups,
+  setGroups,
 }) => {
+  const [activeConditionTable, setActiveConditionTable] = useState(null);
+  const [activeGroupTable, setActiveGroupTable] = useState(null);
+
   const joins = [];
 
-  items.forEach((item) => {
-    if (item.key !== STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
-      return;
-    }
+  const fillItemsJoins = (items) => {
+    items.forEach((item) => {
+      if (item.subItems) {
+        fillItemsJoins(item.subItems);
+      }
 
-    item.content.joins.forEach((join) => {
-      if (!joins.map((subJoin) => subJoin.pseudonym).includes(join.pseudonym)) {
-        joins.push(join);
+      if (
+        item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key
+      ) {
+        item.content.joins.forEach((join) => {
+          if (
+            !joins.map((subJoin) => subJoin.pseudonym).includes(join.pseudonym)
+          ) {
+            joins.push(join);
+          }
+        });
       }
     });
-  });
+  };
 
-  const [activeConditionTable, setActiveConditionTable] = useState(null);
+  fillItemsJoins(items);
 
   const operationOptions = [
     {
@@ -45,16 +59,26 @@ const Where = ({
   ];
 
   const getTableNameOnBaseTable = (table) => {
-    let res = table;
-
-    items.forEach((item) => {
-      item.content.joins.forEach((join) => {
-        if (join.joinedTable === table || join.pseudonym === table) {
-          res = join.joinedTable;
+    const getTableName = (localItems) => {
+      localItems.forEach((item) => {
+        if (item.subItems) {
+          getTableName(item.subItems);
         }
-      });
-    });
 
+        if (!item.content?.joins) {
+          return;
+        }
+
+        item.content.joins.forEach((join) => {
+          if (join.joinedTable === table || join.pseudonym === table) {
+            res = join.joinedTable;
+          }
+        });
+      });
+    };
+
+    let res = table;
+    getTableName(items);
     return res;
   };
 
@@ -78,7 +102,7 @@ const Where = ({
 
   const subTableOptions = cloneObject(mainTableOptions);
 
-  const mainFieldOptions = [
+  const whereMainFieldOptions = [
     {
       value: null,
       title: "Select field",
@@ -93,7 +117,29 @@ const Where = ({
     tableStructure[getTableNameOnBaseTable(activeConditionTable.baseTable)][
       "fields"
     ].forEach((field) => {
-      mainFieldOptions.push({
+      whereMainFieldOptions.push({
+        value: field.columnName,
+        title: field.columnName,
+      });
+    });
+  }
+
+  const groupMainFieldOptions = [
+    {
+      value: null,
+      title: "Select field",
+      default: true,
+    },
+  ];
+
+  if (
+    activeGroupTable?.baseTable &&
+    tableStructure[getTableNameOnBaseTable(activeGroupTable.baseTable)]
+  ) {
+    tableStructure[getTableNameOnBaseTable(activeGroupTable.baseTable)][
+      "fields"
+    ].forEach((field) => {
+      groupMainFieldOptions.push({
         value: field.columnName,
         title: field.columnName,
       });
@@ -151,8 +197,35 @@ const Where = ({
     ]);
   };
 
+  const handleSaveGroup = () => {
+    if (!activeGroupTable) return;
+
+    const newGroups = [...groups];
+    newGroups[activeGroupTable.index] = {
+      baseTable: activeGroupTable.baseTable,
+      baseField: activeGroupTable.baseField,
+    };
+
+    setGroups(newGroups);
+    setActiveGroupTable(null);
+  };
+
+  const handleAddGroup = () => {
+    setGroups((prev) => [
+      ...prev,
+      {
+        baseTable: null,
+        baseField: null,
+      },
+    ]);
+  };
+
   const handleDeleteCondition = (index) => {
     setConditions((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDeleteGroup = (index) => {
+    setGroups((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -171,35 +244,69 @@ const Where = ({
         />
       </div>
 
-      {conditions.map((condition, index) => (
-        <div className="w-full mb-4 flex justify-between">
-          <div
-            className="w-[calc(100%-20px)] border border-slate-200 px-3 py-2 cursor-pointer overflow-hidden truncate"
-            onClick={() => setActiveConditionTable({ ...condition, index })}
-          >
-            {condition.baseTable ?? "-"}.{condition.baseField ?? "-"}{" "}
-            {condition.joinCondition ?? "-"} {condition.joinedTable ?? "-"}.
-            {condition.joinedField ?? "-"}
-          </div>
-
-          <div className="ms-2 flex justify-between w-[20px]">
-            <button
-              onClick={() => handleDeleteCondition(index)}
-              className="btn p-0 text-sm text-gray-500 hover:text-gray-400 disabled:bg-gray-300"
-            >
-              x
-            </button>
-          </div>
-        </div>
-      ))}
-
       <div className="w-full mb-4">
+        <label className="block text-sm font-semibold mb-1">Where</label>
+
+        {conditions.map((condition, index) => (
+          <div className="w-full mb-4 flex justify-between">
+            <div
+              className="w-[calc(100%-20px)] border border-slate-200 px-3 py-2 cursor-pointer overflow-hidden truncate"
+              onClick={() => setActiveConditionTable({ ...condition, index })}
+            >
+              {condition.baseTable ?? "-"}.{condition.baseField ?? "-"}{" "}
+              {condition.joinCondition ?? "-"} {condition.joinedTable ?? "-"}.
+              {condition.joinedField ?? "-"}
+            </div>
+
+            <div className="ms-2 flex justify-between w-[20px]">
+              <button
+                onClick={() => handleDeleteCondition(index)}
+                className="btn p-0 text-sm text-gray-500 hover:text-gray-400 disabled:bg-gray-300"
+              >
+                x
+              </button>
+            </div>
+          </div>
+        ))}
+
         <button
           type="button"
           className="w-full btn bg-blue-500 hover:bg-blue-400 text-white"
           onClick={handleAddCondition}
         >
           Add Condition
+        </button>
+      </div>
+
+      <div className="w-full mb-4">
+        <label className="block text-sm font-semibold mb-1">Group By</label>
+
+        {groups.map((group, index) => (
+          <div className="w-full mb-4 flex justify-between">
+            <div
+              className="w-[calc(100%-20px)] border border-slate-200 px-3 py-2 cursor-pointer overflow-hidden truncate"
+              onClick={() => setActiveGroupTable({ ...group, index })}
+            >
+              {group.baseTable ?? "-"}.{group.baseField ?? "-"}
+            </div>
+
+            <div className="ms-2 flex justify-between w-[20px]">
+              <button
+                onClick={() => handleDeleteGroup(index)}
+                className="btn p-0 text-sm text-gray-500 hover:text-gray-400 disabled:bg-gray-300"
+              >
+                x
+              </button>
+            </div>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          className="w-full btn bg-blue-500 hover:bg-blue-400 text-white"
+          onClick={handleAddGroup}
+        >
+          Add Group
         </button>
       </div>
 
@@ -249,7 +356,7 @@ const Where = ({
                     })
                   }
                   needSearch={true}
-                  options={mainFieldOptions}
+                  options={whereMainFieldOptions}
                   dropdownDisabled={!activeConditionTable?.baseTable}
                 />
               </div>
@@ -318,6 +425,75 @@ const Where = ({
               <button
                 type="button"
                 onClick={handleSaveCondition}
+                className="btn border-blue-200 hover:border-blue-300 text-blue-600 dark:text-blue-300"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </ModalBlank>
+
+      <ModalBlank
+        modalOpen={!!activeGroupTable}
+        setModalOpen={() => setActiveGroupTable(null)}
+      >
+        <div className="p-5 flex space-x-4">
+          <div className="w-full">
+            <div className="mb-4">
+              <div className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+                <span>Group By</span>
+              </div>
+            </div>
+            <div className="text-sm mb-4" style={{ overflow: "auto" }}>
+              <div className="w-full mb-4">
+                <label className="block text-sm font-semibold mb-1">
+                  Group Main Table
+                </label>
+                <DropdownClassic
+                  selected={activeGroupTable?.baseTable}
+                  setSelected={(newValue) =>
+                    setActiveGroupTable({
+                      ...activeGroupTable,
+                      baseTable: newValue,
+                    })
+                  }
+                  needSearch={true}
+                  options={mainTableOptions}
+                  dropdownDisabled={activeGroupTable?.disabled}
+                />
+              </div>
+
+              <div className="w-full mb-4">
+                <label className="block text-sm font-semibold mb-1">
+                  Group Main Field
+                </label>
+                <DropdownClassic
+                  selected={activeGroupTable?.baseField}
+                  setSelected={(newValue) =>
+                    setActiveGroupTable({
+                      ...activeGroupTable,
+                      baseField: newValue,
+                    })
+                  }
+                  needSearch={true}
+                  options={groupMainFieldOptions}
+                  dropdownDisabled={!activeGroupTable?.baseTable}
+                />
+              </div>
+            </div>
+
+            <div className="w-full flex flex-wrap justify-end space-x-2">
+              <button
+                type="button"
+                onClick={() => setActiveGroupTable(null)}
+                className="btn border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 text-slate-600 dark:text-slate-300"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveGroup}
                 className="btn border-blue-200 hover:border-blue-300 text-blue-600 dark:text-blue-300"
               >
                 Save

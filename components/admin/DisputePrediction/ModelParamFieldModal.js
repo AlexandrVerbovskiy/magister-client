@@ -1,7 +1,7 @@
 import Input from "../Form/Input";
 import ModalBlank from "../ModalBlank";
 import { useEffect, useState } from "react";
-import { validateSmallText } from "../../../utils";
+import { cloneObject, validateSmallText } from "../../../utils";
 import TableSelect from "./TableSelect";
 import _ from "lodash";
 
@@ -71,8 +71,13 @@ const ModelParamFieldModal = ({
       pseudonym,
       tableName,
       fieldName,
-      joins,
+      joins: cloneObject(joins),
     });
+
+    setPseudonym("");
+    setTableName(null);
+    setFieldName(null);
+    setJoins([]);
 
     closeModal();
   };

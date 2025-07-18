@@ -1,7 +1,8 @@
 import STATIC from "../../../static";
 
-const Query = ({ tableStructure, items, pseudonym, conditions }) => {
+const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
   let query = "";
+  const joins = {};
 
   const addQueryByItem = (item) => {
     const datePartKeys = {
@@ -31,7 +32,13 @@ const Query = ({ tableStructure, items, pseudonym, conditions }) => {
 
     if (wrapper) {
       query += wrapper[0];
-      item.subItems.forEach(addQueryByItem);
+      item.subItems.forEach((subItem, subItemIndex) => {
+        addQueryByItem(subItem);
+
+        if (subItemIndex != item.subItems.length - 1) {
+          query += ", ";
+        }
+      });
       query += wrapper[1];
     }
 
@@ -46,6 +53,14 @@ const Query = ({ tableStructure, items, pseudonym, conditions }) => {
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
       query += `${item.content.tableName}.${item.content.fieldName}`;
     }
+
+    if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
+      item.content.joins.forEach((join) => {
+        joins[
+          join.pseudonym
+        ] = ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.joinedTable}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
+      });
+    }
   };
 
   if (items.length > 0) {
@@ -59,17 +74,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions }) => {
 
     query += " FROM orders";
 
-    items.forEach((item) => {
-      if (
-        item.key !== STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key
-      ) {
-        return;
-      }
-
-      item.content.joins.forEach((join) => {
-        query += ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.joinedTable}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
-      });
-    });
+    Object.keys(joins).forEach((joinKey) => (query += joins[joinKey]));
 
     if (conditions.length > 0) {
       query += ` WHERE `;
@@ -80,6 +85,18 @@ const Query = ({ tableStructure, items, pseudonym, conditions }) => {
         }
 
         query += `${condition.baseTable}.${condition.baseField} ${condition.joinCondition} ${condition.joinedTable}.${condition.joinedField}`;
+      });
+    }
+
+    if(groups.length > 0) {
+      query += ` GROUP BY `;
+
+      groups.forEach((group, index) => {
+        if (index > 0) {
+          query += " , ";
+        }
+
+        query += `${group.baseTable}.${group.baseField}`;
       });
     }
   }
