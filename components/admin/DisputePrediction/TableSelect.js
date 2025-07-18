@@ -3,6 +3,7 @@ import DropdownClassic from "../DropdownClassic";
 import ErrorSpan from "../ErrorSpan";
 import Input from "../Form/Input";
 import ModalBlank from "../ModalBlank";
+import { cloneObject } from "../../../utils";
 
 const TableSelect = ({
   tableStructure,
@@ -148,6 +149,7 @@ const TableSelect = ({
         activeJoinTableOptions.push({
           value: relation.sourceTable,
           title: relation.sourceTable,
+          joinedField: relation.sourceColumn,
         });
       }
     });
@@ -171,7 +173,7 @@ const TableSelect = ({
     });
   });
 
-  const handleSaveCondition = () => {
+  const handleSaveJoin = () => {
     if (!activeJoin) return;
 
     const newJoin = {
@@ -187,7 +189,7 @@ const TableSelect = ({
       if (activeJoin.index !== undefined) {
         updatedJoins[activeJoin.index] = newJoin;
       } else {
-        updatedJoins.push(newJoin);
+        updatedJoins.push(cloneObject(newJoin));
       }
       return updatedJoins;
     });
@@ -225,9 +227,7 @@ const TableSelect = ({
 
       <div className="w-full mb-4 flex gap-2">
         <div className="w-full sm:w-[calc((100%-90px)/2)]">
-          <label className="block text-sm font-medium mb-1">
-            Table Name
-          </label>
+          <label className="block text-sm font-medium mb-1">Table Name</label>
           <DropdownClassic
             selected={tableName}
             setSelected={handleChangeTableName}
@@ -284,7 +284,7 @@ const TableSelect = ({
 
             <div
               className="text-sm mb-4 w-full flex flex-col space-y-4"
-              style={{ overflow: "auto", height: "400px" }}
+              style={{ overflow: "auto" }}
             >
               <div>
                 <label className="block text-sm font-semibold mb-1">
@@ -363,7 +363,7 @@ const TableSelect = ({
             </button>
             <button
               type="button"
-              onClick={handleSaveCondition}
+              onClick={handleSaveJoin}
               className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
             >
               Save
