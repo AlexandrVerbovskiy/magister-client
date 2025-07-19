@@ -43,9 +43,7 @@ const TableItem = ({
   onActivateModelClick,
 }) => {
   return (
-    <tr
-      className="cursor-pointer"
-    >
+    <tr>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium text-sky-500">#{id}</div>
       </td>

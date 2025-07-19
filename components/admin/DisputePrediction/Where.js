@@ -19,6 +19,9 @@ const Where = ({
 
   groups,
   setGroups,
+
+  comparisonType,
+  setComparisonType,
 }) => {
   const [activeConditionTable, setActiveConditionTable] = useState(null);
   const [activeGroupTable, setActiveGroupTable] = useState(null);
@@ -241,6 +244,28 @@ const Where = ({
           placeholder="Enter Field Pseudonym"
           labelClassName="block text-sm font-semibold mb-1"
           inputClassName="form-input w-full"
+        />
+      </div>
+
+      <div className="w-full mb-4">
+        <label className="block text-sm font-semibold mb-1">
+          Comparison Type
+        </label>
+        <DropdownClassic
+          name="field-type"
+          selected={comparisonType}
+          setSelected={setComparisonType}
+          needSearch={false}
+          options={[
+            {
+              value: "numerical",
+              title: "Numerical",
+            },
+            {
+              value: "categorical",
+              title: "Categorical",
+            },
+          ]}
         />
       </div>
 

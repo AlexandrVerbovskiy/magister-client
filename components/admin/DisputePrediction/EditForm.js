@@ -77,6 +77,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         content: cloneObject(modelParams[index].content),
         conditions: modelParams[index].conditions,
         groups: modelParams[index].groups,
+        comparisonType: modelParams[index].comparisonType,
       });
     }
 
@@ -87,6 +88,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         tableName: modelParams[index].content.tableName,
         fieldName: modelParams[index].content.fieldName,
         joins: modelParams[index].content.joins,
+        comparisonType: modelParams[index].comparisonType,
       });
     }
   };
@@ -96,7 +98,8 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       pseudonym: "",
       content: [],
       conditions: [],
-      groups:[]
+      groups: [],
+      comparisonType: "numerical",
     });
   };
 
@@ -106,6 +109,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       joins: [],
       tableName: "orders",
       fieldName: "",
+      comparisonType: "numerical",
     });
   };
 
@@ -247,7 +251,13 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       </div>
 
       <ModelParamTemplateModal
-        onSaveClick={({ pseudonym, content, conditions, groups }) =>
+        onSaveClick={({
+          comparisonType,
+          pseudonym,
+          content,
+          conditions,
+          groups,
+        }) =>
           saveModelParam(
             {
               pseudonym,
@@ -255,6 +265,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
               content,
               conditions,
               groups,
+              comparisonType,
             },
             activeModelTemplateParam?.index
           )
@@ -265,23 +276,31 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         content={activeModelTemplateParam?.content ?? []}
         conditions={activeModelTemplateParam?.conditions ?? []}
         groups={activeModelTemplateParam?.groups ?? []}
+        comparisonType={activeModelTemplateParam?.comparisonType ?? null}
         pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
         tableStructure={tableStructure}
       />
 
       <ModelParamFieldModal
-        onSaveClick={({ tableName, fieldName, joins, pseudonym }) =>
+        onSaveClick={({
+          comparisonType,
+          tableName,
+          fieldName,
+          joins,
+          pseudonym,
+        }) =>
           saveModelParam(
             {
               pseudonym,
               type: "field",
+              comparisonType,
               content: {
                 tableName,
                 fieldName,
                 joins,
               },
             },
-            activeModelTemplateParam?.index
+            activeModelFieldParam?.index
           )
         }
         modalOpen={!!activeModelFieldParam}
@@ -291,6 +310,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         pseudonym={activeModelFieldParam?.pseudonym ?? ""}
         fieldName={activeModelFieldParam?.fieldName ?? null}
         tableName={activeModelFieldParam?.tableName ?? null}
+        comparisonType={activeModelFieldParam?.comparisonType ?? null}
         joins={activeModelFieldParam?.joins ?? []}
       />
     </div>
