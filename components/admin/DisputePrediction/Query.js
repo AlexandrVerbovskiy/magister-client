@@ -58,7 +58,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
       item.content.joins.forEach((join) => {
         joins[
           join.pseudonym
-        ] = ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.joinedTable}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
+        ] = ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.pseudonym}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
       });
     }
   };
