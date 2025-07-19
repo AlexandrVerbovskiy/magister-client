@@ -11,6 +11,7 @@ const ModelParamTemplateModal = ({
   pseudonym: basePseudonym = "",
   conditions: baseConditions = [],
   groups: baseGroups = [],
+  comparisonType: baseComparisonType = null,
   tableStructure,
 }) => {
   const [content, setContent] = useState([]);
@@ -18,6 +19,7 @@ const ModelParamTemplateModal = ({
   const [pseudonymError, setPseudonymError] = useState(null);
   const [conditions, setConditions] = useState([]);
   const [groups, setGroups] = useState([]);
+  const [comparisonType, setComparisonType] = useState("numerical");
 
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
@@ -27,6 +29,11 @@ const ModelParamTemplateModal = ({
 
   useEffect(() => setGroups(cloneObject(baseGroups)), [baseGroups]);
 
+  useEffect(
+    () => setComparisonType(baseComparisonType ?? "numerical"),
+    [baseComparisonType]
+  );
+
   const handleSaveClick = () => {
     onSaveClick(
       cloneObject({
@@ -35,6 +42,7 @@ const ModelParamTemplateModal = ({
         content: content,
         conditions: conditions,
         groups: groups,
+        comparisonType,
       })
     );
 
@@ -78,6 +86,8 @@ const ModelParamTemplateModal = ({
                     setConditions,
                     groups,
                     setGroups,
+                    comparisonType,
+                    setComparisonType,
                   }}
                 />
               </div>

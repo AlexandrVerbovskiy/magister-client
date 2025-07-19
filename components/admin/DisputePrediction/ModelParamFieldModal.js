@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { cloneObject, validateSmallText } from "../../../utils";
 import TableSelect from "./TableSelect";
 import _ from "lodash";
+import DropdownClassic from "../DropdownClassic";
 
 const ModelParamFieldModal = ({
   onSaveClick,
@@ -13,8 +14,12 @@ const ModelParamFieldModal = ({
   pseudonym: basePseudonym = "",
   fieldName: baseFieldName = null,
   tableName: baseTableName = null,
+  comparisonType: baseComparisonType = null,
+  needComparisonType = true,
   joins: baseJoins = [],
 }) => {
+  const [comparisonType, setComparisonType] = useState("numerical");
+
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
 
@@ -31,6 +36,11 @@ const ModelParamFieldModal = ({
   useEffect(() => setTableName(baseTableName), [baseTableName]);
 
   useEffect(() => setFieldName(baseFieldName), [baseFieldName]);
+
+  useEffect(
+    () => setComparisonType(baseComparisonType ?? "numerical"),
+    [baseComparisonType]
+  );
 
   useEffect(() => {
     if (!_.isEqual(baseJoins, joins)) {
@@ -67,17 +77,24 @@ const ModelParamFieldModal = ({
       return;
     }
 
-    onSaveClick({
+    const data = {
       pseudonym,
       tableName,
       fieldName,
       joins: cloneObject(joins),
-    });
+    };
+
+    if (needComparisonType) {
+      data["comparisonType"] = comparisonType;
+    }
+
+    onSaveClick(data);
 
     setPseudonym("");
     setTableName(null);
     setFieldName(null);
     setJoins([]);
+    setComparisonType("numerical");
 
     closeModal();
   };
@@ -127,6 +144,30 @@ const ModelParamFieldModal = ({
                     inputClassName="form-input w-full"
                   />
                 </div>
+
+                {comparisonType && (
+                  <div className="w-full mb-4">
+                    <label className="block text-sm font-semibold mb-1">
+                      Comparison Type
+                    </label>
+                    <DropdownClassic
+                      name="field-type"
+                      selected={comparisonType}
+                      setSelected={setComparisonType}
+                      needSearch={false}
+                      options={[
+                        {
+                          value: "numerical",
+                          title: "Numerical field",
+                        },
+                        {
+                          value: "categorical",
+                          title: "Categorical field",
+                        },
+                      ]}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

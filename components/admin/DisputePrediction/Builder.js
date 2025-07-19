@@ -443,6 +443,7 @@ const Builder = ({ tableStructure, dopProps }) => {
         fieldName={activeTableDetails?.content?.fieldName ?? ""}
         tableName={activeTableDetails?.content?.tableName ?? ""}
         joins={activeTableDetails?.content?.joins ?? []}
+        needComparisonType={false}
       />
     </>
   );
