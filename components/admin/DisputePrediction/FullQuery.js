@@ -1,19 +1,10 @@
 import STATIC from "../../../static";
-import { isKeyOperation } from "../../../utils/helpers";
 
-const swapSubOrdersTable = (table) => {
-  if (table == "orders") {
-    return "suborder";
-  }
-
-  return table;
-};
-
-const FullQuery = ({ modelParams }) => {
-  let query = "SELECT ";
+const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
+  let query = "";
   const joins = {};
 
-  const addQueryByItem = (item, innerJoins, innerParts) => {
+  const addQueryByItem = (item) => {
     const datePartKeys = {
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.DAY.key]: "day",
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.DOW.key]: "dow",
@@ -29,144 +20,88 @@ const FullQuery = ({ modelParams }) => {
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.BRACKETS.key]: ["(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.AVG.key]: ["AVG(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.SUM.key]: ["SUM(", ")"],
-      [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.COUNT.key]: [
-        "COUNT(",
-        ")",
-      ],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.IS_NULL.key]: [
         "(",
-        " IS NULL)",
+        "IS NULL )",
       ],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.IS_NOT_NULL.key]: [
         "(",
-        " IS NOT NULL)",
+        "IS NOT NULL )",
       ],
       ...Object.fromEntries(
         Object.entries(datePartKeys).map(([key, part]) => [
           key,
-          [`date_part('${part}', `, ")"],
+          [`date_part('${part}',`, ")"],
         ])
       ),
     };
 
     const wrapper = functionWrappers[item.key];
+
     if (wrapper) {
-      innerParts.push(wrapper[0]);
-      item.subItems.forEach((subItem, idx) => {
-        if (
-          idx > 0 &&
-          !isKeyOperation(item.subItems[idx - 1].key) &&
-          !isKeyOperation(subItem.key) &&
-          !(
-            idx !== item.subItems.length - 1 &&
-            isKeyOperation(item.subItems[idx + 1].key)
-          )
-        ) {
-          innerParts.push(", ");
+      query += wrapper[0];
+      item.subItems.forEach((subItem, subItemIndex) => {
+        addQueryByItem(subItem);
+        if (subItemIndex !== item.subItems.length - 1) {
+          query += ", ";
         }
-
-        addQueryByItem(subItem, innerJoins, innerParts);
       });
-      innerParts.push(wrapper[1]);
+      query += wrapper[1];
     }
 
-    if (isKeyOperation(item.key)) {
-      innerParts.push(` ${item.key} `);
-    }
-
-    if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.CUSTOM_VALUE.key) {
-      innerParts.push(item.content.value);
+    if (
+      Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
+        .map((op) => op.key)
+        .includes(item.key)
+    ) {
+      query += ` ${item.key} `;
     }
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
-      innerParts.push(
-        `${swapSubOrdersTable(item.content.tableName)}.${
-          item.content.fieldName
-        }`
-      );
+      query += `${item.content.tableName}.${item.content.fieldName}`;
       item.content.joins.forEach((join) => {
-        innerJoins[join.pseudonym] = `LEFT JOIN ${join.joinedTable} as ${
+        joins[
           join.pseudonym
-        } ON ${join.pseudonym}.${join.joinedField} = ${swapSubOrdersTable(
-          join.baseTable
-        )}.${join.baseField}`;
+        ] = ` LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.pseudonym}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
       });
     }
   };
 
-  modelParams.forEach((field, idx) => {
-    if (idx > 0) {
-      query += ", ";
+  if (items.length > 0) {
+    query = "SELECT ";
+
+    items.forEach(addQueryByItem);
+
+    if (pseudonym) {
+      query += ` as ${pseudonym}`;
     }
 
-    if (field.type === "field") {
-      query += `${field.content.tableName}.${field.content.fieldName}`;
+    query += " FROM orders";
 
-      if (field.pseudonym) {
-        query += ` as ${field.pseudonym}`;
-      }
+    Object.keys(joins).forEach((joinKey) => {
+      query += joins[joinKey];
+    });
 
-      field.content.joins.forEach((join) => {
-        joins[
-          join.pseudonym
-        ] = `LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.pseudonym}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
+    if (conditions.length > 0) {
+      query += ` WHERE `;
+      conditions.forEach((condition, index) => {
+        if (index > 0) {
+          query += " AND ";
+        }
+        query += `${condition.baseTable}.${condition.baseField} ${condition.joinCondition} ${condition.joinedTable}.${condition.joinedField}`;
       });
     }
 
-    if (field.type === "template") {
-      const innerJoins = {};
-      const innerParts = ["SELECT "];
-
-      field.content.forEach((contentItem) => {
-        addQueryByItem(contentItem, innerJoins, innerParts);
+    if (groups.length > 0) {
+      query += ` GROUP BY `;
+      groups.forEach((group, index) => {
+        if (index > 0) {
+          query += " , ";
+        }
+        query += `${group.baseTable}.${group.baseField}`;
       });
-
-      innerParts.push(` FROM orders as suborder`);
-
-      Object.keys(innerJoins).forEach((key) => {
-        innerParts.push(` ${innerJoins[key]}`);
-      });
-
-      innerParts.push(` WHERE orders.id = suborder.id`);
-
-      if (field.conditions?.length) {
-        field.conditions.forEach((cond) => {
-          innerParts.push(
-            ` AND ${swapSubOrdersTable(cond.baseTable)}.${cond.baseField} ${
-              cond.joinCondition
-            } ${swapSubOrdersTable(cond.joinedTable)}.${cond.joinedField}`
-          );
-        });
-      }
-
-      if (field.groups?.length) {
-        innerParts.push(" GROUP BY ");
-        field.groups.forEach((grp, gIdx) => {
-          if (gIdx > 0) innerParts.push(", ");
-          innerParts.push(
-            `${swapSubOrdersTable(grp.baseTable)}.${grp.baseField}`
-          );
-        });
-      }
-
-      if (field.orders?.length) {
-        innerParts.push(" ORDER BY ");
-        field.orders.forEach((ord, oIdx) => {
-          if (oIdx > 0) innerParts.push(", ");
-          innerParts.push(
-            `${swapSubOrdersTable(ord.baseTable)}.${ord.baseField}`
-          );
-        });
-      }
-
-      query += `(${innerParts.join("")}) AS ${field.pseudonym}`;
     }
-  });
-
-  query += ` FROM orders`;
-  Object.keys(joins).forEach((key) => {
-    query += ` ${joins[key]}`;
-  });
+  }
 
   return (
     <div>
@@ -183,4 +118,4 @@ const FullQuery = ({ modelParams }) => {
   );
 };
 
-export default FullQuery;
+export default Query;

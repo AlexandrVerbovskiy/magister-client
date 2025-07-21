@@ -20,6 +20,14 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.BRACKETS.key]: ["(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.AVG.key]: ["AVG(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.SUM.key]: ["SUM(", ")"],
+      [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.IS_NULL.key]: [
+        "(",
+        "IS NULL )",
+      ],
+      [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.IS_NOT_NULL.key]: [
+        "(",
+        "IS NOT NULL )",
+      ],
       ...Object.fromEntries(
         Object.entries(datePartKeys).map(([key, part]) => [
           key,
@@ -88,7 +96,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
       });
     }
 
-    if(groups.length > 0) {
+    if (groups.length > 0) {
       query += ` GROUP BY `;
 
       groups.forEach((group, index) => {

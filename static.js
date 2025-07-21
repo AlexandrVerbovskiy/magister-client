@@ -170,6 +170,8 @@ const config = {
       QUARTER: { key: "quarter", label: "Quarter" },
       WEEK: { key: "week_date_part", label: "Week" },
       YEAR: { key: "year_date_part", label: "Year" },
+      IS_NULL: { key: "is_null", label: "Is Null" },
+      IS_NOT_NULL: { key: "is_not_null", label: "Is Not Null" },
     },
     OPERATIONS: {
       SUM: { key: "+", label: "+" },
