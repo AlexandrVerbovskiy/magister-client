@@ -366,3 +366,13 @@ export const getDisputePredictionModelDetails = async (id, authToken) => {
   );
   return data.body;
 };
+
+export const getModelQuery = async (params) => {
+  const data = await post(`/build-more-query`, { params }, authToken);
+  return data.body;
+};
+
+export const checkModelQuery = async (params) => {
+  const data = await post(`/check-more-query`, { params }, authToken);
+  return data.body;
+};
