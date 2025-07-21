@@ -42,8 +42,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
       query += wrapper[0];
       item.subItems.forEach((subItem, subItemIndex) => {
         addQueryByItem(subItem);
-
-        if (subItemIndex != item.subItems.length - 1) {
+        if (subItemIndex !== item.subItems.length - 1) {
           query += ", ";
         }
       });
@@ -52,7 +51,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     if (
       Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
-        .map((item) => item.key)
+        .map((op) => op.key)
         .includes(item.key)
     ) {
       query += ` ${item.key} `;
@@ -60,9 +59,6 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
       query += `${item.content.tableName}.${item.content.fieldName}`;
-    }
-
-    if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
       item.content.joins.forEach((join) => {
         joins[
           join.pseudonym
@@ -82,28 +78,26 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     query += " FROM orders";
 
-    Object.keys(joins).forEach((joinKey) => (query += joins[joinKey]));
+    Object.keys(joins).forEach((joinKey) => {
+      query += joins[joinKey];
+    });
 
     if (conditions.length > 0) {
       query += ` WHERE `;
-
       conditions.forEach((condition, index) => {
         if (index > 0) {
           query += " AND ";
         }
-
         query += `${condition.baseTable}.${condition.baseField} ${condition.joinCondition} ${condition.joinedTable}.${condition.joinedField}`;
       });
     }
 
     if (groups.length > 0) {
       query += ` GROUP BY `;
-
       groups.forEach((group, index) => {
         if (index > 0) {
           query += " , ";
         }
-
         query += `${group.baseTable}.${group.baseField}`;
       });
     }

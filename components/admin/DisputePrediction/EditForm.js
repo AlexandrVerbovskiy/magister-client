@@ -10,15 +10,18 @@ import { useContext, useState } from "react";
 import { cloneObject } from "../../../utils";
 import ModelParamTemplateModal from "../../../components/admin/DisputePrediction/ModelParamTemplateModal";
 import ModelParamFieldModal from "../../../components/admin/DisputePrediction/ModelParamFieldModal";
+import FullQuery from "../../../components/admin/DisputePrediction/FullQuery";
 import Switch from "../../../partials/admin/base/Switch";
 import { IndiceContext } from "../../../contexts";
 import { useRouter } from "next/router";
+import DropdownClassic from "../DropdownClassic";
 
 const EditForm = ({ structure: tableStructure, base, setBase }) => {
   const router = useRouter();
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { authToken, success, error } = useContext(IndiceContext);
   const [modelParams, setModelParams] = useState(base?.body ?? []);
+  const [checkField, setCheckField] = useState(base?.checkField ?? "");
   const [disabled, setDisabled] = useState(false);
 
   const [afterFinishActive, setAfterFinishActive] = useState(
@@ -41,6 +44,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
             body: modelParams,
             afterFinishActive,
             afterFinishRebuild,
+            checkField,
           },
           authToken
         );
@@ -52,6 +56,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
             body: modelParams,
             afterFinishActive,
             afterFinishRebuild,
+            checkField,
           },
           authToken
         );
@@ -128,6 +133,8 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
     );
   };
 
+  console.log(modelParams, checkField);
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -162,55 +169,85 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                   ))}
                 </div>
 
-                {!base?.finished && (
-                  <div className=" p-6 space-y-6">
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Active after finish
-                      </h2>
-                      <div className="flex flex-wrap mt-2">
-                        <div className="mr-2">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="after_finish"
-                          ></label>
-                        </div>
-                        <Switch
-                          id="after_finish"
-                          checked={afterFinishActive}
-                          changeChecked={() =>
-                            setAfterFinishActive(!afterFinishActive)
-                          }
-                          onText="Active"
-                          offText="Inactive"
-                        />
-                      </div>
-                    </section>
+                <div className="p-6 space-y-6">
+                  <section>
+                    <div className="w-full mb-4">
+                      <label className="block text-sm font-semibold mb-1">
+                        Target Field
+                      </label>
+                      <DropdownClassic
+                        name="target-field"
+                        selected={checkField}
+                        setSelected={setCheckField}
+                        needSearch={false}
+                        options={[
+                          {
+                            value: "",
+                            title: "Not Selected",
+                          },
+                          ...modelParams.map((param) => ({
+                            value: param.pseudonym,
+                            title: param.pseudonym,
+                          })),
+                        ]}
+                      />
+                    </div>
+                  </section>
 
-                    <section>
-                      <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
-                        Rebuild after finish
-                      </h2>
-                      <div className="flex flex-wrap mt-2">
-                        <div className="mr-2">
-                          <label
-                            className="block text-sm font-medium mb-1"
-                            htmlFor="after_finish_rebuild"
-                          ></label>
+                  {!base?.finished && (
+                    <>
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Active after finish
+                        </h2>
+                        <div className="flex flex-wrap mt-2">
+                          <div className="mr-2">
+                            <label
+                              className="block text-sm font-medium mb-1"
+                              htmlFor="after_finish"
+                            ></label>
+                          </div>
+                          <Switch
+                            id="after_finish"
+                            checked={afterFinishActive}
+                            changeChecked={() =>
+                              setAfterFinishActive(!afterFinishActive)
+                            }
+                            onText="Active"
+                            offText="Inactive"
+                          />
                         </div>
-                        <Switch
-                          id="after_finish_rebuild"
-                          checked={afterFinishRebuild}
-                          changeChecked={() =>
-                            setAfterFinishRebuild(!afterFinishRebuild)
-                          }
-                          onText="Yes"
-                          offText="Not"
-                        />
-                      </div>
-                    </section>
-                  </div>
-                )}
+                      </section>
+
+                      <section>
+                        <h2 className="text-xl leading-snug text-slate-800 dark:text-slate-100 font-bold mb-1">
+                          Rebuild after finish
+                        </h2>
+                        <div className="flex flex-wrap mt-2">
+                          <div className="mr-2">
+                            <label
+                              className="block text-sm font-medium mb-1"
+                              htmlFor="after_finish_rebuild"
+                            ></label>
+                          </div>
+                          <Switch
+                            id="after_finish_rebuild"
+                            checked={afterFinishRebuild}
+                            changeChecked={() =>
+                              setAfterFinishRebuild(!afterFinishRebuild)
+                            }
+                            onText="Yes"
+                            offText="Not"
+                          />
+                        </div>
+                      </section>
+                    </>
+                  )}
+                </div>
+
+                <div className="p-6 space-y-6">
+                  <FullQuery modelParams={modelParams}/>
+                </div>
 
                 <div className="flex flex-col md:flex-row md:-mr-px">
                   <div className="grow w-full">
