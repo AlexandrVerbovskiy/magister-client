@@ -18,8 +18,8 @@ import {
 import { IndiceContext } from "../../contexts";
 import Input from "../../components/admin/Form/Input";
 import { validateSmallText } from "../../utils";
-import TrainingSettingsSection from "../../components/admin/Settings/TrainingSettingsSection";
-import ApiKeySection from "../../components/admin/Settings/ApiKeySection";
+import TrainingSettingsSection from "../../partials/admin/settings/TrainingSettingsSection";
+import ApiKeySection from "../../partials/admin/settings/ApiKeySection";
 
 const Settings = ({
   userLogActive: baseUserLogActive,
