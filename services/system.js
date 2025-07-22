@@ -58,3 +58,38 @@ export const setSystemBankAccountOptions = async (
   );
   return data.body;
 };
+
+export const saveApiKey = async (apiKey, authToken) => {
+  const data = await post(
+    "/save-api-key",
+    {
+      apiKey,
+    },
+    authToken
+  );
+  return data.body;
+};
+
+export const saveTrainingSettings = async (
+  {
+    correlationThreshold,
+    pValueThreshold,
+    nEstimators,
+    randomState,
+    trainTestSplit,
+  },
+  authToken
+) => {
+  const data = await post(
+    "/save-training-settings",
+    {
+      correlationThreshold,
+      pValueThreshold,
+      nEstimators,
+      randomState,
+      trainTestSplit,
+    },
+    authToken
+  );
+  return data.body;
+};
