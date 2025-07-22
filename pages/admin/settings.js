@@ -12,10 +12,14 @@ import {
   setSystemMainOptions as setSystemMainOptionsRequest,
   setSystemCommissionOptions as setSystemCommissionOptionsRequest,
   setSystemBankAccountOptions as setSystemBankAccountOptionsRequest,
+  saveTrainingSettings,
+  saveApiKey,
 } from "../../services";
 import { IndiceContext } from "../../contexts";
 import Input from "../../components/admin/Form/Input";
 import { validateSmallText } from "../../utils";
+import TrainingSettingsSection from "../../partials/admin/settings/TrainingSettingsSection";
+import ApiKeySection from "../../partials/admin/settings/ApiKeySection";
 
 const Settings = ({
   userLogActive: baseUserLogActive,
@@ -27,6 +31,12 @@ const Settings = ({
   bankAccountSwiftBic: baseBankAccountSwiftBic,
   bankAccountBeneficiary: baseBankAccountBeneficiary,
   bankAccountReferenceConceptCode: baseBankAccountReferenceConceptCode,
+  apiKey: baseApiKey,
+  correlationThreshold: baseCorrelationThreshold,
+  pValueThreshold: basePValueThreshold,
+  nEstimators: baseNEstimators,
+  randomState: baseRandomState,
+  trainTestSplit: baseTrainTestSplit,
 }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const [baseProps, setBaseProps] = useState({
@@ -39,6 +49,12 @@ const Settings = ({
     bankAccountSwiftBic: baseBankAccountSwiftBic,
     bankAccountBeneficiary: baseBankAccountBeneficiary,
     bankAccountReferenceConceptCode: baseBankAccountReferenceConceptCode,
+    apiKey: baseApiKey,
+    correlationThreshold: baseCorrelationThreshold,
+    pValueThreshold: basePValueThreshold,
+    nEstimators: baseNEstimators,
+    randomState: baseRandomState,
+    trainTestSplit: baseTrainTestSplit,
   });
 
   const [userLogActive, setUserLogActive] = useState(baseUserLogActive);
@@ -317,6 +333,39 @@ const Settings = ({
     }
   };
 
+  const handleSaveApiKeyClick = async (apiKey) => {
+    try {
+      await saveApiKey(apiKey, authToken);
+      success.set("Operation done success");
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
+  const handleSaveTrainingSettings = async ({
+    correlationThreshold,
+    pValueThreshold,
+    nEstimators,
+    randomState,
+    trainTestSplit,
+  }) => {
+    try {
+      await saveTrainingSettings(
+        {
+          correlationThreshold,
+          pValueThreshold,
+          nEstimators,
+          randomState,
+          trainTestSplit,
+        },
+        authToken
+      );
+      success.set("Operation done success");
+    } catch (e) {
+      error.set(e.message);
+    }
+  };
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -532,6 +581,26 @@ const Settings = ({
                     </footer>
                   </div>
                 </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                <ApiKeySection
+                  initialApiKey={baseProps.apiKey}
+                  onSave={handleSaveApiKeyClick}
+                />
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm mb-8">
+                <TrainingSettingsSection
+                  initialSettings={{
+                    correlationThreshold: baseProps.correlationThreshold,
+                    pValueThreshold: baseProps.pValueThreshold,
+                    nEstimators: baseProps.nEstimators,
+                    randomState: baseProps.randomState,
+                    trainTestSplit: baseProps.trainTestSplit,
+                  }}
+                  onSave={handleSaveTrainingSettings}
+                />
               </div>
             </div>
           </div>
