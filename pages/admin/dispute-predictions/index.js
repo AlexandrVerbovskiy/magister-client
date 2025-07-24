@@ -13,6 +13,7 @@ import {
   stopDisputePredictionModel,
   unstopDisputePredictionModel,
   activateDisputePredictionModel,
+  startTrainingDisputePredictionModel,
 } from "../../../services";
 import { baseListPageParams } from "../../../utils";
 import YesNoModal from "../../../components/admin/YesNoModal";
@@ -27,6 +28,8 @@ const DisputePredictionModels = (pageProps) => {
   const [modelIdToStop, setModelIdToStop] = useState(null);
   const [modelIdToUnstop, setModelIdToUnstop] = useState(null);
   const [modelIdToActivate, setModelIdToActivate] = useState(null);
+  const [modelIdToStartTraining, setModelIdToStartTraining] = useState(null);
+
   const [onActivateRebuild, setOnActivateRebuild] = useState(false);
 
   const {
@@ -73,6 +76,15 @@ const DisputePredictionModels = (pageProps) => {
     rebuild();
   };
 
+  const onStartTrainingModel = async () => {
+    await startTrainingDisputePredictionModel(
+      modelIdToStartTraining,
+      authToken
+    );
+    setModelIdToStartTraining(null);
+    rebuild();
+  };
+
   return (
     <div className="flex h-[100dvh] overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
@@ -114,6 +126,7 @@ const DisputePredictionModels = (pageProps) => {
                 setModelIdToStop={setModelIdToStop}
                 setModelIdToUnstop={setModelIdToUnstop}
                 setModelIdToActivate={setModelIdToActivate}
+                setModelIdToStartTraining={setModelIdToStartTraining}
               />
 
               <div className="mt-8">
@@ -205,6 +218,14 @@ const DisputePredictionModels = (pageProps) => {
           </div>
         </div>
       </ModalBlank>
+
+      <YesNoModal
+        title="Start training"
+        active={!!modelIdToStartTraining}
+        closeModal={() => setModelIdToStartTraining(null)}
+        body={`Are you sure you want to start training model #${modelIdToUnstop}?`}
+        onAccept={onStartTrainingModel}
+      />
     </div>
   );
 };
