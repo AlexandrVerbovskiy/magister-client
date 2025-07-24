@@ -14,6 +14,7 @@ const DisputePredictionModelsTable = ({
   setModelIdToStop,
   setModelIdToUnstop,
   setModelIdToActivate,
+  setModelIdToStartTraining,
 }) => {
   const ths = [
     { title: "Id", value: "id", width: "10%" },
@@ -61,6 +62,9 @@ const DisputePredictionModelsTable = ({
                     onStopModelClick={() => setModelIdToStop(model.id)}
                     onUnstopModelClick={() => setModelIdToUnstop(model.id)}
                     onActivateModelClick={() => setModelIdToActivate(model.id)}
+                    onStartTrainingClick={() =>
+                      setModelIdToStartTraining(model.id)
+                    }
                     {...model}
                   />
                 ))}

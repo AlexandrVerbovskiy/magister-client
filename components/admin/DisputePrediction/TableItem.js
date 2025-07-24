@@ -41,6 +41,8 @@ const TableItem = ({
   onStopModelClick,
   onUnstopModelClick,
   onActivateModelClick,
+  onStartTrainingClick,
+  checked,
 }) => {
   return (
     <tr>
@@ -74,7 +76,7 @@ const TableItem = ({
       </td>
 
       <td className="flex flex-col gap-2 my-4">
-        {!finished && !stopped && (
+        {finished && !active && (
           <button
             type="button"
             onClick={(e) => {
@@ -87,7 +89,7 @@ const TableItem = ({
           </button>
         )}
 
-        {!finished && !stopped && (
+        {!finished && started && !stopped && (
           <button
             type="button"
             onClick={(e) => {
@@ -100,7 +102,7 @@ const TableItem = ({
           </button>
         )}
 
-        {!finished && stopped && (
+        {!finished && started && stopped && (
           <button
             type="button"
             onClick={(e) => {
@@ -110,6 +112,32 @@ const TableItem = ({
             className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
           >
             Continue
+          </button>
+        )}
+
+        <Link
+          href={checked ? `/admin/dispute-predictions/details/${id}/` : "#"}
+          className={`bg-teal-100 flex items-center text-teal-500 rounded-full py-2 px-4 w-fit ${
+            checked
+              ? "hover:bg-teal-200 hover:text-teal-600 cursor-pointer"
+              : "opacity-50 cursor-not-allowed pointer-events-none"
+          }`}
+          tabIndex={checked ? 0 : -1}
+          aria-disabled={!checked}
+        >
+          Prediction Details
+        </Link>
+
+        {!finished && !started && checked && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onStartTrainingClick();
+            }}
+            className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
+          >
+            Start Training
           </button>
         )}
 

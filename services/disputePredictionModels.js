@@ -20,6 +20,14 @@ export const activateDisputePredictionModel = async (
   return data.body;
 };
 
+export const startTrainingDisputePredictionModel = async (
+  id,
+  authToken
+) => {
+  const data = await post(`/start-training`, { id }, authToken);
+  return data.body;
+};
+
 export const createDisputePredictionModel = async (
   { body, checkField, afterFinishActive = false, afterFinishRebuild = false },
   authToken
