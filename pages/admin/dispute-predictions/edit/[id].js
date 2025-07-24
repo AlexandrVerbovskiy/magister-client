@@ -15,7 +15,7 @@ const boostServerSideProps = async ({ baseSideProps, context}) => {
     id,
     baseSideProps.authToken
   );
-  return { ...options, pageTitle: `Edit Dispute Prediction#${id}` };
+  return { ...options, pageTitle: `Edit Dispute Prediction #${id}` };
 };
 
 export const getServerSideProps = (context) =>
