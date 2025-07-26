@@ -20,11 +20,17 @@ export const activateDisputePredictionModel = async (
   return data.body;
 };
 
+export const getDisputePredictionModel = async (id, authToken) => {
+  const data = await get(`/get-details/${id}`, authToken);
+  return data.body.model;
+};
+
 export const startTrainingDisputePredictionModel = async (
   id,
+  selectedFields,
   authToken
 ) => {
-  const data = await post(`/start-training`, { id }, authToken);
+  const data = await post(`/start-training`, { id, selectedFields }, authToken);
   return data.body;
 };
 

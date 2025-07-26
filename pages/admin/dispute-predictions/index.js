@@ -77,8 +77,11 @@ const DisputePredictionModels = (pageProps) => {
   };
 
   const onStartTrainingModel = async () => {
+    const model = models.find((model) => model.id === modelIdToStartTraining);
+
     await startTrainingDisputePredictionModel(
       modelIdToStartTraining,
+      model.selectedFields,
       authToken
     );
     setModelIdToStartTraining(null);
