@@ -1,5 +1,7 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
+import { useContext, useEffect } from "react";
+import { IndiceContext } from "../../../contexts";
 
 const StatusSpan = ({ started, stopped, finished }) => {
   let text = "Pending Started";
@@ -43,7 +45,37 @@ const TableItem = ({
   onActivateModelClick,
   onStartTrainingClick,
   checked,
+  progressPercent,
+  selectedFields,
 }) => {
+  const { error } = useContext(IndiceContext);
+  const [localPercent, setLocalPercent] = useState(progressPercent);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (started && localPercent !== 100) {
+      intervalRef.current = setInterval(async () => {
+        try {
+          const model = await getDisputePredictionModel(id);
+          setLocalPercent(model.progressPercent);
+
+          if (model.progressPercent === 100) {
+            clearInterval(intervalRef.current);
+          }
+        } catch (e) {
+          error.set(e.message);
+        }
+      }, 1000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [started, id]);
+
   return (
     <tr>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
@@ -65,9 +97,23 @@ const TableItem = ({
       </td>
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium">
-          {body.map((field) => field.pseudonym).join(", ")}
+          {body
+            .map((field) =>
+              selectedFields && selectedFields.includes(field.pseudonym) ? (
+                <span key={field.pseudonym} className="font-bold">
+                  {field.pseudonym}
+                </span>
+              ) : (
+                <span key={field.pseudonym}>{field.pseudonym}</span>
+              )
+            )
+            .reduce((prev, curr) => [prev, ", ", curr])}
         </div>
       </td>
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+        <div className="font-medium">{started ? `${localPercent}%` : "-"}</div>
+      </td>
+
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium">{accuracy ? `${accuracy}%` : "-"}</div>
       </td>

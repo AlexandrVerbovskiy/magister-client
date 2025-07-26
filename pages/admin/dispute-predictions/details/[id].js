@@ -25,8 +25,21 @@ const DisputePredictionDetails = ({ model }) => {
   const [modelToStopActive, setModelToStopActive] = useState(false);
   const [modelToUnstopActive, setModelToUnstopActive] = useState(false);
   const [modelToActivateActive, setModelToActivateActive] = useState(false);
-  const [modelToStartTrainingActive, setModelToStartTrainingActive] = useState(false);
+  const [modelToStartTrainingActive, setModelToStartTrainingActive] =
+    useState(false);
   const [onActivateRebuild, setOnActivateRebuild] = useState(false);
+
+  const [selectedFields, setSelectedFields] = useState(
+    model.selectedFields ?? []
+  );
+
+  const allFields = (model.body ?? []).map((field) => field.pseudonym);
+
+  const handleFieldChange = (field) => {
+    setSelectedFields((prev) =>
+      prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]
+    );
+  };
 
   const onAcceptStopModel = async () => {
     await stopDisputePredictionModel(model.id, authToken);
@@ -52,7 +65,7 @@ const DisputePredictionDetails = ({ model }) => {
   };
 
   const onStartTrainingModel = async () => {
-    await startTrainingDisputePredictionModel(model.id, authToken);
+    await startTrainingDisputePredictionModel(model.id, selectedFields, authToken);
     setModelToStartTrainingActive(false);
     router.reload();
   };
@@ -131,8 +144,42 @@ const DisputePredictionDetails = ({ model }) => {
                           alt={pseudonym}
                           className="w-full h-48 object-contain mb-2 rounded"
                         />
-                        <div className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                          {pseudonym}
+                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                          {allFields
+                            .filter(
+                              (allFieldPseudonym) =>
+                                allFieldPseudonym === pseudonym
+                            )
+                            .map((allFieldPseudonym) => (
+                              <label
+                                key={allFieldPseudonym}
+                                className="flex items-center gap-2 mb-1"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={selectedFields.includes(
+                                    allFieldPseudonym
+                                  )}
+                                  onChange={() =>
+                                    handleFieldChange(allFieldPseudonym)
+                                  }
+                                  className="form-checkbox text-teal-500"
+                                />
+                                {pseudonym}{" "}
+                                <>
+                                  {model.comparisonType === "numerical"
+                                    ? `Correlation matrix: ${
+                                        model.predictionDetails
+                                          ?.correlation_dict?.[pseudonym] ?? "-"
+                                      }`
+                                    : `Chi2 result: ${
+                                        model.predictionDetails?.chi2_dict?.[
+                                          pseudonym
+                                        ] ?? "-"
+                                      }`}
+                                </>
+                              </label>
+                            ))}
                         </div>
                       </div>
                     ))}
@@ -180,9 +227,7 @@ const DisputePredictionDetails = ({ model }) => {
             </div>
             <div className="text-sm mb-2">
               <div className="space-y-2">
-                <p>
-                  Are you sure you want to activate model #{model.id}?
-                </p>
+                <p>Are you sure you want to activate model #{model.id}?</p>
                 <Switch
                   id="after_finish"
                   checked={onActivateRebuild}
