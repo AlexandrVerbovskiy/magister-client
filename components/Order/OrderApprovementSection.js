@@ -21,6 +21,7 @@ const OrderApprovementSection = ({
   fee,
   setStartDate,
   setFinishDate,
+  disputeProbability,
 }) => {
   const [sendingMessage, setSendingMessage] = useState("");
   const [sendingMessageError, setSendingMessageError] = useState(null);
@@ -101,6 +102,31 @@ const OrderApprovementSection = ({
               userCommentCount: listing.userCommentCount,
             }}
           />
+
+          <div className="listings-widget">
+            <div className="author">
+              <div className="d-flex align-items-center">
+                <div className="title row-dots-end">
+                  <h4
+                    className={`row-dots-end ${
+                      disputeProbability === null
+                        ? ""
+                        : disputeProbability < 25
+                        ? "text-success"
+                        : disputeProbability < 75
+                        ? "text-warning"
+                        : "text-danger"
+                    }`}
+                  >
+                    Dispute probability:{" "}
+                    {disputeProbability === null
+                      ? "-"
+                      : `${disputeProbability}%`}
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

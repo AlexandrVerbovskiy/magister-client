@@ -13,29 +13,16 @@ export const createOrder = async (
   return data.body.id;
 };
 
-export const extendOrder = async (
-  { startDate, endDate, listingId, feeActive, message, parentOrderId },
+export const predictTempOrderDispute = async (
+  { price, startDate, finishDate, listingId },
   authToken
 ) => {
-  if (startDate > endDate) {
-    let temp = startDate;
-    startDate = endDate;
-    endDate = temp;
-  }
-
   const data = await post(
-    `/extend`,
-    {
-      startDate,
-      endDate,
-      listingId,
-      feeActive,
-      message,
-      parentOrderId,
-    },
+    `/predict-temp-order-dispute`,
+    { price, startDate, finishDate, listingId },
     authToken
   );
-  return data.body;
+  return data.body.probabilityOfDelay;
 };
 
 export const getOrderFullInfo = async (id, authToken) => {
@@ -73,11 +60,6 @@ export const paypalOrderPayed = async (orderId, authToken) => {
   return data.body;
 };
 
-export const approveClientGotListing = async (formData, authToken) => {
-  const data = await post(`/approve-client-got-listing`, formData, authToken);
-  return data.body;
-};
-
 export const orderFullCancelPayed = async (
   { id, receiptType, paypalId, cardNumber },
   authToken
@@ -102,11 +84,6 @@ export const rejectOrder = async (id, authToken) => {
 
 export const deleteOrder = async (id, authToken) => {
   const data = await post(`/delete`, { id }, authToken);
-  return data.body;
-};
-
-export const finishedByOwner = async (formData, authToken) => {
-  const data = await post(`/finished-by-owner`, formData, authToken);
   return data.body;
 };
 
