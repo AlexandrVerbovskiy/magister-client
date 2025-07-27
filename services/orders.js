@@ -13,6 +13,18 @@ export const createOrder = async (
   return data.body.id;
 };
 
+export const predictTempOrderDispute = async (
+  { price, startDate, finishDate, listingId },
+  authToken
+) => {
+  const data = await post(
+    `/predict-temp-order-dispute`,
+    { price, startDate, finishDate, listingId },
+    authToken
+  );
+  return data.body.probabilityOfDelay;
+};
+
 export const getOrderFullInfo = async (id, authToken) => {
   const data = await get(`/get-full-by-id/${id}`, authToken);
   return data.body;

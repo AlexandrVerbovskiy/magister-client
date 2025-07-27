@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { IndiceContext } from "../../contexts";
 import {
   activateAuthPopup,
@@ -11,7 +11,11 @@ import ImagePopup from "../_App/ImagePopup";
 import MultyMarkersMap from "../../components/Listings/MultyMarkersMap";
 
 import SendCompleteRequestModal from "./SendCompleteRequestModal";
-import { changeListingFavorite, createOrder } from "../../services";
+import {
+  changeListingFavorite,
+  createOrder,
+  predictTempOrderDispute,
+} from "../../services";
 import { useRouter } from "next/router";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -49,6 +53,7 @@ const SingleListingsContent = ({
 
   const [currentOpenImg, setCurrentOpenImg] = useState(null);
   const [createOrderModalActive, setCreateOrderModalActive] = useState(false);
+  const [disputeProbability, setDisputeProbability] = useState(null);
 
   const closeCurrentOpenImg = () => setCurrentOpenImg(null);
 
@@ -59,6 +64,21 @@ const SingleListingsContent = ({
     setCurrentApprove(true);
     setCreateOrderModalActive(false);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      const probabilityOfDelay = await predictTempOrderDispute({
+        price: currentApprovePrice,
+        startDate: currentApproveStartDate,
+        finishDate: currentApproveFinishDate,
+        listingId: listing.id,
+      });
+
+      setDisputeProbability(probabilityOfDelay);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [currentApprovePrice, currentApproveStartDate, currentApproveFinishDate]);
 
   const handleSendRequest = async ({ sendingMessage }) => {
     try {
@@ -630,6 +650,7 @@ const SingleListingsContent = ({
                 userCommentCount: ownerRatingInfo["commentCount"],
               }}
               handleGoBack={() => setCurrentApprove(false)}
+              disputeProbability={disputeProbability}
               startDate={currentApproveStartDate}
               finishDate={currentApproveFinishDate}
               price={currentApprovePrice}
