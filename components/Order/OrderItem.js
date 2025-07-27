@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import StatusBlock from "../Listings/StatusBlock";
 import {
+  dateConverter,
   fullDateConverter,
   generateProfileFilePath,
   getDisputeTitle,
@@ -103,6 +104,28 @@ const OrderInfo = ({
               ) : (
                 <strong className="unpaid">Unpaid</strong>
               )}
+            </span>
+          </li>
+
+          <li className="row-dots-end">
+            <i className="bx bx-error-circle"></i>
+            <span>Dispute probability: </span>
+            <span
+              className={
+                order.disputeProbability === null ||
+                order.disputeProbability === undefined
+                  ? ""
+                  : order.disputeProbability < 25
+                  ? "text-success"
+                  : order.disputeProbability < 75
+                  ? "text-warning"
+                  : "text-danger"
+              }
+            >
+              {order.disputeProbability !== null &&
+              order.disputeProbability !== undefined
+                ? `${order.disputeProbability}%`
+                : "-"}
             </span>
           </li>
 
