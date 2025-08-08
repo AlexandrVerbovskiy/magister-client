@@ -1,4 +1,5 @@
 import STATIC from "../../../static";
+import { isKeyOperation } from "../../../utils/helpers";
 
 const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
   let query = "";
@@ -40,21 +41,25 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     if (wrapper) {
       query += wrapper[0];
-      item.subItems.forEach((subItem, subItemIndex) => {
-        addQueryByItem(subItem);
-
-        if (subItemIndex != item.subItems.length - 1) {
-          query += ", ";
+      item.subItems.forEach((subItem, idx) => {
+        if (
+          idx > 0 &&
+          !isKeyOperation(item.subItems[idx - 1].key) &&
+          !isKeyOperation(subItem.key) &&
+          !(
+            idx !== item.subItems.length - 1 &&
+            isKeyOperation(item.subItems[idx + 1].key)
+          )
+        ) {
+          query+=", "
         }
+
+        addQueryByItem(subItem);
       });
       query += wrapper[1];
     }
 
-    if (
-      Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
-        .map((item) => item.key)
-        .includes(item.key)
-    ) {
+    if (isKeyOperation(item.key)) {
       query += ` ${item.key} `;
     }
 
@@ -84,7 +89,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     Object.keys(joins).forEach((joinKey) => (query += joins[joinKey]));
 
-    if (conditions.length > 0) {
+    if (conditions && conditions.length > 0) {
       query += ` WHERE `;
 
       conditions.forEach((condition, index) => {
@@ -96,7 +101,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
       });
     }
 
-    if (groups.length > 0) {
+    if (groups && groups.length > 0) {
       query += ` GROUP BY `;
 
       groups.forEach((group, index) => {

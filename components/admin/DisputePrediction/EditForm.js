@@ -133,18 +133,16 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
     );
   };
 
-  console.log(modelParams, checkField);
-
   return (
-    <div className="flex h-[100dvh] overflow-hidden">
+    <div className="flex h-[100dvh]">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden dark:bg-slate-900">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <main className="grow overflow-hidden">
-          <div className="relative h-full">
-            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between overflow-hidden">
+        <main className="grow">
+          <div className="relative">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between">
               <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs
                   links={[
@@ -157,10 +155,11 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                 />
               </div>
 
-              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between h-full overflow-hidden">
-                <div className="overflow-auto max-h-full h-full gap-2 flex flex-col m-4 ">
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between min-h-full overflow-hidden">
+                <div className="gap-2 flex flex-col m-4 ">
                   {modelParams.map((param, index) => (
                     <div
+                      key={index}
                       className="p-4 rounded-xs border border-slate-200 cursor-pointer hover:bg-gray-100 transition duration-150 ease-in-out"
                       onClick={() => updateModelParam(index)}
                     >
@@ -246,7 +245,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                 </div>
 
                 <div className="p-6 space-y-6">
-                  <FullQuery modelParams={modelParams}/>
+                  <FullQuery modelParams={modelParams} />
                 </div>
 
                 <div className="flex flex-col md:flex-row md:-mr-px">
