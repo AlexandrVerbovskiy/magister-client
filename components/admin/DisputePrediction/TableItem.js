@@ -1,6 +1,6 @@
 import Link from "next/link";
 import TableDateView from "../TableDateView";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IndiceContext } from "../../../contexts";
 
 const StatusSpan = ({ started, stopped, finished }) => {
@@ -163,7 +163,7 @@ const TableItem = ({
 
         <Link
           href={checked ? `/admin/dispute-predictions/details/${id}/` : "#"}
-          className={`bg-teal-100 flex items-center text-teal-500 rounded-full py-2 px-4 w-fit ${
+          className={`bg-teal-100 flex items-center text-teal-500 rounded-full py-2 px-4 w-min ${
             checked
               ? "hover:bg-teal-200 hover:text-teal-600 cursor-pointer"
               : "opacity-50 cursor-not-allowed pointer-events-none"

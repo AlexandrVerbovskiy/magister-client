@@ -196,3 +196,8 @@ export const isItemKeyDraggable = (key) =>
   Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN)
     .map((operation) => operation.key)
     .includes(key);
+
+export const isKeyOperation = (key) =>
+  Object.values(STATIC.DISPUTE_PREDICTION_BLOCK.OPERATIONS)
+    .map((op) => op.key)
+    .includes(key);
