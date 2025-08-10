@@ -308,7 +308,7 @@ const EditForm = ({
       price: listing.price ?? "",
       lat: lat,
       lng: lng,
-      rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+      radius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
       otherCategory: listing.otherCategory ?? "",
@@ -336,9 +336,9 @@ const EditForm = ({
       postcode: postcode.trim(),
       city: city.trim(),
       price,
-      lat: lat,
-      lng: lng,
-      rentalRadius: radius,
+      lat,
+      lng,
+      radius,
       listingImages,
       active,
     };
@@ -369,7 +369,7 @@ const EditForm = ({
     setPrice(data.price);
     setLat(data.lat);
     setLng(data.lng);
-    setRadius(data.rentalRadius);
+    setRadius(data.radius);
     setAddress(data.address);
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);

@@ -59,6 +59,27 @@ const OrderInfo = ({
 
         <ul>
           <li className="row-dots-end">
+            <i className="bx bx-error-circle"></i>
+            <span>Dispute probability: </span>
+            <span
+              className={
+                order.disputeProbability === null ||
+                order.disputeProbability === undefined
+                  ? ""
+                  : order.disputeProbability < 25
+                  ? "text-success"
+                  : order.disputeProbability < 75
+                  ? "text-warning"
+                  : "text-danger"
+              }
+            >
+              {order.disputeProbability !== null &&
+              order.disputeProbability !== undefined
+                ? `${order.disputeProbability}%`
+                : "-"}
+            </span>
+          </li>
+          <li className="row-dots-end">
             <i className="bx bx-map"></i>
             <span>Address: </span>
             <span>{order.listingCity}</span>
@@ -104,28 +125,6 @@ const OrderInfo = ({
               ) : (
                 <strong className="unpaid">Unpaid</strong>
               )}
-            </span>
-          </li>
-
-          <li className="row-dots-end">
-            <i className="bx bx-error-circle"></i>
-            <span>Dispute probability: </span>
-            <span
-              className={
-                order.disputeProbability === null ||
-                order.disputeProbability === undefined
-                  ? ""
-                  : order.disputeProbability < 25
-                  ? "text-success"
-                  : order.disputeProbability < 75
-                  ? "text-warning"
-                  : "text-danger"
-              }
-            >
-              {order.disputeProbability !== null &&
-              order.disputeProbability !== undefined
-                ? `${order.disputeProbability}%`
-                : "-"}
             </span>
           </li>
 
@@ -367,7 +366,7 @@ const OrderItem = ({
       <div className="td name">
         <img src={generateProfileFilePath(userPhoto)} alt="image" />
         <div className="info">
-          <span className="row-dots-end">{userName}</span>
+          <span className="row-dots-end mb-0">{userName}</span>
           <ul>
             <li>
               <Link className="row-dots-end" href={`mailto:${userEmail}`}>
