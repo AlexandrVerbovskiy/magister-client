@@ -91,18 +91,6 @@ const OrderApprovementSection = ({
             fee={fee}
           />
 
-          <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
-
-          <OwnerInfo
-            data={{
-              userName: listing.userName,
-              userPhoto: listing.userPhoto,
-              userCountItems: listing.userCountItems,
-              userAverageRating: listing.userAverageRating,
-              userCommentCount: listing.userCommentCount,
-            }}
-          />
-
           <div className="listings-widget">
             <div className="author">
               <div className="d-flex align-items-center">
@@ -127,6 +115,18 @@ const OrderApprovementSection = ({
               </div>
             </div>
           </div>
+
+          <ItemInfo setCurrentOpenImg={setCurrentOpenImg} listing={listing} />
+
+          <OwnerInfo
+            data={{
+              userName: listing.userName,
+              userPhoto: listing.userPhoto,
+              userCountItems: listing.userCountItems,
+              userAverageRating: listing.userAverageRating,
+              userCommentCount: listing.userCommentCount,
+            }}
+          />
         </div>
       </div>
 
