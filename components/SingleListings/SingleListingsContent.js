@@ -67,12 +67,15 @@ const SingleListingsContent = ({
 
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const probabilityOfDelay = await predictTempOrderDispute({
-        price: currentApprovePrice,
-        startDate: currentApproveStartDate,
-        finishDate: currentApproveFinishDate,
-        listingId: listing.id,
-      });
+      const probabilityOfDelay = await predictTempOrderDispute(
+        {
+          price: currentApprovePrice,
+          startDate: currentApproveStartDate,
+          finishDate: currentApproveFinishDate,
+          listingId: listing.id,
+        },
+        authToken
+      );
 
       setDisputeProbability(probabilityOfDelay);
     }, 400);
@@ -89,6 +92,7 @@ const SingleListingsContent = ({
           finishDate: currentApproveFinishDate,
           listingId: listing.id,
           message: sendingMessage,
+          disputeProbability,
         },
         authToken
       );

@@ -583,6 +583,7 @@ const OrderContent = ({
                       Listing price: {moneyFormatVisual(order.listingPrice)}
                     </li>
                   )}
+
                 <li>Offer price: {moneyFormatVisual(order.offerPrice)}</li>
                 <li>
                   <CanBeErrorBaseDateSpan
@@ -608,6 +609,23 @@ const OrderContent = ({
                       adminApproved={order.paymentInfo?.adminApproved}
                       waitingApproved={order.paymentInfo?.waitingApproved}
                     />
+                  </li>
+                )}
+
+                {order.disputeProbability !== null && (
+                  <li>
+                    Dispute Probability:{" "}
+                    <span
+                      className={
+                        order.disputeProbability < 25
+                          ? "text-success"
+                          : order.disputeProbability < 75
+                          ? "text-warning"
+                          : "text-danger"
+                      }
+                    >
+                      {order.disputeProbability}%
+                    </span>
                   </li>
                 )}
 
