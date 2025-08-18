@@ -40,7 +40,7 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
 
   return (
     <>
-      <Navbar canShowSearch={false} needBetaAlert={false} />
+      <Navbar canShowSearch={false} />
 
       <PageBanner
         pageTitle="Checkout"
@@ -205,7 +205,7 @@ const Checkout = ({ order, renterBaseCommission, bankInfo, authToken }) => {
                         ),
                         ownerFee: order.ownerFee,
                         renterFee: order.renterFee,
-                        type: "owner",
+                        type: "renter",
                       })}
                     />
                   )}

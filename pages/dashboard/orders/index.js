@@ -35,7 +35,7 @@ const Wrapper = ({
           {isMobile && (
             <ul
               className="list-group list-group-flush pt-1 mt-2"
-              style={{ borderTop: "1px solid #ede7f6" }}
+              style={{ borderTop: "1px solid #30eded" }}
             >
               <div className="py-1" onClick={() => changeType("renter")}>
                 <div
@@ -43,7 +43,7 @@ const Wrapper = ({
                   style={type == "renter" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    My completing requests ({countForRenter})
+                    Renting ({countForRenter})
                   </label>
                 </div>
               </div>
@@ -54,7 +54,7 @@ const Wrapper = ({
                   style={type == "owner" ? { color: "var(--mainColor)" } : {}}
                 >
                   <label className="form-check-label">
-                    Requests for my listings ({countForOwner})
+                    Hosting ({countForOwner})
                   </label>
                 </div>
               </div>
@@ -106,7 +106,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "renter" ? "active" : ""}`}>
         <span className="menu-title">
-          My completing requests ({countForRenter})
+          Renting ({countForRenter})
         </span>
       </a>
     </li>
@@ -121,7 +121,7 @@ const TabHeaderSection = ({
     >
       <a className={`nav-link ${type == "owner" ? "active" : ""}`}>
         <span className="menu-title">
-          Requests for my listings ({countForOwner})
+          Hosting ({countForOwner})
         </span>
       </a>
     </li>

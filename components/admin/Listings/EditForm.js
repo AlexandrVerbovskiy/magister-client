@@ -5,7 +5,7 @@ import BreadCrumbs from "../../../partials/admin/base/BreadCrumbs";
 import Switch from "../../../partials/admin/base/Switch";
 import DropdownClassic from "../DropdownClassic";
 import Input from "../Form/Input";
-import DateInput from "../Form/DateInput";
+import Textarea from "../Form/Textarea";
 import { getUserNameIdList } from "../../../services";
 import { IndiceContext } from "../../../contexts";
 import EditMap from "../../Listings/EditMap";
@@ -31,12 +31,7 @@ import STATIC from "../../../static";
 import ErrorSpan from "../ErrorSpan";
 import CategorySelect from "./CategorySelect";
 
-const cityOptions = [
-  { value: "London", title: "London" },
-  { value: "Paris", title: "Paris" },
-];
-
-const baseCity = cityOptions[0]["value"];
+const baseCity = STATIC.CITIES[0]["value"];
 
 const OwnerSection = ({
   ownerId,
@@ -281,7 +276,7 @@ const EditForm = ({ listing, categories, save }) => {
     setCity(data.city);
     setLat(data.lat);
     setLng(data.lng);
-    setCenter({ lat: data.lat, lng: data.lLng });
+    setCenter({ lat: data.lat, lng: data.lng });
     setRadius(data.radius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
@@ -613,6 +608,20 @@ const EditForm = ({ listing, categories, save }) => {
                             </div>
                           )}
 
+                          <div>
+                            <Textarea
+                              name="description"
+                              value={description}
+                              setValue={setDescription}
+                              error={descriptionError}
+                              setError={setDescriptionError}
+                              label="Description"
+                              placeholder="Details..."
+                              labelClassName="block text-sm font-medium mb-1"
+                              inputClassName="form-input w-full"
+                            />
+                          </div>
+
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <Input
@@ -646,7 +655,7 @@ const EditForm = ({ listing, categories, save }) => {
                                 City
                               </label>
                               <DropdownClassic
-                                options={cityOptions}
+                                options={STATIC.CITIES}
                                 selected={city}
                                 setSelected={handleChangeCity}
                                 needSearch={false}

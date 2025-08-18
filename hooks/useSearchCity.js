@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { IndiceContext } from "../contexts";
+import STATIC from "../static";
+
+const cities = STATIC.CITIES.map((city) => city.title);
 
 const useSearchCity = () => {
   const [tipsPopupActive, setTipsPopupActive] = useState(false);
-  const cities = ["London", "Paris"];
   const [cityTips, setCityTips] = useState([]);
 
   const { error } = useContext(IndiceContext);

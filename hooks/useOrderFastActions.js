@@ -335,7 +335,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const handleAcceptFinish = async () => {
-    const result = await finishOrder(activeFinishOrder);
+    const result = await finishOrder(activeFinishOrder, authToken);
     setItemFields(result, activeFinishOrder);
     closeFinish();
   };
@@ -351,7 +351,7 @@ const useOrderFastActions = ({ orders, setItemFields }) => {
   };
 
   const handleAcceptAcceptFinish = async () => {
-    const result = await acceptFinishOrder(activeAcceptFinishOrder);
+    const result = await acceptFinishOrder(activeAcceptFinishOrder, authToken);
     setItemFields({ ...result }, activeAcceptFinishOrder);
     closeAcceptFinish();
   };

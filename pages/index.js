@@ -43,9 +43,9 @@ const Index = ({ categories }) => {
 
       <UnlockAccess />
 
-      <StartEarning />
+      <DestinationsTwo />
 
-      <DestinationsTwo bgColor="bg-f9f9f9" />
+      <StartEarning bgColor="bg-f9f9f9" />
 
       <Footer />
     </>

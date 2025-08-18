@@ -14693,8 +14693,8 @@ body:has(.verification-alert)
   .chat-list-wrapper
   .chat-list
   .chat-container {
-  height: calc(100vh - 340px);
-  background-color: #dad8ee;
+  height: calc(100vh - 310px);
+  background-color: var(--mainColorBorder2);
   padding: 25px 20px;
   overflow-y: scroll;
   background-position: center center;
@@ -18908,7 +18908,7 @@ input[type="number"] {
 }
 
 .message-content-action {
-  background: #ede7f6;
+  background: #d8f2f2;
   color: #666666 !important;
   padding: 10px 20px 10px 20px;
   border-radius: 100px;
@@ -18918,7 +18918,7 @@ input[type="number"] {
 }
 
 .message-content-action:hover {
-  background: #c0baca !important;
+  background: #ccf6e9 !important;
 }
 
 .popup-date-fee-switch-widget .form-group,

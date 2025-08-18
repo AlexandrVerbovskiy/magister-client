@@ -513,7 +513,7 @@ const Order = (baseProps) => {
                                   request.newFinishDate
                                 ),
                                 ownerFee: order.ownerFee,
-                                renterFee: request.newFee,
+                                renterFee: order.renterFee,
                               })}
                               prevSenderName={
                                 request.senderId == order.renterId

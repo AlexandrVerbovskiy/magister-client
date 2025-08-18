@@ -45,9 +45,13 @@ const MultyMarkersMap = ({
       }
 
       if (!baseCenter && setCenter) {
-        setCenter(defaultCoords);
+        return setCenter(defaultCoords);
       }
     } else {
+      if (baseCenter && setCenter) {
+        return setCenter(baseCenter);
+      }
+
       onCurrentUserLocation(
         ({ lat, lng }) => {
           if (setUserLocation) {
@@ -55,7 +59,7 @@ const MultyMarkersMap = ({
           }
 
           if (!baseCenter && setCenter) {
-            setCenter({ lat, lng });
+            return setCenter({ lat, lng });
           }
         },
         () => {
@@ -64,7 +68,7 @@ const MultyMarkersMap = ({
           }
 
           if (setCenter) {
-            setCenter(baseCenter);
+            return setCenter(baseCenter);
           }
         }
       );
