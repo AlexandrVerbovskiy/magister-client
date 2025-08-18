@@ -1,6 +1,5 @@
 import React from "react";
-import { moneyFormat, moneyFormatVisual, transactionTableOptions } from "../../utils";
-import STATIC from "../../static";
+import { moneyFormatVisual, transactionTableOptions } from "../../utils";
 
 const TransactionAnalyticsTable = ({ title, data }) => {
   const { paypalInfo, bankTransferInfo } = transactionTableOptions({

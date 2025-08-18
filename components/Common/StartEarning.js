@@ -1,21 +1,15 @@
 import Link from "next/link";
 import { useListingListClick } from "../../hooks";
 
-const StartEarning = () => {
+const StartEarning = ({ bgColor = "" }) => {
   const { handleClick: handleStartEarningClick } = useListingListClick({
     link: "/dashboard/listings/add",
   });
 
   return (
-    <section className="category-area pt-100 pb-100">
+    <section className={`category-area pt-100 pb-100 ${bgColor}`}>
       <div className="container">
-        <div className="row">
-          <div className="col-lg-4 col-md-12 d-flex justify-content-center overflow-hidden">
-            <img
-              src="/images/left-rental-info.svg"
-              style={{ transform: "scale(1.7)" }}
-            />
-          </div>
+        <div className="row justify-content-center">
           <div className="col-lg-8 col-md-12">
             <div className="d-flex flex-column justify-content-between h-100">
               <h2 className="mb-4">Start Earning</h2>

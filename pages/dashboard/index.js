@@ -110,7 +110,7 @@ const Dashboard = (props) => {
           {isMobile && (
             <div
               className="pt-1 mt-2"
-              style={{ borderTop: "1px solid #ede7f6" }}
+              style={{ borderTop: "1px solid #30eded" }}
             >
               <label className="search-header-section w-full d-block mt-2 mb-2">
                 Sort By:{" "}

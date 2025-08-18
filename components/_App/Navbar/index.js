@@ -18,14 +18,12 @@ import STATIC from "../../../static";
 import SignOutModal from "../SignOutModal";
 import { useListingListClick } from "../../../hooks";
 import VerificationAlert from "../../VerificationAlert";
-import BetaAuthAlert from "../../BetaAuthAlert";
 import MobileNavbar from "../MobileNavbar";
 import EmailVerifiedCodeModal from "./EmailVerifiedCodeModal";
 
 const Navbar = ({
   canShowSearch = true,
   alwaysSticky = false,
-  needBetaAlert = true,
 }) => {
   const router = useRouter();
 
@@ -233,7 +231,6 @@ const Navbar = ({
             : "navbar-area navbar-style-two"
         }
       >
-        {needBetaAlert && <BetaAuthAlert />}
         <div className="miran-responsive-nav">
           <div className="container">
             <div className="miran-responsive-menu">

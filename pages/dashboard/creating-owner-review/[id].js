@@ -97,7 +97,7 @@ const FullReview = (baseProps) => {
           />
         )}
 
-        {currentStep == "finished" && <FinishedPart />}
+        {currentStep == "finished" && <FinishedPart isReviewerOwner={true} />}
       </div>
 
       <ImagePopup

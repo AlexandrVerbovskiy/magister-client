@@ -43,7 +43,7 @@ const OrderInfoMessageContent = ({
       </div>
 
       <div className="mb-1">
-        {startDate}-{finishDate}
+        {dateConverter(startDate)}-{dateConverter(finishDate)}
       </div>
 
       <div className="mb-1">

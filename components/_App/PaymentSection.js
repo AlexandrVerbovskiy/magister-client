@@ -164,7 +164,7 @@ const PaymentSection = ({
           style={getPaymentFormStyles(type)}
         >
           {type == STATIC.PAYMENT_TYPES.PAYPAL &&
-            amount &&
+            amount > 0 &&
             orderId &&
             authToken && (
               <PaypalButton
@@ -176,7 +176,7 @@ const PaymentSection = ({
             )}
 
           {type == STATIC.PAYMENT_TYPES.CREDIT_CARD &&
-            amount &&
+            amount > 0 &&
             orderId &&
             authToken && (
               <PaypalForm
