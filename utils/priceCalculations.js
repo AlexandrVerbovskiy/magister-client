@@ -1,7 +1,13 @@
 import STATIC from "../static";
 import { getFactOrderDays } from "./dateHelpers";
 
-export const moneyFormat = (money) => +money.toFixed(2);
+export const moneyFormat = (money) => {
+  if (!money) {
+    return 0;
+  }
+
+  return +money.toFixed(2);
+};
 
 export const getPriceByDays = (pricePerDay, startDate, finishDate) =>
   getFactOrderDays(startDate, finishDate) * pricePerDay;

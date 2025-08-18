@@ -52,7 +52,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
       }
 
       if (
-        type == STATIC.MESSAGE_TYPES.OWNER_PAYED &&
+        type == STATIC.MESSAGE_TYPES.RENTER_PAYED &&
         order.status == STATIC.ORDER_STATUSES.IN_PROCESS
       ) {
         canActions = true;
@@ -81,7 +81,7 @@ const OrderMessageActions = ({ content, order, popupsData, type = null }) => {
 
       if (order.status == STATIC.ORDER_STATUSES.PENDING_RENTER_PAYMENT) {
         if (order?.paymentInfo?.id) {
-          if (type == STATIC.MESSAGE_TYPES.OWNER_PAYED_WAITING) {
+          if (type == STATIC.MESSAGE_TYPES.RENTER_PAYED_WAITING) {
             canActions = true;
           }
         } else {

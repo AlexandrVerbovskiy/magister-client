@@ -98,8 +98,8 @@ const config = {
     UPDATE_ORDER: "update-order",
     ACCEPTED_ORDER: "accepted-order",
     REJECTED_ORDER: "rejected-order",
-    OWNER_PAYED: "owner-payed",
-    OWNER_PAYED_WAITING: "owner-payed-waiting",
+    RENTER_PAYED: "renter-payed",
+    RENTER_PAYED_WAITING: "renter-payed-waiting",
     IN_PROCESS: "in-process",
     WAITING_FINISHED_APPROVE: "waiting-finished-approve",
     FINISHED: "finished",
@@ -183,6 +183,14 @@ const config = {
       TABLE_SELECTS: { key: "table_selects", label: "Table Selects" },
     },
   },
+  CITIES: [
+    { name: "Kyiv", value: "Kyiv", title: "Kyiv" },
+    { name: "Vinnytsia", value: "Vinnytsia", title: "Vinnytsia" },
+    { name: "Zhytomyr", value: "Zhytomyr", title: "Zhytomyr" },
+    { name: "Sumy", value: "Sumy", title: "Sumy" },
+    { name: "Rivne", value: "Rivne", title: "Rivne" },
+    { name: "Lviv", value: "Lviv", title: "Lviv" },
+  ],
 };
 
 config["DEFAULT_PHONE_INFO"] = {
