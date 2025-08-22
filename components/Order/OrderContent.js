@@ -470,14 +470,14 @@ const OrderContent = ({
                     markers={[
                       {
                         id: 1,
-                        lat: order.listingLat,
-                        lng: order.listingLng,
+                        lat: order.listingRentalLat,
+                        lng: order.listingRentalLng,
                         radius: order.listingRadius,
                       },
                     ]}
                     baseCenter={{
-                      lat: order.listingLat,
-                      lng: order.listingLng,
+                      lat: order.listingRentalLat,
+                      lng: order.listingRentalLng,
                     }}
                     userLocation={userLocation}
                     setUserLocation={setUserLocation}

@@ -610,7 +610,7 @@ const SingleListingsContent = ({
                           <span>
                             {listing.userCountItems}{" "}
                             {autoMultiEnding(listing.userCountItems, "Order")}{" "}
-                            for complete
+                            for rent
                           </span>
                         </div>
                       </div>
