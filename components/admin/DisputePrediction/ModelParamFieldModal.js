@@ -17,18 +17,17 @@ const ModelParamFieldModal = ({
   comparisonType: baseComparisonType = null,
   needComparisonType = true,
   joins: baseJoins = [],
+  defaultValue: baseDefaultValue = "",
 }) => {
   const [comparisonType, setComparisonType] = useState("numerical");
-
   const [pseudonym, setPseudonym] = useState("");
   const [pseudonymError, setPseudonymError] = useState(null);
-
   const [tableName, setTableName] = useState(null);
   const [tableNameError, setTableNameError] = useState(null);
-
   const [fieldName, setFieldName] = useState(null);
   const [fieldNameError, setFieldNameError] = useState(null);
-
+  const [defaultValue, setDefaultValue] = useState("");
+  const [defaultValueError, setDefaultValueError] = useState(null);
   const [joins, setJoins] = useState([]);
 
   useEffect(() => setPseudonym(basePseudonym), [basePseudonym]);
@@ -36,6 +35,8 @@ const ModelParamFieldModal = ({
   useEffect(() => setTableName(baseTableName), [baseTableName]);
 
   useEffect(() => setFieldName(baseFieldName), [baseFieldName]);
+
+  useEffect(() => setDefaultValue(baseDefaultValue), [baseDefaultValue]);
 
   useEffect(
     () => setComparisonType(baseComparisonType ?? "numerical"),
@@ -82,6 +83,7 @@ const ModelParamFieldModal = ({
       tableName,
       fieldName,
       joins: cloneObject(joins),
+      defaultValue,
     };
 
     if (needComparisonType) {
@@ -95,6 +97,7 @@ const ModelParamFieldModal = ({
     setFieldName(null);
     setJoins([]);
     setComparisonType("numerical");
+    setDefaultValue("");
 
     closeModal();
   };
@@ -140,6 +143,20 @@ const ModelParamFieldModal = ({
                     setError={setPseudonymError}
                     label="Field Pseudonym (for visual distinction)"
                     placeholder="Enter Field Pseudonym"
+                    labelClassName="block text-sm font-medium mb-1"
+                    inputClassName="form-input w-full"
+                  />
+                </div>
+
+                <div className="w-full mb-4">
+                  <Input
+                    name="default-value"
+                    value={defaultValue}
+                    setValue={setDefaultValue}
+                    error={defaultValueError}
+                    setError={setDefaultValueError}
+                    label="Default Value"
+                    placeholder="Enter Value"
                     labelClassName="block text-sm font-medium mb-1"
                     inputClassName="form-input w-full"
                   />
