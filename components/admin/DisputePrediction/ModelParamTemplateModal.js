@@ -13,6 +13,7 @@ const ModelParamTemplateModal = ({
   groups: baseGroups = [],
   comparisonType: baseComparisonType = null,
   tableStructure,
+  defaultValue: baseDefaultValue = "",
 }) => {
   const [content, setContent] = useState([]);
   const [pseudonym, setPseudonym] = useState("");
@@ -20,6 +21,8 @@ const ModelParamTemplateModal = ({
   const [conditions, setConditions] = useState([]);
   const [groups, setGroups] = useState([]);
   const [comparisonType, setComparisonType] = useState("numerical");
+  const [defaultValue, setDefaultValue] = useState("");
+  const [defaultValueError, setDefaultValueError] = useState("");
 
   useEffect(() => setContent(cloneObject(baseContent)), [baseContent]);
 
@@ -28,6 +31,8 @@ const ModelParamTemplateModal = ({
   useEffect(() => setConditions(cloneObject(baseConditions)), [baseConditions]);
 
   useEffect(() => setGroups(cloneObject(baseGroups)), [baseGroups]);
+
+  useEffect(() => setDefaultValue(baseDefaultValue), [baseDefaultValue]);
 
   useEffect(
     () => setComparisonType(baseComparisonType ?? "numerical"),
@@ -43,6 +48,7 @@ const ModelParamTemplateModal = ({
         conditions: conditions,
         groups: groups,
         comparisonType,
+        defaultValue,
       })
     );
 
@@ -50,6 +56,7 @@ const ModelParamTemplateModal = ({
     setPseudonym("");
     setConditions([]);
     setGroups([]);
+    setDefaultValue("");
 
     closeModal();
   };
@@ -88,6 +95,10 @@ const ModelParamTemplateModal = ({
                     setGroups,
                     comparisonType,
                     setComparisonType,
+                    defaultValue,
+                    setDefaultValue,
+                    defaultValueError,
+                    setDefaultValueError,
                   }}
                 />
               </div>

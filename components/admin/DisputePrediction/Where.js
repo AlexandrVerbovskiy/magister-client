@@ -22,6 +22,11 @@ const Where = ({
 
   comparisonType,
   setComparisonType,
+
+  defaultValue,
+  setDefaultValue,
+  defaultValueError,
+  setDefaultValueError,
 }) => {
   const [activeConditionTable, setActiveConditionTable] = useState(null);
   const [activeGroupTable, setActiveGroupTable] = useState(null);
@@ -333,6 +338,20 @@ const Where = ({
         >
           Add Group
         </button>
+      </div>
+
+      <div className="w-full mb-4">
+        <Input
+          name="default-value"
+          value={defaultValue}
+          setValue={setDefaultValue}
+          error={defaultValueError}
+          setError={setDefaultValueError}
+          label="Default Value"
+          placeholder="Enter Value"
+          labelClassName="block text-sm font-medium mb-1"
+          inputClassName="form-input w-full"
+        />
       </div>
 
       <ModalBlank

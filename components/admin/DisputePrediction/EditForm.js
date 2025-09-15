@@ -83,6 +83,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         conditions: modelParams[index].conditions,
         groups: modelParams[index].groups,
         comparisonType: modelParams[index].comparisonType,
+        defaultValue: modelParams[index].defaultValue ?? null,
       });
     }
 
@@ -94,6 +95,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         fieldName: modelParams[index].content.fieldName,
         joins: modelParams[index].content.joins,
         comparisonType: modelParams[index].comparisonType,
+        defaultValue: modelParams[index].defaultValue ?? null,
       });
     }
   };
@@ -105,6 +107,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       conditions: [],
       groups: [],
       comparisonType: "numerical",
+      defaultValue: null,
     });
   };
 
@@ -115,6 +118,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
       tableName: "orders",
       fieldName: "",
       comparisonType: "numerical",
+      defaultValue: null,
     });
   };
 
@@ -293,6 +297,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
           content,
           conditions,
           groups,
+          defaultValue,
         }) =>
           saveModelParam(
             {
@@ -302,6 +307,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
               conditions,
               groups,
               comparisonType,
+              defaultValue,
             },
             activeModelTemplateParam?.index
           )
@@ -314,6 +320,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         groups={activeModelTemplateParam?.groups ?? []}
         comparisonType={activeModelTemplateParam?.comparisonType ?? null}
         pseudonym={activeModelTemplateParam?.pseudonym ?? ""}
+        defaultValue={activeModelTemplateParam?.defaultValue ?? ""}
         tableStructure={tableStructure}
       />
 
@@ -324,6 +331,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
           fieldName,
           joins,
           pseudonym,
+          defaultValue,
         }) =>
           saveModelParam(
             {
@@ -335,6 +343,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
                 fieldName,
                 joins,
               },
+              defaultValue,
             },
             activeModelFieldParam?.index
           )
@@ -348,6 +357,7 @@ const EditForm = ({ structure: tableStructure, base, setBase }) => {
         tableName={activeModelFieldParam?.tableName ?? null}
         comparisonType={activeModelFieldParam?.comparisonType ?? null}
         joins={activeModelFieldParam?.joins ?? []}
+        defaultValue={activeModelFieldParam?.defaultValue ?? ""}
       />
     </div>
   );
