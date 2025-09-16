@@ -1,4 +1,5 @@
 import STATIC from "../../../static";
+import Input from "../Form/Input";
 
 const ItemTree = ({ item }) => {
   if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
@@ -8,6 +9,17 @@ const ItemTree = ({ item }) => {
         style={{ transform: "none", zIndex: "auto", width: "100%" }}
       >
         {item.content.pseudonym || "-"}
+      </div>
+    );
+  }
+
+  if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.CUSTOM_VALUE.key) {
+    return (
+      <div
+        className="cursor-pointer p-2 text-sm mb-2 border border-slate-300 w-full"
+        style={{ transform: "none", zIndex: "auto", width: "100%" }}
+      >
+        <Input inputClassName="w-full border-slate-300 focus:border-slate-300" value={item.content.value || ""} />
       </div>
     );
   }

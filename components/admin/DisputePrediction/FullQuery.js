@@ -21,6 +21,10 @@ const FullQuery = ({ modelParams }) => {
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.BRACKETS.key]: ["(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.AVG.key]: ["AVG(", ")"],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.SUM.key]: ["SUM(", ")"],
+      [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.COUNT.key]: [
+        "COUNT(",
+        ")",
+      ],
       [STATIC.DISPUTE_PREDICTION_BLOCK.WITH_CHILDREN.IS_NULL.key]: [
         "(",
         " IS NULL)",
@@ -60,6 +64,10 @@ const FullQuery = ({ modelParams }) => {
 
     if (isKeyOperation(item.key)) {
       innerParts.push(` ${item.key} `);
+    }
+
+    if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.CUSTOM_VALUE.key) {
+      innerParts.push(item.content.value);
     }
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {

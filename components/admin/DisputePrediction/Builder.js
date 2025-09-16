@@ -175,7 +175,7 @@ const Builder = ({ tableStructure, dopProps }) => {
 
         return item;
       })
-      .filter(Boolean); // Видаляє null
+      .filter(Boolean);
   };
 
   const reorderItemRecursively = (items, activeId, overId) => {
@@ -360,6 +360,14 @@ const Builder = ({ tableStructure, dopProps }) => {
     );
   };
 
+  const setCustomValue = ({ id, value }) => {
+    dopProps.setContent((prevItems) =>
+      updateItemRecursively(prevItems, id, {
+        content: { value },
+      })
+    );
+  };
+
   return (
     <>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -402,6 +410,7 @@ const Builder = ({ tableStructure, dopProps }) => {
                 key={item.id}
                 activeDrag={activeDrag}
                 setActiveTableDetails={setActiveTableDetails}
+                setCustomValue={setCustomValue}
               />
             )}
           />
