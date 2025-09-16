@@ -51,7 +51,7 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
             isKeyOperation(item.subItems[idx + 1].key)
           )
         ) {
-          query+=", "
+          query += ", ";
         }
 
         addQueryByItem(subItem);
@@ -65,6 +65,10 @@ const Query = ({ tableStructure, items, pseudonym, conditions, groups }) => {
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
       query += `${item.content.tableName}.${item.content.fieldName}`;
+    }
+
+    if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.CUSTOM_VALUE.key) {
+      query += `${item.content.value}`;
     }
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
