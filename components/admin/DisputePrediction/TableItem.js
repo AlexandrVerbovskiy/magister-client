@@ -8,17 +8,17 @@ const StatusSpan = ({ started, stopped, finished }) => {
   let className = "bg-orange-100 text-orange-500";
 
   if (finished) {
-    className += "bg-emerald-100 text-emerald-500";
+    className = "bg-emerald-100 text-emerald-500";
     text = "Finished";
   }
 
   if (stopped) {
-    className += "bg-rose-100 text-rose-500";
+    className = "bg-rose-100 text-rose-500";
     text = "Stopped";
   }
 
   if (started) {
-    className += "bg-yellow-100 text-yellow-500";
+    className = "bg-yellow-100 text-yellow-500";
     text = "Started";
   }
 
@@ -110,13 +110,17 @@ const TableItem = ({
             .reduce((prev, curr) => [prev, ", ", curr])}
         </div>
       </td>
-      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
-        <div className="font-medium">{started ? `${localPercent}%` : "-"}</div>
-      </td>
 
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
         <div className="font-medium">{accuracy ? `${accuracy}%` : "-"}</div>
       </td>
+
+      <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap overflow-separate">
+        <div className="font-medium">
+          {started ? `${localPercent}%` : finished ? "100%" : "-"}
+        </div>
+      </td>
+
       <td className="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
         <TableDateView date={createdAt} />
       </td>
@@ -194,14 +198,12 @@ const TableItem = ({
           Clone
         </Link>
 
-        {finished && (
-          <Link
-            href={`/admin/dispute-predictions/edit/${id}/`}
-            className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4 w-fit"
-          >
-            Edit
-          </Link>
-        )}
+        <Link
+          href={`/admin/dispute-predictions/edit/${id}/`}
+          className="bg-blue-100 hover:bg-blue-200 flex items-center text-blue-500 hover:text-blue-600 rounded-full py-2 px-4 w-fit"
+        >
+          Edit
+        </Link>
       </td>
     </tr>
   );

@@ -1,6 +1,14 @@
 import STATIC from "../../../static";
 import { isKeyOperation } from "../../../utils/helpers";
 
+const swapSubOrdersTable = (table) => {
+  if (table == "orders") {
+    return "suborder";
+  }
+
+  return table;
+};
+
 const FullQuery = ({ modelParams }) => {
   let query = "SELECT ";
   const joins = {};
@@ -71,11 +79,17 @@ const FullQuery = ({ modelParams }) => {
     }
 
     if (item.key === STATIC.DISPUTE_PREDICTION_BLOCK.CUSTOM.TABLE_SELECTS.key) {
-      innerParts.push(`${item.content.tableName}.${item.content.fieldName}`);
+      innerParts.push(
+        `${swapSubOrdersTable(item.content.tableName)}.${
+          item.content.fieldName
+        }`
+      );
       item.content.joins.forEach((join) => {
-        innerJoins[
+        innerJoins[join.pseudonym] = `LEFT JOIN ${join.joinedTable} as ${
           join.pseudonym
-        ] = `LEFT JOIN ${join.joinedTable} as ${join.pseudonym} ON ${join.pseudonym}.${join.joinedField} = ${join.baseTable}.${join.baseField}`;
+        } ON ${join.pseudonym}.${join.joinedField} = ${swapSubOrdersTable(
+          join.baseTable
+        )}.${join.baseField}`;
       });
     }
   };
@@ -118,7 +132,9 @@ const FullQuery = ({ modelParams }) => {
       if (field.conditions?.length) {
         field.conditions.forEach((cond) => {
           innerParts.push(
-            ` AND ${cond.baseTable}.${cond.baseField} ${cond.joinCondition} ${cond.joinedTable}.${cond.joinedField}`
+            ` AND ${swapSubOrdersTable(cond.baseTable)}.${cond.baseField} ${
+              cond.joinCondition
+            } ${swapSubOrdersTable(cond.joinedTable)}.${cond.joinedField}`
           );
         });
       }
@@ -127,7 +143,9 @@ const FullQuery = ({ modelParams }) => {
         innerParts.push(" GROUP BY ");
         field.groups.forEach((grp, gIdx) => {
           if (gIdx > 0) innerParts.push(", ");
-          innerParts.push(`${grp.baseTable}.${grp.baseField}`);
+          innerParts.push(
+            `${swapSubOrdersTable(grp.baseTable)}.${grp.baseField}`
+          );
         });
       }
 
@@ -135,7 +153,9 @@ const FullQuery = ({ modelParams }) => {
         innerParts.push(" ORDER BY ");
         field.orders.forEach((ord, oIdx) => {
           if (oIdx > 0) innerParts.push(", ");
-          innerParts.push(`${ord.baseTable}.${ord.baseField}`);
+          innerParts.push(
+            `${swapSubOrdersTable(ord.baseTable)}.${ord.baseField}`
+          );
         });
       }
 
