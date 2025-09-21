@@ -12,14 +12,17 @@ import BreadCrumbs from "../../../../partials/admin/base/BreadCrumbs";
 import { useAdminPage } from "../../../../hooks";
 import YesNoModal from "../../../../components/admin/YesNoModal";
 import ModalBlank from "../../../../components/admin/ModalBlank";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IndiceContext } from "../../../../contexts";
 import { useRouter } from "next/router";
+import Switch from "../../../../partials/admin/base/Switch";
 
 const DisputePredictionDetails = ({ model }) => {
   const { sidebarOpen, setSidebarOpen } = useAdminPage();
   const { authToken } = useContext(IndiceContext);
-  const fieldPseudonyms = (model.body ?? []).map((field) => field.pseudonym);
+  const fields = (model.body ?? []).filter(
+    (field) => field.pseudonym !== model.checkField
+  );
   const router = useRouter();
 
   const [modelToStopActive, setModelToStopActive] = useState(false);
@@ -28,12 +31,9 @@ const DisputePredictionDetails = ({ model }) => {
   const [modelToStartTrainingActive, setModelToStartTrainingActive] =
     useState(false);
   const [onActivateRebuild, setOnActivateRebuild] = useState(false);
-
   const [selectedFields, setSelectedFields] = useState(
     model.selectedFields ?? []
   );
-
-  const allFields = (model.body ?? []).map((field) => field.pseudonym);
 
   const handleFieldChange = (field) => {
     setSelectedFields((prev) =>
@@ -65,9 +65,18 @@ const DisputePredictionDetails = ({ model }) => {
   };
 
   const onStartTrainingModel = async () => {
-    await startTrainingDisputePredictionModel(model.id, selectedFields, authToken);
+    await startTrainingDisputePredictionModel(
+      model.id,
+      selectedFields,
+      authToken
+    );
     setModelToStartTrainingActive(false);
     router.reload();
+  };
+
+  const getNumericalView = (value) => {
+    if (value === undefined || value === null) return "-";
+    return value.toFixed(4);
   };
 
   return (
@@ -77,9 +86,9 @@ const DisputePredictionDetails = ({ model }) => {
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden dark:bg-slate-900">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <main className="grow overflow-hidden">
+        <main className="grow">
           <div className="relative h-full">
-            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between overflow-hidden">
+            <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto h-full flex flex-col justify-space-between">
               <div className="md:flex md:justify-between md:items-center mb-8">
                 <BreadCrumbs
                   links={[
@@ -92,99 +101,99 @@ const DisputePredictionDetails = ({ model }) => {
                 />
               </div>
 
-              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between h-full overflow-hidden">
-                <div className="flex flex-wrap gap-2 m-4">
-                  {model.finished && !model.active && (
-                    <button
-                      type="button"
-                      onClick={() => setModelToActivateActive(true)}
-                      className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
-                    >
-                      Activate
-                    </button>
-                  )}
-                  {!model.finished && model.started && !model.stopped && (
-                    <button
-                      type="button"
-                      onClick={() => setModelToStopActive(true)}
-                      className="bg-rose-100 hover:bg-rose-200 flex items-center text-rose-500 hover:text-rose-600 rounded-full py-2 px-4 w-fit"
-                    >
-                      Stop
-                    </button>
-                  )}
-                  {!model.finished && model.started && model.stopped && (
-                    <button
-                      type="button"
-                      onClick={() => setModelToUnstopActive(true)}
-                      className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
-                    >
-                      Continue
-                    </button>
-                  )}
-                  {!model.finished && !model.started && (
-                    <button
-                      type="button"
-                      onClick={() => setModelToStartTrainingActive(true)}
-                      className="bg-emerald-100 hover:bg-emerald-200 flex items-center text-emerald-500 hover:text-emerald-600 rounded-full py-2 px-4 w-fit"
-                    >
-                      Start Training
-                    </button>
-                  )}
-                </div>
-
-                <div className="overflow-auto max-h-full h-full m-4">
+              <div className="bg-white dark:bg-slate-800 shadow-lg rounded-sm flex flex-col justify-space-between">
+                <div className="m-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {fieldPseudonyms.map((pseudonym) => (
+                    {fields.map((field) => (
                       <div
-                        key={pseudonym}
+                        key={field.pseudonym}
                         className="flex flex-col items-center bg-gray-50 dark:bg-slate-700 rounded-lg p-4 shadow"
                       >
                         <img
-                          src={`${process.env.NEXTAUTH_PUBLIC_FOREST_API_URL}/images/${model.id}/${pseudonym}.png`}
-                          alt={pseudonym}
+                          src={`${process.env.NEXT_PUBLIC_FOREST_API_URL}/images/${model.id}/${field.pseudonym}.png`}
+                          alt={field.pseudonym}
                           className="w-full h-48 object-contain mb-2 rounded"
                         />
                         <div className="text-xs text-slate-500 dark:text-slate-400">
-                          {allFields
-                            .filter(
-                              (allFieldPseudonym) =>
-                                allFieldPseudonym === pseudonym
-                            )
-                            .map((allFieldPseudonym) => (
-                              <label
-                                key={allFieldPseudonym}
-                                className="flex items-center gap-2 mb-1"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedFields.includes(
-                                    allFieldPseudonym
-                                  )}
-                                  onChange={() =>
-                                    handleFieldChange(allFieldPseudonym)
-                                  }
-                                  className="form-checkbox text-teal-500"
-                                />
-                                {pseudonym}{" "}
-                                <>
-                                  {model.comparisonType === "numerical"
-                                    ? `Correlation matrix: ${
-                                        model.predictionDetails
-                                          ?.correlation_dict?.[pseudonym] ?? "-"
-                                      }`
-                                    : `Chi2 result: ${
-                                        model.predictionDetails?.chi2_dict?.[
-                                          pseudonym
-                                        ] ?? "-"
-                                      }`}
-                                </>
-                              </label>
-                            ))}
+                          <label className="flex items-center gap-2 mb-1">
+                            <input
+                              type="checkbox"
+                              checked={selectedFields.includes(field.pseudonym)}
+                              onChange={() =>
+                                handleFieldChange(field.pseudonym)
+                              }
+                              className="form-checkbox text-teal-500"
+                            />
+
+                            <>
+                              {field.comparisonType === "numerical"
+                                ? `Correlation matrix for ${
+                                    field.pseudonym
+                                  }: ${getNumericalView(
+                                    model.predictionDetails?.correlation_dict?.[
+                                      field.pseudonym
+                                    ]
+                                  )}`
+                                : `Chi2 result for ${
+                                    field.pseudonym
+                                  }: ${getNumericalView(
+                                    model.predictionDetails?.chi2_dict?.[
+                                      field.pseudonym
+                                    ]
+                                  )}`}
+                            </>
+                          </label>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+
+                {((model.finished && !model.active) ||
+                  (!model.finished && model.started && !model.stopped) ||
+                  (!model.finished && model.started && model.stopped) ||
+                  (!model.finished && !model.started && model.checked)) && (
+                  <div className="flex flex-col px-6 py-5 border-t border-slate-200 dark:border-slate-700">
+                    <div className="flex flex-wrap gap-2 self-end">
+                      {model.finished && !model.active && (
+                        <button
+                          type="button"
+                          onClick={() => setModelToActivateActive(true)}
+                          className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
+                        >
+                          Activate
+                        </button>
+                      )}
+                      {!model.finished && model.started && !model.stopped && (
+                        <button
+                          type="button"
+                          onClick={() => setModelToStopActive(true)}
+                          className="btn bg-rose-500 hover:bg-rose-600 text-white ml-3"
+                        >
+                          Stop
+                        </button>
+                      )}
+                      {!model.finished && model.started && model.stopped && (
+                        <button
+                          type="button"
+                          onClick={() => setModelToUnstopActive(true)}
+                          className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
+                        >
+                          Continue
+                        </button>
+                      )}
+                      {!model.finished && !model.started && model.checked && (
+                        <button
+                          type="button"
+                          onClick={() => setModelToStartTrainingActive(true)}
+                          className="btn bg-teal-500 hover:bg-teal-600 text-white ml-3"
+                        >
+                          Start Training
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -193,15 +202,16 @@ const DisputePredictionDetails = ({ model }) => {
 
       <YesNoModal
         title="Confirm action"
-        active={modelToStopActive}
-        closeModal={() => setModelToStopActive(null)}
+        modalOpen={modelToStopActive}
+        handleCloseModal={() => setModelToStopActive(null)}
         body={`Are you sure you want to stop generating model #${model.id}?`}
         onAccept={onAcceptStopModel}
       />
       <YesNoModal
+        type="success"
         title="Confirm action"
-        active={!!modelToUnstopActive}
-        closeModal={() => setModelToUnstopActive(null)}
+        modalOpen={!!modelToUnstopActive}
+        handleCloseModal={() => setModelToUnstopActive(null)}
         body={`Are you sure you want to continue generating model #${model.id}?`}
         onAccept={onAcceptUnstopModel}
       />
@@ -258,9 +268,10 @@ const DisputePredictionDetails = ({ model }) => {
         </div>
       </ModalBlank>
       <YesNoModal
+        type="success"
         title="Start training"
-        active={!!modelToStartTrainingActive}
-        closeModal={() => setModelToStartTrainingActive(null)}
+        modalOpen={modelToStartTrainingActive}
+        handleCloseModal={() => setModelToStartTrainingActive(null)}
         body={`Are you sure you want to start training model #${model.id}?`}
         onAccept={onStartTrainingModel}
       />
