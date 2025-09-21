@@ -151,18 +151,19 @@ const DisputePredictionModels = (pageProps) => {
 
       <YesNoModal
         title="Confirm action"
-        active={!!modelIdToStop}
-        closeModal={() => modelIdToStop(null)}
+        modalOpen={!!modelIdToStop}
+        handleCloseModal={() => modelIdToStop(null)}
         body={`Are you sure you want to stop generating model #${modelIdToStop}?`}
         onAccept={onAcceptStopModel}
       />
 
       <YesNoModal
         title="Confirm action"
-        active={!!modelIdToUnstop}
-        closeModal={() => setModelIdToUnstop(null)}
+        modalOpen={!!modelIdToUnstop}
+        handleCloseModal={() => setModelIdToUnstop(null)}
         body={`Are you sure you want to continue generating model #${modelIdToUnstop}?`}
         onAccept={onAcceptUnstopModel}
+        type="success"
       />
 
       <ModalBlank
@@ -224,10 +225,11 @@ const DisputePredictionModels = (pageProps) => {
 
       <YesNoModal
         title="Start training"
-        active={!!modelIdToStartTraining}
-        closeModal={() => setModelIdToStartTraining(null)}
+        modalOpen={!!modelIdToStartTraining}
+        handleCloseModal={() => setModelIdToStartTraining(null)}
         body={`Are you sure you want to start training model #${modelIdToUnstop}?`}
         onAccept={onStartTrainingModel}
+        type="success"
       />
     </div>
   );
