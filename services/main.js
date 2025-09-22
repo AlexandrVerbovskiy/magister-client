@@ -1,5 +1,5 @@
 import { initAxios } from "../utils";
-const { get, post } = initAxios("/main");
+const { get, post } = initAxios("/main", true);
 
 export const getIndexOptions = async (authToken = null) => {
   const data = await get(`/index-options`, authToken);
