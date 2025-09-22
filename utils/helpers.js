@@ -79,6 +79,40 @@ export const isPayedUsedPaypal = (type) =>
     type
   );
 
+export function recipientStatuses({
+  status,
+  plannedTime,
+  admin,
+  failedDescription,
+  orderStatus,
+}) {
+  if (status === "failed") {
+    return failedDescription
+      ? `Payment failed: ${failedDescription}`
+      : "Payment failed";
+  }
+
+  if (status === "completed") {
+    return "Payment completed";
+  }
+
+  if (status === "cancelled") {
+    return "Payment cancelled";
+  }
+
+  if (status === "pending") {
+    if (orderStatus === "cancelled") {
+      return "Order cancelled, payment not required";
+    }
+    if (plannedTime) {
+      return `Payment scheduled for ${plannedTime}`;
+    }
+    return "Payment pending admin approval";
+  }
+
+  return "Payment status unknown";
+}
+
 export const hasPayError = ({ sessionUser, order }) => {
   if (!sessionUser?.verified) {
     return "You need to be verified to make a payment";
