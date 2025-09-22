@@ -30,11 +30,14 @@ const serviceWrapper = async (promise) => {
   }
 };
 
-export const initAxios = (path = null) => {
+export const initAxios = (path = null, serverSide = false) => {
   axios.defaults.withCredentials = true;
 
-  const baseURL =
-    process.env.NEXT_PUBLIC_SERVER_URL + STATIC.SERVER_API + (path ?? "");
+  const serverConnectLink = serverSide
+    ? process.env.SERVER_URL
+    : process.env.NEXT_PUBLIC_SERVER_URL;
+
+  const baseURL = serverConnectLink + STATIC.SERVER_API + (path ?? "");
 
   const axiosInstance = axios.create({
     baseURL,

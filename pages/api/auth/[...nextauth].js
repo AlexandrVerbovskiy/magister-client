@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { authByProvider } from "../../../services";
+import { innerAuthByProvider } from "../../../services";
 
 export default NextAuth({
   providers: [
@@ -60,7 +60,7 @@ export default NextAuth({
             dataToSend["token"] = account.id_token;
           }
 
-          const res = await authByProvider(dataToSend);
+          const res = await innerAuthByProvider(dataToSend);
 
           user.userId = res.userId;
           user.authToken = res.authToken;
