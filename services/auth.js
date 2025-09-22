@@ -1,6 +1,7 @@
 import { initAxios } from "../utils";
 
-const { get, post, generateFullUrl } = initAxios("/auth");
+const { post, generateFullUrl } = initAxios("/auth");
+const { get: innerGet, post: innerPost } = initAxios("/auth", true);
 
 export const login = async (userInfo) => {
   const data = await post("/login", userInfo);
@@ -40,8 +41,8 @@ export const register = async (userInfo) => {
   return data.body;
 };
 
-export const getMyInfo = async (authToken) => {
-  const data = await get("/my-info", authToken);
+export const innerGetMyInfo = async (authToken) => {
+  const data = await innerGet("/my-info", authToken);
   return data.body.user;
 };
 
@@ -99,8 +100,8 @@ export const changeTwoFactorAuth = async (authToken) => {
   return data;
 };
 
-export const authByProvider = async (body) => {
-  const data = await post("/auth-by-provider", body);
+export const innerAuthByProvider = async (body) => {
+  const data = await innerPost("/auth-by-provider", body);
   return data.body;
 };
 

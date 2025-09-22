@@ -110,7 +110,7 @@ const DisputePredictionDetails = ({ model }) => {
                         className="flex flex-col items-center bg-gray-50 dark:bg-slate-700 rounded-lg p-4 shadow"
                       >
                         <img
-                          src={`${process.env.NEXT_PUBLIC_FOREST_API_URL}/images/${model.id}/${field.pseudonym}.png`}
+                          src={`${process.env.NEXT_PUBLIC_FOREST_IMAGES_URL}/${model.id}/${field.pseudonym}.png`}
                           alt={field.pseudonym}
                           className="w-full h-48 object-contain mb-2 rounded"
                         />
