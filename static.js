@@ -153,10 +153,10 @@ const config = {
   SERVER_STORAGE: "/public",
   SUPPORT_EMAIL: "support@dressrenter.com",
   HELLO_EMAIL: "hello@dressrenter.com",
-  CURRENCY: "£", //"$"
-  CURRENCY_NAME: "GBP", //"USD"
+  CURRENCY: "$",
+  CURRENCY_NAME: "USD",
   MOBILE_SIZE: 1199,
-  PHONE_COUNTRIES_CODES: ["gb", "ua"],
+  PHONE_COUNTRIES_CODES: ["ua"],
   DISPUTE_PREDICTION_BLOCK: {
     WITH_CHILDREN: {
       BRACKETS: { key: "brackets", label: "Brackets" },
