@@ -587,7 +587,7 @@ const SingleListingsContent = ({
                         </div>
                       ) : (
                         <div className="status-background-orange">
-                          You can't complete your own listing
+                          You can't complete your own item
                         </div>
                       )}
                     </div>
