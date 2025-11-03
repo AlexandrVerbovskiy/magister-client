@@ -139,7 +139,7 @@ const config = {
     PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
     PHOTO_LINK: "/images/admin/default-photo.png",
     ADMIN_CHAT_LOGO: "/images/short-logo.svg",
-    CITY_COORDS: { lat: 53.390044, lng: -2.59695 },
+    CITY_COORDS: { lat: 49.0139, lng: 31.2858 }
   },
   RECIPIENT_PAYMENT_TYPES: {
     REFUND: "refund",
