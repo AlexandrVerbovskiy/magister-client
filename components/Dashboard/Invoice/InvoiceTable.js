@@ -75,7 +75,7 @@ const InvoiceTable = ({
   );
 
   const totalPayed = renterPaysCalculate(
-    getPriceByDays(offer.price, offer.startDate, offerFinishDate),
+    getPriceByDays(offer.price, offer.startDate, offer.finishDate),
     offer.fee
   );
 
@@ -158,6 +158,7 @@ const InvoiceTable = ({
                 <td>01</td>
                 <td>{offer.listingName}</td>
                 <td className="text-right">{moneyFormatVisual(offer.price)}</td>
+                <td className="text-right">{dateConverter(offer.startDate)} - {dateConverter(offer.finishDate)}</td>
                 <td className="text-right">
                   {moneyFormatVisual(subTotalPrice)}
                 </td>

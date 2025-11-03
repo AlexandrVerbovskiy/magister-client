@@ -31,6 +31,7 @@ import {
   changeActiveListing,
 } from "../../services";
 
+const labelCities = STATIC.CITIES.map(city=>({value: city.value, label: city.title}))
 const baseCity = STATIC.CITIES[0]["value"];
 
 const EditForm = ({
@@ -684,7 +685,7 @@ const EditForm = ({
                     value={city}
                     label="City:"
                     icon="bx bx-menu-alt-left"
-                    options={STATIC.CITIES}
+                    options={labelCities}
                     isSearchable={false}
                     name="city"
                   />
