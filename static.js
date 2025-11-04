@@ -138,7 +138,7 @@ const config = {
     LISTING_MAP_CIRCLE_RADIUS: 500,
     PROFILE_PHOTO_LINK: "/images/admin/user-avatar-80.png",
     PHOTO_LINK: "/images/admin/default-photo.png",
-    ADMIN_CHAT_LOGO: "/images/short-logo.svg",
+    ADMIN_CHAT_LOGO: "/images/short-logo-black.svg",
     CITY_COORDS: { lat: 49.0139, lng: 31.2858 }
   },
   RECIPIENT_PAYMENT_TYPES: {
