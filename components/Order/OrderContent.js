@@ -617,9 +617,9 @@ const OrderContent = ({
                     Dispute Probability:{" "}
                     <span
                       className={
-                        order.disputeProbability < 25
+                        order.disputeProbability < 34
                           ? "text-success"
-                          : order.disputeProbability < 75
+                          : order.disputeProbability < 67
                           ? "text-warning"
                           : "text-danger"
                       }
