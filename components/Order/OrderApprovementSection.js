@@ -98,9 +98,9 @@ const OrderApprovementSection = ({
                     className={`row-dots-end ${
                       disputeProbability === null
                         ? ""
-                        : disputeProbability < 25
+                        : disputeProbability < 34
                         ? "text-success"
-                        : disputeProbability < 75
+                        : disputeProbability < 67
                         ? "text-warning"
                         : "text-danger"
                     }`}
