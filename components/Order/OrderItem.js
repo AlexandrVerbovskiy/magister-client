@@ -66,9 +66,9 @@ const OrderInfo = ({
                 order.disputeProbability === null ||
                 order.disputeProbability === undefined
                   ? ""
-                  : order.disputeProbability < 25
+                  : order.disputeProbability < 34
                   ? "text-success"
-                  : order.disputeProbability < 75
+                  : order.disputeProbability < 67
                   ? "text-warning"
                   : "text-danger"
               }
