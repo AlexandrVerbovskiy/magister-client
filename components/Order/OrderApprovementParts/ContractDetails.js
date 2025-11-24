@@ -9,10 +9,37 @@ import {
 } from "../../../utils";
 import ErrorSpan from "../../ErrorSpan";
 
-const ContractDetails = ({ price, dateError, finishDate, startDate, fee }) => {
-  const clearPrice = getPriceByDays(price, startDate, finishDate);
-  const totalPrice = renterPaysCalculate(clearPrice, fee);
+const DateInput = ({ value, setValue, label, setDateError }) => {
+  const flatpickrRef = useRef(null);
+  const flatpickrContainerRef = useRef(null);
 
+  const openDatePicker = () => {
+    flatpickrRef.current.open();
+  };
+
+  return (
+    <div className="date-info" onClick={openDatePicker}>
+      <div className="date-info-label">{label}</div>
+      <div className="date-info-value">
+        <input ref={flatpickrContainerRef} />
+      </div>
+    </div>
+  );
+};
+
+const ContractDetails = ({
+  fromDate,
+  toDate,
+  price,
+  setToDate,
+  setFromDate,
+  totalPrice,
+  subtotalPrice,
+  dateError,
+  duration,
+  totalFee,
+  setDateError,
+}) => {
   return (
     <div className="listings-widget listings_contact_details">
       <h3>Rental Details</h3>

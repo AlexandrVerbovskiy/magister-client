@@ -274,10 +274,10 @@ const EditForm = ({ listing, categories, save }) => {
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
-    setLat(data.lat);
-    setLng(data.lng);
-    setCenter({ lat: data.lat, lng: data.lng });
-    setRadius(data.radius);
+    setLat(data.rentalLat);
+    setLng(data.rentalLng);
+    setCenter({ lat: data.rentalLat, lng: data.rentalLng });
+    setRadius(data.rentalRadius);
     setApproved(data.approved);
     setOwnerId(data.ownerId);
     setOwnerName(prevListing.userName);
@@ -318,9 +318,10 @@ const EditForm = ({ listing, categories, save }) => {
       description: prevListing.description ?? "",
       postcode: prevListing.postcode ?? "",
       city: city,
-      lat,
-      lng,
-      radius: prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+      rentalLat: lat,
+      rentalLng: lng,
+      rentalRadius:
+        prevListing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       approved: prevListing.approved ?? false,
       ownerId: prevListing.ownerId,
@@ -351,9 +352,9 @@ const EditForm = ({ listing, categories, save }) => {
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
-      lat,
-      lng,
-      radius,
+      rentalLat: lat,
+      rentalLng: lng,
+      rentalRadius: radius,
       listingImages,
       approved,
       ownerId,
@@ -441,6 +442,18 @@ const EditForm = ({ listing, categories, save }) => {
       if (description && validateBigText(description) !== true) {
         setDescriptionError(validateBigText(description));
         hasError = true;
+      }
+
+      if (hasDefects) {
+        if (!defects) {
+          setDefectsError("Required field");
+          hasError = true;
+        }
+
+        if (defects && validateBigText(defects) !== true) {
+          setDefectsError(validateBigText(defects));
+          hasError = true;
+        }
       }
 
       if (!ownerId) {
@@ -607,38 +620,6 @@ const EditForm = ({ listing, categories, save }) => {
                               />
                             </div>
                           )}
-
-                          <div>
-                            <Textarea
-                              name="description"
-                              value={description}
-                              setValue={setDescription}
-                              error={descriptionError}
-                              setError={setDescriptionError}
-                              label="Description"
-                              placeholder="Details..."
-                              labelClassName="block text-sm font-medium mb-1"
-                              inputClassName="form-input w-full"
-                            />
-                          </div>
-
-                          <div className="flex w-full gap-2">
-                            <div className="w-full sm:w-1/2">
-                              <Input
-                                name="price"
-                                value={price}
-                                setValue={setPrice}
-                                error={priceError}
-                                setError={setPriceError}
-                                label="Price per day"
-                                placeholder="Price per day"
-                                labelClassName="block text-sm font-medium mb-1"
-                                inputClassName="form-input w-full"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </section>
 
                       <section>
                         <div className="flex w-full gap-2 flex-col md:flex-row">

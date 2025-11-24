@@ -163,8 +163,8 @@ export const generateDatesBetween = (start, end) => {
 };
 
 export const checkStringDateLowerOrEqualCurrentDate = (date) => {
-  const currentDate = new Date(dateConverter(new Date()));
-  return new Date(dateConverter(date)) < currentDate;
+  const currentDate = separateDate(new Date());
+  return date < currentDate;
 };
 
 export const increaseDateByOneDay = (dateString) => {

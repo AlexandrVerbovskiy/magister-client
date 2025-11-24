@@ -30,6 +30,7 @@ import {
   createListingApprovalRequest,
   changeActiveListing,
 } from "../../services";
+import DateInput from "../FormComponents/DateInput";
 
 const labelCities = STATIC.CITIES.map(city=>({value: city.value, label: city.title}))
 const baseCity = STATIC.CITIES[0]["value"];
@@ -110,8 +111,11 @@ const EditForm = ({
 
   const [city, setCity] = useState(baseCity);
 
-  const [price, setPrice] = useState("");
-  const [priceError, setPriceError] = useState(null);
+  const [totalPrice, setTotalPrice] = useState("");
+  const [totalPriceError, setTotalPriceError] = useState(null);
+
+  const [finishTime, setFinishTime] = useState("");
+  const [finishTimeError, setFinishTimeError] = useState(null);
 
   const [changePopupActive, setChangePopupActive] = useState(null);
 
@@ -260,9 +264,15 @@ const EditForm = ({
     setMainError(null);
   };
 
-  const handleChangePrice = (e) => {
-    setPrice(e.target.value);
-    setPriceError(null);
+  const handleChangeTotalPrice = (e) => {
+    setTotalPrice(e.target.value);
+    setTotalPriceError(null);
+    setMainError(null);
+  };
+
+  const handleChangeFinishTine = (value) => {
+    setFinishTime(value);
+    setFinishTimeError(null);
     setMainError(null);
   };
 
@@ -301,10 +311,10 @@ const EditForm = ({
       description: listing.description ?? "",
       postcode: listing.postcode ?? "",
       city: city,
-      price: listing.price ?? "",
-      lat: lat,
-      lng: lng,
-      radius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
+      totalPrice: listing.totalPrice ?? "",
+      rentalLat: lat,
+      rentalLng: lng,
+      rentalRadius: listing.radius ?? STATIC.DEFAULTS.LISTING_MAP_CIRCLE_RADIUS,
       listingImages,
       active: listing.active ?? true,
       otherCategory: listing.otherCategory ?? "",
@@ -331,10 +341,10 @@ const EditForm = ({
       description: description.trim(),
       postcode: postcode.trim(),
       city: city.trim(),
-      price,
-      lat,
-      lng,
-      radius,
+      totalPrice,
+      rentalLat: lat,
+      rentalLng: lng,
+      rentalRadius: radius,
       listingImages,
       active,
     };
@@ -362,10 +372,10 @@ const EditForm = ({
     setDescription(data.description);
     setPostcode(data.postcode);
     setCity(data.city);
-    setPrice(data.price);
-    setLat(data.lat);
-    setLng(data.lng);
-    setRadius(data.radius);
+    setTotalPrice(data.totalPrice);
+    setLat(data.rentalLat);
+    setLng(data.rentalLng);
+    setRadius(data.rentalRadius);
     setAddress(data.address);
     setActive(data.active);
     setIsOtherCategory(!!data.otherCategory);
@@ -472,13 +482,25 @@ const EditForm = ({
       hasError = true;
     }
 
-    if (!price) {
-      setPrice("Required field");
+    if (hasDefects) {
+      if (!defects) {
+        setDefectsError("Required field");
+        hasError = true;
+      }
+
+      if (defects && validateBigText(defects) !== true) {
+        setDefectsError(validateBigText(defects));
+        hasError = true;
+      }
+    }
+
+    if (!totalPrice) {
+      setTotalPrice("Required field");
       hasError = true;
     }
 
-    if (price && validatePrice(price) !== true) {
-      setPriceError(validatePrice(price));
+    if (totalPrice && validatePrice(totalPrice) !== true) {
+      setTotalPriceError(validatePrice(totalPrice));
       hasError = true;
     }
 
@@ -653,14 +675,28 @@ const EditForm = ({
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <InputWithIcon
-                label={`Price (${STATIC.CURRENCY}):`}
+                label={`Total price (${STATIC.CURRENCY}):`}
                 icon="bx bx-purchase-tag"
                 placeholder="532.00"
-                value={price}
-                onInput={handleChangePrice}
-                error={priceError}
-                name="priceError"
+                value={totalPrice}
+                onInput={handleChangeTotalPrice}
+                error={totalPriceError}
+                name="totalPriceError"
               />
+            </div>
+
+            <div className="col-lg-6 col-md-6">
+              <div class="form-group ">
+                <label>
+                  <i class="bx bx-timer"></i> Finish Time:
+                </label>
+                <DateInput
+                  name="finishTime"
+                  value={finishTime}
+                  onInput={handleChangeFinishTine}
+                  placeholder="Finish Time"
+                />
+              </div>
             </div>
           </div>
         </div>

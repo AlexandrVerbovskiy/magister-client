@@ -280,6 +280,17 @@ const SingleListingsContent = ({
                     </div>
                   </div>
 
+                  {listing.defects && (
+                    <>
+                      <h3>Defects</h3>
+                      <div id="pricing">
+                        <ul className="pricing-list">
+                          <li className="row-dots-end">{listing.defects}</li>
+                        </ul>
+                      </div>
+                    </>
+                  )}
+
                   <h3>Collection Location</h3>
                   <div className="card-widget" style={{ height: "500px" }}>
                     <MultyMarkersMap
@@ -582,7 +593,7 @@ const SingleListingsContent = ({
                             className="default-btn w-100"
                             onClick={handleSendRequestTriggerClick}
                           >
-                            Send request {moneyFormatVisual(listing.price)}
+                            Send request {moneyFormatVisual(listing.totalPrice)}
                           </button>
                         </div>
                       ) : (
@@ -658,41 +669,47 @@ const SingleListingsContent = ({
               startDate={currentApproveStartDate}
               finishDate={currentApproveFinishDate}
               price={currentApprovePrice}
-              fee={renterBaseCommissionPercent}
-              setStartDate={setCurrentApproveStartDate}
-              setFinishDate={setCurrentApproveFinishDate}
+              fee={workerBaseCommissionPercent}
+              setToDate={setCurrentApproveToDate}
+              setFromDate={setCurrentApproveFromDate}
             />
           )}
         </div>
       </section>
 
       {sessionUser && (
-        <SendCompleteRequestModal
-          handleSendRequest={handleBeforeSendRequest}
-          price={listing.price}
-          startDate={listing.startDate}
-          finishDate={listing.finishDate}
-          blockedDates={listing.blockedDates}
-          fee={renterBaseCommissionPercent}
+        <BookingModal
+          handleMakeBooking={handleBeforeMakeBooking}
+          price={listing.totalPrice}
+          fee={workerBaseCommissionPercent}
           createOrderModalActive={createOrderModalActive}
           closeModal={() => setCreateOrderModalActive(false)}
           listingName={listing.name}
-          title="Send request"
+          title="Book Now"
         />
       )}
 
-      {isMobile && !currentApprove && (
+      {isMobile && (
         <div className="mobile-booking-section">
           <div className="listings-sidebar d-flex flex-column">
             <div className="listings-widget book_listings">
               {sessionUser?.id != listing.ownerId ? (
                 <div>
+                  <ul style={{ listStyle: "none", padding: "0" }}>
+                    <li className="d-flex">
+                      <div className="row-dots-end mt-0">
+                        <span style={{ color: "var(--mainColor)" }}>
+                          {moneyFormatVisual(listing.totalPrice)}
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
                   <button
                     type="button"
                     className="default-btn w-100"
                     onClick={handleSendRequestTriggerClick}
                   >
-                    Send completing request {moneyFormatVisual(listing.price)}
+                    Send rental request {moneyFormatVisual(listing.totalPrice)}
                   </button>
                 </div>
               ) : (

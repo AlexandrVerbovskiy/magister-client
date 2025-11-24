@@ -3,7 +3,9 @@ import CancelModal from "./CancelModal";
 import PayedCancelModal from "./PayedCancelModal";
 import BookingActionModals from "./BookingActionModals";
 import PayModal from "../PayModal";
-import { autoCalculateCurrentTotalPrice, getPriceByDays } from "../../utils";
+import {
+  calculateCurrentTotalPrice,
+} from "../../utils";
 import { useContext } from "react";
 import { IndiceContext } from "../../contexts";
 import YesNoModal from "../_App/YesNoModal";

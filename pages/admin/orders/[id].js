@@ -59,6 +59,30 @@ const PreviousProposalElem = ({
         </div>
 
         <div className="flex w-full gap-2">
+          <div className="w-full sm:w-1/2">
+            <InputView
+              value={prevStartDate}
+              label="Previous Start Date"
+              name={`prev_start_date_${index}`}
+              placeholder="Prev Start Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+
+          <div className="w-1/2">
+            <InputView
+              value={prevEndDate}
+              label="Previous End Date"
+              name={`prev_end_date_${index}`}
+              placeholder="Prev End Date"
+              labelClassName="block text-sm font-medium mb-1"
+              inputClassName="form-input w-full"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full gap-2">
           <div className="w-1/2">
             <InputView
               value={prevTotalPrice}
@@ -197,6 +221,38 @@ const Order = (baseProps) => {
                         </h2>
 
                         <div className="flex flex-col gap-2">
+                          <div className="flex w-full gap-2">
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="from_date"
+                                label="From Date"
+                                placeholder="From Date"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? activeRequestsToUpdate.newStartDate
+                                    : order.offerStartDate
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+
+                            <div className="w-full sm:w-1/2">
+                              <InputView
+                                name="to_date"
+                                label="To Date"
+                                placeholder="To Date"
+                                labelClassName="block text-sm font-medium mb-1"
+                                value={
+                                  activeRequestsToUpdate
+                                    ? activeRequestsToUpdate.newEndDate
+                                    : order.offerEndDate
+                                }
+                                inputClassName="form-input w-full"
+                              />
+                            </div>
+                          </div>
+
                           <div className="flex w-full gap-2">
                             <div className="w-full sm:w-1/2">
                               <InputView

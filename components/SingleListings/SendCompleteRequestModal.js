@@ -4,9 +4,7 @@ import flatpickr from "flatpickr";
 import {
   autoMultiEnding,
   calculateFullTotalByDaysCount,
-  dateConverter,
-  dateToSeconds,
-  findFirstAvailableDate,
+  calculateTotalPriceByDaysCount,
   getFactOrderDays,
   getMaxFlatpickrDate,
   groupDates,
@@ -25,10 +23,7 @@ const SendCompleteRequestModal = ({
   fee,
   createOrderModalActive,
   closeModal,
-  minRentalDays,
-  blockedDates,
   title = "Book Now",
-  startDate = null,
   fullVersion = false,
   isExtend = false,
 }) => {
@@ -74,8 +69,6 @@ const SendCompleteRequestModal = ({
   };
 
   useEffect(() => {
-    const datesToDisable = groupDates(blockedDates);
-
     calendarRef.current = flatpickr(calendarContainer.current, {
       inline: true,
       mode: "range",
@@ -85,7 +78,6 @@ const SendCompleteRequestModal = ({
       defaultDate: [fromDate, toDate],
       monthSelectorType: "static",
       yearSelectorType: "static",
-      disable: datesToDisable,
       maxDate: getMaxFlatpickrDate(),
       onReady: (selectedDates, dateStr, instance) => {
         instance.element.value = dateStr;
@@ -117,54 +109,8 @@ const SendCompleteRequestModal = ({
     setPrice(defaultPrice);
   }, [defaultPrice]);
 
-  useEffect(() => {
-    const defaultCountDays = minRentalDays && !isExtend ? minRentalDays : 1;
-    const firstAvailableDate = findFirstAvailableDate(
-      blockedDates,
-      defaultCountDays,
-      startDate
-    );
-
-    const lastAvailableDate = new Date(
-      firstAvailableDate.getTime() + dateToSeconds(defaultCountDays - 1)
-    );
-
-    const datesToDisable = groupDates(blockedDates);
-
-    if (calendarRef.current) {
-      calendarRef.current.set("disable", datesToDisable);
-      calendarRef.current.setDate([firstAvailableDate, lastAvailableDate]);
-      calendarRef.current.jumpToDate(firstAvailableDate);
-    }
-
-    setFromDate(firstAvailableDate);
-    setToDate(lastAvailableDate);
-  }, [blockedDates, minRentalDays, startDate]);
-
   const handleSubmit = () => {
     let hasError = false;
-
-    if (!isExtend || dateConverter(startDate) != dateConverter(fromDate)) {
-      if (minRentalDays && getFactOrderDays(fromDate, toDate) < minRentalDays) {
-        let message = `You can rent a listing only for a period of more than ${minRentalDays} days`;
-
-        if (isExtend) {
-          message += `, or extend renting from ${dateConverter(startDate)}`;
-        }
-
-        setCalendarError(message);
-        hasError = true;
-      }
-    }
-
-    if (
-      getFactOrderDays(fromDate, toDate) > STATIC.LIMITS.MAX_RENTAL_DURATION
-    ) {
-      setCalendarError(
-        `You can't rent a listing more than ${STATIC.LIMITS.MAX_RENTAL_DURATION} days`
-      );
-      hasError = true;
-    }
 
     if (fullVersion) {
       const resSendingMessageValidated = validateBigText(sendingMessage, true);

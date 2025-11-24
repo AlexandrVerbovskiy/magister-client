@@ -18198,6 +18198,31 @@ input[type="number"] {
   z-index: 9;
 }
 
+.flatpickr-wrapper{
+  width: 100%;
+}
+
+.flatpickr-date-filter > .flatpickr-wrapper > input {
+  height: 40px !important;
+  color: var(--blackColor);
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  transition: var(--transition);
+  font-weight: 400;
+  background-color: #f2f4f5;
+  width: 240px;
+  text-align: center;
+  text-align: start;
+  padding-left: 15px;
+}
+
+.flatpickr-parent-wrapper.flatpickr-date-filter {
+  width: unset !important;
+  /*margin-right: 20px;*/
+}
+
 .filter-nav-item {
   padding-right: 0;
 }

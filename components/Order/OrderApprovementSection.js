@@ -19,9 +19,8 @@ const OrderApprovementSection = ({
   startDate,
   price,
   fee,
-  setStartDate,
-  setFinishDate,
-  disputeProbability,
+  setToDate,
+  setFromDate,
 }) => {
   const [sendingMessage, setSendingMessage] = useState("");
   const [sendingMessageError, setSendingMessageError] = useState(null);
@@ -51,6 +50,11 @@ const OrderApprovementSection = ({
     if (validateBigText(sendingMessage) !== true) {
       hasError = true;
       setSendingMessageError(validateBigText(sendingMessage));
+    }
+
+    if (fromDate > toDate) {
+      hasError = true;
+      setDateError('"From date" can\'t be larger than "To date"');
     }
 
     if (hasError) {
@@ -86,6 +90,10 @@ const OrderApprovementSection = ({
             setStartDate={setStartDate}
             setFinishDate={setFinishDate}
             price={price}
+            setToDate={setToDate}
+            setFromDate={setFromDate}
+            totalPrice={totalPrice}
+            subtotalPrice={subtotalPrice}
             dateError={dateError}
             fee={fee}
           />

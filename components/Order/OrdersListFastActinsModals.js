@@ -5,7 +5,9 @@ import CancelModal from "./CancelModal";
 import CreateUpdateOrderRequestModal from "./CreateUpdateOrderRequestModal";
 import { IndiceContext } from "../../contexts";
 import PayModal from "../PayModal";
-import { getPriceByDays, renterPaysCalculate } from "../../utils";
+import {
+  workerPaymentCalculate,
+} from "../../utils";
 import SuccessIconPopup from "../../components/IconPopups/SuccessIconPopup";
 import PayedCancelModal from "./PayedCancelModal";
 import YesNoModal from "../_App/YesNoModal";
@@ -53,9 +55,9 @@ const OrdersListFastActinsModals = ({
   const [updateRequestProposalPrice, setUpdateRequestProposalPrice] =
     useState(0);
   const [updateRequestProposalStartDate, setUpdateRequestProposalStartDate] =
-    useState(new Date());
-  const [updateRequestProposalFinishDate, setUpdateRequestProposalFinishDate] =
-    useState(new Date());
+    useState(Date.now());
+  const [updateRequestProposalEndDate, setUpdateRequestProposalEndDate] =
+    useState(Date.now());
   const [updateRequestFee, setUpdateRequestFee] = useState(0);
   const [updateRequestCommissionType, setUpdateRequestCommissionType] =
     useState("sum");
@@ -81,10 +83,10 @@ const OrdersListFastActinsModals = ({
           updateRequestModalActiveOrder.offerStartDate ??
           new Date()
       );
-      setUpdateRequestProposalFinishDate(
-        updateRequestModalActiveOrder.newFinishDate ??
-          updateRequestModalActiveOrder.offerFinishDate ??
-          new Date()
+      setUpdateRequestProposalEndDate(
+        updateRequestModalActiveOrder.newEndDate ??
+          updateRequestModalActiveOrder.offerEndDate ??
+          Date.now()
       );
       setUpdateRequestFee(
         sessionUser?.id === updateRequestModalActiveOrder.ownerId
@@ -150,13 +152,13 @@ const OrdersListFastActinsModals = ({
         price={updateRequestPrice}
         proposalPrice={updateRequestProposalPrice}
         proposalStartDate={updateRequestProposalStartDate}
-        proposalFinishDate={updateRequestProposalFinishDate}
+        proposalEndDate={updateRequestProposalEndDate}
         fee={updateRequestFee}
         commissionType={updateRequestCommissionType}
         updateRequestModalActive={activeUpdateRequest}
         closeActiveUpdateRequest={closeActiveUpdateRequest}
         listingName={updateRequestListingName}
-        renterFee={updateRequestModalActiveOrder?.renterFee ?? 0}
+        workerFee={updateRequestModalActiveOrder?.workerFee ?? 0}
       />
 
       <PayModal

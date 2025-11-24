@@ -8,7 +8,7 @@ const BookingActionModals = ({
   listingPrice,
   proposalPrice,
   proposalStartDate,
-  proposalFinishDate,
+  proposalEndDate,
   fee,
   commissionType,
   listingName,
@@ -35,6 +35,7 @@ const BookingActionModals = ({
         proposalPrice={proposalPrice}
         proposalFinishDate={proposalFinishDate}
         proposalStartDate={proposalStartDate}
+        proposalEndDate={proposalEndDate}
         fee={fee}
         commissionType={commissionType}
         updateRequestModalActive={updateRequestModalActive}
